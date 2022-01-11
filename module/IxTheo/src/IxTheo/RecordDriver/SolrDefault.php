@@ -154,7 +154,7 @@ class SolrDefault extends \TueFind\RecordDriver\SolrMarc
 
     // Replaces any occurrences of "v.Chr." in $s w/ the version for the currently selected user-interface language.
     static private function MapBeforeChrist(string $s): string {
-        static $lang_code = this->tuefind()->getTranslatorLocale();
+        static $lang_code = $this->tuefind()->getTranslatorLocale();
         static $lang_code_to_bc_abbreviations_map = [
             "en" => "BC",
             "de" => "v.Chr.",
