@@ -106,11 +106,11 @@ forms:
 
   AcquisitionRequest:
     enabled: true
-    title: Acquisition Request
+    #title: Acquisition Request
     onlyForLoggedUsers: false
     emailSubject: Acquisition Request
     title: Acquisition Request,
-    response: Thank you for your feedback.
+    response: Thank you for suggesting a title.
     senderInfoRequired: true
 
     #recipient:

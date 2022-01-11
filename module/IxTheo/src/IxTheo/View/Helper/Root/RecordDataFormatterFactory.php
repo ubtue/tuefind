@@ -8,6 +8,12 @@ use VuFind\View\Helper\Root\RecordDataFormatter\SpecBuilder;
 class RecordDataFormatterFactory extends \TueFind\View\Helper\Root\RecordDataFormatterFactory {
 
     /**
+     * User Account Capabilites Service
+     * @var \VuFind\Config\AccountCapabilities
+     */
+    protected $accountCapabilities;
+
+    /**
      * Db Table Plugin Manager (e.g. to check user-specific rights)
      * @var \VuFind\Db\Table\PluginManager
      */
@@ -24,6 +30,7 @@ class RecordDataFormatterFactory extends \TueFind\View\Helper\Root\RecordDataFor
     ) {
         $this->user = $container->get('ViewHelperManager')->get('auth')->getManager()->isLoggedIn();
         $this->dbTablePluginManager = $container->get('VuFind\Db\Table\PluginManager');
+        $this->accountCapabilities = $container->get(\VuFind\Config\AccountCapabilities::class);
         return parent::__invoke($container, $requestedName, $options);
     }
 
@@ -49,11 +56,13 @@ class RecordDataFormatterFactory extends \TueFind\View\Helper\Root\RecordDataFor
         $this->addHBZ($spec);
         $this->addJOP($spec);
         // PDA (IxTheo-specific)
-        $spec->setTemplateLine(
-            'PDA', 'showPDA', 'data-PDA.phtml', ['rowId' => 'pda_row']
-        );
+        if ($this->accountCapabilities->getPdaSetting()) {
+            $spec->setTemplateLine(
+                'PDA', 'showPDA', 'data-PDA.phtml', ['rowId' => 'pda_row']
+            );
+        }
         // TAD (IxTheo-specific)
-        if ($this->user != null && $this->dbTablePluginManager->get('IxTheoUser')->canUseTAD($this->user->id)) {
+        if ($this->user != null && $this->dbTablePluginManager->get('user')->canUseTAD($this->user->id)) {
             $spec->setTemplateLine(
                 'TAD', 'workIsTADCandidate', 'data-TAD.phtml'
             );
@@ -89,6 +98,7 @@ class RecordDataFormatterFactory extends \TueFind\View\Helper\Root\RecordDataFor
         );
         $this->addChildRecords($spec);
         $this->addOnlineAccess($spec);
+        $this->addLicense($spec); // TueFind specific
         // Parallel Edition PPNs + Unlinked parallel Editions (IxTheo-specific)
         $spec->setTemplateLine(
                 'Parallel Edition', true, 'data-parallel_edition.phtml'
@@ -104,7 +114,8 @@ class RecordDataFormatterFactory extends \TueFind\View\Helper\Root\RecordDataFor
         $spec = new SpecBuilder();
         $spec->setTemplateLine('Summary', true, 'data-summary.phtml');
         $spec->setLine('Published', 'getDateSpan');
-        $spec->setLine('Item Description', 'getGeneralNotes');
+        // Item Description (IxTheo-specific)
+        $spec->setTemplateLine('Item Description', 'getGeneralNotes', 'data-general-notes.phtml');
         $spec->setLine('Physical Description', 'getPhysicalDescriptions');
         $spec->setLine('Publication Frequency', 'getPublicationFrequency');
         $spec->setLine('Playing Time', 'getPlayingTimes');

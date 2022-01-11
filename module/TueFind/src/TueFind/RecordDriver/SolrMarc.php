@@ -16,7 +16,8 @@ class SolrMarc extends SolrDefault
      * @param string $scheme_prefix     see class constants (ISIL_PREFIX_*)
      * @return string
      */
-    protected function getAuthorIdByHeading($author_heading, $scheme_prefix) {
+    protected function getAuthorIdByHeading($author_heading, $scheme_prefix)
+    {
         $authors = $this->getMarcRecord()->getFields('^100|700$', true);
         foreach ($authors as $author) {
             $subfield_a = $author->getSubfield('a');
@@ -36,11 +37,13 @@ class SolrMarc extends SolrDefault
         }
     }
 
-    public function getAuthorGNDNumber($author_heading) {
+    public function getAuthorGNDNumber($author_heading)
+    {
         return $this->getAuthorIdByHeading($author_heading, self::ISIL_PREFIX_GND);
     }
 
-    public function getAuthorPPN($author_heading) {
+    public function getAuthorPPN($author_heading)
+    {
         return $this->getAuthorIdByHeading($author_heading, self::ISIL_PREFIX_K10PLUS);
     }
 
@@ -52,7 +55,8 @@ class SolrMarc extends SolrDefault
      * the result might only be e.g. "Thomas" instead of "Thomas von Aquin"
      * or "Benedikt" instead of "Benedikt XVI.")
      */
-    public function getAuthorNames(): array {
+    public function getAuthorNames(): array
+    {
         $authorNames = [];
         $authors = $this->getMarcRecord()->getFields('^100|700$', true);
         foreach ($authors as $author) {
@@ -73,7 +77,8 @@ class SolrMarc extends SolrDefault
      * @param array $fallback_roles
      * @return array
      */
-    public function getAuthorRoles($author_heading) {
+    public function getAuthorRoles($author_heading)
+    {
         $roles = [];
         $authors = $this->getMarcRecord()->getFields('^100|700$', true);
         foreach ($authors as $author) {
@@ -94,7 +99,8 @@ class SolrMarc extends SolrDefault
      *
      * @return string
      */
-    public function getCleanDOIs() {
+    public function getCleanDOIs()
+    {
         $clean_dois = [];
         $_024_fields = $this->getMarcRecord()->getFields('024');
         if (!$_024_fields)
@@ -119,7 +125,8 @@ class SolrMarc extends SolrDefault
      *
      * @return array
      */
-    protected function getFieldsArray($fields_and_subfields, $concat=true, $separator=' ') {
+    protected function getFieldsArray($fields_and_subfields, $concat=true, $separator=' ')
+    {
         $fields_array = array();
         foreach ($fields_and_subfields as $field_and_subfield) {
             $field = $field_and_subfield[0];
@@ -132,7 +139,36 @@ class SolrMarc extends SolrDefault
     }
 
 
-    public function isTADTagged() {
+    public function getLicense(): ?array
+    {
+        $licenseFields = $this->getMarcRecord()->getFields('540');
+        foreach ($licenseFields as $licenseField) {
+            $id = null;
+            $idSubfield = $licenseField->getSubfield('f');
+            if ($idSubfield != false)
+                $id = $idSubfield->getData();
+
+            $url = null;
+            $urlSubfield = $licenseField->getSubfield('u');
+            if ($urlSubfield != false)
+                $url = $urlSubfield->getData();
+
+            if ($id == null && preg_match('"^http(s)?:' . preg_quote('//rightsstatements.org/vocab/InC/1.0/', '"') . '$"', $url)) {
+                // force correct ID + english URL
+                $id = 'InC 1.0';
+                $url = 'https://rightsstatements.org/page/InC/1.0/?language=en';
+            }
+
+            if ($id != null && $url != null)
+                return ['id' => $id, 'url' => $url];
+        }
+
+        return null;
+    }
+
+
+    public function isTADTagged()
+    {
         $ita_fields = $this->getMarcRecord()->getFields('ITA');
         foreach ($ita_fields as $ita_field) {
             $t_subfields = $this->getSubfieldArray($ita_field, ['t']);
@@ -143,7 +179,8 @@ class SolrMarc extends SolrDefault
     }
 
 
-    public function isArticle() {
+    public function isArticle()
+    {
         $leader = $this->getMarcRecord()->getLeader();
 
         if ($leader[7] == 'a' || $leader[7] == 'b')
@@ -160,7 +197,8 @@ class SolrMarc extends SolrDefault
         return false;
     }
 
-    public function isArticleCollection() {
+    public function isArticleCollection()
+    {
         $aco_fields = $this->getMarcRecord()->getFields('ACO');
         return (count($aco_fields) > 0);
     }
@@ -174,15 +212,18 @@ class SolrMarc extends SolrDefault
         return false;
     }
 
-    public function isSubscriptionBundle() {
+    public function isSubscriptionBundle(): bool
+    {
         return ($this->isSuperiorWork() && in_array('Subscription Bundle', $this->getFormats()));
     }
 
-    public function workIsTADCandidate() {
+    public function workIsTADCandidate(): bool
+    {
         return ($this->isArticle() || $this->isArticleCollection()) && $this->isPrintedWork() && $this->isTADTagged();
     }
 
-    public function suppressDisplayByFormat() {
+    public function suppressDisplayByFormat()
+    {
         if (in_array('Weblog', $this->getFormats()))
             return true;
         if (in_array('Subscription Bundle', $this->getFormats()))
@@ -192,30 +233,36 @@ class SolrMarc extends SolrDefault
         return false;
     }
 
-    public function showContainerIdsAndTitles() {
+    public function showContainerIdsAndTitles()
+    {
         return (!empty($this->getContainerIDsAndTitles())
                 || $this->getIssue() || $this->getPages()
                 || $this->getVolume() || $this->getYear());
     }
 
-    public function showHBZ() {
+    public function showHBZ()
+    {
         return !$this->suppressDisplayByFormat();
     }
 
-    public function showJOP() {
+    public function showJOP()
+    {
         return (count($this->getFormats()) > 0);
     }
 
-    public function showPDA() {
+    public function showPDA()
+    {
         $formats = $this->getFormats();
         return (!empty($formats) && (in_array('Book', $formats)) && $this->isAvailableForPDA());
     }
 
-    public function showSubito() {
+    public function showSubito()
+    {
         return !$this->suppressDisplayByFormat() && $this->getSubitoURL() != '';
     }
 
-    public function getParallelEditionPPNs() {
+    public function getParallelEditionPPNs()
+    {
         $parallel_ppns_and_type = [];
         foreach (['775', '776'] as $tag) {
             $fields = $this->getMarcRecord()->getFields($tag);
@@ -234,7 +281,8 @@ class SolrMarc extends SolrDefault
     }
 
 
-    public function getUnlinkedParallelEditions() {
+    public function getUnlinkedParallelEditions()
+    {
         $parallel_editions = [];
         foreach (['775', '776'] as $tag) {
             $fields = $this->getMarcRecord()->getFields($tag);
@@ -262,7 +310,8 @@ class SolrMarc extends SolrDefault
     }
 
 
-    protected function getFirstK10PlusPPNFromSubfieldW($field) {
+    protected function getFirstK10PlusPPNFromSubfieldW($field)
+    {
         $subfields_w = $this->getSubfieldArray($field, ['w'], false /* do not concatenate entries */);
         foreach ($subfields_w as $subfield_w) {
             if (preg_match('/^' . preg_quote(self::ISIL_PREFIX_K10PLUS, '/') . '(.*)/', $subfield_w, $match_ppn)) {
@@ -272,29 +321,38 @@ class SolrMarc extends SolrDefault
     }
 
 
-    public function getReferenceInformation(): array {
+    public function getReferenceInformation(): array
+    {
         $references = [];
-        $fields = $this->getMarcRecord()->getFields('770');
+        $fields = $this->getMarcRecord()->getFields('770|772', true);
         foreach ($fields as $field) {
-            $opening = $field->getSubfield('i') ? $field->getSubfield('i')->getData() : '';
+            $opening = $field->getSubfield('i') ? $field->getSubfield('i')->getData() . ':' : '';
+            $timeRange = $field->getSubfield('n') ? $field->getSubfield('n')->getData() : '';
+            if ($timeRange != '') {
+                if ($opening != '')
+                    $opening .= ' ';
+                $opening .= '(' . $timeRange . '):';
+            }
             $titles = [];
             $field->getSubfield('a') ? $titles[] = $field->getSubfield('a')->getData() : '';
             $field->getSubfield('d') ? $titles[] = $field->getSubfield('d')->getData() : '';
             $field->getSubfield('h') ? $titles[] = $field->getSubfield('h')->getData() : '';
             $field->getSubfield('t') ? $titles[] = $field->getSubfield('t')->getData() : '';
-            $description = $opening . ': ' .  implode(', ' , array_filter($titles) /*skip empty elements */);
+            $description = $opening . ' ' .  implode(', ' , array_filter($titles) /*skip empty elements */);
             $link_ppn = $this->getFirstK10PlusPPNFromSubfieldW($field);
             $references[] = ['id' => $link_ppn, 'description' => $description];
         }
-
         return array_merge($references, $this->getOtherReferences());
     }
 
 
-    public function getContainsInformation(): array {
+    public function getContainsInformation(): array
+    {
         $contains = [];
-        $fields = $this->getMarcRecord()->getFields('772|773', true);
+        $fields = $this->getMarcRecord()->getFields('773');
         foreach ($fields as $field) {
+            if ($field->getIndicator(1) != 0)
+                continue;
             $opening = $field->getSubfield('i') ? $field->getSubfield('i')->getData() : '';
             $titles = [];
             $field->getSubfield('a') ? $titles[] = $field->getSubfield('a')->getData() : '';
@@ -307,7 +365,8 @@ class SolrMarc extends SolrDefault
     }
 
 
-    protected function getReferencesFrom787(): array {
+    protected function getReferencesFrom787(): array
+    {
         $references = [];
 
         $fields = $this->getMarcRecord()->getFields('787');
@@ -382,20 +441,24 @@ class SolrMarc extends SolrDefault
         return $references;
     }
 
-    public function getReviews(): array {
+    public function getReviews(): array
+    {
         return $this->getReferencesFrom787()['review'] ?? [];
     }
 
-    public function getReviewedRecords(): array {
+    public function getReviewedRecords(): array
+    {
         return $this->getReferencesFrom787()['reviewed_record'] ?? [];
     }
 
-    protected function getOtherReferences(): array {
+    protected function getOtherReferences(): array
+    {
         return $this->getReferencesFrom787()['other'] ?? [];
     }
 
 
-    public function cleanISSN($issn) {
+    public function cleanISSN($issn)
+    {
         if ($pos = strpos($issn, ' ')) {
             $issn = substr($issn, 0, $pos);
         }
@@ -403,7 +466,8 @@ class SolrMarc extends SolrDefault
     }
 
 
-    public function getJOPISSNsAndAdditionalInformation() {
+    public function getJOPISSNsAndAdditionalInformation()
+    {
         $issns_and_additional_information = [];
         $_022fields = $this->getMarcRecord()->getFields('022');
         foreach ($_022fields as $_022field) {
@@ -452,7 +516,8 @@ class SolrMarc extends SolrDefault
         return [];
     }
 
-    public function getSuperiorFrom773a() {
+    public function getSuperiorFrom773a()
+    {
         $_773_fields = $this->getMarcRecord()->getFields('773');
         foreach ($_773_fields as $_773_field) {
             $subfield_a = $_773_field->getSubfield('a') ? $_773_field->getSubfield('a')->getData() : '';

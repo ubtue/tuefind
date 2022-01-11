@@ -23,6 +23,7 @@ import org.marc4j.marc.Subfield;
 import org.marc4j.marc.DataField;
 import org.solrmarc.index.SolrIndexer;
 import org.apache.log4j.Logger;
+import org.vufind.index.FieldSpecTools;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -132,11 +133,7 @@ public class CreatorTools
         // relator allowed" list.
         if (subfieldE.size() == 0 && subfield4.size() == 0) {
             if (Arrays.asList(noRelatorAllowed).contains(tag)) {
-                // 100 contains the first author even if the relator is not given explicitly
-                if (tag.equals("100"))
-                    relators.add("aut");
-                else
-                    relators.add("");
+                relators.add("");
             }
         } else {
             // If we got this far, we need to figure out what type of relation they have
@@ -162,24 +159,13 @@ public class CreatorTools
      *
      * @param tagList The field specification to parse
      * @return HashMap
+     * @deprecated
      */
-    protected HashMap<String, Set<String>> getParsedTagList(String tagList)
+    @Deprecated protected HashMap<String, Set<String>> getParsedTagList(String tagList)
     {
-        String[] tags = tagList.split(":");//convert string input to array
-        HashMap<String, Set<String>> tagMap = new HashMap<String, Set<String>>();
-        //cut tags array up into key/value pairs in hash map
-        Set<String> currentSet;
-        for(int i = 0; i < tags.length; i++){
-            String tag = tags[i].substring(0, 3);
-            if (!tagMap.containsKey(tag)) {
-                currentSet = new LinkedHashSet<String>();
-                tagMap.put(tag, currentSet);
-            } else {
-                currentSet = tagMap.get(tag);
-            }
-            currentSet.add(tags[i].substring(3));
-        }
-        return tagMap;
+        // Thin wrapper around FieldSpecTools.getParsedTagList() for backward
+        // compatibility; this will be removed in VuFind 8.0.
+        return FieldSpecTools.getParsedTagList(tagList);
     }
 
     /**
@@ -206,7 +192,7 @@ public class CreatorTools
         List<String> result = new LinkedList<String>();
         String[] noRelatorAllowed = acceptWithoutRelator.split(":");
         String[] unknownRelatorAllowed = acceptUnknownRelators.split(":");
-        HashMap<String, Set<String>> parsedTagList = getParsedTagList(tagList);
+        HashMap<String, Set<String>> parsedTagList = FieldSpecTools.getParsedTagList(tagList);
         List fields = SolrIndexer.instance().getFieldSetMatchingTagList(record, tagList);
         Iterator fieldsIter = fields.iterator();
         if (fields != null){
@@ -215,26 +201,18 @@ public class CreatorTools
                 authorField = (DataField) fieldsIter.next();
                 // add all author types to the result set; if we have multiple relators, repeat the authors
                 for (String iterator: getValidRelators(authorField, noRelatorAllowed, relatorConfig, unknownRelatorAllowed, indexRawRelators)) {
-                    for (String subfieldCharacters : parsedTagList.get(authorField.getTag())) {
-                        final List<Subfield> subfields = authorField.getSubfields("["+subfieldCharacters+"]");
-                        final Iterator<Subfield> subfieldsIter =  subfields.iterator();
-                        String resultOneField = new String();
-                        while (subfieldsIter.hasNext()) {
-                           final Subfield subfield = subfieldsIter.next();
-                           final String data = subfield.getData();
-                           if (resultOneField.isEmpty())
-                               resultOneField = data;
-                           else {
-                               resultOneField += (subfield.getCode() == 'b' || subfield.getCode() == 'c' ||
-                                                  subfield.getCode() == 'g') ? ", " : " ";
-                               resultOneField += data;
-
-                           }
-                        }
-                        if (!resultOneField.isEmpty()) {
-                            result.add(resultOneField);
-                            if (firstOnly)
+                    for (String subfields : parsedTagList.get(authorField.getTag())) {
+                        String current = SolrIndexer.instance().getDataFromVariableField(authorField, "["+subfields+"]", " ", false);
+                        // TODO: we may eventually be able to use this line instead,
+                        // but right now it's not handling separation between the
+                        // subfields correctly, so it's commented out until that is
+                        // fixed.
+                        //String current = authorField.getSubfieldsAsString(subfields);
+                        if (null != current) {
+                            result.add(current);
+                            if (firstOnly) {
                                 return result;
+                            }
                         }
                     }
                 }
@@ -431,7 +409,7 @@ public class CreatorTools
         List result = new LinkedList();
         String[] noRelatorAllowed = acceptWithoutRelator.split(":");
         String[] unknownRelatorAllowed = acceptUnknownRelators.split(":");
-        HashMap<String, Set<String>> parsedTagList = getParsedTagList(tagList);
+        HashMap<String, Set<String>> parsedTagList = FieldSpecTools.getParsedTagList(tagList);
         List fields = SolrIndexer.instance().getFieldSetMatchingTagList(record, tagList);
         Iterator fieldsIter = fields.iterator();
         if (fields != null){

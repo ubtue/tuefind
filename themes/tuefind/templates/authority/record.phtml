@@ -1,82 +1,83 @@
 <?php
     $this->layout()->breadcrumbs = false;
+
+    // TueFind: Add fix for tab reset bug which will be fixed in 9.0 by demiankatz
+    $this->layout()->searchClassId = 'SolrAuth';
+
     $this->backgroundTabs = $this->BackgroundTabs ?? [];
     $schemaOrgType = $this->authority()->getSchemaOrgType($this->driver);
+
+    // TueFind:
+    // - record.js is needed for AJAX tab logic
+    // - disabled, because we use the non-ajax-version.
+    // - see also "recordDocReady" at the bottom of this file.
+    //$this->headScript()->appendFile("record.js");
 ?>
-<div vocab="http://schema.org/" typeof="<?=$schemaOrgType?>">
-  <h3 property="name"><?=$this->authority()->getName($this->driver)?></h3>
-  <div class="row">
-    <div class="col-sm-8">
-      <table class="table table-striped">
-        <tbody>
-          <?php $professions = $this->authority()->getProfessions($this->driver);?>
-          <?php if ($professions != ''): ?>
-            <tr>
-              <th>Professions:</th>
-              <td><?=$professions?></td>
-            </tr>
-          <?php endif; ?>
 
-          <?php $birth = $this->authority()->getBirth($this->driver); ?>
-          <?php if ($birth != ''): ?>
-            <tr>
-              <th>Born:</th>
-              <td><?=$birth?></td>
-            </tr>
-          <?php endif; ?>
-
-          <?php $death = $this->authority()->getDeath($this->driver); ?>
-          <?php if ($death != ''): ?>
-            <tr>
-              <th>Died:</th>
-              <td><?=$death?></td>
-            </tr>
-          <?php endif; ?>
-
-          <?php $externalReferences = $this->authority()->getExternalReferences($this->driver); ?>
-          <?php if ($externalReferences != ''): ?>
-            <tr>
-              <th>External references:</th>
-              <td><?=$externalReferences?></td>
-            </tr>
-          <?php endif; ?>
-        </tbody>
-      </table>
-      <?=$this->context($this)->renderInContext('related/AuthorityTitles', ['driver' => $this->driver])?>
-    </div>
-    <div class="col-sm-4">
-      <?php
-        // Image (partially rendered by JS)
-        $imgUrl = '/wikidataproxy/load';
-        $wikidataId = $this->driver->getWikidataId();
-        if ($wikidataId != null) {
-          $imgUrl .= '?id=' . $wikidataId;
-        } else {
-          $imgUrl .= '?search[]=';
-          $names = $this->driver->getNameAliases();
-          $encodedNames = [];
-          foreach ($names as $name) {
-            $encodedNames[] = urlencode($name);
-          }
-          $imgUrl .= implode('&search[]=', $encodedNames);
-          $params = ['birthYear' => $this->driver->getBirthYear(),
-                     'deathYear' => $this->driver->getDeathYear()];
-          foreach ($params as $key => $value) {
-            if ($value)
-              $imgUrl .= '&' . urlencode($key) . '=' . urlencode($value);
-          }
-        }
-      ?>
-      <!-- onload didn't work, so we use a separate script snippet -->
-      <div class="tf-wikidata-image" data-url="<?=htmlspecialchars($imgUrl)?>"></div>
-      <script>TueFind.GetImagesFromWikidata();</script>
-    </div>
+<?php /* User Authority Access */ ?>
+<?php if ($this->user != false && $this->accountCapabilities()->getRequestAuthorityRightsSetting() === 'enabled'): ?>
+  <div>
+    <?php if ($this->user_access['availability'] == 'free'): ?>
+      <a class="save-record toolbar-btn btn-type-save" rel="nofollow" href="<?=$this->url('authority-request-access', ['authority_id' => $this->driver->getUniqueId()])?>" data-lightbox="">Request access rights (This is me!)</a>
+    <?php elseif ($this->user_access['availability'] == 'mine' && $this->user_access['access_state'] == 'requested'): ?>
+      You have requested permission on this authority record. Our team has been informed, please wait for the approval.
+    <?php elseif ($this->user_access['availability'] == 'mine' && $this->user_access['access_state'] == 'granted'): ?>
+      This authority record is linked to your user account.
+      <?php if ($this->user != false && $this->accountCapabilities()->getPublicationSetting() === 'enabled'): ?>
+        <br><a href="<?=$this->url('myresearch-publish')?>">Would you like to publish something?</a>
+      <?php endif; ?>
+    <?php endif; ?>
   </div>
+<?php endif; ?>
+
+<?php /* Record details */ ?>
+<div vocab="http://schema.org/" typeof="<?=$schemaOrgType?>">
+  <h3><?=$this->authority()->getName($this->driver)?></h3>
+  <?php if ($this->driver->isName()): ?>
+    <p><?=$this->transEsc('authority_note_name_record')?></p>
+  <?php endif; ?>
+
+  <div class="container">
+    <?php
+      /*
+        The CSS Here has been optimized for normal & responsive behaviour.
+        Please test very carefully when changing!
+        Also note that some classes will be changed via tuefind.js
+        after the dynamic contents (images, BEACON, etc.) has been loaded!
+       */
+    ?>
+    <div class="row">
+      <div class="col-md-12 row">
+        <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 pull-right tf-d-none">
+          <?php if ($this->driver->getType() == 'person' && !$this->driver->isFamily()): ?>
+            <?=$this->context($this)->renderInContext('authority/record/image', ['driver' => $this->driver])?>
+          <?php endif; ?>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-auto col-lg-auto pull-left">
+          <?=$this->context($this)->renderInContext('authority/record/details', ['driver' => $this->driver])?>
+        </div>
+      </div>
+      <div class="col-md-12 row">
+        <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 pull-right">
+          <?=$this->context($this)->renderInContext('authority/record/beacon', ['driver' => $this->driver])?>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9 pull-left">
+          <?=$this->context($this)->renderInContext('Related/AuthorityTitlesBy', ['driver' => $this->driver])?>
+          <?=$this->context($this)->renderInContext('Related/AuthorityTitlesAbout', ['driver' => $this->driver])?>
+          <?=$this->context($this)->renderInContext('Related/AuthorityAuthors', ['driver' => $this->driver])?>
+          <!-- Graphs -->
+          <?=$this->context($this)->renderInContext('Related/AuthorityTopics', ['driver' => $this->driver])?>
+          <?=$this->context($this)->renderInContext('Related/AuthorityTimeline', ['driver' => $this->driver])?>
+          <?=$this->context($this)->renderInContext('authority/record/tabs', ['driver' => $this->driver])?>
+        </div>
+      </div>
+    </div>
 </div>
 
 <?php
-  // Pick a tab to display -- Details if available, otherwise first option (if any):
-  $tab = $this->tabs['Details'] ?? current($this->tabs) ?? null;
+  // TueFind:
+  // - recordDocReady is needed for AJAX tab logic
+  // - disabled, because we use the non-ajax-version.
+  // - see also "record.js" at the top of this file.
+  // print $this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, '$(document).ready(recordDocReady);', 'SET');
 ?>
-<h3><?=$this->escapeHtml($this->driver->getBreadcrumb())?></h3>
-<p><?=empty($tab) ? $this->transEsc('no_description') :  $this->record($this->driver)->getTab($tab)?></p>

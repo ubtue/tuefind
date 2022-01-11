@@ -5,7 +5,7 @@
   }
 ?>
 <nav class="record-nav">
-  <ul class="action-toolbar" aria-label="<?=$this->transEsc('ajaxview_label_tools'); ?>">
+  <ul class="action-toolbar" aria-label="<?=$this->transEscAttr('ajaxview_label_tools'); ?>">
     <?php if (count($this->driver->getCitationFormats()) > 0): ?>
       <li role="none"><a class="cite-record toolbar-btn btn-type-cite" data-lightbox href="<?=$this->recordLink()->getActionUrl($this->driver, 'Cite')?>" rel="nofollow"><?=$this->transEsc('Cite this')?></a></li>
     <?php endif; ?>
@@ -45,12 +45,17 @@
     <?=$this->render('record/cart-buttons.phtml', ['id' => $this->driver->getUniqueId(), 'source' => $this->driver->getSourceIdentifier()]); ?>
 
     <!-- IxTheo: Subscribe button -->
-    <?php if ($this->driver->isSubscribable()):?>
+    <?php if ($this->accountCapabilities()->getSubscriptionSetting() === 'enabled'): ?>
       <?php if ($this->IxTheo()->isRecordSubscribed($this->driver) || $this->IxTheo()->isRecordSubscribedViaBundle($this->driver)): ?>
         <li><a class="subscribe-record toolbar-btn btn-type-unsubscribe" data-lightbox href="<?=$this->recordLink()->getActionUrl($this->driver, 'Subscribe')?>" rel="nofollow"><?=$this->transEsc('Unsubscribe')?></a></li>
-      <?php else: ?>
+      <?php elseif ($this->driver->isSubscribable()): ?>
         <li><a class="subscribe-record toolbar-btn btn-type-subscribe" data-lightbox href="<?=$this->recordLink()->getActionUrl($this->driver, 'Subscribe')?>" rel="nofollow"><?=$this->transEsc('Subscribe')?></a></li>
       <?php endif; ?>
+    <?php endif; ?>
+
+    <!-- TueFind: Publish button -->
+    <?php if ($this->auth()->isLoggedIn() && ($this->accountCapabilities()->getPublicationSetting() === 'enabled')): ?>
+      <li><a class="toolbar-btn btn-type-publish" data-lightbox href="<?=$this->recordLink()->getActionUrl($this->driver, 'Publish')?>" rel="nofollow"><?=$this->transEsc('Publish')?></a></li>
     <?php endif; ?>
   </ul>
 </nav>

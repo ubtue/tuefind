@@ -1,11 +1,21 @@
 var TueFind = {
     // helper function to add content anchors to content page links
     AddContentAnchors: function() {
+        let current_anchor = null;
+        if (window.location.href.includes('#')) {
+            current_anchor = window.location.href.split('#').pop();
+        }
+
         $('a').each(function() {
             let href = $(this).attr('href');
             if (href != undefined && !href.includes('#')) {
                 if (href.match(/\/Content\//) || href.match(/\?subpage=/)) {
-                    this.setAttribute('href', href + '#content');
+                    if (href.match(/[?&]lng=/)) {
+                        // when switching the language, we want to keep the current anchor
+                        this.setAttribute('href', href + '#' + current_anchor);
+                    } else {
+                        this.setAttribute('href', href + '#content');
+                    }
                 }
             }
         });
@@ -128,10 +138,147 @@ var TueFind = {
         });
     },
 
+    GetBeaconReferencesFromFindbuch: function() {
+        $('.tf-findbuch-references').each(function() {
+            var container = this;
+            var proxyUrl = this.getAttribute('data-url');
+            var headline = this.getAttribute('data-headline');
+            var sortBottomPattern = this.getAttribute('data-sort-bottom-pattern');
+            var sortBottomRegex = new RegExp(sortBottomPattern);
+            var filterUniquePattern = this.getAttribute('data-filter-unique-pattern');
+            var filterUniqueRegex = new RegExp(filterUniquePattern);
+            var filterLabelPattern = this.getAttribute('data-filter-label-pattern');
+            var filterLabelRegex = new RegExp(filterLabelPattern);
+
+            $.ajax({
+                type: 'GET',
+                url: proxyUrl,
+                success: function(json, textStatus, request) {
+                    if (json[1] !== undefined && json[1].length > 0) {
+
+                        // Build different array structure (prepare sort)
+                        var references = [];
+                        let countRegex = new RegExp(/\((\d+)\)$/);
+                        for (let i=0; i<json[1].length; ++i) {
+                            let label = json[1][i];
+                            let groupLabel = label.replace(countRegex, '').trim();
+
+                            let description = json[2][i];
+                            let url = json[3][i];
+
+                            let matchCount = label.match(countRegex);
+                            let count = 1;
+                            if (matchCount != null)
+                                count = parseInt(matchCount[1]);
+
+                            let sortPriority = 1;
+                            if (label.match(sortBottomRegex))
+                                sortPriority = 2;
+
+                            if (filterLabelPattern == '' || !label.match(filterLabelRegex))
+                                references.push({ label: label, groupLabel: groupLabel, description: description, url: url, count: count, sortPriority: sortPriority });
+                        }
+
+                        // sort by priority, then alphabetically
+                        references.sort(function(a, b) {
+                            if (a.sortPriority < b.sortPriority)
+                                return -1;
+                            if (a.sortPriority > b.sortPriority)
+                                return 1;
+
+                            return a.label.localeCompare(b.label);
+                        });
+
+                        // merge links with same label, if exact 1 url contains the correct gnd number
+                        if (filterUniquePattern != '') {
+                            let currentGroup = [];
+                            let currentGroupStartIndex = 0;
+                            var abortCondition = references.length;
+                            for (let i=0; i<abortCondition;++i) {
+                                let currentReference = references[i];
+                                let nextReference = references[i+1];
+                                currentGroup.push(currentReference);
+
+                                // If we are at the end of the group
+                                if (nextReference == undefined || nextReference.groupLabel != currentReference.groupLabel) {
+                                    // Detect how many entries match the GND number
+                                    var matchingIndexes = [];
+                                    currentGroup.forEach(function (groupedReference, index) {
+                                        if (groupedReference.url.match(filterUniqueRegex)) {
+                                            matchingIndexes.push(index);
+                                        }
+                                    });
+
+                                    // If we have exact 1 regex match & more than 1 entry, remove the invalid ones
+                                    if (currentGroup.length > 1 && matchingIndexes.length == 1) {
+                                        var matchingIndex = matchingIndexes[0];
+                                        var removeOffset = 0;
+                                        currentGroup.forEach(function (groupedReference, index) {
+                                            if (index != matchingIndex) {
+                                                let indexToRemove = index + currentGroupStartIndex - removeOffset;
+                                                references.splice(indexToRemove, 1);
+                                                --abortCondition;
+                                                --i;
+                                                ++removeOffset;
+                                            }
+                                        });
+                                    }
+
+                                    // Reset cached group
+                                    currentGroup = [];
+                                    currentGroupStartIndex = i+1;
+                                }
+                            }
+                        }
+
+                        // render HTML
+                        let html = '<h2>' + headline + '</h2>';
+                        html += '<ul class="list-group">';
+                        var previousSortPriority = 1;
+                        references.forEach(function(reference) {
+                            if (reference.sortPriority != previousSortPriority) {
+                                html += '</ul><ul class="list-group">';
+                            }
+                            previousSortPriority = reference.sortPriority;
+                            html += '<li class="list-group-item tf-beacon-reference"><a class="tf-beacon-reference-link" href="' + reference.url + '" title="' + TueFind.EscapeHTML(reference.description) + '" target="_blank" property="sameAs">' + TueFind.EscapeHTML(reference.label) + '</a></li>';
+                        });
+                        html += '</ul>';
+                        $(container).append(html);
+
+                        // check if urls are valid (only if special URL parameter is set)
+                        // Note that CORS needs to be disabled in your browser for this to work.
+                        // See also:
+                        // - https://github.com/ubtue/tuefind/issues/1924
+                        // - https://medium.com/swlh/avoiding-cors-errors-on-localhost-in-2020-5a656ed8cefa
+                        const urlParams = new URLSearchParams(window.location.search);
+                        if (urlParams.get('checkUrls') == 'true') {
+                            $('.tf-beacon-reference').each(function() {
+                                $(this).css('backgroundColor', 'yellow');
+                                var urlToCheck = $(this).children('.tf-beacon-reference-link').attr('href');
+                                var targetBackground = $(this);
+                                $.ajax({
+                                    type: 'GET',
+                                    url: urlToCheck,
+                                    complete: function(jqXHR, textStatus) {
+                                        let color = 'red';
+                                        if (textStatus == 'success')
+                                            color = 'green';
+                                        targetBackground.css('backgroundColor', color);
+                                    }
+                                });
+                            });
+                        }
+                    }
+                }
+            });
+        });
+    },
+
     GetImagesFromWikidata: function() {
         $('.tf-wikidata-image').each(function() {
             var placeholder = this;
             var imageUrl = this.getAttribute('data-url');
+            var parentBlock = $(placeholder).parent();
             $.ajax({
                 type: 'GET',
                 url: imageUrl,
@@ -153,6 +300,15 @@ var TueFind = {
                     content += '<figcaption style="text-align: center;">' + title + '</figcaption>';
                     content += '</figure>';
                     $(placeholder).append(content);
+                },
+                statusCode: {
+                    200: function() {
+                        parentBlock.removeClass('tf-d-none');
+                        parentBlock.next().removeClass('col-md-auto');
+                        parentBlock.next().removeClass('col-lg-auto');
+                        parentBlock.next().addClass('col-md-9');
+                        parentBlock.next().addClass('col-lg-9');
+                    }
                 }
             });
         });
@@ -256,8 +412,6 @@ var TueFind = {
         }, 'fast');
         let searchForm_fulltext = $('#searchForm_fulltext');
         searchForm_fulltext.val(fulltextquery);
-        $('#itemFTSearchScope').val(fulltextscope);
-        searchForm_fulltext.submit();
     },
 
     WildcardHandler : function(query_text) {
@@ -276,10 +430,53 @@ var TueFind = {
         // Case 2: The submit button was pressed
         // Case 3: The tab nav was chosen
         else if ((event.type == 'submit' && this.GetSearchboxSearchContext() == 'search2') ||
-                 (event.type == 'click' && event.explicitOriginalTarget.href.match('/Search2/')) ) {
+                 (event.type == 'click' && event.view.location.href.match('/Search2/')) ) {
                  return this.WildcardHandler($("#searchForm_lookfor").val());
         }
         return true;
+    },
+
+    ItemFullTextSearch: function(home_url, record_id, fulltext_types) {
+        $(document).ready(function(){
+            TueFind.HandlePassedFulltextQuery();
+            $("#ItemFulltextSearchForm").submit(function(){
+                TueFind.GetFulltextSnippets(home_url,
+                                            record_id,
+                                            $("#searchForm_fulltext").val(),
+                                            true,
+                                            $("#itemFTSearchScope").val(),
+                                            $("#itemFTTextTypeScope").val() == "All Types" ? fulltext_types : $("#itemFTTextTypeScope").val())
+                TueFind.CheckWildcards("ItemFulltextSearchForm");
+                return false;
+            });
+            $("#ItemFulltextSearchForm").submit();
+        });
+    },
+
+    ShowMoreButtonFavoriteList: function() {
+      let maxElements = 3;
+      let countListItems = 0;
+      let showMoreButton = false;
+      $('.savedLists.loaded').each(function() {
+	if (!$(this).hasClass('tf-loaded-custom')) {
+	  $(this).find('li').each(function() {
+	    countListItems++;
+	    if (countListItems > maxElements) {
+	      $(this).hide();
+	      showMoreButton = true;
+	    }
+	  });
+	  if (showMoreButton === true) {
+	    $('<span class="tf-favoritesListMoreButton">' + VuFind.translate('more') + '</span>').insertAfter($(this).find('ul'));
+	  }
+	  $(this).removeClass('tf-d-none');
+	  $('.tf-favoritesListMoreButton').click(function() {
+	    $('.tf-favoritesListModal').click();
+	  });
+	  $(this).addClass('tf-loaded-custom');
+	  console.log('tf-loaded-custom');
+	}
+      });
     }
 };
 
@@ -300,6 +497,17 @@ $(document).ready(function () {
         TueFind.SetFocus('#alphaBrowseForm_from');
     }
 
+    $('.tuefind-event-resetsearchhandlers').click(function(){
+        TueFind.ResetSearchHandlers();
+        return TueFind.CheckWildcards(event);
+    });
+
+    $('.tuefind-event-searchForm-on-submit').submit(function(){
+        return TueFind.CheckWildcards(event);
+    });
+
     TueFind.AddContentAnchors();
     TueFind.AdjustSearchHandlers();
+    setInterval(TueFind.ShowMoreButtonFavoriteList, 1000);
+
 });

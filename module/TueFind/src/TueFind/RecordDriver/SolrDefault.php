@@ -71,7 +71,8 @@ class SolrDefault extends \VuFind\RecordDriver\SolrMarc
         return $result;
     }
 
-    public function getAuthorsAsString() {
+    public function getAuthorsAsString()
+    {
         $author_implode = function ($array) {
             if (is_null($array)) {
                 return null;
@@ -162,6 +163,21 @@ class SolrDefault extends \VuFind\RecordDriver\SolrMarc
         return $retval;
     }
 
+    public function getCorporateAuthorsGnds(): array
+    {
+        return $this->fields['author2_gnd'] ?? [];
+    }
+
+    public function getCorporateAuthorsIds(): array
+    {
+        return $this->fields['author2_id'] ?? [];
+    }
+
+    public function getDeduplicatedAuthors($dataFields = ['role', 'id', 'gnd'])
+    {
+        return parent::getDeduplicatedAuthors($dataFields);
+    }
+
     public function getFollowingPPNAndTitle()
     {
         $retval = [];
@@ -226,11 +242,55 @@ class SolrDefault extends \VuFind\RecordDriver\SolrMarc
         return $retval;
     }
 
+    public function getPrimaryAuthorsGnds(): array
+    {
+        return $this->fields['author_gnd'] ?? [];
+    }
+
+    public function getPrimaryAuthorsIds(): array
+    {
+        return $this->fields['author_id'] ?? [];
+    }
+
+    /**
+     * Same as the parent, but we want to return not only the author's name,
+     * but also ids and other properties (e.g. to generate links to authority pages).
+     */
+    public function getPrimaryAuthorsWithHighlighting(): array
+    {
+        $highlights = [];
+        // Create a map of de-highlighted valeus => highlighted values.
+        foreach ($this->getRawAuthorHighlights() as $current) {
+            $dehighlighted = str_replace(
+                ['{{{{START_HILITE}}}}', '{{{{END_HILITE}}}}'], '', $current
+            );
+            $highlights[$dehighlighted] = $current;
+        }
+
+        // replace unhighlighted authors with highlighted versions where
+        // applicable:
+        $authors = [];
+        foreach ($this->getDeduplicatedAuthors()['primary'] ?? [] as $author => $authorProperties) {
+            $author = $highlights[$author] ?? $author;
+            $authors[$author] = $authorProperties;
+        }
+        return $authors;
+    }
+
     public function getRecordDriverByPPN($ppn) {
         $recordLoader = $this->container->get('VuFind\RecordLoader');
         return $recordLoader->load($ppn, 'Solr', false);
     }
 
+    public function getSecondaryAuthorsGnds(): array
+    {
+        return $this->fields['author2_gnd'] ?? [];
+    }
+
+    public function getSecondaryAuthorsIds(): array
+    {
+        return $this->fields['author2_id'] ?? [];
+    }
 
     public function getSuperiorPPN() {
         return isset($this->fields['superior_ppn']) ?
@@ -238,7 +298,8 @@ class SolrDefault extends \VuFind\RecordDriver\SolrMarc
     }
 
 
-    public function getSuperiorRecord() {
+    public function getSuperiorRecord()
+    {
         $superior_ppn = $this->getSuperiorPPN();
         if (empty($superior_ppn))
             return NULL;
@@ -445,6 +506,15 @@ class SolrDefault extends \VuFind\RecordDriver\SolrMarc
         return $material_type;
     }
 
+    /**
+     * Return a list of translated topics. Can be used e.g. for chart generation.
+     * (translation handling only possible in IxTheo right now.)
+     */
+    public function getTopics($language=null): array
+    {
+        return array_unique($this->fields['topic'] ?? []);
+    }
+
 
     /**
      * Return an associative array of URL's mapped to their material types.
@@ -501,29 +571,35 @@ class SolrDefault extends \VuFind\RecordDriver\SolrMarc
      *
      * @return bool
      */
-    public function isAvailableForPDA() {
+    public function isAvailableForPDA()
+    {
         return false;
     }
 
-    public function isSuperiorWork() {
+    public function isSuperiorWork()
+    {
         return (isset($this->fields['is_superior_work'])) ? $this->fields['is_superior_work'] : false;
     }
 
-    public function hasInferiorWorksInCurrentSubsystem() {
+    public function hasInferiorWorksInCurrentSubsystem()
+    {
+        $subsystem = $this->container->get('ViewHelperManager')->get('tuefind')->getTueFindSubtype();
+        if (($subsystem == 'IXT' || $subsystem == 'KRI') && $this->fields['is_superior_work'])
+	    return true;
         if (!isset($this->fields['superior_work_subsystems']))
             return false;
 
         $subsystems = $this->fields['superior_work_subsystems'];
-        return in_array($this->container->get('ViewHelperManager')->get('tuefind')->getTueFindSubtype(),
-                        $subsystems, true);
+        return in_array($subsystem, $subsystems, true);
     }
 
-    public function isSubscribable() {
+    public function isSubscribable()
+    {
         return (isset($this->fields['is_subscribable'])) ? $this->fields['is_subscribable'] : false;
     }
 
     public function stripTrailingDates($text) {
-        $matches = array();
+        $matches = [];
         if (!preg_match("/(\\D*)(\\d{4}).*/", $text, $matches))
             return $text;
         return rtrim($matches[1]);
@@ -595,7 +671,8 @@ class SolrDefault extends \VuFind\RecordDriver\SolrMarc
      *
      * @return array
      */
-    public function getPublicationDetailsNoPlaces(){
+    public function getPublicationDetailsNoPlaces()
+    {
         $names = $this->getPublishers();
         $dates = $this->getHumanReadablePublicationDates();
 
@@ -616,32 +693,38 @@ class SolrDefault extends \VuFind\RecordDriver\SolrMarc
     }
 
 
-    public function setHasFulltextMatch() {
+    public function setHasFulltextMatch()
+    {
         $this->hasFulltextMatch = true;
     }
 
 
-    public function hasFulltextMatch() {
+    public function hasFulltextMatch()
+    {
         return $this->hasFulltextMatch ?? false;
     }
 
 
-    public function getFulltextTypes() : array {
+    public function getFulltextTypes() : array
+    {
         return (isset($this->fields['fulltext_types'])) ? $this->fields['fulltext_types'] : '';
     }
 
 
-    public function setFulltextTypeFilters($selected_fulltext_types) {
+    public function setFulltextTypeFilters($selected_fulltext_types)
+    {
         $this->selected_fulltext_types = $selected_fulltext_types;
     }
 
 
-    public function getFulltextTypeFilters() {
+    public function getFulltextTypeFilters()
+    {
         return $this->selected_fulltext_types;
     }
 
 
-    public function isHybrid() {
+    public function isHybrid()
+    {
         return isset($this->fields['is_hybrid']) && $this->fields['is_hybrid'] == true;
     }
 }

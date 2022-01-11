@@ -119,6 +119,20 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
             return $route_match->getParam('controller', $default);
     }
 
+
+    public function getRouteParams() {
+        $defaultRouteParams = [
+            'controller' => null,
+            'action' => null
+        ];
+        $route_match = $this->container->get('application')->getMvcEvent()->getRouteMatch();
+        if ($route_match == null){
+            return $defaultRouteParams;
+        }else{
+            return $route_match->getParams();
+        }
+    }
+
     /**
      * Calculate percentage of a count related to a solr search result
      *
@@ -159,42 +173,24 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
 
     /**
      * Appropriately format the roles for authors
-     * @param array roles
-     *
-     * @return string
      */
-    public function formatRoles($roles) {
-
-        if (!isset($roles['role'])) {
+    public function formatRoles(array $roles): string {
+        if (count($roles) == 0) {
             return '';
         }
-        $translate = function ($arr) {
-          $translatedRoles = array();
-          foreach ($arr as $element) {
-              if (!is_array($element)) {
+
+        $translate = function ($element) {
+            $translatedRoles = [];
+            if (!is_array($element)) {
                 $translatedRoles[] = $this->translate('CreatorRoles::' . $element);
-              } else {
+            } else {
                 foreach ($element as $str) {
                     $translatedRoles[] = $this->translate('CreatorRoles::' . $str);
                 }
-              }
-          }
-          return implode(', ', $translatedRoles);
+            }
+            return implode(', ', $translatedRoles);
         };
         return ' (' . implode(', ', array_unique(array_map($translate, $roles))) . ')';
-    }
-
-    /**
-     * Analyze a list of facets if at least one of them is chosen
-     * @param facet list array
-     *
-     * @return bool
-     */
-    public function atLeastOneFacetChosen($list) {
-        foreach($list as $i => $thisFacet)
-            if ($thisFacet['isApplied'])
-                return true;
-        return false;
     }
 
     /**
@@ -301,11 +297,32 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
     }
 
     /**
+     * Implemented as a workaround, because getenv('TUEFIND_FLAVOUR')
+     * does not work in apache environment.
+     */
+    public function getTueFindFlavour(): string {
+        if ($this->getTueFindSubtype() == 'KRI')
+            return 'krimdok';
+        else
+            return 'ixtheo';
+    }
+
+
+    /**
       * Get TueFind Instance as defined by VUFIND_LOCAL_DIR variable
       * @return string
       */
     public function getTueFindInstance() {
         return basename(getenv('VUFIND_LOCAL_DIR'));
+    }
+
+    public function getTueFindSubsystem(): string {
+        $instance = $this->getTueFindInstance();
+        $map = ['ixtheo' => 'ixtheo',
+                'relbib' => 'relbib',
+                'bibstudies' => 'biblestudies',
+                'churchlaw' => 'canonlaw'];
+        return $map[$instance] ?? $instance;
     }
 
     /**
@@ -411,6 +428,18 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
     }
 
     /**
+     * Check if a searchbox tab is enabled, e.g. "SolrAuth".
+     */
+    public function isSearchTabEnabled($tabId): bool {
+        $tabConfig = $this->getConfig('config')->SearchTabs ?? [];
+        foreach ($tabConfig as $tabKey => $tabText) {
+            if ($tabKey == $tabId)
+                return true;
+        }
+        return false;
+    }
+
+    /**
      * Check if user account deletion is enabled in config file.
      */
     public function isUserAccountDeletionEnabled() {
@@ -433,30 +462,35 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
 
     public function printPublicationInformation($pubPlaces, $pubDates, $pubNames) {
         if (is_array($pubPlaces) && is_array($pubDates) && is_array($pubNames) &&
-            !(empty($pubPlaces) && empty($pubDates) && empty($pubNames))) {
-             $total = min(count($pubPlaces), count($pubDates), count($pubNames));
-             // if we have pub dates but no other details, we still want to export the year:
-             if ($total == 0 && count($pubDates) > 0) {
-                 $total = 1;
-             }
-             $dateTimeHelper = $this->container->get('ViewHelperManager')->get('dateTime');
-             for ($i = 0; $i < $total; $i++) {
-                 if (isset($pubPlaces[$i])) {
-                     echo "CY  - " . rtrim(str_replace(array('[', ']'), '', $pubPlaces[$i]), ': '). "\r\n";
-                 }
-                 if (isset($pubNames[$i])) {
-                     echo "PB  - " . rtrim($pubNames[$i], ", ") . "\r\n";
-                 }
-                 $date = trim($pubDates[$i], '[]. ');
-                 if (strlen($date) > 4) {
-                     $date = $dateTimeHelper->extractYear($date);
-                 }
-                 if ($date) {
-                     echo 'PY  - ' . "$date\r\n";
-                 }
-             }
-             return true;
-         }
-         return false;
+            !(empty($pubPlaces) && empty($pubDates) && empty($pubNames)))
+        {
+            $total = min(count($pubPlaces), count($pubDates), count($pubNames));
+            // if we have pub dates but no other details, we still want to export the year:
+            if ($total == 0 && count($pubDates) > 0) {
+                $total = 1;
+            }
+            $dateTimeHelper = $this->container->get('ViewHelperManager')->get('dateTime');
+            for ($i = 0; $i < $total; $i++) {
+                if (isset($pubPlaces[$i])) {
+                    echo "CY  - " . rtrim(str_replace(array('[', ']'), '', $pubPlaces[$i]), ': '). "\r\n";
+                }
+                if (isset($pubNames[$i])) {
+                    echo "PB  - " . rtrim($pubNames[$i], ", ") . "\r\n";
+                }
+                $date = trim($pubDates[$i], '[]. ');
+                if (strlen($date) > 4) {
+                    $date = $dateTimeHelper->extractYear($date);
+                }
+                if ($date) {
+                    echo 'PY  - ' . "$date\r\n";
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public function getKfL() {
+        return $this->container->get(\TueFind\Service\KfL::class);
     }
 }
