@@ -33,7 +33,7 @@ VuFind.register('itemStatuses', function ItemStatuses() {
           && $item.find('.callnumAndLocation').length > 0
     ) {
       // Full status mode is on -- display the HTML and hide extraneous junk:
-      $item.find('.callnumAndLocation').empty().append(result.full_status);
+      $item.find('.callnumAndLocation').empty().append(VuFind.updateCspNonce(result.full_status));
       $item.find('.callnumber,.hideIfDetailed,.location,.status').addClass('hidden');
     } else if (typeof(result.missing_data) !== 'undefined'
           && result.missing_data
@@ -157,6 +157,7 @@ VuFind.register('itemStatuses', function ItemStatuses() {
         .fail( this.itemStatusFail)
         .always(function queueAjaxAlways() {
           this.itemStatusRunning = false;
+          VuFind.emit("item-status-done");
         });
     }//end runItemAjaxForQueue
   };
@@ -180,7 +181,7 @@ VuFind.register('itemStatuses', function ItemStatuses() {
       return;
     }
     if ($item.find('.hiddenId').length === 0) {
-      return false;
+      return;
     }
     var id = $item.find('.hiddenId').val();
     var handlerName = 'ils';
@@ -205,7 +206,7 @@ VuFind.register('itemStatuses', function ItemStatuses() {
     }
   }
   function init(_container) {
-    if (typeof Hunt === 'undefined') {
+    if (typeof Hunt === 'undefined' || VuFind.isPrinting()) {
       checkItemStatuses(_container);
     } else {
       var container = typeof _container === 'undefined'
