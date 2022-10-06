@@ -18,6 +18,7 @@ class RssFeed extends RssBase
     {
         $select = $this->getSql()->select();
         $select->where->like('subsystem_types', '%' . $this->instance . '%');
+        $select->where(['active'=>'1']);
         $select->order('feed_name ASC');
         return $this->selectWith($select);
     }
