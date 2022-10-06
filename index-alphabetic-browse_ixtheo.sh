@@ -7,7 +7,7 @@ TMP_RAMDISK_DIR="/tmp/ramdisk"
 
 # We are ordinarily run a solr and need an appropriate sudoers setup c.f. sudoers.d/99-alphabrowse_index_ramdisk
 [ ${USER} == "solr" ] && mount_command="sudo mount" || mount_command="mount"
-[ ${USER} == "solr" ] && umount_command="sudo mount" || umount_command="umount"
+[ ${USER} == "solr" ] && umount_command="sudo umount" || umount_command="umount"
 
 trap ExitHandler EXIT
 trap ExitHandler SIGINT
