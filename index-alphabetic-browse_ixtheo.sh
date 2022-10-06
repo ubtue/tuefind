@@ -5,6 +5,9 @@ set -o errexit
 
 TMP_RAMDISK_DIR="/tmp/ramdisk"
 
+# We are ordinarily run a solr and need an appropriate sudoers setup c.f. sudoers.d/99-alphabrowse_index_ramdisk
+[ ${USER} == "solr" ] && mount_command="sudo mount" || mount_command="mount"
+[ ${USER} == "solr" ] && umount_command="sudo umount" || umount_command="umount"
 
 trap ExitHandler EXIT
 trap ExitHandler SIGINT
@@ -15,7 +18,7 @@ function ExitHandler {
 
 function ShutdownRamdisk() {
     if mountpoint --quiet ${TMP_RAMDISK_DIR}; then
-        umount ${TMP_RAMDISK_DIR}
+        ${umount_command} ${TMP_RAMDISK_DIR}
     fi
 }
 
@@ -43,9 +46,10 @@ fi
 cd "`dirname $0`/import"
 CLASSPATH="browse-indexing.jar:${SOLR_HOME}/jars/*:${SOLR_HOME}/../vendor/contrib/analysis-extras/lib/*:${SOLR_HOME}/../vendor/server/solr-webapp/webapp/WEB-INF/lib/*"
 
+
 mkdir -p ${TMP_RAMDISK_DIR}
 if ! mountpoint --quiet ${TMP_RAMDISK_DIR}; then
-   mount -t tmpfs -o rw,size=10G tmpfs ${TMP_RAMDISK_DIR}
+   ${mount_command} -t tmpfs -o size=10G tmpfs ${TMP_RAMDISK_DIR}
 fi
 
 # make index work with replicated index
