@@ -16,6 +16,7 @@
     $searchTypeSelected = array();
     foreach ($handlers as $handler) {
         if(!empty($handler['selected'])) {
+            $handler['label'] = $this->transEsc($handler['label']);
             $searchTypeSelected = $handler;
         }
     }
