@@ -113,6 +113,8 @@ class DSpace6 {
 
     public function addBitstream(string $itemId, string $name, string $path)
     {
+
+        $name = urlencode($name);
         // POST the whole file
         $fileHandle = fopen($path, "rb");
         $fileContents = stream_get_contents($fileHandle);
