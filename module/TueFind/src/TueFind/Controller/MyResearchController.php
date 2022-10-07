@@ -118,6 +118,19 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
                 $uploadError = true;
             }
 
+            $onlyFileName = explode(".pdf", $uploadedFile['name']);
+            if(isset($onlyFileName[0])) {
+                $fileName = $onlyFileName[0];
+                preg_match('/^[a-zA-Z0-9_\s*]+$/', $fileName, $matchesName);
+                if(empty($matchesName)) {
+                    $this->flashMessenger()->addMessage('The file name is incorrect you can use letters, numbers, underscores and spaces!', 'error');
+                    $uploadError = true;
+                }
+            }else{
+                $this->flashMessenger()->addMessage('The file name is incorrect you can use letters, numbers, underscores and spaces!', 'error');
+                $uploadError = true;
+            }
+
             if (!$uploadError) {
                 $tmpdir = sys_get_temp_dir();
                 $tmpfile = $tmpdir . '/' . $uploadedFile['name'];
@@ -146,7 +159,7 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
                 $collection = $dspace->getCollectionByName($collectionName);
                 $dspaceMetadata = $this->serviceLocator->get(\VuFind\MetadataVocabulary\PluginManager::class)->get('DSpace6')->getMappedData($existingRecord);
                 $item = $dspace->addItem($collection->uuid, $dspaceMetadata);
-                
+
                 $bitstream = $dspace->addBitstream($item->uuid, basename($tmpfile), $tmpfile);
                 $dbPublications = $this->getTable('publication')->addPublication($user->id, $existingRecordId, $item->handle, $item->uuid, $termFileData['termDate']);
 
