@@ -563,4 +563,53 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
         $map = ['ixtheo'];
         return in_array($instance, $map);
     }
+
+    public function getFullRouteName(): string {
+        $currentRoute = $this->getRouteParams();
+        return isset($currentRoute['page']) ? $currentRoute['controller'].'/'.$currentRoute['action'].'/'.$currentRoute['page'] : $currentRoute['controller'].'/'.$currentRoute['action'];
+    }
+
+    public function availableToShowSearchForm(): bool {
+        $map = [
+            'Content/Content/news',
+            'Content/Content/open_access_journals',
+            'Content/Content/ixtheo_account',
+            'Content/Content/ixtheo_content',
+            'Content/Content/index_biblicus',
+            'Content/Content/theology_digital',
+            'Content/Content/canon_law',
+            'Content/Content/networking'
+        ];
+        return in_array($this->getFullRouteName(), $map);
+    }
+
+    public function checkingSelectedTabs($tabs): array {
+      $fullRouteName = $this->getFullRouteName();
+      if($fullRouteName == "Content/Content/open_text") {
+        foreach($tabs as &$tab) {
+            if(!isset($tab['url'])) {
+              $tab['url'] = "/";
+            }
+            if($tab['id'] == 'SolrAuth') {
+              $tab['selected'] = 1;
+            }else{
+              $tab['selected'] = 0;
+            }
+        }
+      }
+      if($fullRouteName == "Content/Content/full_text_search") {
+        foreach($tabs as &$tab) {
+            if(!isset($tab['url'])) {
+              $tab['url'] = "/";
+            }
+            if($tab['id'] == 'Search2:fulltext') {
+              $tab['selected'] = 1;
+            }else{
+              $tab['selected'] = 0;
+            }
+        }
+      }
+      return $tabs;
+    }
+
 }

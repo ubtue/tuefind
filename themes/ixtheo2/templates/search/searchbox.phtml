@@ -1,4 +1,5 @@
 <?php
+    $tuefind = $this->tuefind();
     // Set default value if necessary:
     if (!isset($this->searchClassId)) {
         $config = $this->config()->get('config');
@@ -37,8 +38,10 @@
     }
     $filterDetails = $this->searchbox()->getFilterDetails($filterList, $checkboxFilters);
     $showFilters = $filterDetails && (isset($results) || $options->getRetainFilterSetting());
+    $tabConfig = $this->searchTabs()->getTabConfig($this->searchClassId, $this->lookfor, $this->searchIndex, $this->searchType, $hiddenFilters);
+
+    if($tuefind->availableToShowSearchForm() === false) :
 ?>
-<?php $tabConfig = $this->searchTabs()->getTabConfig($this->searchClassId, $this->lookfor, $this->searchIndex, $this->searchType, $hiddenFilters); ?>
 
 <section class="cw-py-5 cw-bg-gray-100">
     <div class="container">
@@ -78,4 +81,7 @@
         </div>
     </div>
 </section>
+
+<?php endif; ?>
 <!-- End section searchbar -->
+

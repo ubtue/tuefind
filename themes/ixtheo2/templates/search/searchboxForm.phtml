@@ -12,7 +12,6 @@
         $this->searchClassId, $this->searchIndex ?? null
     );
     $handlerCount = count($handlers);
-
     $searchTypeSelected = array();
     foreach ($handlers as $handler) {
         if(!empty($handler['selected'])) {
@@ -47,8 +46,12 @@
     }
     $filterDetails = $this->searchbox()->getFilterDetails($filterList, $checkboxFilters);
     $showFilters = $filterDetails && (isset($results) || $options->getRetainFilterSetting());
+
+    $tabConfig = $this->searchTabs()->getTabConfig($this->searchClassId, $this->lookfor, $this->searchIndex, $this->searchType, $hiddenFilters);
+
+    $tabConfig['tabs'] = $tuefind->checkingSelectedTabs($tabConfig['tabs']);
+
 ?>
-<?php $tabConfig = $this->searchTabs()->getTabConfig($this->searchClassId, $this->lookfor, $this->searchIndex, $this->searchType, $hiddenFilters); ?>
 
 <div class="clearfix searchbox_home" role="search">
     <?php if ($this->searchType == 'advanced'): ?>
