@@ -132,7 +132,7 @@ class DSpace6 {
                     self::HEADER_CONTENT_LENGTH => strlen($requestData),
         ];
 
-        $url = self::ENDPOINT_ITEMS . '/' . urlencode($itemId) . '/bitstreams?name=' . $name;
+        $url = self::ENDPOINT_ITEMS . '/' . urlencode($itemId) . '/bitstreams?name=' . urlencode($name);
         return $this->call($url, self::METHOD_POST, $headers, $requestData);
     }
 
