@@ -117,7 +117,7 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
                 $this->flashMessenger()->addMessage('File is too big!', 'error');
                 $uploadError = true;
             }
-            if (!preg_match('/^[a-z0-9_\s*]+\.pdf$/i', $uploadedFile['name'])) {
+            if (!preg_match('/^[a-z0-9_\s]+\.pdf$/i', $uploadedFile['name'])) {
                 $this->flashMessenger()->addMessage('The file name is incorrect. Only letters, numbers, underscores and spaces are allowed.', 'error');
                 $uploadError = true;
             }

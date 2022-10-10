@@ -113,8 +113,6 @@ class DSpace6 {
 
     public function addBitstream(string $itemId, string $name, string $path)
     {
-
-        $name = urlencode($name);
         // POST the whole file
         $fileHandle = fopen($path, "rb");
         $fileContents = stream_get_contents($fileHandle);
@@ -134,7 +132,7 @@ class DSpace6 {
                     self::HEADER_CONTENT_LENGTH => strlen($requestData),
         ];
 
-        $url = self::ENDPOINT_ITEMS . '/' . urlencode($itemId) . '/bitstreams?name=' . $name;
+        $url = self::ENDPOINT_ITEMS . '/' . urlencode($itemId) . '/bitstreams?name=' . urlencode($name);
         return $this->call($url, self::METHOD_POST, $headers, $requestData);
     }
 
