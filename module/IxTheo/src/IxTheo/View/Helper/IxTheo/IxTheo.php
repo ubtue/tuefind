@@ -135,6 +135,35 @@ class IxTheo extends \Laminas\View\Helper\AbstractHelper
         return count($subscribedBundleIds) > 0;
     }
 
+    public function overrideSelectedSearchTab($tabs): array {
+      $fullRouteName = $this->tuefind->getFullRouteName();
+      if($fullRouteName == "Content/Content/open_text") {
+        foreach($tabs as &$tab) {
+            if(!isset($tab['url'])) {
+              $tab['url'] = "/";
+            }
+            if($tab['id'] == 'SolrAuth') {
+              $tab['selected'] = 1;
+            }else{
+              $tab['selected'] = 0;
+            }
+        }
+      }
+      if($fullRouteName == "Content/Content/full_text_search") {
+        foreach($tabs as &$tab) {
+            if(!isset($tab['url'])) {
+              $tab['url'] = "/";
+            }
+            if($tab['id'] == 'Search2:fulltext') {
+              $tab['selected'] = 1;
+            }else{
+              $tab['selected'] = 0;
+            }
+        }
+      }
+      return $tabs;
+    }
+
     public function availableToShowSearchForm(): bool {
         return in_array($this->tuefind->getFullRouteName(), $this->map) ? false : true;
     }

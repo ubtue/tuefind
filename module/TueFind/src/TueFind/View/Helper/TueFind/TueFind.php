@@ -568,34 +568,4 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
         $currentRoute = $this->getRouteParams();
         return isset($currentRoute['page']) ? $currentRoute['controller'].'/'.$currentRoute['action'].'/'.$currentRoute['page'] : $currentRoute['controller'].'/'.$currentRoute['action'];
     }
-
-    public function overrideSelectedSearchTab($tabs): array {
-      $fullRouteName = $this->getFullRouteName();
-      if($fullRouteName == "Content/Content/open_text") {
-        foreach($tabs as &$tab) {
-            if(!isset($tab['url'])) {
-              $tab['url'] = "/";
-            }
-            if($tab['id'] == 'SolrAuth') {
-              $tab['selected'] = 1;
-            }else{
-              $tab['selected'] = 0;
-            }
-        }
-      }
-      if($fullRouteName == "Content/Content/full_text_search") {
-        foreach($tabs as &$tab) {
-            if(!isset($tab['url'])) {
-              $tab['url'] = "/";
-            }
-            if($tab['id'] == 'Search2:fulltext') {
-              $tab['selected'] = 1;
-            }else{
-              $tab['selected'] = 0;
-            }
-        }
-      }
-      return $tabs;
-    }
-
 }

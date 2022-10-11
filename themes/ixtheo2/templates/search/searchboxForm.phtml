@@ -1,5 +1,6 @@
 <?php
     $tuefind = $this->tuefind();
+    $ixtheo = $this->ixtheo();
     // Set default value if necessary:
     if (!isset($this->searchClassId)) {
         $config = $this->config()->get('config');
@@ -49,7 +50,7 @@
 
     $tabConfig = $this->searchTabs()->getTabConfig($this->searchClassId, $this->lookfor, $this->searchIndex, $this->searchType, $hiddenFilters);
 
-    $tabConfig['tabs'] = $tuefind->overrideSelectedSearchTab($tabConfig['tabs']);
+    $tabConfig['tabs'] = $ixtheo->overrideSelectedSearchTab($tabConfig['tabs']);
 
 ?>
 
