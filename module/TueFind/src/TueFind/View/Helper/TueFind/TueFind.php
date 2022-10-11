@@ -569,21 +569,7 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
         return isset($currentRoute['page']) ? $currentRoute['controller'].'/'.$currentRoute['action'].'/'.$currentRoute['page'] : $currentRoute['controller'].'/'.$currentRoute['action'];
     }
 
-    public function availableToShowSearchForm(): bool {
-        $map = [
-            'Content/Content/news',
-            'Content/Content/open_access_journals',
-            'Content/Content/ixtheo_account',
-            'Content/Content/ixtheo_content',
-            'Content/Content/index_biblicus',
-            'Content/Content/theology_digital',
-            'Content/Content/canon_law',
-            'Content/Content/networking'
-        ];
-        return in_array($this->getFullRouteName(), $map);
-    }
-
-    public function checkingSelectedTabs($tabs): array {
+    public function overrideSelectedSearchTab($tabs): array {
       $fullRouteName = $this->getFullRouteName();
       if($fullRouteName == "Content/Content/open_text") {
         foreach($tabs as &$tab) {

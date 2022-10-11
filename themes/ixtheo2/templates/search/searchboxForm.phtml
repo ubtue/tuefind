@@ -49,7 +49,7 @@
 
     $tabConfig = $this->searchTabs()->getTabConfig($this->searchClassId, $this->lookfor, $this->searchIndex, $this->searchType, $hiddenFilters);
 
-    $tabConfig['tabs'] = $tuefind->checkingSelectedTabs($tabConfig['tabs']);
+    $tabConfig['tabs'] = $tuefind->overrideSelectedSearchTab($tabConfig['tabs']);
 
 ?>
 

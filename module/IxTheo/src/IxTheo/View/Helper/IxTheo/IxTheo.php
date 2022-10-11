@@ -11,9 +11,21 @@ class IxTheo extends \Laminas\View\Helper\AbstractHelper
 {
     protected $container;
     protected $cachedSubscriptions = null;
+    protected $tuefind;
+    protected $map = [
+                'Content/Content/news',
+                'Content/Content/open_access_journals',
+                'Content/Content/ixtheo_account',
+                'Content/Content/ixtheo_content',
+                'Content/Content/index_biblicus',
+                'Content/Content/theology_digital',
+                'Content/Content/canon_law',
+                'Content/Content/networking'
+              ];
 
     public function __construct(ContainerInterface $container) {
         $this->container = $container;
+        $this->tuefind = $container->get('ViewHelperManager')->get('tuefind');
     }
 
 
@@ -121,5 +133,9 @@ class IxTheo extends \Laminas\View\Helper\AbstractHelper
                 $subscribedBundleIds[] = $bundleId;
         }
         return count($subscribedBundleIds) > 0;
+    }
+
+    public function availableToShowSearchForm(): bool {
+        return in_array($this->tuefind->getFullRouteName(), $this->map) ? false : true;
     }
 }

@@ -1,5 +1,10 @@
 <?php
     $tuefind = $this->tuefind();
+
+    $helper = $this->IxTheo();
+    if($tuefind->getTueFindSubsystem() == 'relbib') {
+      $helper = $this->RelBib();
+    }
     // Set default value if necessary:
     if (!isset($this->searchClassId)) {
         $config = $this->config()->get('config');
@@ -40,7 +45,7 @@
     $showFilters = $filterDetails && (isset($results) || $options->getRetainFilterSetting());
     $tabConfig = $this->searchTabs()->getTabConfig($this->searchClassId, $this->lookfor, $this->searchIndex, $this->searchType, $hiddenFilters);
 
-    if($tuefind->availableToShowSearchForm() === false) :
+    if($helper->availableToShowSearchForm()) :
 ?>
 
 <section class="cw-py-5 cw-bg-gray-100">
