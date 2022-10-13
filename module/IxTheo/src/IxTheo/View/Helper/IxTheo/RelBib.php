@@ -6,6 +6,6 @@ use Interop\Container\ContainerInterface;
 
 class RelBib extends \IxTheo\View\Helper\IxTheo\IxTheo
 {
-    protected $map = [];
+    protected $searchFormRoutes = [];
 
 }
