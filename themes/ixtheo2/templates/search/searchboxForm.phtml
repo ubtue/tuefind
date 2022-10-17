@@ -22,6 +22,7 @@
     }
 
     $basicSearch = $this->searchbox()->combinedHandlersActive() ? 'combined-searchbox' : $options->getSearchAction();
+
     $searchHome = $options->getSearchHomeAction();
     $advSearch = $options->getAdvancedSearchAction();
     $lastSort = $this->searchMemory()->getLastSort($this->searchClassId);
@@ -51,6 +52,8 @@
     $tabConfig = $this->searchTabs()->getTabConfig($this->searchClassId, $this->lookfor, $this->searchIndex, $this->searchType, $hiddenFilters);
 
     $tabConfig['tabs'] = $ixtheo->overrideSelectedSearchTab($tabConfig['tabs']);
+
+    $basicSearch = $ixtheo->changeSearchFormAction($basicSearch,$tabConfig['tabs']);
 
 ?>
 

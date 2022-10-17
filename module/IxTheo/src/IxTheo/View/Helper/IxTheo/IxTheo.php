@@ -156,6 +156,23 @@ class IxTheo extends \Laminas\View\Helper\AbstractHelper
         return $tabs;
     }
 
+    public function changeSearchFormAction($actionName,$tabs): string {
+        $fullRouteName = $this->tuefind->getFullRouteName();
+        if($actionName == 'search-results') {
+            foreach($this->searchFormRoutes as $oneRoute) {
+                foreach($tabs as $tab) {
+                    if($fullRouteName == $oneRoute[0] && $tab['selected'] == 1 && $tab['id'] == 'SolrAuth') {
+                        $actionName = 'authority-search';
+                    }
+                    if($fullRouteName == $oneRoute[0] && $tab['selected'] == 1 && $tab['id'] == 'Search2:fulltext') {
+                        $actionName = 'search2-results';
+                    }
+                }
+            }
+        }
+        return $actionName;
+    }
+
     public function availableToShowSearchForm(): bool {
         $showSearchForm = true;
         foreach($this->searchFormRoutes as $oneRoute) {
