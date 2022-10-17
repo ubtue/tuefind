@@ -11,7 +11,9 @@ return [
         ],
         'aliases' => [
             'ixtheo' => 'IxTheo\View\Helper\IxTheo\RelBib',
-            'IxTheo' => 'IxTheo\View\Helper\IxTheo\RelBib'
+            'IxTheo' => 'IxTheo\View\Helper\IxTheo\RelBib',
+            'relbib' => 'IxTheo\View\Helper\IxTheo\RelBib',
+            'RelBib' => 'IxTheo\View\Helper\IxTheo\RelBib'
         ],
     ]
 ];
