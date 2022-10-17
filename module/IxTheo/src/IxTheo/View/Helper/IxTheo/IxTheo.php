@@ -156,6 +156,19 @@ class IxTheo extends \Laminas\View\Helper\AbstractHelper
         return $tabs;
     }
 
+    public function changeSearchFormAction($actionName): string {
+        $fullRouteName = $this->tuefind->getFullRouteName();
+        if($actionName == 'search-results') {
+            if($fullRouteName == "Content/Content/open_text") {
+                $actionName = 'authority-search';
+            }
+            if($fullRouteName == "Content/Content/full_text_search") {
+                $actionName = 'search2-results';
+            }
+        }
+        return $actionName;
+    }
+
     public function availableToShowSearchForm(): bool {
         $showSearchForm = true;
         foreach($this->searchFormRoutes as $oneRoute) {
