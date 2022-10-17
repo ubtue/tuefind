@@ -1,10 +1,6 @@
 <?php
     $tuefind = $this->tuefind();
-
     $helper = $this->IxTheo();
-    if($tuefind->getTueFindSubsystem() == 'relbib') {
-      $helper = $this->RelBib();
-    }
     // Set default value if necessary:
     if (!isset($this->searchClassId)) {
         $config = $this->config()->get('config');
