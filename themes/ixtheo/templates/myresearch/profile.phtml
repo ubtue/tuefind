@@ -18,7 +18,7 @@
     <?=$this->flashmessages();?>
 
     <form method="post" name="accountForm" id="accountForm" class="form-horizontal" data-toggle="validator" role="form">
-        <?=$this->context($this)->renderInContext('Auth/Database/create.phtml', ['only_additional_information' => true]);?>
+        <?=$this->context($this)->renderInContext('Auth/Database/create.phtml', ['profile' => true]);?>
 
         <div id="account-actions">
 
