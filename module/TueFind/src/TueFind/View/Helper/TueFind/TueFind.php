@@ -563,4 +563,9 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
         $map = ['ixtheo'];
         return in_array($instance, $map);
     }
+
+    public function getFullRouteName(): string {
+        $currentRoute = $this->getRouteParams();
+        return isset($currentRoute['page']) ? $currentRoute['controller'].'/'.$currentRoute['action'].'/'.$currentRoute['page'] : $currentRoute['controller'].'/'.$currentRoute['action'];
+    }
 }

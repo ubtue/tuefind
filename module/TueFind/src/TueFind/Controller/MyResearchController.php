@@ -117,6 +117,10 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
                 $this->flashMessenger()->addMessage('File is too big!', 'error');
                 $uploadError = true;
             }
+            if (!preg_match('/^[a-z0-9_\s]+\.pdf$/i', $uploadedFile['name'])) {
+                $this->flashMessenger()->addMessage('The file name is incorrect. Only letters, numbers, underscores and spaces are allowed.', 'error');
+                $uploadError = true;
+            }
 
             if (!$uploadError) {
                 $tmpdir = sys_get_temp_dir();
@@ -146,7 +150,7 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
                 $collection = $dspace->getCollectionByName($collectionName);
                 $dspaceMetadata = $this->serviceLocator->get(\VuFind\MetadataVocabulary\PluginManager::class)->get('DSpace6')->getMappedData($existingRecord);
                 $item = $dspace->addItem($collection->uuid, $dspaceMetadata);
-                
+
                 $bitstream = $dspace->addBitstream($item->uuid, basename($tmpfile), $tmpfile);
                 $dbPublications = $this->getTable('publication')->addPublication($user->id, $existingRecordId, $item->handle, $item->uuid, $termFileData['termDate']);
 
