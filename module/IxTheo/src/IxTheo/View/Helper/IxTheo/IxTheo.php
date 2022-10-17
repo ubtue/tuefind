@@ -11,9 +11,23 @@ class IxTheo extends \Laminas\View\Helper\AbstractHelper
 {
     protected $container;
     protected $cachedSubscriptions = null;
+    protected $tuefind;
+    protected $searchFormRoutes = [
+                ['Content/Content/news',false,''],
+                ['Content/Content/open_access_journals',false,''],
+                ['Content/Content/ixtheo_account',false,''],
+                ['Content/Content/ixtheo_content',false,''],
+                ['Content/Content/index_biblicus',false,''],
+                ['Content/Content/theology_digital',false,''],
+                ['Content/Content/canon_law',false,''],
+                ['Content/Content/networking',false,''],
+                ['Content/Content/open_text',true,'SolrAuth'],
+                ['Content/Content/full_text_search',true,'Search2:fulltext']
+              ];
 
     public function __construct(ContainerInterface $container) {
         $this->container = $container;
+        $this->tuefind = $container->get('ViewHelperManager')->get('tuefind');
     }
 
 
@@ -121,5 +135,34 @@ class IxTheo extends \Laminas\View\Helper\AbstractHelper
                 $subscribedBundleIds[] = $bundleId;
         }
         return count($subscribedBundleIds) > 0;
+    }
+
+    public function overrideSelectedSearchTab($tabs): array {
+        $fullRouteName = $this->tuefind->getFullRouteName();
+        foreach($this->searchFormRoutes as $oneRoute) {
+            if($oneRoute[0] == $this->tuefind->getFullRouteName() && $oneRoute[1] === true && !empty($oneRoute[2])) {
+                foreach($tabs as &$tab) {
+                    if(!isset($tab['url'])) {
+                        $tab['url'] = "/";
+                    }
+                    if($tab['id'] == $oneRoute[2]) {
+                        $tab['selected'] = 1;
+                    }else{
+                        $tab['selected'] = 0;
+                    }
+                }
+            }
+        }
+        return $tabs;
+    }
+
+    public function availableToShowSearchForm(): bool {
+        $showSearchForm = true;
+        foreach($this->searchFormRoutes as $oneRoute) {
+            if($oneRoute[0] == $this->tuefind->getFullRouteName() && $oneRoute[1] === false) {
+                $showSearchForm = false;
+            }
+        }
+        return $showSearchForm;
     }
 }
