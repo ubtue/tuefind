@@ -378,6 +378,7 @@ var TueFind = {
                     if (replacement != "") {
                         $("#" + jop_place_holder_id).each(function () {
                             $(this).replaceWith(replacement);
+                            $.event.trigger({ type: "JOP:success" });
                         });
                     } else {
                         $("#" + jop_place_holder_id).each(function () {
@@ -396,6 +397,14 @@ var TueFind = {
             }
         }); // end ajax
     },
+
+
+    // Remove HBZ line in full title view if JOP yielded sucessful results
+    // c.f. the triggered signal in GetJOPInformation()
+    RemoveHBZIfJOPPresent: function() {
+       $(document).on("JOP:success", function (event) { $('a[href^="http://openurlgw.hbz-nrw.de"]').closest('tr').remove(); });
+    },
+
 
     // helper function to set focus on a specified input field, also sets cursor position to end of field content
     SetFocus: function(input_selector) {
