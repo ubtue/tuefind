@@ -17,5 +17,7 @@
               <span class="save-record toolbar-btn btn-type-save">Another user already has rights to this authority record</span>
           <?php endif;?>
       <?php endif;?>
+  <?php else:?>
+      <a class="save-record toolbar-btn btn-type-save" rel="nofollow" href="<?=$this->url('authority-request-access', ['authority_id' => $this->driver->getUniqueId()])?>" data-lightbox="">Request access rights (This is me!)</a>
   <?php endif;?>
 </div>
