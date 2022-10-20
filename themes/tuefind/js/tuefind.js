@@ -364,21 +364,23 @@ var TueFind = {
                                     replacement += label;
                                     filter[label] = 1;
                                 }
+                            $.event.trigger({ type: "JOP:success" });
                             }
                         } else if (state == 4 || state == 10) {
                             if (replacement == "") {
                                 replacement = '<a href="' + url_html + '" target="_blank"><i class="fa fa-external-link"></i> ' +
-                                              part_img + check_availability_text + '</a>';
+                                              part_img + check_availability_text + '</a>' +
+                                              '<br/>' +  TueFind.GetHBZInfo();
                                 // We get an 1x1 pixel gif from JOP that can be seen as an empty line
                                 // => remove it
                                 $("#" + jop_icons_id).remove();
                             }
+                            $.event.trigger({ type: "JOP:check_availability" });
                         }
                     });
                     if (replacement != "") {
                         $("#" + jop_place_holder_id).each(function () {
                             $(this).replaceWith(replacement);
-                            $.event.trigger({ type: "JOP:success" });
                         });
                     } else {
                         $("#" + jop_place_holder_id).each(function () {
@@ -399,10 +401,21 @@ var TueFind = {
     },
 
 
+    RemoveHBZLine: function() {
+        $('a[href^="http://openurlgw.hbz-nrw.de"]').closest('tr').remove();
+    },
+
+    GetHBZInfo: function() {
+        const info_parts = VuFind.translate('hbz_info_text').split('%HBZ%');
+        return info_parts[0]  + $('a[href^="http://openurlgw.hbz-nrw.de"]').closest('td').html() + info_parts[1];
+    },
+
+
     // Remove HBZ line in full title view if JOP yielded sucessful results
     // c.f. the triggered signal in GetJOPInformation()
     RemoveHBZIfJOPPresent: function() {
-       $(document).on("JOP:success", function (event) { $('a[href^="http://openurlgw.hbz-nrw.de"]').closest('tr').remove(); });
+      $(document).on("JOP:success", function (event) { TueFind.RemoveHBZLine(); });
+      $(document).on("JOP:check_availability", function (event) { TueFind.RemoveHBZLine(); });
     },
 
 
