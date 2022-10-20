@@ -541,7 +541,7 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
         return $result;
     }
 
-    public function userAlreadyMadeRequest($userId = null): bool
+    public function userAlreadyMadeAuthorityRequest($userId): bool
     {
         $table = $this->container->get(\VuFind\Db\Table\PluginManager::class)->get('user_authority');
         $row = $table->getByUserIdCurrent($userId);

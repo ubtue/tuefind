@@ -1,11 +1,9 @@
-<?php
-    $userAccess = $this->tuefind()->getUserAccessState($this->driver->getUniqueId(), $this->user->id ?? null);
-    $userAlreadyMadeRequest = $this->tuefind()->userAlreadyMadeRequest($this->user->id ?? null);
-?>
+<?php $userAccess = $this->tuefind()->getUserAccessState($this->driver->getUniqueId(), $this->user->id ?? null);?>
 <div>
-  <?php if ($this->user != false): ?>
+  <?php if ($this->user != false):
+      $userAlreadyMadeAuthorityRequest = $this->tuefind()->userAlreadyMadeAuthorityRequest($this->user->id);?>
       <?php if ($userAccess['availability'] == 'free'): ?>
-          <?php if($userAlreadyMadeRequest): ?>
+          <?php if($userAlreadyMadeAuthorityRequest): ?>
               You have already made a rights request for another author
           <?php else: ?>
               <a class="save-record toolbar-btn btn-type-save" rel="nofollow" href="<?=$this->url('authority-request-access', ['authority_id' => $this->driver->getUniqueId()])?>" data-lightbox="">Request access rights (This is me!)</a>
