@@ -47,6 +47,11 @@ class UserAuthority extends \VuFind\Db\Table\Gateway {
         return $this->select($whereParams);
     }
 
+    public function getByUserIdCurrent($userId): ?UserAuthorityRow
+    {
+        return $this->select(['user_id' => $userId])->current();
+    }
+
     public function getByAuthorityId($authorityId): ?UserAuthorityRow
     {
         return $this->select(['authority_id' => $authorityId])->current();
