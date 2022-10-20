@@ -92,7 +92,7 @@
                 <?php $journal_issue_display = preg_replace('/(\d+)(\()/','$1 $2', implode(", ", $journal_issue)) ?>
                 <a href="<?=$this->url('record', ['id' => $superior_ppn]) ?>"><?=$journal_issue_display ?></a>
               <?php else: ?>
-                <?php implode($journal_issue, " ") ?>
+                <?php implode(" ", $journal_issue) ?>
               <?php endif; ?>
             </div>
           <?php else: ?>
@@ -193,7 +193,7 @@
 
       <?php $canonLawRangesStrings = $this->driver->tryMethod('getCanonLawRangesStrings');
         if (!empty($canonLawRangesStrings) && count($canonLawRangesStrings) > 0) {
-          echo '<div>' . implode(array_unique($canonLawRangesStrings), '; ') . '</div>';
+          echo '<div>' . implode('; ', array_unique($canonLawRangesStrings)) . '</div>';
         }
       ?>
 
