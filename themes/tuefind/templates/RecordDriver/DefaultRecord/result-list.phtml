@@ -61,10 +61,10 @@
             <div>
               <?php if(!empty($superior_ppn)): ?>
                 <?=$this->transEsc('in')?>:
-                <?php $journal_issue_display = preg_replace('/(\d+)(\()/','$1 $2', implode($journal_issue,  ", ")) ?>
+                <?php $journal_issue_display = preg_replace('/(\d+)(\()/','$1 $2', implode(", ", $journal_issue)) ?>
                 <a href="<?=$this->url('record', array('id' => $superior_ppn)) ?>"><?=$journal_issue_display ?></a>
               <?php else: ?>
-                <?php implode($journal_issue, " ") ?>
+                <?php implode(" ", $journal_issue) ?>
               <?php endif; ?>
             </div>
           <?php // Option 2: We have any other kind of container (e.g. a series of books) ?>
