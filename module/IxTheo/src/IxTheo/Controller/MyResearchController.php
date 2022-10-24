@@ -6,7 +6,19 @@ use VuFind\Search\RecommendListener,
 
 class MyResearchController extends \TueFind\Controller\MyResearchController
 {
-    function pdasubscriptionsAction() {
+    public function changeEmailAction() {
+        $view = parent::changeEmailAction();
+
+        $user = $this->getUser();
+
+        // Update the TAD access flag:
+        exec("/usr/local/bin/set_tad_access_flag.sh " . $user->id);
+
+        return $view;
+    }
+
+
+    public function pdasubscriptionsAction() {
 
         $user = $this->getUser();
         if ($user == false) {
@@ -75,7 +87,7 @@ class MyResearchController extends \TueFind\Controller\MyResearchController
         }
     }
 
-    function subscriptionsAction() {
+    public function subscriptionsAction() {
 
         $user = $this->getUser();
         if ($user == false) {
@@ -144,7 +156,7 @@ class MyResearchController extends \TueFind\Controller\MyResearchController
         }
     }
 
-    function performDeleteSubscription($id, $deleteSource) {
+    public function performDeleteSubscription($id, $deleteSource) {
         // Force login:
         $user = $this->getUser();
         if (!$user) {
@@ -161,7 +173,7 @@ class MyResearchController extends \TueFind\Controller\MyResearchController
         return true;
     }
 
-    function performDeletePDASubscription($id, $deleteSource) {
+    public function performDeletePDASubscription($id, $deleteSource) {
         // Force login:
         $user = $this->getUser();
         if (!$user) {
@@ -202,8 +214,10 @@ class MyResearchController extends \TueFind\Controller\MyResearchController
     private function updateProfile(\Laminas\Http\PhpEnvironment\Request $request,
                                    \VuFind\Db\Row\User $user)
     {
+        // email may no longer be updated here, the separate action (+button) should be used
+        // so that the verify_email functionality actually has an effect.
         $params = [
-            'firstname' => '', 'lastname' => '', 'email' => '',
+            'firstname' => '', 'lastname' => '',
             'ixtheo_title' => '', 'ixtheo_institution' => '', 'ixtheo_country' => '',
             'ixtheo_language' => '', 'ixtheo_appellation' => ''
         ];
@@ -211,10 +225,6 @@ class MyResearchController extends \TueFind\Controller\MyResearchController
             $user->$param = $request->getPost()->get($param, $default);
         }
         $user->save();
-
-        // Update the TAD access flag:
-        exec("/usr/local/bin/set_tad_access_flag.sh " . $user->id);
-
         $this->getAuthManager()->updateSession($user);
     }
 

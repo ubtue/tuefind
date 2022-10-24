@@ -2,123 +2,105 @@
 $countries = IxTheo\Auth\Database::$countries;
 $appellations = IxTheo\Auth\Database::$appellations;
 $titles = IxTheo\Auth\Database::$titles;
+
+$pattern = '';
+if (isset($this->passwordPolicy['pattern'])) {
+  if ($this->passwordPolicy['pattern'] == 'numeric') {
+    $pattern = '\d+';
+  } elseif ($this->passwordPolicy['pattern'] == 'alphanumeric') {
+    $pattern = '[\da-zA-Z]+';
+  } else {
+    $pattern = $this->passwordPolicy['pattern'];
+  }
+}
 ?>
+<!-- IxTheo-specific: Appelation -->
+<div class="form-group">
+  <label class="control-label" for="ixtheo_appellation"><?= $this->transEsc('Appellation') ?>:</label>
+  <select id="account_appellation" name="ixtheo_appellation" class="form-control">
+    <?php foreach ($appellations as $appellation): ?>
+      <?php $selected = $this->request->get('ixtheo_appellation') === $appellation ? 'selected' : ''; ?>
+      <option <?= $selected; ?> value="<?= $appellation; ?>"><?= $this->transEsc($appellation); ?></option>
+    <?php endforeach; ?>
+  </select>
+</div>
+<div class="form-group">
+  <label class="control-label" for="ixtheo_title"><?= $this->transEsc('Title') ?>:</label>
+  <select id="account_title" name="ixtheo_title" class="form-control">
+    <?php foreach ($titles as $title): ?>
+      <?php $selected = $this->request->get('ixtheo_title') == $title ? 'selected' : ''; ?>
+      <option <?= $selected; ?> value="<?= $title; ?>"><?= $this->transEsc($title); ?></option>
+    <?php endforeach; ?>
+  </select>
+</div>
 
-<?php if (!$this->only_additional_information): ?>
-  <?php
-    $pattern = '';
-    if (isset($this->passwordPolicy['pattern'])) {
-      if ($this->passwordPolicy['pattern'] == 'numeric') {
-        $pattern = '\d+';
-      } elseif ($this->passwordPolicy['pattern'] == 'alphanumeric') {
-        $pattern = '[\da-zA-Z]+';
-      } else {
-        $pattern = $this->passwordPolicy['pattern'];
-      }
-    }
-  ?>
-  <div class="form-group row">
-    <label class="col-sm-2 control-label" for="account_email"><?= $this->transEsc('Email Address') ?>:</label>
-    <div class="col-md-10">
-        <input id="account_email" type="email" name="email" required aria-required="true"
-               value="<?= $this->escapeHtmlAttr($this->request->get('email')) ?>"
-               placeholder="<?= $this->transEsc('Email Address') ?>" class="form-control"/>
-    </div>
-  </div>
-  <div class="form-group row">
-    <label class="col-sm-2 control-label" for="account_username"><?= $this->transEsc('Desired Username') ?>:</label>
-    <div class="col-md-10">
-        <input id="account_username" type="text" name="username" required aria-required="true"
-               value="<?= $this->escapeHtmlAttr($this->request->get('username')) ?>"
-               placeholder="<?= $this->transEsc('Desired Username') ?>" class="form-control"/>
-    </div>
-  </div>
-  <div class="form-group row">
-    <label class="col-sm-2 control-label" for="account_password"><?= $this->transEsc('Password') ?>:</label>
-    <div class="col-md-5">
-      <input id="account_password" type="password" name="password" required aria-required="true" class="form-control"
-        <?=isset($this->passwordPolicy['minLength']) ? ' data-minlength="' . $this->passwordPolicy['minLength'] . '" data-minlength-error="' . $this->transEscAttr('password_minimum_length', ['%%minlength%%' => $this->passwordPolicy['minLength']]) . '"' : ''?>
-        <?=isset($this->passwordPolicy['maxLength']) ? ' maxlength="' . $this->passwordPolicy['maxLength'] . '"' : ''?>
-        <?=$pattern ? ' pattern="' . $pattern . '"' : '' ?>
-      />
-    </div>
-    <div class="col-md-5">
-        <input id="account_password2" type="password" name="password2" required aria-required="true"
-               placeholder="<?= $this->transEsc('Password Again') ?>" class="form-control"
-               data-match="#account_password"
-               data-match-error="<?= $this->escapeHtmlAttr($this->translate('Passwords do not match')) ?>"/>
-    </div>
-  </div>
-  <hr/>
-<?php endif;?>
-<div class="form-group row">
-    <label class="col-sm-2 control-label" for="ixtheo_appellation_title"><?= $this->transEsc('Title') ?>:</label>
-    <div class="col-sm-3">
-        <select id="account_appellation" name="ixtheo_appellation" class="form-control">
-            <?php foreach ($appellations as $appellation): ?>
-                <?php $selected = $this->request->get('ixtheo_appellation') === $appellation ? 'selected' : ''; ?>
-                <option <?= $selected; ?> value="<?= $appellation; ?>"><?= $this->transEsc($appellation); ?></option>
-            <?php endforeach; ?>
-        </select>
-    </div>
-    <div class="col-sm-7">
-        <select id="account_title" name="ixtheo_title" class="form-control">
-            <?php foreach ($titles as $title): ?>
-                <?php $selected = $this->request->get('ixtheo_title') == $title ? 'selected' : ''; ?>
-                <option <?= $selected; ?> value="<?= $title; ?>"><?= $this->transEsc($title); ?></option>
-            <?php endforeach; ?>
-        </select>
-    </div>
+<div class="form-group">
+  <label class="control-label" for="account_firstname"><?=$this->transEsc('First Name')?>:</label>
+  <input id="account_firstname" type="text" name="firstname" value="<?=$this->escapeHtmlAttr($this->request->get('firstname'))?>" class="form-control"/>
 </div>
-<div class="form-group row">
-    <label class="col-sm-2 control-label" for="account_title"><?= $this->transEsc('Name') ?>:</label>
-    <div class="col-sm-5">
-        <input id="account_firstname" type="text" name="firstname"
-               value="<?= $this->escapeHtmlAttr($this->request->get('firstname')) ?>"
-               placeholder="<?= $this->transEsc('First Name') ?>" class="form-control"/>
-    </div>
-    <div class="col-sm-5">
-        <input id="account_lastname" type="text" name="lastname"
-               value="<?= $this->escapeHtmlAttr($this->request->get('lastname')) ?>"
-               placeholder="<?= $this->transEsc('Last Name') ?>" class="form-control col-md-4"/>
-    </div>
+<div class="form-group">
+  <label class="control-label" for="account_lastname"><?=$this->transEsc('Last Name')?>:</label>
+  <input id="account_lastname" type="text" name="lastname" value="<?=$this->escapeHtmlAttr($this->request->get('lastname'))?>" class="form-control"/>
 </div>
-<?php if ($this->only_additional_information): ?>
-  <div class="form-group row">
-    <label class="col-sm-2 control-label" for="account_email"><?= $this->transEsc('Email') ?>:</label>
-    <div class="col-md-10">
-        <input id="account_email" type="email" name="email" required
-               value="<?= $this->escapeHtmlAttr($this->request->get('email')) ?>"
-               placeholder="<?= $this->transEsc('Email') ?>" class="form-control"/>
-    </div>
-  </div>
+<?php
+    // Hide these fields when changing an existing user's credentials:
+    // - Email: User must use separate button to change mail address due to verification functionality
+    // - Username: Must never be changed
+    // - Password: Separate button must be used
+?>
+<?php if (!$this->profile): ?>
+<div class="form-group">
+    <label class="control-label" for="account_email"><?= $this->transEsc('Email Address') ?>:</label>
+  <input id="account_email" type="email" name="email" required aria-required="true" value="<?=$this->escapeHtmlAttr($this->request->get('email'))?>" class="form-control"/>
+  <div class="help-block with-errors"></div>
+</div>
+<div class="form-group">
+  <label class="control-label" for="account_username"><?= $this->transEsc('Desired Username') ?>:</label>
+  <input id="account_username" type="text" name="username" required aria-required="true" value="<?=$this->escapeHtmlAttr($this->request->get('username'))?>" class="form-control"/>
+  <div class="help-block with-errors"></div>
+</div>
+<div class="form-group">
+  <label class="control-label" for="account_password"><?= $this->transEsc('Password') ?>:</label>
+    <input id="account_password" type="password" name="password" required aria-required="true" class="form-control"
+      <?=isset($this->passwordPolicy['minLength']) ? ' data-minlength="' . $this->passwordPolicy['minLength'] . '" data-minlength-error="' . $this->transEscAttr('password_minimum_length', ['%%minlength%%' => $this->passwordPolicy['minLength']]) . '"' : ''?>
+      <?=isset($this->passwordPolicy['maxLength']) ? ' maxlength="' . $this->passwordPolicy['maxLength'] . '"' : ''?>
+      <?=$pattern ? ' pattern="' . $pattern . '"' : '' ?>
+    />
+  <?php if ($this->passwordPolicy['hint']): ?>
+    <div class="help-block"><?=$this->transEsc($this->passwordPolicy['hint']) ?></div>
+  <?php endif;?>
+  <div class="help-block with-errors"></div>
+</div>
+<div class="form-group">
+  <label class="control-label" for="account_password2"><?=$this->transEsc('Password Again')?>:</label>
+  <input id="account_password2" type="password" name="password2" required aria-required="true" class="form-control" data-match="#account_password" data-match-error="<?=$this->transEscAttr('Passwords do not match')?>"/>
+  <div class="help-block with-errors"></div>
+</div>
 <?php endif; ?>
-<div class="form-group row">
-    <label class="col-sm-2 control-label" for="ixtheo_institution"><?= $this->transEsc('Institution') ?>:</label>
-    <div class="col-md-10">
-        <input id="account_institution" type="text" name="ixtheo_institution"
-               value="<?= $this->escapeHtmlAttr($this->request->get('ixtheo_institution')) ?>"
-               placeholder="<?= $this->transEsc('Institution') ?>" class="form-control"/>
-    </div>
-</div>
 
-<div class="form-group row">
-    <label class="col-sm-2 control-label" for="ixtheo_country_language"><?= $this->transEsc('Country and Language') ?>:</label>
-    <div class="col-md-5">
-        <select id="account_country" name="ixtheo_country" class="form-control">
-            <option></option>
-            <?php foreach ($countries as $country): ?>
-                <?php $selected = $this->request->get('ixtheo_country') == $country ? 'selected' : ''; ?>
-                <option <?= $selected; ?> value="<?= $country; ?>"><?= $this->transEsc($country); ?></option>
-            <?php endforeach; ?>
-        </select>
-    </div>
-    <div class="col-md-5">
-        <select id="account_language" name="ixtheo_language" class="form-control">
-            <?php foreach ($this->layout()->allLangs as $langCode => $langName): ?>
-                <?php $selected = $this->request->get('ixtheo_language') === $langCode ? 'selected' : '';?>
-                <option <?= $selected; ?> value="<?= $langCode; ?>"><?=$this->displayLanguageOption($langName)?></option>
-            <?php endforeach; ?>
-        </select>
-    </div>
+<!-- IxTheo-specific: Additional fields -->
+<div class="form-group">
+  <label class="control-label" for="ixtheo_institution"><?= $this->transEsc('Institution') ?>:</label>
+  <input id="account_institution" type="text" name="ixtheo_institution"
+         value="<?= $this->escapeHtmlAttr($this->request->get('ixtheo_institution')) ?>"
+         placeholder="<?= $this->transEsc('Institution') ?>" class="form-control"/>
+</div>
+<div class="form-group">
+  <label class="control-label" for="ixtheo_country"><?= $this->transEsc('Country') ?>:</label>
+  <select id="account_country" name="ixtheo_country" class="form-control">
+    <option></option>
+    <?php foreach ($countries as $country): ?>
+      <?php $selected = $this->request->get('ixtheo_country') == $country ? 'selected' : ''; ?>
+      <option <?= $selected; ?> value="<?= $country; ?>"><?= $this->transEsc($country); ?></option>
+    <?php endforeach; ?>
+  </select>
+</div>
+<div class="form-group">
+  <label class="control-label" for="ixtheo_language"><?= $this->transEsc('Language') ?>:</label>
+  <select id="account_language" name="ixtheo_language" class="form-control">
+    <?php foreach ($this->layout()->allLangs as $langCode => $langName): ?>
+      <?php $selected = $this->request->get('ixtheo_language') === $langCode ? 'selected' : '';?>
+      <option <?= $selected; ?> value="<?= $langCode; ?>"><?=$this->displayLanguageOption($langName)?></option>
+    <?php endforeach; ?>
+  </select>
 </div>
