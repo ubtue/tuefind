@@ -48,6 +48,7 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
 
         $config = $this->getConfig('tuefind');
         $dspaceServer = $config->Publication->dspace_url_base;
+        $dspaceVersion = $config->Publication->dspace_version;
 
         $authorityUsers = $this->getTable('user_authority')->getByUserId($user->id);
         $authorityUsersArray = [];
@@ -70,6 +71,7 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
         $viewParams = $this->getUserAuthoritiesAndRecords($user, /* $onlyGranted = */ true);
         $viewParams['publications'] = $publications;
         $viewParams['dspaceServer'] = $dspaceServer;
+        $viewParams['dspaceVersion'] = $dspaceVersion;
         $viewParams['authorityUsers'] = $authorityUsersArray;
         return $this->createViewModel($viewParams);
     }
@@ -85,6 +87,7 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
         $uploadMaxFileSize = 500000;
         $config = $this->getConfig('tuefind');
         $dspaceServer = $config->Publication->dspace_url_base;
+        $dspaceVersion = $config->Publication->dspace_version;
 
         // 1) Get metadata to show form
         $existingRecordId = $this->params()->fromRoute('record_id', null);
@@ -96,10 +99,9 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
         $dbPublications = $this->getTable('publication')->getByControlNumber($existingRecordId);
         if (!empty($dbPublications->external_document_id)) {
 
-            if(!strpos($dbPublications->external_document_id, '/')) {
+            $publicationURL = $dspaceServer."/xmlui/handle/".$dbPublications->external_document_id;
+            if($dspaceVersion == 7) {
                 $publicationURL = $dspaceServer."/handle/".$item->handle;
-            }else{
-                $publicationURL = $dspaceServer."/xmlui/handle/".$dbPublications->external_document_id;
             }
 
             $this->flashMessenger()->addMessage(['msg' => "Publication already exists: <a href='".$publicationURL."' target='_blank'>click here to go to file</a>", 'html' => true], 'error');
@@ -161,10 +163,9 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
                 $bitstream = $dspace->addBitstream($item->uuid, basename($tmpfile), $tmpfile);
                 $dbPublications = $this->getTable('publication')->addPublication($user->id, $existingRecordId, $item->handle, $item->uuid, $termFileData['termDate']);
 
-                if(!strpos($item->handle, '/')) {
-                  $publicationURL = $dspaceServer."/handle/".$item->handle;
-                }else{
-                  $publicationURL = $dspaceServer."/xmlui/handle/".$item->handle;
+                $publicationURL = $dspaceServer."/xmlui/handle/".$item->handle;
+                if($dspaceVersion == 7) {
+                    $publicationURL = $dspaceServer."/handle/".$item->handle;
                 }
 
                 // Store information in database
