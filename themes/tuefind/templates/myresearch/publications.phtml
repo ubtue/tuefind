@@ -38,10 +38,7 @@ $this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') 
           <th>Terms Date</th>
         </tr>
         <?php foreach ($this->publications as $publication):
-          $publicationURL = $this->dspaceServer."/xmlui/handle/".$publication['external_document_id'];
-          if($dspaceVersion == 7) {
-            $publicationURL = $this->dspaceServer."/items/".$publication['external_document_guid'];
-          }?>
+          $publicationURL = ($dspaceVersion == 6) ? $this->dspaceServer."/xmlui/handle/".$publication['external_document_id'] : $this->dspaceServer."/items/".$publication['external_document_guid'];?>
           <tr>
             <td><?=$publication['external_document_id']?></td>
             <td><a href="<?=$this->recordLink()->getUrl($publication['control_number'])?>"><?=$publication['title'];?></a></td>

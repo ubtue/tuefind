@@ -99,10 +99,7 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
         $dbPublications = $this->getTable('publication')->getByControlNumber($existingRecordId);
         if (!empty($dbPublications->external_document_id)) {
 
-            $publicationURL = $dspaceServer."/xmlui/handle/".$dbPublications->external_document_id;
-            if($dspaceVersion == 7) {
-                $publicationURL = $dspaceServer."/handle/".$item->handle;
-            }
+            $publicationURL = ($dspaceVersion == 6) ? $dspaceServer."/xmlui/handle/".$dbPublications->external_document_id : $dspaceServer."/handle/".$item->handle;
 
             $this->flashMessenger()->addMessage(['msg' => "Publication already exists: <a href='".$publicationURL."' target='_blank'>click here to go to file</a>", 'html' => true], 'error');
             $uploadError = true;
@@ -163,10 +160,7 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
                 $bitstream = $dspace->addBitstream($item->uuid, basename($tmpfile), $tmpfile);
                 $dbPublications = $this->getTable('publication')->addPublication($user->id, $existingRecordId, $item->handle, $item->uuid, $termFileData['termDate']);
 
-                $publicationURL = $dspaceServer."/xmlui/handle/".$item->handle;
-                if($dspaceVersion == 7) {
-                    $publicationURL = $dspaceServer."/handle/".$item->handle;
-                }
+                $publicationURL = ($dspaceVersion == 6) ? $dspaceServer."/xmlui/handle/".$item->handle : $dspaceServer."/handle/".$item->handle;
 
                 // Store information in database
                 $this->flashMessenger()->addMessage(['msg' => "Publication successfully created: <a href='".$publicationURL."' target='_blank'>click here go to file</a>", 'html' => true], 'success');
