@@ -95,7 +95,14 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
 
         $dbPublications = $this->getTable('publication')->getByControlNumber($existingRecordId);
         if (!empty($dbPublications->external_document_id)) {
-            $this->flashMessenger()->addMessage(['msg' => "Publication already exists: <a href='".$dspaceServer."/handle/".$dbPublications->external_document_id."' target='_blank'>click here to go to file</a>", 'html' => true], 'error');
+
+            if(!strpos($dbPublications->external_document_id, '/')) {
+                $publicationURL = $dspaceServer."/handle/".$item->handle;
+            }else{
+                $publicationURL = $dspaceServer."/xmlui/handle/".$dbPublications->external_document_id;
+            }
+
+            $this->flashMessenger()->addMessage(['msg' => "Publication already exists: <a href='".$publicationURL."' target='_blank'>click here to go to file</a>", 'html' => true], 'error');
             $uploadError = true;
             $showForm = false;
         }
