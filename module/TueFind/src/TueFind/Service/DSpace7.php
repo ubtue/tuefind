@@ -30,6 +30,7 @@ class DSpace7 {
     const ENDPOINT_WORKSPACE_ITEM = '/api/submission/workspaceitems';
     const ENDPOINT_WORKFLOW_ITEM = '/api/workflow/workflowitems';
 
+    const HEADER_ACCEPT = 'Accept';
     const HEADER_AUTHORIZATION = 'Authorization';
     const HEADER_CONTENT_DISPOSITION = 'Content-Disposition';
     const HEADER_CONTENT_LENGTH = 'Content-Length';
@@ -120,7 +121,7 @@ class DSpace7 {
     {
         // we need to use a POST operation and send a full URL of the workspace item as body (including its endpoint!!!)
         $requestData = $this->baseUrl . '/' . self::ENDPOINT_WORKSPACE_ITEM . '/' . urlencode($workspaceItemId);
-        return $this->call(self::ENDPOINT_WORKFLOW_ITEM, self::METHOD_POST,
+        return $this->callCURL(self::ENDPOINT_WORKFLOW_ITEM, self::METHOD_POST,
                             [self::HEADER_CONTENT_TYPE => 'text/uri-list',
                             self::HEADER_AUTHORIZATION => 'Bearer ' . $this->bearer],
         $requestData);
@@ -414,6 +415,47 @@ class DSpace7 {
     public function getResponseBody(): string
     {
         return $this->responseBody;
+    }
+
+    protected function callCURL(string $endpoint, string $method, array $headers=[], string $data=null)
+    {
+        $fullUrl = $this->baseUrl . $endpoint;
+
+        $curlHandle = curl_init($fullUrl);
+        curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curlHandle, CURLOPT_FAILONERROR, true);
+
+        if (!isset($headers[self::HEADER_ACCEPT])) {
+            $headers[self::HEADER_ACCEPT] = 'application/json';
+        }
+        if ($headers != []) {
+            $curlHeaders = [];
+            foreach ($headers as $headerName => $headerValue) {
+                $curlHeaders[] = $headerName . ': ' . $headerValue;
+            }
+            curl_setopt($curlHandle, CURLOPT_HTTPHEADER, $curlHeaders);
+        }
+
+        if ($method == self::METHOD_POST) {
+            curl_setopt($curlHandle, CURLOPT_POST, true);
+        }
+
+        if (!empty($data)) {
+            curl_setopt($curlHandle, CURLOPT_POSTFIELDS, $data);
+        }
+
+        $cookiePath = sys_get_temp_dir() . '/DSpaceCookies';
+        curl_setopt($curlHandle, CURLOPT_COOKIEJAR, $cookiePath);
+        curl_setopt($curlHandle, CURLOPT_COOKIEFILE, $cookiePath);
+
+        $json = curl_exec($curlHandle);
+        if($json === false) {
+            echo 'Curl error: ' . curl_error($curlHandle)."<br />";
+            echo 'Error when calling: ' . $fullUrl."<br />";
+            echo 'Method: ' . $method."<br />";
+        }
+        curl_close($curlHandle);
+        return json_decode($json);
     }
 
 }

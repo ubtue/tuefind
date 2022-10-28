@@ -139,30 +139,31 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
                     throw new \Exception('Uploaded file could not be moved to tmp directory!');
                 }
 
-                // For DSpace 6:
-                // - add Item (including metadata)
-                // - add Bitstream (=file)
-                // For DSpace 7:
-                // - add Workspace Item (including file)
-                // - update Workspace Item (= update metadata)
-                // - add Workflow Item (= start workflow for the generated item)
-                //
-                // Also, be aware that ID + URL schemas might be different when switching between the versions.
-                //
-                // The following implementation is based on DSpace 6:
-                $dspace = $this->serviceLocator->get(\TueFind\Service\DSpace6::class);
-                $dspace->login();
-                $collectionName = $config->Publication->collection_name;
-                $collection = $dspace->getCollectionByName($collectionName);
-                $dspaceMetadata = $this->serviceLocator->get(\VuFind\MetadataVocabulary\PluginManager::class)->get('DSpace6')->getMappedData($existingRecord);
-                $item = $dspace->addItem($collection->uuid, $dspaceMetadata);
-
-                $bitstream = $dspace->addBitstream($item->uuid, basename($tmpfile), $tmpfile);
-                $dbPublications = $this->getTable('publication')->addPublication($user->id, $existingRecordId, $item->handle, $item->uuid, $termFileData['termDate']);
-
-                $publicationURL = ($dspaceVersion == 6) ? $dspaceServer."/xmlui/handle/".$item->handle : $dspaceServer."/handle/".$item->handle;
-
-                // Store information in database
+                if($dspaceVersion == 6) {
+                    $dspace = $this->serviceLocator->get(\TueFind\Service\DSpace6::class);
+                    $dspace->login();
+                    $collectionName = $config->Publication->collection_name;
+                    $collection = $dspace->getCollectionByName($collectionName);
+                    $dspaceMetadata = $this->serviceLocator->get(\VuFind\MetadataVocabulary\PluginManager::class)->get('DSpace6')->getMappedData($existingRecord);
+                    $item = $dspace->addItem($collection->uuid, $dspaceMetadata);
+                    $bitstream = $dspace->addBitstream($item->uuid, basename($tmpfile), $tmpfile);
+                    // Store information in database
+                    $dbPublications = $this->getTable('publication')->addPublication($user->id, $existingRecordId, $item->handle, $item->uuid, $termFileData['termDate']);
+                    $publicationURL = $dspaceServer."/xmlui/handle/".$item->handle;
+                }else{
+                    $dspace = $this->serviceLocator->get(\TueFind\Service\DSpace7::class);
+                    $dspace->login();
+                    $configCollectionName = $config->Publication->collection_name;
+                    $configCollectionName = 'UOJ 12'; //test collection name from DEMO
+                    $collection = $dspace->getCollectionByName($configCollectionName);
+                    $dspaceMetadata = $this->serviceLocator->get(\VuFind\MetadataVocabulary\PluginManager::class)->get('DSpace7')->getMappedData($existingRecord);
+                    $item = $dspace->addWorkspaceItem($tmpfile,$collection->uuid);
+                    //$workflowItem = $dspace->addWorkflowItem($item->id); // not work
+                    $updateData = $dspace->updateWorkspaceItem($item->id,$dspaceMetadata);
+                    // Store information in database
+                    $dbPublications = $this->getTable('publication')->addPublication($user->id, $existingRecordId, $item->id, $item->sections->upload->files[0]->uuid, $termFileData['termDate']);
+                    $publicationURL = $dspaceServer."/workspaceitems/".$item->id."/view";
+                }
                 $this->flashMessenger()->addMessage(['msg' => "Publication successfully created: <a href='".$publicationURL."' target='_blank'>click here go to file</a>", 'html' => true], 'success');
                 $showForm = false;
             }
@@ -270,7 +271,6 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
     {
         $termsDir =  $_SERVER['CONTEXT_DOCUMENT_ROOT'] . '/publication_terms/';
         $files = scandir($termsDir);
-        $latestTermFileData = [];
         $latestTermData = [];
         foreach ($files as $file) {
             if (preg_match('/(\d{4})(\d{2})(\d{2})/', $file, $matches)) {
@@ -286,12 +286,9 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
         if (empty($latestTermData)) {
             throw new \Exception('Latest term file not found in: ' . $termsDir);
         }
-
-        usort($latestTermData, function ($a, $b) {
-            return strnatcmp($a['milliseconds'], $b['milliseconds']);
+        usort($latestTermData, function($a, $b){
+            return ($b['milliseconds'] - $a['milliseconds']);
         });
-        $latestTermFileData = $latestTermData[0];
-
-        return $latestTermFileData;
+        return $latestTermData[0];
     }
 }
