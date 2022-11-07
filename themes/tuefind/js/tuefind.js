@@ -626,4 +626,6 @@ $(document).ready(function () {
         $("#searchForm").submit();
     });
 
+    $('.dataTable').DataTable();
+
 });

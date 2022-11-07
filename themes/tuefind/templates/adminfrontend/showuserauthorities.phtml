@@ -11,37 +11,41 @@ $this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') 
   <?php if (count($this->users) == 0): ?>
     <p>No user has requested access to any authority record so far.</p>
   <?php else: ?>
-    <table class="table">
-      <tr>
-        <th><?=$this->transEsc('Username')?></th>
-        <th><?=$this->transEsc('First Name')?></th>
-        <th><?=$this->transEsc('Last Name')?></th>
-        <th><?=$this->transEsc('Email Address')?></th>
-        <th><?=$this->transEsc('Institution')?></th>
-        <th><?=$this->transEsc('Author')?></th>
-        <th><?=$this->transEsc('Status')?></th>
-        <th><?=$this->transEsc('Requested')?></th>
-        <th><?=$this->transEsc('Granted')?></th>
-        <th><?=$this->transEsc('Actions')?></th>
-      </tr>
-      <?php foreach ($this->users as $user): ?>
+    <table class="table dataTable display">
+      <thead>
         <tr>
-          <td><?=$user->username?></td>
-          <td><?=$user->firstname?></td>
-          <td><?=$user->lastname?></td>
-          <td><?=$user->email?></td>
-          <td><?=$user->ixtheo_institution?></td>
-          <td><a href="/Authority/<?=urlencode($user->authority_id)?>"><?=$user->authority_id?></a></td>
-          <td><?=$this->transEsc(ucfirst($user->access_state))?></td>
-          <td><?=date("d.m.Y H:i:s",strtotime($user->requested_datetime));?></td>
-          <td><?=($user->granted_datetime)?date("d.m.Y H:i:s",strtotime($user->granted_datetime)):"";?></td>
-          <td>
-            <?php if ($user->access_state == 'requested'): ?>
-              <a href="<?=$this->url('authority-process-request', ['user_id' => $user->user_id, 'authority_id' => $user->authority_id])?>" data-lightbox="">process request</a>
-            <?php endif; ?>
-          </td>
+          <th><?=$this->transEsc('Username')?></th>
+          <th><?=$this->transEsc('First Name')?></th>
+          <th><?=$this->transEsc('Last Name')?></th>
+          <th><?=$this->transEsc('Email Address')?></th>
+          <th><?=$this->transEsc('Institution')?></th>
+          <th><?=$this->transEsc('Author')?></th>
+          <th><?=$this->transEsc('Status')?></th>
+          <th><?=$this->transEsc('Requested')?></th>
+          <th><?=$this->transEsc('Granted')?></th>
+          <th><?=$this->transEsc('Actions')?></th>
         </tr>
-      <?php endforeach; ?>
+      </thead>
+      <tbody>
+        <?php foreach ($this->users as $user): ?>
+          <tr>
+            <td><?=$user->username?></td>
+            <td><?=$user->firstname?></td>
+            <td><?=$user->lastname?></td>
+            <td><?=$user->email?></td>
+            <td><?=$user->ixtheo_institution?></td>
+            <td><a href="/Authority/<?=urlencode($user->authority_id)?>"><?=$user->authority_id?></a></td>
+            <td><?=$this->transEsc(ucfirst($user->access_state))?></td>
+            <td><?=date("d.m.Y H:i:s",strtotime($user->requested_datetime));?></td>
+            <td><?=($user->granted_datetime)?date("d.m.Y H:i:s",strtotime($user->granted_datetime)):"";?></td>
+            <td>
+              <?php if ($user->access_state == 'requested'): ?>
+                <a href="<?=$this->url('authority-process-request', ['user_id' => $user->user_id, 'authority_id' => $user->authority_id])?>" data-lightbox="">process request</a>
+              <?php endif; ?>
+            </td>
+          </tr>
+        <?php endforeach; ?>
+      </tbody>
     </table>
   <?php endif; ?>
 </div>
