@@ -25,6 +25,7 @@ return [
         'vendor/keyboard-basic.css',
         'vendor/keyboard.css',
         'vendor/keyboard-dark.css',
+        'vendor/jquery.dataTable.css',
         'vendor/keyboard-previewkeyset.css',
         'botprotect.css',
         'keyboard-tuefind.css'
@@ -33,6 +34,7 @@ return [
         'tuefind.js',
         'vendor/jquery-ui.min.js',
         'vendor/jquery.keyboard.js',
+        'vendor/jquery.dataTable.js',
         'vendor/keyboard-layouts-greywyvern.js',
         'virtualkeyboard.js'
     ],
