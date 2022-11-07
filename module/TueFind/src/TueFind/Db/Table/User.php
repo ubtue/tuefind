@@ -23,6 +23,11 @@ class User extends \VuFind\Db\Table\User {
         return $this->select(['tuefind_uuid' => $uuid])->current();
     }
 
+    public function getByID($userID)
+    {
+        return $this->select(['id' => $userID])->current();
+    }
+
     public function getAdmins()
     {
         $select = $this->getSql()->select();

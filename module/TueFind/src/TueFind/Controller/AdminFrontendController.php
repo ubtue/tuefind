@@ -30,13 +30,35 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
         $userId = $this->params()->fromRoute('user_id');
         $authorityId = $this->params()->fromRoute('authority_id');
         $entry = $this->getTable('user_authority')->getByUserIdAndAuthorityId($userId, $authorityId);
+        $requestUser = $this->getTable('user')->getByID($userId);
         $action = $this->params()->fromPost('action');
+        $accessInfo = "grant";
         if ($action != '') {
             if ($action == 'grant') {
                 $entry->updateAccessState('granted');
             } elseif ($action == 'decline') {
+                $accessInfo = "decline";
                 $entry->delete();
             }
+            // receivers
+            $receivers = new \Laminas\Mail\AddressList();
+            $receivers->add($requestUser->email);
+
+            $config = $this->getConfig();
+            $mailer = $this->serviceLocator->get(\VuFind\Mailer\Mailer::class);
+            $receiverCount = count($receivers);
+            if ($receiverCount == 0) {
+                $receivers = $config->Site->email;
+            } else {
+                $mailer->setMaxRecipients($receiverCount);
+            }
+
+            // send mail
+            $authority = $this->serviceLocator->get(\VuFind\Record\Loader::class)->load($authorityId, 'SolrAuth');
+            $authorityName = $this->serviceLocator->get('ViewHelperManager')->get('authority')->getName($authority);
+
+            $message = "The access for authority ".$authorityName." has been: ".$accessInfo;
+            $mailer->send($receivers, $config->Site->email_from, 'Process User Authority Request', $message);
         }
 
         return $this->createViewModel(['action' => $action]);
