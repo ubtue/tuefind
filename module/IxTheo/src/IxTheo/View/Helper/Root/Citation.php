@@ -80,6 +80,8 @@ class Citation extends \VuFind\View\Helper\Root\Citation implements \VuFind\I18n
      * @param string $doiPrefix       Prefix to display in front of DOI; set to
      * false to omit DOIs.
      * @param bool   $labelPageRange  Should we include p./pp. before page ranges?
+     * @param bool   $doiArticleComma Should we put a comma instead of period before
+     * a DOI in an article-style citation?
      *
      * @return string
      */
@@ -91,8 +93,9 @@ class Citation extends \VuFind\View\Helper\Root\Citation implements \VuFind\I18n
         $yearFormat = ', %s',
         $pageNoSeparator = ',',
         $includePubPlace = false,
-        $doiPrefix = false,
-        $labelPageRange = true
+        $doiPrefix = 'https://doi.org/',
+        $labelPageRange = true,
+        $doiArticleComma = true
     ) {
         // IxTheo: Always show DOI
         if ($doiPrefix == false)
@@ -119,6 +122,7 @@ class Citation extends \VuFind\View\Helper\Root\Citation implements \VuFind\I18n
             return $partial('Citation/mla.phtml', $mla);
         }
         // If we got this far, we should add other journal-specific details:
+        $mla['doiArticleComma'] = $doiArticleComma;
         $mla['pageRange'] = $this->getPageRange();
         $mla['journal'] = $this->capitalizeTitle($this->details['journal']);
         $mla['numberAndDate'] = $numPrefix . $this->getMLANumberAndDate(
