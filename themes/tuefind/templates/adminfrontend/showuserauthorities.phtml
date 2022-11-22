@@ -2,6 +2,9 @@
 // Set up page title:
 $this->headTitle($this->translate('User Authorities'));
 
+$subSistemType=$this->tuefind()->getTueFindType();
+$isIxTheo = ($subSistemType == 'IxTheo') ? true : false;
+
 // Set up breadcrumbs:
 $this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') . '">' . $this->transEsc('Your Account') . '</a></li> <li class="active">' . $this->transEsc('User Authorities') . '</li>';
 ?>
@@ -18,7 +21,7 @@ $this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') 
           <th><?=$this->transEsc('First Name')?></th>
           <th><?=$this->transEsc('Last Name')?></th>
           <th><?=$this->transEsc('Email Address')?></th>
-          <th><?=$this->transEsc('Institution')?></th>
+          <?php if($isIxTheo){ ?><th><?=$this->transEsc('Institution')?></th><?php }?>
           <th><?=$this->transEsc('Author')?></th>
           <th><?=$this->transEsc('Status')?></th>
           <th><?=$this->transEsc('Requested')?></th>
@@ -33,7 +36,7 @@ $this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') 
             <td><?=$user->firstname?></td>
             <td><?=$user->lastname?></td>
             <td><?=$user->email?></td>
-            <td><?=$user->ixtheo_institution?></td>
+            <?php if($isIxTheo){ ?><td><?=$user->ixtheo_institution?></td><?php }?>
             <td><a href="/Authority/<?=urlencode($user->authority_id)?>"><?=$user->authority_id?></a></td>
             <td><?=$this->transEsc(ucfirst($user->access_state))?></td>
             <td><?=date("d.m.Y H:i:s",strtotime($user->requested_datetime));?></td>
