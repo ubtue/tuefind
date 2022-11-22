@@ -16,10 +16,6 @@ class DSpace6 extends \VuFind\MetadataVocabulary\AbstractBase
         [
             'key' => 'dc.language.iso',
             'source' => 'language',
-            'map' => [
-                'English' => 'en',
-                'German' => 'de',
-            ],
         ],
         [
             'key' => 'dc.publisher',
@@ -31,13 +27,14 @@ class DSpace6 extends \VuFind\MetadataVocabulary\AbstractBase
         ],
     ];
 
-
     // Examples, see:
     // - https://wiki.lyrasis.org/display/DSDOC6x/REST+API#RESTAPI-ItemObject
     // - https://wiki.lyrasis.org/display/DSDOC6x/REST+API#RESTAPI-MetadataEntryObject
     public function getMappedData(\VuFind\RecordDriver\AbstractBase $driver)
     {
         $rawData = parent::getGenericData($driver);
+        $rawData['language'] = $driver->getLanguagesIso639_2();
+
         $dspaceItem = ['name' => $rawData['title'], 'type' => 'item', 'metadata' => []];
 
         foreach ($this->dspaceMap as $mapEntry) {
@@ -54,17 +51,30 @@ class DSpace6 extends \VuFind\MetadataVocabulary\AbstractBase
             foreach ($values as $value) {
                 $dspaceMetadata = ['key' => $mapEntry['key']];
 
-                if (isset($mapEntry['map'])) {
-                    if (!isset($mapEntry['map'][$value])) {
-                        throw new \Exception('Could not map ' . $value . ' to a proper DSpace value for ' . $mapEntry['key']);
-                    }
-                    $value = $mapEntry['map'][$value];
+                if ($mapEntry['source'] == 'language') {
+                    $value = $this->getMappedLanguages($value);
                 }
+
                 $dspaceMetadata['value'] = $value;
                 $dspaceItem['metadata'][] = $dspaceMetadata;
             }
         }
 
         return $dspaceItem;
+    }
+
+    public function getMappedLanguages($lang): string
+    {
+        $langFile = getenv('VUFIND_HOME') . '/local/tuefind/languages/ISO639/ISO-639-2_utf-8.txt';
+        $langs = file($langFile);
+        foreach($langs as $langLine) {
+            $explang = explode('|',$langLine);
+            if(isset($explang[0]) && $explang[0] == $lang) {
+                if(isset($explang[2]) && strlen($explang[2]) == 2) {
+                    return $explang[2];
+                }
+            }
+        }
+        return '';
     }
 }
