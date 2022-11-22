@@ -144,6 +144,7 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
                     $dspace->login();
                     $collectionName = $config->Publication->collection_name;
                     $collection = $dspace->getCollectionByName($collectionName);
+                    $existingRecord = $this->getRecordLoader()->load($existingRecordId);
                     $dspaceMetadata = $this->serviceLocator->get(\VuFind\MetadataVocabulary\PluginManager::class)->get('DSpace6')->getMappedData($existingRecord);
                     $item = $dspace->addItem($collection->uuid, $dspaceMetadata);
                     $bitstream = $dspace->addBitstream($item->uuid, basename($tmpfile), $tmpfile);

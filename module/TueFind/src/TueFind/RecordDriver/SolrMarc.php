@@ -532,4 +532,18 @@ class SolrMarc extends SolrDefault
                 return $subfield_a;
         }
     }
+
+    public function getDefaultSolrLanguages(): array
+    {
+        $retVal = array();
+        $fields = $this->getMarcReader()->getFields('041');
+        foreach ($fields as $field) {
+            if ($field['i2'] !== '7') {
+                foreach ($this->getSubfields($field, 'a') as $subfield) {
+                    $retVal[] = $subfield;
+                }
+            }
+        }
+        return $retVal;
+    }
 }

@@ -4,6 +4,8 @@ namespace TueFind\MetadataVocabulary;
 
 class DSpace6 extends \VuFind\MetadataVocabulary\AbstractBase
 {
+    protected $tuefind;
+
     protected $dspaceMap = [
         [
             'key' => 'dc.contributor.author',
@@ -16,10 +18,6 @@ class DSpace6 extends \VuFind\MetadataVocabulary\AbstractBase
         [
             'key' => 'dc.language.iso',
             'source' => 'language',
-            'map' => [
-                'English' => 'en',
-                'German' => 'de',
-            ],
         ],
         [
             'key' => 'dc.publisher',
@@ -31,13 +29,14 @@ class DSpace6 extends \VuFind\MetadataVocabulary\AbstractBase
         ],
     ];
 
-
     // Examples, see:
     // - https://wiki.lyrasis.org/display/DSDOC6x/REST+API#RESTAPI-ItemObject
     // - https://wiki.lyrasis.org/display/DSDOC6x/REST+API#RESTAPI-MetadataEntryObject
     public function getMappedData(\VuFind\RecordDriver\AbstractBase $driver)
     {
         $rawData = parent::getGenericData($driver);
+        $rawData['language'] = $driver->getDefaultSolrLanguages();
+
         $dspaceItem = ['name' => $rawData['title'], 'type' => 'item', 'metadata' => []];
 
         foreach ($this->dspaceMap as $mapEntry) {
@@ -54,17 +53,30 @@ class DSpace6 extends \VuFind\MetadataVocabulary\AbstractBase
             foreach ($values as $value) {
                 $dspaceMetadata = ['key' => $mapEntry['key']];
 
-                if (isset($mapEntry['map'])) {
-                    if (!isset($mapEntry['map'][$value])) {
-                        throw new \Exception('Could not map ' . $value . ' to a proper DSpace value for ' . $mapEntry['key']);
-                    }
-                    $value = $mapEntry['map'][$value];
+                if ($mapEntry['source'] == 'language') {
+                    $value = $this->getFormatedLanguages($value);
                 }
+
                 $dspaceMetadata['value'] = $value;
                 $dspaceItem['metadata'][] = $dspaceMetadata;
             }
         }
 
         return $dspaceItem;
+    }
+
+    public function getFormatedLanguages($lang): string
+    {
+        $langFile =  $_SERVER['CONTEXT_DOCUMENT_ROOT'] . '/other/language.txt';
+        $langs = file($langFile);
+        foreach($langs as $langLine) {
+            $explang = explode('|',$langLine);
+            if(isset($explang[0]) && $explang[0] == $lang) {
+                if(isset($explang[2]) && strlen($explang[2]) == 2) {
+                    return $explang[2];
+                }
+            }
+        }
+        return '';
     }
 }
