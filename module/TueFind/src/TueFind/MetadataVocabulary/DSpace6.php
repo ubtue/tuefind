@@ -4,8 +4,6 @@ namespace TueFind\MetadataVocabulary;
 
 class DSpace6 extends \VuFind\MetadataVocabulary\AbstractBase
 {
-    protected $tuefind;
-
     protected $dspaceMap = [
         [
             'key' => 'dc.contributor.author',
@@ -35,7 +33,7 @@ class DSpace6 extends \VuFind\MetadataVocabulary\AbstractBase
     public function getMappedData(\VuFind\RecordDriver\AbstractBase $driver)
     {
         $rawData = parent::getGenericData($driver);
-        $rawData['language'] = $driver->getDefaultSolrLanguages();
+        $rawData['language'] = $driver->getLanguagesIso639_2();
 
         $dspaceItem = ['name' => $rawData['title'], 'type' => 'item', 'metadata' => []];
 
@@ -54,7 +52,7 @@ class DSpace6 extends \VuFind\MetadataVocabulary\AbstractBase
                 $dspaceMetadata = ['key' => $mapEntry['key']];
 
                 if ($mapEntry['source'] == 'language') {
-                    $value = $this->getFormatedLanguages($value);
+                    $value = $this->getMappedLanguages($value);
                 }
 
                 $dspaceMetadata['value'] = $value;
@@ -65,9 +63,9 @@ class DSpace6 extends \VuFind\MetadataVocabulary\AbstractBase
         return $dspaceItem;
     }
 
-    public function getFormatedLanguages($lang): string
+    public function getMappedLanguages($lang): string
     {
-        $langFile =  $_SERVER['CONTEXT_DOCUMENT_ROOT'] . '/other/language.txt';
+        $langFile = getenv('VUFIND_HOME') . '/local/tuefind/languages/ISO639/ISO-639-2_utf-8.txt';
         $langs = file($langFile);
         foreach($langs as $langLine) {
             $explang = explode('|',$langLine);

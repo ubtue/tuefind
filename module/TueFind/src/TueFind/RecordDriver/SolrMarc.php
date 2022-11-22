@@ -533,12 +533,12 @@ class SolrMarc extends SolrDefault
         }
     }
 
-    public function getDefaultSolrLanguages(): array
+    public function getLanguagesIso639_2(): array
     {
         $retVal = array();
         $fields = $this->getMarcReader()->getFields('041');
         foreach ($fields as $field) {
-            if ($field['i2'] !== '7') {
+            if (!empty($field['i1']) && !empty($field['i2'])) {
                 foreach ($this->getSubfields($field, 'a') as $subfield) {
                     $retVal[] = $subfield;
                 }
