@@ -2,8 +2,8 @@
 // Set up page title:
 $this->headTitle($this->translate('User Authorities'));
 
-$subSistemType=$this->tuefind()->getTueFindType();
-$isIxTheo = ($subSistemType == 'IxTheo') ? true : false;
+$subSystemType=$this->tuefind()->getTueFindType();
+$isIxTheo = ($subSystemType == 'IxTheo') ? true : false;
 
 // Set up breadcrumbs:
 $this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') . '">' . $this->transEsc('Your Account') . '</a></li> <li class="active">' . $this->transEsc('User Authorities') . '</li>';
