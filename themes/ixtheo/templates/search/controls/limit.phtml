@@ -1,4 +1,12 @@
-<?php $limitList = $this->params->getLimitList(); ?>
+<?php $limitList = $this->params->getLimitList();
+  $sortList = $this->params->getSortList();
+  $sortParam = '';
+  foreach($sortList as $sortName=>$sortValue) {
+    if($sortValue['selected'] == 1) {
+      $sortParam = $sortName;
+    }
+  }
+?>
 <?php if (count($limitList) > 1): ?>
   <form class="form-inline search-result-limit" action="<?=$this->currentPath() . $this->results->getUrlQuery()->setLimit(null)?>" method="get">
     <?=$this->results->getUrlQuery()->asHiddenFields(['sort' => '/.*/']);?>
@@ -9,5 +17,6 @@
       <?php endforeach; ?>
     </select>
     <noscript><input type="submit" value="<?=$this->transEscAttr("Set")?>" /></noscript>
+    <?php if(!empty($sortParam)) : ?><input type="hidden" name="sort" value="<?=$sortParam;?>" /><?php endif;?>
   </form>
 <?php endif; ?>
