@@ -1,8 +1,8 @@
 <?php
 $routeParams = $this->tuefind()->getRouteParams();
 $authorityId = $routeParams['authority_id'];
-$userAccess = $this->tuefind()->getUserAccessState($authorityId, $this->userId ?? null);
-$userAlreadyMadeAuthorityRequest = $this->tuefind()->userAlreadyMadeAuthorityRequest($this->userId ?? null);?>
+$userAccess = $this->tuefind()->getUserAccessState($authorityId, $this->userId);
+$userAlreadyMadeAuthorityRequest = $this->tuefind()->userAlreadyMadeAuthorityRequest($this->userId);?>
 
 <h1>Request access</h1>
 <?php if ($userAccess['availability'] == 'free'): ?>
