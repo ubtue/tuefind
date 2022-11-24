@@ -1,14 +1,20 @@
 <?php
 $routeParams = $this->tuefind()->getRouteParams();
 $authorityId = $routeParams['authority_id'];
-$userAccess = $this->tuefind()->getUserAccessState($authorityId, $this->userId ?? null);?>
+$userAccess = $this->tuefind()->getUserAccessState($authorityId, $this->userId);
+$userAlreadyMadeAuthorityRequest = $this->tuefind()->userAlreadyMadeAuthorityRequest($this->userId);?>
+
 <h1>Request access</h1>
 <?php if ($userAccess['availability'] == 'free'): ?>
-  <p>Would you like to request access to this authority dataset?</p>
-  <form method="post" data-lightbox-onclose="VuFind.refreshPage">
-    <input type="hidden" name="request" value="yes">
-    <button class="btn btn-primary" type="submit">Request access</button>
-  </form>
+  <?php if($userAlreadyMadeAuthorityRequest): ?>
+    You have already made a rights request for another author
+  <?php else: ?>
+    <p>Would you like to request access to this authority dataset?</p>
+    <form method="post" data-lightbox-onclose="VuFind.refreshPage">
+      <input type="hidden" name="request" value="yes">
+      <button class="btn btn-primary" type="submit">Request access</button>
+    </form>
+  <?php endif;?>
 <?php elseif ($userAccess['availability'] == 'mine'): ?>
   <?php if ($userAccess['access_state'] == 'requested'): ?>
     <p>You have requested permission on this authority record. Our team has been informed, please wait for the approval.</p>
