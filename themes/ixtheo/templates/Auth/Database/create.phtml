@@ -14,7 +14,13 @@ if (isset($this->passwordPolicy['pattern'])) {
   }
 }
 ?>
-<!-- IxTheo-specific: Appelation -->
+<!-- IxTheo-specific: Username (readonly) + Appellation + Title -->
+<?php if ($this->profile): ?>
+<div class="form-group">
+  <label class="control-label" for="ixtheo_username"><?= $this->transEsc('Username') ?>:</label>
+  <p class="form-control-static"><?=$this->user->username?></p>
+</div>
+<?php endif; ?>
 <div class="form-group">
   <label class="control-label" for="ixtheo_appellation"><?= $this->transEsc('Appellation') ?>:</label>
   <select id="account_appellation" name="ixtheo_appellation" class="form-control">
