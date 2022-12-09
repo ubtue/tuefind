@@ -23,13 +23,13 @@ class Base64Url
     public function encodeString(string $inputString): string
     {
         $base64 = base64_encode($inputString);
-        $base64Url = str_replace(['/', '+'], ['-', '_'], $base64);
+        $base64Url = str_replace(static::BASE64_SPECIFIC_CHARACTERS, static::BASE64_URL_SPECIFIC_CHARACTERS, $base64);
         return $base64Url;
     } 
     
     public function decodeString(string $inputString): string
     {
-        $base64 = str_replace(['-', '_'], ['/', '+'], $inputString);
+        $base64 = str_replace(static::BASE64_URL_SPECIFIC_CHARACTERS, static::BASE64_SPECIFIC_CHARACTERS, $inputString);
         $outputString = base64_decode($base64);
         return $outputString;
     }
