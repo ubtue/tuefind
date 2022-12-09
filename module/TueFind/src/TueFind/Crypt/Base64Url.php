@@ -17,7 +17,7 @@ class Base64Url
 {
     // The size of these arrays must be the same,
     // will be used for search / replace.
-    const BASE64_SPECIFIC_CHARACTERS = ['/', '+'];
+    const BASE64_SPECIFIC_CHARACTERS = ['+', '/'];
     const BASE64_URL_SPECIFIC_CHARACTERS = ['-', '_'];
     
     public function encodeString(string $inputString): string
