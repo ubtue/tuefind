@@ -217,7 +217,7 @@ class KfL
      *
      * @return string
      */
-    public function getUrlByHanID($hanId, ?string $url=null)
+    public function getUrlByHanID(string $hanId, ?string $url=null)
     {
         return $this->getUrl($this->getTitleInfoByHanID($hanId), $url);
     }
