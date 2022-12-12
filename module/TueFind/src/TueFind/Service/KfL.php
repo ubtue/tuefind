@@ -43,7 +43,7 @@ class KfL
         foreach ($titles as $title) {
             $titleDetails = explode(';', $title);
             $parsedTitles[] = ['ppn' => $titleDetails[0],
-                               'kflId' => $titleDetails[1],
+                               'hanId' => $titleDetails[1],
                                'entitlement' => $titleDetails[2]];
         }
         $this->titles = $parsedTitles;
@@ -179,30 +179,57 @@ class KfL
     /**
      * Get the URL to access the given record via the KfL proxy.
      *
-     * @param \TueFind\RecordDriver\SolrMarc $record
+     * @param array $titleInfo
+     * @param string $url
+     *
+     * @return string
      */
-    public function getUrl(\TueFind\RecordDriver\SolrMarc $record): string
+    protected function getUrl(array $titleInfo, ?string $url=null): string
     {
-        $titleInfo = $this->getTitleInfo($record->getUniqueId());
         $requestData = $this->getRequestTemplate($titleInfo['entitlement']);
         $requestData['method'] = 'getHANID';
         $requestData['return'] = self::RETURN_REDIRECT;
-        $requestData['hanid'] = $titleInfo['kflId'];
-
-        if ($requestData['hanid'] == null)
-            throw new \Exception('Han-ID missing for title: ' . $record->getUniqueID());
+        $requestData['hanid'] = $titleInfo['hanId'];
+        if (!empty($url))
+            $requestData['url'] = $url;
 
         return $this->generateUrl($requestData);
     }
 
     /**
-     * Get information about a title, especially Kfl-ID and entitlement.
+     * Get the URL to access the given record via the KfL proxy.
+     *
+     * @param string $ppn
+     * @param string $url
+     *
+     * @return string
+     */
+    public function getUrlByPPN(string $ppn, ?string $url=null)
+    {
+        return $this->getUrl($this->getTitleInfoByPPN($ppn), $url);
+    }
+
+    /**
+     * Get the URL to access the given record via the KfL proxy.
+     *
+     * @param string $hanId
+     * @param string $url
+     *
+     * @return string
+     */
+    public function getUrlByHanID(string $hanId, ?string $url=null)
+    {
+        return $this->getUrl($this->getTitleInfoByHanID($hanId), $url);
+    }
+
+    /**
+     * Get information about a title, especially HAN-ID and entitlement.
      *
      * @param string $ppn
      *
      * @return array
      */
-    protected function getTitleInfo(string $ppn): array
+    protected function getTitleInfoByPPN(string $ppn): array
     {
         foreach ($this->titles as $title) {
             if ($title['ppn'] == $ppn)
@@ -210,6 +237,23 @@ class KfL
         }
 
         throw new \Exception('KfL title information missing for ppn: ' . $ppn);
+    }
+
+    /**
+     * Get information about a title
+     *
+     * @param string $hanId
+     *
+     * @return array
+     */
+    protected function getTitleInfoByHanID(string $hanId): array
+    {
+        foreach ($this->titles as $title) {
+            if ($title['hanId'] == $hanId)
+                return $title;
+        }
+
+        throw new \Exception('KfL title information missing for HAN ID: ' . $hanId);
     }
 
     /**
