@@ -1,15 +1,14 @@
-<h1>Redirect by license</h1>
+<h1>FID-Lizenz: Zugriff mit RelBib-Konto</h1>
 <?php if ($locked): ?>
+  <h2><?=$this->transEsc('access_denied')?></h2>
   <p>
-    The access to FID licenses has been blocked for your user!<br>
-    Please get in contact with us (see contact information on the imprint page).
+    <?=$this->translate('access_denied_fid_license', ['%%url%%' => $this->url('content-page', ['page' => 'Impressum'])])?>
   </p>
 <?php else: ?>
   <p>
-    Really? We pay for that stuff, you know...<br>
-    So if we provide you a link, it will only be valid for a few days.
+    Diese Lizenz wurde vom Fachinformationsdienst (FID) Religionswissenschaft erworben.<br>
+    Die kostenfreie Nutzung der Ressource ist mit einem RelBib-Konto möglich.
   </p>
-  <p>(By the way, if you click on it you will leave our website)</p>
 
 
   <?php
@@ -20,6 +19,6 @@
    * - data-dismiss="modal": Closes the popup AFTER the onclick event has been executed.
    */
   ?>
-  <button id="licenseButton" class="btn btn-primary" data-dismiss="modal">Do it anyway!</button>
+  <button id="licenseButton" class="btn btn-primary" data-dismiss="modal">Zum Volltext</button>
   <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, '$(\'#licenseButton\').click(function() { window.open(\'' . $this->licenseUrl . '\', \'_blank\')});', 'SET')?>
 <?php endif; ?>
