@@ -102,14 +102,22 @@ $config = [
             'redirect-license' => [
                 'type'    => 'Laminas\Router\Http\Segment',
                 'options' => [
-                    'route'    => '/redirect-license/:id',
+                    'route'    => '/redirect-license/:id[/:proxy-url]',
                     'constraints' => [
-                        'id'   => '[^/]+',
+                        // The ID can either be a regular PPN, or a HAN-ID.
+                        'id'        => '[^/]+',
+                        // The Proxy-URL is sent by the HAN Server
+                        // if there was a timeout on an existing session
+                        // and a user needs to re-authenticate before
+                        // being able to use the resource again.
+                        // The URL will contain detailed information about
+                        // e.g. the last viewed page in the document.
+                        'proxy-url' => '.+',
                     ],
                     'defaults' => [
                         'controller' => 'Redirect',
                         'action'     => 'license',
-                    ]
+                    ],
                 ],
             ],
             'myresearch-publish' => [

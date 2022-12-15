@@ -76,7 +76,7 @@
           <?php else: ?>
             <div>
               <?php // Fill with non article handling code ?>
-              <?=implode($this->driver->tryMethod('getPublicationDetailsNoPlaces'), " ") ?>
+              <?=implode(" ", $this->driver->tryMethod('getPublicationDetailsNoPlaces')) ?>
             </div>
           <?php endif; ?>
 

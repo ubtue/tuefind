@@ -64,10 +64,32 @@ class RedirectController extends \VuFind\Controller\AbstractBase implements \VuF
 
         $id = $this->params()->fromRoute('id');
 
-        $viewParams = [];
-        $viewParams['driver'] = $this->getRecordLoader()->load($id);
-        $viewParams['locked'] = $user->isLicenseAccessLocked();
-        $viewParams['licenseUrl'] = !$viewParams['locked'] ? $this->kfl->getUrl($viewParams['driver']) : null;
-        return $this->createViewModel($viewParams);
+        if (preg_match('"^rx-"', $id)) {
+            // This call will happen when the user opened the document earlier
+            // and the KfL HAN server will have a timeout, so the proxy will call
+            // our page again with the HAN ID and a Proxy URL containing a direct
+            // link to the exact document and page id which the user has navigated
+            // to before.
+            // The timeout will happen after 1 hour of inactivity + trying to navigate
+            // inside the document afterwards.
+            if ($user->isLicenseAccessLocked()) {
+                throw new \Exception("The user's access has been locked!");
+            } else {
+                // Example for a URL sent by the proxy (will not work if you try manually):
+                // id: rx-hdr
+                // proxy-url: https://www-1handbuch-2religionen-1de-1wen6n5xi0b66.proxy.fid-lizenzen.de/#doc/69047/7
+                $proxyUrl = $this->params()->fromRoute('proxy-url');
+                $base64UrlDecoder = new \TueFind\Crypt\Base64Url();
+                $redirectUrl = $this->kfl->getUrlByHanID($id, $base64UrlDecoder->decodeString($proxyUrl));
+                $this->redirect()->toUrl($redirectUrl);
+            }
+        } else {
+            // This is the regular case, a user requesting fulltext access via the frontend.
+            $viewParams = [];
+            $viewParams['driver'] = $this->getRecordLoader()->load($id);
+            $viewParams['locked'] = $user->isLicenseAccessLocked();
+            $viewParams['licenseUrl'] = !$viewParams['locked'] ? $this->kfl->getUrlByPPN($viewParams['driver']->getUniqueID()) : null;
+            return $this->createViewModel($viewParams);
+        }
     }
 }
