@@ -291,4 +291,9 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
         });
         return $latestTermData[0];
     }
+
+    public function helpTextAction()
+    {
+        return $this->createViewModel();
+    }
 }
