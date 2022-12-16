@@ -20,9 +20,9 @@
   }?>
   <li>
     <?php if($showDspaceLink):?>
-      <a class="toolbar-btn btn-type-publish" href="<?=$dspaceLink;?>">go to file</a>
+      <a class="toolbar-btn btn-type-publish" href="<?=$dspaceLink;?>"><?=$this->transEsc('publication_file_button')?></a>
     <?php elseif($accessPublishRecord): ?>
-        <a class="toolbar-btn btn-type-publish" data-lightbox href="<?=$this->recordLinker()->getActionUrl($this->driver, 'Publish')?>" rel="nofollow"><?=$this->transEsc('Publish')?></a>
-      <?php endif; ?>
+        <a class="toolbar-btn btn-type-publish" data-lightbox href="<?=$this->recordLinker()->getActionUrl($this->driver, 'Publish')?>" rel="nofollow"><?=$this->transEsc('publication_request_button')?></a>
+    <?php endif; ?>
   </li>
 <?php endif; ?>

@@ -1,15 +1,15 @@
 <?php
 // Set up page title:
-$this->headTitle($this->translate('Publications'));
+$this->headTitle($this->transEsc('publication_overview_headline'));
 
 // Set up breadcrumbs:
-$this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') . '">' . $this->transEsc('Your Account') . '</a></li> <li class="active">' . $this->transEsc('Publications') . '</li>';
+$this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') . '">' . $this->transEsc('Your Account') . '</a></li> <li class="active">' . $this->transEsc('publication_overview_headline') . '</li>';
 ?>
 
 <div class="<?=$this->layoutClass('mainbody')?>">
-  <h2>Authorities</h2>
+  <h2><?=$this->transEsc('authority_access_overview_headline')?></h2>
   <?php if (count($this->authorityRecords) == 0): ?>
-    <p>You do not have access to any authority records yet. Please search for an authority record first and request access there.</p>
+    <p><?=$this->transEsc('authority_access_overview_empty')?></p>
   <?php else: ?>
     <table class="table">
       <tr>
@@ -23,19 +23,19 @@ $this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') 
         </tr>
       <?php endforeach; ?>
     </table>
-    <p>If you like to publish something, please search for the matching record which is linked to your authority entry and use the "publish" button in the full view.</p>
+    <p><?=$this->transEsc('publication_authority_overview_note')?></p>
 
-    <h2>Publications</h2>
+    <h2><?=$this->transEsc('publication_overview_headline')?></h2>
     <?php if (count($this->publications) == 0): ?>
-      <p>You did not upload any publications so far.</p>
+      <p><?=$this->transEsc('publication_overview_empty')?></p>
     <?php else: ?>
       <table class="table">
         <tr>
-          <th>ID in external repository</th>
-          <th>Title</th>
-          <th>Dspace file</th>
-          <th>Created</th>
-          <th>Terms Date</th>
+          <th><?=$this->transEsc('publication_overview_column_id_external')?></th>
+          <th><?=$this->transEsc('Title')?></th>
+          <th><?=$this->transEsc('publication_overview_column_file_external')?></th>
+          <th><?=$this->transEsc('Created')?></th>
+          <th><?=$this->transEsc('publication_terms')?></th>
         </tr>
         <?php foreach ($this->publications as $publication):
           $publicationURL = ($dspaceVersion == 6) ? $this->dspaceServer."/xmlui/handle/".$publication['external_document_id'] : $this->dspaceServer."/items/".$publication['external_document_guid'];?>
