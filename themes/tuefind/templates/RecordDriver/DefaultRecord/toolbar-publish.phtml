@@ -1,13 +1,9 @@
-<?php if ($this->auth()->isLoggedIn() && ($this->accountCapabilities()->getPublicationSetting() === 'enabled')):
+<?php if ($this->accountCapabilities()->getPublicationSetting() === 'enabled'):
   $routeParams = $this->tuefind()->getRouteParams();
   $recordId = $routeParams['id'];
   $config = $this->tuefind()->getConfig('tuefind');
   $publication = $this->tuefind()->getPublicationByControlNumber($recordId);
   $authors = $this->driver->getDeduplicatedAuthors();
-  $accessPublishRecord = false;
-  if(isset($user->id)) {
-      $accessPublishRecord = $this->tuefind()->getUserAccessPublishRecord($user->id, $authors);
-  }
   $showDspaceLink = false;
   if (isset($publication)) {
       $showDspaceLink = true;
@@ -20,9 +16,11 @@
   }?>
   <li>
     <?php if($showDspaceLink):?>
-      <a class="toolbar-btn btn-type-publish" href="<?=$dspaceLink;?>">go to file</a>
-    <?php elseif($accessPublishRecord): ?>
-        <a class="toolbar-btn btn-type-publish" data-lightbox href="<?=$this->recordLinker()->getActionUrl($this->driver, 'Publish')?>" rel="nofollow"><?=$this->transEsc('Publish')?></a>
-      <?php endif; ?>
+      <a class="toolbar-btn btn-type-publish" href="<?=$dspaceLink;?>"><?=$this->transEsc('publication_file_button')?></a>
+    <?php elseif($this->auth()->isLoggedIn()): ?>
+        <a class="toolbar-btn btn-type-publish" data-lightbox href="<?=$this->recordLinker()->getActionUrl($this->driver, 'Publish')?>" rel="nofollow"><?=$this->transEsc('publication_request_button')?></a>
+    <?php else: ?>
+        <a class="toolbar-btn btn-type-publish" data-lightbox href="<?=$this->url('help-home')?>?topic=publication" rel="nofollow"><?=$this->transEsc('publication_request_button')?></a>
+    <?php endif; ?>
   </li>
 <?php endif; ?>

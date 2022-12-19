@@ -576,4 +576,10 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
         $currentRoute = $this->getRouteParams();
         return isset($currentRoute['page']) ? $currentRoute['controller'].'/'.$currentRoute['action'].'/'.$currentRoute['page'] : $currentRoute['controller'].'/'.$currentRoute['action'];
     }
+
+    public function getPublicationEmail(): string {
+        $config = $this->getConfig('tuefind');
+        return $config->Publication->email ?? "";
+    }
+
 }
