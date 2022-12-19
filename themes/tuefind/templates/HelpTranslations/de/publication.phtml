@@ -1,4 +1,8 @@
-<?php $currentSystem = $this->tuefind()->getTueFindType();?>
+<?php
+$tuefind = $this->tuefind();
+$currentSystem = $tuefind->getTueFindType();
+$publicationEmail = $tuefind->getPublicationEmail();
+?>
 
 <p>Sie können diesen von Ihnen verfassten Beitrag zweitveröffentlichen, wenn Sie einen <?=$currentSystem;?>-Account anlegen und nachweisen, dass Sie der*die Autor*in sind.</p>
 
@@ -6,7 +10,7 @@
 
 <p><b>Registrierung</b></p>
 
-<p>1. Sie benötigen einen <?=$currentSystem;?>-Account.</p>
+<p>1. Sie benötigen einen <?=$currentSystem?>-Account.</p>
 
 <p>Dafür müssen Sie sich lediglich einmalig mit einer gültigen E-Mail-Adresse registrieren. Den Link zur Registrierung und zum Login finden Sie auf der Startseite rechts oben unter dem Button „Login“.
 
@@ -30,4 +34,4 @@ Sobald Sie einen <?=$currentSystem;?>-Account haben, können Sie mit den weitere
 
 <p><b>Fragen?</b></p>
 
-<p>Wenn Sie bei einer Publikation, die von Ihnen stammt, trotzdem keine Datei hochladen können, eine Frage haben oder auf ein anderes Problem stoßen, wenden Sie sich bitte an <Funktionspostfach für den Service>.</p>
+<p>Wenn Sie bei einer Publikation, die von Ihnen stammt, trotzdem keine Datei hochladen können, eine Frage haben oder auf ein anderes Problem stoßen, wenden Sie sich bitte an <b><?=$publicationEmail;?></b>.</p>
