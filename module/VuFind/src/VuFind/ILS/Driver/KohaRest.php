@@ -52,12 +52,14 @@ use VuFind\Service\CurrencyFormatter;
 class KohaRest extends \VuFind\ILS\Driver\AbstractBase implements
     \VuFindHttp\HttpServiceAwareInterface,
     \VuFind\I18n\Translator\TranslatorAwareInterface,
-    \Laminas\Log\LoggerAwareInterface
+    \Laminas\Log\LoggerAwareInterface,
+    \VuFind\I18n\HasSorterInterface
 {
     use \VuFindHttp\HttpServiceAwareTrait;
     use \VuFind\I18n\Translator\TranslatorAwareTrait;
-    use \VuFind\ILS\Driver\CacheTrait;
+    use \VuFind\Cache\CacheTrait;
     use \VuFind\ILS\Driver\OAuth2TokenTrait;
+    use \VuFind\I18n\HasSorterTrait;
 
     /**
      * Library prefix
@@ -619,7 +621,8 @@ class KohaRest extends \VuFind\ILS\Driver\AbstractBase implements
             'zip' => $result['postal_code'],
             'city' => $result['city'],
             'country' => $result['country'],
-            'expiration_date' => $this->convertDate($result['expiry_date'] ?? null)
+            'expiration_date' => $this->convertDate($result['expiry_date'] ?? null),
+            'birthdate' => $result['date_of_birth'] ?? ''
         ];
     }
 
@@ -936,7 +939,10 @@ class KohaRest extends \VuFind\ILS\Driver\AbstractBase implements
                 if (isset($locationOrder[$bLoc])) {
                     return 1;
                 }
-                return strcasecmp($a['locationDisplay'], $b['locationDisplay']);
+                return $this->getSorter()->compare(
+                    $a['locationDisplay'],
+                    $b['locationDisplay']
+                );
             };
             usort($locations, $sortFunction);
         }
@@ -1540,7 +1546,7 @@ class KohaRest extends \VuFind\ILS\Driver\AbstractBase implements
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function getConfig($function, $params = null)
+    public function getConfig($function, $params = [])
     {
         if ('getMyTransactionHistory' === $function) {
             if (empty($this->config['TransactionHistory']['enabled'])) {
@@ -2039,7 +2045,7 @@ class KohaRest extends \VuFind\ILS\Driver\AbstractBase implements
      */
     protected function statusSortFunction($a, $b)
     {
-        $result = strcmp($a['location'], $b['location']);
+        $result = $this->getSorter()->compare($a['location'], $b['location']);
 
         if (0 === $result && $this->sortItemsBySerialIssue) {
             $result = strnatcmp($a['number'], $b['number']);
@@ -2511,7 +2517,9 @@ class KohaRest extends \VuFind\ILS\Driver\AbstractBase implements
             }
 
             $renewable = $entry['renewable'];
-            $renewals = $entry['renewals'];
+            // Koha 22.11 introduced a backward compatibility break by renaming
+            // renewals to renewals_count (bug 30275), so check both:
+            $renewals = $entry['renewals_count'] ?? $entry['renewals'];
             $renewLimit = $entry['max_renewals'];
             $message = '';
             if (!$renewable && !$checkedIn) {

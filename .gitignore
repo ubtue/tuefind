@@ -19,6 +19,9 @@ lessphp_*.list
 module/VuFind/tests/.phpunit.result.cache
 node_modules
 public/swagger-ui
+local/config/vufind/*.ini
+local/config/vufind/*.json
+local/config/vufind/*.yaml
 
 # CUSTOM TUEFIND IGNORES START HERE
 /import/marc_local.properties
