@@ -579,8 +579,7 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
 
     public function getPublicationEmail(): string {
         $config = $this->getConfig('tuefind');
-        $publicationEmail = $config->Publication->email;
-        return isset($publicationEmail) ? $publicationEmail : "";
+        return $config->Publication->email ?? "";
     }
 
 }
