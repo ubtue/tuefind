@@ -1,28 +1,28 @@
 <?php $userAccess = $this->tuefind()->getUserAccessState($this->driver->getUniqueId(), $this->user->id ?? null);?>
 <div>
   <?php if ($this->user != false):
-      $userAlreadyMadeAuthorityRequest = $this->tuefind()->userAlreadyMadeAuthorityRequest($this->user->id);?>
-      <?php if ($userAccess['availability'] == 'free'): ?>
-          <?php if($userAlreadyMadeAuthorityRequest): ?>
-              You have already made a rights request for another author
-          <?php else: ?>
-              <a class="save-record toolbar-btn btn-type-save" rel="nofollow" href="<?=$this->url('authority-request-access', ['authority_id' => $this->driver->getUniqueId()])?>" data-lightbox="">Request access rights (This is me!)</a>
-          <?php endif;?>
-      <?php elseif ($userAccess['availability'] == 'mine'): ?>
-          <?php if ($userAccess['access_state'] == 'requested'): ?>
-               You have requested permission on this authority record. Our team has been informed, please wait for the approval.
-          <?php elseif ($userAccess['access_state'] == 'granted'): ?>
-              This authority record is linked to your user account.
-              <?php if($this->accountCapabilities()->getPublicationSetting() === 'enabled'): ?>
-                  <br><a href="<?=$this->url('myresearch-publications')?>">Would you like to publish something?</a>
-              <?php endif;?>
-          <?php endif;?>
-      <?php elseif ($userAccess['availability'] == 'other'): ?>
+    $userAlreadyMadeAuthorityRequest = $this->tuefind()->userAlreadyMadeAuthorityRequest($this->user->id);?>
+    <?php if ($userAccess['availability'] == 'free'): ?>
+      <?php if($userAlreadyMadeAuthorityRequest): ?>
+        <?=$this->transEsc('authority_access_state_exists_other')?>
+      <?php else: ?>
+        <a class="save-record toolbar-btn btn-type-save" rel="nofollow" href="<?=$this->url('authority-request-access', ['authority_id' => $this->driver->getUniqueId()])?>" data-lightbox=""><?=$this->transEsc('authority_access_request_button')?></a>
+      <?php endif;?>
+    <?php elseif ($userAccess['availability'] == 'mine'): ?>
+      <?php if ($userAccess['access_state'] == 'requested'): ?>
+        <?=$this->transEsc('authority_access_state_requested')?>
+      <?php elseif ($userAccess['access_state'] == 'granted'): ?>
+          <?=$this->transEsc('authority_access_state_granted')?>
           <?php if($this->accountCapabilities()->getPublicationSetting() === 'enabled'): ?>
-              <span class="save-record toolbar-btn btn-type-save">Another user already has rights to this authority record</span>
+            <br><a href="<?=$this->url('myresearch-publications')?>"><?=$this->transEsc('publication_request_link')?></a>
           <?php endif;?>
       <?php endif;?>
+    <?php elseif ($userAccess['availability'] == 'other'): ?>
+      <?php if($this->accountCapabilities()->getPublicationSetting() === 'enabled'): ?>
+        <span class="save-record toolbar-btn btn-type-save"><?=$this->transEsc('authority_access_state_unavailable')?></span>
+      <?php endif;?>
+    <?php endif;?>
   <?php else:?>
-      <a class="save-record toolbar-btn btn-type-save" rel="nofollow" href="<?=$this->url('authority-request-access', ['authority_id' => $this->driver->getUniqueId()])?>" data-lightbox="">Request access rights (This is me!)</a>
+    <a class="save-record toolbar-btn btn-type-save" rel="nofollow" href="<?=$this->url('authority-request-access', ['authority_id' => $this->driver->getUniqueId()])?>" data-lightbox=""><?=$this->transEsc('authority_access_request_button')?></a>
   <?php endif;?>
 </div>
