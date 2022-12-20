@@ -57,7 +57,10 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
             $authority = $this->serviceLocator->get(\VuFind\Record\Loader::class)->load($authorityId, 'SolrAuth');
             $authorityName = $this->serviceLocator->get('ViewHelperManager')->get('authority')->getName($authority);
 
-            $message = "The access for authority ".strip_tags($authorityName)." has been: ".$accessInfo;
+            // body
+            $renderer = $this->getViewRenderer();
+            $message = $renderer->render('Email/authority-request-access-'.$accessInfo.'.phtml');
+
             $mailer->send($receivers, $config->Site->email_from, 'Process User Authority Request', $message);
         }
 
