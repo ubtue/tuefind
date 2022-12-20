@@ -61,7 +61,7 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
             $renderer = $this->getViewRenderer();
             $message = $renderer->render('Email/authority-request-access-'.$accessInfo.'.phtml');
 
-            $mailer->send($receivers, $config->Site->email_from, $this->translate('authority_request_access_email_subject'), $message);
+            $mailer->send($receivers, $config->Site->email_from, $this->translate('authority_access_email_subject_'.$accessInfo), $message);
         }
 
         return $this->createViewModel(['action' => $action]);
