@@ -17,8 +17,6 @@
   <li>
     <?php if($showDspaceLink):?>
       <a class="toolbar-btn btn-type-publish" href="<?=$dspaceLink;?>"><?=$this->transEsc('publication_file_button')?></a>
-    <?php elseif($this->auth()->isLoggedIn()): ?>
-      <a class="toolbar-btn btn-type-publish" data-lightbox href="<?=$this->recordLinker()->getActionUrl($this->driver, 'Publish')?>" rel="nofollow"><?=$this->transEsc('publication_request_button')?></a>
     <?php else: ?>
       <a class="toolbar-btn btn-type-publish" data-lightbox href="<?=$this->url('help-home')?>?topic=publication" rel="nofollow"><?=$this->transEsc('publication_request_button')?></a>
     <?php endif; ?>
