@@ -4,6 +4,7 @@ namespace TueFind\Db\Table;
 
 use Laminas\Db\Adapter\Adapter;
 use Laminas\Db\ResultSet\ResultSetInterface as ResultSet;
+use Laminas\Db\Sql\Select;
 use VuFind\Db\Row\RowGateway;
 use VuFind\Db\Table\PluginManager;
 
@@ -13,6 +14,14 @@ class Publication extends \VuFind\Db\Table\Gateway {
         RowGateway $rowObj = null, $table = 'tuefind_publications'
     ) {
         parent::__construct($adapter, $tm, $cfg, $rowObj, $table);
+    }
+
+    public function getAll()
+    {
+        $select = $this->getSql()->select();
+        $select->join('user', 'tuefind_publications.user_id = user.id', Select::SQL_STAR, Select::JOIN_LEFT);
+        $select->order('publication_datetime DESC');
+        return $this->selectWith($select);
     }
 
     public function getByUserId($userId): ResultSet
