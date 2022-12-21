@@ -20,7 +20,7 @@ class UserAuthority extends \VuFind\Db\Table\Gateway {
     public function getAll()
     {
         $select = $this->getSql()->select();
-        $select->join('user', 'tuefind_user_authorities.user_id = user.id', Select::SQL_STAR, SELECT::JOIN_LEFT);
+        $select->join('user', 'tuefind_user_authorities.user_id = user.id', Select::SQL_STAR, Select::JOIN_LEFT);
         $select->order('username ASC, authority_id ASC');
         return $this->selectWith($select);
     }

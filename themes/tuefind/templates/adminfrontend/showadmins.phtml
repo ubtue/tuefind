@@ -6,7 +6,8 @@ $subSystemType=$this->tuefind()->getTueFindFlavour();
 $isIxTheo = ($subSystemType == 'ixtheo') ? true : false;
 
 // Set up breadcrumbs:
-$this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') . '">' . $this->transEsc('Your Account') . '</a></li> <li class="active">' . $this->transEsc('Admins') . '</li>'; ?>
+$this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') . '">' . $this->transEsc('Your Account') . '</a></li> <li class="active">' . $this->transEsc('Admins') . '</li>';
+?>
 
 <div class="<?=$this->layoutClass('mainbody')?>">
   <h2>Admins</h2>
@@ -26,12 +27,12 @@ $this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') 
     <tbody>
       <?php foreach ($this->admins as $user): ?>
         <tr>
-          <td><?=$user->username?></td>
-          <td><?=$user->firstname?></td>
-          <td><?=$user->lastname?></td>
-          <td><?=$user->email?></td>
-          <?php if($isIxTheo){ ?><td><?=$user->ixtheo_institution?></td><?php }?>
-          <td><?=str_replace(',', '<br>', $user->tuefind_rights)?></td>
+          <td><?=htmlspecialchars($user->username)?></td>
+          <td><?=htmlspecialchars($user->firstname)?></td>
+          <td><?=htmlspecialchars($user->lastname)?></td>
+          <td><?=htmlspecialchars($user->email)?></td>
+          <?php if($isIxTheo){ ?><td><?=htmlspecialchars($user->ixtheo_institution)?></td><?php }?>
+          <td><?=str_replace(',', '<br>', htmlspecialchars($user->tuefind_rights))?></td>
         </tr>
       <?php endforeach; ?>
     </tbody>

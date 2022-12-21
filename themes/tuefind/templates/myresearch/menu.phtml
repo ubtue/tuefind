@@ -136,5 +136,10 @@
         <i class="fa fa-fw fa-user-plus" aria-hidden="true"></i> Show user authorities
       </a>
     <?php endif; ?>
+    <?php if ($this->accountCapabilities()->getPublicationSetting() === 'enabled'): ?>
+      <a href="<?=$this->url('adminfrontend-showuserpublications') ?>"<?=$this->active == 'showuserpublications' ? ' class="active"' : ''?>>
+        <i class="fa fa-fw fa-user-plus" aria-hidden="true"></i> Show user publications
+      </a>
+    <?php endif; ?>
   </div>
 <?php endif; ?>
