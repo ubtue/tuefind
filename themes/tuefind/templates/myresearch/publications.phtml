@@ -23,7 +23,6 @@ $this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') 
         </tr>
       <?php endforeach; ?>
     </table>
-    <p><?=$this->translate('publication_authority_overview_note', ['%%button_label%%' => $this->transEsc('publication_request_button')])?></p>
 
     <h2><?=$this->transEsc('publication_overview_headline')?></h2>
     <?php if (count($this->publications) == 0): ?>
