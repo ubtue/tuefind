@@ -344,25 +344,19 @@ class SolrAuthMarc extends SolrAuthDefault {
     {
         $nameVariants = [];
         $fields = $this->getMarcReader()->getFieldsDelimiter('400|410|411');
-        if (is_array($fields)) {
-            foreach ($fields as $field) {
-                if (is_array($field)) {
-                    foreach ($field as $oneField) {
-                        $nameSubfield = $this->getMarcReader()->getSubfield($oneField,'a');
-                        if (!empty($nameSubfield)) {
-                            $name = $nameSubfield;
-                            $numberSubfield = $this->getMarcReader()->getSubfield($oneField,'b');
-                            if (!empty($numberSubfield)) {
-                                $name .= ' ' . $numberSubfield;
-                            }
-                            $titleSubfield = $this->getMarcReader()->getSubfield($oneField,'c');
-                            if (!empty($titleSubfield)) {
-                                $name .= ' ' . $titleSubfield;
-                            }
-                            $nameVariants[] = $name;
-                        }
-                    }
+        foreach ($fields as $field) {
+            $nameSubfield = $this->getMarcReader()->getSubfield($field,'a');
+            if (!empty($nameSubfield)) {
+                $name = $nameSubfield;
+                $numberSubfield = $this->getMarcReader()->getSubfield($field,'b');
+                if (!empty($numberSubfield)) {
+                    $name .= ' ' . $numberSubfield;
                 }
+                $titleSubfield = $this->getMarcReader()->getSubfield($field,'c');
+                if (!empty($titleSubfield)) {
+                    $name .= ' ' . $titleSubfield;
+                }
+                $nameVariants[] = $name;
             }
         }
 
