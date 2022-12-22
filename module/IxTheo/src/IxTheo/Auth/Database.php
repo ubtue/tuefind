@@ -21,7 +21,7 @@ class Database extends \TueFind\Auth\Database
         $params = parent::collectParamsFromRequest($request);
 
         $additionalParams = [
-            'ixtheo_title' => '', 'ixtheo_institution' => '', 'ixtheo_country' => '',
+            'ixtheo_title' => '', 'ixtheo_country' => '',
             'ixtheo_language' => '', 'ixtheo_appellation' => ''
         ];
         foreach ($additionalParams as $param => $default) {
@@ -46,7 +46,6 @@ class Database extends \TueFind\Auth\Database
         $user->ixtheo_title = in_array($params['ixtheo_title'], Database::$titles) ? $params['ixtheo_title'] : $user->ixtheo_title;
         $user->ixtheo_country = in_array($params['ixtheo_country'], Database::$countries) ? $params['ixtheo_country'] : $user->ixtheo_country;
         $user->ixtheo_language = $params['ixtheo_language'];
-        $user->ixtheo_institution = $params['ixtheo_institution'];
         $user->ixtheo_user_type = \IxTheo\Utility::getUserTypeFromUsedEnvironment();
         $user->save();
 

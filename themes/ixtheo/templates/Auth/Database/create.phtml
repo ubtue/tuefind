@@ -84,13 +84,15 @@ if (isset($this->passwordPolicy['pattern'])) {
 </div>
 <?php endif; ?>
 
-<!-- IxTheo-specific: Additional fields -->
+<!-- TueFind-specific: Additional fields -->
 <div class="form-group">
-  <label class="control-label" for="ixtheo_institution"><?= $this->transEsc('Institution') ?>:</label>
-  <input id="account_institution" type="text" name="ixtheo_institution"
-         value="<?= $this->escapeHtmlAttr($this->request->get('ixtheo_institution')) ?>"
+  <label class="control-label" for="account_institution"><?= $this->transEsc('Institution') ?>:</label>
+  <input id="account_institution" type="text" name="tuefind_institution"
+         value="<?= $this->escapeHtmlAttr($this->request->get('tuefind_institution')) ?>"
          placeholder="<?= $this->transEsc('Institution') ?>" class="form-control"/>
 </div>
+
+<!-- IxTheo-specific: Additional fields -->
 <div class="form-group">
   <label class="control-label" for="ixtheo_country"><?= $this->transEsc('Country') ?>:</label>
   <select id="account_country" name="ixtheo_country" class="form-control">

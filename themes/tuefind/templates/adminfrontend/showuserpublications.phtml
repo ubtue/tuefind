@@ -34,7 +34,7 @@ $this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') 
             <td><?=htmlspecialchars($publication->firstname)?></td>
             <td><?=htmlspecialchars($publication->lastname)?></td>
             <td><?=htmlspecialchars($publication->email)?></td>
-            <?php if($isIxTheo){ ?><td><?=htmlspecialchars($publication->ixtheo_institution)?></td><?php }?>
+            <td><?=htmlspecialchars($publication->tuefind_institution)?></td>
             <td><?=date("d.m.Y H:i:s",strtotime($publication->publication_datetime));?></td>
           </tr>
         <?php endforeach; ?>

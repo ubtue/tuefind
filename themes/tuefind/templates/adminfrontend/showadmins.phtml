@@ -2,9 +2,6 @@
 // Set up page title:
 $this->headTitle($this->translate('Admins'));
 
-$subSystemType=$this->tuefind()->getTueFindFlavour();
-$isIxTheo = ($subSystemType == 'ixtheo') ? true : false;
-
 // Set up breadcrumbs:
 $this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') . '">' . $this->transEsc('Your Account') . '</a></li> <li class="active">' . $this->transEsc('Admins') . '</li>';
 ?>
@@ -20,7 +17,7 @@ $this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') 
         <th><?=$this->transEsc('First Name')?></th>
         <th><?=$this->transEsc('Last Name')?></th>
         <th><?=$this->transEsc('Email Address')?></th>
-        <?php if($isIxTheo){ ?><th><?=$this->transEsc('Institution')?></th><?php }?>
+        <th><?=$this->transEsc('Institution')?></th>
         <th><?=$this->transEsc('Rights')?></th>
       </tr>
     </thead>
@@ -31,7 +28,7 @@ $this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') 
           <td><?=htmlspecialchars($user->firstname)?></td>
           <td><?=htmlspecialchars($user->lastname)?></td>
           <td><?=htmlspecialchars($user->email)?></td>
-          <?php if($isIxTheo){ ?><td><?=htmlspecialchars($user->ixtheo_institution)?></td><?php }?>
+          <td><?=htmlspecialchars($user->tuefind_institution)?></td>
           <td><?=str_replace(',', '<br>', htmlspecialchars($user->tuefind_rights))?></td>
         </tr>
       <?php endforeach; ?>

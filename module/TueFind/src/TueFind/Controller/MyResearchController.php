@@ -1,4 +1,5 @@
 <?php
+
 namespace TueFind\Controller;
 
 class MyResearchController extends \VuFind\Controller\MyResearchController
@@ -37,6 +38,57 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
 
         return $this->createViewModel(['subscribed' => $user->hasSubscribedToNewsletter(),
                                        'submitted'  => $submitted]);
+    }
+
+    /**
+     * This is a separate function so we can override it easier in extending classes.
+     * It returns an array with the name of the params in the form
+     * (should be named similar to the corresponding columns in the user table.)
+     */
+    protected function getProfileParams()
+    {
+        return [
+            'firstname' => '', 'lastname' => '', 'tuefind_institution' => ''
+        ];
+    }
+
+    /**
+     * VuFind usually does not allow to edit your own profile directly.
+     * They just provide additional buttons to change certain single properties,
+     * like e.g. the email address (and trigger verification workflow).
+     *
+     * However, we want the user to be able to edit multiple fields here
+     * and also to add some additional non-vufind-fields.
+     */
+    public function profileAction()
+    {
+        $user = $this->getUser();
+        if (!$user) {
+            return $this->forceLogin();
+        }
+
+        $profileParams = $this->getProfileParams();
+        if ($this->getRequest()->getPost("submit")) {
+            // email may no longer be updated here, the separate action (+button) should be used
+            // so that the verify_email functionality actually has an effect.
+            $request = $this->getRequest();
+
+            foreach ($profileParams as $param => $default) {
+                $user->$param = $request->getPost()->get($param, $default);
+            }
+            $user->save();
+            $this->getAuthManager()->updateSession($user);
+        }
+
+        $view = parent::profileAction();
+        $post = $this->getRequest()->getPost();
+        foreach ($profileParams as $param => $default) {
+            if (!$post->$param) {
+                $post->$param = $user->$param;
+            }
+        }
+        $view->request = $post;
+        return $view;
     }
 
     public function publicationsAction()

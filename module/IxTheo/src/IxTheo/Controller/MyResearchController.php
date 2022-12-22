@@ -1,6 +1,7 @@
 <?php
 
 namespace IxTheo\Controller;
+
 use VuFind\Search\RecommendListener,
     VuFind\Exception\ListPermission as ListPermissionException;
 
@@ -193,6 +194,15 @@ class MyResearchController extends \TueFind\Controller\MyResearchController
         return true;
     }
 
+    protected function getProfileParams()
+    {
+        $params = [
+            'ixtheo_title' => '', 'ixtheo_country' => '',
+            'ixtheo_language' => '', 'ixtheo_appellation' => ''
+        ];
+        return array_merge(parent::getProfileParams(), $params);
+    }
+
     public function profileAction()
     {
         $user = $this->getUser();
@@ -200,45 +210,9 @@ class MyResearchController extends \TueFind\Controller\MyResearchController
             return $this->forceLogin();
         }
 
-        if ($this->getRequest()->getPost("submit")) {
-            $this->updateProfile($this->getRequest(), $user);
-        }
-        $view = $this->createViewModel();
-        $view->user = $user;
-        $view->request = $this->mergePostDataWithUserData($this->getRequest()->getPost(), $user);
-        $config = $this->getConfig();
-        $view->accountDeletion = !empty($config->Authentication->account_deletion);
+        $view = parent::profileAction();
+        $view->request->ixtheo_language = $user->ixtheo_language ?: $this->layout()->userLang;
         return $view;
-    }
-
-    private function updateProfile(\Laminas\Http\PhpEnvironment\Request $request,
-                                   \VuFind\Db\Row\User $user)
-    {
-        // email may no longer be updated here, the separate action (+button) should be used
-        // so that the verify_email functionality actually has an effect.
-        $params = [
-            'firstname' => '', 'lastname' => '',
-            'ixtheo_title' => '', 'ixtheo_institution' => '', 'ixtheo_country' => '',
-            'ixtheo_language' => '', 'ixtheo_appellation' => ''
-        ];
-        foreach ($params as $param => $default) {
-            $user->$param = $request->getPost()->get($param, $default);
-        }
-        $user->save();
-        $this->getAuthManager()->updateSession($user);
-    }
-
-    private function mergePostDataWithUserData($post, $user) {
-        $fields = ['email', 'username', 'ixtheo_appellation', 'ixtheo_title', 'firstname', 'lastname', 'ixtheo_institution', 'ixtheo_country'];
-        foreach ($fields as $field) {
-            if (!$post->$field) {
-                $post->$field = $user->$field;
-            }
-        }
-        if (!$post->ixtheo_language) {
-            $post->ixtheo_language = $user->ixtheo_language ?: $this->layout()->userLang;
-        }
-        return $post;
     }
 
     /**
