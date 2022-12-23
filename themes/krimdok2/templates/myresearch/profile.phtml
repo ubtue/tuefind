@@ -27,9 +27,9 @@
       ]
     )?>
 
-    <?php /* TueFind: Newsletter */?>
+    <?php /* KrimDok: Newsletter */?>
     <tr>
-      <th>Newsletter:</th><td><input type="checkbox" <?=$this->user->hasSubscribedToNewsletter() ? 'checked' : ''?> disabled></td>
+      <th>Newsletter:</th><td><input type="checkbox" <?=$this->user->isSubscribedToNewsletter() ? 'checked' : ''?> disabled></td>
     </tr>
     <?php /* this section renders under two distinct circumstances; see if/else below: */ ?>
     <?php if (count($this->pickup ?? []) > 1 || !empty($this->preferredLibraryDisplay)): ?>

@@ -24,22 +24,6 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
         return ['userAuthorities' => $userAuthorities, 'authorityRecords' => $authorityRecords];
     }
 
-    public function newsletterAction()
-    {
-        $user = $this->getUser();
-        if ($user == false) {
-            return $this->forceLogin();
-        }
-
-        $submitted = $this->formWasSubmitted('submit');
-        if ($submitted) {
-            $user->setSubscribedToNewsletter(boolval($this->getRequest()->getPost()->subscribed));
-        }
-
-        return $this->createViewModel(['subscribed' => $user->hasSubscribedToNewsletter(),
-                                       'submitted'  => $submitted]);
-    }
-
     /**
      * This is a separate function so we can override it easier in extending classes.
      * It returns an array with the name of the params in the form
