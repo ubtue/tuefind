@@ -80,8 +80,7 @@ CREATE TABLE tuefind_user_authorities (
     FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;
 
-ALTER TABLE user ADD tuefind_subscribed_to_newsletter BOOLEAN NOT NULL DEFAULT FALSE;
-CREATE INDEX tuefind_subscribed_to_newsletter_index ON user (tuefind_subscribed_to_newsletter);
+ALTER TABLE vufind.user ADD tuefind_institution VARCHAR(255) DEFAULT NULL;
 
 ALTER TABLE user ADD tuefind_uuid CHAR(36) NOT NULL;
 ALTER TABLE user ADD CONSTRAINT tuefind_user_uuid UNIQUE (tuefind_uuid);

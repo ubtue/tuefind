@@ -53,10 +53,3 @@
          value="<?= $this->escapeHtmlAttr($this->request->get('tuefind_institution')) ?>"
          placeholder="<?= $this->transEsc('Institution') ?>" class="form-control"/>
 </div>
-
-<!-- KrimDok-specific: Additional fields -->
-<div class="form-group">
-  <label class="control-label" for="account_newsletter"><?=$this->transEsc('Newsletter')?>:</label>
-  <!-- intentionally do not use class="form-control" on checkbox, looks horrible  -->
-  <br><input id="account_newsletter" type="checkbox" name="krimdok_subscribed_to_newsletter" /> <?=$this->transEsc('newsletter_info3')?>
-</div>
