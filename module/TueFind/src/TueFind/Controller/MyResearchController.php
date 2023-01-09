@@ -72,6 +72,10 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
             }
         }
         $view->request = $post;
+
+        $view->passwordPolicy = $this->getAuthManager()
+            ->getPasswordPolicy();
+
         return $view;
     }
 

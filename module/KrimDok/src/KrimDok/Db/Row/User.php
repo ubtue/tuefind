@@ -9,7 +9,7 @@ class User extends \TueFind\Db\Row\User
     }
 
     public function setSubscribedToNewsletter(bool $value) {
-        $this->tuefind_subscribed_to_newsletter = intval($value);
+        $this->krimdok_subscribed_to_newsletter = intval($value);
         $this->save();
     }
 }

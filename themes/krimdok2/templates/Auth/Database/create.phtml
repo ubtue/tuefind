@@ -11,23 +11,11 @@
   }
 ?>
 <div class="form-group">
-  <label class="control-label" for="account_firstname"><?=$this->transEsc('First Name')?>:</label>
-  <input id="account_firstname" type="text" name="firstname" value="<?=$this->escapeHtmlAttr($this->request->get('firstname'))?>" class="form-control"/>
+  <label class="control-label" for="account_username"><?=$this->transEsc('Username')?>:</label>
+    <input id="account_username" type="text" name="username" required aria-required="true" value="<?=$this->escapeHtmlAttr($this->request->get('username'))?>" class="form-control" <?=$this->profile ? 'disabled' : ''?>/>
+    <div class="help-block with-errors"></div>
 </div>
-<div class="form-group">
-  <label class="control-label" for="account_lastname"><?=$this->transEsc('Last Name')?>:</label>
-  <input id="account_lastname" type="text" name="lastname" value="<?=$this->escapeHtmlAttr($this->request->get('lastname'))?>" class="form-control"/>
-</div>
-<div class="form-group">
-  <label class="control-label" for="account_email"><?=$this->transEsc('Email Address')?>:</label>
-  <input id="account_email" type="email" name="email" required aria-required="true" value="<?=$this->escapeHtmlAttr($this->request->get('email'))?>" class="form-control"/>
-  <div class="help-block with-errors"></div>
-</div>
-<div class="form-group">
-  <label class="control-label" for="account_username"><?=$this->transEsc('Desired Username')?>:</label>
-  <input id="account_username" type="text" name="username" required aria-required="true" value="<?=$this->escapeHtmlAttr($this->request->get('username'))?>" class="form-control"/>
-  <div class="help-block with-errors"></div>
-</div>
+<?php if (!$this->profile): ?>
 <div class="form-group">
   <label class="control-label" for="account_password"><?=$this->transEsc('Password')?>:</label>
   <input id="account_password" type="password" name="password" required aria-required="true" class="form-control"
@@ -45,6 +33,20 @@
   <input id="account_password2" type="password" name="password2" required aria-required="true" class="form-control" data-match="#account_password" data-match-error="<?=$this->transEscAttr('Passwords do not match')?>"/>
   <div class="help-block with-errors"></div>
 </div>
+<?php endif; ?>
+<div class="form-group">
+  <label class="control-label" for="account_email"><?=$this->transEsc('Email Address')?>:</label>
+  <input id="account_email" type="email" name="email" required aria-required="true" value="<?=$this->escapeHtmlAttr($this->request->get('email'))?>" class="form-control" <?=$this->profile ? 'disabled' : ''?>/>
+  <div class="help-block with-errors"></div>
+</div>
+<div class="form-group">
+  <label class="control-label" for="account_firstname"><?=$this->transEsc('First Name')?>:</label>
+  <input id="account_firstname" type="text" name="firstname" value="<?=$this->escapeHtmlAttr($this->request->get('firstname'))?>" class="form-control"/>
+</div>
+<div class="form-group">
+  <label class="control-label" for="account_lastname"><?=$this->transEsc('Last Name')?>:</label>
+  <input id="account_lastname" type="text" name="lastname" value="<?=$this->escapeHtmlAttr($this->request->get('lastname'))?>" class="form-control"/>
+</div>
 
 <!-- TueFind-specific: Additional fields -->
 <div class="form-group">
@@ -55,8 +57,10 @@
 </div>
 
 <!-- KrimDok-specific: Additional fields -->
+<?php if (!$this->profile): ?>
 <div class="form-group">
   <label class="control-label" for="account_newsletter"><?=$this->transEsc('Newsletter')?>:</label>
   <!-- intentionally do not use class="form-control" on checkbox, looks horrible  -->
   <br><input id="account_newsletter" type="checkbox" name="krimdok_subscribed_to_newsletter" /> <?=$this->transEsc('newsletter_info3')?>
 </div>
+<?php endif; ?>
