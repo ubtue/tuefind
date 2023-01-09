@@ -24,7 +24,7 @@ class MyResearchController extends \TueFind\Controller\MyResearchController
     protected function getProfileParams()
     {
         $params = [
-            'krimdok_subscribed_to_newsletter' => '',
+            'krimdok_subscribed_to_newsletter' => '0',
         ];
         return array_merge(parent::getProfileParams(), $params);
     }
