@@ -14,6 +14,7 @@ class MyResearchController extends \TueFind\Controller\MyResearchController
         $submitted = $this->formWasSubmitted('submit');
         if ($submitted) {
             $user->setSubscribedToNewsletter(boolval($this->getRequest()->getPost()->subscribed));
+            $this->getAuthManager()->updateSession($user);
         }
 
         return $this->createViewModel(['subscribed' => $user->isSubscribedToNewsletter(),
