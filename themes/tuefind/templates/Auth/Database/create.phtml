@@ -1,4 +1,12 @@
 <?php
+
+  /**
+   * TueFind:
+   * - Changed order of fields
+   * - This template is not only used when creating new users,
+   *   but also when editing existing ones.
+   */
+
   $pattern = '';
   if (isset($this->passwordPolicy['pattern'])) {
     if ($this->passwordPolicy['pattern'] == 'numeric') {
@@ -11,24 +19,16 @@
   }
 ?>
 <div class="form-group">
-  <label class="control-label" for="account_username"><?=$this->transEsc('Desired Username')?>:</label>
-  <input id="account_username" type="text" name="username" required aria-required="true" value="<?=$this->escapeHtmlAttr($this->request->get('username'))?>" class="form-control"/>
-  <div class="help-block with-errors"></div>
+  <label class="control-label" for="account_username"><?=$this->transEsc('Username')?>:</label>
+    <input id="account_username" type="text" name="username" required aria-required="true" value="<?=$this->profile ? $this->escapeHtmlAttr($this->user->username) : $this->escapeHtmlAttr($this->request->get('username'))?>" class="form-control" <?=$this->profile ? 'disabled' : ''?>/>
+    <div class="help-block with-errors"></div>
 </div>
-<div class="form-group">
-  <label class="control-label" for="account_firstname"><?=$this->transEsc('First Name')?>:</label>
-  <input id="account_firstname" type="text" name="firstname" value="<?=$this->escapeHtmlAttr($this->request->get('firstname'))?>" class="form-control"/>
-</div>
-<div class="form-group">
-  <label class="control-label" for="account_lastname"><?=$this->transEsc('Last Name')?>:</label>
-  <input id="account_lastname" type="text" name="lastname" value="<?=$this->escapeHtmlAttr($this->request->get('lastname'))?>" class="form-control"/>
-</div>
-<?php if (!$this->profile): ?>
 <div class="form-group">
   <label class="control-label" for="account_email"><?=$this->transEsc('Email Address')?>:</label>
-  <input id="account_email" type="email" name="email" required aria-required="true" value="<?=$this->escapeHtmlAttr($this->request->get('email'))?>" class="form-control"/>
+  <input id="account_email" type="email" name="email" required aria-required="true" value="<?=$this->profile ? $this->escapeHtmlAttr($this->user->email) : $this->escapeHtmlAttr($this->request->get('email'))?>" class="form-control" <?=$this->profile ? 'disabled' : ''?>/>
   <div class="help-block with-errors"></div>
 </div>
+<?php if (!$this->profile): ?>
 <div class="form-group">
   <label class="control-label" for="account_password"><?=$this->transEsc('Password')?>:</label>
   <input id="account_password" type="password" name="password" required aria-required="true" class="form-control"
@@ -47,6 +47,15 @@
   <div class="help-block with-errors"></div>
 </div>
 <?php endif; ?>
+
+<div class="form-group">
+  <label class="control-label" for="account_firstname"><?=$this->transEsc('First Name')?>:</label>
+  <input id="account_firstname" type="text" name="firstname" value="<?=$this->escapeHtmlAttr($this->request->get('firstname'))?>" class="form-control"/>
+</div>
+<div class="form-group">
+  <label class="control-label" for="account_lastname"><?=$this->transEsc('Last Name')?>:</label>
+  <input id="account_lastname" type="text" name="lastname" value="<?=$this->escapeHtmlAttr($this->request->get('lastname'))?>" class="form-control"/>
+</div>
 
 <!-- TueFind-specific: Additional fields -->
 <div class="form-group">
