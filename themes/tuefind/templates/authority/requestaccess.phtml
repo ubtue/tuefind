@@ -1,0 +1,26 @@
+<?php
+$routeParams = $this->tuefind()->getRouteParams();
+$authorityId = $routeParams['authority_id'];
+$userAccess = $this->tuefind()->getUserAccessState($authorityId, $this->userId);
+$userAlreadyMadeAuthorityRequest = $this->tuefind()->userAlreadyMadeAuthorityRequest($this->userId);?>
+
+<h1><?=$this->transEsc('Request access')?></h1>
+<?php if ($userAccess['availability'] == 'free'): ?>
+  <?php if($userAlreadyMadeAuthorityRequest): ?>
+    <?=$this->transEsc('authority_access_state_exists_other')?>
+  <?php else: ?>
+    <p><?=$this->transEsc('authority_access_request_text')?></p>
+    <form method="post" data-lightbox-onclose="VuFind.refreshPage">
+      <input type="hidden" name="request" value="yes">
+      <button class="btn btn-primary" type="submit"><?=$this->transEsc('Request access')?></button>
+    </form>
+  <?php endif;?>
+<?php elseif ($userAccess['availability'] == 'mine'): ?>
+  <?php if ($userAccess['access_state'] == 'requested'): ?>
+    <p><?=$this->transEsc('authority_access_state_requested')?></p>
+  <?php elseif ($userAccess['access_state'] == 'granted'): ?>
+    <p><?=$this->transEsc('authority_access_state_granted')?></p>
+  <?php endif; ?>
+<?php elseif ($userAccess['availability'] == 'other'): ?>
+  <p><?=$this->transEsc('authority_access_state_unavailable')?></p>
+<?php endif; ?>
