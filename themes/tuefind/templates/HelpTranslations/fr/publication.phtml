@@ -1,0 +1,28 @@
+<?php
+$tuefind = $this->tuefind();
+$currentSystem = $tuefind->getTueFindType();
+$publicationEmail = $tuefind->getPublicationEmail();
+?>
+
+<p>Vous pouvez republier un article si vous avez un compte <?=$currentSystem?> et que vous pouvez prouver que vous en êtes l’auteur.</p>
+<p>Voici comment procéder:</p>
+<p><b>Inscription</b></p>
+    <ul>
+        <li>1. Vous devez d’abord créer un compte <?=$currentSystem?>.</li>
+    </ul>
+<p>Vous pouvez vous inscrire en utilisant une adresse e-mail valable. Vous pouvez ouvrir la fenêtre d’inscription et de connexion en cliquant sur le bouton « Connexion » situé au coin supérieur droit de la page d’accueil.</p>
+<p>Si vous avez un compte <?=$currentSystem?>, vous pouvez passer aux étapes suivantes.</p>
+<p><b>Demander les droits d’accès</b></p>
+    <ul>
+        <li>2. Lorsque vous êtes connecté à votre compte <?=$currentSystem?>, vous pouvez demander l’accès à votre identifiant d’auteur. Pour ce faire, sélectionnez l’onglet « Personnes / Sociétés » au-dessus du champ de recherche. Faites ensuite une recherche sur votre nom et sélectionnez l’article approprié.</li>
+        <li>3. Cliquez ensuite sur le bouton « Demander les droits d’accès (c’est moi!)».</li>
+        <li>4. Votre demande sera automatiquement envoyée à l’équipe <?=$currentSystem?>. Nous vérifierons votre identité et nous vous informerons dans un délai de quelques jours par e-mail si votre demande est approuvée ou non.</li>
+    </ul>
+<p>À la prochaine étape, vous pouvez téléverser (« upload ») vos publications.</p>
+<p><b>Téléversement / Upload (republication)</b></p>
+    <ul>
+        <li>5. Dès que votre demande est approuvée, vous pouvez vous connecter à nouveau à votre compte <?=$currentSystem?>. Vous avez maintenant la possibilité de choisir pour fins de publication secondaire chaque article auquel vous êtes lié à titre d’auteur. Lorsque que vous cliquez sur le bouton « Republier », vous pouvez téléverser votre article sous la forme d’un fichier PDF.</li>
+        <li>6. Suite au téléversement, votre fichier est sauvegardé dans un dépôt institutionnel. Nous le mettons habituellement à la disposition des usagers de notre site en accès libre au cours de la journée suivante. En même temps, nous générons des liens stables (handle/doi) auxquels vous pouvez également accéder dans la journée qui suit.  Ces liens sont permanents, et vous pouvez les utiliser dans le cadre de vos travaux de recherche ou de vos activités académiques.</li>
+    </ul>
+<p><b>Avez-vous des questions?</b></p>
+<p>Si vous avez des problèmes avec le téléversement de votre fichier, ou pour tout autre problème ou question que vous pourriez avoir, veuillez nous contacter à l’adresse suivante: <b><?=$publicationEmail?></b>.</p>
