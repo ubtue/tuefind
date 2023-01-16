@@ -4,19 +4,16 @@ $currentSystem = $tuefind->getTueFindType();
 $publicationEmail = $tuefind->getPublicationEmail();
 ?>
 
-Liebe*r <?=$currentSystem?> Nutzer*in,
-
-Sie haben Zugriffsrechte für Ihre Autor*innen-ID im <?=$currentSystem?> beantragt. Dies wurde genehmigt.
-Dadurch können Sie nun Publikationen, die mit Ihrer ID verknüpft sind, zweitveröffentlichen.
-
-Sobald Sie in Ihrem <?=$currentSystem?> Account eingeloggt sind, wird Ihnen bei den Publikationen, die mit Ihrer Autor*innen-ID verknüpft sind, der Button „republish” angezeigt.
-Wenn Sie auf „republish” klicken, können Sie ein Digitalisat Ihrer Publikation als PDF-Datei hochladen. Im Anschluss erhält diese Datei einen dauerhaften Link (handle/doi) und steht anderen Nutzer*innen im Open Access zur Verfügung.
-
-Wenn Sie Publikationen hochladen möchten, die noch nicht im <?=$currentSystem?> verzeichnet sind, wenden Sie sich bitte an uns (<?=$publicationEmail?>).
-Ebenso kontaktieren Sie uns bitte, wenn bei einer im <?=$currentSystem?> verzeichneten Publikation kein Upload möglich ist.
-
-Für Fragen stehen wir gerne zur Verfügung.
-
-Mit freundlichen Grüßen
-
-Ihr <?=$currentSystem?>-Team
+<?=$this->translate('authority_request_access_grant_email_text_1', ['%%currentSystem%%' => $currentSystem, '%%publicationEmail%%' => $publicationEmail])?>
+&#10;
+<?=$this->translate('authority_request_access_grant_email_text_2', ['%%currentSystem%%' => $currentSystem, '%%publicationEmail%%' => $publicationEmail])?>
+&#10;
+<?=$this->translate('authority_request_access_grant_email_text_3', ['%%currentSystem%%' => $currentSystem, '%%publicationEmail%%' => $publicationEmail])?>
+&#10;
+<?=$this->translate('authority_request_access_grant_email_text_4', ['%%currentSystem%%' => $currentSystem, '%%publicationEmail%%' => $publicationEmail])?>
+&#10;
+<?=$this->translate('authority_request_access_grant_email_text_5', ['%%currentSystem%%' => $currentSystem, '%%publicationEmail%%' => $publicationEmail])?>
+&#10;
+<?=$this->translate('authority_request_access_grant_email_text_6', ['%%currentSystem%%' => $currentSystem, '%%publicationEmail%%' => $publicationEmail])?>
+&#10;
+<?=$this->translate('authority_request_access_grant_email_text_7', ['%%currentSystem%%' => $currentSystem, '%%publicationEmail%%' => $publicationEmail])?>
