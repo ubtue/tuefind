@@ -1,0 +1,19 @@
+<?php
+$tuefind = $this->tuefind();
+$currentSystem = $tuefind->getTueFindType();
+$publicationEmail = $tuefind->getPublicationEmail();
+?>
+
+Cher usager d’<?=$currentSystem?>,
+
+Vous avez fait la demande d’accès à votre identifiant d’auteur. Cette demande a été acceptée. Vous avez maintenant la possibilité de republier les articles qui sont liés à votre identifiant d’auteur.
+
+Lorsque vous serez connecté à votre compte <?=$currentSystem?>, vous verrez un bouton avec la mention „Republier“ pour chaque article lié à votre identifiant d’auteur.
+
+Lorsque vous appuierez sur ce bouton, vous pourrez téléverser l’article correspondant sous la forme d’un fichier PDF. Ce fichier recevra ensuite un lien (handle/doi) et sera disponible aux autres usagers d’<?=$currentSystem?> en accès libre.
+
+Si vous aimeriez téléverser des articles qui ne figurent pas dans notre catalogue, si vous avez des problèmes avec un téléversement, ou pour tout autre question, veuillez nous contacter à l’adresse suivante: (<?=$publicationEmail?>).
+
+Cordialement,
+
+Votre équipe <?=$currentSystem?>

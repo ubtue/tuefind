@@ -8,6 +8,9 @@ namespace TueFind\Controller;
  * Backend administration, so we call this one AdminFrontendController instead.
  */
 class AdminFrontendController extends \VuFind\Controller\AbstractBase {
+
+    protected $defaultEmailLanguage = 'en';
+
     protected function forceAdminLogin()
     {
         $user = $this->getUser();
@@ -31,6 +34,8 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
         $authorityId = $this->params()->fromRoute('authority_id');
         $entry = $this->getTable('user_authority')->getByUserIdAndAuthorityId($userId, $authorityId);
         $requestUser = $this->getTable('user')->getByID($userId);
+        $requestUserLanguage = $requestUser->last_language;
+
         $action = $this->params()->fromPost('action');
         $accessInfo = "grant";
         if ($action != '') {
@@ -56,10 +61,10 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
             // send mail
             $authority = $this->serviceLocator->get(\VuFind\Record\Loader::class)->load($authorityId, 'SolrAuth');
             $authorityName = $this->serviceLocator->get('ViewHelperManager')->get('authority')->getName($authority);
-
+            $emailPathTemplate = $this->generationEmailTemplateLink($requestUserLanguage, $accessInfo);
             // body
             $renderer = $this->getViewRenderer();
-            $message = $renderer->render('Email/authority-request-access-'.$accessInfo.'.phtml');
+            $message = $renderer->render($emailPathTemplate);
 
             $mailer->send($receivers, $config->Site->email_from, $this->translate('authority_access_email_subject_'.$accessInfo), $message);
         }
@@ -98,5 +103,17 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
         }
 
         return $this->createViewModel(['publications' => $this->getTable('publication')->getAll()]);
+    }
+
+    private function generationEmailTemplateLink(string $requestUserLanguage, string $accessInfo): string
+    {
+        $emailPathTemplate = 'Email/'.$requestUserLanguage.'/authority-request-access-'.$accessInfo.'.phtml';
+        $fullEmailPathTemplate =  $_SERVER['VUFIND_HOME'].'/themes/tuefind/templates/'.$emailPathTemplate;
+
+        if (!file_exists($fullEmailPathTemplate)) {
+            $emailPathTemplate = 'Email/'.$this->defaultEmailLanguage.'/authority-request-access-'.$accessInfo.'.phtml';
+            $fullEmailPathTemplate =  $_SERVER['VUFIND_HOME'].'/themes/tuefind/templates/'.$emailPathTemplate;
+        }
+        return $fullEmailPathTemplate;
     }
 }
