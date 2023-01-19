@@ -8,9 +8,6 @@ namespace TueFind\Controller;
  * Backend administration, so we call this one AdminFrontendController instead.
  */
 class AdminFrontendController extends \VuFind\Controller\AbstractBase {
-
-    protected $defaultEmailLanguage = 'en';
-
     protected function forceAdminLogin()
     {
         $user = $this->getUser();
@@ -60,8 +57,8 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
 
             // send mail
             $authority = $this->serviceLocator->get(\VuFind\Record\Loader::class)->load($authorityId, 'SolrAuth');
-            $authorityName = $this->serviceLocator->get('ViewHelperManager')->get('authority')->getName($authority);
-            $emailPathTemplate = $this->generationEmailTemplateLink($requestUserLanguage, $accessInfo);
+            $emailPathTemplate = $this->getEmailTemplatePath($requestUserLanguage, $accessInfo);
+            
             // body
             $renderer = $this->getViewRenderer();
             $message = $renderer->render($emailPathTemplate);
@@ -105,15 +102,17 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
         return $this->createViewModel(['publications' => $this->getTable('publication')->getAll()]);
     }
 
-    private function generationEmailTemplateLink(string $requestUserLanguage, string $accessInfo): string
+    protected function getEmailTemplatePath(string $requestUserLanguage, string $accessInfo): string
     {
         $emailPathTemplate = 'Email/'.$requestUserLanguage.'/authority-request-access-'.$accessInfo.'.phtml';
         $fullEmailPathTemplate =  $_SERVER['VUFIND_HOME'].'/themes/tuefind/templates/'.$emailPathTemplate;
 
         if (!file_exists($fullEmailPathTemplate)) {
-            $emailPathTemplate = 'Email/'.$this->defaultEmailLanguage.'/authority-request-access-'.$accessInfo.'.phtml';
-            $fullEmailPathTemplate =  $_SERVER['VUFIND_HOME'].'/themes/tuefind/templates/'.$emailPathTemplate;
+            $config = $this->serviceLocator->get(\VuFind\Config\PluginManager::class)->get('config');
+            $defaultEmailLanguage = $config->Site->language;
+            $emailPathTemplate = 'Email/'.$defaultEmailLanguage.'/authority-request-access-'.$accessInfo.'.phtml';
         }
-        return $fullEmailPathTemplate;
+
+        return $emailPathTemplate;
     }
 }
