@@ -1,0 +1,22 @@
+<?php
+$tuefind = $this->tuefind();
+$currentSystem = $tuefind->getTueFindType();
+$publicationEmail = $tuefind->getPublicationEmail();
+?>
+
+Gentile Utente,
+
+Lei ha fatto richiesta di accesso al suo ID di Autrice/Autore in <?=$currentSystem?>.
+
+In base alle informazioni da Lei forniteci non è possibile verificare che Lei è la persona contrassegnata dal ID. La sua richiesta è stata perciò respinta.
+
+Qualora il rifiuto Le dovesse risultare ingiusitificato, la preghiamo di contattarci (<?=$publicationEmail?>).
+
+A tutela della nostra utenza affettuiamo un controllo molto accurato.
+
+Per ogni chiarimento rimaniano a Sua disposizione.
+
+Con i migliori saluti
+
+<?=$currentSystem?>-Team
+

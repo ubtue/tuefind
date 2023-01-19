@@ -1,0 +1,22 @@
+<?php
+$tuefind = $this->tuefind();
+$currentSystem = $tuefind->getTueFindType();
+$publicationEmail = $tuefind->getPublicationEmail();
+?>
+
+Dear <?=$currentSystem?> user,
+
+You have requested access to an author ID in <?=$currentSystem?>.
+
+Unfortunately, we were not able to confirm that you are the person with this ID on the basis of the information we have. For this reason, your request was denied.
+
+If this is your author ID, and you find that this refusal was unjustified, please contact us at: <?=$publicationEmail?>.
+
+We hope you will understand that we must perform a thorough verification of identity in order to protect our users.
+
+Please contact us for any further question you might have.
+
+Best regards,
+
+Your <?=$currentSystem?>-Team
+
