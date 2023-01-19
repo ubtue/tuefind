@@ -101,7 +101,8 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
 
         return $this->createViewModel(['publications' => $this->getTable('publication')->getAll()]);
     }
-
+    
+    //generate a path for email templates with a specific language, since VueFind does not yet have such functionality
     protected function getEmailTemplatePath(string $requestUserLanguage, string $accessInfo): string
     {
         $emailPathTemplate = 'Email/'.$requestUserLanguage.'/authority-request-access-'.$accessInfo.'.phtml';
