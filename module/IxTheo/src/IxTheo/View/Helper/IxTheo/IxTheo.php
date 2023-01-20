@@ -182,4 +182,19 @@ class IxTheo extends \Laminas\View\Helper\AbstractHelper
         }
         return $showSearchForm;
     }
+
+    public function getBeaconFileName(): string {
+        $instance = basename(getenv('VUFIND_LOCAL_DIR'));
+
+        // Note: RelBib uses an entire different page template + docs directory,
+        // so it is not covered here.
+        switch ($instance) {
+            case 'bibstudies':
+                return 'bibstudies-beacon.txt';
+            case 'churchlaw':
+                return 'canonlaw-beacon.txt';
+            default:
+                return 'ixtheo-beacon.txt';
+        }
+    }
 }
