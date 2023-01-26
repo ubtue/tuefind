@@ -43,7 +43,7 @@ if (!empty($ids_and_titles)) {
     echo 'T2  - ';
     $superior_record = $this->driver->tryMethod('getSuperiorRecord');
     if ($format == 'CHAP' && $superior_record != NULL) {
-        echo $superior_record->getAuthorsAndRoleAsString() . ": " . $superior_record->getTitle();
+        echo $superior_record->getAuthorsAndRoleAsString() . ", " . $superior_record->getTitle();
     } else {
         $i = 0;
         foreach ($ids_and_titles as $id => $title):

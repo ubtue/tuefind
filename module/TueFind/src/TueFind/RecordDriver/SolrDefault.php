@@ -99,15 +99,23 @@ class SolrDefault extends \VuFind\RecordDriver\SolrMarc
     }
 
 
+    protected function getFormattedRoleButAuthor($role)
+    {
+        return ($role == 'aut') ? '' : ' (' .  $role . ')';
+    }
+
+
     public function getAuthorsAndRoleAsString() {
         $deduplicated_authors = $this->getDeduplicatedAuthors();
         $result = '';
         foreach(['primary', 'secondary', 'corporate'] as $type) {
             $type_contents =  $deduplicated_authors[$type];
+            if (!empty($result) && $type == 'corporate')
+                continue;
             foreach (array_keys($type_contents) as $author_full) {
                 $result .= empty($result) ? "" : ", ";
-                $result .= $author_full . (isset($type_contents[$author_full]['role']) ?
-                                ' (' .  $type_contents[$author_full]['role'][0] . ')' : '');
+                $result .= $author_full . (isset($type_contents[$author_full]['role'][0]) ?
+                                $this->getFormattedRoleButAuthor($type_contents[$author_full]['role'][0]) : '');
 
             }
         }
