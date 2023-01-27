@@ -174,19 +174,6 @@ $config = [
                     ],
                 ],
             ],
-            'adminfrontend-publication-statistics' => [
-                'type'    => 'Laminas\Router\Http\Segment',
-                'options' => [
-                    'route'    => "/AdminFronted/Publication/statistics/:user_id",
-                    'constraints' => [
-                        'user_id'          => '\d+',
-                    ],
-                    'defaults' => [
-                        'controller' => 'AdminFrontend',
-                        'action'     => 'showPublicationsStatistics',
-                    ],
-                ],
-            ],
             'crawler-info' => [
                 'type'    => 'Laminas\Router\Http\Literal',
                 'options' => [
