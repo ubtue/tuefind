@@ -17,6 +17,7 @@ class PluginManager extends \VuFind\Db\Row\PluginManager {
     public function __construct($configOrContainerInstance = null,
         array $v3config = []
     ) {
+        $this->aliases['admin_history']          = AdminHistory::class;
         $this->aliases['publication']            = Publication::class;
         $this->aliases['redirect']               = Redirect::class;
         $this->aliases['rss_feed']               = RssFeed::class;
@@ -24,6 +25,7 @@ class PluginManager extends \VuFind\Db\Row\PluginManager {
         $this->aliases['rss_subscription']       = RssSubscription::class;
         $this->aliases['user']                   = User::class;
         $this->aliases['user_authority']         = UserAuthority::class;
+        $this->factories[AdminHistory::class]    = RowGatewayFactory::class;
         $this->factories[Publication::class]     = RowGatewayFactory::class;
         $this->factories[Redirect::class]        = RowGatewayFactory::class;
         $this->factories[RssFeed::class]         = RowGatewayFactory::class;

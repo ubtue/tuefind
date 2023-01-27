@@ -174,6 +174,19 @@ $config = [
                     ],
                 ],
             ],
+            'adminfrontend-publication-statistics' => [
+                'type'    => 'Laminas\Router\Http\Segment',
+                'options' => [
+                    'route'    => "/AdminFronted/Publication/statistics/:user_id",
+                    'constraints' => [
+                        'user_id'          => '\d+',
+                    ],
+                    'defaults' => [
+                        'controller' => 'AdminFrontend',
+                        'action'     => 'showPublicationsStatistics',
+                    ],
+                ],
+            ],
             'crawler-info' => [
                 'type'    => 'Laminas\Router\Http\Literal',
                 'options' => [
@@ -354,8 +367,19 @@ $config = [
 
 $recordRoutes = [];
 $dynamicRoutes = [];
-$staticRoutes = ['AdminFrontend/ShowAdmins', 'AdminFrontend/ShowUserAuthorities', 'AdminFrontend/ShowUserPublications', 'MyResearch/Publications', 'MyResearch/RssFeedSettings', 'MyResearch/RssFeedPreview', 'RssFeed/Full', 'Search3/Home', 'Search3/Results',  'Search3/FacetList', 'Search3/Versions'];
-
+$staticRoutes = [
+    'AdminFrontend/ShowAdmins',
+    'AdminFrontend/ShowUserAuthorities',
+    'AdminFrontend/ShowUserPublications',
+    'AdminFrontend/showAdminHistory',
+    'MyResearch/Publications',
+    'MyResearch/RssFeedSettings',
+    'MyResearch/RssFeedPreview',
+    'RssFeed/Full',
+    'Search3/Home',
+    'Search3/Results',
+    'Search3/FacetList',
+    'Search3/Versions'];
 $routeGenerator = new \TueFind\Route\RouteGenerator();
 $routeGenerator->addRecordRoutes($config, $recordRoutes);
 $routeGenerator->addDynamicRoutes($config, $dynamicRoutes);
