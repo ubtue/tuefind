@@ -2,14 +2,14 @@
 
 namespace TueFind\Db\Row;
 
-class AdminHistory extends \VuFind\Db\Row\RowGateway
+class AuthorityAccessHistory extends \VuFind\Db\Row\RowGateway
 {
     public function __construct($adapter)
     {
-        parent::__construct('id', 'tuefind_admin_history', $adapter);
+        parent::__construct('id', 'tuefind_authority_access_history', $adapter);
     }
 
-    public function updateAdminHistory($adminId, $access)
+    public function updateAuthorityAccessHistory($adminId, $access)
     {
         $this->admin_id = $adminId;
         $this->access_type = $access;

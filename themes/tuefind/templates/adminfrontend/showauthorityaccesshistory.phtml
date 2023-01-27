@@ -1,14 +1,14 @@
 <?php
 // Set up page title:
-$this->headTitle($this->translate('Admin History'));
+$this->headTitle($this->translate('Authority Access History'));
 
 // Set up breadcrumbs:
-$this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') . '">' . $this->transEsc('Your Account') . '</a></li> <li class="active">' . $this->transEsc('Admin history') . '</li>';
+$this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') . '">' . $this->transEsc('Your Account') . '</a></li> <li class="active">' . $this->transEsc('Authority Access History') . '</li>';
 ?>
 
 <div class="<?=$this->layoutClass('mainbody')?>">
-  <h2>Admin history</h2>
-  <?php if (count($this->history_datas) == 0): ?>
+  <h2>Authority Access History</h2>
+  <?php if (count($this->authority_access_history_datas) == 0): ?>
     <p>No history.</p>
   <?php else: ?>
     <table class="table dataTable display">
@@ -23,7 +23,7 @@ $this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') 
         </tr>
       </thead>
       <tbody>
-        <?php foreach ($this->history_datas as $data): ?>
+        <?php foreach ($this->authority_access_history_datas as $data): ?>
           <tr>
             <td><?=$data->admin_username." (".$data->admin_firstname." ".$data->admin_lastname.")"?></td>
             <td><?=$data->request_user_firstname." ".$data->request_user_lastname?></td>
@@ -38,5 +38,5 @@ $this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') 
 </div>
 
 <div class="<?=$this->layoutClass('sidebar')?>" id="myresearch-sidebar">
-  <?=$this->context($this)->renderInContext("myresearch/menu.phtml", ['active' => 'showadminhistory'])?>
+  <?=$this->context($this)->renderInContext("myresearch/menu.phtml", ['active' => 'showauthorityaccesshistory'])?>
 </div>

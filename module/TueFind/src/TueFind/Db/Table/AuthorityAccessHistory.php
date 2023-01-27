@@ -7,17 +7,17 @@ use Laminas\Db\ResultSet\ResultSetInterface as ResultSet;
 use Laminas\Db\Sql\Select;
 use VuFind\Db\Row\RowGateway;
 use VuFind\Db\Table\PluginManager;
-use TueFind\Db\Row\AdminHistory as AdminHistoryRow;
+use TueFind\Db\Row\AuthorityAccessHistory as AuthorityAccessHistoryRow;
 
-class AdminHistory extends \VuFind\Db\Table\Gateway {
+class AuthorityAccessHistory extends \VuFind\Db\Table\Gateway {
 
     public function __construct(Adapter $adapter, PluginManager $tm, $cfg,
-        RowGateway $rowObj = null, $table = 'tuefind_admin_history'
+        RowGateway $rowObj = null, $table = 'tuefind_authority_access_history'
     ) {
         parent::__construct($adapter, $tm, $cfg, $rowObj, $table);
     }
 
-    public function getByRequestUserId($requestUserId): ?AdminHistoryRow
+    public function getByRequestUserId($requestUserId): ?AuthorityAccessHistoryRow
     {
         return $this->select(['request_user_id' => $requestUserId])->current();
     }
@@ -25,12 +25,12 @@ class AdminHistory extends \VuFind\Db\Table\Gateway {
     public function getAll()
     {
         $select = $this->getSql()->select();
-        $select->join(['admin'=>'user'], 'tuefind_admin_history.admin_id = admin.id', [
+        $select->join(['admin'=>'user'], 'tuefind_authority_access_history.admin_id = admin.id', [
             'admin_username'=>'username',
             'admin_firstname'=>'firstname',
             'admin_lastname'=>'lastname'
         ], Select::JOIN_LEFT);
-        $select->join(['request_user'=>'user'], 'tuefind_admin_history.request_user_id = request_user.id', [
+        $select->join(['request_user'=>'user'], 'tuefind_authority_access_history.request_user_id = request_user.id', [
             'request_user_firstname'=>'firstname',
             'request_user_lastname'=>'lastname'
         ], Select::JOIN_LEFT);

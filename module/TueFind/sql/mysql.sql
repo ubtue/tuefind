@@ -93,3 +93,15 @@ CREATE INDEX tuefind_rss_feed_send_emails_index ON user (tuefind_rss_feed_send_e
 ALTER TABLE user ADD tuefind_rss_feed_last_notification TIMESTAMP DEFAULT NOW();
 
 ALTER TABLE user ADD tuefind_rights SET('admin', 'user_authorities') DEFAULT NULL;
+
+CREATE TABLE tuefind_authority_access_history (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    admin_id INT NULL,
+    request_user_id INT NULL,
+    authority_id VARCHAR(255) NOT NULL,
+    access_type VARCHAR(10) NULL,
+    request_user_date TIMESTAMP DEFAULT NOW() NOT NULL,
+    admin_request_date TIMESTAMP DEFAULT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (admin_id) REFERENCES user(id) ON DELETE CASCADE
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;
