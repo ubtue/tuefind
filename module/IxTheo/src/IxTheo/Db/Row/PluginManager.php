@@ -25,7 +25,7 @@ class PluginManager extends \TueFind\Db\Row\PluginManager {
         $this->factories[PDASubscription::class]            = RowGatewayFactory::class;
         $this->factories[Subscription::class]               = RowGatewayFactory::class;
         $this->factories[User::class]                       = \VuFind\Db\Row\UserFactory::class;
-        $this->factories[UserAuthorityHistory::class]   = RowGatewayFactory::class;
+        $this->factories[UserAuthorityHistory::class]       = RowGatewayFactory::class;
         parent::__construct($configOrContainerInstance, $v3config);
     }
 }
