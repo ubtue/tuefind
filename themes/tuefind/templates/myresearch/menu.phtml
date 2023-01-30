@@ -135,13 +135,13 @@
       <a href="<?=$this->url('adminfrontend-showuserauthorities') ?>"<?=$this->active == 'showuserauthorities' ? ' class="active"' : ''?>>
         <i class="fa fa-fw fa-user-plus" aria-hidden="true"></i> Show user authorities
       </a>
+      <a href="<?=$this->url('adminfrontend-showuserauthorityhistory') ?>"<?=$this->active == 'showuserauthorityhistory' ? ' class="active"' : ''?>>
+        <i class="fa fa-fw fa-user-plus" aria-hidden="true"></i> Show user authority history
+      </a>
     <?php endif; ?>
     <?php if ($this->accountCapabilities()->getPublicationSetting() === 'enabled'): ?>
       <a href="<?=$this->url('adminfrontend-showuserpublications') ?>"<?=$this->active == 'showuserpublications' ? ' class="active"' : ''?>>
         <i class="fa fa-fw fa-user-plus" aria-hidden="true"></i> Show user publications
-      </a>
-      <a href="<?=$this->url('adminfrontend-showuserauthorityhistory') ?>"<?=$this->active == 'showuserauthorityhistory' ? ' class="active"' : ''?>>
-        <i class="fa fa-fw fa-user-plus" aria-hidden="true"></i> Show user authority history
       </a>
     <?php endif; ?>
   </div>
