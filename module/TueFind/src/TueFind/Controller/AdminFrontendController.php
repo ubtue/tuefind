@@ -33,7 +33,7 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
         $requestUser = $this->getTable('user')->getByID($userId);
         $requestUserLanguage = $requestUser->last_language;
         $adminUser = $this->getUser();
-        $userAuthorityHistoryTable = $this->getTable('user_authority_history')->getByRequestUserId($userId);
+        $userAuthorityHistoryTable = $this->getTable('user_authority_history')->getLatestRequestByUserId($userId);
         $action = $this->params()->fromPost('action');
         $accessInfo = "grant";
         if ($action != '') {
@@ -62,7 +62,7 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
             // send mail
             $authority = $this->serviceLocator->get(\VuFind\Record\Loader::class)->load($authorityId, 'SolrAuth');
             $emailPathTemplate = $this->getEmailTemplatePath($requestUserLanguage, $accessInfo);
-            
+
             // body
             $renderer = $this->getViewRenderer();
             $message = $renderer->render($emailPathTemplate);
@@ -123,7 +123,7 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
 
     public function showUserAuthorityHistoryAction()
     {
-        
+
         $this->forceAdminLogin();
 
         return $this->createViewModel(['user_authority_history_datas' => $this->getTable('user_authority_history')->getAll()]);

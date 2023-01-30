@@ -17,9 +17,16 @@ class UserAuthorityHistory extends \VuFind\Db\Table\Gateway {
         parent::__construct($adapter, $tm, $cfg, $rowObj, $table);
     }
 
-    public function getByRequestUserId($requestUserId): ?UserAuthorityHistoryRow
+    public function getLatestRequestByUserId($requestUserId): ?UserAuthorityHistoryRow
     {
-        return $this->select(['user_id' => $requestUserId])->current();
+        $select = $this->getSql()->select();
+        $select->where('user_id=' . $requestUserId);
+        $select->order('request_user_date DESC');
+        $resultSet = $this->selectWith($select);
+        foreach ($resultSet as $entry) {
+            return $entry;
+        }
+        return null;
     }
 
     public function getAll()
@@ -39,7 +46,7 @@ class UserAuthorityHistory extends \VuFind\Db\Table\Gateway {
         return $this->selectWith($select);
     }
 
-    public function addUserRequest($userId, $authorityId) 
+    public function addUserRequest($userId, $authorityId)
     {
         $this->insert(['user_id' => $userId, 'authority_id' => $authorityId]);
     }
