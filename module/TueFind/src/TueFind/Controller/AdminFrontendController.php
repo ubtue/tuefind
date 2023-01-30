@@ -33,17 +33,18 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
         $requestUser = $this->getTable('user')->getByID($userId);
         $requestUserLanguage = $requestUser->last_language;
         $adminUser = $this->getUser();
-        $authorityAccessHistoryTable = $this->getTable('authority_access_history')->getByRequestUserId($userId);
+        $userAuthorityHistoryTable = $this->getTable('user_authority_history')->getByRequestUserId($userId);
         $action = $this->params()->fromPost('action');
         $accessInfo = "grant";
         if ($action != '') {
             if ($action == 'grant') {
                 $entry->updateAccessState('granted');
+                $userAuthorityHistoryTable->updateUserAuthorityHistory($adminUser->id, 'granted');
             } elseif ($action == 'decline') {
                 $accessInfo = "decline";
+                $userAuthorityHistoryTable->updateUserAuthorityHistory($adminUser->id, 'declined');
                 $entry->delete();
             }
-            $authorityAccessHistoryTable->updateAuthorityAccessHistory($adminUser->id, $accessInfo);
 
             // receivers
             $receivers = new \Laminas\Mail\AddressList();
@@ -120,14 +121,11 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
         return $emailPathTemplate;
     }
 
-    public function showAuthorityAccessHistoryAction()
+    public function showUserAuthorityHistoryAction()
     {
-        try {
-            $this->forceAdminLogin();
-        } catch (\Exception $e) {
-            return $this->forceLogin($e->getMessage());
-        }
+        
+        $this->forceAdminLogin();
 
-        return $this->createViewModel(['authority_access_history_datas' => $this->getTable('authority_access_history')->getAll()]);
+        return $this->createViewModel(['user_authority_history_datas' => $this->getTable('user_authority_history')->getAll()]);
     }
 }

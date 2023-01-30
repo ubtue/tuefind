@@ -67,7 +67,7 @@ class AuthorityController extends \VuFind\Controller\AuthorityController {
             $userAuthorityTable = $this->getTable('user_authority');
             $userAuthorityTable->addRequest($user->id, $authorityId);
 
-            $authorityAccessHistoryTable = $this->getTable('authority_access_history');
+            $authorityAccessHistoryTable = $this->getTable('user_authority_history');
             $authorityAccessHistoryTable->addUserRequest($user->id, $authorityId);
 
             // body

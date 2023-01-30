@@ -356,8 +356,8 @@ $recordRoutes = [];
 $dynamicRoutes = [];
 $staticRoutes = [
     'AdminFrontend/ShowAdmins',
-    'AdminFrontend/ShowAuthorityAccessHistory',
     'AdminFrontend/ShowUserAuthorities',
+    'AdminFrontend/ShowUserAuthorityHistory',
     'AdminFrontend/ShowUserPublications',
     'MyResearch/Publications',
     'MyResearch/RssFeedSettings',
