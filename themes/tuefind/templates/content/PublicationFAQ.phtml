@@ -97,7 +97,7 @@ $siteEmail = $tuefind->getSiteEmail();
     <p data-toggle="collapse" data-target="#col8" aria-expanded="false" class="tf-panel-collapse-heading"><b>Was brauche ich für die Nutzung des Selbstupload-Formulars?</b></p>
     <div class="collapse multi-collapse tf-panel-collapse-body" id="col8">
         <ul>
-            <li>Ein Konto bei <?=$currentSystem;?>, das Sie <a href="/MyResearch/UserLogin">hier</a> kostenlos anlegen können</li>
+            <li>Ein Konto bei <?=$currentSystem;?>, das Sie <a href="<?=$this->url('myresearch-userlogin')?>">hier</a> kostenlos anlegen können</li>
             <li>Den Zugriff auf Ihre <a onclick="TueFind.goToCollapseBlock('autorID','col11')">Autor*innen-ID</a>, die Sie mit Ihrem <?=$currentSystem;?>-Konto beansprucht haben</li>
             <li>Publikationen, die Sie zweitveröffentlichen dürfen </li>
         </ul>
@@ -170,7 +170,7 @@ $siteEmail = $tuefind->getSiteEmail();
     <div class="collapse multi-collapse tf-panel-collapse-body" id="col13">
         <p>Hierfür kann es mehrere Gründe geben:</p> 
         <ul>
-            <li>Sie sind nicht eingeloggt. Bitte loggen Sie sich ein.<a href="/MyResearch/UserLogin">hier</a></li>
+            <li>Sie sind nicht eingeloggt. Bitte loggen Sie sich ein.<a href="<?=$this->url('myresearch-userlogin')?>">hier</a></li>
             <li>Sie haben den Zugriff auf Ihre <a onclick="TueFind.goToCollapseBlock('autorID','col11')">Autor*innen-ID</a> noch nicht beantragt.</li>
             <li>Falls keiner der genannten Punkte das Problem löst, wenden Sie sich bitte an uns <?=$publicationEmail;?>.</li>
         </ul>
