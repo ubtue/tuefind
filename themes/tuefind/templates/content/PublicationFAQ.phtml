@@ -97,8 +97,8 @@ $siteEmail = $tuefind->getSiteEmail();
     <p data-toggle="collapse" data-target="#col8" aria-expanded="false" class="tf-panel-collapse-heading"><b>Was brauche ich für die Nutzung des Selbstupload-Formulars?</b></p>
     <div class="collapse multi-collapse tf-panel-collapse-body" id="col8">
         <ul>
-            <li>Ein Konto bei <?=$currentSystem;?>, das Sie <a target="_blank" href="/MyResearch/UserLogin">hier</a> kostenlos anlegen können</li>
-            <li>Den Zugriff auf Ihre Autor*innen-ID, die Sie mit Ihrem <?=$currentSystem;?>-Konto beansprucht haben <span class="save-record toolbar-btn tf-cursor-pointer" onclick="TueFind.goToCollapseBlock('autorID','col11')">Autor*innen-ID</span></li>
+            <li>Ein Konto bei <?=$currentSystem;?>, das Sie <a href="/MyResearch/UserLogin">hier</a> kostenlos anlegen können</li>
+            <li>Den Zugriff auf Ihre <a onclick="TueFind.goToCollapseBlock('autorID','col11')">Autor*innen-ID</a>, die Sie mit Ihrem <?=$currentSystem;?>-Konto beansprucht haben</li>
             <li>Publikationen, die Sie zweitveröffentlichen dürfen </li>
         </ul>
     </div>
@@ -140,7 +140,7 @@ $siteEmail = $tuefind->getSiteEmail();
     <p data-toggle="collapse" data-target="#col10" aria-expanded="false" class="tf-panel-collapse-heading"><b>Was ist eine Autor*innen-ID?</b></p>
     <div class="collapse multi-collapse tf-panel-collapse-body" id="col10">
         <ul>
-            <li>Eine Autor*innen-ID ist eine eindeutige und stabile Nummer in der Gemeinsamen Normdatenbank (GND) <a target="_blank" href="https://www.dnb.de/DE/Professionell/Standardisierung/GND/gnd_node.html">hiar</a>, die von <?=$currentSystem;?> nachgenutzt wird, um Sie als Autor*in eindeutig zu identifizieren und Ihre Publikationen zuordnen zu können.</li>
+            <li>Eine Autor*innen-ID ist eine eindeutige und stabile Nummer in der <a target="_blank" href="https://www.dnb.de/DE/Professionell/Standardisierung/GND/gnd_node.html">Gemeinsamen Normdatenbank (GND)</a>, die von <?=$currentSystem;?> nachgenutzt wird, um Sie als Autor*in eindeutig zu identifizieren und Ihre Publikationen zuordnen zu können.</li>
         </ul>
     </div>
 </div>
@@ -170,8 +170,8 @@ $siteEmail = $tuefind->getSiteEmail();
     <div class="collapse multi-collapse tf-panel-collapse-body" id="col13">
         <p>Hierfür kann es mehrere Gründe geben:</p> 
         <ul>
-            <li>Sie sind nicht eingeloggt. Bitte loggen Sie sich ein.<a target="_blank" href="/MyResearch/UserLogin">hier</a></li>
-            <li>Sie haben den Zugriff auf Ihre Autor*innen-ID noch nicht beantragt.<span class="save-record toolbar-btn tf-cursor-pointer" onclick="TueFind.goToCollapseBlock('autorID','col11')">Autor*innen-ID</span></li>
+            <li>Sie sind nicht eingeloggt. Bitte loggen Sie sich ein.<a href="/MyResearch/UserLogin">hier</a></li>
+            <li>Sie haben den Zugriff auf Ihre <a onclick="TueFind.goToCollapseBlock('autorID','col11')">Autor*innen-ID</a> noch nicht beantragt.</li>
             <li>Falls keiner der genannten Punkte das Problem löst, wenden Sie sich bitte an uns <?=$publicationEmail;?>.</li>
         </ul>
     </div>
