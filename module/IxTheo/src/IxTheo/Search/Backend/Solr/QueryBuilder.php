@@ -2,6 +2,8 @@
 
 namespace IxTheo\Search\Backend\Solr;
 
+use VuFindSearch\Query\AbstractQuery;
+
 class QueryBuilder extends \TueFindSearch\Backend\Solr\QueryBuilder
 {
     const BIBLE_RANGE_HANDLER = 'BibleRangeSearch';
@@ -11,5 +13,16 @@ class QueryBuilder extends \TueFindSearch\Backend\Solr\QueryBuilder
         parent::setSpecs($specs);
         $this->specs[strtolower(self::BIBLE_RANGE_HANDLER)] = new SearchHandler(['RangeType' => self::BIBLE_RANGE_HANDLER]);
         $this->specs[strtolower(self::CANONES_RANGE_HANDLER)] = new SearchHandler(['RangeType' => self::CANONES_RANGE_HANDLER]);
+    }
+
+
+    public function build(AbstractQuery $query)
+    {
+        // Rewrite english style Bible searches
+        if($this->getHandler($query) == self::BIBLE_RANGE_HANDLER) {
+           $query->setString(strtr($query->getString(), ":", ","));
+           return parent::build($query);
+        }
+        return parent::build($query);
     }
 }
