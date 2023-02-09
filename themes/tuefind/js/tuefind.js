@@ -574,6 +574,18 @@ var TueFind = {
         }
         clearSpan.css({"left":x+"px","display":visible});
 
+    },
+
+    goToCollapseBlock: function(anchor,blockID) {
+        if(anchor.length) {
+            window.location.href = "#"+anchor;
+        }
+        if(blockID.length) {
+            let blockVar = $('#'+blockID);
+            if(!blockVar.hasClass('in')) {
+                blockVar.addClass('in');
+            }
+        }
     }
 };
 

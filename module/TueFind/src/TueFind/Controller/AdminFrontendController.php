@@ -32,16 +32,20 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
         $entry = $this->getTable('user_authority')->getByUserIdAndAuthorityId($userId, $authorityId);
         $requestUser = $this->getTable('user')->getByID($userId);
         $requestUserLanguage = $requestUser->last_language;
-
+        $adminUser = $this->getUser();
+        $userAuthorityHistoryTable = $this->getTable('user_authority_history')->getLatestRequestByUserId($userId);
         $action = $this->params()->fromPost('action');
         $accessInfo = "grant";
         if ($action != '') {
             if ($action == 'grant') {
                 $entry->updateAccessState('granted');
+                $userAuthorityHistoryTable->updateUserAuthorityHistory($adminUser->id, 'granted');
             } elseif ($action == 'decline') {
                 $accessInfo = "decline";
+                $userAuthorityHistoryTable->updateUserAuthorityHistory($adminUser->id, 'declined');
                 $entry->delete();
             }
+
             // receivers
             $receivers = new \Laminas\Mail\AddressList();
             $receivers->add($requestUser->email);
@@ -58,7 +62,7 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
             // send mail
             $authority = $this->serviceLocator->get(\VuFind\Record\Loader::class)->load($authorityId, 'SolrAuth');
             $emailPathTemplate = $this->getEmailTemplatePath($requestUserLanguage, $accessInfo);
-            
+
             // body
             $renderer = $this->getViewRenderer();
             $message = $renderer->render($emailPathTemplate);
@@ -115,5 +119,13 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
         }
 
         return $emailPathTemplate;
+    }
+
+    public function showUserAuthorityHistoryAction()
+    {
+
+        $this->forceAdminLogin();
+
+        return $this->createViewModel(['user_authority_history_datas' => $this->getTable('user_authority_history')->getAll()]);
     }
 }
