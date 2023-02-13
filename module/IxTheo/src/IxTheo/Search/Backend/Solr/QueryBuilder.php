@@ -19,10 +19,8 @@ class QueryBuilder extends \TueFindSearch\Backend\Solr\QueryBuilder
     public function build(AbstractQuery $query)
     {
         // Rewrite english style Bible searches
-        if($this->getHandler($query) == self::BIBLE_RANGE_HANDLER) {
+        if ($this->getHandler($query) == self::BIBLE_RANGE_HANDLER)
            $query->setString(strtr($query->getString(), ":", ","));
-           return parent::build($query);
-        }
         return parent::build($query);
     }
 }
