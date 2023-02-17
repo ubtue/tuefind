@@ -1,0 +1,23 @@
+<?php $isIxTheo = true;?>
+<table class="table dataTable display">
+  <thead>
+    <tr>
+      <th><?=$this->transEsc('Title')?></th>
+      <th><?=$this->transEsc('Document ID')?></th>
+      <th><?=$this->transEsc('Document guid')?></th>
+      <th><?=$this->transEsc('Terms Date')?></th>
+      <th><?=$this->transEsc('Date')?></th>
+    </tr>
+  </thead>
+  <tbody>
+    <?php foreach ($publications as $one): ?>
+      <tr>
+        <td><a href="<?=$this->recordLinker()->getUrl($one->control_number)?>"><?=htmlspecialchars($one->control_number)?></a></td>
+        <td><?=htmlspecialchars($one->external_document_id)?></td>
+        <td><?=htmlspecialchars($one->external_document_guid)?></td>
+        <td><?=htmlspecialchars($one->terms_date)?></td>
+        <td><?=date("d.m.Y H:i:s",strtotime($one->publication_datetime));?></td>
+      </tr>
+    <?php endforeach; ?>
+  </tbody>
+</table>
