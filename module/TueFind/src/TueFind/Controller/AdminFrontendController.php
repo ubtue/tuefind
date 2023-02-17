@@ -8,6 +8,7 @@ namespace TueFind\Controller;
  * Backend administration, so we call this one AdminFrontendController instead.
  */
 class AdminFrontendController extends \VuFind\Controller\AbstractBase {
+
     protected function forceAdminLogin()
     {
         $user = $this->getUser();
@@ -33,7 +34,7 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
         $requestUser = $this->getTable('user')->getByID($userId);
         $requestUserLanguage = $requestUser->last_language;
         $adminUser = $this->getUser();
-        $userAuthorityHistoryTable = $this->getTable('user_authority_history')->getLatestRequestByUserId($userId);
+        $userAuthorityHistoryTable = $this->getTable('user_authority_history')->getByRequestUserId($userId);
         $action = $this->params()->fromPost('action');
         $accessInfo = "grant";
         if ($action != '') {
@@ -42,7 +43,7 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
                 $userAuthorityHistoryTable->updateUserAuthorityHistory($adminUser->id, 'granted');
             } elseif ($action == 'decline') {
                 $accessInfo = "decline";
-                $userAuthorityHistoryTable->updateUserAuthorityHistory($adminUser->id, 'declined');
+                $userAuthorityHistoryTable->updateUserAuthorityHistory($adminUser->id, $accessInfo);
                 $entry->delete();
             }
 
@@ -62,7 +63,7 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
             // send mail
             $authority = $this->serviceLocator->get(\VuFind\Record\Loader::class)->load($authorityId, 'SolrAuth');
             $emailPathTemplate = $this->getEmailTemplatePath($requestUserLanguage, $accessInfo);
-
+            
             // body
             $renderer = $this->getViewRenderer();
             $message = $renderer->render($emailPathTemplate);
@@ -102,8 +103,18 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
         } catch (\Exception $e) {
             return $this->forceLogin($e->getMessage());
         }
-
-        return $this->createViewModel(['publications' => $this->getTable('publication')->getAll()]);
+        $publications = $this->getTable('publication')->getAll();
+        $publicationStatisticks = [];
+        foreach($publications as $publication) {
+            $publicationStatisticks[$publication->user_id]['user_id'] = $publication->user_id;
+            $publicationStatisticks[$publication->user_id]['user_full_name'] = $publication->firstname.' '.$publication->lastname;
+            $publicationStatisticks[$publication->user_id]['user_login'] = $publication->username;
+            $publicationStatisticks[$publication->user_id]['email'] = $publication->email;
+            $publicationStatisticks[$publication->user_id]['tuefind_institution'] = $publication->tuefind_institution;
+            $publicationStatisticks[$publication->user_id]['user_created'] = $publication->created;
+            $publicationStatisticks[$publication->user_id]['publications'][] = $publication;
+        }
+        return $this->createViewModel(['publications' => $publicationStatisticks]);
     }
 
     //generate a path for email templates which is not related to the current user, since VuFind does not yet have such functionality
@@ -123,9 +134,19 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
 
     public function showUserAuthorityHistoryAction()
     {
-
         $this->forceAdminLogin();
 
         return $this->createViewModel(['user_authority_history_datas' => $this->getTable('user_authority_history')->getAll()]);
     }
+
+    public function showPublicationStatisticksAction() {
+
+        $this->forceAdminLogin();
+
+        $publications = $this->getTable('publication')->getStatisticks();
+
+        return $this->createViewModel(['publications' => $publications]);
+
+    }
+
 }

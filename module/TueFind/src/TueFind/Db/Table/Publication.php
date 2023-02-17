@@ -20,7 +20,7 @@ class Publication extends \VuFind\Db\Table\Gateway {
     {
         $select = $this->getSql()->select();
         $select->join('user', 'tuefind_publications.user_id = user.id', Select::SQL_STAR, Select::JOIN_LEFT);
-        $select->order('publication_datetime DESC');
+        $select->order('tuefind_publications.user_id DESC');
         return $this->selectWith($select);
     }
 
@@ -38,5 +38,16 @@ class Publication extends \VuFind\Db\Table\Gateway {
     {
         $this->insert(['user_id' => $userId, 'control_number' => $controlNumber, 'external_document_id' => $externalDocumentId, 'external_document_guid' => $externalDocumentGuid, 'terms_date' => $termsDate]);
         return true;
+    }
+
+    public function getStatisticks()
+    {
+        $select = $this->getSql()->select();
+        $select->columns([
+            'publication_count' => new \Laminas\Db\Sql\Expression("COUNT(*)"),
+            'year' => new \Laminas\Db\Sql\Expression("YEAR(publication_datetime)"),
+        ]);
+        $select->group(new \Laminas\Db\Sql\Expression("YEAR(publication_datetime)"));
+        return $this->selectWith($select);
     }
 }

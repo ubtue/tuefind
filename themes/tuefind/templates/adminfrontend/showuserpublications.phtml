@@ -14,33 +14,34 @@ $this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') 
   <?php if (count($this->publications) == 0): ?>
     <p>No publications have been added so far.</p>
   <?php else: ?>
+
     <table class="table dataTable display">
       <thead>
         <tr>
-          <th><?=$this->transEsc('Title')?></th>
           <th><?=$this->transEsc('Username')?></th>
-          <th><?=$this->transEsc('First Name')?></th>
-          <th><?=$this->transEsc('Last Name')?></th>
+          <th><?=$this->transEsc('Name')?></th>
           <th><?=$this->transEsc('Email Address')?></th>
           <?php if($isIxTheo){ ?><th><?=$this->transEsc('Institution')?></th><?php }?>
           <th><?=$this->transEsc('Date')?></th>
+          <th><?=$this->transEsc('Publication count')?></th>
         </tr>
       </thead>
       <tbody>
         <?php foreach ($this->publications as $publication): ?>
           <tr>
-            <td><a href="<?=$this->recordLinker()->getUrl($publication->control_number)?>"><?=htmlspecialchars($publication->control_number)?></a></td>
-            <td><?=htmlspecialchars($publication->username)?></td>
-            <td><?=htmlspecialchars($publication->firstname)?></td>
-            <td><?=htmlspecialchars($publication->lastname)?></td>
-            <td><?=htmlspecialchars($publication->email)?></td>
-            <td><?=htmlspecialchars($publication->tuefind_institution)?></td>
-            <td><?=date("d.m.Y H:i:s",strtotime($publication->publication_datetime));?></td>
+            <td><?=htmlspecialchars($publication['user_login'])?></td>
+            <td><?=htmlspecialchars($publication['user_full_name'])?></td>
+            <td><?=htmlspecialchars($publication['email'])?></td>
+            <td><?=htmlspecialchars($publication['tuefind_institution'])?></td>
+            <td><?=date("d.m.Y H:i:s",strtotime($publication['user_created']));?></td>
+            <td><?=htmlspecialchars(count($publication['publications']))?></td>
           </tr>
         <?php endforeach; ?>
       </tbody>
     </table>
-  <?php endif; ?>
+
+  <?php  endif; ?>
+
 </div>
 
 <div class="<?=$this->layoutClass('sidebar')?>" id="myresearch-sidebar">
