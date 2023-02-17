@@ -39,4 +39,15 @@ class Publication extends \VuFind\Db\Table\Gateway {
         $this->insert(['user_id' => $userId, 'control_number' => $controlNumber, 'external_document_id' => $externalDocumentId, 'external_document_guid' => $externalDocumentGuid, 'terms_date' => $termsDate]);
         return true;
     }
+
+    public function getStatistics()
+    {
+        $select = $this->getSql()->select();
+        $select->columns([
+            'publication_count' => new \Laminas\Db\Sql\Expression("COUNT(*)"),
+            'year' => new \Laminas\Db\Sql\Expression("YEAR(publication_datetime)"),
+        ]);
+        $select->group(new \Laminas\Db\Sql\Expression("YEAR(publication_datetime)"));
+        return $this->selectWith($select);
+    }
 }

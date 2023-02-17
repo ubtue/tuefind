@@ -14,6 +14,7 @@ $this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') 
   <?php if (count($this->publications) == 0): ?>
     <p>No publications have been added so far.</p>
   <?php else: ?>
+
     <table class="table dataTable display">
       <thead>
         <tr>
@@ -40,7 +41,9 @@ $this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') 
         <?php endforeach; ?>
       </tbody>
     </table>
-  <?php endif; ?>
+
+  <?php  endif; ?>
+
 </div>
 
 <div class="<?=$this->layoutClass('sidebar')?>" id="myresearch-sidebar">

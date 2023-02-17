@@ -8,6 +8,7 @@ namespace TueFind\Controller;
  * Backend administration, so we call this one AdminFrontendController instead.
  */
 class AdminFrontendController extends \VuFind\Controller\AbstractBase {
+
     protected function forceAdminLogin()
     {
         $user = $this->getUser();
@@ -42,7 +43,7 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
                 $userAuthorityHistoryTable->updateUserAuthorityHistory($adminUser->id, 'granted');
             } elseif ($action == 'decline') {
                 $accessInfo = "decline";
-                $userAuthorityHistoryTable->updateUserAuthorityHistory($adminUser->id, 'declined');
+                $userAuthorityHistoryTable->updateUserAuthorityHistory($adminUser->id, $accessInfo);
                 $entry->delete();
             }
 
@@ -62,7 +63,7 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
             // send mail
             $authority = $this->serviceLocator->get(\VuFind\Record\Loader::class)->load($authorityId, 'SolrAuth');
             $emailPathTemplate = $this->getEmailTemplatePath($requestUserLanguage, $accessInfo);
-
+            
             // body
             $renderer = $this->getViewRenderer();
             $message = $renderer->render($emailPathTemplate);
@@ -102,7 +103,6 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
         } catch (\Exception $e) {
             return $this->forceLogin($e->getMessage());
         }
-
         return $this->createViewModel(['publications' => $this->getTable('publication')->getAll()]);
     }
 
@@ -123,9 +123,19 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
 
     public function showUserAuthorityHistoryAction()
     {
-
         $this->forceAdminLogin();
 
         return $this->createViewModel(['user_authority_history_datas' => $this->getTable('user_authority_history')->getAll()]);
     }
+
+    public function showUserPublicationStatisticsAction() {
+
+        $this->forceAdminLogin();
+
+        $publications = $this->getTable('publication')->getStatistick();
+
+        return $this->createViewModel(['publications' => $publications]);
+
+    }
+
 }
