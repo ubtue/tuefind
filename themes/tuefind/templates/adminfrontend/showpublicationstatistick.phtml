@@ -1,9 +1,9 @@
 <?php
 // Set up page title:
-$this->headTitle($this->translate('Publication Statisticks'));
+$this->headTitle($this->translate('User Publication Statistick'));
 
 // Set up breadcrumbs:
-$this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') . '">' . $this->transEsc('Your Account') . '</a></li> <li class="active">' . $this->transEsc('Publication Statisticks') . '</li>';
+$this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') . '">' . $this->transEsc('Your Account') . '</a></li> <li class="active">' . $this->transEsc('User Publication Statistick') . '</li>';
 ?>
 
 <div class="<?=$this->layoutClass('mainbody')?>">
@@ -32,5 +32,5 @@ $this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') 
 </div>
 
 <div class="<?=$this->layoutClass('sidebar')?>" id="myresearch-sidebar">
-  <?=$this->context($this)->renderInContext("myresearch/menu.phtml", ['active' => 'showpublicationstatisticks'])?>
+  <?=$this->context($this)->renderInContext("myresearch/menu.phtml", ['active' => 'showpublicationstatistick'])?>
 </div>
