@@ -359,7 +359,7 @@ $staticRoutes = [
     'AdminFrontend/ShowUserAuthorities',
     'AdminFrontend/ShowUserAuthorityHistory',
     'AdminFrontend/ShowUserPublications',
-    'AdminFrontend/showPublicationStatistick',
+    'AdminFrontend/ShowUserPublicationStatistics',
     'MyResearch/Publications',
     'MyResearch/RssFeedSettings',
     'MyResearch/RssFeedPreview',

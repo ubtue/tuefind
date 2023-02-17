@@ -20,7 +20,7 @@ class Publication extends \VuFind\Db\Table\Gateway {
     {
         $select = $this->getSql()->select();
         $select->join('user', 'tuefind_publications.user_id = user.id', Select::SQL_STAR, Select::JOIN_LEFT);
-        $select->order('tuefind_publications.user_id DESC');
+        $select->order('publication_datetime DESC');
         return $this->selectWith($select);
     }
 

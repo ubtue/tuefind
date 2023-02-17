@@ -18,23 +18,25 @@ $this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') 
     <table class="table dataTable display">
       <thead>
         <tr>
+          <th><?=$this->transEsc('Title')?></th>
           <th><?=$this->transEsc('Username')?></th>
-          <th><?=$this->transEsc('Name')?></th>
+          <th><?=$this->transEsc('First Name')?></th>
+          <th><?=$this->transEsc('Last Name')?></th>
           <th><?=$this->transEsc('Email Address')?></th>
           <?php if($isIxTheo){ ?><th><?=$this->transEsc('Institution')?></th><?php }?>
           <th><?=$this->transEsc('Date')?></th>
-          <th><?=$this->transEsc('Publication count')?></th>
         </tr>
       </thead>
       <tbody>
         <?php foreach ($this->publications as $publication): ?>
           <tr>
-            <td><?=htmlspecialchars($publication['user_login'])?></td>
-            <td><?=htmlspecialchars($publication['user_full_name'])?></td>
-            <td><?=htmlspecialchars($publication['email'])?></td>
-            <td><?=htmlspecialchars($publication['tuefind_institution'])?></td>
-            <td><?=date("d.m.Y H:i:s",strtotime($publication['user_created']));?></td>
-            <td><?=htmlspecialchars(count($publication['publications']))?></td>
+            <td><a href="<?=$this->recordLinker()->getUrl($publication->control_number)?>"><?=htmlspecialchars($publication->control_number)?></a></td>
+            <td><?=htmlspecialchars($publication->username)?></td>
+            <td><?=htmlspecialchars($publication->firstname)?></td>
+            <td><?=htmlspecialchars($publication->lastname)?></td>
+            <td><?=htmlspecialchars($publication->email)?></td>
+            <td><?=htmlspecialchars($publication->tuefind_institution)?></td>
+            <td><?=date("d.m.Y H:i:s",strtotime($publication->publication_datetime));?></td>
           </tr>
         <?php endforeach; ?>
       </tbody>

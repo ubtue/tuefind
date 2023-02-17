@@ -34,7 +34,7 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
         $requestUser = $this->getTable('user')->getByID($userId);
         $requestUserLanguage = $requestUser->last_language;
         $adminUser = $this->getUser();
-        $userAuthorityHistoryTable = $this->getTable('user_authority_history')->getByRequestUserId($userId);
+        $userAuthorityHistoryTable = $this->getTable('user_authority_history')->getLatestRequestByUserId($userId);
         $action = $this->params()->fromPost('action');
         $accessInfo = "grant";
         if ($action != '') {
@@ -103,18 +103,7 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
         } catch (\Exception $e) {
             return $this->forceLogin($e->getMessage());
         }
-        $publications = $this->getTable('publication')->getAll();
-        $publicationStatisticks = [];
-        foreach($publications as $publication) {
-            $publicationStatisticks[$publication->user_id]['user_id'] = $publication->user_id;
-            $publicationStatisticks[$publication->user_id]['user_full_name'] = $publication->firstname.' '.$publication->lastname;
-            $publicationStatisticks[$publication->user_id]['user_login'] = $publication->username;
-            $publicationStatisticks[$publication->user_id]['email'] = $publication->email;
-            $publicationStatisticks[$publication->user_id]['tuefind_institution'] = $publication->tuefind_institution;
-            $publicationStatisticks[$publication->user_id]['user_created'] = $publication->created;
-            $publicationStatisticks[$publication->user_id]['publications'][] = $publication;
-        }
-        return $this->createViewModel(['publications' => $publicationStatisticks]);
+        return $this->createViewModel(['publications' => $this->getTable('publication')->getAll()]);
     }
 
     //generate a path for email templates which is not related to the current user, since VuFind does not yet have such functionality
@@ -139,7 +128,7 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
         return $this->createViewModel(['user_authority_history_datas' => $this->getTable('user_authority_history')->getAll()]);
     }
 
-    public function showPublicationStatistickAction() {
+    public function showUserPublicationStatisticsAction() {
 
         $this->forceAdminLogin();
 
