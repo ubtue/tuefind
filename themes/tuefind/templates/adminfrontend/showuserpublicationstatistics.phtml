@@ -1,9 +1,9 @@
 <?php
 // Set up page title:
-$this->headTitle($this->translate('User Publication Statistick'));
+$this->headTitle($this->translate('User Publication Statistics'));
 
 // Set up breadcrumbs:
-$this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') . '">' . $this->transEsc('Your Account') . '</a></li> <li class="active">' . $this->transEsc('User Publication Statistick') . '</li>';
+$this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') . '">' . $this->transEsc('Your Account') . '</a></li> <li class="active">' . $this->transEsc('User Publication Statistics') . '</li>';
 ?>
 
 <div class="<?=$this->layoutClass('mainbody')?>">
@@ -11,7 +11,6 @@ $this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') 
   <?php if (count($this->publications) == 0): ?>
     <p>No publications have been added so far.</p>
   <?php else: ?>
-
     <table class="table dataTable display">
       <thead>
         <tr>
@@ -30,7 +29,6 @@ $this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') 
     </table>
   <?php  endif; ?>
 </div>
-
 <div class="<?=$this->layoutClass('sidebar')?>" id="myresearch-sidebar">
-  <?=$this->context($this)->renderInContext("myresearch/menu.phtml", ['active' => 'showuserpublicationstatistick'])?>
+  <?=$this->context($this)->renderInContext("myresearch/menu.phtml", ['active' => 'showuserpublicationstatistics'])?>
 </div>

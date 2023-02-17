@@ -40,7 +40,7 @@ class Publication extends \VuFind\Db\Table\Gateway {
         return true;
     }
 
-    public function getStatistick()
+    public function getStatistics()
     {
         $select = $this->getSql()->select();
         $select->columns([
