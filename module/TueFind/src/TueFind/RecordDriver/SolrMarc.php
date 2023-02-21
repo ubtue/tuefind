@@ -547,24 +547,30 @@ class SolrMarc extends SolrDefault
         return $retVal;
     }
 
+    /**
+     * Initially, data has been stored in 856 (ind1=4 ind2=0)
+     * in the example from bsbfidaltertumswissenschaften.
+     *
+     * After that, it has been moved to LOK for fidreli.
+     *
+     * @return string|null
+     */
     public function getKflUrl(): ?string
     {
-        $fields = $this->getMarcReader()->getFields('856');
-        foreach ($fields as $field) {
-            if ($field['i1'] == '4' && $field['i2'] == '0') {
-                $subfields = [];
-                foreach ($field['subfields'] as $subfield) {
-                    $subfields[$subfield['code']] = $subfield['data'];
-                }
+        $fields = $this->getMarcReader()->getFields('LOK');
 
-                if (isset($subfields['m']) && $subfields['m'] == 'X:KFL') {
-                    // Later on, we should also test subfield y for
-                    // something like "FID Religionswissenschaft" to get the
-                    // correct link if this title is licensed by multiple FIDs.
-                    // However, this value does not exist in the data yet.
-                    if (isset($subfields['u'])) {
-                        return $subfields['u'];
-                    }
+        foreach ($fields as $field) {
+            $subfields = [];
+            foreach ($field['subfields'] as $subfield) {
+                $subfields[$subfield['code']] = $subfield['data'];
+            }
+
+            if (isset($subfields['0']) && $subfields['0'] == '85640') {
+                // Later on, if a title may be licensed by multiple FIDs
+                // (e.g. IxTheo and RelBib) we must define how to pick
+                // the correct one.
+                if (isset($subfields['u'])) {
+                    return $subfields['u'];
                 }
             }
         }
