@@ -13,6 +13,7 @@ class KfL
 {
     protected $authManager;
     protected $tuefindInstance;
+    protected $recordLoader;
 
     protected $baseUrl;
     protected $apiId;
@@ -30,8 +31,9 @@ class KfL
      * @param Config $config            Configuration entries
      * @param Manager $authManager      Auth Manager
      * @param string $tuefindInstance   TueFind instance
+     * @param Loader $recordLoader      Record loader
      */
-    public function __construct($config, $authManager, $tuefindInstance)
+    public function __construct($config, $authManager, $tuefindInstance, $recordLoader)
     {
         $this->baseUrl = $config->base_url;
         $this->apiId = $config->api_id;
@@ -50,6 +52,7 @@ class KfL
 
         $this->authManager = $authManager;
         $this->tuefindInstance = $tuefindInstance;
+        $this->recordLoader = $recordLoader;
     }
 
     /**
@@ -190,8 +193,15 @@ class KfL
         $requestData['method'] = 'getHANID';
         $requestData['return'] = self::RETURN_REDIRECT;
         $requestData['hanid'] = $titleInfo['hanId'];
-        if (!empty($url))
+        if (!empty($url)) {
             $requestData['url'] = $url;
+        } else {
+            $driver = $this->recordLoader->load($titleInfo['ppn']);
+            $url = $driver->getKflUrl();
+            if (!empty($url)) {
+                $requestData['url'] = $url;
+            }
+        }
 
         return $this->generateUrl($requestData);
     }
