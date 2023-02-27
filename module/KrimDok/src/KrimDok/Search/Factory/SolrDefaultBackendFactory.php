@@ -14,64 +14,64 @@ class SolrDefaultBackendFactory extends \TueFind\Search\Factory\SolrDefaultBacke
     use \VuFind\I18n\Translator\TranslatorAwareTrait;
 
 
-    protected function createConnector()
-    {
-        $config = $this->config->get($this->mainConfig);
-        $this->setTranslator($this->serviceLocator->get(\Laminas\Mvc\I18n\Translator::class));
-        $current_lang = $this->getTranslatorLocale();
+    // protected function createConnector()
+    // {
+    //     $config = $this->config->get($this->mainConfig);
+    //     $this->setTranslator($this->serviceLocator->get(\Laminas\Mvc\I18n\Translator::class));
+    //     $current_lang = $this->getTranslatorLocale();
 
-        $handlers = [
-            'select' => [
-                'fallback' => true,
-                'defaults' => ['fl' => '*,score', 'lang' => $current_lang,
-                               'defType' => 'multiLanguageQueryParser', 'df' => 'allfields'
-                              ],
-                'appends'  => ['fq' => []],
-            ],
-            'term' => [
-                'functions' => ['terms'],
-            ],
-        ];
+    //     $handlers = [
+    //         'select' => [
+    //             'fallback' => true,
+    //             'defaults' => ['fl' => '*,score', 'lang' => $current_lang,
+    //                            'defType' => 'multiLanguageQueryParser', 'df' => 'allfields'
+    //                           ],
+    //             'appends'  => ['fq' => []],
+    //         ],
+    //         'term' => [
+    //             'functions' => ['terms'],
+    //         ],
+    //     ];
 
-        foreach ($this->getHiddenFilters() as $filter) {
-            array_push($handlers['select']['appends']['fq'], $filter);
-        }
+    //     foreach ($this->getHiddenFilters() as $filter) {
+    //         array_push($handlers['select']['appends']['fq'], $filter);
+    //     }
 
-        $httpService = $this->serviceLocator->get(\VuFindHttp\HttpService::class);
-        $client = $httpService->createClient();
+    //     $httpService = $this->serviceLocator->get(\VuFindHttp\HttpService::class);
+    //     $client = $httpService->createClient();
 
-        $connector = new $this->connectorClass(
-            $this->getSolrUrl(),
-            new HandlerMap($handlers),
-            $this->uniqueKey,
-            $client
-        );
-        $connector->setTimeout($config->Index->timeout ?? 30);
+    //     $connector = new $this->connectorClass(
+    //         $this->getSolrUrl(),
+    //         new HandlerMap($handlers),
+    //         $this->uniqueKey,
+    //         $client
+    //     );
+    //     $connector->setTimeout($config->Index->timeout ?? 30);
 
-        if ($this->logger) {
-            $connector->setLogger($this->logger);
-        }
+    //     if ($this->logger) {
+    //         $connector->setLogger($this->logger);
+    //     }
 
-        if (!empty($searchConfig->SearchCache->adapter)) {
-            $cacheConfig = $searchConfig->SearchCache->toArray();
-            $options = $cacheConfig['options'] ?? [];
-            if (empty($options['namespace'])) {
-                $options['namespace'] = 'Index';
-            }
-            if (empty($options['ttl'])) {
-                $options['ttl'] = 300;
-            }
-            $settings = [
-                'name' => $cacheConfig['adapter'],
-                'options' => $options,
-            ];
-            $cache = $this->serviceLocator
-                ->get(\Laminas\Cache\Service\StorageAdapterFactory::class)
-                ->createFromArrayConfiguration($settings);
-            $connector->setCache($cache);
-        }
-        return $connector;
-    }
+    //     if (!empty($searchConfig->SearchCache->adapter)) {
+    //         $cacheConfig = $searchConfig->SearchCache->toArray();
+    //         $options = $cacheConfig['options'] ?? [];
+    //         if (empty($options['namespace'])) {
+    //             $options['namespace'] = 'Index';
+    //         }
+    //         if (empty($options['ttl'])) {
+    //             $options['ttl'] = 300;
+    //         }
+    //         $settings = [
+    //             'name' => $cacheConfig['adapter'],
+    //             'options' => $options,
+    //         ];
+    //         $cache = $this->serviceLocator
+    //             ->get(\Laminas\Cache\Service\StorageAdapterFactory::class)
+    //             ->createFromArrayConfiguration($settings);
+    //         $connector->setCache($cache);
+    //     }
+    //     return $connector;
+    // }
 
 
      /**

@@ -4,6 +4,7 @@ namespace TueFind\Record;
 
 use VuFind\Exception\RecordMissing as RecordMissingException;
 use VuFindSearch\ParamBag;
+use VuFindSearch\Command\RetrieveCommand;
 
 class Loader extends \VuFind\Record\Loader {
     public function load($id, $source = DEFAULT_SEARCH_BACKEND,
@@ -17,8 +18,10 @@ class Loader extends \VuFind\Record\Loader {
                 $results = $this->recordCache->lookup($id, $source);
             }
             if (empty($results)) {
-                $results = $this->searchService->retrieve($source, $id, $params)
-                    ->getRecords();
+                $command = new RetrieveCommand($source, $id, $params); 
+                $result = $this->searchService->invoke($command)->getResult()->getRecords();
+                // $results = $this->searchService->retrieve($source, $id, $params)
+                    // ->getRecords();
             }
             if (empty($results) && null !== $this->recordCache
                 && $this->recordCache->isFallback($source)
