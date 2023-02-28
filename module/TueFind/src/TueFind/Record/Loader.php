@@ -13,18 +13,16 @@ class Loader extends \VuFind\Record\Loader {
         if (null !== $id && '' !== $id) {
             $results = [];
             if (null !== $this->recordCache
-                && $this->recordCache->isPrimary($source)
+            && $this->recordCache->isPrimary($source)
             ) {
                 $results = $this->recordCache->lookup($id, $source);
             }
             if (empty($results)) {
                 $command = new RetrieveCommand($source, $id, $params); 
-                $result = $this->searchService->invoke($command)->getResult()->getRecords();
-                // $results = $this->searchService->retrieve($source, $id, $params)
-                    // ->getRecords();
+                $results = $this->searchService->invoke($command)->getResult()->getRecords();
             }
             if (empty($results) && null !== $this->recordCache
-                && $this->recordCache->isFallback($source)
+            && $this->recordCache->isFallback($source)
             ) {
                 $results = $this->recordCache->lookup($id, $source);
             }
@@ -32,7 +30,7 @@ class Loader extends \VuFind\Record\Loader {
             if (count($results) == 1) {
                 return $results[0];
             }
-
+            
             // TueFind: use fallback like in parent's "loadBatchForSource" function
             // (this change might also be sent to vufind.org for future versions)
             if ($this->fallbackLoader
