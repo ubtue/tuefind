@@ -9,6 +9,9 @@ return [
             'TueFind\View\Helper\Root\SearchTabs' => 'VuFind\View\Helper\Root\SearchTabsFactory',
             'TueFind\View\Helper\TueFind\Authority' => 'TueFind\View\Helper\TueFind\AuthorityFactory',
             'TueFind\View\Helper\TueFind\TueFind' => 'TueFind\View\Helper\TueFind\Factory',
+
+            // special overrides related to VuFindTheme\Module.php
+            'TueFind\View\Helper\SetupThemeResources' => 'VuFindTheme\View\Helper\SetupThemeResourcesFactory',
         ],
         'aliases' => [
             'authority' => 'TueFind\View\Helper\TueFind\Authority',
@@ -18,6 +21,9 @@ return [
             'recordDataFormatter' => 'TueFind\View\Helper\Root\RecordDataFormatter',
             'searchTabs' => 'TueFind\View\Helper\Root\SearchTabs',
             'tuefind' => 'TueFind\View\Helper\TueFind\TueFind',
+
+            // special overrides related to VuFindTheme\Module.php
+            'setupThemeResources' => 'TueFind\View\Helper\SetupThemeResources',
         ],
     ],
     'css' => [
