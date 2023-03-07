@@ -24,15 +24,34 @@ class Params extends \TueFind\Search\Solr\Params implements \VuFind\I18n\Transla
         }
     }
 
+    protected function handleQuery(\VuFindSearch\Query\Query $query) {
+        if ($query->getHandler() == \IxTheo\Search\Backend\Solr\QueryBuilder::BIBLE_RANGE_HANDLER && $this->getTranslatorLocale() != 'de') {
+            $queryString = strtr($query->getString(), ",", ":");
+            $query->setString($queryString);
+        }
+    }
+
+    protected function handleGroup(\VuFindSearch\Query\QueryGroup $group) {
+        foreach ($group->getQueries() as $groupOrQuery) {
+            $this->handleGroupOrQuery($groupOrQuery);
+        }
+    }
+
+
+    protected function handleGroupOrQuery($groupOrQuery) {
+        if ($groupOrQuery instanceof \VuFindSearch\Query\Query) {
+            $this->handleQuery($groupOrQuery);
+        } elseif ($groupOrQuery instanceof \VuFindSearch\Query\QueryGroup) {
+            $this->handleGroup($groupOrQuery);
+        }
+    }
+
 
     public function getDisplayQuery()
     {
-      // Rewrite English style bible searches in the English interface
-      if ($this->searchType == 'basic' && $this->query->getHandler() == \IxTheo\Search\Backend\Solr\QueryBuilder::BIBLE_RANGE_HANDLER && $this->getTranslatorLocale() != 'de') {
-          $queryString = strtr($this->query->getString(), ",", ":");
-          $this->query->setString($queryString);
-      }
-      return parent::getDisplayQuery();
+        // Rewrite English style bible searches in the English interface
+        $this->handleGroupOrQuery($this->query);
+        return parent::getDisplayQuery();
     }
 
 }
