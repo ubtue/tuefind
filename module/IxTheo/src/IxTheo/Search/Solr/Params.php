@@ -28,9 +28,11 @@ class Params extends \TueFind\Search\Solr\Params implements \VuFind\I18n\Transla
     public function getDisplayQuery()
     {
       // Rewrite English style bible searches in the English interface
-      if ($this->query->getHandler() == \IxTheo\Search\Backend\Solr\QueryBuilder::BIBLE_RANGE_HANDLER && $this->getTranslatorLocale() != 'de') {
-          $queryString = strtr($this->query->getString(), ",", ":");
-          $this->query->setString($queryString);
+      if ($this->query instanceof \VuFindSearch\Query\Query &&
+          $this->query->getHandler() == \IxTheo\Search\Backend\Solr\QueryBuilder::BIBLE_RANGE_HANDLER &&
+          $this->getTranslatorLocale() != 'de') {
+             $queryString = strtr($this->query->getString(), ",", ":");
+             $this->query->setString($queryString);
       }
       return parent::getDisplayQuery();
     }
