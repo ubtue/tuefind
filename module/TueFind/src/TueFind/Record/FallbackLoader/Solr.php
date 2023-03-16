@@ -60,7 +60,7 @@ class Solr implements \VuFind\Record\FallbackLoader\FallbackLoaderInterface {
         // $query = new Query('ids:"' . $id . '"', null, 'AllFields');
 
         $searchCommd = new SearchCommand('Solr', $query);
-        $result = $this->searchService->invoke($searchCommd)->getResult();
+        $result = $this->searchService->invoke($searchCommd)->getResult()->getRecords();
         // $result = $this->searchService->search('Solr', $query);
         return $result;
     }

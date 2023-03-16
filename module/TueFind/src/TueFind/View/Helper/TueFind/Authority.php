@@ -335,8 +335,7 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
         $query = new Query($this->getTitlesAboutQueryParams($driver), null, 'AllFields');
         $searchCommand = new SearchCommand($identifier, $query,
             $offset, $limit, new ParamBag(['sort' => 'publishDate DESC']));
-        $response = $this->searchService->invoke($searchCommand)->getResult();
-        return $response;
+        return $this->searchService->invoke($searchCommand)->getResult();
     }
 
     public function getNewestTitlesBy(AuthorityRecordDriver &$driver, $offset=0, $limit=10)
@@ -349,9 +348,7 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
         $query = new Query($this->getTitlesByQueryParams($driver), null, 'AllFields');
         $searchCommand = new SearchCommand($identifier, $query,
             $offset, $limit, new ParamBag(['sort' => 'publishDate DESC']));
-        $response = $this->searchService->invoke($searchCommand)->getResult();
-
-        return $response;
+        return $this->searchService->invoke($searchCommand)->getResult();
     }
 
     public function getRelatedAuthors(AuthorityRecordDriver &$driver, $limit)
@@ -529,7 +526,7 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
         //                                          new \VuFindSearch\Query\Query($this->getTitlesByQueryParams($driver), 'AllFields'),
         //                                          0, 0, new \VuFindSearch\ParamBag($params));
 
-        $query = new Query($this->getTitlesByQueryParams($driver), null, 'AllFields');
+        $query = new Query($this->getTitlesByQueryParams($driver), null, 'AllField');
         $searchCommand = new SearchCommand($identifier, $query,
             0 , 0, new ParamBag($params));
         $publishingData = $this->searchService->invoke($searchCommand)->getResult();

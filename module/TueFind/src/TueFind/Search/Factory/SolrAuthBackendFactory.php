@@ -87,7 +87,6 @@ class SolrAuthBackendFactory extends \VuFind\Search\Factory\SolrAuthBackendFacto
             $connector->setLogger($this->logger);
         }
         if (!empty($searchConfig->SearchCache->adapter)) {
-            die();
             $cacheConfig = $searchConfig->SearchCache->toArray();
             $options = $cacheConfig['options'] ?? [];
             if (empty($options['namespace'])) {

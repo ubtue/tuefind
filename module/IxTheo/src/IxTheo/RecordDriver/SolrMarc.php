@@ -1,6 +1,8 @@
 <?php
 
 namespace IxTheo\RecordDriver;
+use VuFindSearch\Query\Query;
+use VuFindSearch\Command\SearchCommand;
 
 class SolrMarc extends SolrDefault
 {
@@ -43,10 +45,12 @@ class SolrMarc extends SolrDefault
             $query_string .= ' AND ' . $key . ':"' . addcslashes($value, '"') . '"';
         }
 
-        $query = new \VuFindSearch\Query\Query(
+        $query = new Query(
             $query_string
         );
-        return $this->searchService->search('Solr', $query, 0, 0)->getTotal();
+        $searchCommand = new SearchCommand('Solr', $query);
+        // return $this->searchService->search('Solr', $query, 0, 0)->getTotal();
+        return $this->searchService->invoke($searchCommand)->getResult()->getTotal();
     }
 
     private function getSubfieldPairs($field_tag, $first_subfield_code, $second_subfield_code)

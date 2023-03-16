@@ -5,6 +5,8 @@ namespace TueFind\Record;
 use VuFind\Exception\RecordMissing as RecordMissingException;
 use VuFindSearch\ParamBag;
 use VuFindSearch\Command\RetrieveCommand;
+use VuFindSearch\Command\SearchCommand;
+use VuFindSearch\Query;
 
 class Loader extends \VuFind\Record\Loader {
     public function load($id, $source = DEFAULT_SEARCH_BACKEND,
@@ -18,8 +20,14 @@ class Loader extends \VuFind\Record\Loader {
                 $results = $this->recordCache->lookup($id, $source);
             }
             if (empty($results)) {
-                $command = new RetrieveCommand($source, $id, $params); 
-                $results = $this->searchService->invoke($command)->getResult()->getRecords();
+                try {
+                    $command = new RetrieveCommand($source, $id, $params); 
+                    $results = $this->searchService->invoke($command)->getResult()->getRecords();
+                } catch (BackendExpception $e){
+                    if(!$tolerateMissing){
+                        throw $e;
+                    }
+                }
             }
             if (empty($results) && null !== $this->recordCache
             && $this->recordCache->isFallback($source)
@@ -65,11 +73,22 @@ class Loader extends \VuFind\Record\Loader {
 
             // use search instead of lookup logic
             if (empty($results)) {
-                $query = new \VuFindSearch\Query\Query('gnd:' . $gndNumber);
-                $results = $this->searchService->search($source, $query);
-                if ($results->first() !== null)
-                    return $results->first();
-                $results = [];
+                
+                try {
+                    // $query = new \VuFindSearch\Query\Query('gnd:' . $gndNumber);
+                    // $results = $this->searchService->search($source, $query);
+                    $query = new Query('gnd:' . $gndNumber);
+                    $command = new SearchCommand($source, $query); 
+                    $results = $this->searchService->invoke($command)->getResult()->getRecords();
+                    if ($results->first() !== null)
+                        return $results->first();
+                    $results = [];
+                } catch (BackendExpception $e){
+                    if(!$tolerateMissing){
+                        throw $e;
+                    }
+                }
+                
             }
 
             // no fallback cache
