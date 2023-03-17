@@ -1,6 +1,7 @@
 <?php
 
 namespace IxTheo\Search\KeywordChainSearch;
+use VuFindSearch\Command\SearchCommand;
 
 class Results extends \VuFind\Search\Solr\Results
 {
@@ -26,7 +27,9 @@ class Results extends \VuFind\Search\Solr\Results
         $params->set("facet.limit", $limit);
 
         // Perform the search:
-        $collection = $this->getSearchService()->search($this->backendId, $query, 0, 0, $params);
+        // $collection = $this->getSearchService()->search($this->backendId, $query, 0, 0, $params);
+        $searchCommand = new SearchCommand($this->backendId,  $query, 0, 0, $params);
+        $collection = $this->getSearchService()->invoke($searchCommand)->getResult();
 
         $this->responseFacets = $collection->getFacets();
 

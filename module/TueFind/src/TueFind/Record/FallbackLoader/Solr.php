@@ -5,7 +5,6 @@ namespace TueFind\Record\FallbackLoader;
 use VuFindSearch\Service;
 use VuFindSearch\Query\Query;
 use VuFindSearch\Command\SearchCommand;
-use VuFindSearch\Command\RetrieveCommand;
 
 class Solr implements \VuFind\Record\FallbackLoader\FallbackLoaderInterface {
 
