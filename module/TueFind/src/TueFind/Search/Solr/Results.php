@@ -41,4 +41,32 @@ class Results extends \VuFind\Search\Solr\Results
         return $facets;
     }
 
+    /**
+     * This is a custom fixBadQuery for TueFind.
+     * Try to fix a query that caused a parser error.
+     *
+     * @param AbstractQuery $query Bad query
+     *
+     * @return bool|AbstractQuery  Fixed query, or false if no solution is found.
+     */
+    function fixBadQuery(AbstractQuery $query)
+    {
+        if ($query instanceof QueryGroup) {
+            return $this->fixBadQueryGroup($query);
+        } else {
+            // Single query? Can we fix it on its own?
+            $oldString = $string = $query->getString();
+
+            // Are there any unescaped colons in the string?
+            // $string = str_replace(':', '\\:', str_replace('\\:', ':', $string));
+
+            // Did we change anything? If so, we should replace the query:
+            if ($oldString != $string) {
+                $query->setString($string);
+                return $query;
+            }
+        }
+        return false;
+    }
+
 }
