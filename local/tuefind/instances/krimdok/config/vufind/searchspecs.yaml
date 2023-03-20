@@ -259,7 +259,6 @@ Subject:
 #    DismaxFields:
 #      - topic_unstemmed^150
 
-
 Coordinate:
   DismaxFields:
     - long_lat_display
@@ -307,7 +306,7 @@ JournalTitle:
       - [and, 50]
     series2:
       - [onephrase, 50]
-      - [and , ~]
+      - [and, ~]
   FilterQuery: "format:Journal OR format:Article"
 #  ExactSettings:
 #    DismaxFields:
@@ -347,7 +346,7 @@ Title:
       - [and, 50]
     series2:
       - [onephrase, 50]
-      - [and , ~]
+      - [and, ~]
 #  ExactSettings:
 #    DismaxFields:
 #      - title_full_unstemmed^450
@@ -391,24 +390,20 @@ AllFields:
     - isbn
     - issn
   QueryFields:
-    0:
-      0:
-        - OR
-        - 50
-      title_short:
-        - [onephrase, 750]
-      title_full_unstemmed:
-        - [onephrase, 600]
-        - [and, 500]
-      title_full:
-        - [onephrase, 400]
-      title:
-        - [onephrase, 300]
-        - [and, 250]
-      title_alt:
-        - [and, 200]
-      title_new:
-        - [and, 100]
+    title_short:
+      - [onephrase, 750]
+    title_full_unstemmed:
+      - [onephrase, 600]
+      - [and, 500]
+    title_full:
+      - [onephrase, 400]
+    title:
+      - [onephrase, 300]
+      - [and, 250]
+    title_alt:
+      - [and, 200]
+    title_new:
+      - [and, 100]
     series:
       - [and, 50]
     series2:
@@ -506,18 +501,18 @@ CallNumber:
   CustomMunge:
     callnumber_exact:
       # Strip whitespace and quotes:
-      - [preg_replace, '/[ "]/', '']
+      - [preg_replace, '/[ "]/', ""]
       # Escape colons (unescape first to avoid double-escapes):
-      - [preg_replace, '/(\\:)/', ':']
-      - [preg_replace, '/:/', '\:']
+      - [preg_replace, '/(\\:)/', ":"]
+      - [preg_replace, "/:/", '\:']
       # Strip pre-existing trailing asterisks:
       - [preg_replace, "/\\*+$/", ""]
     callnumber_fuzzy:
       # Strip whitespace and quotes:
-      - [preg_replace, '/[ "]/', '']
+      - [preg_replace, '/[ "]/', ""]
       # Escape colons (unescape first to avoid double-escapes):
-      - [preg_replace, '/(\\:)/', ':']
-      - [preg_replace, '/:/', '\:']
+      - [preg_replace, '/(\\:)/', ":"]
+      - [preg_replace, "/:/", '\:']
       # Strip pre-existing trailing asterisks, then add a new one:
       - [preg_replace, "/\\*+$/", ""]
       - [append, "*"]
@@ -766,7 +761,6 @@ FulltextAllSynonyms:
       - [onephrase, 50]
       - [and, 50]
       - [or, ~]
-
 
 GND:
   DismaxFields:

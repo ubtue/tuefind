@@ -182,41 +182,41 @@ Author:
   DismaxFields:
     - author^500
     - author_synonyms^99
-    #   - author_fuller^50
+    - author_fuller^50
     - author2
     - author_additional
     - author_corporate
     - corporation
   DismaxHandler: edismax
-  # QueryFields:
-  # author:
-  #   - [onephrase, 500]
-  #   - [and, 200]
-  #   - [or, 100]
-  # author_synonyms:
-  #   - [onephrase, 349]
-  #   - [and, 199]
-  #   - [or, 99]
-  # author_fuller:
-  #   - [onephrase, 200]
-  #   - [and, 100]
-  #   - [or, 50]
-  # author2:
-  #   - [onephrase, 100]
-  #   - [and, 50]
-  #   - [or, ~]
-  # author_additional:
-  #   - [onephrase, 100]
-  #   - [and, 50]
-  #   - [or, ~]
-  # author_corporate:
-  #   - [onephrase, 100]
-  #   - [and, 50]
-  #   - [or, ~]
-  # corporation:
-  #   - [onephrase, 100]
-  #   - [and, 50]
-  #   - [or, ~]
+  QueryFields:
+  author:
+    - [onephrase, 500]
+    - [and, 200]
+    - [or, 100]
+  author_synonyms:
+    - [onephrase, 349]
+    - [and, 199]
+    - [or, 99]
+  author_fuller:
+    - [onephrase, 200]
+    - [and, 100]
+    - [or, 50]
+  author2:
+    - [onephrase, 100]
+    - [and, 50]
+    - [or, ~]
+  author_additional:
+    - [onephrase, 100]
+    - [and, 50]
+    - [or, ~]
+  author_corporate:
+    - [onephrase, 100]
+    - [and, 50]
+    - [or, ~]
+  corporation:
+    - [onephrase, 100]
+    - [and, 50]
+    - [or, ~]
 ISN:
   DismaxFields:
     - isbn
@@ -639,65 +639,61 @@ AllFields:
     - isbn
     - issn
     - key_word_chains
-    # - key_word_chain_bag
-  # QueryFields:
-  #   0:
-  #     0:
-  #       - OR
-  #       - 50
-  #     title_short:
-  #       - [onephrase, 750]
-  #     title_full_unstemmed:
-  #       - [onephrase, 600]
-  #       - [and, 500]
-  #     title_full:
-  #       - [onephrase, 400]
-  #     title:
-  #       - [onephrase, 300]
-  #     # - [and, 250]
-  #   # title_alt:
-  #   # - [and, 200]
-  #   # title_new:
-  #   # - [and, 100]
-  #   series:
-  #     - [and, 50]
-  #   series2:
-  #     - [and, 30]
-  #   author:
-  #     - [onephrase, 300]
-  #     - [and, 250]
-  #   # author_fuller:
-  #   #   - [onephrase, 150]
-  #   #   - [and, 125]
-  #   author2:
-  #     - [and, 50]
-  #   author_additional:
-  #     - [and, 50]
-  #   contents:
-  #     - [and, 10]
-  #   topic_unstemmed:
-  #     - [onephrase, 550]
-  #     - [and, 500]
-  #   topic_all:
-  #     - [onephrase, 500]
-  #   geographic:
-  #     - [onephrase, 300]
-  #   genre:
-  #     - [onephrase, 300]
-  #   allfields_unstemmed:
-  #     - [or, 10]
-  #   allfields:
-  #     - [or, ~]
-  #   description:
-  #     - [or, ~]
-  #   isbn:
-  #     - [onephrase, ~]
-  #   issn:
-  #     - [onephrase, ~]
-  #   key_word_chains:
-  #     - [onephrase, ~]
-  # key_word_chain_bag:
-  #   - [onephrase, ~]
+    - key_word_chain_bag
+  QueryFields:
+    title_short:
+      - [onephrase, 750]
+    title_full_unstemmed:
+      - [onephrase, 600]
+      - [and, 500]
+    title_full:
+      - [onephrase, 400]
+    title:
+      - [onephrase, 300]
+      - [and, 250]
+    title_alt:
+      - [and, 200]
+    title_new:
+      - [and, 100]
+    series:
+      - [and, 50]
+    series2:
+      - [and, 30]
+    author:
+      - [onephrase, 300]
+      - [and, 250]
+    author_fuller:
+      - [onephrase, 150]
+      - [and, 125]
+    author2:
+      - [and, 50]
+    author_additional:
+      - [and, 50]
+    contents:
+      - [and, 10]
+    topic_unstemmed:
+      - [onephrase, 550]
+      - [and, 500]
+    topic_all:
+      - [onephrase, 500]
+    geographic:
+      - [onephrase, 300]
+    genre:
+      - [onephrase, 300]
+    allfields_unstemmed:
+      - [or, 10]
+    allfields:
+      - [or, ~]
+    description:
+      - [or, ~]
+    isbn:
+      - [onephrase, ~]
+    issn:
+      - [onephrase, ~]
+    key_word_chains:
+      - [onephrase, ~]
+  key_word_chain_bag:
+    - [onephrase, ~]
 
 #  ExactSettings:
 #    DismaxFields:
