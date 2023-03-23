@@ -84,10 +84,10 @@ class SearchTabs extends \VuFind\View\Helper\Root\SearchTabs {
                         ]
                     );
             } else {
-                $this->cachedHiddenFilterParams[$searchClassId] = '';
+                $this->cachedHiddenFilterParams[$searchClassId] = "";
             }
         }
-        return (empty($this->cachedHiddenFilterParams[$searchClassId]) ? '' :
+        return (empty($this->cachedHiddenFilterParams[$searchClassId]) ? "" :
         $prepend . $this->cachedHiddenFilterParams[$searchClassId]);
     }
 }
