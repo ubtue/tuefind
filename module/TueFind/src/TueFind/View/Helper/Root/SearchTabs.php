@@ -1,6 +1,18 @@
 <?php
 
+/**
+ * "Search tabs" view helper
+ * 
+ * PHP version 7
+ * 
+ * Copyright (C) Universität Tübingen 2023
+ * 
+ * Author Steven Lolong (steven.lolong@uni-tuebingen.de)
+ */
+
 namespace TueFind\View\Helper\Root;
+
+use VuFind\Search\UrlQueryHelper;
 
 class SearchTabs extends \VuFind\View\Helper\Root\SearchTabs {
 
@@ -26,4 +38,56 @@ class SearchTabs extends \VuFind\View\Helper\Root\SearchTabs {
             . $results->getUrlQuery()->getParams(false);
     }
 
+    /**
+     * Get current hidden filters as a string suitable for search URLs
+     *
+     * @param string $searchClassId            Active search class
+     * @param bool   $ignoreHiddenFilterMemory Whether to ignore hidden filters in
+     * search memory
+     * @param string $prepend                  String to prepend to the hidden
+     * filters if they're not empty
+     *
+     * TueFind version, if found the hidden value then build the string it else return empty string
+     * @return string
+     */
+    public function getCurrentHiddenFilterParams(
+        $searchClassId,
+        $ignoreHiddenFilterMemory = false,
+        $prepend = '&amp;'
+    ) {
+        if (!isset($this->cachedHiddenFilterParams[$searchClassId])) {
+            $view = $this->getView();
+            $hiddenFilters = $this->getHiddenFilters(
+                $searchClassId,
+                $ignoreHiddenFilterMemory
+            );
+            if (empty($hiddenFilters) && !$ignoreHiddenFilterMemory) {
+                $hiddenFilters = $view->plugin('searchMemory')
+                    ->getLastHiddenFilters($searchClassId);
+                if (empty($hiddenFilters)) {
+                    $hiddenFilters = $this->getHiddenFilters($searchClassId);
+                }
+            }
+
+            $results = $this->results->get($searchClassId);
+            $params = $results->getParams();
+            foreach ($hiddenFilters as $field => $filter) {
+                foreach ($filter as $value) {
+                    $params->addHiddenFilterForField($field, $value);
+                }
+            }
+            if ($hiddenFilters = $params->getHiddenFiltersAsQueryParams()) {
+                $this->cachedHiddenFilterParams[$searchClassId]
+                    = UrlQueryHelper::buildQueryString(
+                        [
+                            'hiddenFilters' => $hiddenFilters
+                        ]
+                    );
+            } else {
+                $this->cachedHiddenFilterParams[$searchClassId] = '';
+            }
+        }
+        return (empty($this->cachedHiddenFilterParams[$searchClassId]) ? '' :
+        $prepend . $this->cachedHiddenFilterParams[$searchClassId]);
+    }
 }
