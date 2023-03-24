@@ -41,7 +41,7 @@ class SolrDefaultBackendFactory extends \TueFind\Search\Factory\SolrDefaultBacke
      *
      * @return Connector
      */
-    // protected function createConnector()
+    // protected function createConnector()git 
     // {
     //     $config = $this->config->get($this->mainConfig);
     //     $this->setTranslator($this->serviceLocator->get(\Laminas\Mvc\I18n\Translator::class));
@@ -69,10 +69,9 @@ class SolrDefaultBackendFactory extends \TueFind\Search\Factory\SolrDefaultBacke
     //     foreach ($this->getHiddenFilters() as $filter) {
     //         array_push($handlers['select']['appends']['fq'], $filter);
     //     }
-
     //     $httpService = $this->serviceLocator->get(\VuFindHttp\HttpService::class);
     //     $client = $httpService->createClient();
-
+        
     //     $connector = new $this->connectorClass(
     //         $this->getSolrUrl(),
     //         new HandlerMap($handlers),
@@ -80,11 +79,13 @@ class SolrDefaultBackendFactory extends \TueFind\Search\Factory\SolrDefaultBacke
     //         $this->uniqueKey
     //     );
     //     // $connector->setTimeout($config->Index->timeout ?? 30);
-
+        
     //     if ($this->logger) {
     //         $connector->setLogger($this->logger);
     //     }
         
+    //     // die();
+    //     // The error is with the $searchConfig 
     //     if (!empty($searchConfig->SearchCache->adapter)) {
     //         $cacheConfig = $searchConfig->SearchCache->toArray();
     //         $options = $cacheConfig['options'] ?? [];

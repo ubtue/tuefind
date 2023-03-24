@@ -641,6 +641,10 @@ AllFields:
     - key_word_chains
     - key_word_chain_bag
   QueryFields:
+    # 0:
+    #   0:
+    #     - OR
+    #     - 50
     title_short:
       - [onephrase, 750]
     title_full_unstemmed:

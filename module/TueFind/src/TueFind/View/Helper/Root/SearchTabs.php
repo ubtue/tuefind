@@ -47,7 +47,6 @@ class SearchTabs extends \VuFind\View\Helper\Root\SearchTabs {
      * @param string $prepend                  String to prepend to the hidden
      * filters if they're not empty
      *
-     * TueFind version, if found the hidden value then build the string it else return empty string
      * @return string
      */
     public function getCurrentHiddenFilterParams(
@@ -87,6 +86,10 @@ class SearchTabs extends \VuFind\View\Helper\Root\SearchTabs {
                 $this->cachedHiddenFilterParams[$searchClassId] = "";
             }
         }
+        /**
+         * TueFind version, if the hidden value is empty then return empty string
+         * else build the string and return it
+         */
         return (empty($this->cachedHiddenFilterParams[$searchClassId]) ? "" :
         $prepend . $this->cachedHiddenFilterParams[$searchClassId]);
     }
