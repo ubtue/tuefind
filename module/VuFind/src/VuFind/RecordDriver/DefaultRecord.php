@@ -442,8 +442,13 @@ class DefaultRecord extends AbstractBase
                 foreach ($keys as $author) {
                     if (isset($array2[$author])) {
                         $array1[$author] = array_merge(
-                            $array1[$author],
-                            $array2[$author]
+                            // array_merge will override the values in the
+                            // first param with values in the second param.
+                            // Since array1 is usually more important,
+                            // we want to keep its value, so we pass the arrays
+                            // in reverse order.
+                            $array2[$author],
+                            $array1[$author]
                         );
                         unset($array2[$author]);
                     }
