@@ -108,8 +108,30 @@ class SolrAuthMarc extends SolrAuthDefault {
                              'url' => 'https:////www.wikidata.org/wiki/' . urlencode($wikidataId)];
         }
 
+        $additionalTitle = 'Additional';
+        $fields = $this->getMarcReader()->getFields('670');
+        foreach ($fields as $currentField) {
+            $additionalURL = $this->getSubfieldArray($currentField, ['u'], true, ' ');
+            if (isset($additionalURL[0]) && !empty($additionalURL[0])) {
+                $fildTitle = $this->getSubfieldArray($currentField, ['a'], true, ' ');
+                if(isset($fildTitle[0]) && !empty($fildTitle[0])) {
+                    $additionalTitle = $fildTitle[0];
+                }
+                $references[] = ['title' => $additionalTitle, 'url' => $additionalURL[0]];
+            }
+        }
+
         $references = array_merge($references, $this->getExternalReferencesFiltered(/*blacklist=*/[], /*whitelist=*/['Wikipedia']));
         $references = array_merge($references, $this->getBeaconReferences(/* type flag, false => only non literary-remains */ false));
+
+        $i = 0;
+        foreach($references as &$reference) {
+            if(empty($reference['url'])) {
+                unset($references[$i]);
+            }
+            $i++;
+        }
+
         return $references;
     }
 
