@@ -99,22 +99,23 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
         $tuefindHelper = $this->viewHelperManager->get('tuefind');
 
         $references = $driver->getBiographicalReferences();
-        if (count($references) == 0) {
+        if (count($references) == 0)
             return '';
-        }
 
         usort($references, function($a, $b) { return strcmp($a['title'], $b['title']); });
 
         $display = '';
         foreach ($references as $reference) {
+            $image = $tuefindHelper->getDetailsIcon($reference['title']);
             if(!empty($reference['url'])) {
-                $image = $tuefindHelper->getDetailsIcon($reference['title']);
                 if ($image == null) {
                     $display .= '<a href="' . $reference['url'] . '" target="_blank" property="sameAs"><i class="fa fa-external-link"></i> ' . htmlspecialchars($reference['title']) . '</a><br>';
                 }
                 else {
                     $display .= '<a href="' . $reference['url'] . '" target="_blank" property="sameAs"> <img class="detailsIcon" src="'.$image.'"/>' . htmlspecialchars($reference['title']) . '</a><br>';
                 }
+            }else{
+                $display .= htmlspecialchars($reference['title']) . '<br>';
             }
             
         }

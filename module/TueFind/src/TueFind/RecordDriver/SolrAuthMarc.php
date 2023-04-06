@@ -105,25 +105,11 @@ class SolrAuthMarc extends SolrAuthDefault {
         $wikidataIds = $this->getWikidataIds();
         foreach ($wikidataIds as $wikidataId) {
             $references[] = ['title' => 'Wikidata' .  ' (' . $wikidataId . ')',
-                             'url' => 'https://www.wikidata.org/wiki/' . urlencode($wikidataId)];
+                             'url' => 'https:////www.wikidata.org/wiki/' . urlencode($wikidataId)];
         }
 
-        $fields = $this->getMarcReader()->getFields('670');
-        foreach ($fields as $currentField) {
-            $additionalTitle = $this->translateString('additional');
-            $additionalURL = $this->getSubfieldArray($currentField, ['u'], true, ' ');
-            if (isset($additionalURL[0]) && !empty($additionalURL[0])) {
-                $fieldTitle = $this->getSubfieldArray($currentField, ['a'], true, ' ');
-                if(isset($fieldTitle[0]) && !empty($fieldTitle[0])) {
-                    $additionalTitle = $fieldTitle[0];
-                }
-                $references[] = ['title' => $additionalTitle, 'url' => $additionalURL[0]];
-            }
-        }
-
-        $references = array_merge($references, $this->getExternalReferencesFiltered(/*blacklist=*/[], /*whitelist=*/['Wikipedia']));
+        $references = array_merge($references, $this->getExternalReferencesFiltered(/*blacklist=*/['Archivportal-D', 'Kalliope'], /*whitelist=*/[]));
         $references = array_merge($references, $this->getBeaconReferences(/* type flag, false => only non literary-remains */ false));
-
         return $references;
     }
 
