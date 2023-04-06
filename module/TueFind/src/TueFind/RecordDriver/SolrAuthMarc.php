@@ -105,7 +105,7 @@ class SolrAuthMarc extends SolrAuthDefault {
         $wikidataIds = $this->getWikidataIds();
         foreach ($wikidataIds as $wikidataId) {
             $references[] = ['title' => 'Wikidata' .  ' (' . $wikidataId . ')',
-                             'url' => 'https:////www.wikidata.org/wiki/' . urlencode($wikidataId)];
+                             'url' => 'https://www.wikidata.org/wiki/' . urlencode($wikidataId)];
         }
 
         $references = array_merge($references, $this->getExternalReferencesFiltered(/*blacklist=*/['Archivportal-D', 'Kalliope'], /*whitelist=*/[]));
