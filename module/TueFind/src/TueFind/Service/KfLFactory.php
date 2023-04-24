@@ -20,9 +20,10 @@ class KfLFactory implements FactoryInterface
         $tuefindInstance = $container->get('ViewHelperManager')->get('tuefind')->getTueFindInstance();
         $config = $container->get(\VuFind\Config\PluginManager::class)
             ->get('tuefind')->KfL;
+        $recordLoader = $container->get(\VuFind\Record\Loader::class);
 
         return new $requestedName(
-            $config, $authManager, $tuefindInstance
+            $config, $authManager, $tuefindInstance, $recordLoader
         );
     }
 }

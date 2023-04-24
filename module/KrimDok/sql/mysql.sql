@@ -16,3 +16,6 @@ CREATE TABLE full_text_cache_urls (
     INDEX domain (domain),
     INDEX error_message (error_message(100))
 ) CHARACTER SET utf8mb4;
+
+ALTER TABLE user ADD krimdok_subscribed_to_newsletter BOOLEAN NOT NULL DEFAULT FALSE;
+CREATE INDEX krimdok_subscribed_to_newsletter_index ON user (krimdok_subscribed_to_newsletter);

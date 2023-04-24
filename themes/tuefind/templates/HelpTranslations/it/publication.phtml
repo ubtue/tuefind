@@ -1,0 +1,28 @@
+<?php
+$tuefind = $this->tuefind();
+$currentSystem = $tuefind->getTueFindType();
+$publicationEmail = $tuefind->getPublicationEmail();
+?>
+
+<p>È possibile depositare in forma digitale il presente contributo mediante la creazione di account in <?=$currentSystem?> e dimonstrando di essere l’Autrice/l’Autore di esso.</p>
+<p>Per fare ciò è neccessario procedere come segue:</p>
+<p><b>Registrazione</b></p>
+    <ul>
+        <li>1. È necessario avere un account in <?=$currentSystem?>.</li>
+    </ul>
+<p>Per attivarlo ci si deve registrare con un indirizzo email. L’apposito bottone per la registrazione ed il login sono collocati in alto a destra nella pagina inizale di <?=$currentSystem?>.</p>
+<p>Appena ricevuto un account <?=$currentSystem?>, procedere come segue:</p>
+<p><b>Richiesta diritti</b></p>
+    <ul>
+        <li>2. Mediante un account <?=$currentSystem?> è possible fare richiesta di accesso al proprio ID di Autrice/Autore.  Per fare ciò, selezionare il bottone “Persone/Istituzioni” collocato al di sopra della barra di ricerca. Inserire quindi il proprio nome e selezionare l’esatto records a Lei corrispondente.</li>
+        <li>3. Cliccare sul bottone “Request Access Rights (This is me!)”.</li>
+        <li>4. La sua richiesta sarà automanticamente inoltrata al Team di <?=$currentSystem?>. Dopo averla controllata, riceverà entro pochi giorni una comunicazione via email, se essa è stata accettata o meno.</li>
+    </ul>
+<p>Da quel momento in poi è possible caricare le proprie pubblicazioni.</p>
+<p><b>Upload (deposito digitale)</b></p>
+    <ul>
+        <li>5. Non appena la sua richiesta è stata accettata, è necessario accedere nuovamente all’account di <?=$currentSystem?>. Ogni contributo presente di cui Lei è Autrice/Autore può essere depositato in forma digitale. Cliccando il bottone “republish”, è possibile caricare la singola pubblicazione in formato PDF.</li>
+        <li>6. In seguito il file verrà caricato nella Repository. Di solito dal giorno seguente il caricamento la singola pubblicazione è disponibile in Open Access all’intera utenza di IxTheo. Al tempo stesso verranno generati links duraturi (handle/doi) che in genere sono disponibili sempre a partire dal giorno seguente il caricamento.</li>
+    </ul>
+<p><b>Domande?</b></p>
+<p>Qualora non Le fosse possibile caricare una pubblicazione di cui Lei è l’Autrice/l’Autore oppure se dovesse avere delle domande o problemi, si rivolga pure an <b><?=$publicationEmail?></b>.</p>

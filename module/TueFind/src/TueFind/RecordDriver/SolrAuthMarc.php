@@ -105,10 +105,10 @@ class SolrAuthMarc extends SolrAuthDefault {
         $wikidataIds = $this->getWikidataIds();
         foreach ($wikidataIds as $wikidataId) {
             $references[] = ['title' => 'Wikidata' .  ' (' . $wikidataId . ')',
-                             'url' => 'https:////www.wikidata.org/wiki/' . urlencode($wikidataId)];
+                             'url' => 'https://www.wikidata.org/wiki/' . urlencode($wikidataId)];
         }
 
-        $references = array_merge($references, $this->getExternalReferencesFiltered(/*blacklist=*/[], /*whitelist=*/['Wikipedia']));
+        $references = array_merge($references, $this->getExternalReferencesFiltered(/*blacklist=*/['Archivportal-D', 'Kalliope'], /*whitelist=*/[]));
         $references = array_merge($references, $this->getBeaconReferences(/* type flag, false => only non literary-remains */ false));
         return $references;
     }
@@ -267,7 +267,7 @@ class SolrAuthMarc extends SolrAuthDefault {
 
         $fields = $this->getMarcReader()->getFields('043');
         foreach ($fields as $field) {
-            foreach ($this->getMarcReader()->getSubfields($field,'c') as $subfield) {
+            foreach ($this->getMarcReader()->getSubfields($field, 'c') as $subfield) {
                 $locations[] = ['name' => $subfield,
                                 'type' => 'DIN-ISO-3166'];
             }
@@ -278,12 +278,18 @@ class SolrAuthMarc extends SolrAuthDefault {
     public function getMeetingName()
     {
         foreach ($this->getMarcReader()->getFields('111') as $field) {
-            $name = $this->getMarcReader()->getSubfield($field,'a');
+            $name = $this->getMarcReader()->getSubfield($field, 'a');
 
-            $subfield_c = $this->getMarcReader()->getSubfield($field,'c');
-            $subfield_d = $this->getMarcReader()->getSubfield($field,'d');
-            $subfield_g = $this->getMarcReader()->getSubfield($field,'g');
+            $subfield_c = $this->getMarcReader()->getSubfield($field, 'c');
+            $subfield_d = $this->getMarcReader()->getSubfield($field, 'd');
+            $subfield_e = $this->getMarcReader()->getSubfield($field, 'e');
+            $subfield_g = $this->getMarcReader()->getSubfield($field, 'g');
+            $subfield_n = $this->getMarcReader()->getSubfield($field, 'n');
 
+            if ($subfield_e != false)
+                $name .= ' ' . $subfield_e;
+            if ($subfield_n != false)
+                $name .= ' ' . $subfield_n;
             if ($subfield_c != false || $subfield_g != false)
                 $name .= '.';
             if ($subfield_g != false)
@@ -306,13 +312,13 @@ class SolrAuthMarc extends SolrAuthDefault {
     public function getName()
     {
         foreach ($this->getMarcReader()->getFields('100') as $field) {
-            $aSubfield = $this->getMarcReader()->getSubfield($field,'a');
+            $aSubfield = $this->getMarcReader()->getSubfield($field, 'a');
             if ($aSubfield == false)
                 continue;
 
             $name = $aSubfield;
 
-            $bSubfield = $this->getMarcReader()->getSubfield($field,'b');
+            $bSubfield = $this->getMarcReader()->getSubfield($field, 'b');
             if ($bSubfield != false)
                 $name .= ' ' . $bSubfield;
             return $name;
@@ -344,25 +350,19 @@ class SolrAuthMarc extends SolrAuthDefault {
     {
         $nameVariants = [];
         $fields = $this->getMarcReader()->getFieldsDelimiter('400|410|411');
-        if (is_array($fields)) {
-            foreach ($fields as $field) {
-                if (is_array($field)) {
-                    foreach ($field as $oneField) {
-                        $nameSubfield = $this->getMarcReader()->getSubfield($oneField,'a');
-                        if (!empty($nameSubfield)) {
-                            $name = $nameSubfield;
-                            $numberSubfield = $this->getMarcReader()->getSubfield($oneField,'b');
-                            if (!empty($numberSubfield)) {
-                                $name .= ' ' . $numberSubfield;
-                            }
-                            $titleSubfield = $this->getMarcReader()->getSubfield($oneField,'c');
-                            if (!empty($titleSubfield)) {
-                                $name .= ' ' . $titleSubfield;
-                            }
-                            $nameVariants[] = $name;
-                        }
-                    }
+        foreach ($fields as $field) {
+            $nameSubfield = $this->getMarcReader()->getSubfield($field, 'a');
+            if (!empty($nameSubfield)) {
+                $name = $nameSubfield;
+                $numberSubfield = $this->getMarcReader()->getSubfield($field, 'b');
+                if (!empty($numberSubfield)) {
+                    $name .= ' ' . $numberSubfield;
                 }
+                $titleSubfield = $this->getMarcReader()->getSubfield($field, 'c');
+                if (!empty($titleSubfield)) {
+                    $name .= ' ' . $titleSubfield;
+                }
+                $nameVariants[] = $name;
             }
         }
 

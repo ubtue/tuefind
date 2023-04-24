@@ -45,7 +45,7 @@
                   <?php $authorityId = $authorProperties['id'][0] ?? '';?>
                   <?php if ($authorityId && $authorityDriver = $this->authority()->recordExists($authorityId)): ?>
                     <a href="<?=$this->record($authorityDriver)->getLink('titles-by', $authorityDriver)?>"><i class="fa fa-book" aria-hidden="true" title="<?=$this->transEsc('author_all_titles_tooltip')?>"></i></a>
-                    <a href="<?=$this->record($this->driver)->getLink('authority', $authorityId)?>"><i class="fa fa-user-circle" aria-hidden="true" title="<?=$this->transEsc('author_details_tooltip')?>"></i></a>
+                    <a href="<?=$this->recordLinker()->getUrl($authorityDriver)?>"><i class="fa fa-user-circle" aria-hidden="true" title="<?=$this->transEsc('author_details_tooltip')?>"></i></a>
                   <?php else: ?>
                     <a href="<?=$this->record($this->driver)->getLink('author', $author)?>"><i class="fa fa-book" aria-hidden="true" title="<?=$this->transEsc('author_all_titles_tooltip')?>"></i></a>
                   <?php endif; ?>
@@ -185,17 +185,18 @@
       <?php endif; ?>
       -->
 
-      <!--
-      <div class="result-formats">
-        <?=$this->record($this->driver)->getFormatList() ?>
-
-        <?php if (!$openUrlActive && empty($urls) && $this->driver->supportsAjaxStatus()): ?>
-          <span class="status ajax-availability hidden">
-            <span class="label label-default"><?=$this->transEsc('Loading')?>...</span>
-          </span>
-        <?php endif; ?>
-      </div>
-      -->
+      <?php if (strtolower($this->tuefind()->getControllerName()) != 'search2'): ?>
+        <div class="result-formats">
+          <?php $label=str_replace('class="', 'class="label label-info ', $this->record($this->driver)->getFormatList())?>
+          <?php /* Remove separator needed for long title view */ ?>
+          <?=str_replace(' | ', '', $label)?>
+          <?php if (!$openUrlActive && empty($urls) && $this->driver->supportsAjaxStatus()): ?>
+            <span class="status ajax-availability hidden">
+              <span class="label label-default"><?=$this->transEsc('Loading')?>...</span>
+            </span>
+          <?php endif; ?>
+        </div>
+      <?php endif; ?>
 
       <?php $urls_and_material_types = $this->driver->getURLsAndMaterialTypes(); ?>
       <?php if (!empty($urls_and_material_types)): ?>

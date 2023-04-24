@@ -41,12 +41,17 @@ if (!empty($title)) {
 $ids_and_titles = $this->driver->tryMethod('getContainerIdsAndTitles');
 if (!empty($ids_and_titles)) {
     echo 'T2  - ';
-    $i = 0;
-    foreach ($ids_and_titles as $id => $title):
-        echo $title[0];
-        if (++$i < count($ids_and_titles))
-            echo ", ";
-    endforeach;
+    $superior_record = $this->driver->tryMethod('getSuperiorRecord');
+    if ($format == 'CHAP' && $superior_record != NULL) {
+        echo $superior_record->getAuthorsAndRoleAsString() . ", " . $superior_record->getTitle();
+    } else {
+        $i = 0;
+        foreach ($ids_and_titles as $id => $title):
+            echo $title[0];
+            if (++$i < count($ids_and_titles))
+                echo ", ";
+        endforeach;
+    }
     echo "\r\n";
 }
 

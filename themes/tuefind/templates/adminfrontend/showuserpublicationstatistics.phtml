@@ -1,0 +1,34 @@
+<?php
+// Set up page title:
+$this->headTitle($this->translate('User Publication Statistics'));
+
+// Set up breadcrumbs:
+$this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') . '">' . $this->transEsc('Your Account') . '</a></li> <li class="active">' . $this->transEsc('User Publication Statistics') . '</li>';
+?>
+
+<div class="<?=$this->layoutClass('mainbody')?>">
+  <h2><?=$this->transEsc('Publication Statistics')?></h2>
+  <?php if (count($this->publications) == 0): ?>
+    <p>No publications have been added so far.</p>
+  <?php else: ?>
+    <table class="table dataTable display">
+      <thead>
+        <tr>
+            <th><?=$this->transEsc('Year')?></th>
+            <th><?=$this->transEsc('Publication Count')?></th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php foreach ($this->publications as $one): ?>
+          <tr>
+            <td><?=$one['year']?></td>
+            <td><?=$one['publication_count']?></td>
+          </tr>
+        <?php endforeach; ?>
+      </tbody>
+    </table>
+  <?php  endif; ?>
+</div>
+<div class="<?=$this->layoutClass('sidebar')?>" id="myresearch-sidebar">
+  <?=$this->context($this)->renderInContext("myresearch/menu.phtml", ['active' => 'showuserpublicationstatistics'])?>
+</div>

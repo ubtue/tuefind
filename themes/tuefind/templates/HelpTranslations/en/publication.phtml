@@ -1,0 +1,28 @@
+<?php
+$tuefind = $this->tuefind();
+$currentSystem = $tuefind->getTueFindType();
+$publicationEmail = $tuefind->getPublicationEmail();
+?>
+
+<p>You can republish your essays and articles if you have an <?=$currentSystem?> account and can prove that you are the author.</p>
+<p>This is how you proceed:</p>
+<p><b>Registration</b></p>
+    <ul>
+        <li>1. You need an <?=$currentSystem?> account. </li>
+    </ul>
+<p>You can register using a valid e-mail address.You can access the registration and login pop-up window by pressing on the “Login” button at the top right corner of the home page.</p>
+<p>Once you have an <?=$currentSystem?> account, you can proceed with your request.</p>
+<p><b>Requesting Access Rights</b></p>
+    <ul>
+        <li>2. Once you’ve logged into your <?=$currentSystem?> account, you can request access to your author ID. First click on the tab labelled “Persons / Corporations” above the search field, then search for your name and select the right entry.
+        <li>3. Click on the button “Request Access Rights (This is me!)”.
+        <li>4. Your request will be automatically sent to the <?=$currentSystem?>-team. We will then verify your identity and inform you within a few days per e-mail whether your request has been approved.
+    </ul>
+<p>In the next step, you can upload your articles.</p>
+<p><b>Upload (republish)</b></p>
+    <ul>
+        <li>5. Once your request has been approved, log into your <?=$currentSystem?> account. You can now select every essay linked to you as an author for republication. When you click on the “republish” button, you can upload your article as a PDF-file.</li>
+        <li>6. Your file then gets uploaded on our repository. It should be available in Open Access to other users on the following day. At the same time, stable links (handle/doi) to the file are generated, which you can also access on the following day. These links are permanent, and you can use them in your research and teaching activities.
+    </ul>
+<p><b>Any questions?</b></p>
+<p>If you have any trouble uploading your files, or for any other problem or question you might have, please contact us at <b><?=$publicationEmail;?></b>.</p>

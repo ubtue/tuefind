@@ -4,19 +4,16 @@ namespace TueFind\Marc;
 
 class MarcReader extends \VuFind\Marc\MarcReader
 {
-    public function getFieldsDelimiter($spec, $delimiter='|') : array
+    public function getFieldsDelimiter($spec, $delimiter='|'): array
     {
-        $matches = array();
+        $matches = [];
 
-        $listOfTegs = explode($delimiter, $spec);
-
-        if(!empty($listOfTegs)) {
-            foreach($listOfTegs as $oneTeg) {
-                // Okay, we're actually looking for something specific
-                $allDatafilds = $this->getFields($oneTeg);
-
-                if(!empty($allDatafilds)) {
-                    $matches[] = $allDatafilds;
+        $tags = explode($delimiter, $spec);
+        if(!empty($tags)) {
+            foreach($tags as $tag) {
+                $fields = $this->getFields($tag);
+                if(!empty($fields)) {
+                    $matches = array_merge($matches, $fields);
                 }
             }
         }

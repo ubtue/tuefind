@@ -1,0 +1,22 @@
+<?php
+$tuefind = $this->tuefind();
+$currentSystem = $tuefind->getTueFindType();
+$publicationEmail = $tuefind->getPublicationEmail();
+?>
+
+Liebe*r <?=$currentSystem?> Nutzer*in,
+
+Sie haben den Zugriff auf eine Autor*innen-ID im <?=$currentSystem?> beantragt.
+
+Aufgrund Ihrer Angaben konnten wir leider nicht verifizieren, dass Sie die mit dieser ID bezeichnete Person sind. Ihr Antrag wurde daher abgelehnt.
+
+Wenn Sie die mit dieser ID bezeichnete Person sind und die Ablehnung als nicht gerechtfertigt ansehen, kontaktieren Sie uns bitte über: <?=$publicationEmail?>.
+
+Wir bitten um Verständnis, dass wir zum Schutz unserer Nutzer*innen eine genaue Prüfung vornehmen müssen.
+
+Für Rückfragen stehen wir gerne zur Verfügung.
+
+Mit freundlichen Grüßen
+
+Ihr <?=$currentSystem?>-Team
+

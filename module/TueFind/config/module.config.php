@@ -352,10 +352,25 @@ $config = [
     ],
 ];
 
-$nonTabRecordActions = ['Publish'];
 $recordRoutes = [];
+$nonTabRecordActions = ['Publish'];
 $dynamicRoutes = [];
-$staticRoutes = ['AdminFrontend/ShowAdmins', 'AdminFrontend/ShowUserAuthorities', 'MyResearch/Newsletter', 'MyResearch/Publications', 'MyResearch/RssFeedSettings', 'MyResearch/RssFeedPreview', 'RssFeed/Full', 'Search3/Home', 'Search3/Results',  'Search3/FacetList', 'Search3/Versions'];
+$staticRoutes = [
+    'AdminFrontend/ShowAdmins',
+    'AdminFrontend/ShowUserAuthorities',
+    'AdminFrontend/ShowUserAuthorityHistory',
+    'AdminFrontend/ShowUserPublications',
+    'AdminFrontend/ShowUserPublicationStatistics',
+    'MyResearch/Newsletter',
+    'MyResearch/Publications',
+    'MyResearch/RssFeedSettings',
+    'MyResearch/RssFeedPreview',
+    'RssFeed/Full',
+    'Search3/Home',
+    'Search3/Results',
+    'Search3/FacetList',
+    'Search3/Versions',
+];
 
 $routeGenerator = new \VuFind\Route\RouteGenerator();
 $routeGenerator->addNonTabRecordActions($config, $nonTabRecordActions);

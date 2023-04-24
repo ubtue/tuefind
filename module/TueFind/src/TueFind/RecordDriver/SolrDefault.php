@@ -26,11 +26,22 @@ use VuFind\Exception\RecordMissing as RecordMissingException;
 class SolrDefault extends \VuFind\RecordDriver\SolrMarc
 {
     const SUBITO_BROKER_ID = 'TUEFIND';
-
+    protected $authorImplode;
     protected $container;
-
     protected $selected_fulltext_types;
     protected $hasFulltextMatch;
+
+
+    function __construct() {
+        $this->authorImplode = function ($array) {
+            if (is_null($array)) {
+                return null;
+            }
+            return implode(", ", array_filter($array, function($entry) {
+                return empty($entry) ? false : true;
+            }));
+        };
+    }
 
     public function setContainer(ContainerInterface $container)
     {
@@ -81,18 +92,36 @@ class SolrDefault extends \VuFind\RecordDriver\SolrMarc
         return $result;
     }
 
+
     public function getAuthorsAsString()
     {
-        $author_implode = function ($array) {
-            if (is_null($array)) {
-                return null;
-            }
-            return implode(", ", array_filter($array, function($entry) {
-                return empty($entry) ? false : true;
-            }));
-        };
-        return $author_implode(array_map($author_implode, array_map("array_keys", $this->getDeduplicatedAuthors())));
+        return ($this->authorImplode)(array_map(($this->authorImplode), array_map("array_keys", $this->getDeduplicatedAuthors())));
     }
+
+
+    protected function getFormattedRoleButAuthor($role)
+    {
+        return ($role == 'aut') ? '' : ' (' .  $role . ')';
+    }
+
+
+    public function getAuthorsAndRoleAsString() {
+        $deduplicated_authors = $this->getDeduplicatedAuthors();
+        $result = '';
+        foreach(['primary', 'secondary', 'corporate'] as $type) {
+            $type_contents =  $deduplicated_authors[$type];
+            if (!empty($result) && $type == 'corporate')
+                continue;
+            foreach (array_keys($type_contents) as $author_full) {
+                $result .= empty($result) ? "" : ", ";
+                $result .= $author_full . (isset($type_contents[$author_full]['role'][0]) ?
+                                $this->getFormattedRoleButAuthor($type_contents[$author_full]['role'][0]) : '');
+
+            }
+        }
+        return $result;
+   }
+
 
     /**
      * Compatibility function for VuFind's RecordDriver, e.g. for MetadataVocabularies

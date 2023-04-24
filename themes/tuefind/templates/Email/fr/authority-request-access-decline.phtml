@@ -1,0 +1,22 @@
+<?php
+$tuefind = $this->tuefind();
+$currentSystem = $tuefind->getTueFindType();
+$publicationEmail = $tuefind->getPublicationEmail();
+?>
+
+Cher usager d’<?=$currentSystem?>,
+
+Vous avez fait la demande d’accès à votre identifiant d’auteur.
+
+Malheureusement, nous n’avons pas été en mesure de confirmer votre identité avec les données dont nous disposons. Conséquemment, votre demande a été refusée.
+
+Si vous êtes la personne désignée par cet identifiant d’auteur et que notre refus vous paraît injustifié, veuillez nous contacter à l’adresse suivante: <?=$publicationEmail?>.
+
+Nous espérons que vous comprendrez que nous avons l’obligation d’effectuer nos vérifications avec exactitude afin de protéger nos usagers.
+
+Si vous avez d’autres questions, n’hésitez pas à nous contacter à l’adresse indiquée ci-dessus.
+
+Cordialement,
+
+Votre équipe <?=$currentSystem?>
+
