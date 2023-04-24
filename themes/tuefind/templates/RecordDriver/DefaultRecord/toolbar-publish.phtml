@@ -20,9 +20,9 @@
 
   <li>
     <?php if($showPublicationLink):?>
-      <a class="toolbar-btn btn-type-publish" href="<?=$dspaceLink;?>"><?=$this->transEsc('publication_file_button')?></a>
+      <a class="toolbar-btn btn-type-publish" target="_blank" href="<?=$dspaceLink;?>"><?=$this->transEsc('publication_file_button')?></a>
     <?php elseif($showPublishButton): ?>
-      <a class="toolbar-btn btn-type-publish" href="<?=$this->url('myresearch-publish', ['record_id' => $recordId])?>"><?=$this->transEsc('publication')?></a>
+      <a class="toolbar-btn btn-type-publish" href="<?=$this->url('myresearch-publish', ['record_id' => $recordId])?>"><?=$this->transEsc('publication_request_button')?></a>
     <?php else:?>
       <a class="toolbar-btn btn-type-publish" data-lightbox href="<?=$this->url('help-home')?>?topic=publication" rel="nofollow"><?=$this->transEsc('publication_request_button')?></a>
     <?php endif; ?>
