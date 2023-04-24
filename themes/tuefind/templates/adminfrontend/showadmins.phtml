@@ -2,11 +2,9 @@
 // Set up page title:
 $this->headTitle($this->translate('Admins'));
 
-$subSystemType=$this->tuefind()->getTueFindFlavour();
-$isIxTheo = ($subSystemType == 'ixtheo') ? true : false;
-
 // Set up breadcrumbs:
-$this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') . '">' . $this->transEsc('Your Account') . '</a></li> <li class="active">' . $this->transEsc('Admins') . '</li>'; ?>
+$this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') . '">' . $this->transEsc('Your Account') . '</a></li> <li class="active">' . $this->transEsc('Admins') . '</li>';
+?>
 
 <div class="<?=$this->layoutClass('mainbody')?>">
   <h2>Admins</h2>
@@ -19,19 +17,19 @@ $this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') 
         <th><?=$this->transEsc('First Name')?></th>
         <th><?=$this->transEsc('Last Name')?></th>
         <th><?=$this->transEsc('Email Address')?></th>
-        <?php if($isIxTheo){ ?><th><?=$this->transEsc('Institution')?></th><?php }?>
+        <th><?=$this->transEsc('Institution')?></th>
         <th><?=$this->transEsc('Rights')?></th>
       </tr>
     </thead>
     <tbody>
       <?php foreach ($this->admins as $user): ?>
         <tr>
-          <td><?=$user->username?></td>
-          <td><?=$user->firstname?></td>
-          <td><?=$user->lastname?></td>
-          <td><?=$user->email?></td>
-          <?php if($isIxTheo){ ?><td><?=$user->ixtheo_institution?></td><?php }?>
-          <td><?=str_replace(',', '<br>', $user->tuefind_rights)?></td>
+          <td><?=htmlspecialchars($user->username)?></td>
+          <td><?=htmlspecialchars($user->firstname)?></td>
+          <td><?=htmlspecialchars($user->lastname)?></td>
+          <td><?=htmlspecialchars($user->email)?></td>
+          <td><?=htmlspecialchars($user->tuefind_institution)?></td>
+          <td><?=str_replace(',', '<br>', htmlspecialchars($user->tuefind_rights))?></td>
         </tr>
       <?php endforeach; ?>
     </tbody>

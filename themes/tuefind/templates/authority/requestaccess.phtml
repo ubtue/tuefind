@@ -4,23 +4,23 @@ $authorityId = $routeParams['authority_id'];
 $userAccess = $this->tuefind()->getUserAccessState($authorityId, $this->userId);
 $userAlreadyMadeAuthorityRequest = $this->tuefind()->userAlreadyMadeAuthorityRequest($this->userId);?>
 
-<h1>Request access</h1>
+<h1><?=$this->transEsc('Request access')?></h1>
 <?php if ($userAccess['availability'] == 'free'): ?>
   <?php if($userAlreadyMadeAuthorityRequest): ?>
-    You have already made a rights request for another author
+    <?=$this->transEsc('authority_access_state_exists_other')?>
   <?php else: ?>
-    <p>Would you like to request access to this authority dataset?</p>
+    <p><?=$this->transEsc('authority_access_request_text')?></p>
     <form method="post" data-lightbox-onclose="VuFind.refreshPage">
       <input type="hidden" name="request" value="yes">
-      <button class="btn btn-primary" type="submit">Request access</button>
+      <button class="btn btn-primary" type="submit"><?=$this->transEsc('Request access')?></button>
     </form>
   <?php endif;?>
 <?php elseif ($userAccess['availability'] == 'mine'): ?>
   <?php if ($userAccess['access_state'] == 'requested'): ?>
-    <p>You have requested permission on this authority record. Our team has been informed, please wait for the approval.</p>
+    <p><?=$this->transEsc('authority_access_state_requested')?></p>
   <?php elseif ($userAccess['access_state'] == 'granted'): ?>
-    <p>You have already been granted permission on this authority record.</p>
+    <p><?=$this->transEsc('authority_access_state_granted')?></p>
   <?php endif; ?>
 <?php elseif ($userAccess['availability'] == 'other'): ?>
-  <p>This record is already owned by someone else.</p>
+  <p><?=$this->transEsc('authority_access_state_unavailable')?></p>
 <?php endif; ?>

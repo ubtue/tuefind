@@ -3,6 +3,13 @@ $countries = IxTheo\Auth\Database::$countries;
 $appellations = IxTheo\Auth\Database::$appellations;
 $titles = IxTheo\Auth\Database::$titles;
 
+  /**
+   * TueFind:
+   * - Changed order of fields
+   * - This template is not only used when creating new users,
+   *   but also when editing existing ones.
+   */
+
 $pattern = '';
 if (isset($this->passwordPolicy['pattern'])) {
   if ($this->passwordPolicy['pattern'] == 'numeric') {
@@ -14,13 +21,37 @@ if (isset($this->passwordPolicy['pattern'])) {
   }
 }
 ?>
-<!-- IxTheo-specific: Username (readonly) + Appellation + Title -->
-<?php if ($this->profile): ?>
 <div class="form-group">
-  <label class="control-label" for="ixtheo_username"><?= $this->transEsc('Username') ?>:</label>
-  <p class="form-control-static"><?=$this->user->username?></p>
+  <label class="control-label" for="account_username"><?=$this->transEsc('Username')?>:</label>
+    <input id="account_username" type="text" name="username" required aria-required="true" value="<?=$this->profile ? $this->escapeHtmlAttr($this->user->username) : $this->escapeHtmlAttr($this->request->get('username'))?>" class="form-control" <?=$this->profile ? 'disabled' : ''?>/>
+    <div class="help-block with-errors"></div>
+</div>
+<div class="form-group">
+  <label class="control-label" for="account_email"><?=$this->transEsc('Email Address')?>:</label>
+  <input id="account_email" type="email" name="email" required aria-required="true" value="<?=$this->profile ? $this->escapeHtmlAttr($this->user->email) : $this->escapeHtmlAttr($this->request->get('email'))?>" class="form-control" <?=$this->profile ? 'disabled' : ''?>/>
+  <div class="help-block with-errors"></div>
+</div>
+<?php if (!$this->profile): ?>
+<div class="form-group">
+  <label class="control-label" for="account_password"><?= $this->transEsc('Password') ?>:</label>
+    <input id="account_password" type="password" name="password" required aria-required="true" class="form-control"
+      <?=isset($this->passwordPolicy['minLength']) ? ' data-minlength="' . $this->passwordPolicy['minLength'] . '" data-minlength-error="' . $this->transEscAttr('password_minimum_length', ['%%minlength%%' => $this->passwordPolicy['minLength']]) . '"' : ''?>
+      <?=isset($this->passwordPolicy['maxLength']) ? ' maxlength="' . $this->passwordPolicy['maxLength'] . '"' : ''?>
+      <?=$pattern ? ' pattern="' . $pattern . '"' : '' ?>
+    />
+  <?php if ($this->passwordPolicy['hint']): ?>
+    <div class="help-block"><?=$this->transEsc($this->passwordPolicy['hint']) ?></div>
+  <?php endif;?>
+  <div class="help-block with-errors"></div>
+</div>
+<div class="form-group">
+  <label class="control-label" for="account_password2"><?=$this->transEsc('Password Again')?>:</label>
+  <input id="account_password2" type="password" name="password2" required aria-required="true" class="form-control" data-match="#account_password" data-match-error="<?=$this->transEscAttr('Passwords do not match')?>"/>
+  <div class="help-block with-errors"></div>
 </div>
 <?php endif; ?>
+
+<!-- IxTheo-specific: Appellation + Title -->
 <div class="form-group">
   <label class="control-label" for="ixtheo_appellation"><?= $this->transEsc('Appellation') ?>:</label>
   <select id="account_appellation" name="ixtheo_appellation" class="form-control">
@@ -48,49 +79,16 @@ if (isset($this->passwordPolicy['pattern'])) {
   <label class="control-label" for="account_lastname"><?=$this->transEsc('Last Name')?>:</label>
   <input id="account_lastname" type="text" name="lastname" value="<?=$this->escapeHtmlAttr($this->request->get('lastname'))?>" class="form-control"/>
 </div>
-<?php
-    // Hide these fields when changing an existing user's credentials:
-    // - Email: User must use separate button to change mail address due to verification functionality
-    // - Username: Must never be changed
-    // - Password: Separate button must be used
-?>
-<?php if (!$this->profile): ?>
-<div class="form-group">
-    <label class="control-label" for="account_email"><?= $this->transEsc('Email Address') ?>:</label>
-  <input id="account_email" type="email" name="email" required aria-required="true" value="<?=$this->escapeHtmlAttr($this->request->get('email'))?>" class="form-control"/>
-  <div class="help-block with-errors"></div>
-</div>
-<div class="form-group">
-  <label class="control-label" for="account_username"><?= $this->transEsc('Desired Username') ?>:</label>
-  <input id="account_username" type="text" name="username" required aria-required="true" value="<?=$this->escapeHtmlAttr($this->request->get('username'))?>" class="form-control"/>
-  <div class="help-block with-errors"></div>
-</div>
-<div class="form-group">
-  <label class="control-label" for="account_password"><?= $this->transEsc('Password') ?>:</label>
-    <input id="account_password" type="password" name="password" required aria-required="true" class="form-control"
-      <?=isset($this->passwordPolicy['minLength']) ? ' data-minlength="' . $this->passwordPolicy['minLength'] . '" data-minlength-error="' . $this->transEscAttr('password_minimum_length', ['%%minlength%%' => $this->passwordPolicy['minLength']]) . '"' : ''?>
-      <?=isset($this->passwordPolicy['maxLength']) ? ' maxlength="' . $this->passwordPolicy['maxLength'] . '"' : ''?>
-      <?=$pattern ? ' pattern="' . $pattern . '"' : '' ?>
-    />
-  <?php if ($this->passwordPolicy['hint']): ?>
-    <div class="help-block"><?=$this->transEsc($this->passwordPolicy['hint']) ?></div>
-  <?php endif;?>
-  <div class="help-block with-errors"></div>
-</div>
-<div class="form-group">
-  <label class="control-label" for="account_password2"><?=$this->transEsc('Password Again')?>:</label>
-  <input id="account_password2" type="password" name="password2" required aria-required="true" class="form-control" data-match="#account_password" data-match-error="<?=$this->transEscAttr('Passwords do not match')?>"/>
-  <div class="help-block with-errors"></div>
-</div>
-<?php endif; ?>
 
-<!-- IxTheo-specific: Additional fields -->
+<!-- TueFind-specific: Additional fields -->
 <div class="form-group">
-  <label class="control-label" for="ixtheo_institution"><?= $this->transEsc('Institution') ?>:</label>
-  <input id="account_institution" type="text" name="ixtheo_institution"
-         value="<?= $this->escapeHtmlAttr($this->request->get('ixtheo_institution')) ?>"
+  <label class="control-label" for="account_institution"><?= $this->transEsc('Institution') ?>:</label>
+  <input id="account_institution" type="text" name="tuefind_institution"
+         value="<?= $this->escapeHtmlAttr($this->request->get('tuefind_institution')) ?>"
          placeholder="<?= $this->transEsc('Institution') ?>" class="form-control"/>
 </div>
+
+<!-- IxTheo-specific: Additional fields -->
 <div class="form-group">
   <label class="control-label" for="ixtheo_country"><?= $this->transEsc('Country') ?>:</label>
   <select id="account_country" name="ixtheo_country" class="form-control">

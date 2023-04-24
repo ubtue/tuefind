@@ -383,9 +383,7 @@ AllFields:
     - geographic^300
     - genre^300
     - allfields_unstemmed^10
-    - fulltext_unstemmed^10
     - allfields
-    - fulltext
     - description
     - isbn
     - issn
@@ -431,11 +429,7 @@ AllFields:
       - [onephrase, 300]
     allfields_unstemmed:
       - [or, 10]
-    fulltext_unstemmed:
-      - [or, 10]
     allfields:
-      - [or, ~]
-    fulltext:
       - [or, ~]
     description:
       - [or, ~]

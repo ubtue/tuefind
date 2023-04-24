@@ -1,0 +1,51 @@
+<?php
+// Set up page title:
+$this->headTitle($this->translate('User Authorities'));
+
+$subSystemType=$this->tuefind()->getTueFindFlavour();
+$isIxTheo = ($subSystemType == 'ixtheo') ? true : false;
+
+// Set up breadcrumbs:
+$this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') . '">' . $this->transEsc('Your Account') . '</a></li> <li class="active">' . $this->transEsc('User Publications') . '</li>';
+?>
+
+<div class="<?=$this->layoutClass('mainbody')?>">
+  <h2>User Publications</h2>
+  <?php if (count($this->publications) == 0): ?>
+    <p>No publications have been added so far.</p>
+  <?php else: ?>
+
+    <table class="table dataTable display">
+      <thead>
+        <tr>
+          <th><?=$this->transEsc('Title')?></th>
+          <th><?=$this->transEsc('Username')?></th>
+          <th><?=$this->transEsc('First Name')?></th>
+          <th><?=$this->transEsc('Last Name')?></th>
+          <th><?=$this->transEsc('Email Address')?></th>
+          <?php if($isIxTheo){ ?><th><?=$this->transEsc('Institution')?></th><?php }?>
+          <th><?=$this->transEsc('Date')?></th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php foreach ($this->publications as $publication): ?>
+          <tr>
+            <td><a href="<?=$this->recordLinker()->getUrl($publication->control_number)?>"><?=htmlspecialchars($publication->control_number)?></a></td>
+            <td><?=htmlspecialchars($publication->username)?></td>
+            <td><?=htmlspecialchars($publication->firstname)?></td>
+            <td><?=htmlspecialchars($publication->lastname)?></td>
+            <td><?=htmlspecialchars($publication->email)?></td>
+            <td><?=htmlspecialchars($publication->tuefind_institution)?></td>
+            <td><?=date("d.m.Y H:i:s",strtotime($publication->publication_datetime));?></td>
+          </tr>
+        <?php endforeach; ?>
+      </tbody>
+    </table>
+
+  <?php  endif; ?>
+
+</div>
+
+<div class="<?=$this->layoutClass('sidebar')?>" id="myresearch-sidebar">
+  <?=$this->context($this)->renderInContext("myresearch/menu.phtml", ['active' => 'showuserpublications'])?>
+</div>
