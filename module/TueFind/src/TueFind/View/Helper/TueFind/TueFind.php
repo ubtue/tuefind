@@ -541,6 +541,25 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
         return $result;
     }
 
+    public function getUserAccessPublishButton(array $authorsIds): bool
+    {
+        $access = false;
+        $auth = $this->container->get('ViewHelperManager')->get('auth');
+        $manager = $auth->getManager();
+        $user = $manager->isLoggedIn();
+        if($user) {
+            $table = $this->container->get(\VuFind\Db\Table\PluginManager::class)->get('user_authority');
+            foreach($authorsIds as $authorityId) {
+                $row = $table->getByUserIdAndAuthorityId($user->id,$authorityId);
+                if(!empty($row) && $row->access_state == "granted") {
+                    $access = true;
+                }
+            }
+        }
+
+        return $access;
+    }
+
     public function userAlreadyMadeAuthorityRequest($userId): bool
     {
         $table = $this->container->get(\VuFind\Db\Table\PluginManager::class)->get('user_authority');
