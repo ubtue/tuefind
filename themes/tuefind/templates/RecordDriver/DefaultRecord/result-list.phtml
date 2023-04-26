@@ -165,6 +165,12 @@
       <?php endif; ?>
       -->
 
+      <?php $timeRangesString = $this->driver->tryMethod('getTimeRangesString');
+        if (!empty($timeRangesString)) {
+          echo '<div>' . $this->transEsc($timeRangesString) . '</div>';
+        }
+      ?>
+
       <?php $urls_and_material_types = $this->driver->getURLsAndMaterialTypes(); ?>
       <?php if (!empty($urls_and_material_types)): ?>
         <?php $material_types = array_values($urls_and_material_types); ?>

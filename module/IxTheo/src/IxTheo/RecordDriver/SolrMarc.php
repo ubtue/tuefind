@@ -125,12 +125,4 @@ class SolrMarc extends SolrDefault
 
         return $result;
     }
-
-    public function getTimeRangesString()
-    {
-        // At the moment, only one time range is allowed, so we simply return
-        // the first found subfield.
-        return $this->getFirstFieldValue('TIM', ['b']);
-    }
-
 }
