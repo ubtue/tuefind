@@ -49,6 +49,10 @@
     <field name="fulltext_references" type="text" indexed="true" stored="false"/>
     <field name="fulltext_references_unstemmed" type="textProper" indexed="true" stored="false"/>
     <field name="special_collection" type="string" indexed="true" stored="true" multiValued="true"/>
+    <field name="time_aspect_bbox" type="date_range_bbox" indexed="true" stored="true" multiValued="true"/>
+    <field name="time_aspect_ranges" type="string" indexed="true" stored="true" />
+    <field name="time_range_start" type="string" indexed="true" stored="true" />
+    <field name="time_range_end" type="string" indexed="true" stored="true" />
 
     <!-- COMMON copyFields -->
     <copyField source="id" dest="ids"/>
