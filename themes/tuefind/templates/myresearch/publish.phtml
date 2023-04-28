@@ -16,7 +16,7 @@
 
     <!-- File -->
     <div class="form-group">
-      <label><?=$this->transEsc('publication_upload_file')?></label>
+      <label><?=$this->transEsc('publication_upload_file', ['%%max_size%%' => $this->uploadMaxFilesizeMB])?></label>
       <input class="form-control" type="file" name="file" required>
     </div>
 
