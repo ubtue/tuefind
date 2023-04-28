@@ -776,4 +776,11 @@ class SolrDefault extends \VuFind\RecordDriver\SolrMarc
     {
         return isset($this->fields['is_hybrid']) && $this->fields['is_hybrid'] == true;
     }
+
+    public function getTimeRangesString()
+    {
+        // At the moment, only one time range is allowed, so we simply return
+        // the first found subfield.
+        return $this->getFirstFieldValue('TIM', ['b']);
+    }
 }

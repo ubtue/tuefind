@@ -546,4 +546,35 @@ class SolrMarc extends SolrDefault
         }
         return $retVal;
     }
+
+    /**
+     * Initially, data has been stored in 856 (ind1=4 ind2=0)
+     * in the example from bsbfidaltertumswissenschaften.
+     *
+     * After that, it has been moved to LOK for fidreli.
+     *
+     * @return string|null
+     */
+    public function getKflUrl(): ?string
+    {
+        $fields = $this->getMarcReader()->getFields('LOK');
+
+        foreach ($fields as $field) {
+            $subfields = [];
+            foreach ($field['subfields'] as $subfield) {
+                $subfields[$subfield['code']] = $subfield['data'];
+            }
+
+            if (isset($subfields['0']) && $subfields['0'] == '85640') {
+                // Later on, if a title may be licensed by multiple FIDs
+                // (e.g. IxTheo and RelBib) we must define how to pick
+                // the correct one.
+                if (isset($subfields['u'])) {
+                    return $subfields['u'];
+                }
+            }
+        }
+
+        return null;
+    }
 }
