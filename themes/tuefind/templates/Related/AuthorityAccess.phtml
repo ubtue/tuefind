@@ -4,7 +4,7 @@
     $userAlreadyMadeAuthorityRequest = $this->tuefind()->userAlreadyMadeAuthorityRequest($this->user->id);?>
     <?php if ($userAccess['availability'] == 'free'): ?>
       <?php if($userAlreadyMadeAuthorityRequest): ?>
-        <?=$this->transEsc('authority_access_state_exists_other')?>
+        <?=$this->translate('authority_access_state_exists_other', ['%%email%%' => '<a href="mailto:' . ($this->tuefind()->getConfig()->Publication->email ?? $this->tuefind()->getConfig('config')->Site->email) . '">' . ($this->tuefind()->getConfig()->Publication->email ?? $this->tuefind()->getConfig('config')->Site->email) . '</a>'])?>
       <?php else: ?>
         <a class="save-record toolbar-btn btn-type-save" rel="nofollow" href="<?=$this->url('authority-request-access', ['authority_id' => $this->driver->getUniqueId()])?>" data-lightbox=""><?=$this->transEsc('authority_access_request_button')?></a>
       <?php endif;?>
