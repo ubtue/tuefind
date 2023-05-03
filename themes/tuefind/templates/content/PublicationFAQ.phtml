@@ -5,18 +5,17 @@ $publicationEmail = $tuefind->getPublicationEmail();
 $siteEmail = $tuefind->getSiteEmail();
 ?>
 
+<h2>Green Road Open Access FAQ</h2>
 
-<h2>Legal and general issues</h2>
-
-
-<h3>The following information was verified carefully, but it does not constitute binding legal advice. We do not assume any liability for possible errors.</h3>
+<h3>Legal and general issues</h3>
+<p>The following information was verified carefully, but it does not constitute binding legal advice. We do not assume any liability for possible errors.</p>
 
 
 <div class="tf-panel-collapse">
     <p data-toggle="collapse" data-target="#col1" aria-expanded="false" class="tf-panel-collapse-heading"><b>What can I republish?</b></p>
     <div class="collapse multi-collapse tf-panel-collapse-body" id="col1">
 
-        <p>Unfortunately, the legal situation with regards to republication is not completely clear. Different national laws may apply depending on the country of the publishing house. Furthermore, many publishing houses describe their policies and rules with regards to republication on their respective websites. You can often find these policies under headings such as “Self-Archiving” or “Open Access”.Such policies may also be found on the platform <a target="_blank" href="https://v2.sherpa.ac.uk/romeo/">Sherpa Romeo</a>.We would advise you to examine the legal situation carefully and, in case of doubt, to ask permission from the publishing house for a republication. </p>
+        <p>Unfortunately, the legal situation with regards to republication is not completely clear. Different national laws may apply depending on the country of the publishing house. Furthermore, many publishing houses describe their policies and rules with regards to republication on their respective websites. You can often find these policies under headings such as “Self-Archiving” or “Open Access”. Such policies may also be found on the platform <a target="_blank" href="https://v2.sherpa.ac.uk/romeo/">Sherpa Romeo</a>.We would advise you to examine the legal situation carefully and, in case of doubt, to ask permission from the publishing house for a republication. </p>
         <p>For works or articles published by a German publishing house, <a target="_blank" href="https://www.gesetze-im-internet.de/urhg/__38.html">§38</a> of the German copyright law applies. The republication of articles from journals, anthologies and dictionaries or encyclopedias is basically allowed, but it may depend on individual agreements reached with the publisher. Monographs may not be republished unless there is an agreement to this effect (e.g. in the case of a dissertation which is out of print) with the publishing house.</p>
     </div>
 </div>
@@ -84,33 +83,48 @@ $siteEmail = $tuefind->getSiteEmail();
 </div>
 
 
-<h3>TechnicalProceduresand Problems</h3>
+<h3>Technical Procedures and Problems</h3>
 
 <div class="tf-panel-collapse">
     <p data-toggle="collapse" data-target="#col8" aria-expanded="false" class="tf-panel-collapse-heading"><b>What do I need in order to use the upload form?</b></p>
     <div class="collapse multi-collapse tf-panel-collapse-body" id="col8">
-        <p>A user account in <?=$currentSystem;?>, which you can open free of charge at this <a href="<?=$this->url('myresearch-userlogin')?>">link</a>.</p>
-        <p>Access rights to your author ID, which you can gain through your <?=$currentSystem;?>-user account (see <a onclick="TueFind.goToCollapseBlock('autorID','col11')">author ID</a>).</p>
-        <p>Publications which you are allowed to republish.</p>
+        <ul>
+            <li>A user account in <?=$currentSystem;?>, which you can open free of charge at this <a href="<?=$this->url('myresearch-userlogin')?>">link</a>.</li>
+            <li>Access rights to your author ID, which you can gain through your <?=$currentSystem;?>-user account (see <a onclick="TueFind.goToCollapseBlock('autorID','col11')">author ID</a>).</li>
+            <li>Publications which you are allowed to republish.</li>
+        </ul>
     </div>
 </div>
 
 <div class="tf-panel-collapse">
     <p data-toggle="collapse" data-target="#col9" aria-expanded="false" class="tf-panel-collapse-heading"><b>What is the procedure to upload the articles which I want to republish?</b></p>
     <div class="collapse multi-collapse tf-panel-collapse-body" id="col9">
-
         <p>In order to upload a publication in <?=$currentSystem;?>, do the following:</p>
-        <p>Registration</p>
-        <p>1. You need a user account in <?=$currentSystem;?>.</p>
-        <p>You can register using a valid e-mail address. You can access the registration and login pop-up window by pressing on the “Login” button at the top right corner of the home page. Once you have a user account, you can proceed with the following steps.</p>
-        <p>Requesting Access Rights</p>
-        <p>2. Once you’ve logged into your <?=$currentSystem;?>-account, you can request access rights to your author ID. First click on the tab labelled “Persons / Corporations“ right above the search field. Search for your name and select the right entry.</p>
-        <p>3. Click on the button „Request Access Rights (This is me!)”.</p>
-        <p>4. Your request will be automatically sent to the <?=$currentSystem;?>-team. We will then verify your identity and inform you within a few days per e-mail whether your request has been approved.</p>
-        <p>In the next step, you can upload your essays.</p>
-        <p>Upload (republish)</p>
-        <p>5. Once your request has been approved, log into your <?=$currentSystem;?>-account. You can now select every essay linked to you as an author for republication. When you click on the “republish” button, you can upload your essay as a PDF-file.</p>
-        <p>6. Your file then gets uploaded in our repository. It should be available in Open Access to other users on the following day. At the same time, stable links (handle/DOI) to the file are generated, which you can also access on the following day. These links are permanent, and you may use them in your research and teaching activities.</p>
+        <ol>
+            <p><b>Registration</b></p>
+            <li>
+                <p>You need a user account in <?=$currentSystem;?>.</p>
+                <p>You can register using a valid e-mail address. You can access the registration and login pop-up window by pressing on the “Login” button at the top right corner of the home page. Once you have a user account, you can proceed with the following steps.</p>
+            </li>
+            <p><b>Requesting Access Rights</b></p>
+            <li>
+                <p>Once you’ve logged into your <?=$currentSystem;?>-account, you can request access rights to your author ID. First click on the tab labelled “Persons / Corporations“ right above the search field. Search for your name and select the right entry.</p>
+            </li>
+            <li>
+                <p>Click on the button „Request Access Rights (This is me!)”.</p>
+            </li>
+            <li>
+                <p>Your request will be automatically sent to the <?=$currentSystem;?>-team. We will then verify your identity and inform you within a few days per e-mail whether your request has been approved.</p>
+            </li>
+            <p>In the next step, you can upload your essays.</p>
+            <p><b>Upload (republish)</b></p>
+            <li>
+                <p>Once your request has been approved, log into your <?=$currentSystem;?>-account. You can now select every essay linked to you as an author for republication. When you click on the “republish” button, you can upload your essay as a PDF-file.</p>
+            </li>
+            <li>
+                <p>Your file then gets uploaded in our repository. It should be available in Open Access to other users on the following day. At the same time, stable links (handle/DOI) to the file are generated, which you can also access on the following day. These links are permanent, and you may use them in your research and teaching activities.</p>
+            </li>
+        </ol>
     </div>
 </div>
 
@@ -142,9 +156,11 @@ $siteEmail = $tuefind->getSiteEmail();
     <p data-toggle="collapse" data-target="#col13" aria-expanded="false" class="tf-panel-collapse-heading"><b>The upload-button isn’t working for my article. Why?</b></p>
     <div class="collapse multi-collapse tf-panel-collapse-body" id="col13">
         <p>There are a few possible reasons for this:</p>
-        <p>You haven’t logged into your user account. <a href="<?=$this->url('myresearch-userlogin')?>">Please log in</a>.</p>
-        <p>You haven’t requested access rights to your <a onclick="TueFind.goToCollapseBlock('autorID','col11')">author ID</a> yet.</p>
-        <p>If none of the cases listed above apply, please contact us at <?=$publicationEmail;?>.</p>
+        <ul>
+            <li><p>You haven’t logged into your user account. <a href="<?=$this->url('myresearch-userlogin')?>">Please log in</a>.</p></li>
+            <li><p>You haven’t requested access rights to your <a onclick="TueFind.goToCollapseBlock('autorID','col11')">author ID</a> yet.</p></li>
+            <li><p>If none of the cases listed above apply, please contact us at <?=$publicationEmail;?>.</p></li>
+        </ul>
     </div>
 </div>
 
