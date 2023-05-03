@@ -584,6 +584,7 @@ var TueFind = {
             let blockVar = $('#'+blockID);
             if(!blockVar.hasClass('in')) {
                 blockVar.addClass('in');
+                blockVar.click();
             }
         }
     }
