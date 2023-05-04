@@ -23,7 +23,7 @@ class FulltextSnippetProxyController extends \VuFind\Controller\AbstractBase imp
 
     protected $base_url; //Elasticsearch host and port (host:port)
     protected $index; //Elasticsearch index
-    protected $page_index; //Elasticssearch index with single HTML pages
+    protected $html_index; //Elasticssearch index with single HTML pages
     protected $es; // Elasticsearch interface
     protected $logger;
     protected $maxSnippets = 5;
@@ -58,7 +58,7 @@ class FulltextSnippetProxyController extends \VuFind\Controller\AbstractBase imp
         $config = $this->getConfig(self::fulltextsnippetIni);
         $this->base_url = isset($config->Elasticsearch->base_url) ? $config->Elasticsearch->base_url : 'localhost:9200';
         $this->index = isset($config->Elasticsearch->index) ? $config->Elasticsearch->index : 'full_text_cache';
-        $this->page_index = isset($config->Elasticsearch->page_index) ? $config->Elasticsearch->page_index : 'full_text_cache_html';
+        $this->html_index = isset($config->Elasticsearch->html_index) ? $config->Elasticsearch->html_index : 'full_text_cache_html';
         $this->es = $builder::create()->setHosts([$this->base_url])->build();
         $this->text_type_to_description_map = array_flip(self::description_to_text_type_map);
     }
@@ -124,13 +124,15 @@ class FulltextSnippetProxyController extends \VuFind\Controller\AbstractBase imp
 
     protected function getQueryParams($doc_id, $search_query, $verbose, $synonyms, $paged_results, $types_filter) {
         $this->maxSnippets = $verbose ? self::MAX_SNIPPETS_VERBOSE : self::MAX_SNIPPETS_DEFAULT;
-        $index = $paged_results ? $this->page_index : $this->index;
+        $index = $paged_results ? $this->html_index : $this->index;
         $synonym_analyzer = $this->selectSynonymAnalyzer($synonyms);
         $text_types_filter = !empty($types_filter) ? $this->getTextTypesFilter($types_filter) : [];
+        $source_fields = $paged_results ? [ "id", "full_text", "page", "text_type" ] : ["text_type"];
+        $source_fields = array_merge($source_fields, ($index == $this->html_index) ? [ "is_pdf_converted", "is_publisher_provided"] : ["is_publisher_provided"]);
         $params = [
             'index' => $index,
             'body' => [
-                '_source' => $paged_results ? [ "id", "full_text", "page", "text_type" ] : ["text_type"],
+                '_source' => $source_fields,
                 'size' => '100',
                 'sort' => $paged_results && $verbose ? [ self::TEXT_TYPE => 'asc', 'page' => 'asc' ] : [ '_score' ],
                 'query' => [
@@ -156,7 +158,7 @@ class FulltextSnippetProxyController extends \VuFind\Controller\AbstractBase imp
     }
 
 
-    protected function getFulltext($doc_id, $search_query, $verbose, $synonyms, $types_filter) {
+    protected function getPlainFulltext($doc_id, $search_query, $verbose, $synonyms, $types_filter) {
         // Is this an ordinary query or a phrase query (surrounded by quotes) ?
         $params = $this->getQueryParams($doc_id, $search_query, $verbose,
                                         $synonyms , false /*return paged results*/, $types_filter);
@@ -169,7 +171,7 @@ class FulltextSnippetProxyController extends \VuFind\Controller\AbstractBase imp
     }
 
 
-    protected function getPagedAndFormattedFulltext($doc_id, $search_query, $verbose, $synonyms, $types_filter) {
+    protected function getHTMLFulltext($doc_id, $search_query, $verbose, $synonyms, $types_filter) {
         $params = $this->getQueryParams($doc_id, $search_query, $verbose, $synonyms, true, $types_filter);
         $response = $this->es->search($params);
         $snippets = $this->extractSnippets($response);
@@ -262,7 +264,7 @@ class FulltextSnippetProxyController extends \VuFind\Controller\AbstractBase imp
     }
 
 
-    protected function extractSnippetParagraph($snippet_page) {
+    protected function extractPDFConvertedParagraph($snippet_page) {
         $dom = new \DOMDocument();
         $dom->loadHTML($snippet_page, LIBXML_NOERROR /*Needed since ES highlighting does not address nesting of tags properly*/);
         $dom->normalizeDocument(); //Hopefully get rid of strange empty textfields caused by whitespace nodes that prevent proper navigation
@@ -325,6 +327,37 @@ class FulltextSnippetProxyController extends \VuFind\Controller\AbstractBase imp
     }
 
 
+    protected function extractPublisherNonPageHighlightSnippet (&$snippets, $hit, $highlight_result) {
+        $dom = new \DOMDocument();
+        $dom->loadHTML(mb_convert_encoding($highlight_result, 'HTML-ENTITIES', 'UTF-8'), LIBXML_NOERROR);
+        $dom->normalizeDocument();
+        $xpath = new \DOMXPath($dom);
+        $highlight_nodes = $xpath->query('//' . self::esHighlightTag);
+        $snippets = [];
+        foreach ($highlight_nodes as $highlight_node) {
+            $snippet_tree = new \DOMDocument();
+            $snippet_tree->appendChild($snippet_tree->importNode($highlight_node->parentNode, true));
+            $snippet = $snippet_tree->saveHTML($snippet_tree);
+            $text_type = $this->extractSnippetTextType($hit);
+            array_push($snippets, [ 'snippet' => $snippet, 'text_type' => $text_type ]);
+        }
+    }
+
+
+    protected function extractPageHighlightSnippet(&$snippets, $hit, $highlight_result) {
+        $doc_id = $hit['_source']['id'];
+        $page = $hit['_source']['page'];
+        $style = $this->extractStyle($hit['_source']['full_text']);
+        $style = $this->normalizeCSSClasses($doc_id, $page, $style);
+        $snippet_page = $this->normalizeCSSClasses($doc_id, $page, $highlight_result);
+        $snippet_page = preg_replace('/(<[^>]+) style=[\\s]*".*?"/i', '$1', $snippet_page); //remove styles with absolute positions
+        // Disable links to avoid failing internal references
+        $snippet_page = preg_replace('/<a[^>]*?>/i','<a style="color:inherit; text-decoration:inherit; cursor:inherit">', $snippet_page);
+        $snippet = $this->extractPDFConvertedParagraph($snippet_page);
+        array_push($snippets, [ 'snippet' => $snippet, 'page' => $page, 'text_type' => $this->extractSnippetTextType($hit), 'style' => $style ]);
+    }
+
+
     protected function extractSnippets($response) {
         $top_level_hits = [];
         $hits = [];
@@ -352,26 +385,19 @@ class FulltextSnippetProxyController extends \VuFind\Controller\AbstractBase imp
                 $highlight_results = array_slice($highlight_results, 0, $this->maxSnippets);
             foreach ($highlight_results as $highlight_result) {
                 // Handle pages or generic highlight snippets accordingly
-                if (isset($hit['_source']['page'])) {
-                    $doc_id = $hit['_source']['id'];
-                    $page = $hit['_source']['page'];
-                    $style = $this->extractStyle($hit['_source']['full_text']);
-                    $style = $this->normalizeCSSClasses($doc_id, $page, $style);
-                    $snippet_page = $this->normalizeCSSClasses($doc_id, $page, $highlight_result);
-                    $snippet_page = preg_replace('/(<[^>]+) style=[\\s]*".*?"/i', '$1', $snippet_page); //remove styles with absolute positions
-                    // Disable links to avoid failing internal references
-                    $snippet_page = preg_replace('/<a[^>]*?>/i','<a style="color:inherit; text-decoration:inherit; cursor:inherit">', $snippet_page);
-                    $snippet = $this->extractSnippetParagraph($snippet_page);
-                    array_push($snippets, [ 'snippet' => $snippet, 'page' => $page, 'text_type' => $this->extractSnippetTextType($hit), 'style' => $style ]);
+                if (isset($hit['_source']['is_publisher_provided']) && !isset($hit['_source']['page']) && !isset($hit['_source']['is_converted_pdf'])) {
+                  $this->extractPublisherNonPageHighlightSnippet($snippets, $hit, $highlight_result);
+                } else if (isset($hit['_source']['page'])) {
+                  $this->extractPageHighlightSnippet($snippets, $hit, $highlight_result);
                 } else {
-                    array_push($snippets, [ 'snippet' => $highlight_result, 'text_type' => $this->extractSnippetTextType($hit) ]);
+                   array_push($snippets, [ 'snippet' => $highlight_result, 'text_type' => $this->extractSnippetTextType($hit) ]);
                 }
             }
         }
         if (empty($snippets))
             return false;
 
-        $results['snippets'] = $this->formatHighlighting($snippets);
+        $results['snippets'] = $snippets;
         return $results;
     }
 
@@ -406,13 +432,13 @@ class FulltextSnippetProxyController extends \VuFind\Controller\AbstractBase imp
         $snippets['snippets'] = [];
         foreach (explode(',', $types_filter) as $type_filter) {
             try {
-                $html_snippets = $this->getPagedAndFormattedFulltext($doc_id, $search_query, $verbose, $synonyms, $type_filter);
+                $html_snippets = $this->getHTMLFulltext($doc_id, $search_query, $verbose, $synonyms, $type_filter);
                 if (!empty($html_snippets)) {
                     $snippets['snippets'] = array_merge($snippets['snippets'], $html_snippets['snippets']);
                     continue;
                 }
-                // Use non-paged text as fallback
-                $text_snippets = $this->getFulltext($doc_id, $search_query, $verbose, $synonyms, $type_filter);
+                // Use plain text as fallback
+                $text_snippets = $this->getPlainFulltext($doc_id, $search_query, $verbose, $synonyms, $type_filter);
                 if (!empty($text_snippets))
                     $snippets['snippets'] = array_merge($snippets['snippets'], $text_snippets['snippets']);
             }
@@ -430,10 +456,18 @@ class FulltextSnippetProxyController extends \VuFind\Controller\AbstractBase imp
         }
         // Deduplicate snippets (array_values for fixing indices)
         $snippets['snippets'] = array_values(array_unique($snippets['snippets'], SORT_REGULAR));
+        $snippets['snippets'] = array_slice($snippets['snippets'], 0, $this->maxSnippets);
+        $snippets['snippets'] = $this->formatHighlighting($snippets['snippets']);
 
-        return new JsonModel([
-               'status' => 'SUCCESS',
-               'snippets' => $snippets['snippets']
-               ]);
+        try {
+            $model =  new JsonModel([
+                   'status' => 'SUCCESS',
+                   'snippets' => $snippets['snippets']
+            ]);
+        }
+        catch (\Exception $e) {
+            error_log($e);
+        }
+        return $model;
     }
 }

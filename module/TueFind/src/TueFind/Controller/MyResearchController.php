@@ -123,8 +123,12 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
             return $this->forceLogin();
         }
 
+        // This is related to DSpace in the first place, not to our own server.
+        // The value will be shown as MB in certain display texts, as well as compared
+        // with the uploaded file's size. Be careful increasing this value, since
+        // our own php.ini must also allow the value.
+        $uploadMaxFileSizeMB = 50;
         $showForm = true;
-        $uploadMaxFileSize = 500000;
         $config = $this->getConfig('tuefind');
         $dspaceServer = $config->Publication->dspace_url_base;
         $dspaceVersion = $config->Publication->dspace_version;
@@ -159,7 +163,7 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
                 $this->flashMessenger()->addMessage($this->translate('only_PDF_files_allowed'), 'error');
                 $uploadError = true;
             }
-            if ($uploadedFile['size'] > $uploadMaxFileSize) {
+            if ($uploadedFile['size'] > $uploadMaxFileSizeMB * 1024 * 1024) {
                 $this->flashMessenger()->addMessage($this->translate('file_is_too_big'), 'error');
                 $uploadError = true;
             }
@@ -238,6 +242,7 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
         $view->dublinCore = $dublinCore;
         $view->termFile = $termFileData;
         $view->recordLanguages = $existingRecord->getLanguages();
+        $view->uploadMaxFilesizeMB = $uploadMaxFileSizeMB;
         return $view;
     }
 
