@@ -4,15 +4,15 @@ $authorityId = $routeParams['authority_id'];
 $userAccess = $this->tuefind()->getUserAccessState($authorityId, $this->userId);
 $userAlreadyMadeAuthorityRequest = $this->tuefind()->userAlreadyMadeAuthorityRequest($this->userId);?>
 
-<h1><?=$this->transEsc('Request access')?></h1>
+<h1><?=$this->transEsc('authority_access_request_headline')?></h1>
 <?php if ($userAccess['availability'] == 'free'): ?>
   <?php if($userAlreadyMadeAuthorityRequest): ?>
-    <?=$this->transEsc('authority_access_state_exists_other')?>
+    <?=$this->translate('authority_access_state_exists_other', ['%%email%%' => '<a href="mailto:' . ($this->tuefind()->getConfig()->Publication->email ?? $this->tuefind()->getConfig('config')->Site->email) . '">' . ($this->tuefind()->getConfig()->Publication->email ?? $this->tuefind()->getConfig('config')->Site->email) . '</a>'])?>
   <?php else: ?>
     <p><?=$this->transEsc('authority_access_request_text')?></p>
     <form method="post" data-lightbox-onclose="VuFind.refreshPage">
       <input type="hidden" name="request" value="yes">
-      <button class="btn btn-primary" type="submit"><?=$this->transEsc('Request access')?></button>
+      <button class="btn btn-primary" type="submit"><?=$this->transEsc('authority_access_request_button2')?></button>
     </form>
   <?php endif;?>
 <?php elseif ($userAccess['availability'] == 'mine'): ?>
