@@ -274,7 +274,7 @@ class SolrMarc extends SolrDefault
                 foreach ($subfields_w as $subfield_w) {
                     if (preg_match('/^' . preg_quote(self::ISIL_PREFIX_K10PLUS, '/') . '(.*)/', $subfield_w, $ppn)) {
                         $subfield_k = $this->getMarcReader()->getSubfields($field,'k');
-                        if ($subfield_k !== false && $subfield_k !== 'dangling')
+                        if ($subfield_k !== false && $subfield_k !== 'dangling' && !empty($subfield_k))
                             array_push($parallel_ppns_and_type, [ $ppn[1], $subfield_k ]);
                     }
                 }
