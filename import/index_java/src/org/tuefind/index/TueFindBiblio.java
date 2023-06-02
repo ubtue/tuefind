@@ -2672,9 +2672,12 @@ public class TueFindBiblio extends TueFind {
             final char ind1 = dataField.getIndicator1();
             final char ind2 = dataField.getIndicator2();
             if (ind1 == 'u' && ind2 == 'w') {
-                final Subfield subfieldH = _936Field.getSubfield('h');
-                if(subfieldH != null)
-                return subfieldH.getData();
+                final Subfield subfieldH = dataField.getSubfield('h');
+
+                if(subfieldH != null) {
+                    final String pageRange = subfieldH.getData();
+                    return pageRange;
+                }
             }
         }
         return null;
