@@ -2717,7 +2717,7 @@ public class TueFindBiblio extends TueFind {
             final DataField dataField = (DataField) variableField;
             final char ind1 = dataField.getIndicator1();
             final char ind2 = dataField.getIndicator2();
-            if (ind1.equals('u') && ind2.equals('w')) {
+            if (ind1 == 'u' && ind2 == 'w') {
                 final Subfield subfieldE = dataField.getSubfield('e');
                 if (subfieldE != null) {
                     final String issueString = subfieldE.getData();
