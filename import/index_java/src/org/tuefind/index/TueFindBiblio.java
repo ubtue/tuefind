@@ -60,22 +60,17 @@ public class TueFindBiblio extends TueFind {
     protected final static String ISIL_PREFIX_K10PLUS_ESCAPED = "\\(" + ISIL_K10PLUS + "\\)";
     protected final static String ES_FULLTEXT_PROPERTIES_FILE = "es_fulltext.properties";
 
-    protected final static Pattern PAGE_RANGE_PATTERN1 = Pattern.compile("\\s*(\\d+)\\s*-\\s*(\\d+)$",
-            Pattern.UNICODE_CHARACTER_CLASS);
-    protected final static Pattern PAGE_RANGE_PATTERN2 = Pattern.compile("\\s*\\[(\\d+)\\]\\s*-\\s*(\\d+)$",
-            Pattern.UNICODE_CHARACTER_CLASS);
-    protected final static Pattern PAGE_RANGE_PATTERN3 = Pattern.compile("\\s*(\\d+)\\s*ff",
-            Pattern.UNICODE_CHARACTER_CLASS);
+    protected final static Pattern PAGE_RANGE_PATTERN1 = Pattern.compile("\\s*(\\d+)\\s*-\\s*(\\d+)$", Pattern.UNICODE_CHARACTER_CLASS);
+    protected final static Pattern PAGE_RANGE_PATTERN2 = Pattern.compile("\\s*\\[(\\d+)\\]\\s*-\\s*(\\d+)$", Pattern.UNICODE_CHARACTER_CLASS);
+    protected final static Pattern PAGE_RANGE_PATTERN3 = Pattern.compile("\\s*(\\d+)\\s*ff", Pattern.UNICODE_CHARACTER_CLASS);
     protected final static Pattern PAGE_MATCH_PATTERN = Pattern.compile("^\\[?(\\d+)\\]?([-–](\\d+))?$");
     protected final static Pattern VALID_FOUR_DIGIT_YEAR_PATTERN = Pattern.compile("\\d{4}");
     protected final static Pattern VALID_YEAR_RANGE_PATTERN = Pattern.compile("^\\d*u*$");
     protected final static Pattern VOLUME_PATTERN = Pattern.compile("^\\s*(\\d+)$", Pattern.UNICODE_CHARACTER_CLASS);
     protected final static Pattern BRACKET_DIRECTIVE_PATTERN = Pattern.compile("\\[(.)(.)\\]");
-    protected final static Pattern PPN_WITH_K10PLUS_ISIL_PREFIX_PATTERN = Pattern
-            .compile("\\(" + ISIL_K10PLUS + "\\)(.*)");
+    protected final static Pattern PPN_WITH_K10PLUS_ISIL_PREFIX_PATTERN = Pattern.compile("\\(" + ISIL_K10PLUS + "\\)(.*)");
     protected final static Pattern SUPERIOR_PPN_WITH_K10PLUS_ISIL_PREFIX_PATTERN = PPN_WITH_K10PLUS_ISIL_PREFIX_PATTERN;
-    protected final static Pattern DIFFERENT_CALCULATION_OF_TIME_PATTERN = Pattern
-            .compile(".*?\\[(.*?)\\=\\s*(\\d+)\\s*\\].*", Pattern.UNICODE_CHARACTER_CLASS);
+    protected final static Pattern DIFFERENT_CALCULATION_OF_TIME_PATTERN =  Pattern.compile(".*?\\[(.*?)\\=\\s*(\\d+)\\s*\\].*", Pattern.UNICODE_CHARACTER_CLASS);
     protected final static Pattern REMAINS_OR_PARTIAL_REMAINS = Pattern.compile("^(?=Nachlass|Teilnachlass).*");
 
     // use static instance for better performance
@@ -97,89 +92,65 @@ public class TueFindBiblio extends TueFind {
             this.put("DE-21-18", "Universit\u00E4t T\u00FCbingen, Universit\u00E4ts-Hautklinik");
             this.put("DE-21-19", "Universit\u00E4t T\u00FCbingen, Wirtschaftswissenschaftliches Seminar");
             this.put("DE-21-20", "Universit\u00E4t T\u00FCbingen, Frauenklinik");
-            this.put("DE-21-21",
-                    "Universit\u00E4t T\u00FCbingen, Universit\u00E4ts-Hals-Nasen-Ohrenklinik, Bibliothek");
+            this.put("DE-21-21", "Universit\u00E4t T\u00FCbingen, Universit\u00E4ts-Hals-Nasen-Ohrenklinik, Bibliothek");
             this.put("DE-21-22", "Universit\u00E4t T\u00FCbingen, Kunsthistorisches Institut");
             this.put("DE-21-23", "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Pathologie");
             this.put("DE-21-24", "Universit\u00E4t T\u00FCbingen, Juristisches Seminar");
             this.put("DE-21-25", "Universit\u00E4t T\u00FCbingen, Musikwissenschaftliches Institut");
             this.put("DE-21-26", "Universit\u00E4t T\u00FCbingen, Anatomisches Institut");
             this.put("DE-21-27", "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Anthropologie und Humangenetik");
-            this.put("DE-21-28",
-                    "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Astronomie und Astrophysik, Abteilung Astronomie");
+            this.put("DE-21-28", "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Astronomie und Astrophysik, Abteilung Astronomie");
             this.put("DE-21-31", "Universit\u00E4t T\u00FCbingen, Evangelisch-theologische Fakult\u00E4t");
-            this.put("DE-21-32a",
-                    "Universit\u00E4t T\u00FCbingen, Historisches Seminar, Abteilung f\u00FCr Alte Geschichte");
-            this.put("DE-21-32b",
-                    "Universit\u00E4t T\u00FCbingen, Historisches Seminar, Abteilung f\u00FCr Mittelalterliche Geschichte");
-            this.put("DE-21-32c",
-                    "Universit\u00E4t T\u00FCbingen, Historisches Seminar, Abteilung f\u00FCr Neuere Geschichte");
-            this.put("DE-21-34",
-                    "Universit\u00E4t T\u00FCbingen, Asien-Orient-Institut, Abteilung f\u00FCr Indologie und Vergleichende Religionswissenschaft");
+            this.put("DE-21-32a", "Universit\u00E4t T\u00FCbingen, Historisches Seminar, Abteilung f\u00FCr Alte Geschichte");
+            this.put("DE-21-32b", "Universit\u00E4t T\u00FCbingen, Historisches Seminar, Abteilung f\u00FCr Mittelalterliche Geschichte");
+            this.put("DE-21-32c", "Universit\u00E4t T\u00FCbingen, Historisches Seminar, Abteilung f\u00FCr Neuere Geschichte");
+            this.put("DE-21-34", "Universit\u00E4t T\u00FCbingen, Asien-Orient-Institut, Abteilung f\u00FCr Indologie und Vergleichende Religionswissenschaft");
             this.put("DE-21-35", "Universit\u00E4t T\u00FCbingen, Katholisch-theologische Fakult\u00E4t");
-            this.put("DE-21-39",
-                    "Universit\u00E4t T\u00FCbingen, Fachbibliothek Mathematik und Physik / Bereich Mathematik");
+            this.put("DE-21-39", "Universit\u00E4t T\u00FCbingen, Fachbibliothek Mathematik und Physik / Bereich Mathematik");
             this.put("DE-21-37", "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Sportwissenschaft");
-            this.put("DE-21-42",
-                    "Universit\u00E4t T\u00FCbingen, Asien-Orient-Institut, Abteilung f\u00FCr Orient- uns Islamwissenschaft");
+            this.put("DE-21-42", "Universit\u00E4t T\u00FCbingen, Asien-Orient-Institut, Abteilung f\u00FCr Orient- uns Islamwissenschaft");
             this.put("DE-21-43", "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Erziehungswissenschaft");
             this.put("DE-21-45", "Universit\u00E4t T\u00FCbingen, Philologisches Seminar");
             this.put("DE-21-46", "Universit\u00E4t T\u00FCbingen, Philosophisches Seminar");
             this.put("DE-21-50", "Universit\u00E4t T\u00FCbingen, Physiologisches Institut");
             this.put("DE-21-51", "Universit\u00E4t T\u00FCbingen, Psychologisches Institut");
-            this.put("DE-21-52",
-                    "Universit\u00E4t T\u00FCbingen, Ludwig-Uhland-Institut f\u00FCr Empirische Kulturwissenschaft");
-            this.put("DE-21-53",
-                    "Universit\u00E4t T\u00FCbingen, Asien-Orient-Institut, Abteilung f\u00FCr Ethnologie");
-            this.put("DE-21-54",
-                    "Universit\u00E4t T\u00FCbingen, Universit\u00E4tsklinik f\u00FCr Zahn-, Mund- und Kieferheilkunde");
+            this.put("DE-21-52", "Universit\u00E4t T\u00FCbingen, Ludwig-Uhland-Institut f\u00FCr Empirische Kulturwissenschaft");
+            this.put("DE-21-53", "Universit\u00E4t T\u00FCbingen, Asien-Orient-Institut, Abteilung f\u00FCr Ethnologie");
+            this.put("DE-21-54", "Universit\u00E4t T\u00FCbingen, Universit\u00E4tsklinik f\u00FCr Zahn-, Mund- und Kieferheilkunde");
             this.put("DE-21-58", "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Politikwissenschaft");
-            this.put("DE-21-62",
-                    "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Osteurop\u00E4ische Geschichte und Landeskunde");
+            this.put("DE-21-62", "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Osteurop\u00E4ische Geschichte und Landeskunde");
             this.put("DE-21-63", "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Tropenmedizin");
-            this.put("DE-21-64",
-                    "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Geschichtliche Landeskunde und Historische Hilfswissenschaften");
+            this.put("DE-21-64", "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Geschichtliche Landeskunde und Historische Hilfswissenschaften");
             this.put("DE-21-65", "Universit\u00E4t T\u00FCbingen, Universit\u00E4ts-Apotheke");
             this.put("DE-21-74", "Universit\u00E4t T\u00FCbingen, Zentrum f\u00FCr Informations-Technologie");
             this.put("DE-21-78", "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Medizinische Biometrie");
-            this.put("DE-21-81",
-                    "Universit\u00E4t T\u00FCbingen, Inst. f. Astronomie und Astrophysik/Abt. Geschichte der Naturwiss.");
+            this.put("DE-21-81", "Universit\u00E4t T\u00FCbingen, Inst. f. Astronomie und Astrophysik/Abt. Geschichte der Naturwiss.");
             this.put("DE-21-85", "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Soziologie");
             this.put("DE-21-86", "Universit\u00E4t T\u00FCbingen, Zentrum f\u00FCr Datenverarbeitung");
             this.put("DE-21-89", "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Arbeits- und Sozialmedizin");
             this.put("DE-21-92", "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Gerichtliche Medizin");
             this.put("DE-21-93", "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Ethik und Geschichte der Medizin");
             this.put("DE-21-95", "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Hirnforschung");
-            this.put("DE-21-98",
-                    "Universit\u00E4t T\u00FCbingen, Fachbibliothek Mathematik und Physik / Bereich Physik");
+            this.put("DE-21-98", "Universit\u00E4t T\u00FCbingen, Fachbibliothek Mathematik und Physik / Bereich Physik");
             this.put("DE-21-99",
                     "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Ur- und Fr\u00FChgeschichte und Arch\u00E4ologie des Mittelalters, Abteilung f\u00FCr \u00E4ltere Urgeschichteund Quart\u00E4r\u00F6kologie");
             this.put("DE-21-106", "Universit\u00E4t T\u00FCbingen, Seminar f\u00FCr Zeitgeschichte");
             this.put("DE-21-108", "Universit\u00E4t T\u00FCbingen, Fakult\u00E4tsbibliothek Neuphilologie");
-            this.put("DE-21-109",
-                    "Universit\u00E4t T\u00FCbingen, Asien-Orient-Institut, Abteilung f\u00FCr Sinologie und Koreanistik");
+            this.put("DE-21-109", "Universit\u00E4t T\u00FCbingen, Asien-Orient-Institut, Abteilung f\u00FCr Sinologie und Koreanistik");
             this.put("DE-21-110", "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Kriminologie");
             this.put("DE-21-112", "Universit\u00E4t T\u00FCbingen, Fakult\u00E4t f\u00FCr Biologie, Bibliothek");
-            this.put("DE-21-116",
-                    "Universit\u00E4t T\u00FCbingen, Zentrum f\u00FCr Molekularbiologie der Pflanzen, Forschungsgruppe Pflanzenbiochemie");
-            this.put("DE-21-117",
-                    "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Medizinische Informationsverarbeitung");
+            this.put("DE-21-116", "Universit\u00E4t T\u00FCbingen, Zentrum f\u00FCr Molekularbiologie der Pflanzen, Forschungsgruppe Pflanzenbiochemie");
+            this.put("DE-21-117", "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Medizinische Informationsverarbeitung");
             this.put("DE-21-118", "Universit\u00E4t T\u00FCbingen, Universit\u00E4ts-Archiv");
             this.put("DE-21-119", "Universit\u00E4t T\u00FCbingen, Wilhelm-Schickard-Institut f\u00FCr Informatik");
-            this.put("DE-21-120",
-                    "Universit\u00E4t T\u00FCbingen, Asien-Orient-Institut, Abteilung f\u00FCr Japanologie");
-            this.put("DE-21-121",
-                    "Universit\u00E4t T\u00FCbingen, Internationales Zentrum f\u00FCr Ethik in den Wissenschaften");
+            this.put("DE-21-120", "Universit\u00E4t T\u00FCbingen, Asien-Orient-Institut, Abteilung f\u00FCr Japanologie");
+            this.put("DE-21-121", "Universit\u00E4t T\u00FCbingen, Internationales Zentrum f\u00FCr Ethik in den Wissenschaften");
             this.put("DE-21-123", "Universit\u00E4t T\u00FCbingen, Medizinbibliothek");
-            this.put("DE-21-124",
-                    "Universit\u00E4t T\u00FCbingen, Institut f. Medizinische Virologie und Epidemiologie d. Viruskrankheiten");
-            this.put("DE-21-126",
-                    "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Medizinische Mikrobiologie und Hygiene");
-            this.put("DE-21-203",
-                    "Universit\u00E4t T\u00FCbingen, Sammlung Werner Schweikert - Archiv der Weltliteratur");
+            this.put("DE-21-124", "Universit\u00E4t T\u00FCbingen, Institut f. Medizinische Virologie und Epidemiologie d. Viruskrankheiten");
+            this.put("DE-21-126", "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Medizinische Mikrobiologie und Hygiene");
+            this.put("DE-21-203", "Universit\u00E4t T\u00FCbingen, Sammlung Werner Schweikert - Archiv der Weltliteratur");
             this.put("DE-21-205", "Universit\u00E4t T\u00FCbingen, Zentrum f\u00FCr Islamische Theologie");
-            this.put("DE-Frei85",
-                    "Freiburg MPI Ausl\u00E4nd.Recht, Max-Planck-Institut f\u00FCr ausl\u00E4ndisches und internationales Strafrecht");
+            this.put("DE-Frei85", "Freiburg MPI Ausl\u00E4nd.Recht, Max-Planck-Institut f\u00FCr ausl\u00E4ndisches und internationales Strafrecht");
             this.put("DE-2619", "KrimDok - kriminologische Bibliographie");
         }
     };
@@ -230,21 +201,21 @@ public class TueFindBiblio extends TueFind {
         }
     };
 
+
     protected static ConcurrentLimitedHashMap<String, Set<String>> isilsCache = new ConcurrentLimitedHashMap<>(100);
-    protected static ConcurrentLimitedHashMap<String, Collection<Collection<Topic>>> collectedTopicsCache = new ConcurrentLimitedHashMap<>(
-            100);
-    protected static ConcurrentLimitedHashMap<String, JSONArray> fulltextServerHitsCache = new ConcurrentLimitedHashMap<>(
-            100);
+    protected static ConcurrentLimitedHashMap<String, Collection<Collection<Topic>>> collectedTopicsCache = new ConcurrentLimitedHashMap<>(100);
+    protected static ConcurrentLimitedHashMap<String, JSONArray> fulltextServerHitsCache = new ConcurrentLimitedHashMap<>(100);
     protected static final String fullHostName;
     static {
         String tmp = ""; // Needed for syntactical reasons
         try {
             tmp = InetAddress.getLocalHost().getHostName();
-        } catch (java.net.UnknownHostException e) {
-            throw new RuntimeException("Could not determine Hostname", e);
+        } catch(java.net.UnknownHostException e) {
+            throw new RuntimeException ("Could not determine Hostname", e);
         }
         fullHostName = tmp;
     }
+
 
     protected String getTitleFromField(final DataField titleField) {
         if (titleField == null)
@@ -279,7 +250,7 @@ public class TueFindBiblio extends TueFind {
      * Determine Record Title
      *
      * @param record
-     *               the record
+     *            the record
      * @return String nicely formatted title
      */
     public String getMainTitle(final Record record) {
@@ -303,13 +274,14 @@ public class TueFindBiblio extends TueFind {
         return otherTitles;
     }
 
+
     /**
      * Get the local 689 topics
      * LOK = Field |0 689 = Subfield |a Imperialismus = Subfield with local
      * subject
      *
      * @param record
-     *               the record
+     *            the record
      * @return Set topics
      */
 
@@ -330,13 +302,14 @@ public class TueFindBiblio extends TueFind {
         return topics;
     }
 
+
     /**
      * get the local subjects from LOK-tagged fields and get subjects from 936k
      * and 689a subfields
      * <p/>
-     *
+         *
      * @param record
-     *               the record
+     *            the record
      * @return Set of local subjects
      */
     public Set<String> getAllTopics(final Record record) {
@@ -350,7 +323,7 @@ public class TueFindBiblio extends TueFind {
      * und füge auch Schlagwörter aus LOK 689 ein
      *
      * @param record
-     *               the record
+     *            the record
      * @return Set "topic_facet"
      */
     public Set<String> getFacetTopics(final Record record) {
@@ -380,11 +353,12 @@ public class TueFindBiblio extends TueFind {
         return result;
     }
 
+
+
     // Map used by getPhysicalType().
     protected static final Map<String, String> code_to_material_type_map;
 
-    // Entries are from
-    // http://swbtools.bsz-bw.de/cgi-bin/k10plushelp.pl?cmd=kat&val=4960&kattype=Standard#$3
+    // Entries are from http://swbtools.bsz-bw.de/cgi-bin/k10plushelp.pl?cmd=kat&val=4960&kattype=Standard#$3
     static {
         Map<String, String> tempMap = new TreeMap<>();
         tempMap.put("01", "Inhaltstext");
@@ -414,12 +388,14 @@ public class TueFindBiblio extends TueFind {
         tempMap.put("32", "Beschreibung für Bibliotheken");
         tempMap.put("33", "Einführung/Vorwort");
         tempMap.put("34", "Volltext");
-        tempMap.put("90", "Objektabbildung"); // GBV extension
+        tempMap.put("90", "Objektabbildung");           // GBV extension
         tempMap.put("91", "Objektabbildung Thumbnail"); // GBV extension
-        tempMap.put("92", "Schlüsselseiten"); // GBV extension
-        tempMap.put("93", "Cover"); // GBV extension
+        tempMap.put("92", "Schlüsselseiten");           // GBV extension
+        tempMap.put("93", "Cover");                     // GBV extension
         code_to_material_type_map = Collections.unmodifiableMap(tempMap);
     }
+
+
 
     /**
      * Returns either a Set<String> of parent (URL + colon + material type).
@@ -431,7 +407,7 @@ public class TueFindBiblio extends TueFind {
      * "material type" to "DOI Link".
      *
      * @param record
-     *               the record
+     *            the record
      * @return A, possibly empty, Set<String> containing the URL/material-type
      *         pairs.
      */
@@ -460,8 +436,7 @@ public class TueFindBiblio extends TueFind {
             String materialLicence = "";
             final char indicator1 = field.getIndicator1();
             final char indicator2 = field.getIndicator2();
-            // The existence of subfield 3 == Volltext or Indicators 4 0 means full text
-            // (c.f. https://github.com/ubtue/tuefind/issues/1782)
+            // The existence of subfield 3 == Volltext or Indicators 4 0 means full text (c.f. https://github.com/ubtue/tuefind/issues/1782)
             // Indicator 4 1 can also contain fulltext but this then must be
             // stated $y and is thus addressed by the general evaluation case
             if (indicator1 == '4' && indicator2 == '0') {
@@ -471,7 +446,7 @@ public class TueFindBiblio extends TueFind {
                 else if (subfield_x != null)
                     materialLicence = subfield_x.getData();
             } else if (subfield_3 != null) {
-                materialType = subfield_3.getData();
+                materialType =  subfield_3.getData();
                 if (code_to_material_type_map.containsKey(materialType))
                     materialType = code_to_material_type_map.get(materialType);
                 if (subfield_z != null)
@@ -542,6 +517,7 @@ public class TueFindBiblio extends TueFind {
                         preferredURL = url;
                 }
 
+
                 if (preferredURL != null)
                     urls_and_material_types.add(preferredURL + ":" + material_type);
                 else { // Add the kitchen sink.
@@ -568,14 +544,12 @@ public class TueFindBiblio extends TueFind {
     }
 
     /**
-     * Returns a Set<String> of (parent ID + colon + parent title + optional
-     * volume). Only
+     * Returns a Set<String> of (parent ID + colon + parent title + optional volume). Only
      * ID's w/o titles will not be returned.
      *
      * @param record
-     *               the record
-     * @return A, possibly empty, Set<String> containing the ID/title(/volume) pairs
-     *         and triples.
+     *            the record
+     * @return A, possibly empty, Set<String> containing the ID/title(/volume) pairs and triples.
      */
     public Set<String> getContainerIdsWithTitles(final Record record) {
         final Set<String> containerIdsTitlesAndOptionalVolumes = new TreeSet<>();
@@ -596,7 +570,7 @@ public class TueFindBiblio extends TueFind {
 
                 containerIdsTitlesAndOptionalVolumes
                         .add(parentId + (char) 0x1F + titleSubfield.getData()
-                                + (char) 0x1F + (volumeSubfield == null ? "" : volumeSubfield.getData()));
+                             + (char) 0x1F + (volumeSubfield == null ? "" : volumeSubfield.getData()));
                 // We want precisely one superior work at each level
                 // So, abort if we found one
                 return containerIdsTitlesAndOptionalVolumes;
@@ -605,20 +579,22 @@ public class TueFindBiblio extends TueFind {
         return containerIdsTitlesAndOptionalVolumes;
     }
 
-    protected final static char SUBFIELD_SEPARATOR = (char) 0x1F;
+    protected final static char SUBFIELD_SEPARATOR = (char)0x1F;
 
     public String getSortableAuthorUnicode(final Record record, final String tagList, final String acceptWithoutRelator,
-            final String relatorConfig) {
+                                           final String relatorConfig)
+    {
         String author = creatorTools.getFirstAuthorFilteredByRelator(record, tagList,
-                acceptWithoutRelator,
-                relatorConfig);
+                                                              acceptWithoutRelator,
+                                                              relatorConfig);
 
         return normalizeSortableString(author);
     }
 
+
     /**
      * @param record
-     *                  the record
+     *            the record
      * @param fieldnums
      * @return
      */
@@ -691,7 +667,7 @@ public class TueFindBiblio extends TueFind {
      * LOK = Field |0 852 = Subfield |a DE-Sp3 = Subfield with ISIL
      *
      * @param record
-     *               the record
+     *            the record
      * @return Set of isils
      */
     public Set<String> getIsils(final Record record) {
@@ -720,9 +696,10 @@ public class TueFindBiblio extends TueFind {
     }
 
     public Set<String> getJournalIssue(final Record record) {
-        final DataField _773Field = (DataField) record.getVariableField("773");
+        final DataField _773Field = (DataField)record.getVariableField("773");
         if (_773Field == null)
             return null;
+
 
         Subfield titleSubfield = _773Field.getSubfield('t');
         if (titleSubfield == null)
@@ -750,7 +727,7 @@ public class TueFindBiblio extends TueFind {
 
     /**
      * @param record
-     *               the record
+     *            the record
      * @return
      */
     public String isAvailableInTuebingen(final Record record) {
@@ -769,7 +746,7 @@ public class TueFindBiblio extends TueFind {
      * LOK = Field |0 852 = Subfield |a DE-Sp3 = Subfield with ISIL
      *
      * @param record
-     *               the record
+     *            the record
      * @return Set of collections
      */
     public Set<String> getCollections(final Record record) {
@@ -792,7 +769,7 @@ public class TueFindBiblio extends TueFind {
 
     /**
      * @param record
-     *               the record
+     *            the record
      */
     public String getInstitution(final Record record) {
         final Set<String> collections = getCollections(record);
@@ -810,7 +787,7 @@ public class TueFindBiblio extends TueFind {
 
     /**
      * @param record
-     *               the record
+     *            the record
      */
     public String getTueLocalIndexedDate(final Record record) {
         for (final VariableField variableField : record.getVariableFields("LOK")) {
@@ -851,21 +828,20 @@ public class TueFindBiblio extends TueFind {
                 final String month = dataString.substring(2, 4);
                 if (!isValidMonthCode(month)) {
                     logger.severe("in getTueLocalIndexedDate: bad month in LOK 938 field: " + month
-                            + "! (PPN: " + record.getControlNumber() + ")");
+                                  + "! (PPN: " + record.getControlNumber() + ")");
                     return null;
                 }
                 // If we use a fixed day we underrun a plausible span of time for the new items
-                // but we have to make sure that no invalid date is generated that leads to an
-                // import problem
+                // but we have to make sure that no invalid date is generated that leads to an import problem
                 return year + "-" + month + "-" +
-                        String.format("%02d",
-                                isCurrentYearAndMonth(year, month) ? getCurrentDayOfMonth()
-                                        : getLastDayForYearAndMonth(year, month))
-                        + "T11:00:00.000Z";
+                       String.format("%02d",
+                       isCurrentYearAndMonth(year, month) ? getCurrentDayOfMonth() : getLastDayForYearAndMonth(year, month))
+                       + "T11:00:00.000Z";
             }
         }
         return null;
     }
+
 
     /*
      * Check whether given year and date is equivalent to current year and date
@@ -873,8 +849,9 @@ public class TueFindBiblio extends TueFind {
     boolean isCurrentYearAndMonth(final String year, final String month) {
         Calendar calendar = Calendar.getInstance();
         return (Integer.valueOf(year) == calendar.get(Calendar.YEAR)) &&
-                (Integer.valueOf(month) == calendar.get(Calendar.MONTH) + 1);
+               (Integer.valueOf(month) == calendar.get(Calendar.MONTH) + 1);
     }
+
 
     /*
      * Get day of current month
@@ -883,6 +860,7 @@ public class TueFindBiblio extends TueFind {
         return Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
     }
 
+
     /*
      * Get last day of a given month for a given year
      */
@@ -890,9 +868,10 @@ public class TueFindBiblio extends TueFind {
         return YearMonth.of(Integer.valueOf(year), Integer.valueOf(month)).atEndOfMonth().getDayOfMonth();
     }
 
+
     /**
      * @param record
-     *               the record
+     *            the record
      */
     public String getPageRange(final Record record) {
         final String field_value = getFirstSubfieldValue(record, "936", 'h');
@@ -917,13 +896,14 @@ public class TueFindBiblio extends TueFind {
     /**
      * Return all identifiers from 024. (Ind1 must always be 7)
      *
-     * @param record         The record
-     * @param subfield2Value The value of subfield 2, e.g. "urn", "doi", "hdl", ...
-     * @param resultPrefix   A prefix which will be prepended to each result entry.
+     * @param record            The record
+     * @param subfield2Value    The value of subfield 2, e.g. "urn", "doi", "hdl", ...
+     * @param resultPrefix      A prefix which will be prepended to each result entry.
      */
     protected static Set<String> getIdentifiersFrom024(final Record record,
-            final String subfield2Value,
-            final String resultPrefix) {
+                                                     final String subfield2Value,
+                                                     final String resultPrefix)
+    {
         final Set<String> result = new TreeSet<>();
 
         for (final VariableField variableField : record.getVariableFields("024")) {
@@ -1005,10 +985,10 @@ public class TueFindBiblio extends TueFind {
     /**
      * Returns a Set<String> of Persistent Identifiers, e.g. DOIs and URNs
      * e.g.
-     * DOI:<doi1>
-     * URN:<urn1>
-     * URN:<urn2>
-     * HDL:<handle1>
+     *  DOI:<doi1>
+     *  URN:<urn1>
+     *  URN:<urn2>
+     *  HDL:<handle1>
      */
     public Set<String> getTypesAndPersistentIdentifiers(final Record record) {
         final Set<String> result = getDOIs(record, "DOI:");
@@ -1019,7 +999,7 @@ public class TueFindBiblio extends TueFind {
 
     /**
      * @param record
-     *               the record
+     *            the record
      */
     public String getContainerYear(final Record record) {
         final String field_value = getFirstSubfieldValue(record, "936", 'u', 'w', 'j');
@@ -1032,7 +1012,7 @@ public class TueFindBiblio extends TueFind {
 
     /**
      * @param record
-     *               the record
+     *            the record
      */
     public String getContainerVolume(final Record record) {
         final String field_value = getFirstSubfieldValue(record, "936", 'd');
@@ -1068,7 +1048,7 @@ public class TueFindBiblio extends TueFind {
 
     /**
      * @param record
-     *               the record
+     *            the record
      */
     public Set<String> getPhysicalType(final Record record) {
         return map935b(record, phys_code_to_full_name_map);
@@ -1123,6 +1103,7 @@ public class TueFindBiblio extends TueFind {
         return values;
     }
 
+
     /**
      * Parse the field specifications
      */
@@ -1138,8 +1119,7 @@ public class TueFindBiblio extends TueFind {
         final String subfieldDelim = "$";
         final String esc = "\\";
         final String regexColon = "(?<!" + Pattern.quote(esc) + ")" + Pattern.quote(fieldDelim);
-        final String regexSubfield = "(?<!" + Pattern.quote(esc) + ")" + Pattern.quote(subfieldDelim)
-                + "([0-9][a-z]|[a-zA-Z])(.*)";
+        final String regexSubfield = "(?<!" + Pattern.quote(esc) + ")" + Pattern.quote(subfieldDelim) + "([0-9][a-z]|[a-zA-Z])(.*)";
         final Pattern SUBFIELD_PATTERN = Pattern.compile(regexSubfield);
         String[] subfieldSeparatorList = separatorSpec.split(regexColon);
         for (String s : subfieldSeparatorList) {
@@ -1165,14 +1145,14 @@ public class TueFindBiblio extends TueFind {
     /*
      * Helper Class for passing symbol pairs in bracket directives
      */
-    protected class SymbolPair {
+     protected class SymbolPair {
         public char opening;
         public char closing;
-    }
+     }
+
 
     /*
-     * Function to parse out special forms of separator specs needed to include a
-     * term bracketed in symbol pairs
+     * Function to parse out special forms of separator specs needed to include a term bracketed in symbol pairs
      * e.g. opening and closing parentheses
      * Changes the character arguments
      */
@@ -1187,13 +1167,14 @@ public class TueFindBiblio extends TueFind {
         return symbolPair;
     }
 
+
     protected Boolean isBracketDirective(final String separator) {
         final Matcher matcher = BRACKET_DIRECTIVE_PATTERN.matcher(separator);
         return matcher.matches();
     }
 
-    protected final static Pattern NUMBER_END_PATTERN = Pattern.compile("([^\\d\\s<>]+)(\\s*<?\\d+(-\\d+)>?$)",
-            Pattern.UNICODE_CHARACTER_CLASS);
+
+    protected final static Pattern NUMBER_END_PATTERN = Pattern.compile("([^\\d\\s<>]+)(\\s*<?\\d+(-\\d+)>?$)", Pattern.UNICODE_CHARACTER_CLASS);
 
     /**
      * Translate a single term to given language if a translation is found
@@ -1217,25 +1198,23 @@ public class TueFindBiblio extends TueFind {
             }
             topic = Utils.join(new HashSet<String>(Arrays.asList(subtopics)), " / ");
         }
-        // If we have a topic and a following number, try to separate the word and join
-        // it afterwards
-        // This is especially important for time informations where we provide special
-        // treatment
+        // If we have a topic and a following number, try to separate the word and join it afterwards
+        // This is especially important for time informations where we provide special treatment
         else if (numberEndMatcher.find()) {
             String topicText = numberEndMatcher.group(1);
             String numberExtension = numberEndMatcher.group(2);
             if (topicText.equals("Geschichte")) {
                 switch (langAbbrev) {
-                    case "en":
-                        topic = "History" + numberExtension;
-                        break;
-                    case "fr":
-                        topic = "Histoire" + numberExtension;
-                        break;
+                case "en":
+                    topic = "History" + numberExtension;
+                    break;
+                case "fr":
+                    topic = "Histoire" + numberExtension;
+                    break;
                 }
             } else
                 topic = translation_map.get(topicText) != null ? translation_map.get(topicText) + numberExtension
-                        : topic;
+                                                               : topic;
         } else
             topic = (translation_map.get(topic) != null) ? translation_map.get(topic) : topic;
 
@@ -1244,79 +1223,81 @@ public class TueFindBiblio extends TueFind {
 
     /**
      * Generate Separator according to specification
-     * For some subfields there are standards how the values extracted must be
-     * attached to the resulting keyword string
-     * Examples are $p must be separated y ".". We must also examine the term itself
-     * since there a constructions like
+     * For some subfields there are standards how the values extracted must be attached to the resulting keyword string
+     * Examples are $p must be separated y ".". We must also examine the term itself since there a constructions like
      * $9g:
      */
     public String getSubfieldBasedSeparator(Map<String, String> separators, char subfieldCodeChar, String term) {
         String subfieldCodeString = Character.toString(subfieldCodeChar);
-        // In some cases of numeric Subfields we have ':'-delimited subfield of a
-        // subfield to remove complexity ;-)
+        // In some cases of numeric Subfields we have ':'-delimited subfield of a subfield to remove complexity ;-)
         // i.e. $9 g:xxxx
         subfieldCodeString += Character.isDigit(subfieldCodeChar) ? term.split(":")[0] : "";
         String separator = separators.get(subfieldCodeString) != null ? separators.get(subfieldCodeString)
-                : separators.get("default");
+                                                                      : separators.get("default");
 
         return separator;
     }
 
     /**
      * Predicates for choosing only a subset of all standardized subjects
-     * In the q-Subfield of 689 standardized subjects we have "z" (time subject),
-     * "f" (genre subject), "g" (region subject)
+     * In the q-Subfield of 689 standardized subjects we have "z" (time subject), "f" (genre subject), "g" (region subject)
      * Alternatively this is in the d-Subfields
      */
 
-    boolean HasLocalTag(final DataField marcField, final String tag) {
+     boolean HasLocalTag(final DataField marcField, final String tag) {
         return marcField.getTag().equals("LOK") && marcField.getSubfield('0') != null &&
-                marcField.getSubfield('0').getData().substring(0, 3).equals(tag);
+              marcField.getSubfield('0').getData().substring(0,3).equals(tag);
     }
+
 
     Predicate<DataField> _LOK689IsTimeSubject = (DataField marcField) -> {
         if (!HasLocalTag(marcField, "689"))
             return true;
         Subfield subfield0 = marcField.getSubfield('0');
-        if (subfield0 != null && subfield0.getData().substring(0, 3).equals("689")) {
-            Subfield subfieldA = marcField.getSubfield('a'); // Should be capital
+        if (subfield0 != null && subfield0.getData().substring(0,3).equals("689")) {
+            Subfield subfieldA = marcField.getSubfield('a'); //Should be capital
             return (subfieldA != null && subfieldA.getData().equals("z"));
         }
         return false;
     };
 
+
     Predicate<DataField> _LOK689IsRegionSubject = (DataField marcField) -> {
         if (!HasLocalTag(marcField, "689"))
             return true;
         Subfield subfield0 = marcField.getSubfield('0');
-        if (subfield0 != null && subfield0.getData().substring(0, 3).equals("689")) {
-            Subfield subfieldA = marcField.getSubfield('a'); // Should be capital
+        if (subfield0 != null && subfield0.getData().substring(0,3).equals("689")) {
+            Subfield subfieldA = marcField.getSubfield('a'); //Should be capital
             return (subfieldA != null && subfieldA.getData().equals("g"));
         }
         return false;
     };
 
+
     Predicate<DataField> _LOK689IsCorporationSubject = (DataField marcField) -> {
         if (!HasLocalTag(marcField, "689"))
             return true;
         Subfield subfield0 = marcField.getSubfield('0');
-        if (subfield0 != null && subfield0.getData().substring(0, 3).equals("689")) {
-            Subfield subfieldA = marcField.getSubfield('a'); // Should be capital
+        if (subfield0 != null && subfield0.getData().substring(0,3).equals("689")) {
+            Subfield subfieldA = marcField.getSubfield('a'); //Should be capital
             return (subfieldA != null && subfieldA.getData().equals("k"));
         }
         return false;
     };
 
+
+
     Predicate<DataField> _LOK689IsOrdinarySubject = (DataField marcField) -> {
         if (!(marcField.getTag().equals("LOK")))
             return false;
         Subfield subfield0 = marcField.getSubfield('0');
-        if (subfield0 != null && subfield0.getData().substring(0, 3).equals("689")) {
-            Subfield subfieldA = marcField.getSubfield('a'); // Should be capital
+        if (subfield0 != null && subfield0.getData().substring(0,3).equals("689")) {
+            Subfield subfieldA = marcField.getSubfield('a'); //Should be capital
             return (subfieldA != null && subfieldA.getData().equals("s"));
         }
         return false;
     };
+
 
     Predicate<DataField> _689IsGenreSubject = (DataField marcField) -> {
         if (!marcField.getTag().equals("689"))
@@ -1325,6 +1306,7 @@ public class TueFindBiblio extends TueFind {
         return (subfieldQ != null && subfieldQ.getData().equals("f"));
     };
 
+
     Predicate<DataField> _689IsRegionSubject = (DataField marcField) -> {
         if (marcField.getTag().equals("LOK"))
             return _LOK689IsRegionSubject.test(marcField);
@@ -1332,12 +1314,12 @@ public class TueFindBiblio extends TueFind {
         // Do not prevent non 689-fields
         if (!marcField.getTag().equals("689")) {
             return true;
-        }
+}
         Subfield subfieldQ = marcField.getSubfield('q');
         Subfield subfieldD = marcField.getSubfield('d');
-        return (subfieldQ != null && subfieldQ.getData().equals("g"))
-                || (subfieldD != null && subfieldD.getData().equals("g"));
+        return (subfieldQ != null && subfieldQ.getData().equals("g")) || (subfieldD != null && subfieldD.getData().equals("g"));
     };
+
 
     Predicate<DataField> _689IsTimeSubject = (DataField marcField) -> {
         if (marcField.getTag().equals("LOK"))
@@ -1348,9 +1330,10 @@ public class TueFindBiblio extends TueFind {
             return true;
         Subfield subfieldQ = marcField.getSubfield('q');
         Subfield subfieldD = marcField.getSubfield('d');
-        return (subfieldQ != null && subfieldQ.getData().equals("z"))
-                || (subfieldD != null && subfieldD.getData().equals("z"));
+        return (subfieldQ != null && subfieldQ.getData().equals("z")) || (subfieldD != null && subfieldD.getData().equals("z"));
     };
+
+
 
     Predicate<DataField> _689IsOrdinarySubject = (DataField marcField) -> {
         if (marcField.getTag().equals("LOK"))
@@ -1360,28 +1343,28 @@ public class TueFindBiblio extends TueFind {
         if (!marcField.getTag().equals("689"))
             return true;
 
-        return (!(_689IsTimeSubject.test(marcField) || _689IsGenreSubject.test(marcField)
-                || _689IsRegionSubject.test(marcField)));
+        return (!(_689IsTimeSubject.test(marcField) || _689IsGenreSubject.test(marcField) || _689IsRegionSubject.test(marcField)));
     };
+
 
     @Deprecated
     protected void getTopicsCollector(final Record record, String fieldSpec, Map<String, String> separators,
-            Collection<String> collector, String langAbbrev) {
+                                    Collection<String> collector, String langAbbrev) {
         getTopicsCollector(record, fieldSpec, separators, collector, langAbbrev, null);
     }
 
+
     /**
-     * Construct a regular expression from the subfield tags where all character
-     * subfields are extracted and for number
-     * subfields the subsequent character subSubfield-Code is skipped (e.g.
-     * abctnpz9g => a|b|c|t|n|p|z|9 (without the g)
+     * Construct a regular expression from the subfield tags where all character subfields are extracted and for number
+     * subfields the subsequent character subSubfield-Code is skipped (e.g. abctnpz9g => a|b|c|t|n|p|z|9 (without the g)
      */
     protected String extractNormalizedSubfieldPatternHelper(final String subfldTags) {
-        String[] tokens = subfldTags.split("(?<=[0-9]?[a-z])");
+        String[] tokens =  subfldTags.split("(?<=[0-9]?[a-z])");
         Stream<String> tokenStream = Arrays.stream(tokens);
         Stream<String> normalizedTokenStream = tokenStream.map(t -> "" + t.charAt(0)); // extract only first character
         return String.join("|", normalizedTokenStream.toArray(String[]::new));
     }
+
 
     /**
      * Strip subSubfield-Codes from the value part of a field
@@ -1390,14 +1373,15 @@ public class TueFindBiblio extends TueFind {
         return term.replaceAll("^[a-z]:", "");
     }
 
+
     /**
      * Abstract out topic extract from LOK and ordinary field handling
      */
     protected void extractTopicsHelper(final List<VariableField> marcFieldList, final Map<String, String> separators,
-            final Collection<String> collector, final String langAbbrev, final String fldTag,
-            final String subfldTags, final Predicate<DataField> includeFieldPredicate) {
-        final Pattern subfieldPattern = Pattern
-                .compile(subfldTags.length() == 0 ? "[a-z]" : extractNormalizedSubfieldPatternHelper(subfldTags));
+                                       final Collection<String> collector, final  String langAbbrev, final String fldTag,
+                                       final String subfldTags, final Predicate<DataField> includeFieldPredicate)
+    {
+        final Pattern subfieldPattern = Pattern.compile(subfldTags.length() == 0 ? "[a-z]" : extractNormalizedSubfieldPatternHelper(subfldTags));
         for (final VariableField vf : marcFieldList) {
             final StringBuilder buffer = new StringBuilder("");
             final List<String> complexElements = new ArrayList<String>();
@@ -1448,9 +1432,8 @@ public class TueFindBiblio extends TueFind {
             }
             if (buffer.length() > 0) {
                 // Try a translation once again in case a whole expression matches
-                final String complexTranslation = (complexElements.size() > 1)
-                        ? getTranslationOrNull(String.join(" / ", complexElements), langAbbrev)
-                        : null;
+                final String complexTranslation = (complexElements.size() > 1) ?
+                                                  getTranslationOrNull(String.join(" / ", complexElements), langAbbrev) : null;
                 collector.add(complexTranslation != null ? complexTranslation : DataUtil.cleanData(buffer.toString()));
             }
         }
@@ -1467,28 +1450,24 @@ public class TueFindBiblio extends TueFind {
      * specify several different separators to concatenate the single subfields
      * Separators can be defined on a subfield basis as a list in
      * the format
-     * separator_spec :== separator | subfield_separator_list
-     * subfield_separator_list :== subfield_separator_spec | subfield_separator_spec
-     * ":" subfield_separator_list |
-     * subfield_separator_spec ":" separator
-     * subfield_separator_spec :== subfield_spec separator subfield_spec :== "$"
-     * character_subfield
-     * character_subfield :== A character subfield (e.g. p,n,t,x...)
-     * separator :== separator_without_control_characters+ | separator "\:"
-     * separator |
-     * separator "\$" separator | separator "\[" separator | separator "\]"
-     * separator |
-     * bracket_directive
-     * separator_without_control_characters :== All characters without ":" and "$" |
-     * empty_string
-     * bracket_directive :== [opening_character no_space closing_character]
-     * no_space :== ""
-     * opening_character :== A single character to be prepended on the left side
-     * closing character :== A single character to be appended on the right side
+     *   separator_spec          :== separator | subfield_separator_list
+     *   subfield_separator_list :== subfield_separator_spec |  subfield_separator_spec ":" subfield_separator_list |
+     *                               subfield_separator_spec ":" separator
+     *   subfield_separator_spec :== subfield_spec separator subfield_spec :== "$" character_subfield
+     *   character_subfield      :== A character subfield (e.g. p,n,t,x...)
+     *   separator               :== separator_without_control_characters+ | separator "\:" separator |
+     *                               separator "\$" separator | separator "\[" separator | separator "\]" separator |
+     *                               bracket_directive
+     *   separator_without_control_characters :== All characters without ":" and "$" | empty_string
+     *   bracket_directive       :== [opening_character no_space closing_character]
+     *   no_space                :== ""
+     *   opening_character       :== A single character to be prepended on the left side
+     *   closing character       :== A single character to be appended on the right side
      */
     @Deprecated
     protected void getTopicsCollector(final Record record, String fieldSpec, Map<String, String> separators,
-            Collection<String> collector, String langAbbrev, Predicate<DataField> includeFieldPredicate) {
+                                      Collection<String> collector, String langAbbrev, Predicate<DataField> includeFieldPredicate)
+    {
         String[] fldTags = fieldSpec.split(":");
         String fldTag;
         String subfldTags;
@@ -1519,15 +1498,13 @@ public class TueFindBiblio extends TueFind {
                 // Get subfield 0 since the "subtag" is saved here
                 marcFieldList = record.getVariableFields("LOK");
                 if (!marcFieldList.isEmpty())
-                    extractTopicsHelper(marcFieldList, separators, collector, langAbbrev, fldTag, subfldTags,
-                            includeFieldPredicate);
+                    extractTopicsHelper(marcFieldList, separators, collector, langAbbrev, fldTag, subfldTags, includeFieldPredicate);
             }
             // Case 2: We have an ordinary MARC field
             else {
                 marcFieldList = record.getVariableFields(fldTag);
                 if (!marcFieldList.isEmpty()) {
-                    extractTopicsHelper(marcFieldList, separators, collector, langAbbrev, fldTag, subfldTags,
-                            includeFieldPredicate);
+                    extractTopicsHelper(marcFieldList, separators, collector, langAbbrev, fldTag, subfldTags, includeFieldPredicate);
                 }
             }
         }
@@ -1539,8 +1516,7 @@ public class TueFindBiblio extends TueFind {
         public SymbolPair symbolPair = new SymbolPair();
         public String separator;
 
-        public Topic() {
-        }
+        public Topic() {}
 
         public Topic(final String topic) {
             this.topic = topic;
@@ -1553,7 +1529,8 @@ public class TueFindBiblio extends TueFind {
     }
 
     protected void getCachedTopicsCollector(final Record record, String fieldSpec, Map<String, String> separators,
-            Collection<String> collector, String langAbbrev) {
+                                          Collection<String> collector, String langAbbrev)
+    {
         getCachedTopicsCollector(record, fieldSpec, separators, collector, langAbbrev, null);
     }
 
@@ -1563,31 +1540,26 @@ public class TueFindBiblio extends TueFind {
      * specify several different separators to concatenate the single subfields
      * Separators can be defined on a subfield basis as a list in
      * the format
-     * separator_spec :== separator | subfield_separator_list
-     * subfield_separator_list :== subfield_separator_spec | subfield_separator_spec
-     * ":" subfield_separator_list |
-     * subfield_separator_spec ":" separator
-     * subfield_separator_spec :== subfield_spec separator subfield_spec :== "$"
-     * character_subfield
-     * character_subfield :== A character subfield (e.g. p,n,t,x...)
-     * separator :== separator_without_control_characters+ | separator "\:"
-     * separator |
-     * separator "\$" separator | separator "\[" separator | separator "\]"
-     * separator |
-     * bracket_directive
-     * separator_without_control_characters :== All characters without ":" and "$" |
-     * empty_string
-     * bracket_directive :== [opening_character no_space closing_character]
-     * no_space :== ""
-     * opening_character :== A single character to be prepended on the left side
-     * closing character :== A single character to be appended on the right side
+     *   separator_spec          :== separator | subfield_separator_list
+     *   subfield_separator_list :== subfield_separator_spec |  subfield_separator_spec ":" subfield_separator_list |
+     *                               subfield_separator_spec ":" separator
+     *   subfield_separator_spec :== subfield_spec separator subfield_spec :== "$" character_subfield
+     *   character_subfield      :== A character subfield (e.g. p,n,t,x...)
+     *   separator               :== separator_without_control_characters+ | separator "\:" separator |
+     *                               separator "\$" separator | separator "\[" separator | separator "\]" separator |
+     *                               bracket_directive
+     *   separator_without_control_characters :== All characters without ":" and "$" | empty_string
+     *   bracket_directive       :== [opening_character no_space closing_character]
+     *   no_space                :== ""
+     *   opening_character       :== A single character to be prepended on the left side
+     *   closing character       :== A single character to be appended on the right side
      */
     protected void getCachedTopicsCollector(final Record record, String fieldSpec, final Map<String, String> separators,
-            final Collection<String> collector, final String langAbbrev,
-            final Predicate<DataField> includeFieldPredicate) {
+                                            final Collection<String> collector, final String langAbbrev,
+                                            final Predicate<DataField> includeFieldPredicate)
+    {
         // Part 1: Get raw topics either from cache or from record
-        final String cacheKey = record.getControlNumber() + fieldSpec
-                + separators.entrySet().stream().map(e -> e.getKey() + "=" + e.getValue()).collect(joining(":"));
+        final String cacheKey = record.getControlNumber() + fieldSpec + separators.entrySet().stream().map(e -> e.getKey()+"="+e.getValue()).collect(joining(":"));
         Collection<Collection<Topic>> subcollector = collectedTopicsCache.computeIfAbsent(cacheKey, s -> {
             Collection<Collection<Topic>> cachedSubcollector = new ArrayList<>();
 
@@ -1622,15 +1594,13 @@ public class TueFindBiblio extends TueFind {
                     // Get subfield 0 since the "subtag" is saved here
                     marcFieldList = record.getVariableFields("LOK");
                     if (!marcFieldList.isEmpty())
-                        extractCachedTopicsHelper(marcFieldList, separators, cachedSubcollector, fieldTag, subfieldTags,
-                                includeFieldPredicate);
+                        extractCachedTopicsHelper(marcFieldList, separators, cachedSubcollector, fieldTag, subfieldTags, includeFieldPredicate);
                 }
                 // Case 2: We have an ordinary MARC field
                 else {
                     marcFieldList = record.getVariableFields(fieldTag);
                     if (!marcFieldList.isEmpty())
-                        extractCachedTopicsHelper(marcFieldList, separators, cachedSubcollector, fieldTag, subfieldTags,
-                                includeFieldPredicate);
+                        extractCachedTopicsHelper(marcFieldList, separators, cachedSubcollector, fieldTag, subfieldTags, includeFieldPredicate);
                 }
             }
 
@@ -1641,8 +1611,7 @@ public class TueFindBiblio extends TueFind {
         for (final Collection<Topic> topicParts : subcollector) {
             if (topicParts.size() == 1) {
                 // if topic consists of 1 part, directly try to translate + add
-                collector.add(translateTopic(DataUtil.cleanData(topicParts.iterator().next().topic.replace("/", "\\/")),
-                        langAbbrev));
+                collector.add(translateTopic(DataUtil.cleanData(topicParts.iterator().next().topic.replace("/", "\\/")), langAbbrev));
             } else {
                 // if topic consists of multiple parts:
                 // try to translate the whole string
@@ -1669,8 +1638,7 @@ public class TueFindBiblio extends TueFind {
                         // (compare to this value instead of null)
                         if (topic.symbolPair.opening != '\u0000')
                             translationStringBuilder.append(topic.symbolPair.opening);
-                        translationStringBuilder.append(
-                                translateTopic(DataUtil.cleanData(topic.topic.replace("/", "\\/")), langAbbrev));
+                        translationStringBuilder.append(translateTopic(DataUtil.cleanData(topic.topic.replace("/", "\\/")), langAbbrev));
                         if (topic.symbolPair.closing != '\u0000')
                             translationStringBuilder.append(topic.symbolPair.closing);
                     }
@@ -1683,13 +1651,14 @@ public class TueFindBiblio extends TueFind {
     /**
      * Abstract out topic extract from LOK and ordinary field handling
      */
-    protected void extractCachedTopicsHelper(final List<VariableField> marcFieldList,
-            final Map<String, String> separators,
-            final Collection<Collection<Topic>> collector, final String fieldTag, final String subfieldTags,
-            final Predicate<DataField> includeFieldPredicate) {
+    protected void extractCachedTopicsHelper(final List<VariableField> marcFieldList, final Map<String, String> separators,
+					   final Collection<Collection<Topic>> collector, final String fieldTag, final String subfieldTags,
+					   final Predicate<DataField> includeFieldPredicate)
+    {
         final Pattern subfieldPattern = Pattern.compile(subfieldTags.length() == 0 ? "[a-z]"
-                : extractNormalizedSubfieldPatternHelper(subfieldTags));
-        fieldloop: for (final VariableField vf : marcFieldList) {
+							                         : extractNormalizedSubfieldPatternHelper(subfieldTags));
+        fieldloop:
+        for (final VariableField vf : marcFieldList) {
             final ArrayList<Topic> topicParts = new ArrayList<>();
             final DataField marcField = (DataField) vf;
             // Skip fields that do not match our criteria
@@ -1698,27 +1667,25 @@ public class TueFindBiblio extends TueFind {
             final List<Subfield> subfields = marcField.getSubfields();
 
             // Handle LOK Fields
-            if (fieldTag.length() == 6 && fieldTag.substring(0, 3).equals("LOK")) {
-                final String lokTag = fieldTag.substring(3);
-                for (final Subfield subfield : subfields) {
-                    if (subfield.getCode() == '0') {
-                        if (subfield.getData().substring(0, 3).equals(lokTag))
-                            break;
-                        else
-                            continue fieldloop;
-                    }
-                }
+            if (fieldTag.length() == 6 && fieldTag.substring(0,3).equals("LOK")) {
+                 final String lokTag = fieldTag.substring(3);
+                 for (final Subfield subfield : subfields) {
+                     if (subfield.getCode() == '0') {
+                         if (subfield.getData().substring(0,3).equals(lokTag))
+                             break;
+                         else
+                             continue fieldloop;
+                     }
+                 }
             }
 
-            // Case 1: The separator specification is empty thus we add the subfields
-            // individually
+            // Case 1: The separator specification is empty thus we add the subfields individually
             if (separators.get("default").equals("")) {
                 for (final Subfield subfield : subfields) {
                     if (Character.isDigit(subfield.getCode()))
                         continue;
                     final String term = subfield.getData().trim();
-                    if (term.length() > 1 || term.matches("\\d")) // Skip on character terms to address uppercase
-                                                                  // subfield problems in standardized keywords
+                    if (term.length() > 1 || term.matches("\\d")) //Skip on character terms to address uppercase subfield problems in standardized keywords
                         topicParts.add(new Topic(term));
                 }
             }
@@ -1733,8 +1700,7 @@ public class TueFindBiblio extends TueFind {
                     Topic topic = new Topic();
                     String term = subfield.getData().trim();
                     if ((term.length() < 2) && !term.matches("\\d"))
-                        continue; // Skip on character terms to address uppercase subfield problems in
-                                  // standardized keywords
+                        continue; //Skip on character terms to address uppercase subfield problems in standardized keywords
 
                     if (topicParts.size() > 0) {
                         final String separator = getSubfieldBasedSeparator(separators, subfield.getCode(), term);
@@ -1760,7 +1726,8 @@ public class TueFindBiblio extends TueFind {
     } // end extractTopicsHelper
 
     public Set<String> getTopics(final Record record, String fieldSpec, String separatorSpec, String langAbbrev)
-            throws FileNotFoundException {
+        throws FileNotFoundException
+    {
         final Set<String> topics = new HashSet<String>();
         // It seems to be a general rule that in the fields that the $p fields
         // are converted to a '.'
@@ -1770,12 +1737,14 @@ public class TueFindBiblio extends TueFind {
         return addHonourees(record, topics, langAbbrev);
     }
 
+
     public Set<String> getTopicFacet(final Record record, final String fieldSpecs, String separatorSpec) {
-        return getTopicFacetTranslated(record, fieldSpecs, separatorSpec, "de");
+       return getTopicFacetTranslated(record, fieldSpecs, separatorSpec, "de");
     }
 
     public Set<String> getValuesOrUnassignedTranslated(final Record record, final String fieldSpecs,
-            final String langAbbrev) {
+                                                       final String langAbbrev)
+    {
         Set<String> valuesTranslated = new TreeSet<String>();
         Set<String> values = getValuesOrUnassigned(record, fieldSpecs);
         for (final String value : values) {
@@ -1785,28 +1754,25 @@ public class TueFindBiblio extends TueFind {
         return valuesTranslated;
     }
 
-    public Set<String> getTopicFacetTranslated(final Record record, final String fieldSpecs, String separatorSpec,
-            final String lang) {
+
+    public Set<String> getTopicFacetTranslated(final Record record, final String fieldSpecs, String separatorSpec, final String lang) {
         final Map<String, String> separators = parseTopicSeparators(separatorSpec);
         final Set<String> valuesTranslated = new HashSet<String>();
         getCachedTopicsCollector(record, fieldSpecs, separators, valuesTranslated, lang, _689IsOrdinarySubject);
         // The topic collector generates a chain of all specified subfields for a field
-        // In some cases this is unintended behaviour since different topics are are
-        // independent
-        // To ensure that those chains are broken up again, make sure to specify a
-        // triple pipe (="|||") separator for these
+        // In some cases this is unintended behaviour since different topics are are independent
+        // To ensure that those chains are broken up again, make sure to specify a triple pipe (="|||") separator for these
         // subfields
         // Rewrite slashes
         final Set<String> toRemove = new HashSet<String>();
         final Set<String> toAdd = new HashSet<String>();
-        valuesTranslated.forEach((entry) -> {
-            final String[] triplePipeSeparatedStringChain = entry.split(Pattern.quote("|||"));
-            if (triplePipeSeparatedStringChain.length > 1 || entry.contains("\\/")) {
-                toRemove.add(entry);
-                for (final String topic : triplePipeSeparatedStringChain)
-                    toAdd.add(topic.replace("\\/", "/"));
-            }
-        });
+        valuesTranslated.forEach((entry) -> { final String[] triplePipeSeparatedStringChain = entry.split(Pattern.quote("|||"));
+                                              if (triplePipeSeparatedStringChain.length > 1 || entry.contains("\\/")) {
+                                                  toRemove.add(entry);
+                                                  for (final String topic : triplePipeSeparatedStringChain)
+                                                      toAdd.add(topic.replace("\\/", "/"));
+                                              }
+                                            });
         valuesTranslated.removeAll(toRemove);
         valuesTranslated.addAll(toAdd);
         addHonourees(record, valuesTranslated, lang);
@@ -1828,6 +1794,7 @@ public class TueFindBiblio extends TueFind {
         return leader.charAt(7) == 'b';
     }
 
+
     protected String checkValidYear(String fourDigitYear) {
         Matcher validFourDigitYearMatcher = VALID_FOUR_DIGIT_YEAR_PATTERN.matcher(fourDigitYear);
         return validFourDigitYearMatcher.matches() ? fourDigitYear : "";
@@ -1835,12 +1802,13 @@ public class TueFindBiblio extends TueFind {
 
     protected String yyMMDateToYear(final String controlNumber, final String yyMMDate) {
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);
-        int yearTwoDigit = currentYear - 2000; // If extraction fails later we fall back to current year
+        int yearTwoDigit = currentYear - 2000;  // If extraction fails later we fall back to current year
         try {
             yearTwoDigit = Integer.parseInt(yyMMDate.substring(0, 1));
-        } catch (NumberFormatException e) {
+        }
+        catch (NumberFormatException e) {
             logger.severe("in yyMMDateToYear: expected date in YYMM format, found \"" + yyMMDate
-                    + "\" instead! (Control number was " + controlNumber + ")");
+                          + "\" instead! (Control number was " + controlNumber + ")");
         }
         return Integer.toString(yearTwoDigit < (currentYear - 2000) ? (2000 + yearTwoDigit) : (1900 + yearTwoDigit));
     }
@@ -1868,8 +1836,7 @@ public class TueFindBiblio extends TueFind {
             return years;
         }
 
-        // Case 2 [Reproduction] (Reproductions have the publication date of the
-        // original work in 534$c.)
+        // Case 2 [Reproduction] (Reproductions have the publication date of the original work in 534$c.)
         final VariableField _534Field = record.getVariableField("534");
         if (_534Field != null) {
             final DataField dataField = (DataField) _534Field;
@@ -1898,8 +1865,7 @@ public class TueFindBiblio extends TueFind {
                 final Subfield jSubfield = _936Field.getSubfield('j');
                 if (jSubfield != null) {
                     String yearOrYearRange = jSubfield.getData();
-                    // Partly, we have additional text like "Post annum domini" in the front, so do
-                    // away with that
+                    // Partly, we have additional text like "Post annum domini" in the front, so do away with that
                     yearOrYearRange = yearOrYearRange.replaceAll("^[\\D\\[\\]]+", "");
                     // Make sure we do away with brackets
                     yearOrYearRange = yearOrYearRange.replaceAll("[\\[|\\]]", "");
@@ -1912,8 +1878,7 @@ public class TueFindBiblio extends TueFind {
 
         // Case 4:
         // Test whether we have a 190j field
-        // This was generated in the pipeline for superior works that do not contain a
-        // reasonable 008(7,10) entry
+        // This was generated in the pipeline for superior works that do not contain a reasonable 008(7,10) entry
         final List<VariableField> _190Fields = record.getVariableFields("190");
         for (VariableField _190VField : _190Fields) {
             final DataField _190Field = (DataField) _190VField;
@@ -1930,8 +1895,7 @@ public class TueFindBiblio extends TueFind {
         // Use the sort date given in the 008-Field
         final ControlField _008_field = (ControlField) record.getVariableField("008");
         if (_008_field == null) {
-            logger.severe(
-                    "getYearsBasedOnRecordType [Could not find 008 field for PPN:" + record.getControlNumber() + "]");
+            logger.severe("getYearsBasedOnRecordType [Could not find 008 field for PPN:" + record.getControlNumber() + "]");
             return years;
         }
         final String _008FieldContents = _008_field.getData();
@@ -1941,7 +1905,7 @@ public class TueFindBiblio extends TueFind {
         // log error if year is empty or not a year like "19uu"
         if (year.isEmpty() && !VALID_YEAR_RANGE_PATTERN.matcher(yearExtracted).matches())
             logger.severe("getYearsBasedOnRecordType [\"" + yearExtracted + "\" is not a valid year for PPN "
-                    + record.getControlNumber() + "]");
+                          + record.getControlNumber() + "]");
         else
             years.add(year);
 
@@ -2022,8 +1986,8 @@ public class TueFindBiblio extends TueFind {
         return iso8601date;
     }
 
-    public Set<String> getGenreTranslated(final Record record, final String fieldSpecs, final String separatorSpec,
-            final String lang) {
+
+    public Set<String> getGenreTranslated(final Record record, final String fieldSpecs, final String separatorSpec, final String lang) {
         Map<String, String> separators = parseTopicSeparators(separatorSpec);
         Set<String> genres = new HashSet<String>();
         getCachedTopicsCollector(record, fieldSpecs, separators, genres, lang, _689IsGenreSubject);
@@ -2031,8 +1995,8 @@ public class TueFindBiblio extends TueFind {
         return genres;
     }
 
-    public Set<String> getRegionTranslated(final Record record, final String fieldSpecs, final String separatorSpec,
-            final String lang) {
+
+    public Set<String> getRegionTranslated(final Record record, final String fieldSpecs, final String separatorSpec, final String lang) {
         Map<String, String> separators = parseTopicSeparators(separatorSpec);
         Set<String> region = new HashSet<String>();
         getCachedTopicsCollector(record, fieldSpecs, separators, region, lang, _689IsRegionSubject);
@@ -2040,14 +2004,15 @@ public class TueFindBiblio extends TueFind {
         return region;
     }
 
-    public Set<String> getTimeTranslated(final Record record, final String fieldSpecs, final String separatorSpec,
-            final String lang) {
+
+    public Set<String> getTimeTranslated(final Record record, final String fieldSpecs, final String separatorSpec, final String lang) {
         Map<String, String> separators = parseTopicSeparators(separatorSpec);
         Set<String> time = new HashSet<String>();
         getCachedTopicsCollector(record, fieldSpecs, separators, time, lang, _689IsTimeSubject);
 
         return time;
     }
+
 
     // Map used by getPhysicalType().
     protected static final Map<String, String> phys_code_to_format_map;
@@ -2114,8 +2079,8 @@ public class TueFindBiblio extends TueFind {
             final DataField dataField = (DataField) _655Field;
             final Subfield aSubfield = dataField.getSubfield('a');
             if (aSubfield != null && dataField.getIndicator1() == ' ' && dataField.getIndicator2() == '7'
-                    && aSubfield.getData().startsWith("Rezension"))
-                return true;
+                && aSubfield.getData().startsWith("Rezension"))
+                    return true;
         }
 
         final List<VariableField> _787Fields = record.getVariableFields("787");
@@ -2131,8 +2096,8 @@ public class TueFindBiblio extends TueFind {
             final DataField dataField = (DataField) _655Field;
             final Subfield aSubfield = dataField.getSubfield('a');
             if (aSubfield != null && dataField.getIndicator1() == ' ' && dataField.getIndicator2() == '7'
-                    && aSubfield.getData().equals("Statistik"))
-                return true;
+                && aSubfield.getData().equals("Statistik"))
+                    return true;
         }
 
         return false;
@@ -2161,14 +2126,14 @@ public class TueFindBiblio extends TueFind {
      * out
      *
      * @param record
-     *               MARC record
+     *            MARC record
      * @return set of record format
      */
     public Set<String> getFormats(final Record record) {
         final Set<String> formats = map935b(record, phys_code_to_format_map);
         final String leader = record.getLeader().toString();
         final ControlField fixedField = (ControlField) record.getVariableField("008");
-        // final DataField title = (DataField) record.getVariableField("245");
+        //final DataField title = (DataField) record.getVariableField("245");
         String formatString;
         char formatCode = ' ';
         char formatCode2 = ' ';
@@ -2185,243 +2150,243 @@ public class TueFindBiblio extends TueFind {
                 formatCode2 = formatString.length() > 1 ? formatString.charAt(1) : ' ';
                 formatCode4 = formatString.length() > 4 ? formatString.charAt(4) : ' ';
                 switch (formatCode) {
+                case 'A':
+                    switch (formatCode2) {
+                    case 'D':
+                        formats.add("Atlas");
+                        break;
+                    default:
+                        formats.add("Map");
+                        break;
+                    }
+                    break;
+                case 'C':
+                    switch (formatCode2) {
                     case 'A':
-                        switch (formatCode2) {
-                            case 'D':
-                                formats.add("Atlas");
-                                break;
-                            default:
-                                formats.add("Map");
-                                break;
-                        }
+                        formats.add("TapeCartridge");
+                        break;
+                    case 'B':
+                        formats.add("ChipCartridge");
                         break;
                     case 'C':
-                        switch (formatCode2) {
-                            case 'A':
-                                formats.add("TapeCartridge");
-                                break;
-                            case 'B':
-                                formats.add("ChipCartridge");
-                                break;
-                            case 'C':
-                                formats.add("DiscCartridge");
-                                break;
-                            case 'F':
-                                formats.add("TapeCassette");
-                                break;
-                            case 'H':
-                                formats.add("TapeReel");
-                                break;
-                            case 'J':
-                                formats.add("FloppyDisk");
-                                break;
-                            case 'M':
-                            case 'O':
-                                formats.add("CDROM");
-                                break;
-                            case 'R':
-                                // Do not return - this will cause anything with an
-                                // 856 field to be labeled as electronicRessource
-                                break;
-                        }
-                        break;
-                    case 'D':
-                        formats.add("Globe");
+                        formats.add("DiscCartridge");
                         break;
                     case 'F':
-                        formats.add("Braille");
-                        break;
-                    case 'G':
-                        switch (formatCode2) {
-                            case 'C':
-                            case 'D':
-                                formats.add("Filmstrip");
-                                break;
-                            case 'T':
-                                formats.add("Transparency");
-                                break;
-                            default:
-                                formats.add("Slide");
-                                break;
-                        }
+                        formats.add("TapeCassette");
                         break;
                     case 'H':
-                        formats.add("Microfilm");
+                        formats.add("TapeReel");
                         break;
-                    case 'K':
-                        switch (formatCode2) {
-                            case 'C':
-                                formats.add("Collage");
-                                break;
-                            case 'D':
-                                formats.add("Drawing");
-                                break;
-                            case 'E':
-                                formats.add("Painting");
-                                break;
-                            case 'F':
-                                formats.add("Print");
-                                break;
-                            case 'G':
-                                formats.add("Photonegative");
-                                break;
-                            case 'J':
-                                formats.add("Print");
-                                break;
-                            case 'L':
-                                formats.add("Drawing");
-                                break;
-                            case 'O':
-                                formats.add("FlashCard");
-                                break;
-                            case 'N':
-                                formats.add("Chart");
-                                break;
-                            default:
-                                formats.add("Photo");
-                                break;
-                        }
+                    case 'J':
+                        formats.add("FloppyDisk");
                         break;
                     case 'M':
-                        switch (formatCode2) {
-                            case 'F':
-                                formats.add("VideoCassette");
-                                break;
-                            case 'R':
-                                formats.add("Filmstrip");
-                                break;
-                            default:
-                                formats.add("MotionPicture");
-                                break;
-                        }
-                        break;
                     case 'O':
-                        formats.add("Kit");
-                        break;
-                    case 'Q':
-                        formats.add("MusicalScore");
+                        formats.add("CDROM");
                         break;
                     case 'R':
-                        formats.add("SensorImage");
+                        // Do not return - this will cause anything with an
+                        // 856 field to be labeled as electronicRessource
+                        break;
+                    }
+                    break;
+                case 'D':
+                    formats.add("Globe");
+                    break;
+                case 'F':
+                    formats.add("Braille");
+                    break;
+                case 'G':
+                    switch (formatCode2) {
+                    case 'C':
+                    case 'D':
+                        formats.add("Filmstrip");
+                        break;
+                    case 'T':
+                        formats.add("Transparency");
+                        break;
+                    default:
+                        formats.add("Slide");
+                        break;
+                    }
+                    break;
+                case 'H':
+                    formats.add("Microfilm");
+                    break;
+                case 'K':
+                    switch (formatCode2) {
+                    case 'C':
+                        formats.add("Collage");
+                        break;
+                    case 'D':
+                        formats.add("Drawing");
+                        break;
+                    case 'E':
+                        formats.add("Painting");
+                        break;
+                    case 'F':
+                        formats.add("Print");
+                        break;
+                    case 'G':
+                        formats.add("Photonegative");
+                        break;
+                    case 'J':
+                        formats.add("Print");
+                        break;
+                    case 'L':
+                        formats.add("Drawing");
+                        break;
+                    case 'O':
+                        formats.add("FlashCard");
+                        break;
+                    case 'N':
+                        formats.add("Chart");
+                        break;
+                    default:
+                        formats.add("Photo");
+                        break;
+                    }
+                    break;
+                case 'M':
+                    switch (formatCode2) {
+                    case 'F':
+                        formats.add("VideoCassette");
+                        break;
+                    case 'R':
+                        formats.add("Filmstrip");
+                        break;
+                    default:
+                        formats.add("MotionPicture");
+                        break;
+                    }
+                    break;
+                case 'O':
+                    formats.add("Kit");
+                    break;
+                case 'Q':
+                    formats.add("MusicalScore");
+                    break;
+                case 'R':
+                    formats.add("SensorImage");
+                    break;
+                case 'S':
+                    switch (formatCode2) {
+                    case 'D':
+                        formats.add("SoundDisc");
                         break;
                     case 'S':
-                        switch (formatCode2) {
-                            case 'D':
-                                formats.add("SoundDisc");
-                                break;
-                            case 'S':
-                                formats.add("SoundCassette");
-                                break;
-                            default:
-                                formats.add("SoundRecording");
-                                break;
+                        formats.add("SoundCassette");
+                        break;
+                    default:
+                        formats.add("SoundRecording");
+                        break;
+                    }
+                    break;
+                case 'V':
+                    switch (formatCode2) {
+                    case 'C':
+                        formats.add("VideoCartridge");
+                        break;
+                    case 'D':
+                        switch (formatCode4) {
+                        case 'S':
+                            formats.add("BRDisc");
+                            break;
+                        case 'V':
+                        default:
+                            formats.add("VideoDisc");
+                            break;
                         }
                         break;
-                    case 'V':
-                        switch (formatCode2) {
-                            case 'C':
-                                formats.add("VideoCartridge");
-                                break;
-                            case 'D':
-                                switch (formatCode4) {
-                                    case 'S':
-                                        formats.add("BRDisc");
-                                        break;
-                                    case 'V':
-                                    default:
-                                        formats.add("VideoDisc");
-                                        break;
-                                }
-                                break;
-                            case 'F':
-                                formats.add("VideoCassette");
-                                break;
-                            case 'R':
-                                formats.add("VideoReel");
-                                break;
-                            default:
-                                formats.add("Video");
-                                break;
-                        }
+                    case 'F':
+                        formats.add("VideoCassette");
                         break;
+                    case 'R':
+                        formats.add("VideoReel");
+                        break;
+                    default:
+                        formats.add("Video");
+                        break;
+                    }
+                    break;
                 }
             }
         }
         // check the Leader at position 6
         switch (leader.charAt(6)) {
-            case 'c':
-            case 'd':
-                formats.add("MusicalScore");
-                break;
-            case 'e':
-            case 'f':
-                formats.add("Map");
-                break;
-            case 'g':
-                formats.add(isVideo(record) ? "Video" : "Slide");
-                break;
-            case 'i':
-                formats.add("SoundRecording");
-                break;
-            case 'j':
-                formats.add("MusicRecording");
-                break;
-            case 'k':
-                formats.add("Photo");
-                break;
-            case 'o':
-            case 'p':
-                formats.add("Kit");
-                break;
-            case 'r':
-                formats.add("PhysicalObject");
-                break;
-            case 't':
-                formats.add("Manuscript");
-                break;
+        case 'c':
+        case 'd':
+            formats.add("MusicalScore");
+            break;
+        case 'e':
+        case 'f':
+            formats.add("Map");
+            break;
+        case 'g':
+            formats.add(isVideo(record) ? "Video" : "Slide");
+            break;
+        case 'i':
+            formats.add("SoundRecording");
+            break;
+        case 'j':
+            formats.add("MusicRecording");
+            break;
+        case 'k':
+            formats.add("Photo");
+            break;
+        case 'o':
+        case 'p':
+            formats.add("Kit");
+            break;
+        case 'r':
+            formats.add("PhysicalObject");
+            break;
+        case 't':
+            formats.add("Manuscript");
+            break;
         }
 
         // check the Leader at position 7
         switch (leader.charAt(7)) {
-            // Monograph
-            case 'm':
-                formats.add("Book");
-                break;
-            // Component parts
-            case 'a': // BookComponentPart
-                formats.add("Article");
-                break;
-            case 'b': // SerialComponentPart
-                formats.add("Article");
-                break;
+        // Monograph
+        case 'm':
+            formats.add("Book");
+            break;
+        // Component parts
+        case 'a': // BookComponentPart
+            formats.add("Article");
+            break;
+        case 'b': // SerialComponentPart
+            formats.add("Article");
+            break;
             // Integrating resource
-            case 'i':
-                // Look in 008 to determine the exact type
-                formatCode = fixedField.getData().toUpperCase().charAt(21);
-                switch (formatCode) {
-                    case 'W':
-                        formats.add("Website");
-                        break;
-                    case 'D':
-                        formats.add("Database");
-                        break;
-                }
+        case 'i':
+            // Look in 008 to determine the exact type
+            formatCode = fixedField.getData().toUpperCase().charAt(21);
+            switch (formatCode) {
+            case 'W':
+                formats.add("Website");
                 break;
-            // Serial
-            case 's':
-                // Look in 008 to determine what type of Continuing Resource
-                formatCode = fixedField.getData().toUpperCase().charAt(21);
-                switch (formatCode) {
-                    case 'N':
-                        formats.add("Newspaper");
-                        break;
-                    case 'P':
-                        formats.add("Journal");
-                        break;
-                    default:
-                        formats.add("Serial");
-                        break;
-                }
+            case 'D':
+                formats.add("Database");
+                break;
+            }
+            break;
+        // Serial
+        case 's':
+            // Look in 008 to determine what type of Continuing Resource
+            formatCode = fixedField.getData().toUpperCase().charAt(21);
+            switch (formatCode) {
+            case 'N':
+                formats.add("Newspaper");
+                break;
+            case 'P':
+                formats.add("Journal");
+                break;
+            default:
+                formats.add("Serial");
+                break;
+            }
         }
 
         // Literary remains and archived material
@@ -2439,7 +2404,7 @@ public class TueFindBiblio extends TueFind {
             }
         }
 
-        // Software
+        //Software
         final List<VariableField> _336Fields = record.getVariableFields("336");
         for (final VariableField variableField : _336Fields) {
             final DataField _336Field = (DataField) variableField;
@@ -2472,8 +2437,7 @@ public class TueFindBiblio extends TueFind {
             }
         }
 
-        // Records that contain the code "so" in 935$c should be classified as "Article"
-        // and not as "Book":
+        // Records that contain the code "so" in 935$c should be classified as "Article" and not as "Book":
         if (!formats.contains("Article")) {
             for (final VariableField variableField : _935Fields) {
                 final DataField _935Field = (DataField) variableField;
@@ -2498,8 +2462,7 @@ public class TueFindBiblio extends TueFind {
         if (foundInSubfield(_935Fields, 'c', "fe"))
             formats.add("Festschrift");
 
-        // Determine whether a record is a subscription package, i.e. has
-        // "subskriptionspaket" in 935$c
+        // Determine whether a record is a subscription package, i.e. has "subskriptionspaket" in 935$c
         if (foundInSubfield(_935Fields, 'c', "subskriptionspaket"))
             formats.add("SubscriptionBundle");
 
@@ -2524,7 +2487,8 @@ public class TueFindBiblio extends TueFind {
                     break;
                 }
                 if (aSubfield.getData().startsWith("Forschungsdaten") & dataField.getIndicator1() == ' '
-                        && dataField.getIndicator2() == '7') {
+                    && dataField.getIndicator2() == '7')
+                {
                     formats.remove("Book");
                     formats.add("ResearchData");
                     break;
@@ -2539,8 +2503,7 @@ public class TueFindBiblio extends TueFind {
         return formats;
     }
 
-    protected boolean foundInSubfield(final List<VariableField> fields, final char subfieldCode,
-            final String subfieldContents) {
+    protected boolean foundInSubfield(final List<VariableField> fields, final char subfieldCode, final String subfieldContents) {
         for (final VariableField field : fields) {
             final DataField dataField = (DataField) field;
             for (final Subfield subfield : dataField.getSubfields()) {
@@ -2557,7 +2520,7 @@ public class TueFindBiblio extends TueFind {
      * electronic and non-electronic resources
      *
      * @param record
-     *               the record
+     *            the record
      * @return mediatype of the record
      */
 
@@ -2593,7 +2556,7 @@ public class TueFindBiblio extends TueFind {
         Set<String> merged_ids = new HashSet<String>();
 
         for (final VariableField _ZWIField : record.getVariableFields("ZWI")) {
-            final DataField field = (DataField) _ZWIField;
+            final DataField field = (DataField)_ZWIField;
             final Subfield subfield_a = field.getSubfield('a');
             if (subfield_a != null && subfield_a.getData().equals("1")) {
                 for (final Subfield subfield_b : field.getSubfields('b')) {
@@ -2610,7 +2573,7 @@ public class TueFindBiblio extends TueFind {
      * Helper to calculate the first publication year
      *
      * @param years
-     *              String of possible publication years
+     *            String of possible publication years
      * @return the first publication year
      */
 
@@ -2618,7 +2581,7 @@ public class TueFindBiblio extends TueFind {
         String firstPublicationYear = null;
         for (final String current : years) {
             if (firstPublicationYear == null || current != null
-                    && Integer.parseInt(current) < Integer.parseInt(firstPublicationYear))
+                && Integer.parseInt(current) < Integer.parseInt(firstPublicationYear))
                 firstPublicationYear = current;
         }
         return firstPublicationYear;
@@ -2628,15 +2591,14 @@ public class TueFindBiblio extends TueFind {
      * Helper to calculate the most recent publication year
      *
      * @param year
-     *             String of possible publication years
+     *            String of possible publication years
      * @return the last publication year
      */
 
     public String calculateLastPublicationYear(Set<String> years) {
         String lastPublicationYear = null;
         for (final String current : years) {
-            if (lastPublicationYear == null
-                    || current != null && Integer.parseInt(current) > Integer.parseInt(lastPublicationYear))
+            if (lastPublicationYear == null || current != null && Integer.parseInt(current) > Integer.parseInt(lastPublicationYear))
                 lastPublicationYear = current;
         }
         return lastPublicationYear;
@@ -2646,7 +2608,7 @@ public class TueFindBiblio extends TueFind {
      * Helper to cope with differing dates and possible special characters
      *
      * @param dateString
-     *                   String of possible publication dates
+     *            String of possible publication dates
      * @return the first publication date
      */
     public String getCleanAndNormalizedDate(final String dateString) {
@@ -2662,7 +2624,7 @@ public class TueFindBiblio extends TueFind {
      * accordance with the rules stated in issue 227
      *
      * @param record
-     *               MARC record
+     *            MARC record
      * @return the publication year to be used for
      */
     public String getPublicationSortYear(final Record record) {
@@ -2678,7 +2640,7 @@ public class TueFindBiblio extends TueFind {
 
         // 935a
         for (final VariableField _935Field : record.getVariableFields("935")) {
-            final DataField field = (DataField) _935Field;
+            final DataField field = (DataField)_935Field;
             for (final Subfield subfield_a : field.getSubfields('a')) {
                 if (!subfield_a.getData().isEmpty()) {
                     result.add(subfield_a.getData());
@@ -2705,7 +2667,7 @@ public class TueFindBiblio extends TueFind {
     }
 
     protected String getPages(final Record record) {
-        final DataField _936Field = (DataField) record.getVariableField("936");
+        final DataField _936Field = (DataField)record.getVariableField("936");
         if (_936Field == null)
             return null;
         final Subfield subfieldH = _936Field.getSubfield('h');
@@ -2737,12 +2699,9 @@ public class TueFindBiblio extends TueFind {
         return null;
     }
 
-    /**
-     * @return "open-access" if we have an open access publication, else
-     *         "non-open-access".
-     */
+    /** @return "open-access" if we have an open access publication, else "non-open-access". */
     public String getOpenAccessStatus(final Record record) {
-        final DataField _OASField = (DataField) record.getVariableField("OAS");
+        final DataField _OASField = (DataField)record.getVariableField("OAS");
         if (_OASField == null)
             return "non-open-access";
         final Subfield subfieldA = _OASField.getSubfield('a');
@@ -2799,12 +2758,13 @@ public class TueFindBiblio extends TueFind {
             return volumeString;
         // Handle Some known special cases
         if (volumeString.matches("[\\[]\\d+[\\]]"))
-            return volumeString.replaceAll("[\\[\\]]", "");
+            return volumeString.replaceAll("[\\[\\]]","");
         if (volumeString.matches("\\d+/\\d+"))
             return volumeString.split("/")[0];
 
         return "0";
     }
+
 
     public String getFullText(final Record record) {
         final DataField fullTextField = (DataField) record.getVariableField("FUL");
@@ -2816,7 +2776,7 @@ public class TueFindBiblio extends TueFind {
         try {
             final Statement statement = dbConnection.createStatement();
             final ResultSet resultSet = statement.executeQuery("SELECT full_text FROM full_text_cache WHERE id=\""
-                    + record.getControlNumber() + "\"");
+                                                               + record.getControlNumber() + "\"");
             if (!resultSet.isBeforeFirst())
                 return "";
 
@@ -2828,6 +2788,7 @@ public class TueFindBiblio extends TueFind {
             return ""; // Keep the compiler happy!
         }
     }
+
 
     public String isHybrid(final Record record) {
         final VariableField field = record.getVariableField("ZWI");
@@ -2844,57 +2805,59 @@ public class TueFindBiblio extends TueFind {
         return Boolean.FALSE.toString();
     }
 
+
     protected String extractFullTextFromJSON(final JSONArray hits, final String text_type_description) {
         if (hits.isEmpty())
             return "";
 
         StringBuilder fulltextBuilder = new StringBuilder();
         for (final Object obj : hits) {
-            JSONObject hit = (JSONObject) obj;
-            JSONObject _source = (JSONObject) hit.get("_source");
-            final String description = _source.containsKey("text_type")
-                    ? mapTextTypeToDescription((String) _source.get("text_type"))
-                    : "";
-            if (description.isEmpty() || text_type_description.isEmpty() ||
-                    description.equals(text_type_description))
-                fulltextBuilder.append(_source.get("full_text") != null ? _source.get("full_text") : "");
+             JSONObject hit = (JSONObject) obj;
+             JSONObject _source = (JSONObject) hit.get("_source");
+             final String description = _source.containsKey("text_type") ?
+		                        mapTextTypeToDescription((String) _source.get("text_type")) : "";
+             if (description.isEmpty() || text_type_description.isEmpty() ||
+                 description.equals(text_type_description))
+                     fulltextBuilder.append(_source.get("full_text") != null ? _source.get("full_text") : "");
         }
-        return (fulltextBuilder.length() > 0) ? fulltextBuilder.toString() : null;
+        return (fulltextBuilder.length() > 0)  ? fulltextBuilder.toString() : null;
     }
+
 
     protected String mapTextTypeToDescription(final String text_type) {
         String type_candidate = text_type_to_description_map.get(text_type);
         return type_candidate != null ? type_candidate : "Unknown";
     }
 
+
     protected Set<String> extractTextTypeFromJSON(final JSONArray hits) {
         final Set<String> text_types = new TreeSet<String>();
         if (hits.isEmpty())
             return text_types;
         for (final Object obj : hits) {
-            JSONObject hit = (JSONObject) obj;
-            JSONObject _source = (JSONObject) hit.get("_source");
-            final String description = _source.containsKey("text_type")
-                    ? mapTextTypeToDescription((String) _source.get("text_type"))
-                    : "";
-            if (!description.isEmpty())
-                text_types.add(description);
+             JSONObject hit = (JSONObject) obj;
+             JSONObject _source = (JSONObject) hit.get("_source");
+             final String description = _source.containsKey("text_type") ?
+                                        mapTextTypeToDescription((String) _source.get("text_type")) : "";
+             if (!description.isEmpty())
+                 text_types.add(description);
         }
         return text_types;
     }
+
 
     protected boolean extractIsPublisherProvidedFromJSON(final JSONArray hits) {
         if (hits.isEmpty())
             return false;
         for (final Object obj : hits) {
-            JSONObject hit = (JSONObject) obj;
-            JSONObject _source = (JSONObject) hit.get("_source");
-            if (_source.containsKey("is_publisher_provided")
-                    && ((String) _source.get("is_publisher_provided")).equals("true"))
-                return true;
+             JSONObject hit = (JSONObject) obj;
+             JSONObject _source = (JSONObject) hit.get("_source");
+             if (_source.containsKey("is_publisher_provided") && ((String) _source.get("is_publisher_provided")).equals("true"))
+                 return true;
         }
         return false;
     }
+
 
     protected JSONArray getElasticsearchHits(final String responseString) {
         if (responseString.isEmpty())
@@ -2903,23 +2866,27 @@ public class TueFindBiblio extends TueFind {
             JSONObject responseObject = (JSONObject) new JSONParser().parse(responseString);
             JSONObject hits = (JSONObject) responseObject.get("hits");
             return (JSONArray) hits.get("hits");
-        } catch (ParseException e) {
-            e.printStackTrace();
+        } catch(ParseException e) {
+           e.printStackTrace();
         }
         return new JSONArray(); /* should not be reached */
     }
 
+
     protected static Properties getPropertiesFromFile(final String configProps) {
         String homeDir = Boot.getDefaultHomeDir();
         File configFile = new File(configProps);
-        if (!configFile.isAbsolute()) {
+        if (!configFile.isAbsolute())
+        {
             configFile = new File(homeDir, configProps);
         }
         return PropertyUtils.loadProperties(new String[0], configFile.getAbsolutePath(), true);
     }
 
+
     protected static Properties esFulltextProperties = null;
     protected static String esFulltextUrl = null;
+
 
     public static Properties getESFulltextProperties() {
         if (esFulltextProperties != null)
@@ -2928,9 +2895,11 @@ public class TueFindBiblio extends TueFind {
         return esFulltextProperties;
     }
 
+
     public static String getMyHostnameShort() throws java.net.UnknownHostException {
-        return fullHostName.replaceAll("\\..*", "");
+       return fullHostName.replaceAll("\\..*", "");
     }
+
 
     public static String getElasticsearchHost() throws java.net.UnknownHostException {
         final Properties esFullTextProperties = getESFulltextProperties();
@@ -2938,11 +2907,13 @@ public class TueFindBiblio extends TueFind {
         return PropertyUtils.getProperty(esFullTextProperties, myhostname + ".host", "localhost");
     }
 
+
     public static String getElasticsearchPort() throws java.net.UnknownHostException {
         final Properties esFullTextProperties = getESFulltextProperties();
         final String myhostname = getMyHostnameShort();
         return PropertyUtils.getProperty(esFullTextProperties, myhostname + ".port", "9200");
     }
+
 
     public static String getElasticsearchUrl() throws java.net.UnknownHostException {
         if (esFulltextUrl == null) {
@@ -2953,12 +2924,14 @@ public class TueFindBiblio extends TueFind {
         return esFulltextUrl;
     }
 
+
     public static boolean isFullTextDisabled() throws java.net.UnknownHostException {
         final Properties esFullTextProperties = getESFulltextProperties();
         final String myhostname = getMyHostnameShort();
         final String isDisabled = PropertyUtils.getProperty(esFullTextProperties, myhostname + ".disabled", "false");
         return Boolean.parseBoolean(isDisabled);
     }
+
 
     protected static Set<String> fulltextPPNList;
     static {
@@ -2972,13 +2945,13 @@ public class TueFindBiblio extends TueFind {
                         String ppnLine;
                         while ((ppnLine = in.readLine()) != null)
                             fulltextPPNList.add(ppnLine);
-                    } catch (IOException e) {
+                     } catch (IOException e) {
                         logger.severe("Could not read file: " + e.toString());
-                    }
+                     }
                 }
             }
         } catch (java.net.UnknownHostException e) {
-            throw new RuntimeException("Could not determine Hostname", e);
+            throw new RuntimeException ("Could not determine Hostname", e);
         }
     }
 
@@ -3003,8 +2976,7 @@ public class TueFindBiblio extends TueFind {
             return "";
 
         HttpPost httpPost = new HttpPost(getElasticsearchUrl());
-        final String fulltextById = "{ \"query\" : { \"match\" : { \"id\" : \"" + record.getControlNumber()
-                + "\" } } }";
+        final String fulltextById = "{ \"query\" : { \"match\" : { \"id\" : \"" + record.getControlNumber() + "\" } } }";
         final StringEntity stringEntity = new StringEntity(fulltextById);
         httpPost.setEntity(stringEntity);
         httpPost.setHeader("Accept", "application/json");
@@ -3033,13 +3005,16 @@ public class TueFindBiblio extends TueFind {
         return extractFullTextFromJSON(getFullTextServerHits(record), "Fulltext");
     }
 
+
     public String getFullTextElasticsearchTOC(final Record record) throws Exception {
         return extractFullTextFromJSON(getFullTextServerHits(record), "Table of Contents");
     }
 
+
     public String getFullTextElasticsearchAbstract(final Record record) throws Exception {
         return extractFullTextFromJSON(getFullTextServerHits(record), "Abstract");
     }
+
 
     public String getFullTextElasticsearchSummary(final Record record) throws Exception {
         return extractFullTextFromJSON(getFullTextServerHits(record), "Summary");
@@ -3049,19 +3024,21 @@ public class TueFindBiblio extends TueFind {
         return extractFullTextFromJSON(getFullTextServerHits(record), "List of References");
     }
 
+
+
     public Set<String> getFullTextTypes(final Record record) throws Exception {
         return extractTextTypeFromJSON(getFullTextServerHits(record));
     }
+
 
     public String getHasPublisherFullText(final Record record) throws Exception {
         return Boolean.toString(extractIsPublisherProvidedFromJSON(getFullTextServerHits(record)));
     }
 
-    public String extractFirstK10PlusPPNAndTitle(final Record record, final String fieldAndSubfieldCode)
-            throws IllegalArgumentException {
+
+    public String extractFirstK10PlusPPNAndTitle(final Record record, final String fieldAndSubfieldCode) throws IllegalArgumentException {
         if (fieldAndSubfieldCode.length() != 3 + 1)
-            throw new IllegalArgumentException(
-                    "expected a field tag plus a subfield code, got \"" + fieldAndSubfieldCode + "\"!");
+            throw new IllegalArgumentException("expected a field tag plus a subfield code, got \"" + fieldAndSubfieldCode + "\"!");
 
         final DataField field = (DataField) record.getVariableField(fieldAndSubfieldCode.substring(0, 3));
         if (field == null)
@@ -3080,6 +3057,7 @@ public class TueFindBiblio extends TueFind {
 
         return null;
     }
+
 
     public Set<String> getAuthorsAndIds(final Record record, String tagList) {
         final String separator = ":";
@@ -3133,12 +3111,13 @@ public class TueFindBiblio extends TueFind {
             }
         }
 
-        for (Entry<String, String> pair : authorToId.entrySet()) {
+        for (Entry<String,String> pair : authorToId.entrySet()){
             result.add(pair.getKey() + separator + pair.getValue());
         }
 
         return result;
     }
+
 
     public static List<String> getDateBBoxes(final Record record, final String rangeFieldTag) {
         final DataField rangeField = (DataField) record.getVariableField(rangeFieldTag);
@@ -3177,11 +3156,11 @@ public class TueFindBiblio extends TueFind {
         return ranges;
     }
 
-    public List<String> createNonUniqueSearchField(final Record record, final String tagList,
-            final String processingSteps) {
+
+    public List<String> createNonUniqueSearchField(final Record record, final String tagList, final String processingSteps) {
         List<String> results = new ArrayList<String>();
-        Set<String> fieldsByTagList = org.vufind.index.FieldSpecTools.getFieldsByTagList(record, tagList);
-        // clean(trim), toLower, stripPunct, stripAccent, normalizeSortableString
+        Set<String> fieldsByTagList = org.vufind.index.FieldSpecTools.getFieldsByTagList(record,tagList);
+        //clean(trim), toLower, stripPunct, stripAccent, normalizeSortableString
         String cmpProcessingSteps = processingSteps.toLowerCase();
         boolean doTrim = cmpProcessingSteps.contains("trim");
         boolean doToLower = cmpProcessingSteps.contains("tolower");
