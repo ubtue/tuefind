@@ -2667,13 +2667,20 @@ public class TueFindBiblio extends TueFind {
     }
 
     protected String getPages(final Record record) {
-        final DataField _936Field = (DataField)record.getVariableField("936");
-        if (_936Field == null)
-            return null;
-        final Subfield subfieldH = _936Field.getSubfield('h');
-        if (subfieldH == null)
-            return null;
-        return subfieldH.getData();
+        for (final VariableField variableField : record.getVariableFields("936")) {
+            final DataField dataField = (DataField) variableField;
+            final char ind1 = dataField.getIndicator1();
+            final char ind2 = dataField.getIndicator2();
+            if (ind1 == 'u' && ind2 == 'w') {
+                final Subfield subfieldH = dataField.getSubfield('h');
+
+                if(subfieldH != null) {
+                    final String pageRange = subfieldH.getData();
+                    return pageRange;
+                }
+            }
+        }
+        return null;
     }
 
     public String getStartPage(final Record record) {
