@@ -123,8 +123,12 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
             return $this->forceLogin();
         }
 
+        // This is related to DSpace in the first place, not to our own server.
+        // The value will be shown as MB in certain display texts, as well as compared
+        // with the uploaded file's size. Be careful increasing this value, since
+        // our own php.ini must also allow the value.
+        $uploadMaxFileSizeMB = 50;
         $showForm = true;
-        $uploadMaxFileSize = 500000;
         $config = $this->getConfig('tuefind');
         $dspaceServer = $config->Publication->dspace_url_base;
         $dspaceVersion = $config->Publication->dspace_version;
@@ -141,7 +145,7 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
 
             $publicationURL = ($dspaceVersion == 6) ? $dspaceServer."/xmlui/handle/".$dbPublications->external_document_id : $dspaceServer."/handle/".$item->handle;
 
-            $this->flashMessenger()->addMessage(['msg' => "Publication already exists: <a href='".$publicationURL."' target='_blank'>click here to go to file</a>", 'html' => true], 'error');
+            $this->flashMessenger()->addMessage(['msg' => $this->translate('publication_already_exists').": <a href='".$publicationURL."' target='_blank'>".$this->translate('click_here_to_go_to_file')."</a>", 'html' => true], 'error');
             $uploadError = true;
             $showForm = false;
         }
@@ -156,15 +160,15 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
             $uploadedFile = $this->params()->fromFiles('file');
             $PDFMediaTypesArray = ['application/pdf', 'application/x-pdf', 'application/x-bzpdf', 'application-gzpdf'];
             if (!in_array($uploadedFile['type'], $PDFMediaTypesArray)) {
-                $this->flashMessenger()->addMessage('Only PDF files allowed.', 'error');
+                $this->flashMessenger()->addMessage($this->translate('only_PDF_files_allowed'), 'error');
                 $uploadError = true;
             }
-            if ($uploadedFile['size'] > $uploadMaxFileSize) {
-                $this->flashMessenger()->addMessage('File is too big!', 'error');
+            if ($uploadedFile['size'] > $uploadMaxFileSizeMB * 1024 * 1024) {
+                $this->flashMessenger()->addMessage($this->translate('file_is_too_big'), 'error');
                 $uploadError = true;
             }
-            if (!preg_match('/^[a-z0-9_\s]+\.pdf$/i', $uploadedFile['name'])) {
-                $this->flashMessenger()->addMessage('The file name is incorrect. Only letters, numbers, underscores and spaces are allowed.', 'error');
+            if (!preg_match('/^[-a-z0-9_\s]+\.pdf$/i', $uploadedFile['name'])) {
+                $this->flashMessenger()->addMessage($this->translate('publication_PDF_title_validation'), 'error');
                 $uploadError = true;
             }
 
@@ -204,7 +208,7 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
                     $dbPublications = $this->getTable('publication')->addPublication($user->id, $existingRecordId, $item->id, $item->sections->upload->files[0]->uuid, $termFileData['termDate']);
                     $publicationURL = $dspaceServer."/workspaceitems/".$item->id."/view";
                 }
-                $this->flashMessenger()->addMessage(['msg' => "Publication successfully created: <a href='".$publicationURL."' target='_blank'>click here go to file</a>", 'html' => true], 'success');
+                $this->flashMessenger()->addMessage(['msg' => $this->translate('publication_successfully_created').": <a href='".$publicationURL."' target='_blank'>".$this->translate('click_here_to_go_to_file')."</a>", 'html' => true], 'success');
                 $showForm = false;
             }
         }
@@ -238,6 +242,7 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
         $view->dublinCore = $dublinCore;
         $view->termFile = $termFileData;
         $view->recordLanguages = $existingRecord->getLanguages();
+        $view->uploadMaxFilesizeMB = $uploadMaxFileSizeMB;
         return $view;
     }
 
