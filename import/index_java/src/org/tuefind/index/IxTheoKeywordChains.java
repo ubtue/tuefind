@@ -10,7 +10,7 @@ import org.marc4j.marc.VariableField;
 public class IxTheoKeywordChains extends TueFind {
 
     private final static String KEYWORD_DELIMITER = "/";
-    private final static String SUBFIELD_CODES = "abcdetnpzf";
+    private final static String SUBFIELD_CODES = "abcdetnpzfg";
     private final static TueFindBiblio tueFindBiblio = new TueFindBiblio();
 
     public Set<String> getKeyWordChain(final Record record, final String fieldSpec, final String lang) {
@@ -96,7 +96,7 @@ public class IxTheoKeywordChains extends TueFind {
             if (gnd_seen) {
                 if (SUBFIELD_CODES.indexOf(subfield.getCode()) != -1) {
                     if (keyword.length() > 0) {
-                        if (subfield.getCode() == 'z') {
+                        if (subfield.getCode() == 'z' || subfield.getCode() == 'g') {
                             keyword.append(" (" + tueFindBiblio.translateTopic(subfield.getData(), lang) + ")");
                             continue;
                         }
