@@ -7,7 +7,7 @@ $publicationEmail = $tuefind->getPublicationEmail();
 <p>Self-Archiving Service</p>
 
 <p>You can self-archive your essays and articles if you have an <?=$currentSystem?> account and can prove that you are the author.<p>
-<p>If you already have an <?=$currentSystem?>-account and your access to your author ID has been approved, you only need to <a href="/MyResearch/UserLogin">login</a>, select the article you want to upload and click on "self-archive".<p>
+<p>If you already have an <?=$currentSystem?>-account and your access to your author ID has been approved, you only need to <a href="<?=$this->url('myresearch-userlogin')?>">login</a>, select the article you want to upload and click on "<?=$this->transEsc('publication_request_button')?>".<p>
 <p>If you haven't registered yet for this service, you should proceed as follows:</p>
 
 <p><b>Registration</b></p>
@@ -22,7 +22,7 @@ $publicationEmail = $tuefind->getPublicationEmail();
 
 <ul style="list-style: none;">
     <li>2. Once you’ve logged into your <?=$currentSystem?> account, you can request access to your author ID. First click on the tab labelled “Persons / Corporations” above the search field, then search for your name and select the right entry.</li><br />
-    <li>3. Click on the button “Request Access Rights (This is me!)”.</li><br />
+    <li>3. Click on the button <span class="save-record toolbar-btn btn-type-save"><?=$this->transEsc('authority_access_request_button')?></span>.</li><br />
     <li>4. Your request will be automatically sent to the <?=$currentSystem?>-team. We will then verify your identity and inform you within a few days per e-mail whether your request has been approved.</li><br />
     <li>In the next step, you can upload your articles.</li>
 </ul>

@@ -6,7 +6,7 @@ $publicationEmail = $tuefind->getPublicationEmail();
 
 <p>Self-Archiving Service</p>
 <p>Sie können diesen von Ihnen verfassten Beitrag zweitveröffentlichen, wenn Sie einen <?=$currentSystem;?>-Account anlegen und nachweisen, dass Sie der*die Autor*in sind.</p>
-<p>Wenn Sie bereits einen <?=$currentSystem;?>-Account haben und der Zugriff auf Ihre Autor*innen-ID genehmigt wurde, müssen sie sich lediglich <a href="/MyResearch/UserLogin">einloggen</a> und können im Anschluss beim ausgewählten Beitrag auf „self-archive“ klicken und ihr Digitalisat hochladen.</p>
+<p>Wenn Sie bereits einen <?=$currentSystem;?>-Account haben und der Zugriff auf Ihre Autor*innen-ID genehmigt wurde, müssen sie sich lediglich <a href="<?=$this->url('myresearch-userlogin')?>">einloggen</a> und können im Anschluss beim ausgewählten Beitrag auf „<?=$this->transEsc('publication_request_button')?>“ klicken und ihr Digitalisat hochladen.</p>
 <p>Wenn Sie sich noch nicht für den Service registriert haben, gehen Sie wie folgt vor:</p>
 
 <p><b>Registrierung</b></p>
@@ -21,7 +21,7 @@ $publicationEmail = $tuefind->getPublicationEmail();
 
 <ul style="list-style: none;">
     <li>2. Sobald Sie in Ihrem <?=$currentSystem;?> Konto angemeldet sind, können Sie den Zugriff auf Ihre Autor*innen-ID beantragen. Dazu wählen Sie den Reiter „Personen/Körperschaften“ oberhalb des Suchschlitzes. Suchen Sie nach Ihrem Namen und wählen Sie den richtigen Eintrag aus.</li>
-    <li>3. Klicken Sie auf den Button „Request Access Rights (This is me!)”</li>
+    <li>3. Klicken Sie auf den Button <span class="save-record toolbar-btn btn-type-save"><?=$this->transEsc('authority_access_request_button')?></span></li>
     <li>4. Ihre Anfrage wird nun automatisch an das <?=$currentSystem;?>-Team geschickt. Wir überprüfen, ob Sie die genannte Person sind, und informieren Sie innerhalb weniger Tage per E-Mail, ob Ihr Antrag genehmigt wurde.</li><br />
     <li>Nun können Sie im nächsten Schritt Ihre Publikationen hochladen.</li>
 </ul>
