@@ -4,8 +4,10 @@
   $config = $this->tuefind()->getConfig('tuefind');
   $publication = $this->tuefind()->getPublicationByControlNumber($recordId);
   $authorsIds = $this->driver->getPrimaryAuthorsIds();
+  $secondaryAuthorsIds = $this->driver->getSecondaryAuthorsIds();
   $showPublishButton = $this->tuefind()->getUserAccessPublishButton($authorsIds);
-  $authors = $this->driver->getDeduplicatedAuthors();
+  $showSecondaryAuthorsButton = $this->tuefind()->showSecondaryAuthorsButton($secondaryAuthorsIds);
+
   $showDspaceLink = false;
   $showPublicationLink = false;
   if (isset($publication)) {
@@ -23,7 +25,9 @@
       <a class="toolbar-btn btn-type-publish" target="_blank" href="<?=$dspaceLink;?>"><?=$this->transEsc('publication_file_button')?></a>
     <?php elseif($showPublishButton): ?>
       <a class="toolbar-btn btn-type-publish" href="<?=$this->url('myresearch-publish', ['record_id' => $recordId])?>"><?=$this->transEsc('publication_request_button')?></a>
-    <?php else:?>
+    <?php elseif($showSecondaryAuthorsButton):?>
+      <a class="toolbar-btn btn-type-publish" data-lightbox href="<?=$this->url('help-home')?>?topic=publicationSecondaryAuthors" rel="nofollow"><?=$this->transEsc('publication_request_button')?></a>
+    <?php else: ?>
       <a class="toolbar-btn btn-type-publish" data-lightbox href="<?=$this->url('help-home')?>?topic=publication" rel="nofollow"><?=$this->transEsc('publication_request_button')?></a>
     <?php endif; ?>
   </li>
