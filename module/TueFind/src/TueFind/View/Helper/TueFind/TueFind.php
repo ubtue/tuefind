@@ -560,6 +560,26 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
         return $access;
     }
 
+    public function showSecondaryAuthorsButton($secondaryAuthorsIds): bool
+    {
+        $showButton = false;
+        $auth = $this->container->get('ViewHelperManager')->get('auth');
+        $manager = $auth->getManager();
+        $user = $manager->isLoggedIn();
+        if($user) {
+            $table = $this->container->get(\VuFind\Db\Table\PluginManager::class)->get('user_authority');
+            foreach($secondaryAuthorsIds as $authorId) {
+                $row = $table->getByUserIdAndAuthorityId($user->id,$authorId);
+                if(!empty($row) && $row->access_state == "granted") {
+                    $showButton = true;
+                }
+            }
+
+        }
+        return $showButton;
+    }
+
+
     public function userAlreadyMadeAuthorityRequest($userId): bool
     {
         $table = $this->container->get(\VuFind\Db\Table\PluginManager::class)->get('user_authority');
@@ -605,5 +625,4 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
         $config = $this->container->get('VuFind\Config')->get('config');
         return $config->Site->email ?? "";
     }
-
 }
