@@ -11,7 +11,7 @@ class PluginManager extends \VuFind\Recommend\PluginManager {
         $this->aliases['ids'] = Ids::class;
         $this->aliases['sidefacets'] = SideFacets::class;
         $this->factories[Ids::class] = InvokableFactory::class;
-        $this->factories[SideFacets::class] = SideFacetsFactory::class;
+        $this->factories[SideFacets::class] = \VuFind\Recommend\SideFacetsFactory::class;
         parent::__construct($configOrContainerInstance, $v3config);
     }
 }
