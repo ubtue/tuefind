@@ -41,7 +41,6 @@ public class IxTheoKeywordChains extends TueFind {
         for (List<String> keyWordChain : keyWordChains.values()) {
             keyWordChainBag.addAll(keyWordChain);
         }
-        System.err.println(keyWordChainBag);
         return keyWordChainBag;
     }
 
