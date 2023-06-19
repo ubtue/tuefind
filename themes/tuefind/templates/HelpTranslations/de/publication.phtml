@@ -4,7 +4,7 @@ $currentSystem = $tuefind->getTueFindType();
 $publicationEmail = $tuefind->getPublicationEmail();
 ?>
 
-<p>Self-Archiving Service</p>
+<h2>Self-Archiving Service</h2>
 <p>Sie können diesen von Ihnen verfassten Beitrag zweitveröffentlichen, wenn Sie einen <?=$currentSystem;?>-Account anlegen und nachweisen, dass Sie der*die Autor*in sind.</p>
 <p>Wenn Sie bereits einen <?=$currentSystem;?>-Account haben und der Zugriff auf Ihre Autor*innen-ID genehmigt wurde, müssen sie sich lediglich <a href="<?=$this->url('myresearch-userlogin')?>">einloggen</a> und können im Anschluss beim ausgewählten Beitrag auf „<?=$this->transEsc('publication_request_button')?>“ klicken und ihr Digitalisat hochladen.</p>
 <p>Wenn Sie sich noch nicht für den Service registriert haben, gehen Sie wie folgt vor:</p>
