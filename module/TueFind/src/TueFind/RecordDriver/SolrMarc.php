@@ -264,6 +264,34 @@ class SolrMarc extends SolrDefault
         return !$this->suppressDisplayByFormat() && $this->getSubitoURL() != '';
     }
 
+    public function getAllRecordLinks()
+    {
+        $parallel_ppns_and_type = [];
+        foreach (['775', '776'] as $tag) {
+            $fields = $this->getMarcReader()->getFields($tag);
+            foreach ($fields as $field) {
+                $subfields_w = $this->getSubfieldArray($field, ['w'], false /* do not concatenate entries */);
+                foreach ($subfields_w as $subfield_w) {
+                    if (preg_match('/^' . preg_quote(self::ISIL_PREFIX_K10PLUS, '/') . '(.*)/', $subfield_w, $ppn)) {
+                        $subfield_w = $this->getMarcReader()->getSubfields($field,'w');
+                        $title = $this->getMarcReader()->getSubfield($field,'i');
+                        $subfield_k = $this->getMarcReader()->getSubfields($field,'k');
+                        if (!empty($subfield_w) && $subfield_w !== 'dangling' && !empty($title) && empty($subfield_k)) { //remove duplicates from getParallelEditionPPNs
+                            $link_ppn = $this->getFirstK10PlusPPNFromSubfieldW($field);
+                            $oneNpp = [
+                                'link' => ['type'=>'bib','value'=>$link_ppn],
+                                'title'=> $title,
+                                'value'=> $link_ppn
+                            ];
+                            array_push($parallel_ppns_and_type, $oneNpp);
+                        }
+                    }
+                }
+            }
+        }
+        return $parallel_ppns_and_type;
+    }
+
     public function getParallelEditionPPNs()
     {
         $parallel_ppns_and_type = [];
@@ -274,7 +302,7 @@ class SolrMarc extends SolrDefault
                 foreach ($subfields_w as $subfield_w) {
                     if (preg_match('/^' . preg_quote(self::ISIL_PREFIX_K10PLUS, '/') . '(.*)/', $subfield_w, $ppn)) {
                         $subfield_k = $this->getMarcReader()->getSubfields($field,'k');
-                        if ($subfield_k !== false && $subfield_k !== 'dangling')
+                        if (!empty($subfield_k) && $subfield_k !== 'dangling')
                             array_push($parallel_ppns_and_type, [ $ppn[1], $subfield_k ]);
                     }
                 }
