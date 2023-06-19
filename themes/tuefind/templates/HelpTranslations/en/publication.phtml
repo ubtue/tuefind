@@ -4,7 +4,7 @@ $currentSystem = $tuefind->getTueFindType();
 $publicationEmail = $tuefind->getPublicationEmail();
 ?>
 
-<p>Self-Archiving Service</p>
+<h2>Self-Archiving Service</h2>
 
 <p>You can self-archive your essays and articles if you have an <?=$currentSystem?> account and can prove that you are the author.<p>
 <p>If you already have an <?=$currentSystem?>-account and your access to your author ID has been approved, you only need to <a href="<?=$this->url('myresearch-userlogin')?>">login</a>, select the article you want to upload and click on "<?=$this->transEsc('publication_request_button')?>".<p>
