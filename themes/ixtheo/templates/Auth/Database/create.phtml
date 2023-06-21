@@ -89,13 +89,13 @@ if (isset($this->passwordPolicy['pattern'])) {
 </div>
 
 <!-- IxTheo-specific: Additional fields -->
+<?php $ixtheo_user_country = $this->request->get('ixtheo_country');?>
 <div class="form-group">
   <label class="control-label" for="ixtheo_country"><?= $this->transEsc('Country') ?>:</label>
   <select id="account_country" name="ixtheo_country" class="form-control">
     <option></option>
-    <?php foreach ($countries as $country): ?>
-      <?php $selected = $this->request->get('ixtheo_country') == $country ? 'selected' : ''; ?>
-      <option <?= $selected; ?> value="<?= $country; ?>"><?= $this->transEsc($country); ?></option>
+    <?php foreach ($this->layout()->allCountries as $countryKey => $country): ?>
+      <option <?php if($ixtheo_user_country == $countryKey || $ixtheo_user_country == $country) { echo 'selected';} ?> value="<?=$countryKey; ?>"><?=$this->transEsc($country); ?></option>
     <?php endforeach; ?>
   </select>
 </div>

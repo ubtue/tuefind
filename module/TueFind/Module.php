@@ -53,6 +53,10 @@ class Module
      */
     public function onBootstrap(MvcEvent $e)
     {
+
+        $bootstrapper = new Bootstrapper($e);
+        $bootstrapper->bootstrap();
+
         BotProtect::ProcessRequest($e);
 
         $eventManager = $e->getApplication()->getEventManager();
