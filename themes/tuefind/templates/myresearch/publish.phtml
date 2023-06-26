@@ -22,7 +22,7 @@
 
     <div class="form-group">
         <label>
-          <?=$this->translate('publication_upload_terms_agree', ['%%link%%' => '<a href="/publication_terms/' . urlencode($termFile['fileName']) . '" target="_blank">' . htmlspecialchars($termFile['fileName']) . '</a>'])?>
+          <?=$this->translate('publication_upload_terms_agree', ['%%link_start%%' => '<a href="/publication_terms/' . urlencode($termFile['fileName']) . '" target="_blank">', '%%link_end%%' => '</a>'])?>
           <input type="checkbox" value="term" name="term" required="required">
         </label>
     </div>
