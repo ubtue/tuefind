@@ -38,7 +38,7 @@
     <?php /* TueFind: Publication functionality */ ?>
     <?php if ($this->accountCapabilities()->getPublicationSetting() === 'enabled'): ?>
       <a href="<?=$this->url('myresearch-publications')?>"<?=$this->active == 'publications' ? ' class="active"' : ''?>>
-        <i class="fa fa-fw fa-upload" aria-hidden="true"></i> <?=$this->transEsc('Publications')?>
+        <i class="fa fa-fw fa-upload" aria-hidden="true"></i> <?=$this->transEsc('My Publications')?>
       </a>
     <?php endif; ?>
   <?php endif; ?>
