@@ -197,8 +197,9 @@ class MyResearchController extends \TueFind\Controller\MyResearchController
     protected function getProfileParams()
     {
         $params = [
-            'ixtheo_title' => '', 'ixtheo_country' => '',
-            'ixtheo_language' => '', 'ixtheo_appellation' => ''
+            'ixtheo_title' => '',
+            'ixtheo_country' => '',
+            'ixtheo_appellation' => ''
         ];
         return array_merge(parent::getProfileParams(), $params);
     }
@@ -211,7 +212,6 @@ class MyResearchController extends \TueFind\Controller\MyResearchController
         }
 
         $view = parent::profileAction();
-        $view->request->ixtheo_language = $user->ixtheo_language ?: $this->layout()->userLang;
         return $view;
     }
 

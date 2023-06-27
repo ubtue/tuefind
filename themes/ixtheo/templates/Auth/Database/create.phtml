@@ -99,12 +99,3 @@ if (isset($this->passwordPolicy['pattern'])) {
     <?php endforeach; ?>
   </select>
 </div>
-<div class="form-group">
-  <label class="control-label" for="ixtheo_language"><?= $this->transEsc('Language') ?>:</label>
-  <select id="account_language" name="ixtheo_language" class="form-control">
-    <?php foreach ($this->layout()->allLangs as $langCode => $langName): ?>
-      <?php $selected = $this->request->get('ixtheo_language') === $langCode ? 'selected' : '';?>
-      <option <?= $selected; ?> value="<?= $langCode; ?>"><?=$this->displayLanguageOption($langName)?></option>
-    <?php endforeach; ?>
-  </select>
-</div>
