@@ -29,7 +29,7 @@
             <span class="pull-right flip"><i class="fa fa-angle-right" title="<?=$this->transEscAttr('more') ?>"></i></span>
           <?php else: ?>
             <?=$this->transEsc($category['text'])?>
-            <span class="badge"><?=number_format($category['count'])?></span>
+            <span class="badge"><?=$this->localizedNumber($category['count'])?></span>
           <?php endif; ?>
         </a>
       <?php endforeach; ?>
