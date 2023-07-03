@@ -589,12 +589,43 @@ var TueFind = {
                 blockVar.click();
             }
         }
+    },
+
+    GetFacetInformation: function() {
+        let facet = $('#facet_hidden_id').val();
+        console.log(facet);
+        let url = "/AJAX/JSON?q=sta&method=getFacetDataCustom&facet=" + facet;
+        let facet_contains = $('#facet_contains').val();
+        if (facet_contains !== undefined) {
+            url += "&facet_contains=" + facet_contains;
+        }
+
+        $.ajax({
+            type: "GET",
+            url: url,
+            dataType: "json",
+            success: function (json) {
+                let facetItems = json.data[facet].data.list;
+                let html = '<ul>';
+                facetItems.forEach(function(item) {
+                    html += '<li>';
+                    html += item.value + " (" + item.count + ")";
+                    html += '</li>';
+                });
+                html += '</ul>';
+                $('#facet-info-result').html(html);
+            }, // end success
+            error: function (xhr, ajaxOptions, thrownError) {
+                $("#snippet_place_holder").each(function () {
+                    $('#facet-info-result').replaceWith('Invalid server response!!!!!');
+                });
+            }
+        });
     }
 };
 
 
 $(document).ready(function () {
-
     // Home search: set focus on first input field of first search group
     if (window.location.pathname.match(/\/Search(2)?\/Home$/i) || window.location.pathname === '/') {
         TueFind.SetFocus('#searchForm_lookfor');
@@ -624,6 +655,10 @@ $(document).ready(function () {
 
     $('.rssLabel').change(function(){
         TueFind.SwitchRSSFeedData($(this));
+    });
+
+    $('#facet_contains').keyup(function() {
+        TueFind.GetFacetInformation();
     });
 
     $('#searchForm_lookfor').change(function() {
