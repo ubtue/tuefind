@@ -29,6 +29,7 @@ class GetFacetListPartial extends \VuFind\AjaxHandler\AbstractBase
         $operator = $queryParams->fromQuery('operator', 'AND');
         $exclude = intval($queryParams->fromQuery('exclude', 0));
         $searchAction = $queryParams->fromQuery('searchAction', '');
+        $urlBase = $queryParams->fromQuery('urlBase', '');
 
         $results = $this->searchResultsManager->get('Solr');
         $params = $results->getParams();
@@ -36,13 +37,11 @@ class GetFacetListPartial extends \VuFind\AjaxHandler\AbstractBase
         $params->initFromRequest($queryParams->getController()->getRequest()->getQuery());
         $params->getOptions()->spellcheckEnabled(false);
         $params->getOptions()->disableHighlighting();
-
         $params->addFacet($facet);
         if (!empty($contains)) {
             $params->setFacetContains($contains);
         }
-        $results->setParams($params);
-        $results->performAndProcessSearch();
+
         $partialFacets = $results->getPartialFieldFacets(
             [$facet],
             false,
@@ -65,6 +64,7 @@ class GetFacetListPartial extends \VuFind\AjaxHandler\AbstractBase
              'anotherPage' => $partialFacets[$facet]['more'] ?? false,
 
              'searchAction' => $searchAction,
+             'urlBase' => $urlBase,
              'active' => $sort,
              'key' => $sort,
             ]

@@ -33,6 +33,7 @@
 <input id="ajax_page" type="hidden" value="<?=$this->page?>">
 <input id="ajax_sort" type="hidden" value="<?=$this->sort?>">
 <input id="ajax_searchAction" type="hidden" value="<?=$searchAction?>">
+<input id="ajax_urlBase" type="hidden" value="<?=$urlBase?>">
 <div id="facet-info-result" class="lightbox-scroll full-facets">
   <?php foreach ($this->sortOptions as $key => $sort): ?>
     <?php $active = $this->sort == $key; ?>

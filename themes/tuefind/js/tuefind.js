@@ -599,7 +599,7 @@ var TueFind = {
         $('#ajax_contains').keyup(function() {
             clearTimeout(timeout);
             timeout = setTimeout(function() {
-                TueFind.GetFacetInformationPartial();
+                TueFind.GetFacetListPartial();
             }, 500);
         });
     },
@@ -608,7 +608,7 @@ var TueFind = {
         let facet = $('#ajax_facet').val();
         var url = "/AJAX/JSON?q=sta&method=getFacetListPartial&facet=" + facet;
 
-        let params = ['contains', 'sort', 'exclude', 'operator', 'page', 'limit', 'searchAction'];
+        let params = ['contains', 'sort', 'exclude', 'operator', 'page', 'limit', 'searchAction', 'urlBase'];
         params.forEach(function(item) {
             let val = $('#ajax_' + item).val();
             if (val !== undefined) {

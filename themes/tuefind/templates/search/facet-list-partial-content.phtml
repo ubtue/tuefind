@@ -15,8 +15,9 @@
     <?php endforeach; ?>
   <?php endif; ?>
   <?php if ($this->anotherPage): ?>
-    <a href="<?=$urlBase . '&amp;facetpage=' . ($this->page + 1) . '&amp;facetsort=' . urlencode($key) ?>" class="facet js-facet-next-page" data-page="<?=($this->page + 1) ?>" data-sort="<?=$this->escapeHtmlAttr($key) ?>" data-lightbox-ignore>
+    <a href="<?=$urlBase . '&amp;facet=' . $facet . '&amp;page=' . ($this->page + 1) . '&amp;sort=' . urlencode($key) ?>" class="facet js-facet-next-page" data-page="<?=($this->page + 1) ?>" data-sort="<?=$this->escapeHtmlAttr($key) ?>">
       <span class="text"><?=$this->translate('more_ellipsis') ?></span>
     </a>
   <?php endif; ?>
 </div>
+<?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, '(typeof VuFind.lightbox_facets !== "undefined") && VuFind.lightbox_facets.setup();', 'SET'); ?>
