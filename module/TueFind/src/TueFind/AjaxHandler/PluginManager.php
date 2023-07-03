@@ -9,10 +9,12 @@ class PluginManager extends \VuFind\AjaxHandler\PluginManager
     public function __construct($configOrContainerInstance = null,
         array $v3config = []
     ) {
+        $this->addOverride('aliases', 'getFacetListPartial', GetFacetListPartial::class);
         $this->addOverride('aliases', 'getSubscriptionBundleEntries', GetSubscriptionBundleEntries::class);
-        $this->addOverride('aliases', 'getFacetDataCustom', GetFacetDataCustom::class);
+
+        $this->addOverride('factories', GetFacetListPartial::class, GetFacetListPartialFactory::class);
         $this->addOverride('factories', GetSubscriptionBundleEntries::class, GetSubscriptionBundleEntriesFactory::class);
-        $this->addOverride('factories', GetFacetDataCustom::class, GetFacetDataCustomFactory::class);
+
         $this->applyOverrides();
         parent::__construct($configOrContainerInstance, $v3config);
     }

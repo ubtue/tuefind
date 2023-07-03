@@ -4,7 +4,7 @@ namespace TueFind\AjaxHandler;
 
 use Interop\Container\ContainerInterface;
 
-class GetFacetDataCustomFactory implements \Laminas\ServiceManager\Factory\FactoryInterface
+class GetFacetListPartialFactory implements \Laminas\ServiceManager\Factory\FactoryInterface
 {
     public function __invoke(
         ContainerInterface $container,
@@ -15,7 +15,8 @@ class GetFacetDataCustomFactory implements \Laminas\ServiceManager\Factory\Facto
             throw new \Exception('Unexpected options passed to factory.');
         }
         return new $requestedName(
-            $container->get(\VuFind\Search\Results\PluginManager::class)
+            $container->get(\VuFind\Search\Results\PluginManager::class),
+            $container->get('ViewRenderer')
         );
     }
 }

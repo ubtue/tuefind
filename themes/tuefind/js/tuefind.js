@@ -591,29 +591,37 @@ var TueFind = {
         }
     },
 
-    GetFacetInformation: function() {
-        let facet = $('#facet_hidden_id').val();
-        console.log(facet);
-        let url = "/AJAX/JSON?q=sta&method=getFacetDataCustom&facet=" + facet;
-        let facet_contains = $('#facet_contains').val();
-        if (facet_contains !== undefined) {
-            url += "&facet_contains=" + facet_contains;
-        }
+    // Useful function to delay callbacks, e.g. when using a keyup event
+    // to detect when the user stops typing.
+    // See also: https://stackoverflow.com/questions/1909441/how-to-delay-the-keyup-handler-until-the-user-stops-typing
+    GetFacetListPartialKeyupCallback: function() {
+        var timeout = null;
+        $('#ajax_contains').keyup(function() {
+            clearTimeout(timeout);
+            timeout = setTimeout(function() {
+                TueFind.GetFacetInformationPartial();
+            }, 500);
+        });
+    },
+
+    GetFacetListPartial: function() {
+        let facet = $('#ajax_facet').val();
+        var url = "/AJAX/JSON?q=sta&method=getFacetListPartial&facet=" + facet;
+
+        let params = ['contains', 'sort', 'exclude', 'operator', 'page', 'limit', 'searchAction'];
+        params.forEach(function(item) {
+            let val = $('#ajax_' + item).val();
+            if (val !== undefined) {
+                url += '&' + encodeURI(item) + '=' + encodeURI(val);
+            }
+        });
 
         $.ajax({
             type: "GET",
             url: url,
             dataType: "json",
             success: function (json) {
-                let facetItems = json.data[facet].data.list;
-                let html = '<ul>';
-                facetItems.forEach(function(item) {
-                    html += '<li>';
-                    html += item.value + " (" + item.count + ")";
-                    html += '</li>';
-                });
-                html += '</ul>';
-                $('#facet-info-result').html(html);
+                $('#facet-info-result').html(json.data.html);
             }, // end success
             error: function (xhr, ajaxOptions, thrownError) {
                 $("#snippet_place_holder").each(function () {
@@ -621,6 +629,9 @@ var TueFind = {
                 });
             }
         });
+
+        // This needs to be registered here as well so it works in a lightbox
+        TueFind.GetFacetListPartialKeyupCallback();
     }
 };
 
@@ -657,8 +668,9 @@ $(document).ready(function () {
         TueFind.SwitchRSSFeedData($(this));
     });
 
-    $('#facet_contains').keyup(function() {
-        TueFind.GetFacetInformation();
+    $('#ajax_contains').keyup(function() {
+        // for non-lightbox mode
+        TueFind.GetFacetListPartialKeyupCallback();
     });
 
     $('#searchForm_lookfor').change(function() {

@@ -51,7 +51,7 @@ class SearchController extends \VuFind\Controller\SearchController {
                 'baseUriExtra' => $this->params()->fromQuery('baseUriExtra'),
             ]
         );
-        $view->setTemplate('search/facet-list-custom');
+        $view->setTemplate('search/facet-list-partial-wrapper');
         return $view;
     }
 }

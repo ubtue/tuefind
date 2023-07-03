@@ -1,0 +1,46 @@
+<!-- TueFind: This template is similar to the original bootstrap3 facet-list template,
+              except the body will be generated via AJAX to allow dynamic filtering. -->
+<?php
+  $options = $this->results->getParams()->getOptions();
+  $facetLightbox = $options->getFacetListAction();
+  if (empty($this->sortOptions)) {
+    $this->sort = 'default';
+    $this->sortOptions = [ 'default' => 'default' ];
+  }
+  $urlBase = $this->url($facetLightbox) . $results->getUrlQuery()->getParams() . '&amp;facet=' . urlencode($this->facet) . '&amp;facetexclude=' . urlencode($this->exclude) . '&amp;facetop=' . urlencode($this->operator);
+  $searchAction = $this->url($options->getSearchAction());
+  if (!empty($this->baseUriExtra)) {
+    $searchAction .= urlencode($this->baseUriExtra);
+    $urlBase .= '&amp;baseUriExtra=' . urlencode($this->baseUriExtra);
+  }
+  $this->headTitle($this->translate('facet_list_for', ['%%field%%' => $this->facetLabel]));
+?>
+<h2><?=$this->transEsc($this->facetLabel) ?></h2>
+<?php if (count($this->sortOptions) > 1): ?>
+  <div class="full-facet-sort-options">
+    <label><?=$this->translate('Sort') ?></label>
+    <div class="btn-group">
+      <?php foreach ($this->sortOptions as $key => $sort): ?>
+        <a href="<?=$urlBase . '&amp;facetpage=1&amp;facetsort=' . urlencode($key) ?>" class="btn btn-default js-facet-sort<?php if($this->sort == $key): ?> active<?php endif; ?>" data-sort="<?=$key ?>"><?=$this->translate($sort) ?></a>
+      <?php endforeach; ?>
+    </div>
+  </div>
+<?php endif; ?>
+<input id="ajax_contains" placeholder="Suche" class="form-control" type="text">
+<input id="ajax_facet" type="hidden" value="<?=$this->facet?>">
+<input id="ajax_exclude" type="hidden" value="<?=$this->exclude?>">
+<input id="ajax_operator" type="hidden" value="<?=$this->operator?>">
+<input id="ajax_page" type="hidden" value="<?=$this->page?>">
+<input id="ajax_sort" type="hidden" value="<?=$this->sort?>">
+<input id="ajax_searchAction" type="hidden" value="<?=$searchAction?>">
+<div id="facet-info-result" class="lightbox-scroll full-facets">
+  <?php foreach ($this->sortOptions as $key => $sort): ?>
+    <?php $active = $this->sort == $key; ?>
+    <div class="full-facet-list facet-group<?php if(!$active): ?> hidden<?php endif; ?>" id="facet-list-<?=$this->escapeHtmlAttr($key) ?>">
+      <!-- TueFind: Content of this list will be generated dynamically, see facet-list-partial-content.phtml -->
+    </div>
+  <?php endforeach; ?>
+</div>
+<button class="btn btn-default lightbox-only" data-dismiss="modal"><?=$this->translate('close') ?></button>
+<?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, '(typeof VuFind.lightbox_facets !== "undefined") && VuFind.lightbox_facets.setup();', 'SET'); ?>
+<?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, 'TueFind.GetFacetListPartial();', 'SET'); ?>
