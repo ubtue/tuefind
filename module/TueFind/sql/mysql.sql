@@ -12,6 +12,7 @@ CREATE TABLE tuefind_publications (
     UNIQUE KEY publication_control_number (control_number),
     UNIQUE KEY publication_external_document_id (external_document_id),
     UNIQUE KEY publication_external_document_guid (external_document_guid),
+    UNIQUE KEY publication_doi (doi),
     FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
 ) DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_bin;
 
