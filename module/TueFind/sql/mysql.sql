@@ -5,7 +5,7 @@ CREATE TABLE tuefind_publications (
     external_document_id VARCHAR(255) NOT NULL,
     external_document_guid VARCHAR(255) DEFAULT NULL,
     doi VARCHAR(255) DEFAULT NULL,
-    doi_notification DATETIME DEFAULT NULL,
+    doi_notification_datetime DATETIME DEFAULT NULL,
     terms_date DATE NOT NULL,
     publication_datetime TIMESTAMP DEFAULT NOW() NOT NULL,
     PRIMARY KEY (id),
