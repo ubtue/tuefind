@@ -109,7 +109,7 @@ $siteEmail = $tuefind->getSiteEmail();
                 <p>Sobald Sie in Ihrem <?=$currentSystem;?> Konto angemeldet sind, können Sie den Zugriff auf Ihre Autor*innen-ID beantragen. Dazu wählen Sie den Reiter &quot;Personen/Körperschaften&quot; oberhalb des Suchschlitzes. Suchen Sie nach Ihrem Namen und wählen Sie den richtigen Eintrag aus.</p>
             </li>
             <li>
-                <p>Klicken Sie auf den Button &quot;Request Access Rights (This is me!)&quot;</p>
+                <p>Klicken Sie auf den Button &quot;<?=$this->transEsc('authority_access_request_button')?>&quot;</p>
             </li>
             <li>
                 <p>Ihre Anfrage wird nun automatisch an das <?=$currentSystem;?>-Team geschickt. Wir überprüfen, ob Sie die genannte Person sind, und informieren Sie innerhalb weniger Tage per E-Mail, ob Ihr Antrag genehmigt wurde.</p>
