@@ -111,7 +111,7 @@ $siteEmail = $tuefind->getSiteEmail();
                 <p>Once you’ve logged into your <?=$currentSystem;?>-account, you can request access rights to your author ID. First click on the tab labelled “Persons / Corporations“ right above the search field. Search for your name and select the right entry.</p>
             </li>
             <li>
-                <p>Click on the button „Request Access Rights (This is me!)”.</p>
+                <p>Click on the button „<?=$this->transEsc('authority_access_request_button')?>”.</p>
             </li>
             <li>
                 <p>Your request will be automatically sent to the <?=$currentSystem;?>-team. We will then verify your identity and inform you within a few days per e-mail whether your request has been approved.</p>
