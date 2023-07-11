@@ -321,14 +321,37 @@ class SolrDefault extends \VuFind\RecordDriver\SolrMarc
         return $recordLoader->load($ppn, 'Solr', false);
     }
 
+    /**
+     *  In the facet we only want to show primary & secondary authors,
+     *  but here in the RecordDriver we want to treat non-creative authors
+     *  the same way as secondary authors.
+     */
+    public function getSecondaryAuthors(): array
+    {
+        $secondaryAuthors = parent::getSecondaryAuthors();
+        $nonCreativeAuthors = (array)($this->fields['author3'] ?? []);
+        return array_merge($secondaryAuthors, $nonCreativeAuthors);
+    }
+
     public function getSecondaryAuthorsGnds(): array
     {
-        return $this->fields['author2_gnd'] ?? [];
+        $secondaryAuthorsGnds = $this->fields['author2_gnd'] ?? [];
+        $nonCreativeAuthorsGnds = $this->fields['author3_gnd'] ?? [];
+        return array_merge($secondaryAuthorsGnds, $nonCreativeAuthorsGnds);
     }
 
     public function getSecondaryAuthorsIds(): array
     {
-        return $this->fields['author2_id'] ?? [];
+        $secondaryAuthorsIds = $this->fields['author2_id'] ?? [];
+        $nonCreativeAuthorsIds = $this->fields['author3_id'] ?? [];
+        return array_merge($secondaryAuthorsIds, $nonCreativeAuthorsIds);
+    }
+
+    public function getSecondaryAuthorsRoles(): array
+    {
+        $secondaryAuthorsRoles = parent::getSecondaryAuthorsRoles();
+        $nonCreativeAuthorsRoles = (array)($this->fields['author3_role'] ?? []);
+        return array_merge($secondaryAuthorsRoles, $nonCreativeAuthorsRoles);
     }
 
     public function getSuperiorPPN() {
