@@ -1181,7 +1181,7 @@ public class TueFindBiblio extends TueFind {
      */
     public String translateTopic(String topic, String langAbbrev) {
         if (langAbbrev.equals("de"))
-            return topic;
+            return  BCEReplacer.replaceBCEPatterns(topic);
 
         Map<String, String> translation_map = getTranslationMap(langAbbrev);
         Matcher numberEndMatcher = NUMBER_END_PATTERN.matcher(topic);
@@ -1218,7 +1218,7 @@ public class TueFindBiblio extends TueFind {
         } else
             topic = (translation_map.get(topic) != null) ? translation_map.get(topic) : topic;
 
-        return topic;
+        return BCEReplacer.replaceBCEPatterns(topic, langAbbrev);
     }
 
     /**

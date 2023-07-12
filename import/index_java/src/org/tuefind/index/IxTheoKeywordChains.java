@@ -156,7 +156,7 @@ public class IxTheoKeywordChains extends TueFind {
                                               TueFindBiblio.getTranslationOrNull(String.join(" / ", complexElements), lang) : null;
             String keywordString = (complexTranslation != null) ? complexTranslation : keyword.toString();
             keywordString = keywordString.replace("/", "\\/");
-            keyWordChain.add(lang.equals("de") ? BCEReplacer.replaceBCEPatterns(keywordString) : keywordString);
+            keyWordChain.add(BCEReplacer.replaceBCEPatterns(keywordString, lang));
         }
     }
 
