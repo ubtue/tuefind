@@ -1174,7 +1174,8 @@ public class TueFindBiblio extends TueFind {
     }
 
 
-    protected final static Pattern NUMBER_END_PATTERN = Pattern.compile("([^\\d\\s<>]+)(\\s*<?\\d+(-\\d+)>?$)", Pattern.UNICODE_CHARACTER_CLASS);
+     // Detect numbers or number ranges at the end, also include BC information like v333-v288
+    protected final static Pattern NUMBER_END_PATTERN = Pattern.compile("([^\\d\\s<>]+)(\\s*<?v?\\d+(-v?\\d+)>?$)", Pattern.UNICODE_CHARACTER_CLASS);
 
     /**
      * Translate a single term to given language if a translation is found
@@ -1203,18 +1204,8 @@ public class TueFindBiblio extends TueFind {
         else if (numberEndMatcher.find()) {
             String topicText = numberEndMatcher.group(1);
             String numberExtension = numberEndMatcher.group(2);
-            if (topicText.equals("Geschichte")) {
-                switch (langAbbrev) {
-                case "en":
-                    topic = "History" + numberExtension;
-                    break;
-                case "fr":
-                    topic = "Histoire" + numberExtension;
-                    break;
-                }
-            } else
-                topic = translation_map.get(topicText) != null ? translation_map.get(topicText) + numberExtension
-                                                               : topic;
+            topic = translation_map.get(topicText) != null ? translation_map.get(topicText) + numberExtension
+                                                      : topic;
         } else
             topic = (translation_map.get(topic) != null) ? translation_map.get(topic) : topic;
 

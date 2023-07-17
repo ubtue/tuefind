@@ -27,7 +27,12 @@ public class BCEReplacer {
        lang_to_bc_expressions = Collections.unmodifiableMap(Map.of(
             "de", "v. Chr.",
             "en", "BC",
-            "fr", "avant J.-C."
+            "fr", "avant J.-C.",
+            "es", "a. C.",
+            "it", "a.C.",
+            "pt", "a.C.",
+            "ru", "до н.э.",
+            "el", "π.Χ."
        ));
 
        // Non-standard BCE year references and their standardized replacements. Backreferences for matched groups look like $N

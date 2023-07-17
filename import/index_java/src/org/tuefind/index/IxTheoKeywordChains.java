@@ -98,6 +98,9 @@ public class IxTheoKeywordChains extends TueFind {
             // Skip the notorious type field D (which is passed as d)
             if (subfield.getCode() == 'd' && subfield.getData().length() < 2)
                 continue;
+            // Skip $a=z time field indicator
+            if (subfield.getCode() == 'a' && subfield.getData().equals("z"))
+                continue;
             if (SUBFIELD_CODES.indexOf(subfield.getCode()) != -1) {
                 if (keyword.length() > 0) {
                     if (subfield.getCode() == 'z' || subfield.getCode() == 'g') {
