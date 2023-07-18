@@ -12,6 +12,8 @@ User-agent: SEOkicks-Robot
 Disallow: /
 
 User-agent: *
+Allow: /Authority/
+Allow: /Record/
 Disallow: /AJAX
 Disallow: /Alphabrowse
 Disallow: /Author
