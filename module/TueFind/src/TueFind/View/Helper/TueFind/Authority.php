@@ -117,7 +117,7 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
             }else{
                 $display .= htmlspecialchars($reference['title']) . '<br>';
             }
-            
+
         }
 
         return $display;
@@ -451,15 +451,18 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
             $queryString = 'author_id:"' . $author->getUniqueId() . '"';
             $queryString .= ' OR author2_id:"' . $author->getUniqueId() . '"';
             $queryString .= ' OR author_corporate_id:"' . $author->getUniqueId() . '"';
+            $queryString .= ' OR author3_id:"' . $author->getUniqueId() . '"';
             if ($fuzzy) {
                 $queryString .= ' OR author:"' . $author->getTitle() . '"';
                 $queryString .= ' OR author2:"' . $author->getTitle() . '"';
                 $queryString .= ' OR author_corporate:"' . $author->getTitle() . '"';
+                $queryString .= ' OR author3:"' . $author->getTitle() . '"';
             }
         } else {
             $queryString = 'author:"' . $author . '"';
             $queryString .= ' OR author2:"' . $author . '"';
             $queryString .= ' OR author_corporate:"' . $author . '"';
+            $queryString .= ' OR author3:"' . $author . '"';
         }
         return $queryString;
     }
