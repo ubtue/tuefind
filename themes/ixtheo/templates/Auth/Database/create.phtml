@@ -95,7 +95,7 @@ if (isset($this->passwordPolicy['pattern'])) {
   <select id="account_country" name="ixtheo_country" class="form-control">
     <option></option>
     <?php foreach ($this->layout()->allCountries as $countryKey => $country): ?>
-      <option <?php if($ixtheo_user_country == $countryKey || $ixtheo_user_country == $country) { echo 'selected';} ?> value="<?=$countryKey; ?>"><?=$this->transEsc($country); ?></option>
+      <option <?php if($ixtheo_user_country == $countryKey || $ixtheo_user_country == $country) { echo 'selected';} ?> value="<?=$countryKey; ?>"><?=$country; ?></option>
     <?php endforeach; ?>
   </select>
 </div>
