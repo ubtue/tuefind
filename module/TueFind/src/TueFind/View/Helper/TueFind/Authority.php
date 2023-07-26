@@ -23,6 +23,21 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
 
     protected $normdataTranslationCache = [];
 
+    /**
+     * This list is used to register authors
+     * who explicitly requested to hide certain titles
+     * from their authority page.
+     * These titles will only be hidden from the authority page,
+     * but they will still be searchable as a title,
+     * which is the reqested behaviour.
+     */
+    protected $authorTitlesBlacklist = [
+        '815326920' => [
+            '1666824623',
+            '1663081204',
+        ],
+    ];
+
     public function __construct(\VuFindSearch\Service $searchService,
                                 \Laminas\View\HelperPluginManager $viewHelperManager,
                                 \VuFind\Record\Loader $recordLoader,
@@ -424,9 +439,16 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
     protected function getTitlesAboutQueryParams(&$author, $fuzzy=false): string
     {
         if ($author instanceof AuthorityRecordDriver) {
-            $queryString = 'topic_id:"' . $author->getUniqueId() . '"';
+            $queryString = '(';
+            $queryString .= 'topic_id:"' . $author->getUniqueId() . '"';
             if ($fuzzy) {
-                $queryString = 'OR topic_all:"' . $author->getTitle() . '"';
+                $queryString .= 'OR topic_all:"' . $author->getTitle() . '"';
+            }
+            $queryString .= ')';
+            if (isset($this->authorTitlesBlacklist[$author->getUniqueId()])) {
+                foreach ($this->authorTitlesBlacklist[$author->getUniqueId()] as $title) {
+                    $queryString .= ' AND -id:' . $title;
+                }
             }
         } else {
             $queryString = 'topic_all:"' . $author . '"';
@@ -448,7 +470,8 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
     protected function getTitlesByQueryParams(&$author, $fuzzy=false): string
     {
         if ($author instanceof AuthorityRecordDriver) {
-            $queryString = 'author_id:"' . $author->getUniqueId() . '"';
+            $queryString = '(';
+            $queryString .= 'author_id:"' . $author->getUniqueId() . '"';
             $queryString .= ' OR author2_id:"' . $author->getUniqueId() . '"';
             $queryString .= ' OR author_corporate_id:"' . $author->getUniqueId() . '"';
             $queryString .= ' OR author3_id:"' . $author->getUniqueId() . '"';
@@ -458,12 +481,20 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
                 $queryString .= ' OR author_corporate:"' . $author->getTitle() . '"';
                 $queryString .= ' OR author3:"' . $author->getTitle() . '"';
             }
+            $queryString .= ')';
+
+            if (isset($this->authorTitlesBlacklist[$author->getUniqueId()])) {
+                foreach ($this->authorTitlesBlacklist[$author->getUniqueId()] as $title) {
+                    $queryString .= ' AND -id:' . $title;
+                }
+            }
         } else {
             $queryString = 'author:"' . $author . '"';
             $queryString .= ' OR author2:"' . $author . '"';
             $queryString .= ' OR author_corporate:"' . $author . '"';
             $queryString .= ' OR author3:"' . $author . '"';
         }
+
         return $queryString;
     }
 
