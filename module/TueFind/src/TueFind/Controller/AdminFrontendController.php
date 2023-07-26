@@ -130,9 +130,8 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
 
     public function showUserPublicationStatisticsAction() {
         $this->forceAdminLogin();
-        $publications = $this->getTable('publication')->getStatistics();
-
-        return $this->createViewModel(['publications' => $publications]);
+        
+        return $this->createViewModel(['publications' => $this->getTable('publication')->getStatistics()]);
     }
 
 }
