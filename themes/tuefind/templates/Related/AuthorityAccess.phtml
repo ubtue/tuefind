@@ -12,10 +12,10 @@
       <?php if ($userAccess['access_state'] == 'requested'): ?>
         <?=$this->transEsc('authority_access_state_requested')?>
       <?php elseif ($userAccess['access_state'] == 'granted'): ?>
-          <?=$this->transEsc('authority_access_state_granted')?>
-          <?php if($this->accountCapabilities()->getPublicationSetting() === 'enabled'): ?>
-            <br><a href="<?=$this->url('myresearch-publications')?>"><?=$this->transEsc('publication_request_link')?></a>
-          <?php endif;?>
+        <a href="<?=$this->url('myresearch-publications')?>"><?=$this->transEsc('authority_access_state_granted')?></a>
+        <?php if($this->accountCapabilities()->getPublicationSetting() === 'enabled'): ?>
+          <br><a class="help-link" data-lightbox href="<?=$this->url('help-home')?>?topic=publicationStart&amp;_=<?=time()?>"><?=$this->transEsc('publication_request_link')?></a>
+        <?php endif;?>
       <?php endif;?>
     <?php elseif ($userAccess['availability'] == 'other'): ?>
       <?php if($this->accountCapabilities()->getPublicationSetting() === 'enabled'): ?>
