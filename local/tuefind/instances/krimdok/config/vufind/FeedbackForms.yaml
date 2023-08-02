@@ -173,13 +173,13 @@ forms:
         type: checkbox
         label: 
         options:
-              - feedback_form_checkbox_text
+              - acquisition_request_checkbox_acquire_krimdok
 
       - name: feedback_form_checkbox2
         type: checkbox
         label: 
         options:
-              - feedback_form_checkbox2_text
+              - acquisition_request_checkbox_include_krimdok
 
       - name: keywords
         type: text
