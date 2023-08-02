@@ -85,6 +85,14 @@ mark {
     color: #a51e37;
 }
 
+.modal-body .badge,.facet > .badge {
+    background-color: transparent;
+    line-height: 0.8;
+    color: #777;
+    font-weight: 400;
+    border: 1px solid #ddd;
+}
+
 /* hyperlink color fixes */
 a:hover, .template-name-content .container a:not(.panel-default-link) {
     color: #a51e37;
@@ -139,12 +147,20 @@ div.jqcloud span.w1 { color: #720004; }
     border-radius: 4px 4px 0 0;
 }
 
+a.fulltext, .record a i.fa-book, .record a i.fa-user-circle {
+    color: #a51e37;
+}    
+
 .krimdok-search-block #searchForm .nav-tabs>li.active>a:hover {
     border: none;
 }
 
 .krimdok-search-block #searchForm .nav-tabs>li>a:hover {
     border: none;
+}
+
+.facet>.badge {
+    line-height: 1;
 }
 
 form .group-feedback_form_checkbox input[type='checkbox'],form .group-feedback_form_checkbox2 input[type='checkbox']{
