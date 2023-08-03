@@ -13,6 +13,7 @@ import java.time.Instant;
 import java.time.YearMonth;
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -44,6 +45,104 @@ import org.vufind.index.DatabaseManager;
 import java.sql.*;
 import static java.util.stream.Collectors.joining;
 
+/*
+     * a structure to hold some issue informations
+     */
+class IssueInfo {
+    public String volume_, year_, number_, month_, pages_;
+
+    public IssueInfo() {
+    }
+
+    public IssueInfo(final Record record) {
+        boolean isOldVersion = true;
+        // start on 2024 the issue information will take from file 773 rather than 936
+        for (final VariableField variableField : record.getVariableFields("773")) {
+            final DataField dataField_ = (DataField) variableField;
+
+            if (dataField_.getIndicator1() == '1' && dataField_.getIndicator2() == '8') {
+                for (final Subfield subfield_ : dataField_.getSubfields('g')) {
+                    if (subfield_ != null && !subfield_.getData().isEmpty()) {
+                        final String[] subfield_content = subfield_.getData().split(":");
+
+                        if (subfield_content[0].equals("volume"))
+                            this.volume_ = subfield_content[1];
+
+                        if (subfield_content[0].equals("year"))
+                            this.year_ = subfield_content[1];
+
+                        if (subfield_content[0].equals("number"))
+                            this.number_ = subfield_content[1];
+
+                        if (subfield_content[0].equals("month"))
+                            this.month_ = subfield_content[1];
+
+                        if (subfield_content[0].equals("pages"))
+                            this.pages_ = subfield_content[1];
+                    }
+                }
+                isOldVersion = false;
+                break;
+            }
+        }
+
+        // for compatibility with old version
+        if (isOldVersion) {
+            for (final VariableField variableField : record.getVariableFields("936")) {
+                final DataField dataField_ = (DataField) variableField;
+                if (dataField_.getIndicator1() == 'u' && dataField_.getIndicator2() == 'w') {
+                    if ((dataField_.getSubfield('d') != null) && (!dataField_.getSubfield('d').getData().isEmpty()))
+                        this.volume_ = dataField_.getSubfield('d').getData();
+                    else {
+                        for (final VariableField variableField_830 : record.getVariableFields("830")) {
+                            final DataField dataField_830 = (DataField) variableField_830;
+                            if (dataField_830.getIndicator2() == '0') {
+                                if ((dataField_830.getSubfield('9') != null)
+                                        && (!dataField_830.getSubfield('9').getData().isEmpty()))
+                                    this.volume_ = dataField_830.getSubfield('9').getData();
+                            }
+                        }
+                    }
+
+                    if ((dataField_.getSubfield('j') != null) && (!dataField_.getSubfield('j').getData().isEmpty()))
+                        this.year_ = dataField_.getSubfield('j').getData();
+
+                    if ((dataField_.getSubfield('e') != null) && (!dataField_.getSubfield('e').getData().isEmpty()))
+                        this.number_ = dataField_.getSubfield('e').getData();
+
+                    if ((dataField_.getSubfield('c') != null) && (!dataField_.getSubfield('c').getData().isEmpty()))
+                        this.month_ = dataField_.getSubfield('c').getData();
+
+                    if ((dataField_.getSubfield('h') != null) && (!dataField_.getSubfield('h').getData().isEmpty()))
+                        this.pages_ = dataField_.getSubfield('h').getData();
+                }
+            }
+
+        }
+    }
+
+    public String getInfo(final String key_) {
+        switch (key_) {
+            case "volume":
+                return this.volume_;
+            case "year":
+                return this.year_;
+            case "number":
+                return this.number_;
+            case "month":
+                return this.month_;
+            case "pages":
+                return this.pages_;
+            default:
+                return null;
+        }
+
+    }
+}
+
+// Caching issue info to avoid multiple times reading the whole element in the
+// record
+
 public class TueFindBiblio extends TueFind {
     public final static String UNASSIGNED_STRING = "[Unassigned]";
     public final static Set<String> UNASSIGNED_SET = Collections.singleton(UNASSIGNED_STRING);
@@ -69,7 +168,8 @@ public class TueFindBiblio extends TueFind {
     protected final static Pattern PAGE_MATCH_PATTERN = Pattern.compile("^\\[?(\\d+)\\]?([-–](\\d+))?$");
     protected final static Pattern VALID_FOUR_DIGIT_YEAR_PATTERN = Pattern.compile("\\d{4}");
     protected final static Pattern VALID_YEAR_RANGE_PATTERN = Pattern.compile("^\\d*u*$");
-    protected final static Pattern VOLUME_PATTERN = Pattern.compile("^\\s*(\\d+)$", Pattern.UNICODE_CHARACTER_CLASS);
+    protected final static Pattern VOLUME_PATTERN = Pattern.compile("^\\s*(\\d+)$",
+            Pattern.UNICODE_CHARACTER_CLASS);
     protected final static Pattern BRACKET_DIRECTIVE_PATTERN = Pattern.compile("\\[(.)(.)\\]");
     protected final static Pattern PPN_WITH_K10PLUS_ISIL_PREFIX_PATTERN = Pattern
             .compile("\\(" + ISIL_K10PLUS + "\\)(.*)");
@@ -230,6 +330,7 @@ public class TueFindBiblio extends TueFind {
         }
     };
 
+    ConcurrentLimitedHashMap<String, IssueInfo> IssueInfos = new ConcurrentLimitedHashMap<>(100);
     protected static ConcurrentLimitedHashMap<String, Set<String>> isilsCache = new ConcurrentLimitedHashMap<>(100);
     protected static ConcurrentLimitedHashMap<String, Collection<Collection<Topic>>> collectedTopicsCache = new ConcurrentLimitedHashMap<>(
             100);
@@ -607,7 +708,8 @@ public class TueFindBiblio extends TueFind {
 
     protected final static char SUBFIELD_SEPARATOR = (char) 0x1F;
 
-    public String getSortableAuthorUnicode(final Record record, final String tagList, final String acceptWithoutRelator,
+    public String getSortableAuthorUnicode(final Record record, final String tagList,
+            final String acceptWithoutRelator,
             final String relatorConfig) {
         String author = creatorTools.getFirstAuthorFilteredByRelator(record, tagList,
                 acceptWithoutRelator,
@@ -3236,90 +3338,16 @@ public class TueFindBiblio extends TueFind {
         return results;
     }
 
-    public String getIssueInfo(final Record record, final String subfield) {
-        String result = "";
-        // start on 2024 the issue information will take from file 773 rather than 936
-        for (final VariableField variableField : record.getVariableFields("773")) {
-            final DataField dataField_ = (DataField) variableField;
+    public String getIssueInfo(final Record record, final String info_type) {
+        final ControlField dataField = (ControlField) record.getVariableField("001");
+        final String id_ = dataField.getData();
 
-            if (dataField_.getIndicator1() == '1' && dataField_.getIndicator2() == '8') {
-                for (final Subfield subfield_ : dataField_.getSubfields('g')) {
-                    if (subfield_ != null && !subfield_.getData().isEmpty()) {
-                        final String[] subfield_content = subfield_.getData().split(":");
-                        switch (subfield) {
-                            case "d": // volume
-                                if (subfield_content[0].equals("volume")) {
-                                    return subfield_content[1];
-                                }
-                                break;
-                            case "j": // year
-                                if (subfield_content[0].equals("year"))
-                                    return subfield_content[1];
-                                break;
-                            case "e": // number
-                                if (subfield_content[0].equals("number"))
-                                    return subfield_content[1];
-                                break;
-                            case "c": // month
-                                if (subfield_content[0].equals("month"))
-                                    return subfield_content[1];
-                                break;
-                            case "h": // pages
-                                if (subfield_content[0].equals("pages"))
-                                    return subfield_content[1];
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-
-                }
-            }
-
+        if (IssueInfos.get(id_) == null) {
+            IssueInfo issueInfo = new IssueInfo(record);
+            IssueInfos.put(id_, issueInfo);
         }
 
-        // for compatibility with old version
-        for (final VariableField variableField : record.getVariableFields("936")) {
-            final DataField dataField_ = (DataField) variableField;
-            if (dataField_.getIndicator1() == 'u' && dataField_.getIndicator2() == 'w') {
-                switch (subfield) {
-                    case "d": // volume
-                        if ((dataField_.getSubfield('d') != null) && (!dataField_.getSubfield('d').getData().isEmpty()))
-                            return dataField_.getSubfield('d').getData();
-                        else {
-                            for (final VariableField variableField_830 : record.getVariableFields("830")) {
-                                final DataField dataField_830 = (DataField) variableField_830;
-                                if (dataField_830.getIndicator2() == '0') {
-                                    if ((dataField_830.getSubfield('9') != null)
-                                            && (!dataField_830.getSubfield('9').getData().isEmpty()))
-                                        return dataField_830.getSubfield('9').getData();
-                                }
-                            }
-                        }
-                        break;
-                    case "j": // year
-                        if ((dataField_.getSubfield('j') != null) && (!dataField_.getSubfield('j').getData().isEmpty()))
-                            return dataField_.getSubfield('j').getData();
-                        break;
-                    case "e": // number
-                        if ((dataField_.getSubfield('e') != null) && (!dataField_.getSubfield('e').getData().isEmpty()))
-                            return dataField_.getSubfield('e').getData();
-                        break;
-                    case "c": // month
-                        if ((dataField_.getSubfield('c') != null) && (!dataField_.getSubfield('c').getData().isEmpty()))
-                            return dataField_.getSubfield('c').getData();
-                        break;
-                    case "h": // pages
-                        if ((dataField_.getSubfield('h') != null) && (!dataField_.getSubfield('h').getData().isEmpty()))
-                            return dataField_.getSubfield('h').getData();
-                        break;
-                    default:
-                        break;
-                }
-            }
-
-        }
-
-        return result;
+        return IssueInfos.get(id_).getInfo(info_type);
     }
+
 }
