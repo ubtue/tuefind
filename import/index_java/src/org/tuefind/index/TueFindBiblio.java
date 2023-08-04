@@ -13,7 +13,6 @@ import java.time.Instant;
 import java.time.YearMonth;
 import java.util.*;
 import java.util.Map.Entry;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -159,23 +158,17 @@ public class TueFindBiblio extends TueFind {
     protected final static String ISIL_PREFIX_K10PLUS_ESCAPED = "\\(" + ISIL_K10PLUS + "\\)";
     protected final static String ES_FULLTEXT_PROPERTIES_FILE = "es_fulltext.properties";
 
-    protected final static Pattern PAGE_RANGE_PATTERN1 = Pattern.compile("\\s*(\\d+)\\s*-\\s*(\\d+)$",
-            Pattern.UNICODE_CHARACTER_CLASS);
-    protected final static Pattern PAGE_RANGE_PATTERN2 = Pattern.compile("\\s*\\[(\\d+)\\]\\s*-\\s*(\\d+)$",
-            Pattern.UNICODE_CHARACTER_CLASS);
-    protected final static Pattern PAGE_RANGE_PATTERN3 = Pattern.compile("\\s*(\\d+)\\s*ff",
-            Pattern.UNICODE_CHARACTER_CLASS);
+    protected final static Pattern PAGE_RANGE_PATTERN1 = Pattern.compile("\\s*(\\d+)\\s*-\\s*(\\d+)$",Pattern.UNICODE_CHARACTER_CLASS);
+    protected final static Pattern PAGE_RANGE_PATTERN2 = Pattern.compile("\\s*\\[(\\d+)\\]\\s*-\\s*(\\d+)$",Pattern.UNICODE_CHARACTER_CLASS);
+    protected final static Pattern PAGE_RANGE_PATTERN3 = Pattern.compile("\\s*(\\d+)\\s*ff",Pattern.UNICODE_CHARACTER_CLASS);
     protected final static Pattern PAGE_MATCH_PATTERN = Pattern.compile("^\\[?(\\d+)\\]?([-–](\\d+))?$");
     protected final static Pattern VALID_FOUR_DIGIT_YEAR_PATTERN = Pattern.compile("\\d{4}");
     protected final static Pattern VALID_YEAR_RANGE_PATTERN = Pattern.compile("^\\d*u*$");
-    protected final static Pattern VOLUME_PATTERN = Pattern.compile("^\\s*(\\d+)$",
-            Pattern.UNICODE_CHARACTER_CLASS);
+    protected final static Pattern VOLUME_PATTERN = Pattern.compile("^\\s*(\\d+)$",Pattern.UNICODE_CHARACTER_CLASS);
     protected final static Pattern BRACKET_DIRECTIVE_PATTERN = Pattern.compile("\\[(.)(.)\\]");
-    protected final static Pattern PPN_WITH_K10PLUS_ISIL_PREFIX_PATTERN = Pattern
-            .compile("\\(" + ISIL_K10PLUS + "\\)(.*)");
+    protected final static Pattern PPN_WITH_K10PLUS_ISIL_PREFIX_PATTERN = Pattern.compile("\\(" + ISIL_K10PLUS + "\\)(.*)");
     protected final static Pattern SUPERIOR_PPN_WITH_K10PLUS_ISIL_PREFIX_PATTERN = PPN_WITH_K10PLUS_ISIL_PREFIX_PATTERN;
-    protected final static Pattern DIFFERENT_CALCULATION_OF_TIME_PATTERN = Pattern
-            .compile(".*?\\[(.*?)\\=\\s*(\\d+)\\s*\\].*", Pattern.UNICODE_CHARACTER_CLASS);
+    protected final static Pattern DIFFERENT_CALCULATION_OF_TIME_PATTERN = Pattern.compile(".*?\\[(.*?)\\=\\s*(\\d+)\\s*\\].*", Pattern.UNICODE_CHARACTER_CLASS);
     protected final static Pattern REMAINS_OR_PARTIAL_REMAINS = Pattern.compile("^(?=Nachlass|Teilnachlass).*");
 
     // use static instance for better performance
@@ -205,81 +198,57 @@ public class TueFindBiblio extends TueFind {
             this.put("DE-21-25", "Universit\u00E4t T\u00FCbingen, Musikwissenschaftliches Institut");
             this.put("DE-21-26", "Universit\u00E4t T\u00FCbingen, Anatomisches Institut");
             this.put("DE-21-27", "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Anthropologie und Humangenetik");
-            this.put("DE-21-28",
-                    "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Astronomie und Astrophysik, Abteilung Astronomie");
+            this.put("DE-21-28", "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Astronomie und Astrophysik, Abteilung Astronomie");
             this.put("DE-21-31", "Universit\u00E4t T\u00FCbingen, Evangelisch-theologische Fakult\u00E4t");
-            this.put("DE-21-32a",
-                    "Universit\u00E4t T\u00FCbingen, Historisches Seminar, Abteilung f\u00FCr Alte Geschichte");
-            this.put("DE-21-32b",
-                    "Universit\u00E4t T\u00FCbingen, Historisches Seminar, Abteilung f\u00FCr Mittelalterliche Geschichte");
-            this.put("DE-21-32c",
-                    "Universit\u00E4t T\u00FCbingen, Historisches Seminar, Abteilung f\u00FCr Neuere Geschichte");
-            this.put("DE-21-34",
-                    "Universit\u00E4t T\u00FCbingen, Asien-Orient-Institut, Abteilung f\u00FCr Indologie und Vergleichende Religionswissenschaft");
+            this.put("DE-21-32a", "Universit\u00E4t T\u00FCbingen, Historisches Seminar, Abteilung f\u00FCr Alte Geschichte");
+            this.put("DE-21-32b", "Universit\u00E4t T\u00FCbingen, Historisches Seminar, Abteilung f\u00FCr Mittelalterliche Geschichte");
+            this.put("DE-21-32c", "Universit\u00E4t T\u00FCbingen, Historisches Seminar, Abteilung f\u00FCr Neuere Geschichte");
+            this.put("DE-21-34", "Universit\u00E4t T\u00FCbingen, Asien-Orient-Institut, Abteilung f\u00FCr Indologie und Vergleichende Religionswissenschaft");
             this.put("DE-21-35", "Universit\u00E4t T\u00FCbingen, Katholisch-theologische Fakult\u00E4t");
-            this.put("DE-21-39",
-                    "Universit\u00E4t T\u00FCbingen, Fachbibliothek Mathematik und Physik / Bereich Mathematik");
+            this.put("DE-21-39", "Universit\u00E4t T\u00FCbingen, Fachbibliothek Mathematik und Physik / Bereich Mathematik");
             this.put("DE-21-37", "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Sportwissenschaft");
-            this.put("DE-21-42",
-                    "Universit\u00E4t T\u00FCbingen, Asien-Orient-Institut, Abteilung f\u00FCr Orient- uns Islamwissenschaft");
+            this.put("DE-21-42", "Universit\u00E4t T\u00FCbingen, Asien-Orient-Institut, Abteilung f\u00FCr Orient- uns Islamwissenschaft");
             this.put("DE-21-43", "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Erziehungswissenschaft");
             this.put("DE-21-45", "Universit\u00E4t T\u00FCbingen, Philologisches Seminar");
             this.put("DE-21-46", "Universit\u00E4t T\u00FCbingen, Philosophisches Seminar");
             this.put("DE-21-50", "Universit\u00E4t T\u00FCbingen, Physiologisches Institut");
             this.put("DE-21-51", "Universit\u00E4t T\u00FCbingen, Psychologisches Institut");
-            this.put("DE-21-52",
-                    "Universit\u00E4t T\u00FCbingen, Ludwig-Uhland-Institut f\u00FCr Empirische Kulturwissenschaft");
-            this.put("DE-21-53",
-                    "Universit\u00E4t T\u00FCbingen, Asien-Orient-Institut, Abteilung f\u00FCr Ethnologie");
-            this.put("DE-21-54",
-                    "Universit\u00E4t T\u00FCbingen, Universit\u00E4tsklinik f\u00FCr Zahn-, Mund- und Kieferheilkunde");
+            this.put("DE-21-52", "Universit\u00E4t T\u00FCbingen, Ludwig-Uhland-Institut f\u00FCr Empirische Kulturwissenschaft");
+            this.put("DE-21-53", "Universit\u00E4t T\u00FCbingen, Asien-Orient-Institut, Abteilung f\u00FCr Ethnologie");
+            this.put("DE-21-54", "Universit\u00E4t T\u00FCbingen, Universit\u00E4tsklinik f\u00FCr Zahn-, Mund- und Kieferheilkunde");
             this.put("DE-21-58", "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Politikwissenschaft");
-            this.put("DE-21-62",
-                    "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Osteurop\u00E4ische Geschichte und Landeskunde");
+            this.put("DE-21-62",  "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Osteurop\u00E4ische Geschichte und Landeskunde");
             this.put("DE-21-63", "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Tropenmedizin");
-            this.put("DE-21-64",
-                    "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Geschichtliche Landeskunde und Historische Hilfswissenschaften");
+            this.put("DE-21-64", "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Geschichtliche Landeskunde und Historische Hilfswissenschaften");
             this.put("DE-21-65", "Universit\u00E4t T\u00FCbingen, Universit\u00E4ts-Apotheke");
             this.put("DE-21-74", "Universit\u00E4t T\u00FCbingen, Zentrum f\u00FCr Informations-Technologie");
             this.put("DE-21-78", "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Medizinische Biometrie");
-            this.put("DE-21-81",
-                    "Universit\u00E4t T\u00FCbingen, Inst. f. Astronomie und Astrophysik/Abt. Geschichte der Naturwiss.");
+            this.put("DE-21-81", "Universit\u00E4t T\u00FCbingen, Inst. f. Astronomie und Astrophysik/Abt. Geschichte der Naturwiss.");
             this.put("DE-21-85", "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Soziologie");
             this.put("DE-21-86", "Universit\u00E4t T\u00FCbingen, Zentrum f\u00FCr Datenverarbeitung");
             this.put("DE-21-89", "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Arbeits- und Sozialmedizin");
             this.put("DE-21-92", "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Gerichtliche Medizin");
             this.put("DE-21-93", "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Ethik und Geschichte der Medizin");
             this.put("DE-21-95", "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Hirnforschung");
-            this.put("DE-21-98",
-                    "Universit\u00E4t T\u00FCbingen, Fachbibliothek Mathematik und Physik / Bereich Physik");
-            this.put("DE-21-99",
-                    "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Ur- und Fr\u00FChgeschichte und Arch\u00E4ologie des Mittelalters, Abteilung f\u00FCr \u00E4ltere Urgeschichteund Quart\u00E4r\u00F6kologie");
+            this.put("DE-21-98", "Universit\u00E4t T\u00FCbingen, Fachbibliothek Mathematik und Physik / Bereich Physik");
+            this.put("DE-21-99", "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Ur- und Fr\u00FChgeschichte und Arch\u00E4ologie des Mittelalters, Abteilung f\u00FCr \u00E4ltere Urgeschichteund Quart\u00E4r\u00F6kologie");
             this.put("DE-21-106", "Universit\u00E4t T\u00FCbingen, Seminar f\u00FCr Zeitgeschichte");
             this.put("DE-21-108", "Universit\u00E4t T\u00FCbingen, Fakult\u00E4tsbibliothek Neuphilologie");
-            this.put("DE-21-109",
-                    "Universit\u00E4t T\u00FCbingen, Asien-Orient-Institut, Abteilung f\u00FCr Sinologie und Koreanistik");
+            this.put("DE-21-109", "Universit\u00E4t T\u00FCbingen, Asien-Orient-Institut, Abteilung f\u00FCr Sinologie und Koreanistik");
             this.put("DE-21-110", "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Kriminologie");
             this.put("DE-21-112", "Universit\u00E4t T\u00FCbingen, Fakult\u00E4t f\u00FCr Biologie, Bibliothek");
-            this.put("DE-21-116",
-                    "Universit\u00E4t T\u00FCbingen, Zentrum f\u00FCr Molekularbiologie der Pflanzen, Forschungsgruppe Pflanzenbiochemie");
-            this.put("DE-21-117",
-                    "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Medizinische Informationsverarbeitung");
+            this.put("DE-21-116", "Universit\u00E4t T\u00FCbingen, Zentrum f\u00FCr Molekularbiologie der Pflanzen, Forschungsgruppe Pflanzenbiochemie");
+            this.put("DE-21-117", "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Medizinische Informationsverarbeitung");
             this.put("DE-21-118", "Universit\u00E4t T\u00FCbingen, Universit\u00E4ts-Archiv");
             this.put("DE-21-119", "Universit\u00E4t T\u00FCbingen, Wilhelm-Schickard-Institut f\u00FCr Informatik");
-            this.put("DE-21-120",
-                    "Universit\u00E4t T\u00FCbingen, Asien-Orient-Institut, Abteilung f\u00FCr Japanologie");
-            this.put("DE-21-121",
-                    "Universit\u00E4t T\u00FCbingen, Internationales Zentrum f\u00FCr Ethik in den Wissenschaften");
+            this.put("DE-21-120", "Universit\u00E4t T\u00FCbingen, Asien-Orient-Institut, Abteilung f\u00FCr Japanologie");
+            this.put("DE-21-121", "Universit\u00E4t T\u00FCbingen, Internationales Zentrum f\u00FCr Ethik in den Wissenschaften");
             this.put("DE-21-123", "Universit\u00E4t T\u00FCbingen, Medizinbibliothek");
-            this.put("DE-21-124",
-                    "Universit\u00E4t T\u00FCbingen, Institut f. Medizinische Virologie und Epidemiologie d. Viruskrankheiten");
-            this.put("DE-21-126",
-                    "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Medizinische Mikrobiologie und Hygiene");
-            this.put("DE-21-203",
-                    "Universit\u00E4t T\u00FCbingen, Sammlung Werner Schweikert - Archiv der Weltliteratur");
+            this.put("DE-21-124", "Universit\u00E4t T\u00FCbingen, Institut f. Medizinische Virologie und Epidemiologie d. Viruskrankheiten");
+            this.put("DE-21-126", "Universit\u00E4t T\u00FCbingen, Institut f\u00FCr Medizinische Mikrobiologie und Hygiene");
+            this.put("DE-21-203", "Universit\u00E4t T\u00FCbingen, Sammlung Werner Schweikert - Archiv der Weltliteratur");
             this.put("DE-21-205", "Universit\u00E4t T\u00FCbingen, Zentrum f\u00FCr Islamische Theologie");
-            this.put("DE-Frei85",
-                    "Freiburg MPI Ausl\u00E4nd.Recht, Max-Planck-Institut f\u00FCr ausl\u00E4ndisches und internationales Strafrecht");
+            this.put("DE-Frei85", "Freiburg MPI Ausl\u00E4nd.Recht, Max-Planck-Institut f\u00FCr ausl\u00E4ndisches und internationales Strafrecht");
             this.put("DE-2619", "KrimDok - kriminologische Bibliographie");
         }
     };
@@ -379,8 +348,7 @@ public class TueFindBiblio extends TueFind {
     /**
      * Determine Record Title
      *
-     * @param record
-     *               the record
+     * @param record the record
      * @return String nicely formatted title
      */
     public String getMainTitle(final Record record) {
@@ -409,8 +377,7 @@ public class TueFindBiblio extends TueFind {
      * LOK = Field |0 689 = Subfield |a Imperialismus = Subfield with local
      * subject
      *
-     * @param record
-     *               the record
+     * @param record the record
      * @return Set topics
      */
 
@@ -436,8 +403,7 @@ public class TueFindBiblio extends TueFind {
      * and 689a subfields
      * <p/>
      *
-     * @param record
-     *               the record
+     * @param record the record
      * @return Set of local subjects
      */
     public Set<String> getAllTopics(final Record record) {
@@ -450,8 +416,7 @@ public class TueFindBiblio extends TueFind {
      * Hole das Sachschlagwort aus 689|a (wenn 689|d != z oder f)
      * und füge auch Schlagwörter aus LOK 689 ein
      *
-     * @param record
-     *               the record
+     * @param record the record
      * @return Set "topic_facet"
      */
     public Set<String> getFacetTopics(final Record record) {
@@ -484,8 +449,7 @@ public class TueFindBiblio extends TueFind {
     // Map used by getPhysicalType().
     protected static final Map<String, String> code_to_material_type_map;
 
-    // Entries are from
-    // http://swbtools.bsz-bw.de/cgi-bin/k10plushelp.pl?cmd=kat&val=4960&kattype=Standard#$3
+    // Entries are from http://swbtools.bsz-bw.de/cgi-bin/k10plushelp.pl?cmd=kat&val=4960&kattype=Standard#$3
     static {
         Map<String, String> tempMap = new TreeMap<>();
         tempMap.put("01", "Inhaltstext");
@@ -531,8 +495,7 @@ public class TueFindBiblio extends TueFind {
      * a URL with a DOI resolver from the DOI in 024$a and set the
      * "material type" to "DOI Link".
      *
-     * @param record
-     *               the record
+     * @param record the record
      * @return A, possibly empty, Set<String> containing the URL/material-type
      *         pairs.
      */
@@ -561,8 +524,7 @@ public class TueFindBiblio extends TueFind {
             String materialLicence = "";
             final char indicator1 = field.getIndicator1();
             final char indicator2 = field.getIndicator2();
-            // The existence of subfield 3 == Volltext or Indicators 4 0 means full text
-            // (c.f. https://github.com/ubtue/tuefind/issues/1782)
+            // The existence of subfield 3 == Volltext or Indicators 4 0 means full text (c.f. https://github.com/ubtue/tuefind/issues/1782)
             // Indicator 4 1 can also contain fulltext but this then must be
             // stated $y and is thus addressed by the general evaluation case
             if (indicator1 == '4' && indicator2 == '0') {
@@ -669,12 +631,10 @@ public class TueFindBiblio extends TueFind {
     }
 
     /**
-     * Returns a Set<String> of (parent ID + colon + parent title + optional
-     * volume). Only
+     * Returns a Set<String> of (parent ID + colon + parent title + optional volume). Only
      * ID's w/o titles will not be returned.
      *
-     * @param record
-     *               the record
+     * @param record the record
      * @return A, possibly empty, Set<String> containing the ID/title(/volume) pairs
      *         and triples.
      */
@@ -719,8 +679,7 @@ public class TueFindBiblio extends TueFind {
     }
 
     /**
-     * @param record
-     *                  the record
+     * @param record the record
      * @param fieldnums
      * @return
      */
@@ -851,8 +810,7 @@ public class TueFindBiblio extends TueFind {
     }
 
     /**
-     * @param record
-     *               the record
+     * @param record the record
      * @return
      */
     public String isAvailableInTuebingen(final Record record) {
@@ -870,8 +828,7 @@ public class TueFindBiblio extends TueFind {
      * <p/>
      * LOK = Field |0 852 = Subfield |a DE-Sp3 = Subfield with ISIL
      *
-     * @param record
-     *               the record
+     * @param record the record
      * @return Set of collections
      */
     public Set<String> getCollections(final Record record) {
@@ -952,17 +909,11 @@ public class TueFindBiblio extends TueFind {
 
                 final String month = dataString.substring(2, 4);
                 if (!isValidMonthCode(month)) {
-                    logger.severe("in getTueLocalIndexedDate: bad month in LOK 938 field: " + month
-                            + "! (PPN: " + record.getControlNumber() + ")");
+                    logger.severe("in getTueLocalIndexedDate: bad month in LOK 938 field: " + month + "! (PPN: " + record.getControlNumber() + ")");
                     return null;
                 }
-                // If we use a fixed day we underrun a plausible span of time for the new items
-                // but we have to make sure that no invalid date is generated that leads to an
-                // import problem
-                return year + "-" + month + "-" +
-                        String.format("%02d",
-                                isCurrentYearAndMonth(year, month) ? getCurrentDayOfMonth()
-                                        : getLastDayForYearAndMonth(year, month))
+                // If we use a fixed day we underrun a plausible span of time for the new items but we have to make sure that no invalid date is generated that leads to an import problem
+                return year + "-" + month + "-" + String.format("%02d", isCurrentYearAndMonth(year, month) ? getCurrentDayOfMonth() : getLastDayForYearAndMonth(year, month))
                         + "T11:00:00.000Z";
             }
         }
@@ -993,8 +944,7 @@ public class TueFindBiblio extends TueFind {
     }
 
     /**
-     * @param record
-     *               the record
+     * @param record the record
      */
     public String getPageRange(final Record record) {
         final String field_value = getFirstSubfieldValue(record, "936", 'h');
@@ -1120,8 +1070,7 @@ public class TueFindBiblio extends TueFind {
     }
 
     /**
-     * @param record
-     *               the record
+     * @param record the record
      */
     public String getContainerYear(final Record record) {
         final String field_value = getFirstSubfieldValue(record, "936", 'u', 'w', 'j');
@@ -1133,8 +1082,7 @@ public class TueFindBiblio extends TueFind {
     }
 
     /**
-     * @param record
-     *               the record
+     * @param record the record
      */
     public String getContainerVolume(final Record record) {
         final String field_value = getFirstSubfieldValue(record, "936", 'd');
@@ -1169,8 +1117,7 @@ public class TueFindBiblio extends TueFind {
     }
 
     /**
-     * @param record
-     *               the record
+     * @param record the record
      */
     public Set<String> getPhysicalType(final Record record) {
         return map935b(record, phys_code_to_full_name_map);
@@ -1240,8 +1187,7 @@ public class TueFindBiblio extends TueFind {
         final String subfieldDelim = "$";
         final String esc = "\\";
         final String regexColon = "(?<!" + Pattern.quote(esc) + ")" + Pattern.quote(fieldDelim);
-        final String regexSubfield = "(?<!" + Pattern.quote(esc) + ")" + Pattern.quote(subfieldDelim)
-                + "([0-9][a-z]|[a-zA-Z])(.*)";
+        final String regexSubfield = "(?<!" + Pattern.quote(esc) + ")" + Pattern.quote(subfieldDelim) + "([0-9][a-z]|[a-zA-Z])(.*)";
         final Pattern SUBFIELD_PATTERN = Pattern.compile(regexSubfield);
         String[] subfieldSeparatorList = separatorSpec.split(regexColon);
         for (String s : subfieldSeparatorList) {
@@ -1273,8 +1219,7 @@ public class TueFindBiblio extends TueFind {
     }
 
     /*
-     * Function to parse out special forms of separator specs needed to include a
-     * term bracketed in symbol pairs
+     * Function to parse out special forms of separator specs needed to include a term bracketed in symbol pairs
      * e.g. opening and closing parentheses
      * Changes the character arguments
      */
@@ -1294,8 +1239,7 @@ public class TueFindBiblio extends TueFind {
         return matcher.matches();
     }
 
-    protected final static Pattern NUMBER_END_PATTERN = Pattern.compile("([^\\d\\s<>]+)(\\s*<?\\d+(-\\d+)>?$)",
-            Pattern.UNICODE_CHARACTER_CLASS);
+    protected final static Pattern NUMBER_END_PATTERN = Pattern.compile("([^\\d\\s<>]+)(\\s*<?\\d+(-\\d+)>?$)", Pattern.UNICODE_CHARACTER_CLASS);
 
     /**
      * Translate a single term to given language if a translation is found
@@ -1319,10 +1263,8 @@ public class TueFindBiblio extends TueFind {
             }
             topic = Utils.join(new HashSet<String>(Arrays.asList(subtopics)), " / ");
         }
-        // If we have a topic and a following number, try to separate the word and join
-        // it afterwards
-        // This is especially important for time informations where we provide special
-        // treatment
+        // If we have a topic and a following number, try to separate the word and join it afterwards
+        // This is especially important for time informations where we provide special treatment
         else if (numberEndMatcher.find()) {
             String topicText = numberEndMatcher.group(1);
             String numberExtension = numberEndMatcher.group(2);
@@ -1346,17 +1288,12 @@ public class TueFindBiblio extends TueFind {
 
     /**
      * Generate Separator according to specification
-     * For some subfields there are standards how the values extracted must be
-     * attached to the resulting keyword string
-     * Examples are $p must be separated y ".". We must also examine the term itself
-     * since there a constructions like
-     * $9g:
+     * For some subfields there are standards how the values extracted must be attached to the resulting keyword string
+     * Examples are $p must be separated y ".". We must also examine the term itself since there a constructions like $9g:
      */
     public String getSubfieldBasedSeparator(Map<String, String> separators, char subfieldCodeChar, String term) {
         String subfieldCodeString = Character.toString(subfieldCodeChar);
-        // In some cases of numeric Subfields we have ':'-delimited subfield of a
-        // subfield to remove complexity ;-)
-        // i.e. $9 g:xxxx
+        // In some cases of numeric Subfields we have ':'-delimited subfield of a subfield to remove complexity ;-) i.e. $9 g:xxxx
         subfieldCodeString += Character.isDigit(subfieldCodeChar) ? term.split(":")[0] : "";
         String separator = separators.get(subfieldCodeString) != null ? separators.get(subfieldCodeString)
                 : separators.get("default");
@@ -1366,8 +1303,7 @@ public class TueFindBiblio extends TueFind {
 
     /**
      * Predicates for choosing only a subset of all standardized subjects
-     * In the q-Subfield of 689 standardized subjects we have "z" (time subject),
-     * "f" (genre subject), "g" (region subject)
+     * In the q-Subfield of 689 standardized subjects we have "z" (time subject), "f" (genre subject), "g" (region subject)
      * Alternatively this is in the d-Subfields
      */
 
@@ -1450,8 +1386,7 @@ public class TueFindBiblio extends TueFind {
             return true;
         Subfield subfieldQ = marcField.getSubfield('q');
         Subfield subfieldD = marcField.getSubfield('d');
-        return (subfieldQ != null && subfieldQ.getData().equals("z"))
-                || (subfieldD != null && subfieldD.getData().equals("z"));
+        return (subfieldQ != null && subfieldQ.getData().equals("z")) || (subfieldD != null && subfieldD.getData().equals("z"));
     };
 
     Predicate<DataField> _689IsOrdinarySubject = (DataField marcField) -> {
@@ -1462,8 +1397,7 @@ public class TueFindBiblio extends TueFind {
         if (!marcField.getTag().equals("689"))
             return true;
 
-        return (!(_689IsTimeSubject.test(marcField) || _689IsGenreSubject.test(marcField)
-                || _689IsRegionSubject.test(marcField)));
+        return (!(_689IsTimeSubject.test(marcField) || _689IsGenreSubject.test(marcField) || _689IsRegionSubject.test(marcField)));
     };
 
     @Deprecated
@@ -1473,10 +1407,8 @@ public class TueFindBiblio extends TueFind {
     }
 
     /**
-     * Construct a regular expression from the subfield tags where all character
-     * subfields are extracted and for number
-     * subfields the subsequent character subSubfield-Code is skipped (e.g.
-     * abctnpz9g => a|b|c|t|n|p|z|9 (without the g)
+     * Construct a regular expression from the subfield tags where all character subfields are extracted and for number
+     * subfields the subsequent character subSubfield-Code is skipped (e.g. abctnpz9g => a|b|c|t|n|p|z|9 (without the g)
      */
     protected String extractNormalizedSubfieldPatternHelper(final String subfldTags) {
         String[] tokens = subfldTags.split("(?<=[0-9]?[a-z])");
