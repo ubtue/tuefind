@@ -49,10 +49,9 @@ import static java.util.stream.Collectors.joining;
 */
 
 class IssueInfo {
-    public String volume_, year_, number_, month_, pages_;
+    public String volume_, issue_, pages_, year_, month_;
 
-    public IssueInfo() {
-    }
+    public IssueInfo() { }
 
     public IssueInfo(final Record record) {
         boolean isOldVersion = true;
@@ -68,17 +67,17 @@ class IssueInfo {
                         if (subfield_content[0].equals("volume"))
                             this.volume_ = subfield_content[1];
 
-                        if (subfield_content[0].equals("year"))
-                            this.year_ = subfield_content[1];
-
                         if (subfield_content[0].equals("number"))
-                            this.number_ = subfield_content[1];
-
-                        if (subfield_content[0].equals("month"))
-                            this.month_ = subfield_content[1];
+                            this.issue_ = subfield_content[1];
 
                         if (subfield_content[0].equals("pages"))
                             this.pages_ = subfield_content[1];
+
+                        if (subfield_content[0].equals("year"))
+                            this.year_ = subfield_content[1];
+
+                        if (subfield_content[0].equals("month"))
+                            this.month_ = subfield_content[1];
                     }
                 }
                 isOldVersion = false;
@@ -108,7 +107,7 @@ class IssueInfo {
                         this.year_ = dataField_.getSubfield('j').getData();
 
                     if ((dataField_.getSubfield('e') != null) && (!dataField_.getSubfield('e').getData().isEmpty()))
-                        this.number_ = dataField_.getSubfield('e').getData();
+                        this.issue_ = dataField_.getSubfield('e').getData();
 
                     if ((dataField_.getSubfield('c') != null) && (!dataField_.getSubfield('c').getData().isEmpty()))
                         this.month_ = dataField_.getSubfield('c').getData();
@@ -119,24 +118,6 @@ class IssueInfo {
             }
 
         }
-    }
-
-    public String getInfo(final String key_) {
-        switch (key_) {
-            case "volume":
-                return this.volume_;
-            case "year":
-                return this.year_;
-            case "number":
-                return this.number_;
-            case "month":
-                return this.month_;
-            case "pages":
-                return this.pages_;
-            default:
-                return null;
-        }
-
     }
 }
 
@@ -346,16 +327,34 @@ public class TueFindBiblio extends TueFind {
     /**
      * Get issue informations
      */
-    public String getIssueInfo(final Record record, final String info_type) {
+    protected IssueInfo getIssueInfo(final Record record) {
         final ControlField dataField = (ControlField) record.getVariableField("001");
         final String id_ = dataField.getData();
 
-        if (IssueInfos.get(id_) == null) {
-            IssueInfo issueInfo = new IssueInfo(record);
-            IssueInfos.put(id_, issueInfo);
-        }
+        return IssueInfos.computeIfAbsent(id_, param -> {
+            return  new IssueInfo(record);
+        });
+    }
+    
+    public String getIssueInfoVolume(final Record record){
+        return getIssueInfo(record).volume_;
 
-        return IssueInfos.get(id_).getInfo(info_type);
+    }
+    public String getIssueInfoIssue(final Record record){
+        return getIssueInfo(record).issue_;
+
+    }
+    public String getIssueInfoPages(final Record record){
+        return getIssueInfo(record).pages_;
+
+    }
+    public String getIssueInfoYear(final Record record){
+        return getIssueInfo(record).year_;
+
+    }
+    public String getIssueInfoMonth(final Record record){
+        return getIssueInfo(record).month_;
+
     }
 
     /**
@@ -2770,7 +2769,7 @@ public class TueFindBiblio extends TueFind {
     }
 
     public String getStartPage(final Record record) {
-        final String pages = getIssueInfo(record, "pages");
+        final String pages = getIssueInfoPages(record);
         if (pages == null)
             return null;
         final Matcher matcher = PAGE_MATCH_PATTERN.matcher(pages);
@@ -2780,7 +2779,7 @@ public class TueFindBiblio extends TueFind {
     }
 
     public String getEndPage(final Record record) {
-        final String pages = getIssueInfo(record, "pages");
+        final String pages = getIssueInfoPages(record);
         if (pages == null)
             return null;
         final Matcher matcher = PAGE_MATCH_PATTERN.matcher(pages);
