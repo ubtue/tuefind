@@ -328,10 +328,7 @@ public class TueFindBiblio extends TueFind {
      * Get issue informations
      */
     protected IssueInfo getIssueInfo(final Record record) {
-        final ControlField dataField = (ControlField) record.getVariableField("001");
-        final String id_ = dataField.getData();
-
-        return IssueInfos.computeIfAbsent(id_, param -> {
+        return IssueInfos.computeIfAbsent(record.getControlNumber(), param -> {
             return  new IssueInfo(record);
         });
     }
