@@ -6,6 +6,10 @@ class DSpace6 extends \VuFind\MetadataVocabulary\AbstractBase
 {
     protected $dspaceMap = [
         [
+            'key' => 'dc.identifier.other',
+            'source' => 'ppn',
+        ],
+        [
             'key' => 'dc.contributor.author',
             'source' => 'author',
         ],
@@ -34,10 +38,12 @@ class DSpace6 extends \VuFind\MetadataVocabulary\AbstractBase
     {
         $rawData = parent::getGenericData($driver);
         $rawData['language'] = $driver->getLanguagesIso639_2();
+        $rawData['ppn'] = $driver->getUniqueID();
 
         $dspaceItem = ['name' => $rawData['title'], 'type' => 'item', 'metadata' => []];
 
         foreach ($this->dspaceMap as $mapEntry) {
+
             $rawDataKey = $mapEntry['source'];
             if (!isset($rawData[$rawDataKey])) {
                 continue;
@@ -49,6 +55,7 @@ class DSpace6 extends \VuFind\MetadataVocabulary\AbstractBase
             }
 
             foreach ($values as $value) {
+
                 $dspaceMetadata = ['key' => $mapEntry['key']];
 
                 if ($mapEntry['source'] == 'language') {
