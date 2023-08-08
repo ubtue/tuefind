@@ -6,7 +6,7 @@ class DSpace6 extends \VuFind\MetadataVocabulary\AbstractBase
 {
     protected $dspaceMap = [
         [
-            'key' => 'dc.identifier.other',
+            'key' => 'utue.artikel.ppn',
             'source' => 'ppn',
         ],
         [
