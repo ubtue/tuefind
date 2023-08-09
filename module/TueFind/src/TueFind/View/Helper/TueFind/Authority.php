@@ -94,6 +94,33 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
         return $display;
     }
 
+    public function getOtherNames(AuthorityRecordDriver &$driver): string
+    {
+        $otherNames = $driver->getUseFor();
+        $headingTimespan = $driver->getHeadingTimespan();
+        $limit = 5;
+        $i = 0;
+        $display = '';
+        if(!empty($otherNames)) {
+            $display .= '<ul class="tf-other-names-list">';
+            foreach ($otherNames as $name) {
+                if($i < $limit) {
+                    $clearName = explode($headingTimespan, $name);
+                    if(isset($clearName[0])) {
+                        $display .= '<li>'.trim($clearName[0]).'</li>';
+                    }
+                }
+                $i++;
+            }
+            if($i > $limit) {
+                $display .= '<li><a href="#other-names">'.$this->translate('more').'</a></li>';
+            }
+            $display .= '</ul>';
+        }
+
+        return $display;
+    }
+
     public function getBiographicalReferences(AuthorityRecordDriver &$driver): string
     {
         $tuefindHelper = $this->viewHelperManager->get('tuefind');
