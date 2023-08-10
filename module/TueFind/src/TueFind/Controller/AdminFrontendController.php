@@ -42,7 +42,7 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
                 $entry->updateAccessState('granted');
                 $userAuthorityHistoryTable->updateUserAuthorityHistory($adminUser->id, 'granted');
             } elseif ($action == 'decline') {
-                $accessInfo = "decline";
+                $accessInfo = "declined";
                 $userAuthorityHistoryTable->updateUserAuthorityHistory($adminUser->id, $accessInfo);
                 $entry->delete();
             }
