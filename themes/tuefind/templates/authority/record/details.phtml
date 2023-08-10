@@ -11,8 +11,8 @@
 <table class="table table-striped">
   <tbody>
     <?php renderRow($this->transEsc('Born'), $this->authority()->getBirth($this->driver)); ?>
-    <?php renderRow($this->transEsc('Other Names'), $this->authority()->getOtherNames($this->driver)); ?>
     <?php renderRow($this->transEsc('Died'), $this->authority()->getDeath($this->driver)); ?>
+    <?php renderRow($this->transEsc('Other Names'), $this->authority()->getOtherNames($this->driver)); ?>
     <?php renderRow($this->transEsc('Occupation'), $this->authority()->getOccupations($this->driver)); ?>
     <?php renderRow($this->transEsc('Personal Relations'), $this->authority()->getPersonalRelations($this->driver)); ?>
     <?php renderRow($this->transEsc('Corporate Relations'), $this->authority()->getCorporateRelations($this->driver)); ?>
