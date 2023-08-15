@@ -49,6 +49,31 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
         $this->viewHelperManager = $viewHelperManager;
     }
 
+    protected function formatPlace(array $place): string
+    {
+        // prepare / override given information
+        $name = $place['name'];
+        $district = $place['district'] ?? '';
+        $type = $place['type'] ?? '';
+        if ($type == 'DIN-ISO-3166') {
+            $type = 'Country';
+            $name = \Locale::getDisplayRegion($place['name'], $this->getTranslatorLocale());
+            if (empty($district))
+                $district = $place['name'];
+        } else {
+            $type = $this->translateNormdata($type);
+        }
+
+        // build label
+        $label = '';
+        if (!empty($type))
+            $label .= $this->translate($type) . ': ';
+        $label .= $name;
+        if (!empty($district))
+            $label .= ' (' . $district . ')';
+        return $label;
+    }
+
     /**
      * Get authority birth information for display
      *
@@ -63,7 +88,7 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
             $display .= $this->getDateTimeProperty($birthDate, 'birthDate');
             $birthPlace = $driver->getBirthPlace();
             if ($birthPlace != null)
-                $display .= ', <span property="birthPlace">' . $birthPlace . '</span>';
+                $display .= ', <span property="birthPlace">' . htmlspecialchars($this->formatPlace($birthPlace)) . '</span>';
         }
 
         return $display;
@@ -104,7 +129,7 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
             $display .= $this->getDateTimeProperty($deathDate, 'deathDate');
             $deathPlace = $driver->getDeathPlace();
             if ($deathPlace != null)
-                $display .= ', <span property="deathPlace">' . $deathPlace . '</span>';
+                $display .= ', <span property="deathPlace">' . htmlspecialchars($this->formatPlace($deathPlace)) . '</span>';
         }
         return $display;
     }
@@ -344,12 +369,7 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
 
         $places = $driver->getGeographicalRelations();
         foreach ($places as $place) {
-            if ($place['type'] == 'DIN-ISO-3166') {
-                $place['type'] = 'Land';
-                $place['name'] = \Locale::getDisplayRegion($place['name'], $this->getTranslatorLocale()) . ' (' . $place['name'] . ')';
-            }
-
-            $placesString .= htmlentities($this->translateNormdata($place['type'])) . ': ' . htmlentities($place['name']) . '<br>';
+            $placesString .= htmlentities($this->formatPlace($place)) . '<br>';
         }
 
         return $placesString;
