@@ -18,8 +18,8 @@
     </a>
     <br/>
   <?php endforeach; ?>
-<?php elseif (!empty($this->driver->getSuperiorFrom773a())): ?>
-  <?=$this->driver->getSuperiorFrom773a()[0];?>
-  <br/>
+<?php elseif (!empty($this->driver->getSuperiorFrom773())): ?>
+  <?=nl2br($this->escapeHtml(implode("\n\n", $this->driver->getSuperiorFrom773())));?>
+<?php else: ?>
+  <?=$this->escapeHtml(implode(', ', $infos));?>
 <?php endif; ?>
-<?=implode(', ', $infos);?>

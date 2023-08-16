@@ -551,14 +551,48 @@ class SolrMarc extends SolrDefault
         return [];
     }
 
-    public function getSuperiorFrom773a()
+    public function getSuperiorFrom773(): array
     {
+        $superiors = [];
+
         $_773_fields = $this->getMarcReader()->getFields('773');
         foreach ($_773_fields as $_773_field) {
-            $subfield_a = $this->getMarcReader()->getSubfields($_773_field,'a') ? $this->getMarcReader()->getSubfields($_773_field,'a') : '';
-            if (!empty($subfield_a))
-                return $subfield_a;
+            // Skip if "Do not display note"-flag is set
+            if ($_773_field['i1'] == '1')
+                continue;
+
+            // series info (non-repeatable subfields)
+            $superior = '';
+            $mainHeading = $this->getMarcReader()->getSubfield($_773_field, 'a') ?? '';
+            $title = $this->getMarcReader()->getSubfield($_773_field, 't') ?? '';
+            $issn = $this->getMarcReader()->getSubfield($_773_field, 'x') ?? '';
+            if (!empty($mainHeading))
+                $superior .= $mainHeading;
+            elseif (!empty($title))
+                $superior .= $title;
+
+            if (!empty($issn)) {
+                $superior .= ' (' . $issn . ')';
+            }
+            $superior .= "\n";
+
+            // volume(s) info (repeatable subfields)
+            $related = $this->getMarcReader()->getSubfields($_773_field, 'g') ?? [];
+            $relationship = $this->getMarcReader()->getSubfields($_773_field, 'i') ?? [];
+            $i = 0;
+            foreach ($related as $relatedEntry) {
+                if (isset($relationship[$i])) {
+                    $superior .= $relationship[$i] . ': ';
+                }
+                $superior .= $relatedEntry;
+                ++$i;
+                $superior .= "\n";
+            }
+
+            $superiors[] = trim($superior);
         }
+
+        return $superiors;
     }
 
     public function getLanguagesIso639_2(): array
