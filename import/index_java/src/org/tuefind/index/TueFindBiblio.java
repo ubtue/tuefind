@@ -2718,22 +2718,6 @@ public class TueFindBiblio extends TueFind {
 
     }
 
-    protected String formatingYearForSorting(final String strYear){
-        String newStrYear = "";
-        if(strYear != null){
-            for(int i = 0; i < strYear.length(); i++ ){
-                if(strYear.substring(i,i+1).isBlank() || strYear.substring(i,i+1).equals("-"))
-                    return newStrYear;
-
-                if((strYear.substring(i,i+1)).matches("[0-9.]+"))
-                    newStrYear += strYear.substring(i,i+1);
-                else
-                    newStrYear += "0";
-            }
-        }
-        return newStrYear;
-    }
-
     /**
      * Determine the publication year for "date ascending/descending" sorting in
      * accordance with the rules stated in issue 227
@@ -2744,15 +2728,15 @@ public class TueFindBiblio extends TueFind {
      */
     public String getPublicationSortYear(final Record record) {
         final Set<String> years = getYearsBasedOnRecordType(record);
-        Set<String> newYears = new HashSet<String>();
+        Set<String> normalizedYears = new HashSet<>();
 
         if (years.isEmpty())
-            return "";
+            return null;
 
         for(String year : years)
-            newYears.add(formatingYearForSorting(year));
+            normalizedYears.add(normalizeSortableYear(year));
 
-        return calculateLastPublicationYear(newYears);
+        return calculateLastPublicationYear(normalizedYears);
     }
 
     public Set<String> getRecordSelectors(final Record record) {

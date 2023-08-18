@@ -224,6 +224,19 @@ public class TueFind extends SolrIndexerMixin {
         return SORTABLE_STRING_REMOVE_PATTERN.matcher(string).replaceAll("").trim();
     }
 
+    protected String normalizeSortableYear(final String strYear){
+        String newStrYear = "";
+        if(strYear != null){
+            for(int i = 0; i < strYear.length(); i++ ){
+                if((strYear.substring(i,i+1)).matches("[0-9.]+"))
+                    newStrYear += strYear.substring(i,i+1);
+                else
+                    newStrYear += "0";
+            }
+        }
+        return newStrYear;
+    }
+
     /**
      * At the moment used for time range(s) parsing, if more than one timerange exists in TIM-field, minimum lower and maximum upper have to be implemented
      * @param record
