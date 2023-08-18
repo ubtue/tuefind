@@ -561,33 +561,25 @@ class SolrMarc extends SolrDefault
             if ($_773_field['i1'] == '1')
                 continue;
 
-            // series info (non-repeatable subfields)
+            // non-repeatable subfields
             $superior = '';
             $mainHeading = $this->getMarcReader()->getSubfield($_773_field, 'a') ?? '';
             $title = $this->getMarcReader()->getSubfield($_773_field, 't') ?? '';
             $issn = $this->getMarcReader()->getSubfield($_773_field, 'x') ?? '';
+            // repeatable subfields
+            $related = $this->getMarcReader()->getSubfields($_773_field, 'g') ?? [];
+            $relationship = $this->getMarcReader()->getSubfields($_773_field, 'i') ?? [];
+
+            if (!empty($relationship[0]))
+                $superior .= $relationship[0] . ': ';
             if (!empty($mainHeading))
                 $superior .= $mainHeading;
             elseif (!empty($title))
                 $superior .= $title;
-
-            if (!empty($issn)) {
+            if (!empty($issn))
                 $superior .= ' (' . $issn . ')';
-            }
-            $superior .= "\n";
-
-            // volume(s) info (repeatable subfields)
-            $related = $this->getMarcReader()->getSubfields($_773_field, 'g') ?? [];
-            $relationship = $this->getMarcReader()->getSubfields($_773_field, 'i') ?? [];
-            $i = 0;
-            foreach ($related as $relatedEntry) {
-                if (isset($relationship[$i])) {
-                    $superior .= $relationship[$i] . ': ';
-                }
-                $superior .= $relatedEntry;
-                ++$i;
-                $superior .= "\n";
-            }
+            if (!empty($related[0]))
+                $superior .= ' ' . $related[0];
 
             $superiors[] = trim($superior);
         }
