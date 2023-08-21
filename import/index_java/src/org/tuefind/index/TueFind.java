@@ -226,12 +226,14 @@ public class TueFind extends SolrIndexerMixin {
 
     protected String normalizeSortableYear(final String strYear){
         String newStrYear = "";
+        String tmpStr = "";
         if(strYear != null){
             for(int i = 0; i < strYear.length(); i++ ){
-                if((strYear.substring(i,i+1)).matches("[0-9.]+"))
-                    newStrYear += strYear.substring(i,i+1);
+                tmpStr = strYear.substring(i,i+1);
+                if(tmpStr.equals("X"))
+                    newStrYear.concat("0");
                 else
-                    newStrYear += "0";
+                    newStrYear.concat(tmpStr);
             }
         }
         return newStrYear;
