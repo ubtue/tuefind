@@ -2728,10 +2728,15 @@ public class TueFindBiblio extends TueFind {
      */
     public String getPublicationSortYear(final Record record) {
         final Set<String> years = getYearsBasedOnRecordType(record);
-        if (years.isEmpty())
-            return "";
+        Set<String> normalizedYears = new HashSet<>();
 
-        return calculateLastPublicationYear(years);
+        if (years.isEmpty())
+            return null;
+
+        for(String year : years)
+            normalizedYears.add(normalizeSortableYear(year));
+
+        return calculateLastPublicationYear(normalizedYears);
     }
 
     public Set<String> getRecordSelectors(final Record record) {
