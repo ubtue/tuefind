@@ -231,9 +231,9 @@ public class TueFind extends SolrIndexerMixin {
             for(int i = 0; i < strYear.length(); i++ ){
                 tmpStr = strYear.substring(i,i+1);
                 if(tmpStr.equals("X"))
-                    newStrYear.concat("0");
+                    newStrYear += "0";
                 else
-                    newStrYear.concat(tmpStr);
+                    newStrYear += tmpStr;
             }
         }
         return newStrYear;
