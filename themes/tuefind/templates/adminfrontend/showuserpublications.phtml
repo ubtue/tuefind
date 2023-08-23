@@ -36,7 +36,7 @@ $this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') 
             <td><?=htmlspecialchars($publication->lastname)?></td>
             <td><?=htmlspecialchars($publication->email)?></td>
             <td><?=htmlspecialchars($publication->tuefind_institution)?></td>
-            <td data-sort="<?=strtotime($publication->publication_datetime);?>"><?=date("d.m.Y H:i:s",strtotime($publication->publication_datetime));?></td>
+            <td data-sort="<?=date("Y-m-d H:i:s",strtotime($publication->publication_datetime));?>"><?=date("d.m.Y H:i:s",strtotime($publication->publication_datetime));?></td>
           </tr>
         <?php endforeach; ?>
       </tbody>
