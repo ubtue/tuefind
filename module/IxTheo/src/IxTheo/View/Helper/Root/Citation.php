@@ -44,7 +44,7 @@ class Citation extends \VuFind\View\Helper\Root\Citation implements \VuFind\I18n
 {
     use \VuFind\I18n\Translator\TranslatorAwareTrait;
 
-        /**
+    /**
      * Get Chicago Style citation.
      *
      * This function returns a Chicago Style citation using a modified version
