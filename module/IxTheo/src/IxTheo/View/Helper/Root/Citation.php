@@ -5,7 +5,7 @@
  * PHP version 7
  *
  * Copyright (C) Villanova University 2010.
- * Copyright (C) Universitätsbibliothek Tübingen 2017
+ * Copyright (C) Universitätsbibliothek Tübingen 2017-2023
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -44,6 +44,29 @@ class Citation extends \VuFind\View\Helper\Root\Citation implements \VuFind\I18n
 {
     use \VuFind\I18n\Translator\TranslatorAwareTrait;
 
+        /**
+     * Get Chicago Style citation.
+     *
+     * This function returns a Chicago Style citation using a modified version
+     * of the MLA logic.
+     *
+     * @return string
+     */
+    public function getCitationChicago()
+    {
+        return $this->getCitationMLA(
+            9,
+            ', no. ',
+            ' ',
+            '',
+            ' (%s)',
+            ':',
+            true,
+            'https://doi.org/',
+            false,
+            true
+        );
+    }
 
     public function getContainerTitle() {
 
