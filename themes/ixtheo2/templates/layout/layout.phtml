@@ -98,14 +98,18 @@ JS;
     ?>
 
     <?=$this->render('header.phtml');?>
-    <?php $routeParams = $this->tuefind()->getRouteParams(); $searchResults = "";
+    <?php $routeParams = $this->tuefind()->getRouteParams(); $searchResults = ""; $indexPage = '';
     if($routeParams['controller'] == "Search" && $routeParams['action'] == "Results") {
       $searchResults = "searchResults";
-    }?>
+    }
+    if($routeParams['controller'] == "index" && $routeParams['action'] == "Home") {
+      $indexPage = 'index-page';
+    }
+    ?>
     <div class="container-fluid">
         <div class="row">
             <div class="col-12 px-0 pt-5 pb-5 justify-content-center">
-                <div role="main" class="main template-dir-<?=$this->templateDir?> template-name-<?=$this->templateName?> <?=$searchResults;?>">
+                <div role="main" class="main template-dir-<?=$this->templateDir?> template-name-<?=$this->templateName?> <?=$searchResults;?> <?=$indexPage;?>">
                   <?php $showContainerBlock = true;
                   if($routeParams['controller'] == 'index') {
                       $showContainerBlock = false;
