@@ -1,6 +1,7 @@
 User-agent: adscanner/
 User-agent: AhrefsBot
 User-agent: BLEXBot
+User-agent: Bytespider
 User-agent: dotbot
 User-agent: Mail.RU_Bot/2.0
 User-agent: MegaIndex.ru
