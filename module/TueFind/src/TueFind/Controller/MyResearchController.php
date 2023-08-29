@@ -173,7 +173,9 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
             }
 
             if (!$uploadError) {
-                $tmpdir = sys_get_temp_dir();
+                $tmpdir = sys_get_temp_dir() . '/' . uniqid('publication_');
+                if (!is_dir($tmpdir))
+                    mkdir($tmpdir);
                 $tmpfile = $tmpdir . '/' . $uploadedFile['name'];
 
                 if (is_file($tmpfile)) {

@@ -44,6 +44,83 @@ import org.vufind.index.DatabaseManager;
 import java.sql.*;
 import static java.util.stream.Collectors.joining;
 
+/*
+* a structure to hold some issue informations
+*/
+
+class IssueInfo {
+    public String volume_, issue_, pages_, year_, month_;
+
+    public IssueInfo() { }
+
+    public IssueInfo(final Record record) {
+        boolean isOldVersion = true;
+        // start on 2024 the issue information will take from file 773 rather than 936
+        for (final VariableField variableField : record.getVariableFields("773")) {
+            final DataField dataField_ = (DataField) variableField;
+
+            if (dataField_.getIndicator1() == '1' && dataField_.getIndicator2() == '8') {
+                for (final Subfield subfield_ : dataField_.getSubfields('g')) {
+                    if (subfield_ != null && !subfield_.getData().isEmpty()) {
+                        final String[] subfield_content = subfield_.getData().split(":");
+
+                        if (subfield_content[0].equals("volume"))
+                            this.volume_ = subfield_content[1];
+
+                        if (subfield_content[0].equals("number"))
+                            this.issue_ = subfield_content[1];
+
+                        if (subfield_content[0].equals("pages"))
+                            this.pages_ = subfield_content[1];
+
+                        if (subfield_content[0].equals("year"))
+                            this.year_ = subfield_content[1];
+
+                        if (subfield_content[0].equals("month"))
+                            this.month_ = subfield_content[1];
+                    }
+                }
+                isOldVersion = false;
+                break;
+            }
+        }
+
+        // for compatibility with old version
+        if (isOldVersion) {
+            for (final VariableField variableField : record.getVariableFields("936")) {
+                final DataField dataField_ = (DataField) variableField;
+                if (dataField_.getIndicator1() == 'u' && dataField_.getIndicator2() == 'w') {
+                    if ((dataField_.getSubfield('d') != null) && (!dataField_.getSubfield('d').getData().isEmpty()))
+                        this.volume_ = dataField_.getSubfield('d').getData();
+                    else {
+                        for (final VariableField variableField_830 : record.getVariableFields("830")) {
+                            final DataField dataField_830 = (DataField) variableField_830;
+                            if (dataField_830.getIndicator2() == '0') {
+                                if ((dataField_830.getSubfield('9') != null)
+                                        && (!dataField_830.getSubfield('9').getData().isEmpty()))
+                                    this.volume_ = dataField_830.getSubfield('9').getData();
+                            }
+                        }
+                    }
+
+                    if ((dataField_.getSubfield('j') != null) && (!dataField_.getSubfield('j').getData().isEmpty()))
+                        this.year_ = dataField_.getSubfield('j').getData();
+
+                    if ((dataField_.getSubfield('e') != null) && (!dataField_.getSubfield('e').getData().isEmpty()))
+                        this.issue_ = dataField_.getSubfield('e').getData();
+
+                    if ((dataField_.getSubfield('c') != null) && (!dataField_.getSubfield('c').getData().isEmpty()))
+                        this.month_ = dataField_.getSubfield('c').getData();
+
+                    if ((dataField_.getSubfield('h') != null) && (!dataField_.getSubfield('h').getData().isEmpty()))
+                        this.pages_ = dataField_.getSubfield('h').getData();
+                }
+            }
+
+        }
+    }
+}
+
 public class TueFindBiblio extends TueFind {
     public final static String UNASSIGNED_STRING = "[Unassigned]";
     public final static Set<String> UNASSIGNED_SET = Collections.singleton(UNASSIGNED_STRING);
@@ -205,6 +282,7 @@ public class TueFindBiblio extends TueFind {
     protected static ConcurrentLimitedHashMap<String, Set<String>> isilsCache = new ConcurrentLimitedHashMap<>(100);
     protected static ConcurrentLimitedHashMap<String, Collection<Collection<Topic>>> collectedTopicsCache = new ConcurrentLimitedHashMap<>(100);
     protected static ConcurrentLimitedHashMap<String, JSONArray> fulltextServerHitsCache = new ConcurrentLimitedHashMap<>(100);
+    protected static ConcurrentLimitedHashMap<String, IssueInfo> IssueInfos = new ConcurrentLimitedHashMap<>(100);
     protected static final String fullHostName;
     static {
         String tmp = ""; // Needed for syntactical reasons
@@ -244,6 +322,36 @@ public class TueFindBiblio extends TueFind {
             completeTitle.append(DataUtil.cleanData(titleN));
         }
         return completeTitle.toString();
+    }
+
+    /**
+     * Get issue informations
+     */
+    protected IssueInfo getIssueInfo(final Record record) {
+        return IssueInfos.computeIfAbsent(record.getControlNumber(), param -> {
+            return  new IssueInfo(record);
+        });
+    }
+    
+    public String getIssueInfoVolume(final Record record){
+        return getIssueInfo(record).volume_;
+
+    }
+    public String getIssueInfoIssue(final Record record){
+        return getIssueInfo(record).issue_;
+
+    }
+    public String getIssueInfoPages(final Record record){
+        return getIssueInfo(record).pages_;
+
+    }
+    public String getIssueInfoYear(final Record record){
+        return getIssueInfo(record).year_;
+
+    }
+    public String getIssueInfoMonth(final Record record){
+        return getIssueInfo(record).month_;
+
     }
 
     /**
@@ -2620,10 +2728,15 @@ public class TueFindBiblio extends TueFind {
      */
     public String getPublicationSortYear(final Record record) {
         final Set<String> years = getYearsBasedOnRecordType(record);
-        if (years.isEmpty())
-            return "";
+        Set<String> normalizedYears = new HashSet<>();
 
-        return calculateLastPublicationYear(years);
+        if (years.isEmpty())
+            return null;
+
+        for(String year : years)
+            normalizedYears.add(normalizeSortableYear(year));
+
+        return calculateLastPublicationYear(normalizedYears);
     }
 
     public Set<String> getRecordSelectors(final Record record) {
@@ -2657,25 +2770,8 @@ public class TueFindBiblio extends TueFind {
         return result;
     }
 
-    protected String getPages(final Record record) {
-        for (final VariableField variableField : record.getVariableFields("936")) {
-            final DataField dataField = (DataField) variableField;
-            final char ind1 = dataField.getIndicator1();
-            final char ind2 = dataField.getIndicator2();
-            if (ind1 == 'u' && ind2 == 'w') {
-                final Subfield subfieldH = dataField.getSubfield('h');
-
-                if(subfieldH != null) {
-                    final String pageRange = subfieldH.getData();
-                    return pageRange;
-                }
-            }
-        }
-        return null;
-    }
-
     public String getStartPage(final Record record) {
-        final String pages = getPages(record);
+        final String pages = getIssueInfoPages(record);
         if (pages == null)
             return null;
         final Matcher matcher = PAGE_MATCH_PATTERN.matcher(pages);
@@ -2685,7 +2781,7 @@ public class TueFindBiblio extends TueFind {
     }
 
     public String getEndPage(final Record record) {
-        final String pages = getPages(record);
+        final String pages = getIssueInfoPages(record);
         if (pages == null)
             return null;
         final Matcher matcher = PAGE_MATCH_PATTERN.matcher(pages);
@@ -3192,4 +3288,5 @@ public class TueFindBiblio extends TueFind {
         }
         return results;
     }
+
 }

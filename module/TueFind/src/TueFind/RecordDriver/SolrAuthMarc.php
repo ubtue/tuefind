@@ -152,14 +152,21 @@ class SolrAuthMarc extends SolrAuthDefault {
 
         $fields = $this->getMarcReader()->getFields('551');
         foreach ($fields as $field) {
-            $typeSubfield = $this->getMarcReader()->getSubfield($field,'4');
+            $typeSubfield = $this->getMarcReader()->getSubfield($field, '4');
             if ($typeSubfield !== false) {
+                $name = $this->getMarcReader()->getSubfield($field, 'a') ?? null;
+                $district = $this->getMarcReader()->getSubfield($field, 'g') ?? null;
+                $placeArray = null;
+                if (!empty($name)) {
+                    $placeArray = ['name' => $name, 'district' => $district];
+                }
+
                 switch($typeSubfield) {
                 case 'ortg':
-                    $lifePlaces['birth'] = $this->getMarcReader()->getSubfield($field,'a') ?? null;
+                    $lifePlaces['birth'] = $placeArray;
                     break;
                 case 'orts':
-                    $lifePlaces['death'] = $this->getMarcReader()->getSubfield($field,'a') ?? null;
+                    $lifePlaces['death'] = $placeArray;
                     break;
                 }
 
@@ -262,7 +269,8 @@ class SolrAuthMarc extends SolrAuthDefault {
         $fields = $this->getMarcReader()->getFields('551');
         foreach ($fields as $field) {
             $locations[] = ['name' => $this->getMarcReader()->getSubfield($field, 'a'),
-                            'type' => $this->getMarcReader()->getSubfield($field, 'i')];
+                            'type' => $this->getMarcReader()->getSubfield($field, 'i'),
+                            'district' => $this->getMarcReader()->getSubfield($field, 'g')];
         }
 
         $fields = $this->getMarcReader()->getFields('043');

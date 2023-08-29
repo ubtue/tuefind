@@ -29,8 +29,8 @@ $this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') 
             <td><?=$data->request_user_firstname." ".$data->request_user_lastname?></td>
             <td><a href="/Authority/<?=$data->authority_id?>"><?=$data->authority_id?></a></td>
             <td><?=$data->access_state?></td>
-            <td><?=$data->request_user_date?></td>
-            <td><?=$data->process_admin_date?></td>
+            <td data-sort="<?=date("Y-m-d H:i:s",strtotime($data->request_user_date));?>"><?=date("d.m.Y H:i:s", strtotime($data->request_user_date));?></td>
+            <td data-sort="<?=date("Y-m-d H:i:s",strtotime($data->process_admin_date));?>"><?=date("d.m.Y H:i:s", strtotime($data->process_admin_date));?></td>
         <?php endforeach; ?>
       </tbody>
     </table>
