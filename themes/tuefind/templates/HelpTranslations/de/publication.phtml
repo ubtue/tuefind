@@ -4,25 +4,35 @@ $currentSystem = $tuefind->getTueFindType();
 $publicationEmail = $tuefind->getPublicationEmail();
 ?>
 
-<p>Sie können diesen von Ihnen verfassten Beitrag zweitveröffentlichen, wenn Sie einen <?=$currentSystem;?>-Account anlegen und nachweisen, dass Sie der*die Autor*in sind.</p>
-<p>Dazu gehen Sie wie folgt vor:</p>
+<h2>Self-Archiving Service</h2>
+<p>Sie können diesen von Ihnen verfassten Beitrag zweitveröffentlichen, wenn Sie ein <?=$currentSystem;?>-Konto anlegen und nachweisen, dass Sie der*die Autor*in sind.</p>
+<p>Wenn Sie bereits ein <?=$currentSystem;?>-Konto haben und der Zugriff auf Ihre Autor*innen-ID genehmigt wurde, müssen Sie sich lediglich <a href="<?=$this->url('myresearch-userlogin')?>">einloggen</a> und können im Anschluss beim ausgewählten Beitrag auf „<?=$this->transEsc('publication_request_button')?>“ klicken und Ihr Digitalisat hochladen.</p>
+<p>Wenn Sie sich noch nicht für den Service registriert haben, gehen Sie wie folgt vor:</p>
+
 <p><b>Registrierung</b></p>
-    <ul>
-        <li>1. Sie benötigen einen <?=$currentSystem?>-Account.</li>
-    </ul>
-<p>Dafür müssen Sie sich lediglich einmalig mit einer gültigen E-Mail-Adresse registrieren. Den Link zur Registrierung und zum Login finden Sie auf der Startseite rechts oben unter dem Button „Login“.
-Sobald Sie einen <?=$currentSystem;?>-Account haben, können Sie mit den weiteren Schritten fortfahren.</p>
+
+<ul style="list-style: none;">
+    <li>1. Sie benötigen ein <?=$currentSystem;?>-Konto.</li><br />
+    <li>Dafür müssen Sie sich einmalig mit einer gültigen E-Mail-Adresse registrieren. Den Link zur Registrierung und zum Login finden Sie auf der Startseite rechts oben unter dem Button „Login“.</li><br />
+    <li>Sobald Sie ein <?=$currentSystem;?>-Konto haben, können Sie mit den weiteren Schritten fortfahren.</li>
+</ul>
+
 <p><b>Rechte beantragen</b></p>
-    <ul>
-        <li>2. Sobald Sie in Ihrem <?=$currentSystem;?> Konto angemeldet sind, können Sie den Zugriff auf Ihre Autor*innen-ID beantragen. Dazu wählen Sie den Reiter „Personen/Körperschaften“ oberhalb des Suchschlitzes. Suchen Sie nach Ihrem Namen und wählen Sie den richtigen Eintrag aus.</li>
-        <li>3. Klicken Sie auf den Button „Request Access Rights (This is me!)”</li>
-        <li>4. Ihre Anfrage wird nun automatisch an das <?=$currentSystem;?>-Team geschickt. Wir überprüfen, ob Sie die genannte Person sind, und informieren Sie innerhalb weniger Tage per E-Mail, ob Ihr Antrag genehmigt wurde.</li>
-    </ul>
-<p>Nun können Sie im nächsten Schritt Ihre Publikationen hochladen.</p>
-<p><b>Upload (republish)</b></p>
-    <ul>
-        <li>5. Sobald Ihr Antrag genehmigt wurde, melden Sie sich erneut in Ihrem <?=$currentSystem;?>-Konto an. Nun können Sie jeden Aufsatz für eine Zweitveröffentlichung auswählen, der mit Ihnen als Autor*in verknüpft ist. Wenn Sie auf den Button „republish“ klicken, können Sie ein Digitalisat Ihrer Publikation als PDF-Datei hochladen.</li>
-        <li>6. Im Anschluss wird Ihre Datei auf das Repositorium hochgeladen. Im Regelfall steht sie ab dem folgenden Tag für andere Nutzer*innen im Open Access zur Verfügung. Gleichzeitig werden stabile Links (handle/doi) generiert, die Sie ebenfalls ab dem folgenden Tag abrufen können. Diese Links bleiben dauerhaft erhalten und können von Ihnen für Forschung und Lehre verwendet werden.</li>
-    </ul>
+
+<ul style="list-style: none;">
+    <li>2. Sobald Sie in Ihrem <?=$currentSystem;?>-Konto angemeldet sind, können Sie den Zugriff auf Ihre Autor*innen-ID beantragen. Dazu wählen Sie den Reiter „Personen/Körperschaften“ oberhalb des Suchschlitzes. Suchen Sie nach Ihrem Namen und wählen Sie den richtigen Eintrag aus.</li>
+    <li>3. Klicken Sie auf den Button <span class="save-record toolbar-btn btn-type-save"><?=$this->transEsc('authority_access_request_button')?></span></li>
+    <li>4. Ihre Anfrage wird nun automatisch an das <?=$currentSystem;?>-Team geschickt. Wir überprüfen, ob Sie die genannte Person sind, und informieren Sie innerhalb weniger Tage per E-Mail, ob Ihr Antrag genehmigt wurde.</li><br />
+    <li>Nun können Sie im nächsten Schritt Ihre Publikationen hochladen.</li>
+</ul>
+
+<p><b>Upload (self-archive)</b></p>
+
+<ul style="list-style: none;">
+    <li>5. Sobald Ihr Antrag genehmigt wurde, melden Sie sich erneut in Ihrem <?=$currentSystem;?>-Konto an. Nun können Sie jeden Titel für eine Zweitveröffentlichung auswählen, der mit Ihnen als Autor*in verknüpft ist. Wenn Sie auf den Button „<?=$this->transEsc('publication_request_button')?>“ klicken, können Sie ein Digitalisat Ihrer Publikation als PDF-Datei hochladen.</li>
+    <li>6. Im Anschluss wird Ihre Datei auf das Repositorium hochgeladen. Im Regelfall steht sie ab dem folgenden Tag für andere Nutzer*innen im Open Access zur Verfügung. Gleichzeitig werden stabile Links (handle/doi) generiert, die Sie ebenfalls ab dem folgenden Tag abrufen können. Diese Links bleiben dauerhaft erhalten und können von Ihnen für Forschung und Lehre verwendet werden.</li>
+</ul>
+
 <p><b>Fragen?</b></p>
+
 <p>Wenn Sie bei einer Publikation, die von Ihnen stammt, trotzdem keine Datei hochladen können, eine Frage haben oder auf ein anderes Problem stoßen, wenden Sie sich bitte an <b><?=$publicationEmail;?></b>.</p>

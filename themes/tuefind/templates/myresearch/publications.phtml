@@ -47,6 +47,7 @@ $this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') 
           </tr>
         <?php endforeach; ?>
       </table>
+      <p><?=$this->transEsc('Please contact')?> <b><?=$this->tuefind()->getPublicationEmail()?></b></p>
     <?php endif; ?>
   <?php endif; ?>
 </div>

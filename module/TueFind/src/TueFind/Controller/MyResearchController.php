@@ -103,7 +103,7 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
         $publications = [];
         $dbPublications = $this->getTable('publication')->getByUserId($user->id);
         foreach ($dbPublications as $dbPublication) {
-            $existingRecord = $this->getRecordLoader()->load($dbPublication->control_number);
+            $existingRecord = $this->getRecordLoader()->load($dbPublication->control_number, 'Solr', /*tolerate_missing=*/true);
             $dbPublication['title'] = $existingRecord->getTitle();
             $publications[] = $dbPublication;
         }
@@ -173,7 +173,9 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
             }
 
             if (!$uploadError) {
-                $tmpdir = sys_get_temp_dir();
+                $tmpdir = sys_get_temp_dir() . '/' . uniqid('publication_');
+                if (!is_dir($tmpdir))
+                    mkdir($tmpdir);
                 $tmpfile = $tmpdir . '/' . $uploadedFile['name'];
 
                 if (is_file($tmpfile)) {

@@ -42,7 +42,7 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
                 $entry->updateAccessState('granted');
                 $userAuthorityHistoryTable->updateUserAuthorityHistory($adminUser->id, 'granted');
             } elseif ($action == 'decline') {
-                $accessInfo = "decline";
+                $accessInfo = "declined";
                 $userAuthorityHistoryTable->updateUserAuthorityHistory($adminUser->id, $accessInfo);
                 $entry->delete();
             }
@@ -130,9 +130,8 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
 
     public function showUserPublicationStatisticsAction() {
         $this->forceAdminLogin();
-        $publications = $this->getTable('publication')->getStatistics();
-
-        return $this->createViewModel(['publications' => $publications]);
+        
+        return $this->createViewModel(['publications' => $this->getTable('publication')->getStatistics()]);
     }
 
 }

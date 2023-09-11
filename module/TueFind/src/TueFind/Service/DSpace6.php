@@ -104,7 +104,7 @@ class DSpace6 {
 
         $json = curl_exec($curlHandle);
         if ($json === false) {
-            throw new \Exception('Error when calling ' . $endpoint . '/' . $method);
+            throw new \Exception('Error when calling ' . $fullUrl . ' (method: ' . $method . '), message: ' . curl_error($curlHandle));
         }
 
         curl_close($curlHandle);

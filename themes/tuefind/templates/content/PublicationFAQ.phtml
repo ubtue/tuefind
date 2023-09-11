@@ -5,7 +5,7 @@ $publicationEmail = $tuefind->getPublicationEmail();
 $siteEmail = $tuefind->getSiteEmail();
 ?>
 
-<h2>Green Road Open Access FAQ</h2>
+<h2>Self-Archiving Service FAQ</h2>
 
 <h3>Legal and general issues</h3>
 <p>The following information was verified carefully, but it does not constitute binding legal advice. We do not assume any liability for possible errors.</p>
@@ -111,15 +111,15 @@ $siteEmail = $tuefind->getSiteEmail();
                 <p>Once you’ve logged into your <?=$currentSystem;?>-account, you can request access rights to your author ID. First click on the tab labelled “Persons / Corporations“ right above the search field. Search for your name and select the right entry.</p>
             </li>
             <li>
-                <p>Click on the button „Request Access Rights (This is me!)”.</p>
+                <p>Click on the button „<?=$this->transEsc('authority_access_request_button')?>”.</p>
             </li>
             <li>
                 <p>Your request will be automatically sent to the <?=$currentSystem;?>-team. We will then verify your identity and inform you within a few days per e-mail whether your request has been approved.</p>
             </li>
             <p>In the next step, you can upload your essays.</p>
-            <p><b>Upload (republish)</b></p>
+            <p><b>Upload (self-archive)</b></p>
             <li>
-                <p>Once your request has been approved, log into your <?=$currentSystem;?>-account. You can now select every essay linked to you as an author for republication. When you click on the “republish” button, you can upload your essay as a PDF-file.</p>
+                <p>Once your request has been approved, log into your <?=$currentSystem;?>-account. You can now select every essay linked to you as an author for republication. When you click on the “<?=$this->transEsc('publication_request_button')?>” button, you can upload your essay as a PDF-file.</p>
             </li>
             <li>
                 <p>Your file then gets uploaded in our repository. It should be available in Open Access to other users on the following day. At the same time, stable links (handle/DOI) to the file are generated, which you can also access on the following day. These links are permanent, and you may use them in your research and teaching activities.</p>

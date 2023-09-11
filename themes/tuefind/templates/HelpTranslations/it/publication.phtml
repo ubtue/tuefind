@@ -15,13 +15,13 @@ $publicationEmail = $tuefind->getPublicationEmail();
 <p><b>Richiesta diritti</b></p>
     <ul>
         <li>2. Mediante un account <?=$currentSystem?> è possible fare richiesta di accesso al proprio ID di Autrice/Autore.  Per fare ciò, selezionare il bottone “Persone/Istituzioni” collocato al di sopra della barra di ricerca. Inserire quindi il proprio nome e selezionare l’esatto records a Lei corrispondente.</li>
-        <li>3. Cliccare sul bottone “Request Access Rights (This is me!)”.</li>
+        <li>3. Cliccare sul bottone “<?=$this->transEsc('authority_access_request_button')?>”.</li>
         <li>4. La sua richiesta sarà automanticamente inoltrata al Team di <?=$currentSystem?>. Dopo averla controllata, riceverà entro pochi giorni una comunicazione via email, se essa è stata accettata o meno.</li>
     </ul>
 <p>Da quel momento in poi è possible caricare le proprie pubblicazioni.</p>
 <p><b>Upload (deposito digitale)</b></p>
     <ul>
-        <li>5. Non appena la sua richiesta è stata accettata, è necessario accedere nuovamente all’account di <?=$currentSystem?>. Ogni contributo presente di cui Lei è Autrice/Autore può essere depositato in forma digitale. Cliccando il bottone “republish”, è possibile caricare la singola pubblicazione in formato PDF.</li>
+        <li>5. Non appena la sua richiesta è stata accettata, è necessario accedere nuovamente all’account di <?=$currentSystem?>. Ogni contributo presente di cui Lei è Autrice/Autore può essere depositato in forma digitale. Cliccando il bottone “<?=$this->translate('publication_request_button')?>”, è possibile caricare la singola pubblicazione in formato PDF.</li>
         <li>6. In seguito il file verrà caricato nella Repository. Di solito dal giorno seguente il caricamento la singola pubblicazione è disponibile in Open Access all’intera utenza di IxTheo. Al tempo stesso verranno generati links duraturi (handle/doi) che in genere sono disponibili sempre a partire dal giorno seguente il caricamento.</li>
     </ul>
 <p><b>Domande?</b></p>
