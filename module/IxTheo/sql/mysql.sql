@@ -34,7 +34,6 @@ ALTER TABLE vufind.user ADD COLUMN ixtheo_user_type ENUM('ixtheo', 'relbib', 'bi
 ALTER TABLE vufind.user ADD COLUMN ixtheo_appellation VARCHAR(64) DEFAULT NULL;
 ALTER TABLE vufind.user ADD COLUMN ixtheo_title VARCHAR(64) DEFAULT NULL;
 ALTER TABLE vufind.user ADD COLUMN ixtheo_country VARCHAR(255) DEFAULT NULL;
-ALTER TABLE vufind.user ADD COLUMN ixtheo_language VARCHAR(20) DEFAULT NULL;
 ALTER TABLE vufind.user ADD COLUMN ixtheo_can_use_tad BOOLEAN DEFAULT FALSE;
 ALTER TABLE vufind.user ADD COLUMN ixtheo_journal_subscription_format ENUM ('meistertask') DEFAULT NULL;
 

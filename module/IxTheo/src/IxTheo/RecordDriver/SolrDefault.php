@@ -345,4 +345,11 @@ class SolrDefault extends \TueFind\RecordDriver\SolrMarc
         }
         return $result;
     }
+
+
+    public function getTimeRangesString()
+    {
+        if (isset($this->fields['time_range_display']))
+            return $this->fields['time_range_display'];
+    }
 }

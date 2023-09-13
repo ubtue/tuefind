@@ -2,7 +2,7 @@
 
 namespace IxTheo\View\Helper\Root;
 
-class Record extends \VuFind\View\Helper\Root\Record
+class Record extends \TueFind\View\Helper\Root\Record
 {
     /**
      * Render an subscription entry.

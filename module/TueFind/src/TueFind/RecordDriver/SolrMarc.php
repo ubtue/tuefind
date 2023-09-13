@@ -264,6 +264,34 @@ class SolrMarc extends SolrDefault
         return !$this->suppressDisplayByFormat() && $this->getSubitoURL() != '';
     }
 
+    public function getAllRecordLinks()
+    {
+        $parallel_ppns_and_type = [];
+        foreach (['775', '776'] as $tag) {
+            $fields = $this->getMarcReader()->getFields($tag);
+            foreach ($fields as $field) {
+                $subfields_w = $this->getSubfieldArray($field, ['w'], false /* do not concatenate entries */);
+                foreach ($subfields_w as $subfield_w) {
+                    if (preg_match('/^' . preg_quote(self::ISIL_PREFIX_K10PLUS, '/') . '(.*)/', $subfield_w, $ppn)) {
+                        $subfield_w = $this->getMarcReader()->getSubfields($field,'w');
+                        $title = $this->getMarcReader()->getSubfield($field,'i');
+                        $subfield_k = $this->getMarcReader()->getSubfields($field,'k');
+                        if (!empty($subfield_w) && $subfield_w !== 'dangling' && !empty($title) && empty($subfield_k)) { //remove duplicates from getParallelEditionPPNs
+                            $link_ppn = $this->getFirstK10PlusPPNFromSubfieldW($field);
+                            $oneNpp = [
+                                'link' => ['type'=>'bib','value'=>$link_ppn],
+                                'title'=> $title,
+                                'value'=> $link_ppn
+                            ];
+                            array_push($parallel_ppns_and_type, $oneNpp);
+                        }
+                    }
+                }
+            }
+        }
+        return $parallel_ppns_and_type;
+    }
+
     public function getParallelEditionPPNs()
     {
         $parallel_ppns_and_type = [];
@@ -274,7 +302,7 @@ class SolrMarc extends SolrDefault
                 foreach ($subfields_w as $subfield_w) {
                     if (preg_match('/^' . preg_quote(self::ISIL_PREFIX_K10PLUS, '/') . '(.*)/', $subfield_w, $ppn)) {
                         $subfield_k = $this->getMarcReader()->getSubfields($field,'k');
-                        if ($subfield_k !== false && $subfield_k !== 'dangling' && !empty($subfield_k))
+                        if (!empty($subfield_k) && $subfield_k !== 'dangling')
                             array_push($parallel_ppns_and_type, [ $ppn[1], $subfield_k ]);
                     }
                 }
@@ -523,14 +551,40 @@ class SolrMarc extends SolrDefault
         return [];
     }
 
-    public function getSuperiorFrom773a()
+    public function getSuperiorFrom773(): array
     {
+        $superiors = [];
+
         $_773_fields = $this->getMarcReader()->getFields('773');
         foreach ($_773_fields as $_773_field) {
-            $subfield_a = $this->getMarcReader()->getSubfields($_773_field,'a') ? $this->getMarcReader()->getSubfields($_773_field,'a') : '';
-            if (!empty($subfield_a))
-                return $subfield_a;
+            // Skip if "Do not display note"-flag is set
+            if ($_773_field['i1'] == '1')
+                continue;
+
+            // non-repeatable subfields
+            $superior = '';
+            $mainHeading = $this->getMarcReader()->getSubfield($_773_field, 'a') ?? '';
+            $title = $this->getMarcReader()->getSubfield($_773_field, 't') ?? '';
+            $issn = $this->getMarcReader()->getSubfield($_773_field, 'x') ?? '';
+            // repeatable subfields
+            $related = $this->getMarcReader()->getSubfields($_773_field, 'g') ?? [];
+            $relationship = $this->getMarcReader()->getSubfields($_773_field, 'i') ?? [];
+
+            if (!empty($relationship[0]))
+                $superior .= $relationship[0] . ': ';
+            if (!empty($mainHeading))
+                $superior .= $mainHeading;
+            elseif (!empty($title))
+                $superior .= $title;
+            if (!empty($issn))
+                $superior .= ' (' . $issn . ')';
+            if (!empty($related[0]))
+                $superior .= ' ' . $related[0];
+
+            $superiors[] = trim($superior);
         }
+
+        return $superiors;
     }
 
     public function getLanguagesIso639_2(): array

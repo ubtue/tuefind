@@ -196,4 +196,12 @@ public class IxTheoBiblio extends TueFindBiblio {
 
         return normalizedValues;
     }
+
+
+    public String getTimeRangeDisplay(final Record record, String fieldSpec, final String langShortcut) {
+        final Set<String> values = SolrIndexer.instance().getFieldList(record, fieldSpec);
+        if (!values.isEmpty())
+            return translateTopic(values.iterator().next(), langShortcut);
+        return "";
+    }
 }

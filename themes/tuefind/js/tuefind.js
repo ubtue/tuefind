@@ -12,7 +12,9 @@ var TueFind = {
                 if (href.match(/\/Content\//) || href.match(/\?subpage=/)) {
                     if (href.match(/[?&]lng=/)) {
                         // when switching the language, we want to keep the current anchor
-                        this.setAttribute('href', href + '#' + current_anchor);
+                        if(current_anchor != null) {
+                            this.setAttribute('href', href + '#' + current_anchor);
+                        }
                     } else {
                         this.setAttribute('href', href + '#content');
                     }
@@ -584,6 +586,7 @@ var TueFind = {
             let blockVar = $('#'+blockID);
             if(!blockVar.hasClass('in')) {
                 blockVar.addClass('in');
+                blockVar.click();
             }
         }
     }

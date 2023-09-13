@@ -26,6 +26,21 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
 
     protected $normdataTranslationCache = [];
 
+    /**
+     * This list is used to register authors
+     * who explicitly requested to hide certain titles
+     * from their authority page.
+     * These titles will only be hidden from the authority page,
+     * but they will still be searchable as a title,
+     * which is the reqested behaviour.
+     */
+    protected $authorTitlesBlacklist = [
+        '815326920' => [
+            '1666824623',
+            '1663081204',
+        ],
+    ];
+
     public function __construct(\VuFindSearch\Service $searchService,
                                 \Laminas\View\HelperPluginManager $viewHelperManager,
                                 \VuFind\Record\Loader $recordLoader,
@@ -35,6 +50,31 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
         $this->recordLoader = $recordLoader;
         $this->searchService = $searchService;
         $this->viewHelperManager = $viewHelperManager;
+    }
+
+    protected function formatPlace(array $place): string
+    {
+        // prepare / override given information
+        $name = $place['name'];
+        $district = $place['district'] ?? '';
+        $type = $place['type'] ?? '';
+        if ($type == 'DIN-ISO-3166') {
+            $type = 'Country';
+            $name = \Locale::getDisplayRegion($place['name'], $this->getTranslatorLocale());
+            if (empty($district))
+                $district = $place['name'];
+        } else {
+            $type = $this->translateNormdata($type);
+        }
+
+        // build label
+        $label = '';
+        if (!empty($type))
+            $label .= $this->translate($type) . ': ';
+        $label .= $name;
+        if (!empty($district))
+            $label .= ' (' . $district . ')';
+        return $label;
     }
 
     /**
@@ -51,7 +91,7 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
             $display .= $this->getDateTimeProperty($birthDate, 'birthDate');
             $birthPlace = $driver->getBirthPlace();
             if ($birthPlace != null)
-                $display .= ', <span property="birthPlace">' . $birthPlace . '</span>';
+                $display .= ', <span property="birthPlace">' . htmlspecialchars($this->formatPlace($birthPlace)) . '</span>';
         }
 
         return $display;
@@ -92,8 +132,35 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
             $display .= $this->getDateTimeProperty($deathDate, 'deathDate');
             $deathPlace = $driver->getDeathPlace();
             if ($deathPlace != null)
-                $display .= ', <span property="deathPlace">' . $deathPlace . '</span>';
+                $display .= ', <span property="deathPlace">' . htmlspecialchars($this->formatPlace($deathPlace)) . '</span>';
         }
+        return $display;
+    }
+
+    public function getOtherNames(AuthorityRecordDriver &$driver): string
+    {
+        $otherNames = $driver->getUseFor();
+        $headingTimespan = $driver->getHeadingTimespan();
+        $limit = 5;
+        $i = 0;
+        $display = '';
+        if(!empty($otherNames)) {
+            $display .= '<ul class="tf-other-names-list">';
+            foreach ($otherNames as $name) {
+                if($i < $limit) {
+                    $clearName = explode($headingTimespan, $name);
+                    if(isset($clearName[0])) {
+                        $display .= '<li>'.trim($clearName[0]).'</li>';
+                    }
+                }
+                $i++;
+            }
+            if($i > $limit) {
+                $display .= '<li><a href="#other-names">'.$this->translate('more').'</a></li>';
+            }
+            $display .= '</ul>';
+        }
+
         return $display;
     }
 
@@ -120,7 +187,7 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
             }else{
                 $display .= htmlspecialchars($reference['title']) . '<br>';
             }
-            
+
         }
 
         return $display;
@@ -305,12 +372,7 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
 
         $places = $driver->getGeographicalRelations();
         foreach ($places as $place) {
-            if ($place['type'] == 'DIN-ISO-3166') {
-                $place['type'] = 'Land';
-                $place['name'] = \Locale::getDisplayRegion($place['name'], $this->getTranslatorLocale()) . ' (' . $place['name'] . ')';
-            }
-
-            $placesString .= htmlentities($this->translateNormdata($place['type'])) . ': ' . htmlentities($place['name']) . '<br>';
+            $placesString .= htmlentities($this->formatPlace($place)) . '<br>';
         }
 
         return $placesString;
@@ -437,9 +499,16 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
     protected function getTitlesAboutQueryParams(&$author, $fuzzy=false): string
     {
         if ($author instanceof AuthorityRecordDriver) {
-            $queryString = 'topic_id:"' . $author->getUniqueId() . '"';
+            $queryString = '(';
+            $queryString .= 'topic_id:"' . $author->getUniqueId() . '"';
             if ($fuzzy) {
-                $queryString = 'OR topic_all:"' . $author->getTitle() . '"';
+                $queryString .= 'OR topic_all:"' . $author->getTitle() . '"';
+            }
+            $queryString .= ')';
+            if (isset($this->authorTitlesBlacklist[$author->getUniqueId()])) {
+                foreach ($this->authorTitlesBlacklist[$author->getUniqueId()] as $title) {
+                    $queryString .= ' AND -id:' . $title;
+                }
             }
         } else {
             $queryString = 'topic_all:"' . $author . '"';
@@ -461,19 +530,31 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
     protected function getTitlesByQueryParams(&$author, $fuzzy=false): string
     {
         if ($author instanceof AuthorityRecordDriver) {
-            $queryString = 'author_id:"' . $author->getUniqueId() . '"';
+            $queryString = '(';
+            $queryString .= 'author_id:"' . $author->getUniqueId() . '"';
             $queryString .= ' OR author2_id:"' . $author->getUniqueId() . '"';
             $queryString .= ' OR author_corporate_id:"' . $author->getUniqueId() . '"';
+            $queryString .= ' OR author3_id:"' . $author->getUniqueId() . '"';
             if ($fuzzy) {
                 $queryString .= ' OR author:"' . $author->getTitle() . '"';
                 $queryString .= ' OR author2:"' . $author->getTitle() . '"';
                 $queryString .= ' OR author_corporate:"' . $author->getTitle() . '"';
+                $queryString .= ' OR author3:"' . $author->getTitle() . '"';
+            }
+            $queryString .= ')';
+
+            if (isset($this->authorTitlesBlacklist[$author->getUniqueId()])) {
+                foreach ($this->authorTitlesBlacklist[$author->getUniqueId()] as $title) {
+                    $queryString .= ' AND -id:' . $title;
+                }
             }
         } else {
             $queryString = 'author:"' . $author . '"';
             $queryString .= ' OR author2:"' . $author . '"';
             $queryString .= ' OR author_corporate:"' . $author . '"';
+            $queryString .= ' OR author3:"' . $author . '"';
         }
+
         return $queryString;
     }
 

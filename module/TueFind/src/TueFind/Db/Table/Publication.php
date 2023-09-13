@@ -47,7 +47,11 @@ class Publication extends \VuFind\Db\Table\Gateway {
             'publication_count' => new \Laminas\Db\Sql\Expression("COUNT(*)"),
             'year' => new \Laminas\Db\Sql\Expression("YEAR(publication_datetime)"),
         ]);
-        $select->group(new \Laminas\Db\Sql\Expression("YEAR(publication_datetime)"));
+        $select->join('user', 'tuefind_publications.user_id = user.id', null, Select::JOIN_LEFT);
+        $select->where('user.ixtheo_user_type = "' . \IxTheo\Utility::getUserTypeFromUsedEnvironment() . '"');
+        $select->group(new \Laminas\Db\Sql\Expression("year"));
+        $select->order('year DESC');
         return $this->selectWith($select);
+
     }
 }

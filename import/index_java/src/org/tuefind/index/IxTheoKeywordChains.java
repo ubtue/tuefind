@@ -10,7 +10,7 @@ import org.marc4j.marc.VariableField;
 public class IxTheoKeywordChains extends TueFind {
 
     private final static String KEYWORD_DELIMITER = "/";
-    private final static String SUBFIELD_CODES = "abcdetnpzf";
+    private final static String SUBFIELD_CODES = "abcdetnpzfgl";
     private final static TueFindBiblio tueFindBiblio = new TueFindBiblio();
 
     public Set<String> getKeyWordChain(final Record record, final String fieldSpec, final String lang) {
@@ -41,7 +41,6 @@ public class IxTheoKeywordChains extends TueFind {
         for (List<String> keyWordChain : keyWordChains.values()) {
             keyWordChainBag.addAll(keyWordChain);
         }
-
         return keyWordChainBag;
     }
 
@@ -84,69 +83,74 @@ public class IxTheoKeywordChains extends TueFind {
      * keyword chain.
      */
     private void processField(final DataField dataField, final Map<Character, List<String>> keyWordChains, String lang) {
+        if (dataField.getIndicator2() == ' ')
+            return;
         final char chainID = dataField.getIndicator1();
         final List<String> keyWordChain = getKeyWordChain(keyWordChains, chainID);
-
-        boolean gnd_seen = false;
         StringBuilder keyword = new StringBuilder();
         // Collect elements within one chain in case there is a translation for a whole string
         List<String> complexElements = new ArrayList<String>();
+        if (dataField.getSubfield('2') == null || !dataField.getSubfield('2').getData().equals("gnd"))
+            return;
+
         final List<Subfield> subfields = dataField.getSubfields();
         for (final Subfield subfield : subfields) {
-            if (gnd_seen) {
-                if (SUBFIELD_CODES.indexOf(subfield.getCode()) != -1) {
-                    if (keyword.length() > 0) {
-                        if (subfield.getCode() == 'z') {
-                            keyword.append(" (" + tueFindBiblio.translateTopic(subfield.getData(), lang) + ")");
-                            continue;
+            // Skip the notorious type field D (which is passed as d)
+            if (subfield.getCode() == 'd' && subfield.getData().length() < 2)
+                continue;
+            // Skip $a=z time field indicator
+            if (subfield.getCode() == 'a' && subfield.getData().equals("z"))
+                continue;
+            if (SUBFIELD_CODES.indexOf(subfield.getCode()) != -1) {
+                if (keyword.length() > 0) {
+                    if (subfield.getCode() == 'z' || subfield.getCode() == 'g') {
+                        keyword.append(" (" + tueFindBiblio.translateTopic(subfield.getData(), lang) + ")");
+                        continue;
+                    }
+                    // We need quite a bunch of special logic here to group subsequent d and c fields
+                    else if (subfield.getCode() == 'c') {
+                        if (isSubfieldPrecededBySubfield(subfields, 'c', 'd')) {
+                           keyword.append(" : " + subfield.getData() + ")");
+                           continue;
                         }
-                        // We need quite a bunch of special logic here to group subsequent d and c fields
-                        else if (subfield.getCode() == 'c') {
-                            if (isSubfieldPrecededBySubfield(subfields, 'c', 'd')) {
-                               keyword.append(" : " + subfield.getData() + ")");
-                               continue;
-                            }
-                            else
-                               keyword.append(", ");
-                        } else if (subfield.getCode() == 'd') {
-                            if (isSubfieldFollowedBySubfield(subfields, 'd', 'c'))
-                                keyword.append(" (");
-                            else
-                                keyword.append(" ");
-
-                        } else if (subfield.getCode() == 'f') {
-                            keyword.append(" (" + subfield.getData() + ")");
-                            continue;
-                        } else if (subfield.getCode() == 'n')
-                            keyword.append(" ");
-                        else if (subfield.getCode() == 'p')
-                            keyword.append(". ");
                         else
-                            keyword.append(", ");
-                    }
-                    final String term = subfield.getData().trim();
-                    keyword.append(tueFindBiblio.translateTopic(term, lang));
-                    complexElements.add(term);
-                } else if (subfield.getCode() == '9' && keyword.length() > 0 && subfield.getData().startsWith("g:")) {
-                    // For Ixtheo-translations the specification in the g:-Subfield is appended in angle
-                    // brackets, so this is a special case where we have to begin from scratch
-                    final String specification = subfield.getData().substring(2);
-                    final Subfield germanASubfield = dataField.getSubfield('a');
-                    if (germanASubfield != null) {
-                        final String translationCandidate = germanASubfield.getData() + " <" + specification + ">";
-                        final String translation = tueFindBiblio.translateTopic(translationCandidate, lang);
-                        keyword.setLength(0);
-                        keyword.append(translation.replaceAll("<", "(").replaceAll(">", ")"));
-                    }
-                    else {
-                        keyword.append(" (");
-                        keyword.append(tueFindBiblio.translateTopic(specification, lang));
-                        keyword.append(')');
-                    }
-                }
+                           keyword.append(", ");
+                    } else if (subfield.getCode() == 'd') {
+                        if (isSubfieldFollowedBySubfield(subfields, 'd', 'c'))
+                            keyword.append(" (");
+                        else
+                            keyword.append(" ");
 
-            } else if (subfield.getCode() == '2' && subfield.getData().equals("gnd"))
-                gnd_seen = true;
+                    } else if (subfield.getCode() == 'f') {
+                        keyword.append(" (" + subfield.getData() + ")");
+                        continue;
+                    } else if (subfield.getCode() == 'n')
+                        keyword.append(" ");
+                    else if (subfield.getCode() == 'p')
+                        keyword.append(". ");
+                    else
+                        keyword.append(", ");
+                }
+                final String term = subfield.getData().trim();
+                keyword.append(tueFindBiblio.translateTopic(term, lang));
+                complexElements.add(term);
+            } else if (subfield.getCode() == '9' && keyword.length() > 0 && subfield.getData().startsWith("g:")) {
+                // For Ixtheo-translations the specification in the g:-Subfield is appended in angle
+                // brackets, so this is a special case where we have to begin from scratch
+                final String specification = subfield.getData().substring(2);
+                final Subfield germanASubfield = dataField.getSubfield('a');
+                if (germanASubfield != null) {
+                    final String translationCandidate = germanASubfield.getData() + " <" + specification + ">";
+                    final String translation = tueFindBiblio.translateTopic(translationCandidate, lang);
+                    keyword.setLength(0);
+                    keyword.append(translation.replaceAll("<", "(").replaceAll(">", ")"));
+                }
+                else {
+                    keyword.append(" (");
+                    keyword.append(tueFindBiblio.translateTopic(specification, lang));
+                    keyword.append(')');
+                }
+            }
         }
 
         if (keyword.length() > 0) {
@@ -155,7 +159,7 @@ public class IxTheoKeywordChains extends TueFind {
                                               TueFindBiblio.getTranslationOrNull(String.join(" / ", complexElements), lang) : null;
             String keywordString = (complexTranslation != null) ? complexTranslation : keyword.toString();
             keywordString = keywordString.replace("/", "\\/");
-            keyWordChain.add(lang.equals("de") ? BCEReplacer.replaceBCEPatterns(keywordString) : keywordString);
+            keyWordChain.add(BCEReplacer.replaceBCEPatterns(keywordString, lang));
         }
     }
 
