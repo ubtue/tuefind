@@ -1,1 +1,0 @@
-index-alphabetic-browse_ixtheo.sh
