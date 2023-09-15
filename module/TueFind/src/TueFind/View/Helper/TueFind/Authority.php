@@ -141,14 +141,20 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
         $limit = 5;
         $i = 0;
         $display = '';
+        $clearName = '';
         if(!empty($otherNames)) {
             $display .= '<ul class="tf-other-names-list">';
             foreach ($otherNames as $name) {
                 if($i < $limit) {
-                    $clearName = explode($headingTimespan, $name);
-                    if(isset($clearName[0])) {
-                        $display .= '<li>'.trim($clearName[0]).'</li>';
+                    if(!empty($headingTimespan)) {
+                        $clearNameArray = explode($headingTimespan, $name);
+                        if(isset($clearNameArray[0])) {
+                            $clearName = $clearNameArray[0];
+                        }
+                    }else{
+                        $clearName = $name;
                     }
+                    $display .= '<li>'.trim($clearName).'</li>';
                 }
                 $i++;
             }
