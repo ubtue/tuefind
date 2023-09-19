@@ -396,9 +396,6 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
     {
         // We use 'Solr' as identifier here, because the RecordDriver's identifier would be "SolrAuth"
         $identifier = 'Solr';
-        // $response = $this->searchService->search($identifier,
-        //                                          new \VuFindSearch\Query\Query($this->getTitlesAboutQueryParams($driver), 'AllFields'),
-        //                                          $offset, $limit, new \VuFindSearch\ParamBag(['sort' => 'publishDate DESC']));
         $query = new Query($this->getTitlesAboutQueryParams($driver), null, 'AllFields');
         $searchCommand = new SearchCommand($identifier, $query,
             $offset, $limit, new ParamBag(['sort' => 'publishDate DESC']));
@@ -409,9 +406,6 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
     {
         // We use 'Solr' as identifier here, because the RecordDriver's identifier would be "SolrAuth"
         $identifier = 'Solr';
-        // $response = $this->searchService->search($identifier,
-        //                                          new \VuFindSearch\Query\Query($this->getTitlesByQueryParams($driver), 'AllFields'),
-        //                                          $offset, $limit, new \VuFindSearch\ParamBag(['sort' => 'publishDate DESC']));
         $query = new Query($this->getTitlesByQueryParams($driver), null, 'AllFields');
         $searchCommand = new SearchCommand($identifier, $query,
             $offset, $limit, new ParamBag(['sort' => 'publishDate DESC']));
@@ -434,9 +428,7 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
         // Make sure we set offset+limit to 0, because we only want the facet counts
         // and not the rows itself for performance reasons.
         // (This could get very slow, e.g. Martin Luther where we have thousands of related datasets.)
-        // $titleRecords = $this->searchService->search('Solr',
-        //                                              new \VuFindSearch\Query\Query($this->getTitlesByQueryParams($driver), 'AllFields'),
-        //                                              0, 0, $params);
+
         $identifier = 'Solr';
         $query = new Query($this->getTitlesByQueryParams($driver), null, 'AllFields');
         $searchCommand = new SearchCommand($identifier, $query,
@@ -608,9 +600,6 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
                    "facet.sort"=>"count"];
 
         $identifier = 'Solr';
-        // $publishingData = $this->searchService->search($identifier,
-        //                                          new \VuFindSearch\Query\Query($this->getTitlesByQueryParams($driver), 'AllFields'),
-        //                                          0, 0, new \VuFindSearch\ParamBag($params));
 
         $query = new Query($this->getTitlesByQueryParams($driver), null, 'AllField');
         $searchCommand = new SearchCommand($identifier, $query,
@@ -622,12 +611,6 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
         $publishArray = $allFacets['publishDate'];
         $publishDates = array_keys($publishArray);
 
-        // $aboutData = $this->searchService->search($identifier,
-        //                                          new \VuFindSearch\Query\Query($this->getTitlesAboutQueryParamsChartDate($driver), 'AllFields'),
-        //                                          0, 0, new \VuFindSearch\ParamBag($params));
-        
-        // $allFacetsAbout = $aboutData->getFacets();
-        // $aboutFacet = $allFacetsAbout->getFieldFacets();
         $aboutArray = $allFacets['publishDate'];
 
         $aboutDates = array_keys($aboutArray);
@@ -690,10 +673,6 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
         // Note: This query might be critical to peformance. Also set 'fl' parameter
         //       to reduce the result size and avoid out of memory problems.
         //       Example: Martin Luther, 133813363
-        // $titleRecords = $this->searchService->search($identifier,
-        //                                          new \VuFindSearch\Query\Query($this->getTitlesByQueryParams($driver), $settings['searchType']),
-        //                                          0, $settings['maxTopicRows'], new \VuFindSearch\ParamBag($settings['paramBag']));
-
 
         $query = new Query($this->getTitlesByQueryParams($driver), null, $settings['searchType']);
         $searchCommand = new SearchCommand($identifier, $query,

@@ -53,14 +53,12 @@ class Solr implements \VuFind\Record\FallbackLoader\FallbackLoaderInterface {
      * @return \VuFindSearch\Response\RecordCollectionInterface
      */
     protected function fetchRecordCandidates($id)
-    {   
+    {
         $id = addcslashes($id, '"');
         $query = new Query("ids:\"$id\"", null, "AllFields");
-        // $query = new Query('ids:"' . $id . '"', null, 'AllFields');
 
         $searchCommd = new SearchCommand('Solr', $query);
         $result = $this->searchService->invoke($searchCommd)->getResult()->getRecords();
-        // $result = $this->searchService->search('Solr', $query);
         return $result;
     }
 }

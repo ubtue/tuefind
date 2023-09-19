@@ -49,7 +49,6 @@ class SolrMarc extends SolrDefault
             $query_string
         );
         $searchCommand = new SearchCommand('Solr', $query);
-        // return $this->searchService->search('Solr', $query, 0, 0)->getTotal();
         return $this->searchService->invoke($searchCommand)->getResult()->getTotal();
     }
 

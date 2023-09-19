@@ -75,8 +75,6 @@ class Loader extends \VuFind\Record\Loader {
             if (empty($results)) {
                 
                 try {
-                    // $query = new \VuFindSearch\Query\Query('gnd:' . $gndNumber);
-                    // $results = $this->searchService->search($source, $query);
                     $query = new Query('gnd:' . $gndNumber);
                     $command = new SearchCommand($source, $query); 
                     $results = $this->searchService->invoke($command)->getResult()->getRecords();

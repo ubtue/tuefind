@@ -17,8 +17,6 @@ class Results extends \VuFind\Search\SolrAuthorFacets\Results
         $params = $this->getParams()->getBackendParametersAuthorAndIdFacet();
 
         // Perform the search:
-        // $collection = $this->getSearchService()
-        //     ->search($this->backendId, $query, 0, 0, $params);
         $searchCommand = new SearchCommand($this->backendId,  $query, 0, 0, $params);
         $collection = $this->getSearchService()->invoke($searchCommand)->getResult();
 

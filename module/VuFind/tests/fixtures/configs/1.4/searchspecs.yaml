@@ -133,7 +133,6 @@
 Author:
   DismaxFields:
     - author^100
-    - author_fuller^50
     - author2
     - author_additional
   QueryFields:
@@ -141,10 +140,6 @@ Author:
       - [onephrase, 350]
       - [and, 200]
       - [or, 100]
-    author_fuller:
-      - [onephrase, 200]
-      - [and, 100]
-      - [or, 50]
     author2:
       - [onephrase, 100]
       - [and, 50]
@@ -299,7 +294,6 @@ AllFields:
     - series^50
     - series2^30
     - author^300
-    - author_fuller^150
     - contents^10
     - topic_unstemmed^550
     - topic^500
@@ -335,9 +329,6 @@ AllFields:
     author:
       - [onephrase, 300]
       - [and, 250]
-    author_fuller:
-      - [onephrase, 150]
-      - [and, 125]
     author2:
       - [and, 50]
     author_additional:
