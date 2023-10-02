@@ -3,7 +3,7 @@
 namespace TueFind\Controller;
 
 use Laminas\ServiceManager\ServiceLocatorInterface;
-use TueFind\Http\CachedDownloader;
+use TueFind\Http\CachingDownloader;
 
 /**
  * Use Wikidata API to search for specific information (e.g. a picture)
@@ -207,7 +207,7 @@ class WikidataProxyController extends AbstractProxyController
      */
     public function searchEntities($search, $language) {
         $url = self::API_URL . '&action=wbsearchentities&search=' . urlencode($search) . '&language=' . $language;
-        return $this->cachedDownloader->download($url, CachedDownloader::RESULT_MODE_JSON);
+        return $this->cachingDownloader->download($url, $this->downloaderClientOptions, [CachingDownloader::class, 'DecodeCallbackJson']);
     }
 
     /**
@@ -219,7 +219,7 @@ class WikidataProxyController extends AbstractProxyController
      */
     public function getEntities($ids) {
         $url = self::API_URL . '&action=wbgetentities&ids=' . urlencode(implode('|', $ids));
-        return $this->cachedDownloader->download($url, CachedDownloader::RESULT_MODE_JSON);
+        return $this->cachingDownloader->download($url, $this->downloaderClientOptions, [CachingDownloader::class, 'DecodeCallbackJson']);
     }
 
     /**
@@ -230,7 +230,7 @@ class WikidataProxyController extends AbstractProxyController
      */
     public function getImage($filename) {
         $metadata = $this->getImageMetadata($filename);
-        $metadata['image'] = $this->cachedDownloader->download($metadata['url']);
+        $metadata['image'] = $this->cachingDownloader->download($metadata['url']);
         return $metadata;
     }
 
@@ -242,7 +242,7 @@ class WikidataProxyController extends AbstractProxyController
      */
     public function getImageMetadata($filename) {
         $lookupUrl = self::API_URL . '&action=query&prop=imageinfo&iiprop=url|mime|extmetadata&titles=File:' . urlencode($filename);
-        $lookupResult = $this->cachedDownloader->download($lookupUrl, CachedDownloader::RESULT_MODE_JSON);
+        $lookupResult = $this->cachingDownloader->download($lookupUrl, $this->downloaderClientOptions, [CachingDownloader::class, 'DecodeCallbackJson']);
         $subindex = '-1';
 
         $imageInfo = $lookupResult->query->pages->$subindex->imageinfo[0] ?? null;
