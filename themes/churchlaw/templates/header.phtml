@@ -106,8 +106,7 @@
         <h1>
           <a href="<?=$this->url('home')?>" title="Index Canonicus">Index Canonicus</a>
         </h1>
-        <!--The following subtitle will be translated as soon as more information is available-->
-        <small>Internationale Bibliographie für Kanonisches Recht und Kirchenrecht</small>
+        <small><?=$this->transEsc("canonlaw_subtitle")?></small>
         <br />
       </div>
       <?php if ($this->ils()->getOfflineMode() == "ils-offline"): ?>
