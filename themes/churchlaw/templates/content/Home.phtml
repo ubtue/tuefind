@@ -1,0 +1,468 @@
+<style>
+    .read-more-state ~ .read-more-trigger:before {
+        content: 'Mehr';
+    }
+
+    .read-more-state:checked ~ .read-more-trigger:before {
+        content: 'Weniger';
+    }
+</style>
+<?=$this->content()->renderTranslated('snippets/BreakingNews'); ?>
+<?php
+    $panelId = 0;
+    $panelClass = "panel-default";
+    $panelWidth = "col-md-6";
+?>
+<div class="col-md-12" style="margin-top: 30px;"></div>
+
+<?=$this->render('content/snippets/RSSFeedAggregator'); ?>
+
+<div class="col-md-6 ix-panel-news">
+    <div class="panel <?= $panelClass; ?>">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <i class="fa fa-bell-o"></i> Welcome!
+            </h4>
+        </div>
+        <div id="<?= $panelId++; ?>" class="panel-collapse">
+            <div class="panel-body">
+                <input type="checkbox" class="read-more-state" id="post-<?= $panelId; ?>" />
+                <div class="read-more-wrap">
+                    <p>The Index Canonicus is a comprehensive, international database and bibliography for canon law, Protestant and Orthodox canon law and state church law. It is based on the merger of the two canon law databases KALDI (Innsbruck) and DaKaR (Münster) with the canon law holdings of the Index Theologicus (Tübingen). </p>
+                    <div class="read-more-target">
+                        <p>In addition to articles from journals and collected works, monographs, databases, archival material and bequests, encyclopaedia articles and relevant internet links can be searched. The data of selected review organs are also included in the Index Canonicus. The Index Canonicus offers special searches on ecclesiastical and secular court decisions as well as on universal and particular laws. When licensable, the full texts of essays, reviews and books can be accessed directly.</p>
+                        <p>The Index Canonicus is a free open access offering to the worldwide specialist community. The publishers of the Index Canonicus are
+                        <ul>
+                            <li>the Specialised Information Service in Theology [Fachinformationsdienst (FID) Theologie] at Tübingen University Library together with the two theological faculties in Tübingen</li>
+                            <li>the Institute for Canon Law at the Faculty of Catholic Theology (University of Münster) in cooperation with the
+                                <ul>
+                                    <li>canon law departments of the universities of Eichstätt-Ingolstadt, Freiburg, Mainz, Regensburg and Tübingen</li>
+                                    <li>and the canonical departments of the dioceses of Hamburg, Osnabrück and Limburg</li>
+                                </ul>
+                            </li>
+                            <li>the Chair of Canon Law at the Institute for Practical Theology of the Faculty of Catholic Theology (University of Innsbruck)</li>
+                        </ul>
+                        </p>
+                        <p>We hope you enjoy discovering the Index Canonicus and are grateful for your feedback!</p>
+                    </div>
+                </div>
+                <label for="post-<?= $panelId; ?>" class="read-more-trigger"></label>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-md-6 ix-panel-news">
+    <div class="panel <?= $panelClass; ?>">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <i class="fa fa-puzzle-piece"></i> <a target="_blank" href="https://www.uibk.ac.at/praktheol/kaldi/"> KALDI</a>
+            </h4>
+        </div>
+        <div id="<?= $panelId++; ?>" class="panel-collapse">
+            <div class="panel-body">
+                <input type="checkbox" class="read-more-state" id="post-<?= $panelId; ?>" />
+                <div class="read-more-wrap">
+                  <p>KALDI startete 1995 unter der Verwendung der Literaturdatenbank STAR. Über einen
+browserbasierten Zugang konnte die Datenbank über das Internet genutzt werden. Von 1995 bis
+                        2019, dem Jahr der Migration in den IxTheo, wuchs die Datenbank, die sich zunehmend eines
+                        großen internationalen Interesses erfreute, auf ca. 34.000 Datensätze an.
+                  <div class="read-more-target">
+                    <p> Im Rahmen der
+                        Kooperation konnten bisher ca. weitere 9.000 Datensätze (Stand: Februar 2023) durch KALDI
+                        ergänzt werden.
+                    </p>
+                  </div>
+                </div>
+                <label for="post-<?= $panelId; ?>" class="read-more-trigger"></label>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-md-6 ix-panel-news">
+    <div class="panel <?= $panelClass; ?>">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <i class="fa fa-puzzle-piece"></i> DaKaR-Network
+            </h4>
+        </div>
+        <div id="<?= $panelId++; ?>" class="panel-collapse">
+            <div class="panel-body">
+                <input type="checkbox" class="read-more-state" id="post-<?= $panelId; ?>" />
+                <div class="read-more-wrap">
+                    <p>The "Datenbank Kanonisches Recht" (Canon law Database) has been recording canon law literature since 1985. Together, about 50,000 titles have been indexed over the years.<br><br></p>
+                    <div class="read-more-target">
+                        <p>DaKaR is a cooperation of currently nine parties. These are the chairs of canon law at the Albert Ludwig University in Freiburg, the University of Regensburg, the Johannes Gutenberg University in Mainz, the Eberhard Karls University in Tübingen, the Catholic University in Eichstätt-Ingolstadt and the Westfälische Wilhelms-University in Münster and, as non-university institutions, the Vicariates General in Hamburg, Limburg and Osnabrück. In the past, the Vicariate General of Erfurt and the Chair of Church History at Radboud University Nijmegen have also participated.</p>
+                        <p>In 2016, the Index Theologicus team asked for the first time whether cooperation and thus a larger joint database was possible. In 2021, the DaKaR was fully migrated to the Index Theologicus and thus also to the Index Canonicus. At present, around 2000 new titles are added each year by DaKaR and improvements are also made to the "old" data, so that the search in the Index Canonicus can be continually improved with the help of the DaKaR network.</p>
+                    </div>
+                </div>
+                <label for="post-<?= $panelId; ?>" class="read-more-trigger"></label>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-md-6 ix-panel-news">
+    <div class="panel <?= $panelClass; ?>">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <i class="fa fa-puzzle-piece"></i> IxTheo (Kirchenrecht)
+            </h4>
+        </div>
+        <div id="<?= $panelId++; ?>" class="panel-collapse">
+            <div class="panel-body">
+                <input type="checkbox" class="read-more-state" id="post-<?= $panelId; ?>" />
+                <div class="read-more-wrap">
+                    <p>Die Universitätsbibliothek Tübingen erstellt seit 1975 unter dem Namen Index Theologicus eine Datenbank und Bibliographie für Theologie, die alle Themen und Teildisziplinen der Theologie abdeckt.</p>
+                    <div class="read-more-target">
+                      <p>Seit 2019 kooperiert der Fachinformationsdienst (FID) Theologie an der UB Tübingen bei der Erschließung der kirchenrechtlichen Literatur mit dem Lehrstuhl für Kirchenrecht an der Katholisch-Theologischen Fakultät in Innsbruck (KALDI). Im Jahre 2021 wurde die Kooperation um das Institut für Kanonisches Recht in Münster (DaKaR) erweitert.</p>
+                      <p>Nach der Migration der Daten aus den beiden Spezialdatenbanken KALDI und DaKaR in den Index Theologicus wird die Erschließung der kirchenrechtlichen Literatur gemeinsam verantwortet und steht der weltweiten Fachcommunity seit 2022 unter dem Namen Index Canonicus zur Verfügung.</p>
+                      <p>Die Titel im Index Canonicus sind eine Teilmenge des Index Theologicus, die durch fachliche <a href="https://github.com/ubtue/tuefind/wiki/Daten-Abzugs--und-Selektionskriterien#selektionskriterium-f%C3%BCr-das-subsystem-kirchenrecht" target="_blank">Selektionskriterien</a> ausgewählt werden. Als Subsystem des allumfassenden Index Theologicus ist der Index Canonicus ein spezielles Angebot für die Kirchenrechtsforschung und bietet durch die Fachauswahl und die umfassende inhaltliche Erschließung einen Mehrwert bei der Recherche einschlägiger kirchenrechtlicher Forschungsliteratur.</p>
+                      <p>Der Fachinformationsdienst (FID) Theologie stellt den Kooperationspartnern die bibliothekarischen Tools für die formale und inhaltliche Erschließung zu Verfügung. Er ist für das Hosting, die automatischen Verfahren und die technische Realisierung verantwortlich.</p>
+                    </div>
+                </div>
+                <label for="post-<?= $panelId; ?>" class="read-more-trigger"></label>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h2 class="col-md-12 panel-group">Discover IxCan</h2>
+<div class="col-md-6 ix-panel-news">
+    <div class="panel <?= $panelClass; ?>">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <i class="fa fa-search"></i> Codex Search
+            </h4>
+        </div>
+        <div id="<?= $panelId++; ?>" class="panel-collapse">
+            <div class="panel-body">
+                <input type="checkbox" class="read-more-state" id="post-<?= $panelId; ?>" />
+                <div class="read-more-wrap">
+                    <p>In the Index Canonicus you may search for results on a specific canon of the codices. To do this, please first set "Canon law passages" to the right of the search field.</p>
+                    <div class="read-more-target">
+                      <p>Now you may enter the desired codex followed by the desired canon. For c. 517 of the CIC/1983, enter "cic83 517". This works analogously with the CCEO (cceo) and the CIC/1917 (cic17).</p>
+                      <p>You will now receive all titles for which a reference to the corresponding Canon could be found.</p>
+                      <p>For a detailed introduction to the codex search see <a href="/docs/ixtheo-canon-search_en.pdf" target="_blank">here</a>.</p>
+                      <p>Special search for the "new canones" for Mitis Iudex Dominus Iesus (2015) and Pascite gregem Dei
+                        (2021): It is possible to search specifically for these canones. To do this, the advanced search must be
+                        set and then searched for the keyword "Strafrechtsreform"(reform of criminal law) or
+                        "Eheprozessrechtsreform"(reform of matrimonial procedure) and, for example, for the Canon "CIC83
+                        1311". The result will only show articles that contain both keywords.</p>
+                      <p>Good luck with your Codex Search!</p>
+                    </div>
+                </div>
+                <label for="post-<?= $panelId; ?>" class="read-more-trigger"></label>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-md-6 ix-panel-news">
+    <div class="panel <?= $panelClass; ?>">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <i class="fa fa-search"></i> Search
+            </h4>
+        </div>
+        <div id="<?= $panelId++; ?>" class="panel-collapse">
+            <div class="panel-body">
+                <input type="checkbox" class="read-more-state" id="post-<?= $panelId; ?>" />
+                <div class="read-more-wrap">
+                    <p>You can start a search on all the titles catalogued in the Index Canonicus by clicking on the “Find” button. You will then find over 175,000 titles.<br><br></p>
+                    <div class="read-more-target">
+                        <p>You may narrow down the search according to certain criteria by selecting the corresponding facets. For example, you can select the “Electronic” media type, the “Article” format and the “German” language. The number of titles is now reduced to about 2,300.</p>
+
+                        <p>Search by content</p>
+                        <h4>IxTheo Classification</h4>
+                        <p>
+                            For this purpose, you can use the advanced search by clicking on “Advanced Search” underneath the search field. There, you will find the IxTheo classifications among others. The following classes are available for Church Law:
+                            <ul>
+                                <li>SA Church law; state-church law</li>
+                                <li>SB Catholic Church law</li>
+                                <li>SC Church law; Anglican Church</li>
+                                <li>SD Church law; Protestant Church</li>
+                                <li>SE Church law; Orthodox Church</li>
+                            </ul>
+                        </p>
+                        <p>You may select the corresponding classes by clicking on them. You may also select a range of classes by holding the “shift”-key while clicking on the start and finishing items of the range. If you want to select several individual classes, just hold the “Command”-key (on Apple computers) or the “Ctrl”-key (on Windows computers) while clicking on each item.</p>
+                        <p>After selecting your options, just click on “Find” to start a search on the IxTheo classifications you selected.</p>
+
+                        <h4>Search Terms</h4>
+                        <p>Enter the term in the search field and leave the search category on “All Fields”. IxCan will then search for the term you entered in all search fields.</p>
+                        <p>To conduct a search by content, you may find the search category “Subject” very useful. In this case, the search is conducted on subject headings assigned by our staff.</p>
+                    </div>
+                </div>
+                <label for="post-<?= $panelId; ?>" class="read-more-trigger"></label>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-md-6 ix-panel-news">
+    <div class="panel <?= $panelClass; ?>">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <i class="fa fa-list"></i> Browse
+            </h4>
+        </div>
+        <div id="<?= $panelId++; ?>" class="panel-collapse ">
+            <div class="panel-body">
+                <input type="checkbox" class="read-more-state" id="post-<?= $panelId; ?>" />
+                <div class="read-more-wrap">
+                    <p>The Index Canonicus offers three different ways to browse. You can access it by clicking on “Browse” in the area below the search box.</p>
+                    <div class="read-more-target">
+                        <!-- Needed since otherwise the More-Button gets confused immediately before a heading -->
+                        <div style="height: 0px;">&emsp;</div>
+                        <h4>IxCan - Find Topic</h4>
+                        <p>When you select this option, it opens an additional search field in which you may enter your search term. This term is then used as the starting point of the browsing.</p>
+                        <p>1st example: enter the term “Canon Law”. You will then see a list of subject heading strings in which the term "Canon Law" occurs in combination with other terms.</p>
+                        <p>2nd example: enter the terms “canon law” and “Adult woman”. You will then see a list of subject heading strings which contain the words “canon law” and “Adult woman”.</p>
+
+                        <h4>Browse the Catalogue</h4>
+                        <p>The standard browsing function of the software used by IxCan (VuFind) makes it possible to browse through various fields: DDC-Classification, IxTheo-Classification, Topic (subject heading), Author and Publisher. In a further step, you may determine the items you wish to browse by using other fields.</p>
+                        <p>For example, select “Author”, then “By IxTheo-Classification”, then “SA Church law; state-church law”. You will then see a list of authors who have worked in this subject field, sorted according to the number of their works catalogued in the IxCan.</p>
+
+                        <h4>Browse Alphabetically</h4>
+                        <p>With this search option, you can decide at which point in the alphabet you would like to start the search. After you’ve selected the browsing category (you may select among Topic, Author, Title or DDC-Classification), enter the letter at which you would like to start to browse.</p>
+                        <p>1st example: select “By Author” and enter “Z” next to “starting from”. You will then get a list of all authors whose name starts with the letter “Z”.</p>
+                        <p>2nd example: select “By Title” and enter “Tr” next to “starting from”. You will then get a list of all the titles which start with the letter “Tr”.</p>
+                    </div>
+                </div>
+                <label for="post-<?= $panelId; ?>" class="read-more-trigger"></label>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-md-6 ix-panel-news">
+    <div class="panel <?= $panelClass; ?>">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <i class="fa fa-search-plus"></i> Full Text Search
+            </h4>
+        </div>
+        <div id="<?= $panelId++; ?>" class="panel-collapse">
+            <div class="panel-body flex-col">
+                <p>The new <a href="/Search2/Home?hiddenFilters[]=has_fulltext%3A1">Full Text Search</a> provides searching in commercial and free full texts, TOCs and Abstracts.<br/>Comprehensive information is given in the <a href="/docs/Fulltext_Description.pdf" target="_blank">description</a>.<br><br></p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-md-6 ix-panel-news">
+    <div class="panel <?= $panelClass; ?>">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <i class="fa fa-child"></i> Personalized searches
+            </h4>
+        </div>
+        <div id="<?= $panelId++; ?>" class="panel-collapse">
+            <div class="panel-body">
+                <input type="checkbox" class="read-more-state" id="post-<?= $panelId; ?>" />
+                <div class="read-more-wrap">
+                    <p>Many useful functions are at your disposal when you create a personal account. Once you’ve registered, you may log into your account by clicking
+                        on the link called “Login” on the top right corner.</p>
+                    <p>By clicking on “Your account”, you come into your personalized area. You may then use the following functions:</p>
+                    <div class="read-more-target">
+                        <!-- Needed since otherwise the More-Button gets confused immediately before a heading -->
+                        <div style="height: 0px;">&emsp;</div>
+                        <h3>Alerting function</h3>
+                        <p>The alerting function lets you know when new articles from certain journals and new volumes from certain series are available. You may decide in which
+                            cases you would like to get a corresponding message.</p>
+                        <p>In order to receive such “alerts” for a journal or a series, you must mark the corresponding entry for the journal or series as a whole. You can do this
+                            by clicking on the “Bell” symbol which you will find on the right side of the corresponding entry. You can manage the list of publications marked for an
+                            alert in your account under the heading “New Issue Alerting”.</p>
+
+                        <p>1st example: in order to get alerts for the Theologische Quartalschrift, search for the title of this journal or enter the abbreviation “ThQ”
+                            in the search field. Then select under “Format” the “Journal” facet. You will get two entries as a result: one for the printed, and one for the
+                            online version of the journal. In this case, it would be preferable to mark both media types for an alert.</p>
+
+                        <p>2nd example: in order to get alerts for the series “Wissenschaftliche Untersuchungen zum Neuen Testament”, search for the title of the series or
+                            enter the abbreviation “WUNT” in the search field. You will then get a list of entries. Mark the series by clicking on the “Bell” symbol.</p>
+
+                        <p>We will try to make the selection of journals and series for the alerting function more user-friendly in the future. We plan to offer the possibility
+                            of marking whole blocks of journals which are catalogued in the IxTheo according to their academic discipline.</p>
+
+                        <h3>Saving search requests</h3>
+                        <p>Your current search requests are temporarily stored in the search history. If you would like to have permanent access to certain search requests,
+                            you can save them permanently in your account. You may then use them again through a simple mouse click. This feature might be useful for complex
+                            requests or for subjects in which you have a continuing interest. In this way, you will find the latest literature on a given subject or area of knowledge.</p>
+
+                        <h3>Saving favorites</h3>
+                        <p>You can save interesting titles directly in your account  by clicking on the “Asterisk” symbol which you will find on the right side of the corresponding entry.
+                            They are then permanently accessible, and you don’t have to waste any time searching for them again.
+                            In order to sort such “favorites”, they are kept in lists which you define yourself. In this way, you can assign interesting titles to specific research
+                            projects or subjects.</p>
+                        <p>In your account, you can also export your favorites, send them per e-mail or print them.</p>
+                    </div>
+                </div>
+                <label for="post-<?= $panelId; ?>" class="read-more-trigger"></label>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-md-6 ix-panel-news">
+    <div class="panel <?= $panelClass; ?>">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <i class="fa fa-users"></i> Person Information Pages <div class="new">new</div>
+            </h4>
+        </div>
+        <div id="<?= $panelId++; ?>" class="panel-collapse">
+            <div class="panel-body">
+                <input type="checkbox" class="read-more-state" id="post-<?= $panelId; ?>" />
+                <div class="read-more-wrap">
+                    <p>A new milestone has been reached with the introduction of the person information pages in IxTheo and RelBib. Next to the standard (IxTheo) search and the full text search, a third tab called <b>Persons / Corporations</b> is now available.</p>
+                    <div class="read-more-target">
+                        <p>The person / corporation information page allows users to search for specific <b>authors</b>, <b>corporations</b> and <b>conferences</b> (or <b>conference proceedings</b>).</p>
+
+                        <p>Retrieve all persons, corporations and conferences by clicking on FIND. You can refine your search by selecting the appropriate criteria in the facets:</p>
+                        <ul>
+                            <li>Record Type: Person / Corporation / Conference (Proceeding)</li>
+                            <li>External References: Authority files / Links to Wikipedia, Links to archives etc.</li>
+                            <li>Occupation: Theologian / Historian / Priest etc.</li>
+                            <li>Language: German / English / French etc.</li>
+                            <li>Location: Berlin / London / New York etc.</li>
+                        </ul>
+
+                        <p>Person information pages offer some biographical information and further links, e.g. to Wikipedia, archives and external resources.</p>
+
+                        <p>The information stored in IxTheo on this person are processed and displayed in a clear manner:</p>
+                        <ul>
+                            <li>Literature <b>from</b> the author</li>
+                            <li>Literature <b>on</b> the author</li>
+                            <li>Relationships to <b>other</b> persons</li>
+                            <li><b>Topics</b> (subject headings) on which the author published</li>
+                            <li>A <b>chronology</b> of publications</li>
+                        </ul>
+
+                        <p>A few examples of well-known authors:</p>
+                        <ul>
+                            <li><a href="<?=$this->url('solrauthrecord')?>080038956">Judith Butler</a></li>
+                            <li><a href="<?=$this->url('solrauthrecord')?>079908942">Luise Abramowski</a></li>
+                            <li><a href="<?=$this->url('solrauthrecord')?>079319769">Rudolf Bultmann</a></li>
+                            <li><a href="<?=$this->url('solrauthrecord')?>035286210">Martin Luther King</a></li>
+                            <li><a href="<?=$this->url('solrauthrecord')?>133801128">Paul Claudel</a></li>
+                            <li><a href="<?=$this->url('solrauthrecord')?>198371527">Pierre Bourdieu</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <label for="post-<?= $panelId; ?>" class="read-more-trigger"></label>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h2 class="col-md-12 panel-group">Additional Cooperation Partners</h2>
+<div class="col-md-12 ix-panel-news">
+    <div class="panel <?= $panelClass; ?>">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <i class="fa fa-handshake-o"></i> Cooperation Partners of the Institute for Canon Law (IKR)
+            </h4>
+        </div>
+        <div id="<?= $panelId++; ?>" class="panel-collapse">
+            <div class="panel-body flex-col">
+                <table border="1" class="cl-table-partners">
+                    <tr>
+                        <td class="cl-td-img">
+                            <img src="<?=$this->imageLink('partners/KU.png')?>" alt="Katholische Universität Eichstätt-Ingolstadt"><br><br>
+                            <p>Chair of Canon Law and Ecclesiastical Legal History at the Catholic University of Eichstätt-Ingolstadt</p>
+                        </td>
+                        <td class="cl-td-text">
+                            <p>
+                                The Chair of Canon Law and Ecclesiastical Legal History at the Catholic University of Eichstätt-Ingolstadt
+                                is a long-standing cooperation partner. Under the leadership of the chair holder, the team
+                                is dedicated to the collection and evaluation of the ecclesiastical official gazettes of the
+                                (Arch)Dioceses of Bamberg, Eichstätt, Speyer, and Würzburg. Additionally, the Chair of Canon Law
+                                and Ecclesiastical Legal History meticulously analyzes and systematically records important academic
+                                journals such as "Kirche und Recht" (Church and Law), "Zeitschrift der Savigny-Stiftung für
+                                Rechtsgeschichte: Kanonistische Abteilung" (Journal of the Savigny Foundation for Legal History:
+                                Canon Law Section), "Zeitschrift für Evangelisches Kirchenrecht" (Journal of Protestant Church Law),
+                                and "Kanonika." These journals serve as significant sources for current research and developments in
+                                the field of canon law.
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="cl-td-img">
+                            <img src="<?=$this->imageLink('partners/UFR.png')?>" alt="Universität Freiburg" width="300"><br><br>
+                            <p>Chair of Canon Law and Ecclesiastical Legal History at the University of Freiburg</p>
+                        </td>
+                        <td class="cl-td-text">
+
+                            <p>
+                                Within the project, the Chair of Canon Law and Ecclesiastical Legal History at the University of
+                                Freiburg takes care of the formal and content indexing of various legal texts as well as canonical
+                                literature. The legal texts include the Official Gazette of the Archdiocese of Freiburg as well as the
+                                Communicationes, which are published by the Dicastery for Legal Texts at the Vatican. The specialist
+                                literature includes De Processibus Matrimonialibus, Revista espanola de derecho canónico, Revue de
+                                droit canonique and The Jurist, an international and multilingual selection of canonical topics.
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="cl-td-img">
+                            <img src="<?=$this->imageLink('partners/limburg.jpg')?>" alt="Bistum Limburg"><br><br>
+                            <p>Diocesan Curia of Limburg</p>
+                        </td>
+                        <td class="cl-td-text">
+                            <p>
+                                The official gazettes of the dioceses of Fulda, Limburg and Trier as well as the official gazette of the
+                                Austrian Bishops' Conference are evaluated by the Diocesan Curia of Limburg for the Index
+                                Canonicus.
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="cl-td-img">
+                            <img src="<?=$this->imageLink('partners/JGU.png')?>" alt="Johannes Gutenberg Universität Mainz"><br><br>
+                            <p>Seminar for Canon Law, Canon Law History and State-Church Law of the Johannes Gutenberg University Mainz</p>
+                        </td>
+                        <td class="cl-td-text">
+                            <p>
+                                The Seminar for Canon Law, Canon Law History and State-Church Law of the Johannes Gutenberg
+                                University Mainz has been a cooperation partner of the IKR-Münster in the processing of the canon
+                                law database since 2009. In addition to the official gazette of the diocese of Mainz, the chair's team
+                                searches and enters articles relevant to ecclesiastical and constitutional law from scholarly and
+                                jurisprudential journals, the Osservatore Romano (German weekly edition), the canonical journals Jus
+                                Missionale (Urbaniana Rome), NomoK@non (Munich), as well as the series Kirchen- und
+                                Religionsrecht / formerly Kirchen- und Staatskirchenrecht and Mainzer Beiträge zu Kirchen- und
+                                Religionsrecht.
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="cl-td-img">
+                            <img src="<?=$this->imageLink('partners/IKR.png')?>" alt="IKR"><br><br>
+                            <p>Institute for Canon Law at the University of Münster</p>
+                        </td>
+                        <td class="cl-td-text">
+                            <p>
+                                The "IKR" is responsible for networking and overall organisation among the equal cooperators. This is
+                                where the information is collected and forwarded, and the IKR can always be contacted in the event
+                                of problems with the recording and indexing of the various titles. The IKR also ensures that the
+                                individual essays and sometimes the associated keywords are transferred to the database. In
+                                addition, the IKR makes sure that any errors are corrected. The IKR also records journals and series
+                                itself. These include, for example, the Official Gazette of the Diocese of Münster, the series "Essener
+                                Gespräche zum Thema Staat und Kirche", the supplements to the Münsterischer Kommentar on the
+                                CIC, but also somewhat more internationally, for example, the newsletter of the Canon Law Society
+                                of Great Britain and Ireland.
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="cl-td-img">
+                            <img src="<?=$this->imageLink('partners/tübingen.png')?>" alt="Eberhard Karls Universität Tübingen"><br><br>
+                            <p>Department of Canon Law at the Faculty of Catholic Theology at the University of Tübingen</p>
+                        </td>
+                        <td class="cl-td-text">
+                            <p>
+                                The Department of Canon Law at the Faculty of Catholic Theology at the University of
+                                Tübingen joined the cooperation project in 2014. We index the Official Gazette of the Diocese
+                                of Rottenburg-Stuttgart, the Italian journal "Daimon" as well as the "Tübinger
+                                Kirchenrechtlichen Studien", including the "Kleine Wissenschaftliche Reihe".
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
