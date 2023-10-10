@@ -1,10 +1,10 @@
 <style>
     .read-more-state ~ .read-more-trigger:before {
-        content: 'Mehr';
+        content: 'Show more';
     }
 
     .read-more-state:checked ~ .read-more-trigger:before {
-        content: 'Weniger';
+        content: 'Show less';
     }
 </style>
 <?=$this->content()->renderTranslated('snippets/BreakingNews'); ?>
@@ -62,15 +62,9 @@
             <div class="panel-body">
                 <input type="checkbox" class="read-more-state" id="post-<?= $panelId; ?>" />
                 <div class="read-more-wrap">
-                  <p>KALDI startete 1995 unter der Verwendung der Literaturdatenbank STAR. Über einen
-browserbasierten Zugang konnte die Datenbank über das Internet genutzt werden. Von 1995 bis
-                        2019, dem Jahr der Migration in den IxTheo, wuchs die Datenbank, die sich zunehmend eines
-                        großen internationalen Interesses erfreute, auf ca. 34.000 Datensätze an.
+                    <p>KALDI started in 1995 using the STAR literature database. The database could be used over the Internet via browser-based access. From 1995 to 2019, the year of migration to the IxTheo, the database, which increasingly enjoyed great international interest, grew to around 34,000 data records.<br><br></p>
                   <div class="read-more-target">
-                    <p> Im Rahmen der
-                        Kooperation konnten bisher ca. weitere 9.000 Datensätze (Stand: Februar 2023) durch KALDI
-                        ergänzt werden.
-                    </p>
+                    <p> As part of the cooperation, KALDI has so far been able to add around a further 9,000 data sets (as of February 2023).</p>
                   </div>
                 </div>
                 <label for="post-<?= $panelId; ?>" class="read-more-trigger"></label>
@@ -89,7 +83,7 @@ browserbasierten Zugang konnte die Datenbank über das Internet genutzt werden. 
             <div class="panel-body">
                 <input type="checkbox" class="read-more-state" id="post-<?= $panelId; ?>" />
                 <div class="read-more-wrap">
-                    <p>The "Datenbank Kanonisches Recht" (Canon law Database) has been recording canon law literature since 1985. Together, about 50,000 titles have been indexed over the years.<br><br></p>
+                    <p>The "Datenbank Kanonisches Recht" (Canon law Database) has been recording canon law literature since 1985. Together, about 50,000 titles have been indexed over the years.<br><br><br></p>
                     <div class="read-more-target">
                         <p>DaKaR is a cooperation of currently nine parties. These are the chairs of canon law at the Albert Ludwig University in Freiburg, the University of Regensburg, the Johannes Gutenberg University in Mainz, the Eberhard Karls University in Tübingen, the Catholic University in Eichstätt-Ingolstadt and the Westfälische Wilhelms-University in Münster and, as non-university institutions, the Vicariates General in Hamburg, Limburg and Osnabrück. In the past, the Vicariate General of Erfurt and the Chair of Church History at Radboud University Nijmegen have also participated.</p>
                         <p>In 2016, the Index Theologicus team asked for the first time whether cooperation and thus a larger joint database was possible. In 2021, the DaKaR was fully migrated to the Index Theologicus and thus also to the Index Canonicus. At present, around 2000 new titles are added each year by DaKaR and improvements are also made to the "old" data, so that the search in the Index Canonicus can be continually improved with the help of the DaKaR network.</p>
@@ -104,19 +98,19 @@ browserbasierten Zugang konnte die Datenbank über das Internet genutzt werden. 
     <div class="panel <?= $panelClass; ?>">
         <div class="panel-heading">
             <h4 class="panel-title">
-                <i class="fa fa-puzzle-piece"></i> IxTheo (Kirchenrecht)
+                <i class="fa fa-puzzle-piece"></i> IxTheo (Church Law)
             </h4>
         </div>
         <div id="<?= $panelId++; ?>" class="panel-collapse">
             <div class="panel-body">
                 <input type="checkbox" class="read-more-state" id="post-<?= $panelId; ?>" />
                 <div class="read-more-wrap">
-                    <p>Die Universitätsbibliothek Tübingen erstellt seit 1975 unter dem Namen Index Theologicus eine Datenbank und Bibliographie für Theologie, die alle Themen und Teildisziplinen der Theologie abdeckt.</p>
+                    <p>The Tübingen University library (“Universitätsbibliothek” or UB Tübingen) maintains since 1975 a database and a bibliography in theology called Index Theologicus which covers all theological subjects and disciplines. The leading journals, series and monographs in the field of canon law and church law have been included in our bibliography from the beginning.</p>
                     <div class="read-more-target">
-                      <p>Seit 2019 kooperiert der Fachinformationsdienst (FID) Theologie an der UB Tübingen bei der Erschließung der kirchenrechtlichen Literatur mit dem Lehrstuhl für Kirchenrecht an der Katholisch-Theologischen Fakultät in Innsbruck (KALDI). Im Jahre 2021 wurde die Kooperation um das Institut für Kanonisches Recht in Münster (DaKaR) erweitert.</p>
-                      <p>Nach der Migration der Daten aus den beiden Spezialdatenbanken KALDI und DaKaR in den Index Theologicus wird die Erschließung der kirchenrechtlichen Literatur gemeinsam verantwortet und steht der weltweiten Fachcommunity seit 2022 unter dem Namen Index Canonicus zur Verfügung.</p>
-                      <p>Die Titel im Index Canonicus sind eine Teilmenge des Index Theologicus, die durch fachliche <a href="https://github.com/ubtue/tuefind/wiki/Daten-Abzugs--und-Selektionskriterien#selektionskriterium-f%C3%BCr-das-subsystem-kirchenrecht" target="_blank">Selektionskriterien</a> ausgewählt werden. Als Subsystem des allumfassenden Index Theologicus ist der Index Canonicus ein spezielles Angebot für die Kirchenrechtsforschung und bietet durch die Fachauswahl und die umfassende inhaltliche Erschließung einen Mehrwert bei der Recherche einschlägiger kirchenrechtlicher Forschungsliteratur.</p>
-                      <p>Der Fachinformationsdienst (FID) Theologie stellt den Kooperationspartnern die bibliothekarischen Tools für die formale und inhaltliche Erschließung zu Verfügung. Er ist für das Hosting, die automatischen Verfahren und die technische Realisierung verantwortlich.</p>
+                      <p>Since 2019, the Specialised Information Service (“Fachinformationsdienst” or FID) in theology at the UB Tübingen has been indexing literature on canon law in cooperation with the chair of church law at the Catholic faculty of theology of the University of Innsbruck, publisher of the canon law database KALDI. The Institute for Canon Law (“Institut für Kanonisches Recht”) in Münster, publisher of the canon law database DaKaR, joined this cooperative enterprise in 2021.</p>
+                      <p>Since the data from both KALDI and DaKaR was migrated in the Index Theologicus, the indexing of literature on canon law has been performed cooperatively and has been available to the global research community since 2022 under the name Index Canonicus.</p>
+                      <p>The titles available in the Index Canonicus constitute a subset of the Index Theologicus. They are chosen according to <a href="https://github.com/ubtue/tuefind/wiki/Daten-Abzugs--und-Selektionskriterien#selektionskriterium-f%C3%BCr-das-subsystem-kirchenrecht" target="_blank">selection criteria</a> related to the research field. As a specialised subsystem of the more general Index Theologicus, the Index Canonicus constitutes a targeted offer for research in church law and provides additional benefits through its comprehensive indexing and its field-related selection of literature.</p>
+                      <p>The Specialised Information Service (FID) in theology provides the library tools necessary for cataloguing and indexing the literature to its cooperation partners. It is also responsible for the hosting, automatic procedures and technical implementation of the service.</p>
                     </div>
                 </div>
                 <label for="post-<?= $panelId; ?>" class="read-more-trigger"></label>
@@ -206,7 +200,7 @@ browserbasierten Zugang konnte die Datenbank über das Internet genutzt werden. 
             <div class="panel-body">
                 <input type="checkbox" class="read-more-state" id="post-<?= $panelId; ?>" />
                 <div class="read-more-wrap">
-                    <p>The Index Canonicus offers three different ways to browse. You can access it by clicking on “Browse” in the area below the search box.</p>
+                    <p>The Index Canonicus offers three different ways to browse. You can access it by clicking on “Browse” in the area below the search box.<br></p>
                     <div class="read-more-target">
                         <!-- Needed since otherwise the More-Button gets confused immediately before a heading -->
                         <div style="height: 0px;">&emsp;</div>
