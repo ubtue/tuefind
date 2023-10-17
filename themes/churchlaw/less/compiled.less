@@ -5,14 +5,14 @@
 /* jqcloud */
 div.jqcloud { color: #09f; }
 div.jqcloud a { color: inherit; }
-div.jqcloud a:hover { color: #FFB30F; }
-div.jqcloud span.w10 { color: #994D00; }
-div.jqcloud span.w9 { color: #CC8000; }
-div.jqcloud span.w8 { color: #FFCD29; }
-div.jqcloud span.w7 { color: #994D00; }
-div.jqcloud span.w6 { color: #CC8000; }
-div.jqcloud span.w5 { color: #FFCD29; }
-div.jqcloud span.w4 { color: #994D00; }
-div.jqcloud span.w3 { color: #CC8000; }
-div.jqcloud span.w2 { color: #FFCD29; }
-div.jqcloud span.w1 { color: #FFB30F; }
+div.jqcloud a:hover { color: @brand-primary }
+div.jqcloud span.w10 { color: @brand-primary }
+div.jqcloud span.w9 { color: lighten(@brand-primary, 5%) }
+div.jqcloud span.w8 { color: lighten(@brand-primary, 10%) }
+div.jqcloud span.w7 { color: lighten(@brand-primary, 15%) }
+div.jqcloud span.w6 { color: lighten(@brand-primary, 20%) }
+div.jqcloud span.w5 { color: darken(@brand-secondary, 20%) }
+div.jqcloud span.w4 { color: darken(@brand-secondary, 15%) }
+div.jqcloud span.w3 { color: darken(@brand-secondary, 10%) }
+div.jqcloud span.w2 { color: darken(@brand-secondary, 5%) }
+div.jqcloud span.w1 { color: @brand-secondary }
