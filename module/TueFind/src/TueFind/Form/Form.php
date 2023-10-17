@@ -4,6 +4,7 @@ namespace TueFind\Form;
 
 use Laminas\View\HelperPluginManager;
 use VuFind\Config\YamlReader;
+use VuFind\Form\Handler\PluginManager as HandlerManager;
 
 
 class Form extends \VuFind\Form\Form {
@@ -12,10 +13,10 @@ class Form extends \VuFind\Form\Form {
     // to map a form id to its (optional existing) config key in local overrides
     protected $emailReceiverLocalOverridesConfigKeys = ['AcquisitionRequest' => 'acquisition_request_receivers'];
 
-    public function __construct(YamlReader $yamlReader, HelperPluginManager $viewHelperManager,
+    public function __construct(YamlReader $yamlReader, HelperPluginManager $viewHelperManager, HandlerManager $handlerManager,
                                 array $defaultFeedbackConfig = null, array $defaultSiteConfig = null)
     {
-        parent::__construct($yamlReader, $viewHelperManager, $defaultFeedbackConfig);
+        parent::__construct($yamlReader, $viewHelperManager, $handlerManager, $defaultFeedbackConfig);
         $this->defaultSiteConfig = $defaultSiteConfig;
     }
 
