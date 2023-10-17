@@ -23,7 +23,7 @@ class Loader extends \VuFind\Record\Loader {
                 try {
                     $command = new RetrieveCommand($source, $id, $params); 
                     $results = $this->searchService->invoke($command)->getResult()->getRecords();
-                } catch (BackendExpception $e){
+                } catch (BackendException $e){
                     if(!$tolerateMissing){
                         throw $e;
                     }
@@ -81,7 +81,7 @@ class Loader extends \VuFind\Record\Loader {
                     if ($results->first() !== null)
                         return $results->first();
                     $results = [];
-                } catch (BackendExpception $e){
+                } catch (BackendException $e){
                     if(!$tolerateMissing){
                         throw $e;
                     }
