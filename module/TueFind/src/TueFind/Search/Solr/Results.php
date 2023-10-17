@@ -2,9 +2,6 @@
 
 namespace TueFind\Search\Solr;
 
-use VuFindSearch\Query\AbstractQuery;
-use VuFindSearch\Query\QueryGroup;
-
 class Results extends \VuFind\Search\Solr\Results
 {
     /**
@@ -40,6 +37,4 @@ class Results extends \VuFind\Search\Solr\Results
         // Send back data:
         return $facets;
     }
-
-
 }

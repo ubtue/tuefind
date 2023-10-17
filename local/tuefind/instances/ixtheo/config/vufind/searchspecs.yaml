@@ -838,8 +838,8 @@ Keywordchains:
   DismaxFields:
     - key_word_chains_sorted
   QueryFields:
-    key_word_chain_sorted:
-      - [and, ~]
+    key_word_chains_sorted:
+      - [and, 10]
   DismaxParams:
     - ["defType", "multiLanguageQueryParser"]
     - ["mm", "100%"]
