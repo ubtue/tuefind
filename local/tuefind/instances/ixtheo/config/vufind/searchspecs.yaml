@@ -746,20 +746,20 @@ CallNumber:
   CustomMunge:
     callnumber_exact:
       # Strip whitespace and quotes:
-      - [preg_replace, '/[ "]/', ""]
+      - [preg_replace, '/[ "]/', '']
       # Escape colons (unescape first to avoid double-escapes):
-      - [preg_replace, '/(\\:)/', ":"]
+      - [preg_replace, '/(\\:)/', ':']
       - [preg_replace, "/:/", '\:']
       # Strip pre-existing trailing asterisks:
-      - [preg_replace, "/\\*+$/", ""]
+      - [preg_replace, "/\\*+$/", '']
     callnumber_fuzzy:
       # Strip whitespace and quotes:
-      - [preg_replace, '/[ "]/', ""]
+      - [preg_replace, '/[ "]/', '']
       # Escape colons (unescape first to avoid double-escapes):
-      - [preg_replace, '/(\\:)/', ":"]
+      - [preg_replace, '/(\\:)/', ':']
       - [preg_replace, "/:/", '\:']
       # Strip pre-existing trailing asterisks, then add a new one:
-      - [preg_replace, "/\\*+$/", ""]
+      - [preg_replace, "/\\*+$/", '']
       - [append, "*"]
   QueryFields:
     callnumber-search:
@@ -839,7 +839,7 @@ Keywordchains:
     - key_word_chains_sorted
   QueryFields:
     key_word_chains_sorted:
-      - [and, 10]
+      - [and, ~]
   DismaxParams:
     - ["defType", "multiLanguageQueryParser"]
     - ["mm", "100%"]
