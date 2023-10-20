@@ -1,9 +1,11 @@
 <div class="panel panel-bottom panel-default tf-panel-home-3">
-    <a class="panel-default-link" href="<?=$this->url('content-page', ['page' => 'partners'])?>">
-        <div class="panel-image" style="background-image: url(<?=$this->imageLink('frontpage/coffee.jpg') ?>);"></div>
+    <a class="panel-default-link" href="<?=$this->url('content-page', ['page' => 'partners','container' => 'false'])?>">
+        <div class="panel-image" style="background-image: url(<?=$this->imageLink('newfrontpage/coffee.jpg') ?>);"></div>
         <div class="panel-content">
-            <h4>Kooperationspartner</h4>
-            <p>Mit wem arbeiten wir zusammen?</p>
+            <h4>Literatur</h4>
+        </div>
+        <div class="tf-result-link-block" style="margin-top:80px; margin-right:15px;">
+            <a href="/Feedback/Form/AcquisitionRequest" class="btn btn-default btn-panel-more btn-panel-more-new" role="button" ><?=$this->transEsc('Acquisition Request')?></a>
         </div>
     </a>
 </div>
