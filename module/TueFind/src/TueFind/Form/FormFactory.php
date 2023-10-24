@@ -17,10 +17,11 @@ class FormFactory extends \VuFind\Form\FormFactory
             ->get('config')->toArray();
         $yamlReader = $container->get(\VuFind\Config\YamlReader::class);
         $viewHelperManager = $container->get('ViewHelperManager');
+        $handlerManager = $container->get(\VuFind\Form\Handler\PluginManager::class);
 
         return new $requestedName(
             // TueFind: Also pass Site config
-            $yamlReader, $viewHelperManager, $config['Feedback'] ?? null, $config['Site'] ?? null
+            $yamlReader, $viewHelperManager, $handlerManager, $config['Feedback'] ?? null, $config['Site'] ?? null
         );
     }
 }

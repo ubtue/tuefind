@@ -63,7 +63,9 @@ class KeywordChainSearchController extends \VuFind\Controller\AbstractSearch
         $params = $results->getParams();
         $params->addFacet($facet);
         $lookfor = $request->get('lookfor');
-
+        if(empty($lookfor)) {
+            $lookfor = '';
+        }
         $request->set('lookfor', $lookfor);
         $request->set('type', 'KeywordChainSearch');
         $params->initFromRequest($request);

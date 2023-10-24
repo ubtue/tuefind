@@ -34,7 +34,7 @@ class SolrDefaultBackendFactory extends \TueFind\Search\Factory\SolrDefaultBacke
         return $backend;
     }
 
-
+    
     /**
      * Create the SOLR connector
      * Set the language code
@@ -43,6 +43,7 @@ class SolrDefaultBackendFactory extends \TueFind\Search\Factory\SolrDefaultBacke
      */
     protected function createConnector()
     {
+        $timeout = $this->getIndexConfig('timeout', 30);
         $config = $this->config->get($this->mainConfig);
         $this->setTranslator($this->serviceLocator->get(\Laminas\Mvc\I18n\Translator::class));
         $current_lang = $this->getTranslatorLocale();
@@ -70,16 +71,18 @@ class SolrDefaultBackendFactory extends \TueFind\Search\Factory\SolrDefaultBacke
             array_push($handlers['select']['appends']['fq'], $filter);
         }
 
-        $httpService = $this->serviceLocator->get(\VuFindHttp\HttpService::class);
-        $client = $httpService->createClient();
-
         $connector = new $this->connectorClass(
             $this->getSolrUrl(),
             new HandlerMap($handlers),
-            $this->uniqueKey,
-            $client
+            function (string $url) use ($timeout) {
+                return $this->createHttpClient(
+                    $timeout,
+                    $this->getHttpOptions($url),
+                    $url
+                );
+            },
+            $this->uniqueKey
         );
-        $connector->setTimeout($config->Index->timeout ?? 30);
 
         if ($this->logger) {
             $connector->setLogger($this->logger);
@@ -105,7 +108,7 @@ class SolrDefaultBackendFactory extends \TueFind\Search\Factory\SolrDefaultBacke
         }
         return $connector;
     }
-
+    
     /**
      * Create the query builder.
      *

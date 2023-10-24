@@ -190,7 +190,6 @@ Signature:
 Author:
   DismaxFields:
     - author^100
-    - author_fuller^50
     - author2
     - author_additional
     - author_corporate
@@ -199,10 +198,6 @@ Author:
       - [onephrase, 350]
       - [and, 200]
       - [or, 100]
-    author_fuller:
-      - [onephrase, 200]
-      - [and, 100]
-      - [or, 50]
     author2:
       - [onephrase, 100]
       - [and, 50]
@@ -259,7 +254,6 @@ Subject:
 #    DismaxFields:
 #      - topic_unstemmed^150
 
-
 Coordinate:
   DismaxFields:
     - long_lat_display
@@ -307,7 +301,7 @@ JournalTitle:
       - [and, 50]
     series2:
       - [onephrase, 50]
-      - [and , ~]
+      - [and, ~]
   FilterQuery: "format:Journal OR format:Article"
 #  ExactSettings:
 #    DismaxFields:
@@ -347,7 +341,7 @@ Title:
       - [and, 50]
     series2:
       - [onephrase, 50]
-      - [and , ~]
+      - [and, ~]
 #  ExactSettings:
 #    DismaxFields:
 #      - title_full_unstemmed^450
@@ -377,7 +371,6 @@ AllFields:
     - series^50
     - series2^30
     - author^300
-    - author_fuller^150
     - contents^10
     - topic_unstemmed^550
     - topic^500
@@ -389,24 +382,20 @@ AllFields:
     - isbn
     - issn
   QueryFields:
-    0:
-      0:
-        - OR
-        - 50
-      title_short:
-        - [onephrase, 750]
-      title_full_unstemmed:
-        - [onephrase, 600]
-        - [and, 500]
-      title_full:
-        - [onephrase, 400]
-      title:
-        - [onephrase, 300]
-        - [and, 250]
-      title_alt:
-        - [and, 200]
-      title_new:
-        - [and, 100]
+    title_short:
+      - [onephrase, 750]
+    title_full_unstemmed:
+      - [onephrase, 600]
+      - [and, 500]
+    title_full:
+      - [onephrase, 400]
+    title:
+      - [onephrase, 300]
+      - [and, 250]
+    title_alt:
+      - [and, 200]
+    title_new:
+      - [and, 100]
     series:
       - [and, 50]
     series2:
@@ -414,9 +403,6 @@ AllFields:
     author:
       - [onephrase, 300]
       - [and, 250]
-    author_fuller:
-      - [onephrase, 150]
-      - [and, 125]
     author2:
       - [and, 50]
     author_additional:
@@ -760,7 +746,6 @@ FulltextAllSynonyms:
       - [onephrase, 50]
       - [and, 50]
       - [or, ~]
-
 
 GND:
   DismaxFields:

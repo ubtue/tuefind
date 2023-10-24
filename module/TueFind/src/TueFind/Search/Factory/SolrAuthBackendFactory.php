@@ -52,6 +52,8 @@ class SolrAuthBackendFactory extends \VuFind\Search\Factory\SolrAuthBackendFacto
         $chinese_lang_map = [ "zh" => "hant", "zh-cn" => "hans"];
         if (array_key_exists($current_lang, $chinese_lang_map))
             $current_lang = $chinese_lang_map[$current_lang];
+            
+        $defaultFields = $searchConfig->General->default_record_fields ?? '*';
 
         $handlers = [
             'select' => [
@@ -65,25 +67,25 @@ class SolrAuthBackendFactory extends \VuFind\Search\Factory\SolrAuthBackendFacto
                 'functions' => ['terms'],
             ],
         ];
+
         foreach ($this->getHiddenFilters() as $filter) {
             array_push($handlers['select']['appends']['fq'], $filter);
         }
 
-        $httpService = $this->serviceLocator->get(\VuFindHttp\HttpService::class);
-        $client = $httpService->createClient();
-
+        $client =  function (string $url) use ($config) {
+            return $this->createHttpClient($config->Index->timeout ?? 30, $this->getHttpOptions($url), $url);
+        };
+        
         $connector = new $this->connectorClass(
             $this->getSolrUrl(),
             new HandlerMap($handlers),
-            $this->uniqueKey,
-            $client
+            $client,
+            $this->uniqueKey
         );
-        $connector->setTimeout($config->Index->timeout ?? 30);
-
+        
         if ($this->logger) {
             $connector->setLogger($this->logger);
         }
-
         if (!empty($searchConfig->SearchCache->adapter)) {
             $cacheConfig = $searchConfig->SearchCache->toArray();
             $options = $cacheConfig['options'] ?? [];
@@ -102,6 +104,7 @@ class SolrAuthBackendFactory extends \VuFind\Search\Factory\SolrAuthBackendFacto
                 ->createFromArrayConfiguration($settings);
             $connector->setCache($cache);
         }
+
         return $connector;
     }
 

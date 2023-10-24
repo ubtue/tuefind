@@ -95,6 +95,8 @@ $config = [
     ],
 ];
 
+$nonTabRecordActions = ['PDASubscribe', 'Subscribe'];
+
 $recordRoutes = [
     // needs to be registered again even if already registered in parent module,
     // for the nonTabRecordActions added in \IxTheo\Route\RouteGenerator
@@ -117,7 +119,8 @@ $staticRoutes = [
     'Classification/Home'
 ];
 
-$routeGenerator = new \IxTheo\Route\RouteGenerator();
+$routeGenerator = new \VuFind\Route\RouteGenerator();
+$routeGenerator->addNonTabRecordActions($config, $nonTabRecordActions);
 $routeGenerator->addRecordRoutes($config, $recordRoutes);
 $routeGenerator->addDynamicRoutes($config, $dynamicRoutes);
 $routeGenerator->addStaticRoutes($config, $staticRoutes);

@@ -39,6 +39,10 @@ mark {
   }
 }
 
+.nav> li > a {
+  display: block;
+}
+
 a.navbar-brand, nav > .nav > li > a {
   color: white;
 }
@@ -46,6 +50,7 @@ a.navbar-brand, nav > .nav > li > a {
 .nav > li > a:focus,
 .nav > li > a:hover {
   color: @brand-primary;
+  background-color: @dropdown-link-hover-bg;
 }
 
 .blog {

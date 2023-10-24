@@ -4,6 +4,9 @@ namespace TueFind\View\Helper\TueFind;
 
 use \TueFind\RecordDriver\SolrAuthMarc as AuthorityRecordDriver;
 use \TueFind\RecordDriver\SolrMarc as TitleRecordDriver;
+use VuFindSearch\Query\Query;
+use VuFindSearch\Command\SearchCommand;
+use \VuFindSearch\ParamBag;
 
 /**
  * View Helper for TueFind, containing functions related to authority data + schema.org
@@ -399,22 +402,20 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
     {
         // We use 'Solr' as identifier here, because the RecordDriver's identifier would be "SolrAuth"
         $identifier = 'Solr';
-        $response = $this->searchService->search($identifier,
-                                                 new \VuFindSearch\Query\Query($this->getTitlesAboutQueryParams($driver), 'AllFields'),
-                                                 $offset, $limit, new \VuFindSearch\ParamBag(['sort' => 'publishDate DESC']));
-
-        return $response;
+        $query = new Query($this->getTitlesAboutQueryParams($driver), null, 'AllFields');
+        $searchCommand = new SearchCommand($identifier, $query,
+            $offset, $limit, new ParamBag(['sort' => 'publishDate DESC']));
+        return $this->searchService->invoke($searchCommand)->getResult();
     }
 
     public function getNewestTitlesBy(AuthorityRecordDriver &$driver, $offset=0, $limit=10)
     {
         // We use 'Solr' as identifier here, because the RecordDriver's identifier would be "SolrAuth"
         $identifier = 'Solr';
-        $response = $this->searchService->search($identifier,
-                                                 new \VuFindSearch\Query\Query($this->getTitlesByQueryParams($driver), 'AllFields'),
-                                                 $offset, $limit, new \VuFindSearch\ParamBag(['sort' => 'publishDate DESC']));
-
-        return $response;
+        $query = new Query($this->getTitlesByQueryParams($driver), null, 'AllFields');
+        $searchCommand = new SearchCommand($identifier, $query,
+            $offset, $limit, new ParamBag(['sort' => 'publishDate DESC']));
+        return $this->searchService->invoke($searchCommand)->getResult();
     }
 
     public function getRelatedAuthors(AuthorityRecordDriver &$driver, $limit)
@@ -433,12 +434,16 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
         // Make sure we set offset+limit to 0, because we only want the facet counts
         // and not the rows itself for performance reasons.
         // (This could get very slow, e.g. Martin Luther where we have thousands of related datasets.)
-        $titleRecords = $this->searchService->search('Solr',
-                                                     new \VuFindSearch\Query\Query($this->getTitlesByQueryParams($driver), 'AllFields'),
-                                                     0, 0, $params);
 
-        $relatedAuthors = $titleRecords->getFacets()->getFieldFacets()['author_and_id_facet']->toArray();
+        $identifier = 'Solr';
+        $query = new Query($this->getTitlesByQueryParams($driver), null, 'AllFields');
+        $searchCommand = new SearchCommand($identifier, $query,
+            0, 0, $params);
+        $titleRecords = $this->searchService->invoke($searchCommand)->getResult();
 
+
+        $relatedAuthors = $titleRecords->getFacets()['author_and_id_facet'];
+        
         $referenceAuthorKey = $driver->getUniqueID() . ':' . $driver->getTitle();
 
         $referenceAuthorID = $driver->getUniqueID();
@@ -601,21 +606,18 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
                    "facet.sort"=>"count"];
 
         $identifier = 'Solr';
-        $publishingData = $this->searchService->search($identifier,
-                                                 new \VuFindSearch\Query\Query($this->getTitlesByQueryParams($driver), 'AllFields'),
-                                                 0, 0, new \VuFindSearch\ParamBag($params));
+
+        $query = new Query($this->getTitlesByQueryParams($driver), null, 'AllField');
+        $searchCommand = new SearchCommand($identifier, $query,
+            0 , 0, new ParamBag($params));
+        $publishingData = $this->searchService->invoke($searchCommand)->getResult();
+
         $allFacets = $publishingData->getFacets();
-        $publishFacet = $allFacets->getFieldFacets();
-        $publishArray = $publishFacet['publishDate']->toArray();
+        // $publishFacet = $allFacets->getFieldFacets();
+        $publishArray = $allFacets['publishDate'];
         $publishDates = array_keys($publishArray);
 
-        $aboutData = $this->searchService->search($identifier,
-                                                 new \VuFindSearch\Query\Query($this->getTitlesAboutQueryParamsChartDate($driver), 'AllFields'),
-                                                 0, 0, new \VuFindSearch\ParamBag($params));
-
-        $allFacetsAbout = $aboutData->getFacets();
-        $aboutFacet = $allFacetsAbout->getFieldFacets();
-        $aboutArray = $aboutFacet['publishDate']->toArray();
+        $aboutArray = $allFacets['publishDate'];
 
         $aboutDates = array_keys($aboutArray);
 
@@ -677,9 +679,11 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
         // Note: This query might be critical to peformance. Also set 'fl' parameter
         //       to reduce the result size and avoid out of memory problems.
         //       Example: Martin Luther, 133813363
-        $titleRecords = $this->searchService->search($identifier,
-                                                 new \VuFindSearch\Query\Query($this->getTitlesByQueryParams($driver), $settings['searchType']),
-                                                 0, $settings['maxTopicRows'], new \VuFindSearch\ParamBag($settings['paramBag']));
+
+        $query = new Query($this->getTitlesByQueryParams($driver), null, $settings['searchType']);
+        $searchCommand = new SearchCommand($identifier, $query,
+            0 , $settings['maxTopicRows'], new ParamBag($settings['paramBag']));
+        $titleRecords = $this->searchService->invoke($searchCommand);
 
         $countedTopics = [];
         foreach ($titleRecords as $titleRecord) {
