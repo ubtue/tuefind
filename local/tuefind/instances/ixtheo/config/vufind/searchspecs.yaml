@@ -182,41 +182,35 @@ Author:
   DismaxFields:
     - author^500
     - author_synonyms^99
-    - author_fuller^50
     - author2
     - author_additional
     - author_corporate
     - corporation
   QueryFields:
-    author:
-      - [onephrase, 500]
-      - [and, 200]
-      - [or, 100]
-    author_synonyms:
-      - [onephrase, 349]
-      - [and, 199]
-      - [or, 99]
-    author_fuller:
-      - [onephrase, 200]
-      - [and, 100]
-      - [or, 50]
-    author2:
-      - [onephrase, 100]
-      - [and, 50]
-      - [or, ~]
-    author_additional:
-      - [onephrase, 100]
-      - [and, 50]
-      - [or, ~]
-    author_corporate:
-      - [onephrase, 100]
-      - [and, 50]
-      - [or, ~]
-    corporation:
-      - [onephrase, 100]
-      - [and, 50]
-      - [or, ~]
-
+  author:
+    - [onephrase, 500]
+    - [and, 200]
+    - [or, 100]
+  author_synonyms:
+    - [onephrase, 349]
+    - [and, 199]
+    - [or, 99]
+  author2:
+    - [onephrase, 100]
+    - [and, 50]
+    - [or, ~]
+  author_additional:
+    - [onephrase, 100]
+    - [and, 50]
+    - [or, ~]
+  author_corporate:
+    - [onephrase, 100]
+    - [and, 50]
+    - [or, ~]
+  corporation:
+    - [onephrase, 100]
+    - [and, 50]
+    - [or, ~]
 ISN:
   DismaxFields:
     - isbn
@@ -338,7 +332,7 @@ JournalTitle:
       - [and, 50]
     series2:
       - [onephrase, 50]
-      - [and , ~]
+      - [and, ~]
   FilterQuery: "format:Journal OR format:Article"
 #  ExactSettings:
 #    DismaxFields:
@@ -382,7 +376,7 @@ Title:
       - [and, 50]
     series2:
       - [onephrase, 50]
-      - [and , ~]
+      - [and, ~]
 #  ExactSettings:
 #    DismaxFields:
 #      - title_full_unstemmed^450
@@ -454,9 +448,6 @@ FulltextOnly:
       - [onephrase, 50]
       - [and, 50]
       - [or, ~]
-
-
-
 
 FulltextWithSynonyms:
   DismaxFields:
@@ -538,7 +529,6 @@ FulltextWithSynonyms:
       - [and, 50]
       - [or, ~]
 
-
 FulltextAllSynonyms:
   DismaxFields:
     - fulltext^750
@@ -619,7 +609,6 @@ FulltextAllSynonyms:
       - [and, 50]
       - [or, ~]
 
-
 AllFields:
   DismaxFields:
     - title_short^750
@@ -631,7 +620,6 @@ AllFields:
     - series^50
     - series2^30
     - author^300
-    - author_fuller^150
     - author2^50
     - contents^10
     - topic_unstemmed^550
@@ -646,24 +634,24 @@ AllFields:
     - key_word_chains
     - key_word_chain_bag
   QueryFields:
-    0:
-      0:
-        - OR
-        - 50
-      title_short:
-        - [onephrase, 750]
-      title_full_unstemmed:
-        - [onephrase, 600]
-        - [and, 500]
-      title_full:
-        - [onephrase, 400]
-      title:
-        - [onephrase, 300]
-        - [and, 250]
-      title_alt:
-        - [and, 200]
-      title_new:
-        - [and, 100]
+    # 0:
+    #   0:
+    #     - OR
+    #     - 50
+    title_short:
+      - [onephrase, 750]
+    title_full_unstemmed:
+      - [onephrase, 600]
+      - [and, 500]
+    title_full:
+      - [onephrase, 400]
+    title:
+      - [onephrase, 300]
+      - [and, 250]
+    title_alt:
+      - [and, 200]
+    title_new:
+      - [and, 100]
     series:
       - [and, 50]
     series2:
@@ -671,18 +659,12 @@ AllFields:
     author:
       - [onephrase, 300]
       - [and, 250]
-    author_fuller:
-      - [onephrase, 150]
-      - [and, 125]
     author2:
       - [and, 50]
     author_additional:
       - [and, 50]
     contents:
       - [and, 10]
-    topic_unstemmed:
-      - [onephrase, 550]
-      - [and, 500]
     topic_all:
       - [onephrase, 500]
     geographic:
@@ -856,8 +838,8 @@ Keywordchains:
   DismaxFields:
     - key_word_chains_sorted
   QueryFields:
-    key_word_chain_sorted:
-    - [and, ~]
+    key_word_chains_sorted:
+      - [and, ~]
   DismaxParams:
     - ["defType", "multiLanguageQueryParser"]
     - ["mm", "100%"]
