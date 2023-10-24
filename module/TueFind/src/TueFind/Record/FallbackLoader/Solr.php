@@ -4,6 +4,7 @@ namespace TueFind\Record\FallbackLoader;
 
 use VuFindSearch\Service;
 use VuFindSearch\Query\Query;
+use VuFindSearch\Command\SearchCommand;
 
 class Solr implements \VuFind\Record\FallbackLoader\FallbackLoaderInterface {
 
@@ -54,8 +55,10 @@ class Solr implements \VuFind\Record\FallbackLoader\FallbackLoaderInterface {
     protected function fetchRecordCandidates($id)
     {
         $id = addcslashes($id, '"');
-        $query = new Query('ids:"' . $id . '"', 'AllFields');
-        $result = $this->searchService->search('Solr', $query);
-        return $result->getRecords();
+        $query = new Query("ids:\"$id\"", null, "AllFields");
+
+        $searchCommd = new SearchCommand('Solr', $query);
+        $result = $this->searchService->invoke($searchCommd)->getResult()->getRecords();
+        return $result;
     }
 }

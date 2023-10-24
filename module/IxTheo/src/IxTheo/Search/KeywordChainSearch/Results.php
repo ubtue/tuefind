@@ -1,6 +1,7 @@
 <?php
 
 namespace IxTheo\Search\KeywordChainSearch;
+use VuFindSearch\Command\SearchCommand;
 
 class Results extends \VuFind\Search\Solr\Results
 {
@@ -26,13 +27,15 @@ class Results extends \VuFind\Search\Solr\Results
         $params->set("facet.limit", $limit);
 
         // Perform the search:
-        $collection = $this->getSearchService()->search($this->backendId, $query, 0, 0, $params);
+        // $collection = $this->getSearchService()->search($this->backendId, $query, 0, 0, $params);
+        $searchCommand = new SearchCommand($this->backendId,  $query, 0, 0, $params);
+        $collection = $this->getSearchService()->invoke($searchCommand)->getResult();
 
         $this->responseFacets = $collection->getFacets();
 
         // Generate language extension and remove language subcode
-        $lang =  implode($params->get("lang"));
-        $lang_ext = $lang ? "_" . explode("-", $lang)[0] : "_de";
+        $lang = $this->getOptions()->getTranslatorLocale();
+        $lang_ext = '_' . ($lang ? $lang : "de");
 
         $facet = 'key_word_chains_sorted' . $lang_ext;
         $facet_count = $facet . '-count';

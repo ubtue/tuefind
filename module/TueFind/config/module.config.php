@@ -208,7 +208,7 @@ $config = [
             'TueFind\Controller\AuthorityController' => 'VuFind\Controller\AbstractBaseFactory',
             'TueFind\Controller\CartController' => 'VuFind\Controller\CartControllerFactory',
             'TueFind\Controller\FeedbackController' => 'VuFind\Controller\AbstractBaseFactory',
-            'TueFind\Controller\FindbuchProxyController' => 'VuFind\Controller\AbstractBaseFactory',
+            'TueFind\Controller\FindbuchProxyController' => 'TueFind\Controller\AbstractProxyControllerFactory',
             'TueFind\Controller\FulltextSnippetProxyController' => '\TueFind\Controller\FulltextSnippetProxyControllerFactory',
             'TueFind\Controller\MyResearchController' => 'VuFind\Controller\AbstractBaseFactory',
             'TueFind\Controller\PDAProxyController' => 'VuFind\Controller\AbstractBaseFactory',
@@ -220,7 +220,7 @@ $config = [
             'TueFind\Controller\Search2recordController' => 'VuFind\Controller\AbstractBaseFactory',
             'TueFind\Controller\Search3recordController' => 'VuFind\Controller\AbstractBaseFactory',
             'TueFind\Controller\Search3Controller' => 'VuFind\Controller\AbstractBaseFactory',
-            'TueFind\Controller\WikidataProxyController' => 'VuFind\Controller\AbstractBaseFactory',
+            'TueFind\Controller\WikidataProxyController' => 'TueFind\Controller\AbstractProxyControllerFactory',
         ],
         'initializers' => [
             'TueFind\ServiceManager\ServiceInitializer',
@@ -278,7 +278,7 @@ $config = [
             'TueFind\Db\Row\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'TueFind\Db\Table\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'TueFind\Form\Form' => 'TueFind\Form\FormFactory',
-            'TueFind\Http\CachedDownloader' => 'TueFind\Http\CachedDownloaderFactory',
+            'TueFind\Http\CachingDownloader' => 'VuFind\Http\CachingDownloaderFactory',
             'TueFind\Mailer\Mailer' => 'TueFind\Mailer\Factory',
             'TueFind\MetadataVocabulary\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'TueFind\Recommend\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
@@ -317,6 +317,7 @@ $config = [
             'VuFind\DbTablePluginManager' => 'TueFind\Db\Table\PluginManager',
             'VuFind\Db\Table\PluginManager' => 'TueFind\Db\Table\PluginManager',
             'VuFind\Form\Form' => 'TueFind\Form\Form',
+            'VuFind\Http\CachingDownloader' => 'TueFind\Http\CachingDownloader',
             'VuFind\Mailer\Mailer' => 'TueFind\Mailer\Mailer',
             'VuFind\MetadataVocabulary\PluginManager' => 'TueFind\MetadataVocabulary\PluginManager',
             'VuFind\RecommendPluginManager' => 'TueFind\Recommend\PluginManager',
@@ -353,6 +354,7 @@ $config = [
 ];
 
 $recordRoutes = [];
+$nonTabRecordActions = ['Publish'];
 $dynamicRoutes = [];
 $staticRoutes = [
     'AdminFrontend/ShowAdmins',
@@ -360,6 +362,7 @@ $staticRoutes = [
     'AdminFrontend/ShowUserAuthorityHistory',
     'AdminFrontend/ShowUserPublications',
     'AdminFrontend/ShowUserPublicationStatistics',
+    'MyResearch/Newsletter',
     'MyResearch/Publications',
     'MyResearch/RssFeedSettings',
     'MyResearch/RssFeedPreview',
@@ -367,8 +370,11 @@ $staticRoutes = [
     'Search3/Home',
     'Search3/Results',
     'Search3/FacetList',
-    'Search3/Versions'];
-$routeGenerator = new \TueFind\Route\RouteGenerator();
+    'Search3/Versions',
+];
+
+$routeGenerator = new \VuFind\Route\RouteGenerator();
+$routeGenerator->addNonTabRecordActions($config, $nonTabRecordActions);
 $routeGenerator->addRecordRoutes($config, $recordRoutes);
 $routeGenerator->addDynamicRoutes($config, $dynamicRoutes);
 $routeGenerator->addStaticRoutes($config, $staticRoutes);

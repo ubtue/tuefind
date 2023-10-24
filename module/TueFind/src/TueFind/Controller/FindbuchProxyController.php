@@ -56,7 +56,7 @@ class FindbuchProxyController extends AbstractProxyController
             $apiUrlFull .= '-' . $exclusion . '/';
         $apiUrlFull .= self::API_URL_PARAMS . urlencode($gndNumber);
 
-        $response = $this->cachedDownloader->download($apiUrlFull);
+        $response = $this->cachingDownloader->download($apiUrlFull);
         return $response;
     }
 
