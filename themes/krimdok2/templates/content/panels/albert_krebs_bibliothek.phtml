@@ -8,9 +8,10 @@
     <div class="col-lg-12 mini-search-block">
         <div class="input-group">
             <form action="<?=$this->url("search-results", [], [])?>" method="get">
-                <input type="hidden" name="lookfor" value="rs:kreb">
+                <input type="hidden" name="filter[]" value='author_facet:"Krebs, Albert"'>
+                <input type="hidden" name="type" value="AllFields">
                 <div class="input-group">
-                    <input type="text" class="form-control" value="" placeholder="Search for...">
+                    <input type="text" class="form-control" name="lookfor" value="" placeholder="Search for...">
                     <span class="input-group-btn">
                         <button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button>
                     </span>
