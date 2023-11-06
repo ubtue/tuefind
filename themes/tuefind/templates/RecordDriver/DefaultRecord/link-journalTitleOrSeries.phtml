@@ -1,0 +1,10 @@
+<?php
+// combine journaltitle + series for this one
+// URL is built similar to the advanced search
+$searchRoute = $this->searchOptions($this->driver->getSourceIdentifier())->getSearchAction();
+$url = $this->url($searchRoute) . '?join=OR';
+$cond = [];
+$cond[] = 'lookfor0[]=' . urlencode($this->lookfor) . '&amp;type0[]=Series&amp;bool0[]=AND';
+$cond[] = 'lookfor1[]=' . urlencode($this->lookfor) . '&amp;type1[]=JournalTitle&amp;bool1[]=AND';
+$url .= '&amp;' . implode('&amp;', $cond);
+echo $url;
