@@ -7,8 +7,6 @@ use VuFind\Exception\Mail as MailException;
 
 class FeedbackController extends \VuFind\Controller\FeedbackController
 {
-    protected $overwritableFields = ['title'];
-
     /**
      * Handles rendering and submit of dynamic forms.
      * Form configurations are specified in FeedbackForms.yaml.
@@ -25,6 +23,7 @@ class FeedbackController extends \VuFind\Controller\FeedbackController
         $user = $this->getUser();
 
         $form = $this->serviceLocator->get($this->formClass);
+        $prefill = $this->params()->fromQuery();
         $params = [];
         if ($refererHeader = $this->getRequest()->getHeader('Referer')) {
             $params['referrer'] = $refererHeader->getFieldValue();
@@ -32,7 +31,7 @@ class FeedbackController extends \VuFind\Controller\FeedbackController
         if ($userAgentHeader = $this->getRequest()->getHeader('User-Agent')) {
             $params['userAgent'] = $userAgentHeader->getFieldValue();
         }
-        $form->setFormId($formId, $params);
+        $form->setFormId($formId, $params, $prefill);
 
         if (!$form->isEnabled()) {
             throw new \VuFind\Exception\Forbidden("Form '$formId' is disabled");
@@ -50,7 +49,6 @@ class FeedbackController extends \VuFind\Controller\FeedbackController
         $form->setData($params->fromPost());
 
         if (!$this->formWasSubmitted('submit', $view->useCaptcha)) {
-            $form = $this->prefillUrlInfo($form);
             $form = $this->prefillUserInfo($form, $user);
             return $view;
         }
@@ -165,15 +163,6 @@ class FeedbackController extends \VuFind\Controller\FeedbackController
             return [true, null];
         } catch (MailException $e) {
             return [false, $e->getMessage()];
-        }
-    }
-
-    public function prefillUrlInfo($form) {
-        foreach ($this->overwritableFields as $overwritableField) {
-            $value = $this->params()->fromQuery($overwritableField);
-            if ($value != null) {
-                $form->setData([$overwritableField => $value]);
-            }
         }
         return $form;
     }
