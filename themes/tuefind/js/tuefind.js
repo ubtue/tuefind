@@ -350,7 +350,7 @@ var TueFind = {
                                 if (filter[accessURL] != 1) {
                                     if (replacement)
                                         replacement += '<br/>';
-                                    replacement += '<a href="' + accessURL + '"><i class="fa fa-external-link"></i> '
+                                    replacement += '<a href="' + accessURL + '" target="_blank"><i class="fa fa-external-link"></i> '
                                             + available_online_text + '.</a>';
                                     filter[accessURL] = 1;
                                 }
