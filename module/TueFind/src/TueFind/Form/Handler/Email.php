@@ -17,12 +17,6 @@ class Email extends \VuFind\Form\Handler\Email {
             compact('fields')
         );
 
-        // TueFind: Add additional information
-        $emailMessage .= "----------------------------------------------------------------------------------------------\n";
-        $emailMessage .= "Aktuelle Seite: " . $params->fromHeader("Referer")->getUri() . "\n";
-        $emailMessage .= "Browser:        " . htmlentities($params->fromHeader("User-Agent")->getFieldValue()) . "\n";
-        $emailMessage .= "----------------------------------------------------------------------------------------------\n\n";
-
         [$senderName, $senderEmail] = $this->getSender($form);
 
         $replyToName = $params->fromPost(
