@@ -22,13 +22,25 @@
 
   <li>
     <?php if($showPublicationLink):?>
-      <a class="toolbar-btn btn-type-publish" target="_blank" href="<?=$dspaceLink;?>"><?=$this->transEsc('publication_file_button')?></a>
+      <a class="toolbar-btn" target="_blank" href="<?=$dspaceLink;?>">
+        <span class="icon icon--font fa fa-upload" role="img" aria-hidden="true"></span>
+        <?=$this->transEsc('publication_file_button')?>
+      </a>
     <?php elseif($showPublishButton): ?>
-      <a class="toolbar-btn btn-type-publish" href="<?=$this->url('myresearch-publish', ['record_id' => $recordId])?>"><?=$this->transEsc('publication_request_button')?></a>
+      <a class="toolbar-btn" href="<?=$this->url('myresearch-publish', ['record_id' => $recordId])?>">
+        <span class="icon icon--font fa fa-upload" role="img" aria-hidden="true"></span>
+        <?=$this->transEsc('publication_request_button')?>
+      </a>
     <?php elseif($showSecondaryAuthorsButton):?>
-      <a class="toolbar-btn btn-type-publish" data-lightbox href="<?=$this->url('help-home')?>?topic=publicationSecondaryAuthors" rel="nofollow"><?=$this->transEsc('publication_request_button')?></a>
+      <a class="toolbar-btn" data-lightbox href="<?=$this->url('help-home')?>?topic=publicationSecondaryAuthors" rel="nofollow">
+        <span class="icon icon--font fa fa-upload" role="img" aria-hidden="true"></span>
+        <?=$this->transEsc('publication_request_button')?>
+      </a>
     <?php else: ?>
-      <a class="toolbar-btn btn-type-publish" data-lightbox href="<?=$this->url('help-home')?>?topic=publication" rel="nofollow"><?=$this->transEsc('publication_request_button')?></a>
+      <a class="toolbar-btn" data-lightbox href="<?=$this->url('help-home')?>?topic=publication" rel="nofollow">
+        <span class="icon icon--font fa fa-upload" role="img" aria-hidden="true"></span>
+        <?=$this->transEsc('publication_request_button')?>
+      </a>
     <?php endif; ?>
   </li>
 <?php endif;?>

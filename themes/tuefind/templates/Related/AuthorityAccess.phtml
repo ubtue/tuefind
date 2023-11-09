@@ -6,7 +6,10 @@
       <?php if($userAlreadyMadeAuthorityRequest): ?>
         <?=$this->translate('authority_access_state_exists_other', ['%%email%%' => '<a href="mailto:' . ($this->tuefind()->getConfig()->Publication->email ?? $this->tuefind()->getConfig('config')->Site->email) . '">' . ($this->tuefind()->getConfig()->Publication->email ?? $this->tuefind()->getConfig('config')->Site->email) . '</a>'])?>
       <?php else: ?>
-        <a class="save-record toolbar-btn btn-type-save" rel="nofollow" href="<?=$this->url('authority-request-access', ['authority_id' => $this->driver->getUniqueId()])?>" data-lightbox=""><?=$this->transEsc('authority_access_request_button')?></a>
+        <a class="save-record toolbar-btn btn-type-save" rel="nofollow" href="<?=$this->url('authority-request-access', ['authority_id' => $this->driver->getUniqueId()])?>" data-lightbox="">
+          <span class="icon icon--font fa fa-star" role="img" aria-hidden="true"></span>
+          <?=$this->transEsc('authority_access_request_button')?>
+        </a>
       <?php endif;?>
     <?php elseif ($userAccess['availability'] == 'mine'): ?>
       <?php if ($userAccess['access_state'] == 'requested'): ?>
@@ -19,10 +22,16 @@
       <?php endif;?>
     <?php elseif ($userAccess['availability'] == 'other'): ?>
       <?php if($this->accountCapabilities()->getPublicationSetting() === 'enabled'): ?>
-        <span class="save-record toolbar-btn btn-type-save"><?=$this->transEsc('authority_access_state_unavailable')?></span>
+        <span class="save-record toolbar-btn btn-type-save">
+          <span class="icon icon--font fa fa-star" role="img" aria-hidden="true"></span>
+          <?=$this->transEsc('authority_access_state_unavailable')?>
+        </span>
       <?php endif;?>
     <?php endif;?>
   <?php else:?>
-    <a class="save-record toolbar-btn btn-type-save" rel="nofollow" href="<?=$this->url('authority-request-access', ['authority_id' => $this->driver->getUniqueId()])?>" data-lightbox=""><?=$this->transEsc('authority_access_request_button')?></a>
+    <a class="save-record toolbar-btn btn-type-save" rel="nofollow" href="<?=$this->url('authority-request-access', ['authority_id' => $this->driver->getUniqueId()])?>" data-lightbox="">
+      <span class="icon icon--font fa fa-star" role="img" aria-hidden="true"></span>
+      <?=$this->transEsc('authority_access_request_button')?>
+    </a>
   <?php endif;?>
 </div>
