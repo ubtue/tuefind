@@ -607,17 +607,21 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
 
         $identifier = 'Solr';
 
-        $query = new Query($this->getTitlesByQueryParams($driver), null, 'AllField');
+        $query = new \VuFindSearch\Query\Query($this->getTitlesByQueryParams($driver), 'AllFields');
         $searchCommand = new SearchCommand($identifier, $query,
-            0 , 0, new ParamBag($params));
+            0, 0, new ParamBag($params));
         $publishingData = $this->searchService->invoke($searchCommand)->getResult();
-
         $allFacets = $publishingData->getFacets();
-        // $publishFacet = $allFacets->getFieldFacets();
         $publishArray = $allFacets['publishDate'];
         $publishDates = array_keys($publishArray);
 
-        $aboutArray = $allFacets['publishDate'];
+        $query = new \VuFindSearch\Query\Query($this->getTitlesAboutQueryParamsChartDate($driver), 'AllFields');
+        $searchCommand = new SearchCommand($identifier, $query,
+            0, 0, new ParamBag($params));
+        $aboutData = $this->searchService->invoke($searchCommand)->getResult();
+
+        $allFacetsAbout = $aboutData->getFacets();
+        $aboutArray = $allFacetsAbout['publishDate'];
 
         $aboutDates = array_keys($aboutArray);
 
