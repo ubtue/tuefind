@@ -653,9 +653,14 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
      * This will be overridden in the corresponding IxTheo View Helper to
      * consider the correct fields based on the translatorLocale.
      */
-    public function getTopicsCloudFieldname($translatorLocale=null): string
+    protected function getTopicsCloudFieldname($translatorLocale=null): string
     {
         return 'topic_cloud';
+    }
+
+    protected function getTopicsCloudField($row, $language=null): array {
+        $key = $this->getTopicsCloudFieldname($language);
+        return array_unique($row[$key] ?? []);
     }
 
     public function getTopicsData(AuthorityRecordDriver &$driver): array
@@ -691,7 +696,7 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
 
         $countedTopics = [];
         foreach ($result->getResponseDocs() as $oneRecord) {
-            $keywords = $this->getFieldTopicCloud($oneRecord, $translatorLocale);
+            $keywords = $this->getTopicsCloudField($oneRecord, $translatorLocale);
             foreach ($keywords as $keyword) {
                 if(strpos($keyword, "\\") !== false) {
                     $keyword = str_replace("\\", "", $keyword);
@@ -755,11 +760,6 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
             $mainTopicsArray[0]['topicNumber'] = $settings['maxNumber'];
         }
         return [$mainTopicsArray, $settings];
-    }
-
-    protected function getFieldTopicCloud($row, $language=null): array {
-        $key = 'topic_cloud';
-        return array_unique($row[$key] ?? []);
     }
 
     public function userHasRightsOnRecord(\VuFind\Db\Row\User $user, TitleRecordDriver &$titleRecord): bool

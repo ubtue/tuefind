@@ -4,18 +4,11 @@ namespace IxTheo\View\Helper\TueFind;
 
 class Authority extends \TueFind\View\Helper\TueFind\Authority {
 
-    public function getTopicsCloudFieldname($translatorLocale=null): string
+    protected function getTopicsCloudFieldname($translatorLocale=null): string
     {
-        return 'topic_cloud_' . $translatorLocale;
-    }
-
-    public function getFieldTopicCloud($row, $language=null): array {
-        $key = 'topic_cloud';
-        if(isset($row) && !empty($row)) {
-            if($language !== null) {
-                $key = 'topic_cloud_'.$language;
-            }
-        }
-        return array_unique($row[$key] ?? []);
+        if ($translatorLocale == null)
+            return 'topic_cloud';
+        else
+            return 'topic_cloud_' . $translatorLocale;
     }
 }
