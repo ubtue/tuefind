@@ -687,11 +687,11 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
         $query = new \VuFindSearch\Query\Query($this->getTitlesByQueryParams($driver), null, $settings['searchType']);
         $searchCommand = new SearchCommand($identifier, $query,
             0 , $settings['maxTopicRows'], new ParamBag($settings['paramBag']));
-        $titleRecords = $this->searchService->invoke($searchCommand)->getResult();
+        $result = $this->searchService->invoke($searchCommand)->getResult();
 
         $countedTopics = [];
-        foreach ($titleRecords->getResponseDocs() as $titleRecord) {
-            $keywords = $this->getFieldTopicCloud($titleRecord, $translatorLocale);
+        foreach ($result->getResponseDocs() as $oneRecord) {
+            $keywords = $this->getFieldTopicCloud($oneRecord, $translatorLocale);
             foreach ($keywords as $keyword) {
                 if(strpos($keyword, "\\") !== false) {
                     $keyword = str_replace("\\", "", $keyword);
@@ -759,11 +759,6 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
 
     private function getFieldTopicCloud($row, $language=null): array {
         $key = 'topic_cloud';
-        if(isset($row) && !empty($row)) {
-            if($language !== null) {
-                $key = 'topic_cloud_'.$language;
-            }
-        }
         return array_unique($row[$key] ?? []);
     }
 
