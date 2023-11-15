@@ -653,9 +653,14 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
      * This will be overridden in the corresponding IxTheo View Helper to
      * consider the correct fields based on the translatorLocale.
      */
-    public function getTopicsCloudFieldname($translatorLocale=null): string
+    protected function getTopicsCloudFieldname($translatorLocale=null): string
     {
         return 'topic_cloud';
+    }
+
+    protected function getTopicsCloudField($row, $language=null): array {
+        $key = $this->getTopicsCloudFieldname($language);
+        return array_unique($row[$key] ?? []);
     }
 
     public function getTopicsData(AuthorityRecordDriver &$driver): array
@@ -684,15 +689,14 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
         //       to reduce the result size and avoid out of memory problems.
         //       Example: Martin Luther, 133813363
 
-        $query = new Query($this->getTitlesByQueryParams($driver), null, $settings['searchType']);
+        $query = new \VuFindSearch\Query\Query($this->getTitlesByQueryParams($driver), null, $settings['searchType']);
         $searchCommand = new SearchCommand($identifier, $query,
             0 , $settings['maxTopicRows'], new ParamBag($settings['paramBag']));
-        $titleRecords = $this->searchService->invoke($searchCommand);
+        $result = $this->searchService->invoke($searchCommand)->getResult();
 
         $countedTopics = [];
-        foreach ($titleRecords as $titleRecord) {
-
-            $keywords = $titleRecord->getTopicsForCloud($translatorLocale);
+        foreach ($result->getResponseDocs() as $oneRecord) {
+            $keywords = $this->getTopicsCloudField($oneRecord, $translatorLocale);
             foreach ($keywords as $keyword) {
                 if(strpos($keyword, "\\") !== false) {
                     $keyword = str_replace("\\", "", $keyword);
