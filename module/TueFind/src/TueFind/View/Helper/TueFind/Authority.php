@@ -757,7 +757,7 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
         return [$mainTopicsArray, $settings];
     }
 
-    private function getFieldTopicCloud($row, $language=null): array {
+    protected function getFieldTopicCloud($row, $language=null): array {
         $key = 'topic_cloud';
         return array_unique($row[$key] ?? []);
     }
