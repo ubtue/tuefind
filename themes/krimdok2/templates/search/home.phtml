@@ -1,16 +1,16 @@
 <?php
-    // Set page title.
-    $this->headTitle($this->translate('KrimDok'));
+  // Set page title.
+  $this->headTitle($this->translate('Search Home'));
 
-    // KrimDok: Searchbox will always be shown, so do not override it (Part 1)
-    // $this->layout()->searchbox = false;
+  // KrimDok: Searchbox will always be shown, so do not override it (Part 1)
+  // $this->layout()->searchbox = false;
 
-    // Set default value if necessary:
-    if (!isset($this->searchClassId)) {
-      $this->searchClassId = 'Solr';
-    }
+  // Set default value if necessary:
+  if (!isset($this->searchClassId)) {
+    $this->searchClassId = 'Solr';
+  }
 
-    $this->layout()->breadcrumbs = false;
+  $this->layout()->breadcrumbs = false;
 ?>
 
 <!-- KrimDok: Searchbox will always be shown, so do not override it (Part 2) -->
