@@ -684,15 +684,14 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
         //       to reduce the result size and avoid out of memory problems.
         //       Example: Martin Luther, 133813363
 
-        $query = new Query($this->getTitlesByQueryParams($driver), null, $settings['searchType']);
+        $query = new \VuFindSearch\Query\Query($this->getTitlesByQueryParams($driver), null, $settings['searchType']);
         $searchCommand = new SearchCommand($identifier, $query,
             0 , $settings['maxTopicRows'], new ParamBag($settings['paramBag']));
-        $titleRecords = $this->searchService->invoke($searchCommand);
+        $titleRecords = $this->searchService->invoke($searchCommand)->getResult();
 
         $countedTopics = [];
-        foreach ($titleRecords as $titleRecord) {
-
-            $keywords = $titleRecord->getTopicsForCloud($translatorLocale);
+        foreach ($titleRecords->getResponseDocs() as $titleRecord) {
+            $keywords = $this->getFieldTopicCloud($titleRecord, $translatorLocale);
             foreach ($keywords as $keyword) {
                 if(strpos($keyword, "\\") !== false) {
                     $keyword = str_replace("\\", "", $keyword);
@@ -756,6 +755,16 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
             $mainTopicsArray[0]['topicNumber'] = $settings['maxNumber'];
         }
         return [$mainTopicsArray, $settings];
+    }
+
+    private function getFieldTopicCloud($row, $language=null): array {
+        $key = 'topic_cloud';
+        if(isset($row) && !empty($row)) {
+            if($language !== null) {
+                $key = 'topic_cloud_'.$language;
+            }
+        }
+        return array_unique($row[$key] ?? []);
     }
 
     public function userHasRightsOnRecord(\VuFind\Db\Row\User $user, TitleRecordDriver &$titleRecord): bool
