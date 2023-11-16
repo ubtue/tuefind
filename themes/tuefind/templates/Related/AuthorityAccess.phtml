@@ -1,5 +1,5 @@
 <?php $userAccess = $this->tuefind()->getUserAccessState($this->driver->getUniqueId(), $this->user->id ?? null);?>
-<div>
+<div class="action-toolbar">
   <?php if ($this->user != false):
     $userAlreadyMadeAuthorityRequest = $this->tuefind()->userAlreadyMadeAuthorityRequest($this->user->id);?>
     <?php if ($userAccess['availability'] == 'free'): ?>
@@ -8,7 +8,7 @@
       <?php else: ?>
         <a class="save-record toolbar-btn btn-type-save" rel="nofollow" href="<?=$this->url('authority-request-access', ['authority_id' => $this->driver->getUniqueId()])?>" data-lightbox="">
           <span class="icon icon--font fa fa-star" role="img" aria-hidden="true"></span>
-          <?=$this->transEsc('authority_access_request_button')?>
+          <span><?=$this->transEsc('authority_access_request_button')?></span>
         </a>
       <?php endif;?>
     <?php elseif ($userAccess['availability'] == 'mine'): ?>
@@ -24,14 +24,14 @@
       <?php if($this->accountCapabilities()->getPublicationSetting() === 'enabled'): ?>
         <span class="save-record toolbar-btn btn-type-save">
           <span class="icon icon--font fa fa-star" role="img" aria-hidden="true"></span>
-          <?=$this->transEsc('authority_access_state_unavailable')?>
+          <span><?=$this->transEsc('authority_access_state_unavailable')?></span>
         </span>
       <?php endif;?>
     <?php endif;?>
   <?php else:?>
     <a class="save-record toolbar-btn btn-type-save" rel="nofollow" href="<?=$this->url('authority-request-access', ['authority_id' => $this->driver->getUniqueId()])?>" data-lightbox="">
       <span class="icon icon--font fa fa-star" role="img" aria-hidden="true"></span>
-      <?=$this->transEsc('authority_access_request_button')?>
+      <span><?=$this->transEsc('authority_access_request_button')?></span>
     </a>
   <?php endif;?>
 </div>

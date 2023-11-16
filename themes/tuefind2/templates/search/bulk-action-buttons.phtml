@@ -15,7 +15,7 @@
           <li>
             <button id="ribbon-email" class="toolbar-btn btn-type-email" type="submit" name="email" value="1" title="<?=$this->transEsc('bookbag_email_selected')?>"<?php if ($this->formAttr): ?> form="<?=$this->escapeHtmlAttr($this->formAttr) ?>"<?php endif; ?>>
               <?=$this->icon('send-email') ?>
-              <?=$this->transEsc('Email')?>
+              <span><?=$this->transEsc('Email')?></span>
             </button>
           </li>
         <?php endif; ?>
