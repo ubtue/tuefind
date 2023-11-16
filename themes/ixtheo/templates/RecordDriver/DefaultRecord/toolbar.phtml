@@ -74,13 +74,15 @@
     <?php if ($this->accountCapabilities()->getSubscriptionSetting() === 'enabled'): ?>
       <?php if ($this->IxTheo()->isRecordSubscribed($this->driver) || $this->IxTheo()->isRecordSubscribedViaBundle($this->driver)): ?>
         <li>
-          <a class="subscribe-record toolbar-btn btn-type-unsubscribe" data-lightbox href="<?=$this->recordLinker()->getActionUrl($this->driver, 'Subscribe')?>" rel="nofollow">
+          <a class="subscribe-record toolbar-btn" data-lightbox href="<?=$this->recordLinker()->getActionUrl($this->driver, 'Subscribe')?>" rel="nofollow">
+            <span class="icon icon--font fa fa-bell" role="img" aria-hidden="true"></span>
             <span><?=$this->transEsc('Unsubscribe')?></span>
           </a>
         </li>
       <?php elseif ($this->driver->isSubscribable()): ?>
         <li>
-          <a class="subscribe-record toolbar-btn btn-type-subscribe" data-lightbox href="<?=$this->recordLinker()->getActionUrl($this->driver, 'Subscribe')?>" rel="nofollow">
+          <a class="subscribe-record toolbar-btn" data-lightbox href="<?=$this->recordLinker()->getActionUrl($this->driver, 'Subscribe')?>" rel="nofollow">
+            <span class="icon icon--font fa fa-bell" role="img" aria-hidden="true"></span>
             <span><?=$this->transEsc('Subscribe')?></span>
           </a>
         </li>

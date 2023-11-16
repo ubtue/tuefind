@@ -10,7 +10,7 @@
       <li role="none">
         <a class="cite-record toolbar-btn btn-type-cite" data-lightbox href="<?=$this->recordLinker()->getActionUrl($this->driver, 'Cite')?>" rel="nofollow">
           <span class="icon icon--font fa fa-asterisk" role="img" aria-hidden="true"></span>
-          <?=$this->transEsc('Cite this')?>
+          <span><?=$this->transEsc('Cite this')?></span>
         </a>
       </li>
     <?php endif; ?>
@@ -19,7 +19,7 @@
       <li role="none">
         <a class="sms-record toolbar-btn btn-type-phone" data-lightbox href="<?=$this->recordLinker()->getActionUrl($this->driver, 'SMS')?>" rel="nofollow">
           <span class="icon icon--font fa fa-phone" role="img" aria-hidden="true"></span>
-          <?=$this->transEsc('Text this')?>
+          <span><?=$this->transEsc('Text this')?></span>
         </a>
       </li>
     <?php endif; ?>
@@ -27,14 +27,14 @@
     <li role="none">
       <a class="mail-record toolbar-btn btn-type-email" data-lightbox href="<?=$this->recordLinker()->getActionUrl($this->driver, 'Email')?>" rel="nofollow">
         <span class="icon icon--font fa fa-envelope" role="img" aria-hidden="true"></span>  
-        <?=$this->transEsc('Email this')?>
+        <span><?=$this->transEsc('Email this')?></span>
       </a>
     </li>
 
     <li>
       <a class="print-record toolbar-btn btn-type-print" href="<?=$this->url()->addQueryParameters(['print' => true])?>" rel="nofollow">
         <span class="icon icon--font fa fa-print" role="img" aria-hidden="true"></span>
-        <?=$this->transEsc('Print')?>
+        <span><?=$this->transEsc('Print')?></span>
       </a>
     </li>
 
@@ -43,7 +43,7 @@
       <li role="none" class="dropdown">
         <a class="export-toggle toolbar-btn btn-type-export dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" href="<?=$this->recordLinker()->getActionUrl($this->driver, 'Export')?>" rel="nofollow" aria-expanded="false" aria-controls="export-options">
           <span class="icon icon--font fa fa-external-link" role="img" aria-hidden="true"></span>
-          <?=$this->transEsc('Export Record') ?>
+          <span><?=$this->transEsc('Export Record') ?></span>
         </a>
         <ul class="dropdown-menu" id="export-options" role="menu">
           <?php foreach ($exportFormats as $exportFormat): ?>
@@ -58,7 +58,7 @@
         <?php if ($this->permission()->allowDisplay('feature.Favorites')): ?>
           <a class="save-record toolbar-btn btn-type-save" data-lightbox href="<?=$this->recordLinker()->getActionUrl($this->driver, 'Save')?>" rel="nofollow">
             <span class="icon icon--font fa fa-star" role="img" aria-hidden="true"></span>
-            <?=$this->transEsc('Add to favorites')?>
+            <span><?=$this->transEsc('Add to favorites')?></span>
           </a>
         <?php elseif ($block = $this->permission()->getAlternateContent('feature.Favorites')): ?>
           <?=$block?>
@@ -73,9 +73,19 @@
     <!-- IxTheo: Subscribe button -->
     <?php if ($this->accountCapabilities()->getSubscriptionSetting() === 'enabled'):?>
       <?php if ($this->IxTheo()->isRecordSubscribed($this->driver) || $this->IxTheo()->isRecordSubscribedViaBundle($this->driver)): ?>
-        <li><a class="subscribe-record toolbar-btn btn-type-unsubscribe" data-lightbox href="<?=$this->recordLinker()->getActionUrl($this->driver, 'Subscribe')?>" rel="nofollow"><?=$this->transEsc('Unsubscribe')?></a></li>
+        <li>
+          <a class="subscribe-record toolbar-btn" data-lightbox href="<?=$this->recordLinker()->getActionUrl($this->driver, 'Subscribe')?>" rel="nofollow">
+            <span class="icon icon--font fa fa-bell" role="img" aria-hidden="true"></span>
+            <?=$this->transEsc('Unsubscribe')?>
+          </a>
+        </li>
       <?php elseif ($this->driver->isSubscribable()): ?>
-        <li><a class="subscribe-record toolbar-btn btn-type-subscribe" data-lightbox href="<?=$this->recordLinker()->getActionUrl($this->driver, 'Subscribe')?>" rel="nofollow"><?=$this->transEsc('Subscribe')?></a></li>
+        <li>
+          <a class="subscribe-record toolbar-btn" data-lightbox href="<?=$this->recordLinker()->getActionUrl($this->driver, 'Subscribe')?>" rel="nofollow">
+            <span class="icon icon--font fa fa-bell" role="img" aria-hidden="true"></span>
+            <?=$this->transEsc('Subscribe')?>
+          </a>
+        </li>
       <?php endif; ?>
     <?php endif; ?>
 
