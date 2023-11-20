@@ -1,36 +1,39 @@
 <?php
-    // Set default value if necessary:
-    if (!isset($this->searchClassId)) {
+    $tuefind = $this->tuefind();
+    // Initialize from current search (if available) or defaults:
+    if ($results = ($this->results ?? $this->searchMemory()->getCurrentSearch())) {
+      $params = $results->getParams();
+      $this->searchClassId = $params->getSearchClassId();
+      $hiddenFilters = $params->getHiddenFilters();
+      $lastSort = $params->getSort();
+      $lastLimit = $params->getLimit();
+      $options = $results->getOptions();
+    } else {
+      if (!isset($this->searchClassId)) {
         $config = $this->config()->get('config');
         $this->searchClassId = $config->Site->defaultSearchBackend ?? 'Solr';
+        if (preg_match('"/Authority"i', $this->serverUrl(true)))
+          $this->searchClassId = 'SolrAuth';
+      }
+      $options = $this->searchOptions($this->searchClassId);
+      $hiddenFilters = $this->searchTabs()->getHiddenFilters($this->searchClassId, true, $this->ignoreHiddenFiltersInRequest ?? false);
+      $lastSort = $this->searchMemory()->getLastSort($this->searchClassId);
+      $lastLimit = $this->searchMemory()->getLastLimit($this->searchClassId);
+      $params = null;
     }
 
-    if (preg_match('"/Authority"i', $this->serverUrl(true)))
-        $this->searchClassId = 'SolrAuth';
     // Load search actions and settings (if any):
-    $options = $this->searchOptions($this->searchClassId);
     $handlers = $this->searchbox()->getHandlers(
-        $this->searchClassId, $this->searchIndex ?? null
+        $this->searchClassId,
+        $this->searchIndex ?? null
     );
     $handlerCount = count($handlers);
     $basicSearch = $this->searchbox()->combinedHandlersActive() ? 'combined-searchbox' : $options->getSearchAction();
     $searchHome = $options->getSearchHomeAction();
     $advSearch = $options->getAdvancedSearchAction();
-    $lastSort = $this->searchMemory()->getLastSort($this->searchClassId);
-    $lastLimit = $this->searchMemory()->getLastLimit($this->searchClassId);
-    $ignoreHiddenFilterMemory = true;
-    $ignoreHiddenFiltersInRequest = $this->ignoreHiddenFiltersInRequest ?? false;
-    $hiddenFilters = $this->searchTabs()->getHiddenFilters($this->searchClassId, $ignoreHiddenFilterMemory, $ignoreHiddenFiltersInRequest);
-    if (empty($hiddenFilters) && !$ignoreHiddenFilterMemory) {
-        $hiddenFilters = $this->searchMemory()->getLastHiddenFilters($this->searchClassId);
-        if (empty($hiddenFilters)) {
-            $hiddenFilters = $this->searchTabs()->getHiddenFilters($this->searchClassId);
-        }
-    }
-    $hiddenFilterParams = $this->searchTabs()->getCurrentHiddenFilterParams($this->searchClassId, $ignoreHiddenFilterMemory, '?');
 
     if (!isset($this->filterList) || !isset($this->checkboxFilters)) {
-        $params = $this->searchMemory()->getLastSearchParams($this->searchClassId);
+        $params ??= $this->searchMemory()->getLastSearchParams($this->searchClassId);
         $filterList = $params->getFilterList(true);
         $checkboxFilters = $params->getCheckboxFacets();
     } else {
@@ -38,20 +41,21 @@
         $checkboxFilters = is_array($this->checkboxFilters) ? $this->checkboxFilters : [];
     }
     $filterDetails = $this->searchbox()->getFilterDetails($filterList, $checkboxFilters);
-    $showFilters = $filterDetails && (isset($results) || $options->getRetainFilterSetting());
+    $showFilters = $filterDetails && ($results || $options->getRetainFilterSetting());
 ?>
 <?php $tabConfig = $this->searchTabs()->getTabConfig($this->searchClassId, $this->lookfor, $this->searchIndex, $this->searchType, $hiddenFilters); ?>
 <?php if ($this->searchType == 'advanced'): ?>
   <div class="navbar-form navbar-left flip">
-    <?php $tabs = $this->context($this)->renderInContext('search/searchTabs', ['searchTabs' => $tabConfig['tabs']]); ?>
+    <?php $tabs = $this->context($this)->renderInContext('search/searchTabs', ['searchTabs' => $tabConfig['tabs'], 'showCounts' => false]); ?>
     <?php if (!empty($tabs)): ?><?=$tabs ?><div class="tab-content clearfix"><?php endif; ?>
       <p class="adv_search_terms"><?=$this->transEsc("Your search terms")?>: "<strong><?=$this->escapeHtml($this->lookfor)?></strong>"</p>
       <p class="adv_search_links">
         <a href="<?=$this->url($advSearch)?>?edit=<?=$this->escapeHtmlAttr($this->searchId)?>"><?=$this->transEsc("Edit this Advanced Search")?></a> |
-        <a href="<?=$this->url($advSearch) . $hiddenFilterParams?>"><?=$this->transEsc("Start a new Advanced Search")?></a> |
-        <a href="<?=$this->url($searchHome) . $hiddenFilterParams?>"><?=$this->transEsc("Start a new Basic Search")?></a>
+        <a href="<?=$this->url($advSearch, [], ['query' => $hiddenFilters])?>"><?=$this->transEsc("Start a new Advanced Search")?></a> |
+        <a href="<?=$this->url($searchHome, [], ['query' => $hiddenFilters])?>"><?=$this->transEsc("Start a new Basic Search")?></a>
       </p>
-      <?=$this->context($this)->renderInContext(
+      <?=
+        $this->context($this)->renderInContext(
         'search/filters.phtml',
         [
           'params' => $params ?? null,
@@ -61,16 +65,16 @@
           'searchClassId' => $this->searchClassId,
           'searchType' => $this->searchType,
         ]
-      );?>
+        );
+      ?>
     <?php if (!empty($tabs)): ?></div><?php endif; ?>
   </div>
 <?php else: ?>
   <form id="searchForm" class="searchForm navbar-form navbar-left flip tuefind-event-searchForm-on-submit" method="get" action="<?=$this->url($basicSearch)?>" name="searchForm" autocomplete="off">
-    <?= $this->context($this)->renderInContext('search/searchTabs', ['searchTabs' => $tabConfig['tabs'], 'hiddenFilters' => $hiddenFilters]); ?>
+    <?= $this->context($this)->renderInContext('search/searchTabs', ['searchTabs' => $tabConfig['tabs'], 'hiddenFilters' => $hiddenFilters, 'showCounts' => $tabConfig['showCounts']]); ?>
     <?php $placeholder = $this->searchbox()->getPlaceholderText($tabConfig['selected']['id'] ?? null); ?>
 
     <span class="tf-clear-search-input-span ixtheo-form" data-x-position="124" data-x-position-lg="56" data-x-position-md="44" data-x-position-sm="30"><svg focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg></span>
-
     <section id="searchForm_row">
         <input id="searchForm_lookfor" class="searchForm_lookfor form-control search-query<?php if($this->searchbox()->autocompleteEnabled($this->searchClassId)):?> autocomplete searcher:<?=$this->escapeHtmlAttr($this->searchClassId) ?><?=$this->searchbox()->autocompleteAutoSubmit($this->searchClassId) ? ' ac-auto-submit' : '' ?><?php endif ?>" type="text" name="lookfor" value="<?=$this->escapeHtmlAttr($this->lookfor)?>"<?php if ($placeholder): ?> placeholder="<?=$this->transEscAttr($placeholder) ?>"<?php endif ?> aria-label="<?=$this->transEscAttr("search_terms")?>" />
           <?php if ($handlerCount > 1): ?>
@@ -98,15 +102,19 @@
             <?php endif; ?>
           </select>
         <?php elseif ($handlerCount == 1): ?>
-          <input type="hidden" name="type" value="<?=$this->escapeHtmlAttr($handlers[0]['value'])?>" />
+          <input type="hidden" name="type" value="<?=$this->escapeHtmlAttr($handlers[0]['value'])?>">
         <?php endif; ?>
-        <button type="submit" class="btn btn-primary form-control"><i class="fa fa-search" aria-hidden="true"></i> <?=$this->transEsc("Find")?></button>
+        <button type="submit" class="btn btn-primary"><?=$this->icon('search') ?> <?=$this->transEsc("Find")?></button>
         </section>
 
         <ul class="nav nav-pills">
         <?php if ($advSearch): ?>
           <li>
-            <a href="<?=$this->url($advSearch) . ((isset($this->searchId) && $this->searchId) ? '?edit=' . $this->escapeHtmlAttr($this->searchId) : $hiddenFilterParams) ?>" class="btn btn-link" rel="nofollow"><?=$this->transEsc("Advanced Search")?></a>
+            <?php
+              $advSearchQuery = $results ? ['edit' => $results->getSearchId()] : $hiddenFilters;
+              $advSearchLink = $this->url($advSearch, [], ['query' => $advSearchQuery]);
+            ?>
+            <a href="<?=$advSearchLink?>" class="advanced-search-link btn btn-link" rel="nofollow"><?=$this->transEsc("Advanced")?></a>
           </li>
           <li class="dropdown">
               <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
@@ -151,38 +159,38 @@
       <?php
       $selectedShards = $this->selectedShards ?? $options->getDefaultSelectedShards();
       ?>
-      <br />
+      <br>
       <?php foreach ($shards as $shard => $val): ?>
         <?php $isSelected = empty($selectedShards) || in_array($shard, $selectedShards); ?>
-          <input type="checkbox" <?=$isSelected ? 'checked="checked" ' : ''?>name="shard[]" value='<?=$this->escapeHtmlAttr($shard)?>' /> <?=$this->transEsc($shard)?>
+          <input type="checkbox" <?=$isSelected ? 'checked="checked" ' : ''?>name="shard[]" value='<?=$this->escapeHtmlAttr($shard)?>'> <?=$this->transEsc($shard)?>
       <?php endforeach; ?>
     <?php endif; ?>
     <?php if (($hasDefaultsApplied ?? false) || !empty($filterDetails)): ?>
       <?php if ($options->getRetainFilterSetting()): ?>
         <?php foreach ($filterDetails as $current): ?>
-          <input class="applied-filter" id="<?=$this->escapeHtmlAttr($current['id'])?>" type="hidden" name="filter[]" value="<?=$this->escapeHtmlAttr($current['value'])?>" />
+          <input class="applied-filter" id="<?=$this->escapeHtmlAttr($current['id'])?>" type="hidden" name="filter[]" value="<?=$this->escapeHtmlAttr($current['value'])?>">
         <?php endforeach; ?>
         <?php if ($hasDefaultsApplied ?? false): ?>
-          <input class="applied-filter" id="dfApplied" type="hidden" name="dfApplied" value="1" />
+          <input class="applied-filter" id="dfApplied" type="hidden" name="dfApplied" value="1">
         <?php endif; ?>
       <?php endif; ?>
     <?php endif; ?>
     <?php foreach ($hiddenFilters as $key => $filter): ?>
       <?php foreach ($filter as $value): ?>
-        <input type="hidden" name="hiddenFilters[]" value="<?=$this->escapeHtmlAttr($key) . ':' . $this->escapeHtmlAttr($value)?>" />
+        <input type="hidden" name="hiddenFilters[]" value="<?=$this->escapeHtmlAttr($key) . ':' . $this->escapeHtmlAttr('"' . $value . '"')?>">
       <?php endforeach; ?>
     <?php endforeach; ?>
     <?php
       /* Show hidden field for active search class when in combined handler mode. */
       if ($this->searchbox()->combinedHandlersActive()) {
-        echo '<input type="hidden" name="activeSearchClassId" value="' . $this->escapeHtmlAttr($this->searchClassId) . '" />';
+        echo '<input type="hidden" name="activeSearchClassId" value="' . $this->escapeHtmlAttr($this->searchClassId) . '">';
       }
       /* Load hidden limit preference from Session */
       if (!empty($lastLimit)) {
-        echo '<input type="hidden" name="limit" value="' . $this->escapeHtmlAttr($lastLimit) . '" />';
+        echo '<input type="hidden" name="limit" value="' . $this->escapeHtmlAttr($lastLimit) . '">';
       }
       if (!empty($lastSort)) {
-        echo '<input type="hidden" name="sort" value="' . $this->escapeHtmlAttr($lastSort) . '" />';
+        echo '<input type="hidden" name="sort" value="' . $this->escapeHtmlAttr($lastSort) . '">';
       }
     ?>
     <?=$this->context($this)->renderInContext(
@@ -198,4 +206,3 @@
     );?>
   </form>
 <?php endif; ?>
-
