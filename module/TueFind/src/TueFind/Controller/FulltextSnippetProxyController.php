@@ -52,7 +52,7 @@ class FulltextSnippetProxyController extends \VuFind\Controller\AbstractBase imp
     const DOTS = '...';
 
 
-    public function __construct(\Elasticsearch\ClientBuilder $builder, \Laminas\ServiceManager\ServiceLocatorInterface $sm, \VuFind\Log\Logger $logger) {
+    public function __construct(\Elastic\Elasticsearch\ClientBuilder $builder, \Laminas\ServiceManager\ServiceLocatorInterface $sm, \VuFind\Log\Logger $logger) {
         parent::__construct($sm);
         $this->logger = $logger;
         $config = $this->getConfig(self::fulltextsnippetIni);
@@ -162,7 +162,8 @@ class FulltextSnippetProxyController extends \VuFind\Controller\AbstractBase imp
         // Is this an ordinary query or a phrase query (surrounded by quotes) ?
         $params = $this->getQueryParams($doc_id, $search_query, $verbose,
                                         $synonyms , false /*return paged results*/, $types_filter);
-        $response = $this->es->search($params);
+        $response = $this->es->search($params)->asArray();
+        error_log(print_r($response, true));
         $snippets = $this->extractSnippets($response);
         if ($snippets == false)
             return false;
@@ -173,7 +174,7 @@ class FulltextSnippetProxyController extends \VuFind\Controller\AbstractBase imp
 
     protected function getHTMLFulltext($doc_id, $search_query, $verbose, $synonyms, $types_filter) {
         $params = $this->getQueryParams($doc_id, $search_query, $verbose, $synonyms, true, $types_filter);
-        $response = $this->es->search($params);
+        $response = $this->es->search($params)->asArray();
         $snippets = $this->extractSnippets($response);
         if ($snippets == false)
             return false;
