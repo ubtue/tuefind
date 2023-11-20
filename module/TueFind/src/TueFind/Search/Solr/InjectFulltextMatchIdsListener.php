@@ -1,10 +1,10 @@
 <?php
 namespace TueFind\Search\Solr;
 
-use VuFindSearch\Backend\BackendInterface;
-
 use Laminas\EventManager\EventInterface;
 use Laminas\EventManager\SharedEventManagerInterface;
+use VuFindSearch\Backend\BackendInterface;
+use VuFindSearch\Service;
 
 class InjectFulltextMatchIdsListener
 {
@@ -44,8 +44,8 @@ class InjectFulltextMatchIdsListener
      */
     public function attach(SharedEventManagerInterface $manager)
     {
-        $manager->attach('VuFind\Search', 'pre', [$this, 'onSearchPre']);
-        $manager->attach('VuFind\Search', 'post', [$this, 'onSearchPost']);
+        $manager->attach('VuFind\Search', Service::EVENT_PRE, [$this, 'onSearchPre']);
+        $manager->attach('VuFind\Search', Service::EVENT_POST, [$this, 'onSearchPost']);
     }
 
 
@@ -86,14 +86,15 @@ class InjectFulltextMatchIdsListener
     * @return EventInterface
     */
     public function onSearchPre(EventInterface $event) {
-        if ($event->getParam('context') != 'search') {
+        $command = $event->getParam('command');
+        if ($command->getContext() != 'search') {
             return $event;
         }
-        $backend = $event->getTarget();
-        if ($backend === $this->backend) {
-            $params = $event->getParam('params');
+        $backend = $command->getTargetIdentifier();
+        if ($backend == $this->backend->getIdentifier()) {
+            $params = $command->getSearchParameters();
             if ($params) {
-                if ($backend->getIdentifier() == 'Search2') {
+                if ($backend == 'Search2') {
                     $this->active = true;
                     $this->backend->getQueryBuilder()->setIncludeFulltextSnippets(true);
                     // Pass filter from chosen fulltext_type facet
@@ -115,16 +116,17 @@ class InjectFulltextMatchIdsListener
      */
     public function onSearchPost(EventInterface $event)
     {
-        // Do nothing if highlighting is disabled or context is wrong
-        if (!$this->active || $event->getParam('context') != 'search') {
+        $command = $event->getParam('command');
+        $backend = $command->getTargetIdentifier();
+        if (!$this->active || $command->getContext() != 'search') {
             return $event;
         }
 
         // Inject highlighting details into record objects:
-        $backend = $event->getParam('backend');
         if ($backend == $this->backend->getIdentifier()) {
-            $result = $event->getTarget();
-            if ($backend == 'Search2' && !empty($event->getParams('params')['query']->getString())) {
+            $result = $command->getResult();
+            $params = $command->getSearchParameters();
+            if ($backend == 'Search2' && $params->get('q')[0] && $params->get('q')[0] != '*:*') {
                 foreach ($result->getRecords() as $record) {
                     $record->setHasFulltextMatch();
                     $record->setFulltextTypeFilters($this->selected_fulltext_types);
