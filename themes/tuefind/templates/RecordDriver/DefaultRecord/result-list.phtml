@@ -120,7 +120,8 @@
       <?php endif; ?>
 
       <?php if ($this->driver->tryMethod('getWorkKeys') && $this->searchOptions($this->driver->getSourceIdentifier())->getVersionsAction()): ?>
-        <div class="record-versions ajax"></div>
+        <?php // TueFind: we want this feature only to be active in the tab, but not here in the result list due to performance issues. ?>
+        <!--<div class="record-versions ajax"></div>-->
       <?php endif; ?>
 
       <!--
