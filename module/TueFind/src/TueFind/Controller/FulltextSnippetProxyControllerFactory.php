@@ -1,7 +1,7 @@
 <?php
 namespace TueFind\Controller;
 
-use \Elasticsearch\ClientBuilder;
+use \Elastic\Elasticsearch\ClientBuilder;
 use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 
