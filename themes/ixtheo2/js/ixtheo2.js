@@ -5,8 +5,8 @@ var IxTheo2 = {
         let content_block_element = $("#content").html();
         let index_page = $(".index-page").html();
         let search_form_element = document.getElementById("searchForm");
-
-        if(search_form_element.length > 0 && content_block_element != undefined && index_page == undefined) {
+        let ix2_search_form = $(".ix2-searchForm").html();
+        if(search_form_element.length > 0 && content_block_element != undefined && index_page == undefined && ix2_search_form != undefined) {
             const y = search_form_element.getBoundingClientRect().top + window.scrollY;
             window.scroll({
             top: y-100,
