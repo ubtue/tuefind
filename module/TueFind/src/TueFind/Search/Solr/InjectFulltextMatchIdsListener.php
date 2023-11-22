@@ -98,7 +98,7 @@ class InjectFulltextMatchIdsListener
                     $this->active = true;
                     $this->backend->getQueryBuilder()->setIncludeFulltextSnippets(true);
                     // Pass filter from chosen fulltext_type facet
-                    $this->selected_fulltext_types = $this->getFulltextFilterFromFulltextTypeFacet($backend, $params);
+                    $this->selected_fulltext_types = $this->getFulltextFilterFromFulltextTypeFacet($this->backend, $params);
                     $this->backend->getQueryBuilder()->setSelectedFulltextTypes($this->selected_fulltext_types);
                 }
             }
