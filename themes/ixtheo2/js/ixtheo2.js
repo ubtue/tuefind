@@ -23,4 +23,6 @@ $(function () {
 
     IxTheo2.ScrollToSearchForm();
 
+    $(".searchForm_lookfor:visible").focus();
+
 });
