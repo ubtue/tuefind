@@ -90,4 +90,33 @@ class SolrMarc extends SolrDefault
 
         return $headings;
     }
+
+    public function isAlbertKrebsLibraryRecord(): bool
+    {
+        return in_array('kreb', $this->getRecordSelectors());
+    }
+
+    public function getAlbertKrebsLibrarySignature(): ?string
+    {
+        $lokFields = $this->getMarcReader()->getFields('LOK');
+        foreach ($lokFields as $lokField) {
+            $isAlbertKrebsSignatureField = false;
+            $signature = null;
+            foreach ($lokField['subfields'] as $subfield) {
+                if ($subfield['code'] == '0' && $subfield['data'] == '852 1')
+                    $isAlbertKrebsSignatureField = true;
+                elseif ($subfield['code'] == 'c')
+                    $signature = $subfield['data'];
+            }
+
+            if ($isAlbertKrebsSignatureField && $signature !== null)
+                return $signature;
+        }
+        return null;
+    }
+
+    public function showAvailabilityInAlbertKrebsLibrary(): bool
+    {
+        return $this->isAlbertKrebsLibraryRecord() && ($this->getAlbertKrebsLibrarySignature() !== null);
+    }
 }
