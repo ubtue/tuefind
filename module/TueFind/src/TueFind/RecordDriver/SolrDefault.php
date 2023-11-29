@@ -796,4 +796,9 @@ class SolrDefault extends \VuFind\RecordDriver\SolrMarc
         // the first found subfield.
         return $this->getFirstFieldValue('TIM', ['b']);
     }
+
+    public function getRecordSelectors(): array
+    {
+        return $this->fields['record_selector'] ?? [];
+    }
 }
