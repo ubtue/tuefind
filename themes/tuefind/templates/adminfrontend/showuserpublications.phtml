@@ -15,7 +15,7 @@ $this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') 
     <p>No publications have been added so far.</p>
   <?php else: ?>
 
-    <table class="table dataTable display">
+    <table class="table dataTable display" data-order='[[ 6, "desc" ]]'>
       <thead>
         <tr>
           <th><?=$this->transEsc('Title')?></th>
