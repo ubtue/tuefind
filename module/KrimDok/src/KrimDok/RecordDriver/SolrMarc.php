@@ -128,7 +128,7 @@ class SolrMarc extends SolrDefault
             if ($isSignature && $c !== null)
                 $availability['signature'] = $c;
             elseif ($isHolding && $a !== null)
-                $availability['holding'] = $a;
+                $availability['holding'] = str_replace('Bestand Albert-Krebs-Bibliothek: ', '', $a);
         }
 
         if ($availability['signature'] != null || $availability['holding'] != null)
