@@ -95,7 +95,7 @@ class SolrMarc extends SolrDefault
 
     public function getLOKBlockKrimDok()
     {
-        return $this->getLOKBlocks(self::ISIL_KRIMDOK);
+        return $this->getLOKBlock(self::ISIL_KRIMDOK);
     }
 
     public function isAlbertKrebsLibraryRecord(): bool
