@@ -103,21 +103,33 @@ class SolrMarc extends SolrDefault
         return in_array('kreb', $this->getRecordSelectors());
     }
 
-    public function getAlbertKrebsLibrarySignature(): ?string
+    public function getAlbertKrebsLibraryAvailability(): ?array
     {
+        $availability = ['signature' => null, 'holding' => null];
+
         foreach ($this->getLOKBlockKrimDok() as $lokField) {
-            $isAlbertKrebsSignatureField = false;
-            $signature = null;
+            $isHolding = false;
+            $isSignature = false;
+            $a = null;
+            $c = null;
             foreach ($lokField['subfields'] as $subfield) {
                 if ($subfield['code'] == '0' && $subfield['data'] == '852 1')
-                    $isAlbertKrebsSignatureField = true;
+                    $hasSignature = true;
+                elseif ($subfield['code'] == 'a')
+                    $a = $subfield['data'];
                 elseif ($subfield['code'] == 'c')
-                    $signature = $subfield['data'];
+                    $c = $subfield['data'];
             }
 
-            if ($isAlbertKrebsSignatureField && $signature !== null)
-                return $signature;
+            if ($isSignature && $c !== null)
+                $availability['signature'] = $c;
+            elseif ($isHolding && $a !== null)
+                $availability['holding'] = $a;
         }
+
+        if ($availability['signature'] != null || $availability['holding'] != null)
+            return $availability;
+
         return null;
     }
 
