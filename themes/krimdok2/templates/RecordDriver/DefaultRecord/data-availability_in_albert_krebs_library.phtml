@@ -1,1 +1,10 @@
-<?=$this->escapeHtml($this->driver->getAlbertKrebsLibrarySignature())?>
+<?php $availability = $this->driver->getAlbertKrebsLibraryAvailability(); ?>
+<?php if ($availability !== null): ?>
+  <?php if ($availability['signature'] !== null): ?>
+    <?=$this->escapeHtml($availability['signature'])?>
+  <?php endif; ?>
+  <?php if ($availability['holding'] !== null): ?>
+    <?php if ($availability['signature'] !== null): ?><br><?php endif; ?>
+    <?=$this->escapeHtml($availability['holding'])?>
+  <?php endif; ?>
+<?php endif; ?>
