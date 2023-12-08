@@ -113,12 +113,16 @@ class SolrMarc extends SolrDefault
             $a = null;
             $c = null;
             foreach ($lokField['subfields'] as $subfield) {
-                if ($subfield['code'] == '0' && $subfield['data'] == '852 1')
-                    $hasSignature = true;
-                elseif ($subfield['code'] == 'a')
+                if ($subfield['code'] == '0') {
+                    if ($subfield['data'] == '852 1')
+                        $isSignature = true;
+                    elseif ($subfield['data'] == '86630')
+                        $isHolding = true;
+                } elseif ($subfield['code'] == 'a') {
                     $a = $subfield['data'];
-                elseif ($subfield['code'] == 'c')
+                } elseif ($subfield['code'] == 'c') {
                     $c = $subfield['data'];
+                }
             }
 
             if ($isSignature && $c !== null)
