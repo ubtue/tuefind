@@ -139,6 +139,6 @@ class SolrMarc extends SolrDefault
 
     public function showAvailabilityInAlbertKrebsLibrary(): bool
     {
-        return $this->isAlbertKrebsLibraryRecord() && ($this->getAlbertKrebsLibrarySignature() !== null);
+        return $this->isAlbertKrebsLibraryRecord() && ($this->getAlbertKrebsLibraryAvailability() !== null);
     }
 }
