@@ -6,6 +6,8 @@ class SolrMarc extends SolrDefault
 {
     const SUBITO_BROKER_ID = 'KRIMDOK';
 
+    const ISIL_KRIMDOK = 'DE-2619';
+
     /**
      * Get all subject headings associated with this record.  Each heading is
      * returned as an array of chunks, increasing from least specific to most
@@ -91,6 +93,11 @@ class SolrMarc extends SolrDefault
         return $headings;
     }
 
+    public function getLOKBlockKrimDok()
+    {
+        return $this->getLOKBlocks(self::ISIL_KRIMDOK);
+    }
+
     public function isAlbertKrebsLibraryRecord(): bool
     {
         return in_array('kreb', $this->getRecordSelectors());
@@ -98,8 +105,7 @@ class SolrMarc extends SolrDefault
 
     public function getAlbertKrebsLibrarySignature(): ?string
     {
-        $lokFields = $this->getMarcReader()->getFields('LOK');
-        foreach ($lokFields as $lokField) {
+        foreach ($this->getLOKBlockKrimDok() as $lokField) {
             $isAlbertKrebsSignatureField = false;
             $signature = null;
             foreach ($lokField['subfields'] as $subfield) {
