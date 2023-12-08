@@ -631,4 +631,56 @@ class SolrMarc extends SolrDefault
 
         return null;
     }
+
+    /**
+     * This is a helper function to group the LOK blocks based on the
+     * library ISIL they belong to.
+     *
+     * @return array
+     */
+    protected function getLOKBlocks(): array
+    {
+        $lokBlocks = [];
+
+        $lokFields = $this->getMarcReader()->getFields('LOK');
+
+        $blockFields = [];
+        $library = null;
+        foreach ($lokFields as $lokField) {
+            $type = null;
+            $a = null;
+            foreach ($lokField['subfields'] as $subfield) {
+                if ($subfield['code'] == '0') {
+                    $type = $subfield['data'];
+                } elseif ($subfield['code'] == 'a') {
+                    $a = $subfield['data'];
+                }
+            }
+
+            if (preg_match('"^000"', $type)) {
+                if ($blockFields != [] && $library != null) {
+                    $lokBlocks[$library] = $blockFields;
+                }
+                $blockFields = [];
+                $library = null;
+            } elseif ($type == '040  ') {
+                $library = $a;
+            }
+
+
+            $blockFields[] = $lokField;
+        }
+
+        if ($blockFields != [] && $library != null) {
+            $lokBlocks[$library] = $blockFields;
+        }
+
+        return $lokBlocks;
+    }
+
+    protected function getLOKBlock(string $isil): array
+    {
+        $lokBlocks = $this->getLOKBlocks();
+        return $lokBlocks[$isil] ?? [];
+    }
 }
