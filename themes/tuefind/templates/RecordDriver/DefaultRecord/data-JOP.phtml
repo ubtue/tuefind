@@ -72,7 +72,7 @@
         $url_img_proxy = $this->url('home') . 'proxy/load?url=' . urlencode($url_img);
         $url_ajax_proxy = $this->url('home') . 'proxy/load?url=' . urlencode($url_ajax);
 
-        $part_img = '<img src="' . $url_img_proxy . '" alt="JOP Icons should be here"/>';
+        $part_img = '<img style="width:10%; min-width:50" src="' . $url_img_proxy . '" alt="JOP Icons should be here"/>';
 
         $check_availability_text = $this->transEsc('Check Availability');
         if (count($issns_and_additional_information) > 1)

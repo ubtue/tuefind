@@ -371,11 +371,11 @@ var TueFind = {
                         } else if (state == 4 || state == 10) {
                             if (replacement == "") {
                                 replacement = '<a href="' + url_html + '" target="_blank"><i class="fa fa-external-link"></i> ' +
-                                              part_img + check_availability_text + '</a>' +
+                                               check_availability_text + '</a>' +
                                               '<br/>' +  TueFind.GetHBZInfo();
-                                // We get an 1x1 pixel gif from JOP that can be seen as an empty line
-                                // => remove it
-                                $("#" + jop_icons_id).remove();
+                                $('.jop-icons').remove();
+                                $('#' + jop_icons_id).remove();
+
                             }
                             $.event.trigger({ type: "JOP:check_availability" });
                         }
