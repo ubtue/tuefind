@@ -613,7 +613,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrMarc
     public function getZDBNumber()
     {
         return (isset($this->fields['zdb_number'])) ?
-            $this->fields['zdb_number'] : '';
+            preg_replace('/^ZDB/', '', $this->fields['zdb_number']) : '';
     }
 
     /**
