@@ -22,6 +22,8 @@
       $params = null;
     }
 
+    $routeParams = $tuefind->getRouteParams();
+
     // Load search actions and settings (if any):
     $handlers = $this->searchbox()->getHandlers(
         $this->searchClassId,
@@ -177,7 +179,11 @@
     <?php endif; ?>
     <?php foreach ($hiddenFilters as $key => $filter): ?>
       <?php foreach ($filter as $value): ?>
-        <input type="hidden" name="hiddenFilters[]" value="<?=$this->escapeHtmlAttr($key) . ':' . $this->escapeHtmlAttr('"' . $value . '"')?>">
+        <?php if (count($filter) == 1 && strcmp ($value, "[NOW-30DAY TO NOW]-id:LR*") == 0 && $routeParams['controller'] == 'Search' && $routeParams['action'] == 'NewItem'): ?>
+          <input type="hidden" name="hiddenFilters[]" value="">
+        <?php else: ?>
+          <input type="hidden" name="hiddenFilters[]" value="<?=$this->escapeHtmlAttr($key) . ':' . $this->escapeHtmlAttr('"' . $value . '"')?>">
+        <?php endif; ?>
       <?php endforeach; ?>
     <?php endforeach; ?>
     <?php
