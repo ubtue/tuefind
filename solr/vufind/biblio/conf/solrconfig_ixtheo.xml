@@ -515,22 +515,34 @@
     </lst>
   </requestHandler>
 
-  <searchComponent name="spellcheck" class="org.apache.solr.handler.component.SpellCheckComponent">
+  <searchComponent name="spellcheck" class="solr.SpellCheckComponent">
     <lst name="spellchecker">
       <str name="name">default</str>
       <str name="field">spellingShingle</str>
+      <str name="classname">solr.DirectSolrSpellChecker</str>
+      <str name="distanceMeasure">internal</str>
       <str name="accuracy">0.75</str>
+      <int name="maxEdits">2</int>
+      <int name="minPrefix">1</int>
+      <int name="maxInspections">5</int>
+      <int name="minQueryLength">4</int>
+      <int name="maxQueryLength">40</int>
       <str name="spellcheckIndexDir">./spellShingle</str>
       <str name="queryAnalyzerFieldType">textSpellShingle</str>
-      <str name="buildOnOptimize">true</str>
     </lst>
     <lst name="spellchecker">
       <str name="name">basicSpell</str>
       <str name="field">spelling</str>
+      <str name="classname">solr.DirectSolrSpellChecker</str>
+      <str name="distanceMeasure">internal</str>
       <str name="accuracy">0.75</str>
+      <int name="maxEdits">2</int>
+      <int name="minPrefix">1</int>
+      <int name="maxInspections">5</int>
+      <int name="minQueryLength">4</int>
+      <int name="maxQueryLength">40</int>
       <str name="spellcheckIndexDir">./spellchecker</str>
       <str name="queryAnalyzerFieldType">textSpell</str>
-      <str name="buildOnOptimize">true</str>
     </lst>
   </searchComponent>
   <queryConverter name="queryConverter" class="org.apache.solr.spelling.SpellingQueryConverter"/>
