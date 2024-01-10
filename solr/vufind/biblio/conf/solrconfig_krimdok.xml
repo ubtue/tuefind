@@ -22,7 +22,8 @@
        encountered an severe configuration error.  In a production environment,
        you may want solr to keep working even if one handler is mis-configured.
 
-       You may also set this to false using by setting the system property: -Dsolr.abortOnConfigurationError=false
+       You may also set this to false using by setting the system property:
+         -Dsolr.abortOnConfigurationError=false
      -->
   <abortOnConfigurationError>${solr.abortOnConfigurationError:false}</abortOnConfigurationError>
 
@@ -62,7 +63,7 @@
     <!-- <maxBufferedDocs>1000</maxBufferedDocs> -->
 
 
-    <!-- Commit Deletion Policy
+       <!-- Commit Deletion Policy
 
          Custom deletion policies can be specified here. The class must
          implement org.apache.lucene.index.IndexDeletionPolicy.
@@ -76,7 +77,7 @@
          The latest commit point should always be preserved regardless
          of the criteria.
     -->
-    <deletionPolicy class="solr.SolrDeletionPolicy">
+   <deletionPolicy class="solr.SolrDeletionPolicy">
       <!-- Keep only optimized commit points -->
       <str name="keepOptimizedOnly">false</str>
       <!-- The maximum number of commit points to be kept -->
@@ -103,7 +104,7 @@
   <updateHandler class="solr.DirectUpdateHandler2">
 
 
-    <!-- Enables a transaction log, used for real-time get, durability, and
+      <!-- Enables a transaction log, used for real-time get, durability, and
          and solr cloud replica recovery.  The log can grow as big as
          uncommitted changes to the index, so use of a hard autoCommit
          is recommended (see below).
@@ -122,17 +123,17 @@
          maxDocs - number of updates since last commit is greater than this
          maxTime - oldest uncommited update (in ms) is this long ago
     -->
-    <autoCommit>
-      <maxTime>15000</maxTime>
-      <openSearcher>false</openSearcher>
-    </autoCommit>
+     <autoCommit>
+       <maxTime>15000</maxTime>
+       <openSearcher>false</openSearcher>
+     </autoCommit>
 
     <!-- The RunExecutableListener executes an external command.
          exe - the name of the executable to run
          dir - dir to use as the current working directory. default="."
          wait - the calling thread waits until the executable returns. default="true"
-         args - the arguments to pass to the program. default=nothing
-         env - environment variables to set. default=nothing
+         args - the arguments to pass to the program.  default=nothing
+         env - environment variables to set.  default=nothing
       -->
     <!-- A postCommit event is fired after every commit or optimize command
     <listener event="postCommit" class="solr.RunExecutableListener">
@@ -187,16 +188,27 @@
     <!-- VuFind uses the default Solr settings for filterCache, which should produce a high
          hit rate. You can carefully adjust the filterCache and check the hit ratio in
          admin>plugins>stats -->
-    <filterCache class="solr.search.CaffeineCache" size="512" initialSize="512" autowarmCount="256"/>
+    <filterCache
+      class="solr.search.CaffeineCache"
+      size="512"
+      initialSize="512"
+      autowarmCount="256"/>
 
-    <!-- queryResultCache caches results of searches - ordered lists of
+   <!-- queryResultCache caches results of searches - ordered lists of
          document ids (DocList) based on a query, a sort, and the range
          of documents requested.  -->
-    <queryResultCache class="solr.search.CaffeineCache" size="512" initialSize="512" autowarmCount="256"/>
+    <queryResultCache
+      class="solr.search.CaffeineCache"
+      size="512"
+      initialSize="512"
+      autowarmCount="256"/>
 
-    <!-- documentCache caches Lucene Document objects (the stored fields for each document).
+  <!-- documentCache caches Lucene Document objects (the stored fields for each document).
        Since Lucene internal document ids are transient, this cache will not be autowarmed.  -->
-    <documentCache class="solr.search.CaffeineCache" size="16384" initialSize="16384"/>
+    <documentCache
+      class="solr.search.CaffeineCache"
+      size="16384"
+      initialSize="16384"/>
 
     <!-- If true, stored fields that are not requested will be loaded lazily.
 
@@ -206,7 +218,7 @@
     -->
     <enableLazyFieldLoading>true</enableLazyFieldLoading>
 
-    <!-- An optimization that attempts to use a filter to satisfy a search.
+   <!-- An optimization that attempts to use a filter to satisfy a search.
          If the requested sort does not include score, then the filterCache
          will be checked for a filter matching the query. If found, the filter
          will be used as the source of document ids, and then the sort will be
@@ -214,7 +226,7 @@
     <useFilterForSortedQuery>true</useFilterForSortedQuery>
    -->
 
-    <!-- An optimization for use with the queryResultCache.  When a search
+   <!-- An optimization for use with the queryResultCache.  When a search
          is requested, a superset of the requested number of document ids
          are collected.  For example, if a search for a particular query
          requests matching documents 10 through 19, and queryWindowSize is 50,
@@ -267,11 +279,16 @@
   </query>
 
   <!--
-    Let the dispatch filter handler /select?qt=XXX handleSelect=true will use consistent error handling for /select and /update handleSelect=false will use solr1.1 style error formatting
+    Let the dispatch filter handler /select?qt=XXX
+    handleSelect=true will use consistent error handling for /select and /update
+    handleSelect=false will use solr1.1 style error formatting
     -->
-  <requestDispatcher handleSelect="true">
+  <requestDispatcher handleSelect="true" >
     <!--Make sure your system has some authentication before enabling remote streaming!  -->
-    <requestParsers enableRemoteStreaming="true" enableStreamBody="true" multipartUploadLimitInKB="2048000" formdataUploadLimitInKB="2048"/>
+    <requestParsers enableRemoteStreaming="true"
+                    enableStreamBody="true"
+                    multipartUploadLimitInKB="2048000"
+                    formdataUploadLimitInKB="2048"/>
 
     <!-- Set HTTP caching related parameters (for proxy caches and clients).
 
@@ -280,28 +297,33 @@
          <cacheControl>
     -->
     <!-- <httpCaching never304="true"> -->
-    <httpCaching lastModifiedFrom="openTime" etagSeed="Solr">
-      <!-- lastModFrom="openTime" is the default, the Last-Modified value
+    <httpCaching lastModifiedFrom="openTime"
+                 etagSeed="Solr">
+       <!-- lastModFrom="openTime" is the default, the Last-Modified value
             (and validation against If-Modified-Since requests) will all be
             relative to when the current Searcher was opened.
             You can change it to lastModFrom="dirLastMod" if you want the
             value to exactly correspond to when the physical index was last
-            modified. etagSeed="..." is an option you can change to force the ETag
+            modified.
+
+            etagSeed="..." is an option you can change to force the ETag
             header (and validation against If-None-Match requests) to be
             different even if the index has not changed (ie: when making
             significant changes to your config file)
 
-            lastModifiedFrom and etagSeed are both ignored if you use the never304="true" option.
+            lastModifiedFrom and etagSeed are both ignored if you use the
+            never304="true" option.
        -->
-      <!-- If you include a <cacheControl> directive, it will be used to
+       <!-- If you include a <cacheControl> directive, it will be used to
             generate a Cache-Control header, as well as an Expires header
             if the value contains "max-age="
 
             By default, no Cache-Control header is generated.
 
-            You can use the <cacheControl> option even if you have set never304="true"
+            You can use the <cacheControl> option even if you have set
+            never304="true"
        -->
-      <!-- <cacheControl>max-age=30, public</cacheControl> -->
+       <!-- <cacheControl>max-age=30, public</cacheControl> -->
     </httpCaching>
   </requestDispatcher>
 
@@ -309,24 +331,25 @@
   <!-- requestHandler plugins... incoming queries will be dispatched to the
      correct handler based on the path or the qt (query type) param.
      Names starting with a '/' are accessed with the a path equal to the
-     registered name.  Names without a leading '/' are accessed with: http://host/app/select?qt=name
+     registered name.  Names without a leading '/' are accessed with:
+      http://host/app/select?qt=name
      If no qt is defined, the requestHandler that declares default="true"
      will be used.
   -->
 
   <requestHandler name="/update" class="solr.UpdateRequestHandler">
-    <lst name="defaults">
-      <str name="update.chain">conditional_insert_field</str>
-    </lst>
+     <lst name="defaults">
+        <str name="update.chain">conditional_insert_field</str>
+     </lst>
   </requestHandler>
 
 
 
   <requestHandler name="standard" class="solr.SearchHandler" default="true">
     <!-- default values for query parameters -->
-    <lst name="defaults">
-      <str name="echoParams">explicit</str>
-      <!--
+     <lst name="defaults">
+       <str name="echoParams">explicit</str>
+       <!--
        <int name="rows">10</int>
        <str name="fl">*</str>
        <str name="version">2.1</str>
@@ -521,12 +544,12 @@
 
    By default, the following components are available:
 
-   <searchComponent name="query" class="org.apache.solr.handler.component.QueryComponent" />
-   <searchComponent name="facet" class="org.apache.solr.handler.component.FacetComponent" />
-   <searchComponent name="mlt" class="org.apache.solr.handler.component.MoreLikeThisComponent" />
+   <searchComponent name="query"     class="org.apache.solr.handler.component.QueryComponent" />
+   <searchComponent name="facet"     class="org.apache.solr.handler.component.FacetComponent" />
+   <searchComponent name="mlt"       class="org.apache.solr.handler.component.MoreLikeThisComponent" />
    <searchComponent name="highlight" class="org.apache.solr.handler.component.HighlightComponent" />
-   <searchComponent name="stats" class="org.apache.solr.handler.component.StatsComponent" />
-   <searchComponent name="debug" class="org.apache.solr.handler.component.DebugComponent" />
+   <searchComponent name="stats"     class="org.apache.solr.handler.component.StatsComponent" />
+   <searchComponent name="debug"     class="org.apache.solr.handler.component.DebugComponent" />
 
    If you register a searchComponent to one of the standard names, that will be used instead.
 
@@ -571,7 +594,7 @@
     </arr>
   </requestHandler>
 
-  <searchComponent name="elevator" class="org.apache.solr.handler.component.QueryElevationComponent">
+  <searchComponent name="elevator" class="org.apache.solr.handler.component.QueryElevationComponent" >
     <!-- pick a fieldType to analyze queries -->
     <str name="queryFieldType">string</str>
     <str name="config-file">elevate.xml</str>
@@ -604,7 +627,9 @@
            field value analysis will be marked as "matched" for every
            token that is produces by the query analysis
    -->
-  <requestHandler name="/analysis/field" startup="lazy" class="solr.FieldAnalysisRequestHandler" />
+  <requestHandler name="/analysis/field"
+                  startup="lazy"
+                  class="solr.FieldAnalysisRequestHandler" />
 
 
   <!-- Document Analysis Handler
@@ -637,7 +662,9 @@
     true, all field tokens that match the query tokens will be marked
     as a "match".
   -->
-  <requestHandler name="/analysis/document" class="solr.DocumentAnalysisRequestHandler" startup="lazy" />
+  <requestHandler name="/analysis/document"
+                  class="solr.DocumentAnalysisRequestHandler"
+                  startup="lazy" />
 
 
   <!-- ping/healthcheck -->
@@ -650,10 +677,10 @@
   </requestHandler>
 
   <!-- Echo the request contents back to the client -->
-  <requestHandler name="/debug/dump" class="solr.DumpRequestHandler">
+  <requestHandler name="/debug/dump" class="solr.DumpRequestHandler" >
     <lst name="defaults">
-      <str name="echoParams">explicit</str>      <!-- for all params (including the default etc) use: 'all' -->
-      <str name="echoHandler">true</str>
+     <str name="echoParams">explicit</str> <!-- for all params (including the default etc) use: 'all' -->
+     <str name="echoHandler">true</str>
     </lst>
   </requestHandler>
 
