@@ -514,7 +514,6 @@
       <int name="maxQueryLength">40</int>
       <str name="spellcheckIndexDir">./spellShingle</str>
       <str name="queryAnalyzerFieldType">textSpellShingle</str>
-      <str name="buildOnOptimize">true</str>
     </lst>
     <lst name="spellchecker">
       <str name="name">basicSpell</str>
@@ -529,7 +528,6 @@
       <int name="maxQueryLength">40</int>
       <str name="spellcheckIndexDir">./spellchecker</str>
       <str name="queryAnalyzerFieldType">textSpell</str>
-      <str name="buildOnOptimize">true</str>
     </lst>
   </searchComponent>
   <queryConverter name="queryConverter" class="org.apache.solr.spelling.SpellingQueryConverter"/>
