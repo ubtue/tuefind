@@ -179,7 +179,7 @@
     <?php endif; ?>
     <?php foreach ($hiddenFilters as $key => $filter): ?>
       <?php foreach ($filter as $value): ?>
-        <?php preg_match ( '/\[NOW-(1|7|14|30|60)DAY TO NOW\]-id:LR\*/', $value, $matchesValue ); if (count($filter) == 1 && !empty($matchesValue) && $routeParams['controller'] == 'Search' && $routeParams['action'] == 'NewItem'): ?>
+        <?php preg_match ( '/\[NOW-(\d+)DAY TO NOW\]-id:LR\*/', $value, $matchesValue ); if (count($filter) == 1 && !empty($matchesValue) && $routeParams['controller'] == 'Search' && $routeParams['action'] == 'NewItem'): ?>
           <input type="hidden" name="hiddenFilters[]" value="">
         <?php else: ?>
           <input type="hidden" name="hiddenFilters[]" value="<?=$this->escapeHtmlAttr($key) . ':' . $this->escapeHtmlAttr('"' . $value . '"')?>">
