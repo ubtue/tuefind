@@ -28,7 +28,7 @@
     <!-- Required by Solr 4.x -->
     <field name="_version_" type="long" indexed="true" stored="true"/>
     <!-- Core Fields  -->
-    <field name="id" type="string" indexed="true" stored="true"/>
+    <field name="id" type="string" indexed="true" stored="true" docValues="true" omitTermFreqAndPositions="true"/>
     <field name="fullrecord" type="string" indexed="false" stored="true"/>
     <field name="marc_error" type="string" indexed="false" stored="true" multiValued="true"/>
     <field name="allfields" type="text" indexed="true" stored="false" multiValued="true"/>
