@@ -209,6 +209,19 @@ class KfL
     }
 
     /**
+     * Get the relevant country mode for the hanId in this record.
+     *
+     * @param SolrMarc $driver
+     *
+     * @return string
+     */
+    public function getCountryModeByDriver(\TueFind\RecordDriver\SolrMarc $driver): string
+    {
+        $licenseInfo = $this->getLicenseInfoByDriver($driver);
+        return $licenseInfo['countryMode'] ?? null;
+    }
+
+    /**
      * Get the URL to access the given record via the KfL proxy.
      *
      * @param SolrMarc $driver
@@ -241,6 +254,11 @@ class KfL
 
     /**
      * Get license information by driver (either hanId or PPN)
+     *
+     * Note: We do not want the whole license information to be publically available outside this class,
+     *       since it might contain entitlements & other security-related functions.
+     *       If you need specific information (e.g. countryMode), please use a separate public getter.
+     *
      *
      * @param SolrMarc $driver
      *

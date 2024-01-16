@@ -88,6 +88,15 @@ class RedirectController extends \VuFind\Controller\AbstractBase implements \VuF
             $viewParams = [];
             $viewParams['driver'] = $this->getRecordLoader()->load($id);
             $viewParams['locked'] = $user->isLicenseAccessLocked();
+
+            // Check country restriction
+            $viewParams['countryMode'] = $this->kfl->getCountryModeByDriver($viewParams['driver']);
+            if ($viewParams['countryMode'] == 'DACH') {
+                $viewParams['countryAllowed'] = in_array($user->ixtheo_country, ['DE', 'AT', 'CH']);
+            } else {
+                $viewParams['countryAllowed'] = true;
+            }
+
             $viewParams['licenseUrl'] = !$viewParams['locked'] ? $this->kfl->getUrlByDriver($viewParams['driver']) : null;
             return $this->createViewModel($viewParams);
         }
