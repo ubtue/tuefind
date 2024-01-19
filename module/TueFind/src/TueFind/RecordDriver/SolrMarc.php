@@ -7,6 +7,9 @@ class SolrMarc extends SolrDefault
     const ISIL_PREFIX_GND = '(DE-588)';
     const ISIL_PREFIX_K10PLUS = '(DE-627)';
 
+    // ISIL to e.g. determine the correct default local data block. Should be overridden in child classes.
+    const ISIL_DEFAULT = 'DE-21'; // Universitätsbibliothek der Eberhard Karls Universität
+
     use Feature\MarcAdvancedTrait;
 
     protected $marcReaderClass = \TueFind\Marc\MarcReader::class;
@@ -611,7 +614,7 @@ class SolrMarc extends SolrDefault
      */
     public function getKflUrl(): ?string
     {
-        $fields = $this->getMarcReader()->getFields('LOK');
+        $fields = $this->getLOKBlockDefault();
 
         foreach ($fields as $field) {
             $subfields = [];
@@ -682,5 +685,10 @@ class SolrMarc extends SolrDefault
     {
         $lokBlocks = $this->getLOKBlocks();
         return $lokBlocks[$isil] ?? [];
+    }
+
+    protected function getLOKBlockDefault(): array
+    {
+        return $this->getLOKBlock(static::ISIL_DEFAULT);
     }
 }

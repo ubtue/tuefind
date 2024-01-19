@@ -47,7 +47,6 @@ class KfL
             $parsedLicenses[] = ['hanId' => $licenseDetails[0],
                                  'entitlement' => $licenseDetails[1],
                                  'countryMode' => $licenseDetails[2] ?? null,
-                                 'ppn' => $licenseDetails[3] ?? null,
             ];
         }
         $this->licenses = $parsedLicenses;
@@ -195,15 +194,8 @@ class KfL
         $requestData['method'] = 'getHANID';
         $requestData['return'] = self::RETURN_REDIRECT;
         $requestData['hanid'] = $licenseInfo['hanId'];
-        if (!empty($url)) {
+        if (!empty($url))
             $requestData['url'] = $url;
-        } else {
-            $driver = $this->recordLoader->load($licenseInfo['ppn']);
-            $url = $driver->getKflUrl();
-            if (!empty($url)) {
-                $requestData['url'] = $url;
-            }
-        }
 
         return $this->generateUrl($requestData);
     }
@@ -253,7 +245,7 @@ class KfL
     }
 
     /**
-     * Get license information by driver (either hanId or PPN)
+     * Get license information by driver
      *
      * Note: We do not want the whole license information to be publically available outside this class,
      *       since it might contain entitlements & other security-related functions.
@@ -273,13 +265,6 @@ class KfL
                 if ($license['hanId'] == $urlInfo['hanId'])
                     return $license;
             }
-        }
-
-        // Fallback: Check config for PPN
-        $ppn = $driver->getUniqueId();
-        foreach ($this->licenses as $license) {
-            if ($license['ppn'] == $ppn)
-                return $license;
         }
 
         return null;

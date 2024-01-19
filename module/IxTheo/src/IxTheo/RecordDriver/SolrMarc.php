@@ -8,6 +8,9 @@ class SolrMarc extends SolrDefault
 {
     const SUBITO_BROKER_ID = 'IXTHEO';
 
+    // ISIL to e.g. determine the correct default local data block. Should be overridden in child classes.
+    const ISIL_DEFAULT = 'DE-Tue135'; // Index theologicus der Universitätsbibliothek Tübingen
+
     public function canUseTAD($userId)
     {
         $formats_tad_allowed = array('Article');

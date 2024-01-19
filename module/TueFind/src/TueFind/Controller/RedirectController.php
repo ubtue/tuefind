@@ -78,6 +78,7 @@ class RedirectController extends \VuFind\Controller\AbstractBase implements \VuF
                 // Example for a URL sent by the proxy (will not work if you try manually):
                 // id: rx-hdr
                 // proxy-url: https://www-1handbuch-2religionen-1de-1wen6n5xi0b66.proxy.fid-lizenzen.de/#doc/69047/7
+                // (note: rx-hdr has been moved to a different publisher so the URL might be different now)
                 $proxyUrl = $this->params()->fromRoute('proxy-url');
                 $base64UrlDecoder = new \TueFind\Crypt\Base64Url();
                 $redirectUrl = $this->kfl->getUrlByHanID($id, $base64UrlDecoder->decodeString($proxyUrl));
