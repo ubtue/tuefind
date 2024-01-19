@@ -10,15 +10,26 @@
     Die kostenfreie Nutzung der Ressource ist mit einem RelBib-Konto möglich.
   </p>
 
+  <?php if ($this->countryAllowed == false): ?>
+    <p>
+      Der Zugriff ist auf Personen aus dem DACH-Raum beschränkt. Falls Sie aus dem DACH-Raum stammen, ändern Sie bitte die Ländereinstellung in Ihrem Benutzerkonto um auf die Ressource zugreifen zu können.
+    </p>
+  <?php else: ?>
+    <?php if ($this->countryMode == 'DACH'): ?>
+      <p>
+        Der Zugriff ist auf Personen aus dem DACH-Raum beschränkt. Dieses Kriterium ist gemäß der Einstellung in Ihrem Benutzerkonto erfüllt.
+      </p>
+    <?php endif; ?>
 
-  <?php
-  /**
-   * The desired behaviour could not be implemented using the default lightbox attributes data-lightbox-onclose and data-lightbox-onsubmit.
-   * Instead we use the following solution:
-   * - custom onclick event (open the URL in a new window)
-   * - data-dismiss="modal": Closes the popup AFTER the onclick event has been executed.
-   */
-  ?>
-  <button id="licenseButton" class="btn btn-primary" data-dismiss="modal">Zum Volltext</button>
-  <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, '$(\'#licenseButton\').click(function() { window.open(\'' . $this->licenseUrl . '\', \'_blank\')});', 'SET')?>
+    <?php
+    /**
+     * The desired behaviour could not be implemented using the default lightbox attributes data-lightbox-onclose and data-lightbox-onsubmit.
+     * Instead we use the following solution:
+     * - custom onclick event (open the URL in a new window)
+     * - data-dismiss="modal": Closes the popup AFTER the onclick event has been executed.
+     */
+    ?>
+    <button id="licenseButton" class="btn btn-primary" data-dismiss="modal">Zum Volltext</button>
+    <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, '$(\'#licenseButton\').click(function() { window.open(\'' . $this->licenseUrl . '\', \'_blank\')});', 'SET')?>
+  <?php endif; ?>
 <?php endif; ?>
