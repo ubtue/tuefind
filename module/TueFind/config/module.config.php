@@ -259,7 +259,12 @@ $config = [
         ],
     ],
     'controller_plugins' => [
-
+        'factories' => [
+            'TueFind\Controller\Plugin\ResultScroller' => 'TueFind\Controller\Plugin\ResultScrollerFactory'
+        ],
+        'aliases' => [
+            'resultScroller' => 'TueFind\Controller\Plugin\ResultScroller',
+        ],
     ],
     'service_manager' => [
         'allow_override' => true,
