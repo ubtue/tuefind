@@ -199,6 +199,7 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
         $imgSrc = $this->getView()->imageLink('rss/' . $rssFeedId . '.png');
         if ($imgSrc == null)
             $imgSrc = $this->getView()->imageLink('rss/rss.png');
+
         return $imgSrc;
     }
 
