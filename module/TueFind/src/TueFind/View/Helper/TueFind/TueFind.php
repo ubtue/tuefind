@@ -196,11 +196,9 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
      * @return string
      */
     public function getRssFeedIcon($rssFeedId='rss') {
-
         $imgSrc = $this->getView()->imageLink('rss/' . $rssFeedId . '.png');
         if ($imgSrc == null)
             $imgSrc = $this->getView()->imageLink('rss/rss.png');
-        
         return $imgSrc;
     }
 
