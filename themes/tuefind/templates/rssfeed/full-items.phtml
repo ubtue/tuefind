@@ -76,10 +76,10 @@ function renderPagination($currentPageNo, $maxPageNo, $itemsPerPage, $helpers) {
             <?php if ($minItemId <= $i && $maxItemId >= $i): ?>
                 <div class="tf-rss-full-item">
                     <h2>
-                        <a href="<?=$this->tuefind()->getRedirectUrl($rssItem['item_url'], $redirectGroup)?>" target="_blank"><img src="<?=$this->tuefind()->getRssFeedIcon($rssItem['feed_name'])?>" height="20">&nbsp;<?=$rssItem['item_title']?></a>
+                        <a href="<?=$this->tuefind()->getRedirectUrl($rssItem['item_url'], $redirectGroup)?>" target="_blank" rel="nofollow"><img src="<?=$this->tuefind()->getRssFeedIcon($rssItem['feed_name'])?>" height="20">&nbsp;<?=$rssItem['item_title']?></a>
                     </h2>
                     <p>
-                        <a href="<?=$this->tuefind()->getRedirectUrl($rssItem['website_url'], $redirectGroup)?>" target="_blank"><?=$rssItem['feed_name']?></a>: <?=date('d.m.Y H:i:s', strtotime($rssItem['pub_date']))?>
+                        <a href="<?=$this->tuefind()->getRedirectUrl($rssItem['website_url'], $redirectGroup)?>" target="_blank" rel="nofollow"><?=$rssItem['feed_name']?></a>: <?=date('d.m.Y H:i:s', strtotime($rssItem['pub_date']))?>
                     </p>
                     <?php if (!empty($rssItem['item_description'])):?>
                         <p>

@@ -19,7 +19,7 @@ class KfL
     protected $apiId;
     protected $encryptionKey;
     protected $cipher;
-    protected $titles;
+    protected $licenses;
 
     const RETURN_REDIRECT = 0;
     const RETURN_JSON = 1;
@@ -40,15 +40,16 @@ class KfL
         $this->cipher = $config->cipher;
         $this->encryptionKey = $config->encryption_key;
 
-        $titles = $config->titles ?? [];
-        $parsedTitles = [];
-        foreach ($titles as $title) {
-            $titleDetails = explode(';', $title);
-            $parsedTitles[] = ['ppn' => $titleDetails[0],
-                               'hanId' => $titleDetails[1],
-                               'entitlement' => $titleDetails[2]];
+        $licenses = $config->licenses ?? [];
+        $parsedLicenses = [];
+        foreach ($licenses as $license) {
+            $licenseDetails = explode(';', $license);
+            $parsedLicenses[] = ['hanId' => $licenseDetails[0],
+                                 'entitlement' => $licenseDetails[1],
+                                 'countryMode' => $licenseDetails[2] ?? null,
+            ];
         }
-        $this->titles = $parsedTitles;
+        $this->licenses = $parsedLicenses;
 
         $this->authManager = $authManager;
         $this->tuefindInstance = $tuefindInstance;
@@ -182,41 +183,52 @@ class KfL
     /**
      * Get the URL to access the given record via the KfL proxy.
      *
-     * @param array $titleInfo
+     * @param array $licenseInfo
      * @param string $url
      *
      * @return string
      */
-    protected function getUrl(array $titleInfo, ?string $url=null): string
+    protected function getUrl(array $licenseInfo, ?string $url=null): string
     {
-        $requestData = $this->getRequestTemplate($titleInfo['entitlement']);
+        $requestData = $this->getRequestTemplate($licenseInfo['entitlement']);
         $requestData['method'] = 'getHANID';
         $requestData['return'] = self::RETURN_REDIRECT;
-        $requestData['hanid'] = $titleInfo['hanId'];
-        if (!empty($url)) {
+        $requestData['hanid'] = $licenseInfo['hanId'];
+        if (!empty($url))
             $requestData['url'] = $url;
-        } else {
-            $driver = $this->recordLoader->load($titleInfo['ppn']);
-            $url = $driver->getKflUrl();
-            if (!empty($url)) {
-                $requestData['url'] = $url;
-            }
-        }
 
         return $this->generateUrl($requestData);
     }
 
     /**
-     * Get the URL to access the given record via the KfL proxy.
+     * Get the relevant country mode for the hanId in this record.
      *
-     * @param string $ppn
-     * @param string $url
+     * @param SolrMarc $driver
      *
      * @return string
      */
-    public function getUrlByPPN(string $ppn, ?string $url=null)
+    public function getCountryModeByDriver(\TueFind\RecordDriver\SolrMarc $driver): string
     {
-        return $this->getUrl($this->getTitleInfoByPPN($ppn), $url);
+        $licenseInfo = $this->getLicenseInfoByDriver($driver);
+        return $licenseInfo['countryMode'] ?? null;
+    }
+
+    /**
+     * Get the URL to access the given record via the KfL proxy.
+     *
+     * @param SolrMarc $driver
+     *
+     * @return string
+     */
+    public function getUrlByDriver(\TueFind\RecordDriver\SolrMarc $driver)
+    {
+        // Main: Get Han ID from License URL
+        $url = $driver->getKflUrl();
+        $licenseInfo = $this->getLicenseInfoByDriver($driver);
+        if (empty($licenseInfo))
+            throw new \Exception("No License found for record " . $driver->getUniqueId());
+
+        return $this->getUrl($licenseInfo, $url);
     }
 
     /**
@@ -229,56 +241,81 @@ class KfL
      */
     public function getUrlByHanID(string $hanId, ?string $url=null)
     {
-        return $this->getUrl($this->getTitleInfoByHanID($hanId), $url);
+        return $this->getUrl($this->getLicenseInfoByHanID($hanId), $url);
     }
 
     /**
-     * Get information about a title, especially HAN-ID and entitlement.
+     * Get license information by driver
      *
-     * @param string $ppn
+     * Note: We do not want the whole license information to be publically available outside this class,
+     *       since it might contain entitlements & other security-related functions.
+     *       If you need specific information (e.g. countryMode), please use a separate public getter.
      *
-     * @return array
+     *
+     * @param SolrMarc $driver
+     *
+     * @return array|null
      */
-    protected function getTitleInfoByPPN(string $ppn): array
+    protected function getLicenseInfoByDriver(\TueFind\RecordDriver\SolrMarc $driver): ?array
     {
-        foreach ($this->titles as $title) {
-            if ($title['ppn'] == $ppn)
-                return $title;
+        $url = $driver->getKflUrl();
+        if ($url) {
+            $urlInfo = $this->parseKflUrl($url);
+            foreach($this->licenses as $license) {
+                if ($license['hanId'] == $urlInfo['hanId'])
+                    return $license;
+            }
         }
 
-        throw new \Exception('KfL title information missing for ppn: ' . $ppn);
+        return null;
     }
 
     /**
-     * Get information about a title
+     * Get license information by hand id only
      *
      * @param string $hanId
      *
      * @return array
      */
-    protected function getTitleInfoByHanID(string $hanId): array
+    protected function getLicenseInfoByHanID(string $hanId): array
     {
-        foreach ($this->titles as $title) {
-            if ($title['hanId'] == $hanId)
-                return $title;
+        foreach ($this->licenses as $license) {
+            if ($license['hanId'] == $hanId)
+                return $license;
         }
 
-        throw new \Exception('KfL title information missing for HAN ID: ' . $hanId);
+        throw new \Exception('KfL license information missing for HAN ID: ' . $hanId);
     }
 
     /**
-     * Is the given PPN available via the KfL?
+     * Get information from the KfL URL (e.g. HanId)
      *
-     * @param string $ppn
+     * @param string $url
+     *
+     * @return array
+     */
+    protected function parseKflUrl($url): array
+    {
+        if (strstr($url, 'proxy.fid-lizenzen.de') === false)
+            throw new \Exception("Invalid KfL URL: " . $url);
+
+        $path = parse_url($url, PHP_URL_PATH);
+
+        // example: /han/rx-ebookcentral/ebookcentral.proquest.com/lib/fidreli/detail.action
+
+        $pathParts = explode('/', $path);
+        return ['hanId' => $pathParts[2]];
+    }
+
+    /**
+     * Is the given record available via the KfL?
+     *
+     * @param SolrMarc $driver
      *
      * @return bool
      */
-    public function hasTitle(string $ppn): bool
+    public function hasTitle(\TueFind\RecordDriver\SolrMarc $driver): bool
     {
-        foreach ($this->titles as $title) {
-            if ($title['ppn'] == $ppn)
-                return true;
-        }
-        return false;
+        return $this->getLicenseInfoByDriver($driver) !== null;
     }
 }

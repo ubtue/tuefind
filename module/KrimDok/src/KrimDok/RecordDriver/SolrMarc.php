@@ -6,7 +6,8 @@ class SolrMarc extends SolrDefault
 {
     const SUBITO_BROKER_ID = 'KRIMDOK';
 
-    const ISIL_KRIMDOK = 'DE-2619';
+    // ISIL to e.g. determine the correct default local data block. Should be overridden in child classes.
+    const ISIL_DEFAULT = 'DE-2619'; // Index theologicus der Universitätsbibliothek Tübingen
 
     /**
      * Get all subject headings associated with this record.  Each heading is
@@ -93,11 +94,6 @@ class SolrMarc extends SolrDefault
         return $headings;
     }
 
-    public function getLOKBlockKrimDok()
-    {
-        return $this->getLOKBlock(self::ISIL_KRIMDOK);
-    }
-
     public function isAlbertKrebsLibraryRecord(): bool
     {
         return in_array('kreb', $this->getRecordSelectors());
@@ -107,7 +103,7 @@ class SolrMarc extends SolrDefault
     {
         $availability = ['signature' => null, 'holding' => null];
 
-        foreach ($this->getLOKBlockKrimDok() as $lokField) {
+        foreach ($this->getLOKBlockDefault() as $lokField) {
             $isHolding = false;
             $isSignature = false;
             $a = null;

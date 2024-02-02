@@ -78,6 +78,7 @@ class RedirectController extends \VuFind\Controller\AbstractBase implements \VuF
                 // Example for a URL sent by the proxy (will not work if you try manually):
                 // id: rx-hdr
                 // proxy-url: https://www-1handbuch-2religionen-1de-1wen6n5xi0b66.proxy.fid-lizenzen.de/#doc/69047/7
+                // (note: rx-hdr has been moved to a different publisher so the URL might be different now)
                 $proxyUrl = $this->params()->fromRoute('proxy-url');
                 $base64UrlDecoder = new \TueFind\Crypt\Base64Url();
                 $redirectUrl = $this->kfl->getUrlByHanID($id, $base64UrlDecoder->decodeString($proxyUrl));
@@ -88,7 +89,16 @@ class RedirectController extends \VuFind\Controller\AbstractBase implements \VuF
             $viewParams = [];
             $viewParams['driver'] = $this->getRecordLoader()->load($id);
             $viewParams['locked'] = $user->isLicenseAccessLocked();
-            $viewParams['licenseUrl'] = !$viewParams['locked'] ? $this->kfl->getUrlByPPN($viewParams['driver']->getUniqueID()) : null;
+
+            // Check country restriction
+            $viewParams['countryMode'] = $this->kfl->getCountryModeByDriver($viewParams['driver']);
+            if ($viewParams['countryMode'] == 'DACH') {
+                $viewParams['countryAllowed'] = in_array($user->ixtheo_country, ['DE', 'AT', 'CH']);
+            } else {
+                $viewParams['countryAllowed'] = true;
+            }
+
+            $viewParams['licenseUrl'] = !$viewParams['locked'] ? $this->kfl->getUrlByDriver($viewParams['driver']) : null;
             return $this->createViewModel($viewParams);
         }
     }

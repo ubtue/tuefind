@@ -204,4 +204,20 @@ public class IxTheoBiblio extends TueFindBiblio {
             return translateTopic(values.iterator().next(), langShortcut);
         return "";
     }
+
+    public Set<String> getCollectionsHierarchy(final Record record) {
+        final Set<String> collections = new HashSet<>();
+
+        // This is just a first proof-of-concept so we generate this based on the record selector.
+        // Later on we should get the information from LOK 866, which is not yet present in the data.
+        // Example: SPQUE#Universitätsbibliothek Marburg#SPSAM#Archiv des Religionswissenschaftlichen Medien- und Informationsdienstes e. V. (REMID)
+        Set<String> recordSelectors = getRecordSelectors(record);
+        if (recordSelectors.contains("remi")) {
+            // Example values for hierarchical facets, see: https://vufind.org/wiki/configuration:facets
+            collections.add("0/Universitätsbibliothek Marburg/");
+            collections.add("1/Universitätsbibliothek Marburg/Archiv des Religionswissenschaftlichen Medien- und Informationsdienstes e. V. (REMID)/");
+        }
+
+        return collections;
+    }
 }

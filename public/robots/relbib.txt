@@ -14,6 +14,7 @@ Disallow: /
 
 User-agent: *
 Allow: /Authority/
+Allow: /AuthorityRecord/
 Allow: /Record/
 Disallow: /AJAX
 Disallow: /Alphabrowse
