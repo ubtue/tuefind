@@ -3,7 +3,7 @@
 // http://www.cardiff.ac.uk/insrv/educationandtraining/guides/endnote/endnote_codes.html
 //
 // A driver-specific template may pass in format overrides; check for these before going to the driver itself:
-$formats = isset($this->overrideFormats) ? $this->overrideFormats : $this->driver->tryMethod('getFormats');
+$formats = isset($this->overrideFormats) ? $this->overrideFormats : array_merge(...[$this->driver->tryMethod('getFormats')]);
 if (is_array($formats) && !empty($formats)) {
     foreach ($formats as $format) {
         echo "%0 $format\n";
@@ -139,4 +139,3 @@ if (!empty($summary)) {
 
 // Record separator:
 echo "\n";
-?>
