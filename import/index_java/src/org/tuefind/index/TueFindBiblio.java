@@ -149,6 +149,7 @@ public class TueFindBiblio extends TueFind {
     protected final static Pattern SUPERIOR_PPN_WITH_K10PLUS_ISIL_PREFIX_PATTERN = PPN_WITH_K10PLUS_ISIL_PREFIX_PATTERN;
     protected final static Pattern DIFFERENT_CALCULATION_OF_TIME_PATTERN =  Pattern.compile(".*?\\[(.*?)\\=\\s*(\\d+)\\s*\\].*", Pattern.UNICODE_CHARACTER_CLASS);
     protected final static Pattern REMAINS_OR_PARTIAL_REMAINS = Pattern.compile("^(?=Nachlass|Teilnachlass).*");
+    protected final static Pattern KFL_URL_PATTERN = Pattern.compile("^https?://proxy\\.fid-lizenzen\\.de/han/([^/]+)/");
 
     // use static instance for better performance
     protected static CreatorTools creatorTools = new CreatorTools();
@@ -332,7 +333,7 @@ public class TueFindBiblio extends TueFind {
             return  new IssueInfo(record);
         });
     }
-    
+
     public String getIssueInfoVolume(final Record record){
         return getIssueInfo(record).volume_;
 
@@ -3289,4 +3290,26 @@ public class TueFindBiblio extends TueFind {
         return results;
     }
 
+    public List<String> getKflIDs(final Record record) {
+        List<String> KflIDs = new ArrayList<String>();
+
+        for (final VariableField variableField : record.getVariableFields("LOK")) {
+            final DataField lokfield = (DataField)variableField;
+            final Subfield subfield0 = lokfield.getSubfield('0');
+            if (subfield0 == null || !subfield0.getData().equals("85640")) {
+                continue;
+            }
+            for (final Subfield subfieldU : lokfield.getSubfields('u')) {
+                if (subfieldU != null && subfieldU.getData() != null) {
+                    // Parse KflID from URL, e.g. "http://proxy.fid-lizenzen.de/han/rx-hdr/..." => "rx-hdr"
+                    Matcher matcher = KFL_URL_PATTERN.matcher(subfieldU.getData());
+                    if (matcher.find()) {
+                        KflIDs.add(matcher.group(1));
+                    }
+                }
+            }
+        }
+
+        return KflIDs;
+    }
 }
