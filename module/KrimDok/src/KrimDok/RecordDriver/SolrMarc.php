@@ -7,7 +7,7 @@ class SolrMarc extends SolrDefault
     const SUBITO_BROKER_ID = 'KRIMDOK';
 
     // ISIL to e.g. determine the correct default local data block. Should be overridden in child classes.
-    const ISIL_DEFAULT = 'DE-2619'; // Index theologicus der Universitätsbibliothek Tübingen
+    const ISIL_DEFAULT = 'DE-2619'; // KrimDok - Kriminologische Bibliographie
 
     /**
      * Get all subject headings associated with this record.  Each heading is
