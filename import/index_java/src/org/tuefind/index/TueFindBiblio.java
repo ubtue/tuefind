@@ -3312,4 +3312,29 @@ public class TueFindBiblio extends TueFind {
 
         return KflIDs;
     }
+
+
+    public Collection<String> getHierarchicalSpecialCollection(final Record record) {
+         Collection<String> results = new ArrayList<String>();
+          for (final VariableField variableField : record.getVariableFields("LOK")) {
+            final DataField lokfield = (DataField) variableField;
+            final Subfield subfield_0 = lokfield.getSubfield('0');
+            if (subfield_0 == null || !subfield_0.getData().equals("866  "))
+                continue;
+
+            for (final Subfield subfield_x : lokfield.getSubfields('x')) {
+                if (!subfield_x.getData().isEmpty()) {
+                    final String hierarchyDescription = subfield_x.getData();
+                    List<String> hierarchy = new ArrayList<String>(Arrays.asList(hierarchyDescription.split("#")));
+                    hierarchy.removeIf(s -> Arrays.asList("SPQUE", "SPSAM", "SPUSM", "SPSYS").contains(s));
+                    for (int i = 0; i < hierarchy.size(); ++i) {
+                        List<String> hierarchyPart = new ArrayList<String>(Arrays.asList(Integer.toString(i)));
+                        hierarchyPart.addAll(hierarchy.subList(0, i+1));
+                        results.add(String.join("/", hierarchyPart) + '/');
+                    }
+                }
+            }
+        }
+        return results;
+    }
 }
