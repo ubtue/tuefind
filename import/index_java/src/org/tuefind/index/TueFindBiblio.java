@@ -3323,15 +3323,17 @@ public class TueFindBiblio extends TueFind {
                 continue;
 
             for (final Subfield subfield_x : lokfield.getSubfields('x')) {
-                if (!subfield_x.getData().isEmpty()) {
-                    final String hierarchyDescription = subfield_x.getData();
-                    List<String> hierarchy = new ArrayList<String>(Arrays.asList(hierarchyDescription.split("#")));
-                    hierarchy.removeIf(s -> Arrays.asList("SPQUE", "SPSAM", "SPUSM", "SPSYS").contains(s));
-                    for (int i = 0; i < hierarchy.size(); ++i) {
-                        List<String> hierarchyPart = new ArrayList<String>(Arrays.asList(Integer.toString(i)));
-                        hierarchyPart.addAll(hierarchy.subList(0, i+1));
-                        results.add(String.join("/", hierarchyPart) + '/');
-                    }
+                if (subfield_x.getData().isEmpty())
+                    continue;
+                final String hierarchyDescription = subfield_x.getData();
+                if (!hierarchyDescription.startsWith("SPQUE"))
+                    continue;
+                List<String> hierarchy = new ArrayList<String>(Arrays.asList(hierarchyDescription.split("#")));
+                hierarchy.removeIf(s -> Arrays.asList("SPQUE", "SPSAM", "SPUSM", "SPSYS").contains(s));
+                for (int i = 0; i < hierarchy.size(); ++i) {
+                    List<String> hierarchyPart = new ArrayList<String>(Arrays.asList(Integer.toString(i)));
+                    hierarchyPart.addAll(hierarchy.subList(0, i+1));
+                    results.add(String.join("/", hierarchyPart) + '/');
                 }
             }
         }
