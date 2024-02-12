@@ -419,7 +419,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrMarc
                 $isbn = $this->getCleanISBN();
                 if (!empty($isbn))
                     return $base_url . "&SB=" . $isbn;
-                return $base_url . "&CAT=SWB&ND" . $this->getRecordId();
+                return $base_url . "&K10=SWB&ND=" . $this->getRecordId();
             case 'Serial':
                 $zdb_number = $this->getZDBNumber();
                 if (!empty($zdb_number))
