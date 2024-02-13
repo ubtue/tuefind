@@ -627,7 +627,12 @@ class SolrMarc extends SolrDefault
                 // (e.g. IxTheo and RelBib) we must define how to pick
                 // the correct one.
                 if (isset($subfields['u'])) {
-                    return $subfields['u'];
+
+                    // There might also be other URLs in this field,
+                    // but in the KfL context we only want to consider
+                    // the ones related to the KfL-specific domain.
+                    if (strstr($subfields['u'], 'proxy.fid-lizenzen.de') !== false)
+                        return $subfields['u'];
                 }
             }
         }
