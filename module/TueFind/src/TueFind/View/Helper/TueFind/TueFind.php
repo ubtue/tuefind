@@ -620,4 +620,8 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
         $config = $this->container->get('VuFind\Config')->get('config');
         return $config->Site->email ?? "";
     }
+
+    public function getHierarchicalDisplayText($filterDisplayText): string {
+        return $this->container->get(\VuFind\Search\Solr\HierarchicalFacetHelper::class)->formatDisplayText($filterDisplayText)->getDisplayString();
+    }
 }
