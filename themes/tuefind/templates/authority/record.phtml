@@ -47,10 +47,14 @@
         </div>
       </div>
       <div class="col-md-12 row">
-        <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 pull-right">
-          <?=$this->context($this)->renderInContext('authority/record/beacon', ['driver' => $this->driver])?>
-        </div>
-        <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9 pull-left">
+        <?php
+            /*
+                Note: Until 2024 the following contents was split into 2 columns => authority/record/beacon was shown on the right side.
+                      After that it got disabled because the external "findbuch" service is no longer available,
+                      so for now we also go back to a single column layout to save some space.
+             */
+         ?>
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
           <?=$this->context($this)->renderInContext('Related/AuthorityTitlesBy', ['driver' => $this->driver])?>
           <?=$this->context($this)->renderInContext('Related/AuthorityTitlesAbout', ['driver' => $this->driver])?>
           <?=$this->context($this)->renderInContext('Related/AuthorityAuthors', ['driver' => $this->driver])?>
