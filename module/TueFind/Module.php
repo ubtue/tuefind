@@ -32,6 +32,22 @@ class Module
     }
 
     /**
+     * Get view helper configuration.
+     *
+     * @return array
+     */
+    public function getViewHelperConfig()
+    {
+        return [
+            'factories' => [
+                View\Helper\ImageLink::class => \VuFindTheme\View\Helper\ImageLinkFactory::class,
+            ],
+            'aliases' => [
+                'imageLink' => View\Helper\ImageLink::class,            ],
+        ];
+    }
+
+    /**
      * Initialize the module
      *
      * @param ModuleManager $m Module manager
