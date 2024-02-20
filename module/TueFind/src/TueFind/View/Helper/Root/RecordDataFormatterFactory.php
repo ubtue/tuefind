@@ -47,6 +47,12 @@ class RecordDataFormatterFactory extends \VuFind\View\Helper\Root\RecordDataForm
         );
     }
 
+    protected function addInterlibraryLoan(&$spec) {
+        $spec->setTemplateLine(
+            'Fernleihe', 'showInterlibraryLoan', 'data-interlibraryLoan.phtml'
+        );
+    }
+
     protected function addJOP(&$spec) {
         $spec->setTemplateLine(
             'Journals Online & Print', 'showJOP', 'data-JOP.phtml'

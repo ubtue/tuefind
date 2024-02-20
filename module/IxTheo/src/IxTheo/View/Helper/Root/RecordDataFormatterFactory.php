@@ -70,6 +70,7 @@ class RecordDataFormatterFactory extends \TueFind\View\Helper\Root\RecordDataFor
                 'TAD', 'workIsTADCandidate', 'data-TAD.phtml'
             );
         }
+        $this->addInterlibraryLoan($spec);
         $this->addPublications($spec);
         $this->addContainerIdsAndTitles($spec);
         // Reviews (IxTheo-specific)
