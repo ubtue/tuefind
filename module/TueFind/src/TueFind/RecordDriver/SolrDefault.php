@@ -801,4 +801,9 @@ class SolrDefault extends \VuFind\RecordDriver\SolrMarc
     {
         return $this->fields['record_selector'] ?? [];
     }
+
+    public function showInterlibraryLoan(): bool
+    {
+        return !in_array('Archived Material', $this->getFormats());
+    }
 }
