@@ -343,4 +343,9 @@ class SolrDefault extends \TueFind\RecordDriver\SolrMarc
         if (isset($this->fields['time_range_display']))
             return $this->fields['time_range_display'];
     }
+
+    public function getCollectionsHierarchy(): array
+    {
+        return $this->fields['collections_hierarchy'] ?? [];
+    }
 }

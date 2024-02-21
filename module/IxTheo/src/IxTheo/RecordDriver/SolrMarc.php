@@ -131,4 +131,31 @@ class SolrMarc extends SolrDefault
 
         return $result;
     }
+
+    public function getCollectionsHierarchyRaw(): array
+    {
+        $collectionsHierarchy = [];
+
+        foreach ($this->getLOKBlockDefault() as $lokField) {
+            $is866 = false;
+            $x = null;
+
+            foreach ($lokField['subfields'] as $subfield) {
+                if ($subfield['code'] == '0') {
+                    if ($subfield['data'] == '866  ')
+                        $is866 = true;
+                } elseif ($subfield['code'] == 'x')
+                    $x = $subfield['data'];
+            }
+
+            if ($is866 && $x != null) {
+                $markers = ['SPQUE', 'SPSAM', 'SPUSM', 'SPSYS'];
+                $parts = explode('#', $x);
+                $relevantParts = array_values(array_diff($parts, $markers));
+                $collectionsHierarchy[] = $relevantParts;
+            }
+        }
+
+        return $collectionsHierarchy;
+    }
 }
