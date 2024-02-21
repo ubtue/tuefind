@@ -1,6 +1,11 @@
-<?php
+<?php $formats = $this->driver->getFormats(); ?>
+<?php if (array_intersect(['Serial', 'Journal', 'Newspaper'], $formats)): ?>
+  Für eine Fernleihe wählen Sie bitte zuerst einen Band oder Aufsatz aus.
+<?php else: ?>
+  <?php
     $ppn = $this->driver->getUniqueId();
     $serviceId = $this->tuefind()->getTueFindType();
     $url = 'https://fid.fernleihe.de/?&rft_id=info:gvi/(DE-627)' . urlencode($ppn) . '&svc.ill=yes&req_dat=&rfr_id=info:sid/' . urlencode($serviceId);
-?>
-<a href="<?=$this->escapeHtmlAttr($url)?>" target="_blank">Fernleihe für die Fachinformationsdienste</a>
+  ?>
+  <a href="<?=$this->escapeHtmlAttr($url)?>" target="_blank">Fernleihe für die Fachinformationsdienste</a>
+<?php endif; ?>
