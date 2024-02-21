@@ -4,10 +4,16 @@ namespace KrimDok\Auth;
 
 class Database extends \VuFind\Auth\Database
 {
+
     protected function collectParamsFromRequest($request)
     {
         $params = parent::collectParamsFromRequest($request);
-        $params['krimdok_subscribed_to_newsletter'] = boolval($request->getPost()->get('krimdok_subscribed_to_newsletter', false));
+        $additionalParams = [
+            'krimdok_subscribed_to_newsletter' => boolval($request->getPost()->get('krimdok_subscribed_to_newsletter', false)),
+        ];
+        foreach ($additionalParams as $param => $default) {
+            $params[$param] = $request->getPost()->get($param, $default);
+        }
         return $params;
     }
 

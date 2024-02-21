@@ -198,7 +198,6 @@ class MyResearchController extends \TueFind\Controller\MyResearchController
     {
         $params = [
             'ixtheo_title' => '',
-            'ixtheo_country' => '',
             'ixtheo_appellation' => ''
         ];
         return array_merge(parent::getProfileParams(), $params);

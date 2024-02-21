@@ -93,7 +93,7 @@ class RedirectController extends \VuFind\Controller\AbstractBase implements \VuF
             // Check country restriction
             $viewParams['countryMode'] = $this->kfl->getCountryModeByDriver($viewParams['driver']);
             if ($viewParams['countryMode'] == 'DACH') {
-                $viewParams['countryAllowed'] = in_array($user->ixtheo_country, ['DE', 'AT', 'CH']);
+                $viewParams['countryAllowed'] = in_array($user->tuefind_country, ['DE', 'AT', 'CH']);
             } else {
                 $viewParams['countryAllowed'] = true;
             }

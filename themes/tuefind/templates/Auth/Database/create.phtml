@@ -58,9 +58,4 @@
 </div>
 
 <!-- TueFind-specific: Additional fields -->
-<div class="form-group">
-  <label class="control-label" for="account_institution"><?= $this->transEsc('Institution') ?>:</label>
-  <input id="account_institution" type="text" name="tuefind_institution"
-         value="<?= $this->escapeHtmlAttr($this->request->get('tuefind_institution')) ?>"
-         placeholder="<?= $this->transEsc('Institution') ?>" class="form-control"/>
-</div>
+<?=$this->context($this)->renderInContext("myresearch/additional_fields.phtml", [])?>

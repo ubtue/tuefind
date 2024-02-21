@@ -25,6 +25,7 @@ class MyResearchController extends \TueFind\Controller\MyResearchController
     {
         $params = [
             'krimdok_subscribed_to_newsletter' => '0',
+            'tuefind_country' => '',
         ];
         return array_merge(parent::getProfileParams(), $params);
     }
