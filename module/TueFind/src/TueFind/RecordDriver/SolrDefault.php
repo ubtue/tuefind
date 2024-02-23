@@ -802,8 +802,25 @@ class SolrDefault extends \VuFind\RecordDriver\SolrMarc
         return $this->fields['record_selector'] ?? [];
     }
 
+    /**
+     * This function is just for the RecordDataFormatterFactory
+     * to determine for which cases this field should be shown or hidden
+     * in the full title view. However, there might be some cases where
+     * the field is shown and there is only some help text displayed.
+     * Please check the template in those cases.
+     */
     public function showInterlibraryLoan(): bool
     {
-        return !in_array('Archived Material', $this->getFormats());
+        $formats = $this->getFormats();
+
+        $formatsToHide = ['Archived Material', 'Database', 'Literary Remains', 'Weblog', 'Website'];
+        if (count(array_intersect($formats, $formatsToHide)) > 0)
+            return false;
+
+        $formatsToHideIfOpenAccess = ['Research Data'];
+        if (count(array_intersect($formats, $formatsToHideIfOpenAccess)) > 0)
+            return false;
+
+        return true;
     }
 }
