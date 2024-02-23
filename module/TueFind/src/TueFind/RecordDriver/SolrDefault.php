@@ -204,12 +204,12 @@ class SolrDefault extends \VuFind\RecordDriver\SolrMarc
 
     public function getCorporateAuthorsGnds(): array
     {
-        return $this->fields['author2_gnd'] ?? [];
+        return $this->fields['author_corporate_gnd'] ?? [];
     }
 
     public function getCorporateAuthorsIds(): array
     {
-        return $this->fields['author2_id'] ?? [];
+        return $this->fields['author_corporate_id'] ?? [];
     }
 
     public function getDeduplicatedAuthors($dataFields = ['role', 'id', 'gnd'])

@@ -5,7 +5,9 @@
   $publication = $this->tuefind()->getPublicationByControlNumber($recordId);
   $authorsIds = $this->driver->getPrimaryAuthorsIds();
   $secondaryAuthorsIds = $this->driver->getSecondaryAuthorsIds();
-  $showPublishButton = $this->tuefind()->getUserAccessPublishButton($authorsIds);
+  $corporateAuthorsIds = $this->driver->getCorporateAuthorsIds();
+  $primaryAndCorporateAuthorsIds = array_merge($authorsIds, $corporateAuthorsIds);
+  $showPublishButton = $this->tuefind()->getUserAccessPublishButton($primaryAndCorporateAuthorsIds);
   $showSecondaryAuthorsButton = $this->tuefind()->showSecondaryAuthorsButton($secondaryAuthorsIds);
 
   $showDspaceLink = false;
