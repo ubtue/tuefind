@@ -1,0 +1,18 @@
+
+<div class="form-group">
+  <label class="control-label" for="account_institution"><?= $this->transEsc('Institution') ?>:</label>
+  <input id="account_institution" type="text" name="tuefind_institution"
+         value="<?= $this->escapeHtmlAttr($this->request->get('tuefind_institution')) ?>"
+         placeholder="<?= $this->transEsc('Institution') ?>" class="form-control"/>
+</div>
+
+<?php $tuefind_user_country = $this->request->get('tuefind_country');?>
+<div class="form-group">
+  <label class="control-label" for="tuefind_country"><?= $this->transEsc('Country') ?>:</label>
+  <select id="account_country" name="tuefind_country" class="form-control">
+    <option></option>
+    <?php foreach ($this->layout()->allCountries as $countryKey => $country): ?>
+      <option <?php if($tuefind_user_country == $countryKey || $tuefind_user_country == $country) { echo 'selected';} ?> value="<?=$countryKey; ?>"><?=$country; ?></option>
+    <?php endforeach; ?>
+  </select>
+</div>

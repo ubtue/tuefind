@@ -13,7 +13,7 @@ class User extends \VuFind\Db\Row\User
         $this->save();
     }
 
-    public function setTuefindCountry($tuefindCountry) {
+    public function setCountry($tuefindCountry) {
         $this->tuefind_country = $tuefindCountry;
         $this->save();
     }
