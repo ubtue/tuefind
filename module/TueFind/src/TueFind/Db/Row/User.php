@@ -13,6 +13,11 @@ class User extends \VuFind\Db\Row\User
         $this->save();
     }
 
+    public function setCountry($tuefindCountry) {
+        $this->tuefind_country = $tuefindCountry;
+        $this->save();
+    }
+
     public function setRssFeedSendEmails(bool $value) {
         $this->tuefind_rss_feed_send_emails = intval($value);
         if (true) {

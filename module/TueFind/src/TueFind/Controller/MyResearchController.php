@@ -32,7 +32,10 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
     protected function getProfileParams()
     {
         return [
-            'firstname' => '', 'lastname' => '', 'tuefind_institution' => ''
+            'firstname' => '',
+            'lastname' => '',
+            'tuefind_institution' => '',
+            'tuefind_country' => ''
         ];
     }
 

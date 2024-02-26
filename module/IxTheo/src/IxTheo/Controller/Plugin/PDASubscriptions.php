@@ -75,7 +75,7 @@ class PDASubscriptions extends AbstractPlugin
                      'firstname' => $userRow->firstname,
                      'lastname' =>  $userRow->lastname,
                      'email' => $userRow->email,
-                     'country' => $userRow->ixtheo_country,
+                     'country' => $userRow->tuefind_country,
                      'user_type' => $userRow->ixtheo_user_type ];
        return $userData;
     }
