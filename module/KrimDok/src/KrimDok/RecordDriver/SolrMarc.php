@@ -130,6 +130,15 @@ class SolrMarc extends SolrDefault
         if ($availability['signature'] != null || $availability['holding'] != null)
             return $availability;
 
+        // Special case for articles: Check superior work availability information
+        if ($akbField = $this->getField('AKB')) {
+            if ($a = $this->getSubfield($akbField, 'a'))
+                $availability['holding'] = $a;
+            if ($b = $this->getSubfield($akbField, 'b'))
+                $availability['signature'] = $b;
+            return $availability;
+        }
+
         return null;
     }
 
