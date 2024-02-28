@@ -1,8 +1,9 @@
 <?php
+
 /**
  * Logic for initializing a language within a translator used by VuFind.
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2019.
  *
@@ -25,10 +26,13 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org Main Site
  */
+
 namespace VuFind\I18n\Translator;
 
 use Laminas\I18n\Translator\TranslatorInterface;
 use VuFind\I18n\Locale\LocaleSettings;
+
+use function strlen;
 
 /**
  * Logic for initializing a language within a translator used by VuFind.
@@ -51,7 +55,7 @@ trait LanguageInitializerTrait
         $base = APPLICATION_PATH;
         $local = LOCAL_OVERRIDE_DIR;
         $languagePathParts = ["$base/languages"];
-        if (!empty($local)) {
+        if (strlen($local) > 0) {
             $languagePathParts[] = "$local/languages";
         }
         $languagePathParts[] = "$base/themes/*/languages";

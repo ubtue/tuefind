@@ -1,10 +1,11 @@
 <?php
+
 /**
  * Class to represent currently-selected theme and related information.
  *
- * PHP version 7
+ * PHP version 8
  *
- * Copyright (C) Villanova University 2010.
+ * Copyright (C) Villanova University 2010-2023.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -25,7 +26,13 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org Main Site
  */
+
 namespace VuFindTheme;
+
+use Laminas\Cache\Storage\StorageInterface;
+
+use function is_array;
+use function strlen;
 
 /**
  * Class to represent currently-selected theme and related information.
@@ -38,6 +45,8 @@ namespace VuFindTheme;
  */
 class ThemeInfo
 {
+    use \VuFind\Feature\MergeRecursiveTrait;
+
     /**
      * Base directory for theme files
      *
@@ -61,11 +70,18 @@ class ThemeInfo
     protected $safeTheme;
 
     /**
-     * Theme configuration
+     * Theme configuration cache
      *
      * @var array
      */
     protected $allThemeInfo = null;
+
+    /**
+     * Cache for merged configs
+     *
+     * @var StorageInterface
+     */
+    protected $cache = null;
 
     // Constant for use with findContainingTheme:
     public const RETURN_ALL_DETAILS = 'all';
@@ -80,6 +96,18 @@ class ThemeInfo
     {
         $this->baseDir = $baseDir;
         $this->currentTheme = $this->safeTheme = $safeTheme;
+    }
+
+    /**
+     * Provide cache and activate info caching
+     *
+     * @param StorageInterface $cache cache object
+     *
+     * @return void
+     */
+    public function setCache(StorageInterface $cache)
+    {
+        $this->cache = $cache;
     }
 
     /**
@@ -176,7 +204,7 @@ class ThemeInfo
     public function getThemeInfo()
     {
         // Fill in the theme info cache if it is not already populated:
-        if (null === $this->allThemeInfo) {
+        if ($this->allThemeInfo === null) {
             // Build an array of theme information by inheriting up the theme tree:
             $this->allThemeInfo = [];
             $currentTheme = $this->getTheme();
@@ -192,51 +220,60 @@ class ThemeInfo
     /**
      * Get a configuration element, merged to reflect theme inheritance.
      *
-     * @param string $key     Configuration key to retrieve
-     * @param bool   $flatten Use array_replace to flatten values
+     * @param string $key Configuration key to retrieve (or empty string to
+     * retrieve full configuration)
      *
-     * @return array
+     * @return array|string
      */
-    public function getMergedConfig(string $key, bool $flatten = false): array
+    public function getMergedConfig(string $key = '')
     {
         $currentTheme = $this->getTheme();
         $allThemeInfo = $this->getThemeInfo();
 
-        /**
-         * Assume a parent value 'a' and a child value 'b'
-         *
-         * Using array_merge (default) will merge them into ['b', 'a']
-         * Using array_replace ($flatten = true) will merge them into 'b'
-         *
-         * We're using an anonymous function here to swap the arguments in the
-         * flatten case. This is to make sure child values override parent values
-         * with replace but parent values are appended to the end of merged values
-         */
-        $deepFunc = !$flatten
-            ? 'array_merge_recursive'
-            : 'array_replace_recursive';
+        $cacheKey = $currentTheme . '_' . $key;
+
+        if ($this->cache !== null) {
+            $cached = $this->cache->getItem($cacheKey);
+
+            if ($cached !== null) {
+                return $cached;
+            }
+        }
 
         $merged = [];
+
         while (!empty($currentTheme)) {
             $currentThemeSet = array_merge(
                 (array)$currentTheme,
                 $allThemeInfo[$currentTheme]['mixins'] ?? [],
             );
+
+            // from child to parent
             foreach ($currentThemeSet as $theme) {
-                if (isset($allThemeInfo[$theme][$key])) {
-                    $merged = $deepFunc(
-                        $allThemeInfo[$theme][$key],
-                        $merged,
-                    );
+                if (
+                    isset($allThemeInfo[$theme])
+                    && (empty($key) || isset($allThemeInfo[$theme][$key]))
+                ) {
+                    $current = empty($key)
+                        ? $allThemeInfo[$theme]
+                        : $allThemeInfo[$theme][$key];
+
+                    $merged = $this->mergeRecursive($current, $merged);
                 }
             }
+
             $currentTheme = $allThemeInfo[$currentTheme]['extends'];
         }
+
+        if ($this->cache !== null) {
+            $this->cache->setItem($cacheKey, $merged);
+        }
+
         return $merged;
     }
 
     /**
-     * Search the themes for a particular file.  If it exists, return the
+     * Search the themes for a particular file. If it exists, return the
      * first matching theme name; otherwise, return null.
      *
      * @param string|array $relativePath Relative path (or array of paths) to

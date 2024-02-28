@@ -1,8 +1,9 @@
 <?php
+
 /**
  * CSRF Validator factory.
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2014.
  * Copyright (C) The National Library of Finland 2018.
@@ -27,13 +28,14 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development Wiki
  */
+
 namespace VuFind\Validator;
 
-use Interop\Container\ContainerInterface;
-use Interop\Container\Exception\ContainerException;
 use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 use Laminas\ServiceManager\Factory\FactoryInterface;
+use Psr\Container\ContainerExceptionInterface as ContainerException;
+use Psr\Container\ContainerInterface;
 
 /**
  * CSRF Validator factory.
@@ -77,7 +79,7 @@ class SessionCsrfFactory implements FactoryInterface
         return new $requestedName(
             [
                 'session' => new \Laminas\Session\Container('csrf', $sessionManager),
-                'salt' => $config->Security->HMACkey ?? 'VuFindCsrfSalt'
+                'salt' => $config->Security->HMACkey ?? 'VuFindCsrfSalt',
             ]
         );
     }

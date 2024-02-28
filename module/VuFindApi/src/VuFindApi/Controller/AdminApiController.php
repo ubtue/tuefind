@@ -1,8 +1,9 @@
 <?php
+
 /**
  * Admin Api Controller
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) The National Library of Finland 2021.
  *
@@ -25,6 +26,7 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org Main Page
  */
+
 namespace VuFindApi\Controller;
 
 use Laminas\ServiceManager\ServiceLocatorInterface;
@@ -39,8 +41,7 @@ use VuFind\Cache\Manager as CacheManager;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org Main Page
  */
-class AdminApiController extends \VuFind\Controller\AbstractBase
-    implements ApiInterface
+class AdminApiController extends \VuFind\Controller\AbstractBase implements ApiInterface
 {
     use ApiTrait;
 
@@ -71,13 +72,6 @@ class AdminApiController extends \VuFind\Controller\AbstractBase
     protected $cacheAccessPermission = 'access.api.admin.cache';
 
     /**
-     * Caches that are not cleared by the clearCache command by default
-     *
-     * @var array
-     */
-    protected $defaultIgnoredCaches = ['cover'];
-
-    /**
      * Clear the cache
      *
      * @return \Laminas\Http\Response
@@ -105,12 +99,12 @@ class AdminApiController extends \VuFind\Controller\AbstractBase
     }
 
     /**
-     * Get Swagger specification JSON fragment for services provided by the
+     * Get API specification JSON fragment for services provided by the
      * controller
      *
      * @return string
      */
-    public function getSwaggerSpecFragment()
+    public function getApiSpecFragment()
     {
         $spec = [];
         if (!$this->isAccessDenied($this->cacheAccessPermission)) {
@@ -125,32 +119,42 @@ class AdminApiController extends \VuFind\Controller\AbstractBase
                         'description' => 'Caches to clear. By default the following'
                             . " caches are cleared: $defaultCaches",
                         'required' => false,
-                        'type' => 'array',
-                        'collectionFormat' => 'multi',
-                        'items' => [
-                            'type' => 'string'
-                        ]
-                    ]
+                        'style' => 'form',
+                        'explode' => true,
+                        'schema' => [
+                            'type' => 'array',
+                            'items' => [
+                                'type' => 'string',
+                            ],
+                        ],
+                    ],
                 ],
                 'tags' => ['admin'],
                 'responses' => [
                     '200' => [
                         'description' => 'An OK response',
-                        'schema' => [
-                            '$ref' => '#/definitions/Success'
-                        ]
+                        'content' => [
+                            'application/json' => [
+                                'schema' => [
+                                    '$ref' => '#/components/schemas/Success',
+                                ],
+                            ],
+                        ],
                     ],
                     'default' => [
                         'description' => 'Error',
-                        'schema' => [
-                            '$ref' => '#/definitions/Error'
-                        ]
-                    ]
-                ]
+                        'content' => [
+                            'application/json' => [
+                                'schema' => [
+                                    '$ref' => '#/components/schemas/Error',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
             ];
         }
 
-        // Admin API endpoints are not published
         return json_encode($spec);
     }
 
@@ -162,10 +166,7 @@ class AdminApiController extends \VuFind\Controller\AbstractBase
     protected function getDefaultCachesToClear(): array
     {
         $result = [];
-        foreach ($this->cacheManager->getCacheList() as $id) {
-            if (in_array($id, $this->defaultIgnoredCaches)) {
-                continue;
-            }
+        foreach ($this->cacheManager->getNonPersistentCacheList() as $id) {
             $cache = $this->cacheManager->getCache($id);
             if ($cache instanceof \Laminas\Cache\Storage\FlushableInterface) {
                 $result[] = $id;

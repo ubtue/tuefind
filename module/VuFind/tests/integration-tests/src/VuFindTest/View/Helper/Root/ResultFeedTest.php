@@ -1,8 +1,9 @@
 <?php
+
 /**
  * ResultFeed Test Class
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2010.
  *
@@ -25,6 +26,7 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development:testing:unit_tests Wiki
  */
+
 namespace VuFindTest\Integration\View\Helper\Root;
 
 use VuFind\View\Helper\Root\ResultFeed;
@@ -43,6 +45,7 @@ class ResultFeedTest extends \PHPUnit\Framework\TestCase
     use \VuFindTest\Feature\LiveDetectionTrait;
     use \VuFindTest\Feature\LiveSolrTrait;
     use \VuFindTest\Feature\ViewTrait;
+    use \VuFindTest\Feature\TranslatorTrait;
 
     /**
      * Standard setup method.
@@ -74,7 +77,7 @@ class ResultFeedTest extends \PHPUnit\Framework\TestCase
                 [
                     new \VuFind\Record\Router(
                         new \Laminas\Config\Config([])
-                    )
+                    ),
                 ]
             )->getMock();
         $recordLinker->expects($this->any())->method('getUrl')
@@ -85,21 +88,6 @@ class ResultFeedTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue('http://server/url'));
 
         return compact('currentPath', 'recordLinker') + ['serverurl' => $serverUrl];
-    }
-
-    /**
-     * Mock out the translator.
-     *
-     * @return \Laminas\I18n\Translator\TranslatorInterface
-     */
-    protected function getMockTranslator()
-    {
-        $mock = $this->getMockBuilder(\Laminas\I18n\Translator\TranslatorInterface::class)
-            ->getMock();
-        $mock->expects($this->any())->method('translate')
-            ->withConsecutive(['Results for'], ['showing_results_of_html', 'default'])
-            ->willReturnOnConsecutiveCalls('Results for', 'Showing <strong>%%start%% - %%end%%</strong> results of <strong>%%total%%</strong>');
-        return $mock;
     }
 
     /**
@@ -123,10 +111,19 @@ class ResultFeedTest extends \PHPUnit\Framework\TestCase
 
         $helper = new ResultFeed();
         $helper->registerExtensions(new \VuFindTest\Container\MockContainer($this));
-        $helper->setTranslator($this->getMockTranslator());
+        $translator = $this->getMockTranslator(
+            [
+                'default' => [
+                    'Results for' => 'Results for',
+                    'showing_results_of_html' => 'Showing <strong>%%start%% - %%end%%'
+                        . '</strong> results of <strong>%%total%%</strong>',
+                ],
+            ]
+        );
+        $helper->setTranslator($translator);
         $helper->setView($this->getPhpRenderer($this->getPlugins()));
         $feed = $helper($results, '/test/path');
-        $this->assertTrue(is_object($feed));
+        $this->assertIsObject($feed);
         $rss = $feed->export('rss');
 
         // Make sure it's really an RSS feed:
@@ -134,6 +131,9 @@ class ResultFeedTest extends \PHPUnit\Framework\TestCase
 
         // Make sure custom Dublin Core elements are present:
         $this->assertTrue(strstr($rss, 'dc:format') !== false);
+
+        // Make sure custom Atom link elements are present:
+        $this->assertTrue(strstr($rss, 'atom:link') !== false);
 
         // Now re-parse it and check for some expected values:
         $parsedFeed = \Laminas\Feed\Reader\Reader::importString($rss);

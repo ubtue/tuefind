@@ -5,7 +5,7 @@
  * functionality depends upon the LiveDetectionTrait for identification of a live
  * test environment.
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2021.
  *
@@ -28,7 +28,10 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development:testing:unit_tests Wiki
  */
+
 namespace VuFindTest\Feature;
+
+use function count;
 
 /**
  * Mix-in for accessing a real database during testing.
@@ -41,6 +44,8 @@ namespace VuFindTest\Feature;
  */
 trait LiveDatabaseTrait
 {
+    use PathResolverTrait;
+
     /**
      * Flag to allow other traits to test for the presence of this one (to enforce
      * dependencies).
@@ -73,6 +78,7 @@ trait LiveDatabaseTrait
                 $config['vufind']['config_reader']
             );
             $container->set(\VuFind\Config\PluginManager::class, $configManager);
+            $this->addPathResolverToContainer($container);
             $adapterFactory = new \VuFind\Db\AdapterFactory(
                 $configManager->get('config')
             );
@@ -118,7 +124,7 @@ trait LiveDatabaseTrait
      */
     protected static function failIfDataExists(): void
     {
-        $test = new static();   // create instance of current class
+        $test = new static('');   // create instance of current class
         // Fail if the test does not include the LiveDetectionTrait.
         if (!$test->hasLiveDetectionTrait ?? false) {
             self::fail(
@@ -135,11 +141,11 @@ trait LiveDatabaseTrait
         $checks = [
             [
                 'table' => \VuFind\Db\Table\User::class,
-                'name' => 'users'
+                'name' => 'users',
             ],
             [
                 'table' => \VuFind\Db\Table\Tags::class,
-                'name' => 'tags'
+                'name' => 'tags',
             ],
         ];
         foreach ($checks as $check) {
@@ -165,7 +171,7 @@ trait LiveDatabaseTrait
      */
     protected static function removeUsers($users)
     {
-        $test = new static();   // create instance of current class
+        $test = new static('');   // create instance of current class
         // Fail if the test does not include the LiveDetectionTrait.
         if (!$test->hasLiveDetectionTrait ?? false) {
             self::fail(

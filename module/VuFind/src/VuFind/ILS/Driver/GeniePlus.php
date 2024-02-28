@@ -1,8 +1,9 @@
 <?php
+
 /**
  * GeniePlus API driver
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2022.
  *
@@ -25,9 +26,13 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development:plugins:ils_drivers Wiki
  */
+
 namespace VuFind\ILS\Driver;
 
 use VuFind\Exception\ILS as ILSException;
+
+use function count;
+use function in_array;
 
 /**
  * GeniePlus API driver
@@ -143,6 +148,7 @@ class GeniePlus extends AbstractAPI
      * Renew the OAuth access token needed by the API.
      *
      * @return void
+     * @throws ILSException
      */
     protected function renewAccessToken(): void
     {
@@ -158,10 +164,6 @@ class GeniePlus extends AbstractAPI
         ];
         $response = $this->makeRequest('POST', '/_oauth/token', $params, $headers);
         $result = json_decode($response->getBody());
-        if ($response->getStatusCode() >= 400) {
-            $this->logError('GeniePlus API failure: ' . $response->getBody());
-            throw new ILSException('Problem with GeniePlus API.');
-        }
         if (!isset($result->access_token)) {
             throw new ILSException('No access token in API response.');
         }
@@ -180,33 +182,34 @@ class GeniePlus extends AbstractAPI
      * @return \Laminas\Http\Response
      */
     protected function callApiWithToken(
-        $method = "GET",
-        $path = "/",
+        $method = 'GET',
+        $path = '/',
         $params = [],
         $headers = []
     ) {
-        $headers[] = "Accept: application/json";
+        $headers[] = 'Accept: application/json';
         if (null === $this->token) {
             $this->renewAccessToken();
         }
-        try {
-            $authHeader = "Authorization: Bearer {$this->token}";
-            return $this->makeRequest(
-                $method,
-                $path,
-                $params,
-                array_merge($headers, [$authHeader])
-            );
-        } catch (\VuFind\Exception\Forbidden $e) {
+        $authHeader = "Authorization: Bearer {$this->token}";
+        $response = $this->makeRequest(
+            $method,
+            $path,
+            $params,
+            array_merge($headers, [$authHeader]),
+            [401, 403]
+        );
+        if ($response->getStatusCode() > 400) {
             $this->renewAccessToken();
             $authHeader = "Authorization: Bearer {$this->token}";
-            return $this->makeRequest(
+            $response = $this->makeRequest(
                 $method,
                 $path,
                 $params,
                 array_merge($headers, [$authHeader])
             );
         }
+        return $response;
     }
 
     /**
@@ -436,7 +439,7 @@ class GeniePlus extends AbstractAPI
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function getConfig($function, $params = null)
+    public function getConfig($function, $params = [])
     {
         if ('getMyTransactions' === $function) {
             return $this->config['Transactions'] ?? [
@@ -506,7 +509,7 @@ class GeniePlus extends AbstractAPI
             'cat_password' => trim($password),
             'email'        => $email,
             'major'        => null,
-            'college'      => null
+            'college'      => null,
         ];
     }
 

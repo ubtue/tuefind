@@ -1,10 +1,11 @@
 <?php
+
 /**
- * ILS driver test
+ * GeniePlus ILS driver test
  *
- * PHP version 7
+ * PHP version 8
  *
- * Copyright (C) Villanova University 2011.
+ * Copyright (C) Villanova University 2021.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -25,6 +26,7 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org Main Page
  */
+
 namespace VuFindTest\ILS\Driver;
 
 use Laminas\Http\Response;
@@ -32,7 +34,7 @@ use Laminas\Session\Container;
 use VuFind\ILS\Driver\GeniePlus;
 
 /**
- * ILS driver test
+ * GeniePlus ILS driver test
  *
  * @category VuFind
  * @package  Tests
@@ -43,6 +45,7 @@ use VuFind\ILS\Driver\GeniePlus;
 class GeniePlusTest extends \VuFindTest\Unit\ILSDriverTestCase
 {
     use \VuFindTest\Feature\FixtureTrait;
+    use \VuFindTest\Feature\WithConsecutiveTrait;
 
     /**
      * Default driver configuration
@@ -68,6 +71,26 @@ class GeniePlusTest extends \VuFindTest\Unit\ILSDriverTestCase
     ];
 
     /**
+     * Expected parameters to patron login request
+     *
+     * @var array
+     */
+    protected $expectedLoginRequest = [
+        'GET',
+        '/_rest/databases/api_database_name/templates/Borrower/search-result',
+        [
+            'page-size' => 1,
+            'page' => 0,
+            'fields' => 'ID,Name,Email',
+            'command' => "Email == 'foo@foo.com' AND InstitutionalIdNumber == 'bar'",
+        ],
+        [
+            'Accept: application/json',
+            'Authorization: Bearer fake-token',
+        ],
+    ];
+
+    /**
      * Expected parameters to token generation request
      *
      * @var array
@@ -88,7 +111,8 @@ class GeniePlusTest extends \VuFindTest\Unit\ILSDriverTestCase
     /**
      * Get a mock response with a predetermined body.
      *
-     * @param string $body Body
+     * @param string $body   Body
+     * @param int    $status HTTP status code
      *
      * @return Response
      */
@@ -135,25 +159,68 @@ class GeniePlusTest extends \VuFindTest\Unit\ILSDriverTestCase
      */
     public function testAPIFailure(): void
     {
+        // Note: in a real-world scenario, the makeRequest method would throw
+        // an exception instead of returning a value when encountering a 500
+        // status, but this test is retained to confirm that invalid responses
+        // are processed appropriately.
         $response = $this->getMockResponse('Internal server error', 500);
         $this->driver->expects($this->once())
             ->method('makeRequest')
-            ->withConsecutive($this->expectedTokenRequest)
-            ->willReturnOnConsecutiveCalls($response);
+            ->with(...$this->expectedTokenRequest)
+            ->willReturn($response);
         $this->driver->setConfig($this->config);
         $this->driver->init();
-        $logger = $this->getMockBuilder(\Laminas\Log\Logger::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $logger->expects($this->once())
-            ->method('err')
-            ->with(
-                $this->equalTo(get_class($this->driver)
-                . ": GeniePlus API failure: Internal server error")
-            );
-        $this->driver->setLogger($logger);
-        $this->expectExceptionMessage('Problem with GeniePlus API.');
+        $this->expectExceptionMessage('No access token in API response.');
         $this->driver->patronLogin('foo@foo.com', 'bar');
+    }
+
+    /**
+     * Test token auto-renewal
+     *
+     * @return void
+     */
+    public function testTokenAutoRenewal(): void
+    {
+        $goodToken = $this->getMockResponse(
+            $this->getFixture('genieplus/token.json')
+        );
+        $expiredToken = $this->getMockResponse('Forbidden', 403);
+        $patronLogin = $this->getMockResponse(
+            $this->getFixture('genieplus/patronLogin.json')
+        );
+        $this->expectConsecutiveCalls(
+            $this->driver,
+            'makeRequest',
+            [
+                // first attempt (new token):
+                $this->expectedTokenRequest,
+                $this->expectedLoginRequest,
+                // second attempt (renew expired token):
+                $this->expectedLoginRequest,
+                $this->expectedTokenRequest,
+                $this->expectedLoginRequest,
+            ],
+            [
+                // first attempt (new token):
+                $goodToken,
+                $patronLogin,
+                // second attempt (renew expired token):
+                $expiredToken,
+                $goodToken,
+                $patronLogin,
+            ]
+        );
+        $this->driver->setConfig($this->config);
+        $this->driver->init();
+        // We'll call patronLogin twice -- the first time will simulate a "normal"
+        // first login, the second will simulate the token having expired after the
+        // passage of time.
+        for ($i = 0; $i < 2; $i++) {
+            $this->assertEquals(
+                $this->defaultPatron,
+                $this->driver->patronLogin('foo@foo.com', 'bar')
+            );
+        }
     }
 
     /**
@@ -169,28 +236,18 @@ class GeniePlusTest extends \VuFindTest\Unit\ILSDriverTestCase
         $response2 = $this->getMockResponse(
             $this->getFixture('genieplus/patronLogin.json')
         );
-        $this->driver->expects($this->exactly(2))
-            ->method('makeRequest')
-            ->withConsecutive(
+        $this->expectConsecutiveCalls(
+            $this->driver,
+            'makeRequest',
+            [
                 $this->expectedTokenRequest,
-                [
-                    'GET',
-                    '/_rest/databases/api_database_name/templates/Borrower/search-result',
-                    [
-                        'page-size' => 1,
-                        'page' => 0,
-                        'fields' => 'ID,Name,Email',
-                        'command' => "Email == 'foo@foo.com' AND InstitutionalIdNumber == 'bar'",
-                    ],
-                    [
-                        'Accept: application/json',
-                        'Authorization: Bearer fake-token',
-                    ]
-                ],
-            )->willReturnOnConsecutiveCalls(
+                $this->expectedLoginRequest,
+            ],
+            [
                 $response1,
                 $response2,
-            );
+            ]
+        );
         $this->driver->setConfig($this->config);
         $this->driver->init();
         $this->assertEquals(
@@ -212,9 +269,10 @@ class GeniePlusTest extends \VuFindTest\Unit\ILSDriverTestCase
         $response2 = $this->getMockResponse(
             $this->getFixture('genieplus/holdings.json')
         );
-        $this->driver->expects($this->exactly(2))
-            ->method('makeRequest')
-            ->withConsecutive(
+        $this->expectConsecutiveCalls(
+            $this->driver,
+            'makeRequest',
+            [
                 $this->expectedTokenRequest,
                 [
                     'GET',
@@ -222,18 +280,21 @@ class GeniePlusTest extends \VuFindTest\Unit\ILSDriverTestCase
                     [
                         'page-size' => 100,
                         'page' => 0,
-                        'fields' => 'Inventory.Barcode,Inventory.CallNumLC,Inventory.ClaimDate,UniqRecNum,Inventory.SubLoc.CodeDesc,Inventory.ActType.Status,Inventory.VolumeDesc',
+                        'fields' => 'Inventory.Barcode,Inventory.CallNumLC,Inventory.ClaimDate,UniqRecNum,'
+                        . 'Inventory.SubLoc.CodeDesc,Inventory.ActType.Status,Inventory.VolumeDesc',
                         'command' => "UniqRecNum == 'foo-id'",
                     ],
                     [
                         'Accept: application/json',
                         'Authorization: Bearer fake-token',
-                    ]
+                    ],
                 ],
-            )->willReturnOnConsecutiveCalls(
+            ],
+            [
                 $response1,
                 $response2,
-            );
+            ]
+        );
     }
 
     /**
@@ -401,9 +462,10 @@ class GeniePlusTest extends \VuFindTest\Unit\ILSDriverTestCase
         $response2 = $this->getMockResponse(
             $this->getFixture('genieplus/profile.json')
         );
-        $this->driver->expects($this->exactly(2))
-            ->method('makeRequest')
-            ->withConsecutive(
+        $this->expectConsecutiveCalls(
+            $this->driver,
+            'makeRequest',
+            [
                 $this->expectedTokenRequest,
                 [
                     'GET',
@@ -411,18 +473,21 @@ class GeniePlusTest extends \VuFindTest\Unit\ILSDriverTestCase
                     [
                         'page-size' => 1,
                         'page' => 0,
-                        'fields' => 'Address1,Address2,ZipCode,City,StateProv.CodeDesc,Country.CodeDesc,PhoneNumber,ExpiryDate',
+                        'fields' => 'Address1,Address2,ZipCode,City,StateProv.CodeDesc,Country.CodeDesc,'
+                        . 'PhoneNumber,ExpiryDate',
                         'command' => "ID == 'fake.user.fake.com'",
                     ],
                     [
                         'Accept: application/json',
                         'Authorization: Bearer fake-token',
-                    ]
+                    ],
                 ],
-            )->willReturnOnConsecutiveCalls(
+            ],
+            [
                 $response1,
                 $response2,
-            );
+            ]
+        );
         $this->driver->setConfig($this->config);
         $this->driver->init();
         $this->assertEquals(
@@ -454,9 +519,10 @@ class GeniePlusTest extends \VuFindTest\Unit\ILSDriverTestCase
         $response2 = $this->getMockResponse(
             $this->getFixture('genieplus/checkedout.json')
         );
-        $this->driver->expects($this->exactly(2))
-            ->method('makeRequest')
-            ->withConsecutive(
+        $this->expectConsecutiveCalls(
+            $this->driver,
+            'makeRequest',
+            [
                 $this->expectedTokenRequest,
                 [
                     'GET',
@@ -470,12 +536,14 @@ class GeniePlusTest extends \VuFindTest\Unit\ILSDriverTestCase
                     [
                         'Accept: application/json',
                         'Authorization: Bearer fake-token',
-                    ]
+                    ],
                 ],
-            )->willReturnOnConsecutiveCalls(
+            ],
+            [
                 $response1,
                 $response2,
-            );
+            ]
+        );
         $this->driver->setConfig($this->config);
         $this->driver->init();
         $this->assertEquals(

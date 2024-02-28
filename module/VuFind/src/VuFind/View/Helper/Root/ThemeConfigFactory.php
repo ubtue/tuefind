@@ -1,8 +1,9 @@
 <?php
+
 /**
  * Theme Config helper factory.
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2020.
  *
@@ -26,13 +27,14 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development Wiki
  */
+
 namespace VuFind\View\Helper\Root;
 
-use Interop\Container\ContainerInterface;
-use Interop\Container\Exception\ContainerException;
 use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 use Laminas\ServiceManager\Factory\FactoryInterface;
+use Psr\Container\ContainerExceptionInterface as ContainerException;
+use Psr\Container\ContainerInterface;
 
 /**
  * Icon helper factory.
@@ -71,13 +73,6 @@ class ThemeConfigFactory implements FactoryInterface
 
         $themeInfo = $container->get(\VuFindTheme\ThemeInfo::class);
 
-        // As of release 1.1.0, the memory storage adapter has a flaw which can cause
-        // unnecessary out of memory exceptions when a memory limit is enabled; we
-        // can disable these problematic checks by setting memory_limit to -1.
-        $cacheConfig = ['name' => 'memory', 'options' => ['memory_limit' => -1]];
-        $cache = $container->get(\Laminas\Cache\Service\StorageAdapterFactory::class)
-            ->createFromArrayConfiguration($cacheConfig);
-
-        return new $requestedName($themeInfo, $cache);
+        return new $requestedName($themeInfo);
     }
 }

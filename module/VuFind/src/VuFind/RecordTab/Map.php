@@ -1,8 +1,9 @@
 <?php
+
 /**
  * Map tab
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2010.
  *
@@ -26,7 +27,12 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development:plugins:record_tabs Wiki
  */
+
 namespace VuFind\RecordTab;
+
+use VuFind\Config\PathResolver;
+
+use function count;
 
 /**
  * Map tab
@@ -76,16 +82,25 @@ class Map extends AbstractBase
     protected $basemapOptions = [];
 
     /**
+     * Configuration file path resolver
+     *
+     * @var PathResolver
+     */
+    protected $pathResolver;
+
+    /**
      * Constructor
      *
-     * @param bool  $mapTabDisplay  Display Map
-     * @param array $basemapOptions basemap settings
-     * @param array $mapTabOptions  MapTab settings
+     * @param bool         $mapTabDisplay  Display Map
+     * @param array        $basemapOptions basemap settings
+     * @param array        $mapTabOptions  MapTab settings
+     * @param PathResolver $pathResolver   Config file path resolver
      */
     public function __construct(
         $mapTabDisplay = false,
         $basemapOptions = [],
-        $mapTabOptions = []
+        $mapTabOptions = [],
+        PathResolver $pathResolver = null
     ) {
         if ($mapTabDisplay) {
             $this->mapTabDisplay = $mapTabDisplay;
@@ -98,6 +113,7 @@ class Map extends AbstractBase
             $this->basemapOptions[0] = $basemapOptions['basemap_url'];
             $this->basemapOptions[1] = $basemapOptions['basemap_attribution'];
         }
+        $this->pathResolver = $pathResolver;
     }
 
     /**
@@ -226,7 +242,9 @@ class Map extends AbstractBase
             $coords = $this->getRecordDriver()->tryMethod('getDisplayCoordinates');
             /* read lookup file into array */
             $label_lookup = [];
-            $file = \VuFind\Config\Locator::getConfigPath($mapLabelData[1]);
+            $file = $this->pathResolver
+                ? $this->pathResolver->getConfigPath($mapLabelData[1])
+                : \VuFind\Config\Locator::getConfigPath($mapLabelData[1]);
             if (file_exists($file)) {
                 $fp = fopen($file, 'r');
                 while (($line = fgetcsv($fp, 0, "\t")) !== false) {
@@ -287,7 +305,7 @@ class Map extends AbstractBase
                 [
                     $geoCoords[$key][0], $geoCoords[$key][1],
                     $geoCoords[$key][2], $geoCoords[$key][3],
-                    $mapLabel, $mapCoords
+                    $mapLabel, $mapCoords,
                 ]
             );
         }

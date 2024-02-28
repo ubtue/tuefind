@@ -1,8 +1,9 @@
 <?php
+
 /**
  * Factory for GetRecordDetails AJAX handler.
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2018.
  *
@@ -25,9 +26,10 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development Wiki
  */
+
 namespace VuFind\AjaxHandler;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 /**
  * Factory for GetRecordDetails AJAX handler.
@@ -38,8 +40,7 @@ use Interop\Container\ContainerInterface;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development Wiki
  */
-class GetResultCountFactory
-    implements \Laminas\ServiceManager\Factory\FactoryInterface
+class GetResultCountFactory implements \Laminas\ServiceManager\Factory\FactoryInterface
 {
     /**
      * Create an object
@@ -66,7 +67,8 @@ class GetResultCountFactory
             throw new \Exception('Unexpected options passed to factory.');
         }
         return new $requestedName(
-            $container->get(\VuFind\Search\Results\PluginManager::class)
+            $container->get(\VuFind\Search\Results\PluginManager::class),
+            $container->get(\VuFind\Session\Settings::class)
         );
     }
 }

@@ -1,8 +1,9 @@
 <?php
+
 /**
  * XSLT helper tests.
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2019.
  *
@@ -25,9 +26,12 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development:testing:unit_tests Wiki
  */
+
 namespace VuFindTest\XSLT\Import;
 
 use VuFind\XSLT\Import\VuFind;
+
+use function chr;
 
 /**
  * XSLT helper tests.
@@ -40,6 +44,8 @@ use VuFind\XSLT\Import\VuFind;
  */
 class VuFindTest extends \PHPUnit\Framework\TestCase
 {
+    use \VuFindTest\Feature\PathResolverTrait;
+
     /**
      * Support method -- set up a mock container for testing the class.
      *
@@ -78,6 +84,7 @@ class VuFindTest extends \PHPUnit\Framework\TestCase
     public function testGetConfig()
     {
         $container = $this->getMockContainer();
+        $this->addPathResolverToContainer($container);
         $config = new \Laminas\Config\Config([]);
         $container->get(\VuFind\Config\PluginManager::class)->expects($this->once())
             ->method('get')->with('config')->will($this->returnValue($config));
@@ -243,5 +250,123 @@ class VuFindTest extends \PHPUnit\Framework\TestCase
                 )
             );
         }
+    }
+
+    /**
+     * DataProvider for name-related tests
+     *
+     * @return array
+     */
+    public static function nameProvider(): array
+    {
+        return [
+            'single name' => ['foo', 'foo'],
+            'two-part name' => ['foo bar', 'bar, foo'],
+            'long name' => ['foo bar baz xyzzy', 'xyzzy, foo bar baz'],
+        ];
+    }
+
+    /**
+     * DataProvider for testIsInvertedName().
+     *
+     * @return array
+     */
+    public static function isInvertedNameProvider(): array
+    {
+        return [
+            ['foo bar', false],
+            ['foo bar, jr.', false],
+            ['bar, foo', true],
+            ['bar, foo, jr.', true],
+        ];
+    }
+
+    /**
+     * Test the isInvertedName helper.
+     *
+     * @param string $input  Input to test
+     * @param bool   $output Expected output of test
+     *
+     * @return void
+     *
+     * @dataProvider isInvertedNameProvider
+     */
+    public function testIsInvertedName(string $input, bool $output): void
+    {
+        $this->assertEquals($output, VuFind::isInvertedName($input));
+    }
+
+    /**
+     * Test the invertName helper.
+     *
+     * @param string $input  Input to test
+     * @param string $output Expected output of test
+     *
+     * @return void
+     *
+     * @dataProvider nameProvider
+     */
+    public function testInvertName(string $input, string $output): void
+    {
+        $this->assertEquals($output, VuFind::invertName($input));
+    }
+
+    /**
+     * Test the invertNames helper.
+     *
+     * @return void
+     */
+    public function testInvertNames(): void
+    {
+        $input = [];
+        $output = new \DOMDocument('1.0', 'utf-8');
+        // Leverage the data provider to create an array of input elements and
+        // an expected output document to compare against real output:
+        foreach ($this->nameProvider() as $current) {
+            $input[] = new \DOMElement('name', $current[0]);
+            $output->appendChild(new \DOMElement('name', $current[1]));
+        }
+        $this->assertEquals(
+            $output->saveXML(),
+            VuFind::invertNames($input)->saveXML()
+        );
+    }
+
+    /**
+     * Data provider for testTitleSortLower().
+     *
+     * @return array
+     */
+    public static function titleSortLowerProvider(): array
+    {
+        return [
+            'basic lowercasing' => ['ABCDEF', 'abcdef'],
+            'Latin accent stripping' => ['çèñüĂ', 'cenua'],
+            'Punctuation stripping' => ['this:that:...!>!the other', 'this that the other'],
+            'Japanese text' => ['日本語テキスト', '日本語テキスト'],
+            'Leading bracket' => ['[foo', 'foo'],
+            'Trailing bracket' => ['foo]', 'foo'],
+            'Outer brackets' => ['[foo]', 'foo'],
+            'Stacked outer brackets' => ['[[foo]]', 'foo'],
+            'Tons of brackets' => ['[]foo][[', 'foo'],
+            'Inner brackets' => ['foo[]foo', 'foo foo'],
+            'Trailing whitespace' => ['foo   ', 'foo'],
+            'Trailing punctuation' => ['foo /.', 'foo'],
+        ];
+    }
+
+    /**
+     * Test the titleSortLower helper.
+     *
+     * @param string $input    Input to test
+     * @param string $expected Expected output of test
+     *
+     * @return void
+     *
+     * @dataProvider titleSortLowerProvider
+     */
+    public function testTitleSortLower($input, $expected): void
+    {
+        $this->assertEquals($expected, VuFind::titleSortLower($input));
     }
 }
