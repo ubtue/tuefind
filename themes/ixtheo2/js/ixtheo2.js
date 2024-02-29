@@ -2,7 +2,7 @@ TueFind2.ExpandDropdownsOnHover = true;
 
 var IxTheo2 = {
     ScrollToSearchForm: function() {
-        if($('#searchForm').length === true) {
+        if($('#searchForm').html() != undefined) {
             let content_block_element = $("#content").html();
             let index_page = $(".index-page").html();
             let search_form_element = document.getElementById("searchForm");
