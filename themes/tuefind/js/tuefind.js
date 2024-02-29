@@ -568,7 +568,7 @@ var TueFind = {
 
         let x = Math.round(searchInputWidth) + fixWidthClosed;
         let visible = "none";
-        if(searchFormObj.length === true && searchFormObj.val().length > 0) {
+        if(searchInputWidth != undefined && searchFormObj.val().length > 0) {
             visible = "block";
         }
         if(clearSpan.hasClass("ixtheo2-form")) {
