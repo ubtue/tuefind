@@ -16,8 +16,8 @@ var IxTheo2 = {
             }
         }
     },
-    ChangeSearchFormMenu: function() {
-        $('.handlers-menu a').click(function(el) {
+    ChangeHandlerMenuSearchForm: function() {
+        $('.handlers-menu a').click(function() {
             $('#searchForm_typeCaption').html($(this).html());
             $('#searchForm_type').attr('value', $(this).data('value'));
             return false;
@@ -31,7 +31,7 @@ $(function () {
     $('[data-toggle="popover"]').popover();
 
     IxTheo2.ScrollToSearchForm();
-    IxTheo2.ChangeSearchFormMenu();
+    IxTheo2.ChangeHandlerMenuSearchForm();
 
     $(".searchForm_lookfor:visible").focus();
 });
