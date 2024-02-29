@@ -131,7 +131,7 @@ class SolrMarc extends SolrDefault
             return $availability;
 
         // Special case for articles: Check superior work availability information
-        if ($akbField = $this->getField('AKB')) {
+        if ($akbField = $this->getMarcReader()->getField('AKB')) {
             if ($a = $this->getSubfield($akbField, 'a'))
                 $availability['holding'] = $a;
             if ($b = $this->getSubfield($akbField, 'b'))
