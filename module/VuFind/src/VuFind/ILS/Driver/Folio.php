@@ -3,7 +3,7 @@
 /**
  * FOLIO REST API driver
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2018-2023.
  *
@@ -32,9 +32,17 @@ namespace VuFind\ILS\Driver;
 use DateTime;
 use DateTimeZone;
 use Exception;
+use Laminas\Http\Response;
 use VuFind\Exception\ILS as ILSException;
 use VuFind\I18n\Translator\TranslatorAwareInterface;
 use VuFindHttp\HttpServiceAwareInterface as HttpServiceAwareInterface;
+
+use function array_key_exists;
+use function count;
+use function in_array;
+use function is_int;
+use function is_object;
+use function is_string;
 
 /**
  * FOLIO REST API driver
@@ -243,16 +251,14 @@ class Folio extends AbstractAPI implements
     protected function renewTenantToken()
     {
         $this->token = null;
-        $auth = [
-            'username' => $this->config['API']['username'],
-            'password' => $this->config['API']['password'],
-        ];
-        $response = $this->makeRequest('POST', '/authn/login', json_encode($auth));
-        $this->token = $response->getHeaders()->get('X-Okapi-Token')
-            ->getFieldValue();
+        $response = $this->performOkapiUsernamePasswordAuthentication(
+            $this->config['API']['username'],
+            $this->config['API']['password']
+        );
+        $this->token = $this->extractTokenFromResponse($response);
         $this->sessionCache->folio_token = $this->token;
         $this->debug(
-            'Token renewed. Tenant: ' . $auth['username'] .
+            'Token renewed. Username: ' . $this->config['API']['username'] .
             ' Token: ' . substr($this->token, 0, 30) . '...'
         );
     }
@@ -408,8 +414,8 @@ class Folio extends AbstractAPI implements
         ];
         $response = $this->makeRequest('GET', '/instance-storage/instances', $query);
         $instances = json_decode($response->getBody());
-        if (count($instances->instances) == 0) {
-            throw new ILSException("Item Not Found");
+        if (count($instances->instances ?? []) == 0) {
+            throw new ILSException('Item Not Found');
         }
         return $instances->instances[0];
     }
@@ -471,7 +477,7 @@ class Folio extends AbstractAPI implements
         $excludeLocs = (array)($this->config['Holds']['excludeHoldLocations'] ?? []);
 
         // Exclude checking by regex match
-        if (trim(strtolower($mode)) == "regex") {
+        if (trim(strtolower($mode)) == 'regex') {
             foreach ($excludeLocs as $pattern) {
                 $match = @preg_match($pattern, $locationName);
                 // Invalid regex, skip this pattern
@@ -516,8 +522,8 @@ class Folio extends AbstractAPI implements
                 $code = $location->code;
                 $locationMap[$location->id] = compact('name', 'code');
             }
+            $this->putCachedData($cacheKey, $locationMap);
         }
-        $this->putCachedData($cacheKey, $locationMap);
         return $locationMap;
     }
 
@@ -597,7 +603,10 @@ class Folio extends AbstractAPI implements
             $format = '%s %s';
             $supStat = $supplement->statement ?? '';
             $supNote = $supplement->note ?? '';
-            $statement = trim(sprintf($format, $supStat, $supNote));
+            $statement = trim(
+                // Avoid duplicate display if note and statement are identical:
+                $supStat === $supNote ? $supStat : sprintf($format, $supStat, $supNote)
+            );
             return $statement;
         };
         $id = $holding->id;
@@ -605,18 +614,18 @@ class Folio extends AbstractAPI implements
             array_map([$this, 'formatNote'], $holding->notes ?? [])
         );
         $hasHoldingNotes = !empty(implode($holdingNotes));
-        $holdingsStatements = array_map(
+        $holdingsStatements = array_values(array_filter(array_map(
             $textFormatter,
             $holding->holdingsStatements ?? []
-        );
-        $holdingsSupplements = array_map(
+        )));
+        $holdingsSupplements = array_values(array_filter(array_map(
             $textFormatter,
             $holding->holdingsStatementsForSupplements ?? []
-        );
-        $holdingsIndexes = array_map(
+        )));
+        $holdingsIndexes = array_values(array_filter(array_map(
             $textFormatter,
             $holding->holdingsStatementsForIndexes ?? []
-        );
+        )));
         $holdingCallNumber = $holding->callNumber ?? '';
         $holdingCallNumberPrefix = $holding->callNumberPrefix ?? '';
         return compact(
@@ -682,7 +691,7 @@ class Folio extends AbstractAPI implements
         return $callNumberData + [
             'id' => $bibId,
             'item_id' => $item->id,
-            'holding_id' => $holdingDetails['id'],
+            'holdings_id' => $holdingDetails['id'],
             'number' => $number,
             'enumchron' => $enum,
             'barcode' => $item->barcode ?? '',
@@ -693,7 +702,7 @@ class Folio extends AbstractAPI implements
             'holdings_notes' => $holdingDetails['hasHoldingNotes']
                 ? $holdingDetails['holdingNotes'] : null,
             'item_notes' => !empty(implode($itemNotes)) ? $itemNotes : null,
-            'issues' => $holdingDetails['holdingsStatements'],
+            'summary' => array_unique($holdingDetails['holdingsStatements']),
             'supplements' => $holdingDetails['holdingsSupplements'],
             'indexes' => $holdingDetails['holdingsIndexes'],
             'location' => $locationName,
@@ -856,6 +865,62 @@ class Folio extends AbstractAPI implements
     }
 
     /**
+     * Should we use the legacy authentication mechanism?
+     *
+     * @return bool
+     */
+    protected function useLegacyAuthentication(): bool
+    {
+        return $this->config['API']['legacy_authentication'] ?? true;
+    }
+
+    /**
+     * Support method to perform a username/password login to Okapi.
+     *
+     * @param string $username The patron username
+     * @param string $password The patron password
+     *
+     * @return Response
+     */
+    protected function performOkapiUsernamePasswordAuthentication(string $username, string $password): Response
+    {
+        $tenant = $this->config['API']['tenant'];
+        $credentials = compact('tenant', 'username', 'password');
+        // Get token
+        return $this->makeRequest(
+            method: 'POST',
+            path: $this->useLegacyAuthentication() ? '/authn/login' : '/authn/login-with-expiry',
+            params: json_encode($credentials),
+            debugParams: '{"username":"...","password":"..."}'
+        );
+    }
+
+    /**
+     * Given a response from performOkapiUsernamePasswordAuthentication(),
+     * extract the token value.
+     *
+     * @param Response $response Response from performOkapiUsernamePasswordAuthentication().
+     *
+     * @return string
+     */
+    protected function extractTokenFromResponse(Response $response): string
+    {
+        if ($this->useLegacyAuthentication()) {
+            return $response->getHeaders()->get('X-Okapi-Token')->getFieldValue();
+        }
+        $folioUrl = $this->config['API']['base_url'];
+        $cookies = new \Laminas\Http\Cookies();
+        $cookies->addCookiesFromResponse($response, $folioUrl);
+        $results = $cookies->getAllCookies();
+        foreach ($results as $cookie) {
+            if ($cookie->getName() == 'folioAccessToken') {
+                return $cookie->getValue();
+            }
+        }
+        throw new \Exception('Could not find token in response');
+    }
+
+    /**
      * Support method for patronLogin(): authenticate the patron with an Okapi
      * login attempt. Returns a CQL query for retrieving more information about
      * the authenticated user.
@@ -867,22 +932,14 @@ class Folio extends AbstractAPI implements
      */
     protected function patronLoginWithOkapi($username, $password)
     {
-        $tenant = $this->config['API']['tenant'];
-        $credentials = compact('tenant', 'username', 'password');
-        // Get token
-        $response = $this->makeRequest(
-            'POST',
-            '/authn/login',
-            json_encode($credentials)
-        );
+        $response = $this->performOkapiUsernamePasswordAuthentication($username, $password);
         $debugMsg = 'User logged in. User: ' . $username . '.';
         // We've authenticated the user with Okapi, but we only have their
         // username; set up a query to retrieve full info below.
         $query = 'username == ' . $username;
         // Replace admin with user as tenant if configured to do so:
         if ($this->config['User']['use_user_token'] ?? false) {
-            $this->token = $response->getHeaders()->get('X-Okapi-Token')
-                ->getFieldValue();
+            $this->token = $this->extractTokenFromResponse($response);
             $debugMsg .= ' Token: ' . substr($this->token, 0, 30) . '...';
         }
         $this->debug($debugMsg);
@@ -942,13 +999,12 @@ class Folio extends AbstractAPI implements
      * @param string $responseKey Key containing values to collect in response
      * @param string $interface   FOLIO api interface to call
      * @param array  $query       CQL query
+     * @param int    $limit       How many results to retrieve from FOLIO per call
      *
      * @return array
      */
-    protected function getPagedResults($responseKey, $interface, $query = [])
+    protected function getPagedResults($responseKey, $interface, $query = [], $limit = 1000)
     {
-        $count = 0;
-        $limit = 1000;
         $offset = 0;
 
         do {
@@ -963,19 +1019,15 @@ class Folio extends AbstractAPI implements
                 $msg = $json->errors[0]->message ?? json_last_error_msg();
                 throw new ILSException("Error: '$msg' fetching '$responseKey'");
             }
-            $total = $json->totalRecords ?? 0;
-            $previousCount = $count;
+            $totalEstimate = $json->totalRecords ?? 0;
             foreach ($json->$responseKey ?? [] as $item) {
-                $count++;
-                if ($count % $limit == 0) {
-                    $offset += $limit;
-                }
                 yield $item ?? '';
             }
-            // Continue until the count reaches the total records
-            // found, if count does not increase, something has gone
-            // wrong. Stop so we don't loop forever.
-        } while ($count < $total && $previousCount != $count);
+            $offset += $limit;
+
+            // Continue until the current offset is greater than the totalRecords value returned
+            // from the API (which could be an estimate if more than 1000 results are returned).
+        } while ($offset <= $totalEstimate);
     }
 
     /**
@@ -1066,7 +1118,7 @@ class Folio extends AbstractAPI implements
         $profile = $this->getUserById($patron['id']);
         $expiration = isset($profile->expirationDate)
             ? $this->dateConverter->convertToDisplayDate(
-                "Y-m-d H:i",
+                'Y-m-d H:i',
                 $profile->expirationDate
             )
             : null;
@@ -1213,11 +1265,11 @@ class Folio extends AbstractAPI implements
                     $renewal = [
                         'success' => true,
                         'new_date' => $this->dateConverter->convertToDisplayDate(
-                            "Y-m-d H:i",
+                            'Y-m-d H:i',
                             $json->dueDate
                         ),
                         'new_time' => $this->dateConverter->convertToDisplayTime(
-                            "Y-m-d H:i",
+                            'Y-m-d H:i',
                             $json->dueDate
                         ),
                         'item_id' => $json->itemId,
@@ -1237,7 +1289,7 @@ class Folio extends AbstractAPI implements
                 );
                 $renewal = [
                     'success' => false,
-                    'sysMessage' => "Renewal Failed",
+                    'sysMessage' => 'Renewal Failed',
                 ];
             }
             $renewalResults['details'][$loanId] = $renewal;
@@ -1253,10 +1305,10 @@ class Folio extends AbstractAPI implements
      *
      * @param array $patron   Patron information returned by $this->patronLogin
      * @param array $holdInfo Optional array, only passed in when getting a list
-     * in the context of placing or editing a hold.  When placing a hold, it contains
-     * most of the same values passed to placeHold, minus the patron data.  When
+     * in the context of placing or editing a hold. When placing a hold, it contains
+     * most of the same values passed to placeHold, minus the patron data. When
      * editing a hold it contains all the hold information returned by getMyHolds.
-     * May be used to limit the pickup options or may be ignored.  The driver must
+     * May be used to limit the pickup options or may be ignored. The driver must
      * not add new options to the return array based on this data or other areas of
      * VuFind may behave incorrectly.
      *
@@ -1338,33 +1390,33 @@ class Folio extends AbstractAPI implements
             ) as $hold
         ) {
             $requestDate = $this->dateConverter->convertToDisplayDate(
-                "Y-m-d H:i",
+                'Y-m-d H:i',
                 $hold->requestDate
             );
             // Set expire date if it was included in the response
             $expireDate = isset($hold->requestExpirationDate)
                 ? $this->dateConverter->convertToDisplayDate(
-                    "Y-m-d H:i",
+                    'Y-m-d H:i',
                     $hold->requestExpirationDate
                 )
                 : null;
             // Set lastPickup Date if provided, format to j M Y
             $lastPickup = isset($hold->holdShelfExpirationDate)
                 ? $this->dateConverter->convertToDisplayDate(
-                    "Y-m-d H:i",
+                    'Y-m-d H:i',
                     $hold->holdShelfExpirationDate
                 )
                 : null;
             $currentHold = [
                 'type' => $hold->requestType,
                 'create' => $requestDate,
-                'expire' => $expireDate ?? "",
+                'expire' => $expireDate ?? '',
                 'id' => $this->getBibId(
                     $hold->instanceId,
-                    $hold->holdingsRecordId,
-                    $hold->itemId
+                    $hold->holdingsRecordId ?? null,
+                    $hold->itemId ?? null
                 ),
-                'item_id' => $hold->itemId,
+                'item_id' => $hold->itemId ?? null,
                 'reqnum' => $hold->id,
                 // Title moved from item to instance in Lotus release:
                 'title' => $hold->instance->title ?? $hold->item->title ?? '',
@@ -1405,6 +1457,40 @@ class Folio extends AbstractAPI implements
     }
 
     /**
+     * Get latest major version of a $moduleName enabled for a tenant.
+     * Result is cached.
+     *
+     * @param string $moduleName module name
+     *
+     * @return int module version or 0 if no module found
+     */
+    protected function getModuleMajorVersion(string $moduleName): int
+    {
+        $cacheKey = 'module_version:' . $moduleName;
+        $version = $this->getCachedData($cacheKey);
+        if ($version === null) {
+            // get latest version of a module enabled for a tenant
+            $response = $this->makeRequest(
+                'GET',
+                '/_/proxy/tenants/' . $this->tenant . '/modules?filter=' . $moduleName . '&latest=1'
+            );
+
+            // get version major from json result
+            $versions = json_decode($response->getBody());
+            $latest = $versions[0]->id ?? '0';
+            preg_match_all('!\d+!', $latest, $matches);
+            $version = (int)($matches[0][0] ?? 0);
+            if ($version === 0) {
+                $this->debug('Unable to find version in ' . $response->getBody());
+            } else {
+                // Only cache non-zero values, so we don't persist an error condition:
+                $this->putCachedData($cacheKey, $version);
+            }
+        }
+        return $version;
+    }
+
+    /**
      * Place Hold
      *
      * Attempts to place a hold or recall on a particular item and returns
@@ -1442,12 +1528,15 @@ class Folio extends AbstractAPI implements
             // applying the latest hotfix is a better solution!
             $baseParams = ['itemId' => $holdDetails['item_id']];
         }
+        // Account for an API spelling change introduced in mod-circulation v24:
+        $fulfillmentKey = $this->getModuleMajorVersion('mod-circulation') >= 24
+            ? 'fulfillmentPreference' : 'fulfilmentPreference';
         $requestBody = $baseParams + [
             'requestType' => $holdDetails['status'] == 'Available'
                 ? 'Page' : $default_request,
             'requesterId' => $holdDetails['patron']['id'],
             'requestDate' => date('c'),
-            'fulfilmentPreference' => 'Hold Shelf',
+            $fulfillmentKey => 'Hold Shelf',
             'requestExpirationDate' => $requiredBy,
             'pickupServicePointId' => $holdDetails['pickUpLocation'],
         ];
@@ -1530,7 +1619,7 @@ class Folio extends AbstractAPI implements
                 $request_json->requesterId != $patron['id']
                 && ($request_json->proxyUserId ?? null) != $patron['id']
             ) {
-                throw new ILSException("Invalid Request");
+                throw new ILSException('Invalid Request');
             }
             // Change status to Closed and add cancellationID
             $request_json->status = 'Closed - Cancelled';
@@ -1708,12 +1797,22 @@ class Folio extends AbstractAPI implements
     public function findReserves($course, $inst, $dept)
     {
         $retVal = [];
+        $query = [];
+
+        $includeSuppressed = $this->config['CourseReserves']['includeSuppressed'] ?? false;
+
+        if (!$includeSuppressed) {
+            $query = [
+                'query' => 'copiedItem.instanceDiscoverySuppress==false',
+            ];
+        }
 
         // Results can be paginated, so let's loop until we've gotten everything:
         foreach (
             $this->getPagedResults(
                 'reserves',
-                '/coursereserves/reserves'
+                '/coursereserves/reserves',
+                $query
             ) as $item
         ) {
             $idProperty = $this->getBibIdType() === 'hrid'
@@ -1782,7 +1881,7 @@ class Folio extends AbstractAPI implements
                 'status' => $fine->paymentStatus->name,
                 'type' => $fine->feeFineType,
                 'title' => $title,
-                'createdate' => date_format($date, "j M Y"),
+                'createdate' => date_format($date, 'j M Y'),
             ];
         }
         return $fines;
@@ -1820,19 +1919,21 @@ class Folio extends AbstractAPI implements
     }
 
     /**
-     * Get list of users for whom the provided patron is a proxy.
+     * Support method for getProxiedUsers() and getProxyingUsers() to load proxy user data.
      *
      * This requires the FOLIO user configured in Folio.ini to have the permission:
      * proxiesfor.collection.get
      *
-     * @param array $patron The patron array with username and password
+     * @param array  $patron       The patron array with username and password
+     * @param string $lookupField  Field to use for looking up matching users
+     * @param string $displayField Field in response to use for displaying user names
      *
      * @return array
      */
-    public function getProxiedUsers(array $patron): array
+    protected function loadProxyUserData(array $patron, string $lookupField, string $displayField): array
     {
         $query = [
-            'query' => '(proxyUserId=="' . $patron['id'] . '")',
+            'query' => '(' . $lookupField . '=="' . $patron['id'] . '")',
         ];
         $results = [];
         $proxies = $this->getPagedResults('proxiesFor', '/proxiesfor', $query);
@@ -1840,14 +1941,40 @@ class Folio extends AbstractAPI implements
             if (
                 $current->status ?? '' === 'Active'
                 && $current->requestForSponsor ?? '' === 'Yes'
-                && isset($current->userId)
+                && isset($current->$displayField)
             ) {
-                if ($proxy = $this->getUserById($current->userId)) {
+                if ($proxy = $this->getUserById($current->$displayField)) {
                     $results[$proxy->id] = $this->formatUserNameForProxyList($proxy);
                 }
             }
         }
         return $results;
+    }
+
+    /**
+     * Get list of users for whom the provided patron is a proxy.
+     *
+     * @param array $patron The patron array with username and password
+     *
+     * @return array
+     */
+    public function getProxiedUsers(array $patron): array
+    {
+        return $this->loadProxyUserData($patron, 'proxyUserId', 'userId');
+    }
+
+    /**
+     * Get list of users who act as proxies for the provided patron.
+     *
+     * @param array $patron The patron array with username and password
+     *
+     * @return array
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function getProxyingUsers(array $patron): array
+    {
+        return $this->loadProxyUserData($patron, 'userId', 'proxyUserId');
     }
 
     /**

@@ -3,7 +3,7 @@
 /**
  * XSLT helper tests for VuFindWorkKeys.
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2020.
  *
@@ -89,6 +89,36 @@ class VuFindWorkKeysTest extends \PHPUnit\Framework\TestCase
             ['AUTHOR 1', 'author 2'],
             '/([0-9A-Za-z]+)/',
             ''
+        );
+        $this->assertEquals(
+            $expected,
+            simplexml_import_dom($result)->asXml()
+        );
+    }
+
+    /**
+     * Test the work keys helper with a very long Greek title.
+     *
+     * @return void
+     */
+    public function testGetWorkKeysWithLongGreekTitle()
+    {
+        $expected = '<?xml version="1.0" encoding="utf-8"?>'
+            . "\n<workKey>UT αυτοματοποίηση συστημάτων ηλεκτρικής ενέργειας: σχεδιασμός και προσομοίωση συστήματος "
+            . 'για τον εντοπισμό-απομόνωση σφαλμάτων γραμμής και την αποκατάσταση της ηλεκτροδότησης σε δίκτυα '
+            . "διανομής μέσης τάσης με την εφαρμογή μεθόδων διανεμημένης τεχνητής νοημοσ</workKey>\n"
+            . '<workKey>AT μπαξεβάνος, ιωάννης σ. αυτοματοποίηση συστημάτων ηλεκτρικής ενέργειας: σχεδιασμός και '
+            . 'προσομοίωση συστήματος για τον εντοπισμό-απομόνωση σφαλμάτων γραμμής και την αποκατάσταση της '
+            . 'ηλεκτροδότησης σε δίκτυα διανομής μέσης τάσης με την εφαρμογή μεθόδων διανεμημένης τεχνητής '
+            . "νοημοσ</workKey>\n";
+        $title = 'Αυτοματοποίηση συστημάτων ηλεκτρικής ενέργειας: σχεδιασμός και προσομοίωση συστήματος για τον '
+            . 'εντοπισμό-απομόνωση σφαλμάτων γραμμής και την αποκατάσταση της ηλεκτροδότησης σε δίκτυα διανομής '
+            . 'μέσης τάσης με την εφαρμογή μεθόδων διανεμημένης τεχνητής νοημοσύνης';
+        $result = VuFindWorkKeys::getWorkKeys(
+            $title,
+            [$title],
+            [$title],
+            ['Μπαξεβάνος, Ιωάννης Σ.']
         );
         $this->assertEquals(
             $expected,

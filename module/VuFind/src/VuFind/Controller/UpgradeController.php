@@ -3,7 +3,7 @@
 /**
  * Upgrade Controller
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2010.
  * Copyright (C) The National Library of Finland 2016.
@@ -51,6 +51,13 @@ use VuFind\Date\Converter;
 use VuFind\Db\AdapterFactory;
 use VuFind\Exception\RecordMissing as RecordMissingException;
 use VuFind\Search\Results\PluginManager as ResultsManager;
+
+use function count;
+use function dirname;
+use function in_array;
+use function is_object;
+use function is_string;
+use function strlen;
 
 /**
  * Class controls VuFind upgrading.
@@ -109,7 +116,7 @@ class UpgradeController extends AbstractBase
         $this->cookie = new CookieContainer('vfup', $cookieManager);
 
         // ...however, once the configuration piece of the upgrade is done, we can
-        // safely use the session for storing some values.  We'll use this for the
+        // safely use the session for storing some values. We'll use this for the
         // temporary storage of root database credentials, since it is unwise to
         // send such sensitive values around as cookies!
         $this->session = $sessionContainer;
@@ -190,9 +197,7 @@ class UpgradeController extends AbstractBase
     public function establishversionsAction()
     {
         $this->cookie->newVersion = Version::getBuildVersion();
-        $this->cookie->oldVersion = Version::getBuildVersion(
-            $this->cookie->sourceDir
-        );
+        $this->cookie->oldVersion = Version::getBuildVersion($this->getSourceDir());
 
         // Block upgrade when encountering common errors:
         if (empty($this->cookie->oldVersion)) {
@@ -227,7 +232,7 @@ class UpgradeController extends AbstractBase
     {
         $localConfig = dirname($this->getForcedLocalConfigPath('config.ini'));
         $confDir = $this->cookie->oldVersion < 2
-            ? $this->cookie->sourceDir . '/web/conf'
+            ? $this->getSourceDir() . '/web/conf'
             : $localConfig;
         $upgrader = new Upgrade(
             $this->cookie->oldVersion,
@@ -379,7 +384,7 @@ class UpgradeController extends AbstractBase
                         }
                         $this->dbUpgrade()->setAdapter($this->getRootDbAdapter());
                         $this->session->warnings->append(
-                            "Removed deprecated column(s) from table(s): "
+                            'Removed deprecated column(s) from table(s): '
                             . implode(', ', array_keys($deprecatedColumns))
                         );
                     }
@@ -391,7 +396,7 @@ class UpgradeController extends AbstractBase
             }
         }
 
-        // Check for missing tables.  Note that we need to finish dealing with
+        // Check for missing tables. Note that we need to finish dealing with
         // missing tables before we proceed to the missing columns check, or else
         // the missing tables will cause fatal errors during the column test.
         $missingTables = $this->dbUpgrade()->getMissingTables();
@@ -403,7 +408,7 @@ class UpgradeController extends AbstractBase
                 }
                 $this->dbUpgrade()->setAdapter($this->getRootDbAdapter());
                 $this->session->warnings->append(
-                    "Created missing table(s): " . implode(', ', $missingTables)
+                    'Created missing table(s): ' . implode(', ', $missingTables)
                 );
             }
             $sql .= $this->dbUpgrade()
@@ -421,7 +426,7 @@ class UpgradeController extends AbstractBase
                 }
                 $this->dbUpgrade()->setAdapter($this->getRootDbAdapter());
                 $this->session->warnings->append(
-                    "Added column(s) to table(s): "
+                    'Added column(s) to table(s): '
                     . implode(', ', array_keys($missingCols))
                 );
             }
@@ -440,7 +445,7 @@ class UpgradeController extends AbstractBase
                 }
                 $this->dbUpgrade()->setAdapter($this->getRootDbAdapter());
                 $this->session->warnings->append(
-                    "Modified column(s) in table(s): "
+                    'Modified column(s) in table(s): '
                     . implode(', ', array_keys($modifiedCols))
                 );
             }
@@ -458,7 +463,7 @@ class UpgradeController extends AbstractBase
                 }
                 $this->dbUpgrade()->setAdapter($this->getRootDbAdapter());
                 $this->session->warnings->append(
-                    "Added constraint(s) to table(s): "
+                    'Added constraint(s) to table(s): '
                     . implode(', ', array_keys($missingConstraints))
                 );
             }
@@ -477,7 +482,7 @@ class UpgradeController extends AbstractBase
                 }
                 $this->dbUpgrade()->setAdapter($this->getRootDbAdapter());
                 $this->session->warnings->append(
-                    "Modified constraint(s) in table(s): "
+                    'Modified constraint(s) in table(s): '
                     . implode(', ', array_keys($modifiedConstraints))
                 );
             }
@@ -495,7 +500,7 @@ class UpgradeController extends AbstractBase
                 }
                 $this->dbUpgrade()->setAdapter($this->getRootDbAdapter());
                 $this->session->warnings->append(
-                    "Modified key(s) in table(s): "
+                    'Modified key(s) in table(s): '
                     . implode(', ', array_keys($modifiedKeys))
                 );
             }
@@ -512,7 +517,7 @@ class UpgradeController extends AbstractBase
                 }
                 $this->dbUpgrade()->setAdapter($this->getRootDbAdapter());
                 $this->session->warnings->append(
-                    "Modified character set(s)/collation(s) in table(s): "
+                    'Modified character set(s)/collation(s) in table(s): '
                     . implode(', ', array_keys($colProblems))
                 );
             }
@@ -664,7 +669,7 @@ class UpgradeController extends AbstractBase
                     $factory = $this->serviceLocator
                         ->get(AdapterFactory::class);
                     $db = $factory->getAdapter($dbrootuser, $pass);
-                    $db->query("SELECT * FROM user;");
+                    $db->query('SELECT * FROM user;');
                     $this->session->dbRootUser = $dbrootuser;
                     $this->session->dbRootPass = $pass;
                     return $this->forwardTo('Upgrade', 'FixDatabase');
@@ -782,7 +787,7 @@ class UpgradeController extends AbstractBase
                     $problem->assignMetadata($driver, $converter)->save();
                 } catch (RecordMissingException $e) {
                     $this->session->warnings->append(
-                        "Unable to load metadata for record "
+                        'Unable to load metadata for record '
                         . "{$problem->source}:{$problem->record_id}"
                     );
                 }
@@ -802,7 +807,7 @@ class UpgradeController extends AbstractBase
         // Process form submission:
         $dir = $this->params()->fromPost('sourcedir');
         if (!empty($dir)) {
-            if (!is_dir($dir)) {
+            if (!$this->isSourceDirValid($dir)) {
                 $this->flashMessenger()
                     ->addMessage($dir . ' does not exist.', 'error');
             } elseif (!file_exists($dir . '/build.xml')) {
@@ -812,7 +817,7 @@ class UpgradeController extends AbstractBase
                     'error'
                 );
             } else {
-                $this->cookie->sourceDir = rtrim($dir, '\/');
+                $this->setSourceDir(rtrim($dir, '\/'));
                 // Clear out request to avoid infinite loop:
                 $this->getRequest()->getPost()->set('sourcedir', '');
                 return $this->forwardTo('Upgrade', 'Home');
@@ -857,7 +862,7 @@ class UpgradeController extends AbstractBase
                 );
             } else {
                 $this->cookie->oldVersion = $version;
-                $this->cookie->sourceDir = realpath(APPLICATION_PATH);
+                $this->setSourceDir(realpath(APPLICATION_PATH));
                 // Clear out request to avoid infinite loop:
                 $this->getRequest()->getPost()->set('sourceversion', '');
                 $this->processSkipParam();
@@ -883,6 +888,50 @@ class UpgradeController extends AbstractBase
     }
 
     /**
+     * Validate a source directory string.
+     *
+     * @param string $dir Directory string to check
+     *
+     * @return bool
+     */
+    protected function isSourceDirValid(string $dir): bool
+    {
+        // Prevent abuse of stream wrappers:
+        if (empty($dir) || str_contains($dir, '://')) {
+            return false;
+        }
+        return is_dir($dir);
+    }
+
+    /**
+     * Set the source directory for the upgrade
+     *
+     * @param string $dir Directory to set
+     *
+     * @return void
+     */
+    protected function setSourceDir(string $dir): void
+    {
+        $this->cookie->sourceDir = $dir;
+    }
+
+    /**
+     * Get the source directory for the upgrade
+     *
+     * @param bool $validate Should we validate the directory?
+     *
+     * @return string
+     */
+    protected function getSourceDir($validate = true): string
+    {
+        $sourceDir = $this->cookie->sourceDir ?? '';
+        if ($validate && !$this->isSourceDirValid($sourceDir)) {
+            throw new \Exception('Unexpected source directory value!');
+        }
+        return $sourceDir;
+    }
+
+    /**
      * Display summary of installation status
      *
      * @return mixed
@@ -897,10 +946,7 @@ class UpgradeController extends AbstractBase
         }
 
         // First find out which version we are upgrading:
-        if (
-            !isset($this->cookie->sourceDir)
-            || !is_dir($this->cookie->sourceDir)
-        ) {
+        if (!$this->isSourceDirValid($this->getSourceDir(false))) {
             return $this->forwardTo('Upgrade', 'GetSourceDir');
         }
 
