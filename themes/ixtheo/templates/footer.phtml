@@ -1,40 +1,40 @@
-<hr />
+<hr/>
 <footer class="hidden-print">
   <div class="footer-container">
     <div class="footer-column">
       <?php $this->slot('footer-left')->start(); ?>
-      <p><strong><?= $this->transEsc('footer_header_search_options') ?></strong></p>
-      <ul>
-        <li><a href="<?= $this->url('search-history') ?>"><?= $this->transEsc('Search History') ?></a></li>
-        <li><a href="<?= $this->url('search-advanced') ?>"><?= $this->transEsc('Advanced Search') ?></a></li>
-      </ul>
-      <?= $this->slot('footer-left')->end(); ?>
+        <p><strong><?=$this->transEsc('footer_header_search_options')?></strong></p>
+        <ul>
+          <li><a href="<?=$this->url('search-history')?>"><?=$this->transEsc('Search History')?></a></li>
+          <li><a href="<?=$this->url('search-advanced')?>"><?=$this->transEsc('Advanced Search')?></a></li>
+        </ul>
+      <?=$this->slot('footer-left')->end(); ?>
     </div>
     <div class="footer-column">
       <?php $this->slot('footer-center')->start(); ?>
-      <p><strong><?= $this->transEsc('Find More') ?></strong></p>
-      <ul>
-        <li><a href="<?= $this->url('keywordchainsearch-home') ?>"><?= $this->transEsc('Browse Keywordchains') ?></a></li>
-        <li><a href="<?= $this->url('browse-home') ?>"><?= $this->transEsc('Browse the Catalog') ?></a></li>
-        <li><a href="<?= $this->url('alphabrowse-home') ?>"><?= $this->transEsc('Browse Alphabetically') ?></a></li>
-        <li><a href="<?= $this->url('search-newitem') ?>"><?= $this->transEsc('New Items') ?></a></li>
-      </ul>
-      <?= $this->slot('footer-center')->end(); ?>
+        <p><strong><?=$this->transEsc('Find More')?></strong></p>
+        <ul>
+          <li><a href="<?=$this->url('keywordchainsearch-home')?>"><?=$this->transEsc('Browse Keywordchains')?></a></li>
+          <li><a href="<?=$this->url('browse-home')?>"><?=$this->transEsc('Browse the Catalog')?></a></li>
+          <li><a href="<?=$this->url('alphabrowse-home')?>"><?=$this->transEsc('Browse Alphabetically')?></a></li>
+          <li><a href="<?=$this->url('search-newitem')?>"><?=$this->transEsc('New Items')?></a></li>
+        </ul>
+      <?=$this->slot('footer-center')->end(); ?>
     </div>
     <div class="footer-column">
       <?php $this->slot('footer-right')->start(); ?>
-      <p><strong><?= $this->transEsc('link_text_need_help') ?></strong></p>
-      <ul>
-        <li><a href="<?= $this->url('help-home') ?>?topic=search" data-lightbox class="help-link" title="<?= $this->transEsc('Search Tips') ?>"><?= $this->transEsc('Search Tips') ?></a></li>
-        <li><a href="/Feedback/Form/AcquisitionRequest"><?= $this->transEsc('Acquisition Request') ?></a></li>
-      </ul>
-      <?= $this->slot('footer-right')->end(); ?>
+        <p><strong><?=$this->transEsc('link_text_need_help')?></strong></p>
+        <ul>
+          <li><a href="<?=$this->url('help-home')?>?topic=search" data-lightbox class="help-link" title="<?=$this->transEsc('Search Tips')?>"><?=$this->transEsc('Search Tips')?></a></li>
+          <li><a href="/Feedback/Form/AcquisitionRequest"><?=$this->transEsc('Acquisition Request')?></a></li>
+        </ul>
+      <?=$this->slot('footer-right')->end(); ?>
     </div>
     <div class="footer-column">
-      <p><strong><?= $this->transEsc('Social Media') ?></strong></p>
-      <a target="blank" href="//twitter.com/ix_theo"><img src="<?= $this->imageLink('twitter.svg') ?>" height="30" alt="Twitter"></a>
-      <a target="blank" href="//hcommons.social/@ixtheo"><img src="<?= $this->imageLink('mastodon.svg') ?>" height="30" alt="Mastodon"></a>
-      <a target="blank" href="//bsky.app/profile/ixtheo.bsky.social"><img src="<?= $this->imageLink('bluesky.svg') ?>" height="30" alt="Bluesky"></a>
+        <p><strong><?=$this->transEsc('Social Media')?></strong></p>
+        <a target="blank" href="//twitter.com/ix_theo"><img src="<?=$this->imageLink('twitter.svg')?>" height="30" alt="Twitter"></a>
+        <a target="blank" href="//hcommons.social/@ixtheo"><img src="<?=$this->imageLink('mastodon.svg')?>" height="30" alt="Mastodon"></a>
+        <a target="blank" href="//bsky.app/profile/ixtheo.bsky.social"><img src="<?=$this->imageLink('bluesky.svg')?>" height="30" alt="Bluesky"></a>
     </div>
   </div>
 </footer>
