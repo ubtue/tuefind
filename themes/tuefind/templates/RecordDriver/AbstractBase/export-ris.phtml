@@ -63,11 +63,11 @@ if (is_array($series)) {
     }
 }
 
-foreach ($this->driver->tryMethod('getPrimaryAuthors', [], []) as $current) {
+foreach (array_unique($this->driver->tryMethod('getPrimaryAuthors', [], [])) as $current) {
     echo 'AU  - ' . $this->driver->stripTrailingDates($current) . "\r\n";
 }
 
-foreach ($this->driver->tryMethod('getSecondaryAuthors', [], []) as $current) {
+foreach (array_unique($this->driver->tryMethod('getSecondaryAuthors', [], [])) as $current) {
     echo 'A2  - ' . $this->driver->stripTrailingDates($current) . "\r\n";
 }
 
