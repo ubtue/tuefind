@@ -33,5 +33,7 @@ $(function () {
     IxTheo2.ScrollToSearchForm();
     IxTheo2.ChangeHandlerMenuSearchForm();
 
-    $(".searchForm_lookfor:visible").focus();
+    if($('.ixtheo2-form').html() == undefined && $('.relbib-form').html() == undefined) { //for now disabled
+        $(".searchForm_lookfor:visible").focus();
+    }
 });
