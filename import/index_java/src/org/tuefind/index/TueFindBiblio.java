@@ -983,7 +983,7 @@ public class TueFindBiblio extends TueFind {
      *            the record
      */
     public String getPageRange(final Record record) {
-        final String field_value = getFirstSubfieldValue(record, "936", 'h');
+        final String field_value = getIssueInfoPages(record);
         if (field_value == null)
             return null;
 
@@ -1111,7 +1111,7 @@ public class TueFindBiblio extends TueFind {
      *            the record
      */
     public String getContainerYear(final Record record) {
-        final String field_value = getFirstSubfieldValue(record, "936", 'u', 'w', 'j');
+        final String field_value = getIssueInfoYear(record);
         if (field_value == null)
             return null;
 
@@ -1124,7 +1124,7 @@ public class TueFindBiblio extends TueFind {
      *            the record
      */
     public String getContainerVolume(final Record record) {
-        final String field_value = getFirstSubfieldValue(record, "936", 'd');
+        final String field_value = getIssueInfoVolume(record);
         if (field_value == null)
             return null;
 
@@ -1956,21 +1956,12 @@ public class TueFindBiblio extends TueFind {
         // (Format YYYY/YY for older and Format YYYY/YYYY) for
         // newer entries
         if (format.contains("Article") || (format.contains("Review") && !format.contains("Book"))) {
-            final List<VariableField> _936Fields = record.getVariableFields("936");
-            for (final VariableField _936VField : _936Fields) {
-                final DataField _936Field = (DataField) _936VField;
-                if (_936Field.getIndicator1() != 'u' || _936Field.getIndicator2() != 'w')
-                    continue;
-
-                final Subfield jSubfield = _936Field.getSubfield('j');
-                if (jSubfield != null) {
-                    String yearOrYearRange = jSubfield.getData();
-                    // Partly, we have additional text like "Post annum domini" in the front, so do away with that
-                    yearOrYearRange = yearOrYearRange.replaceAll("^[\\D\\[\\]]+", "");
-                    // Make sure we do away with brackets
-                    yearOrYearRange = yearOrYearRange.replaceAll("[\\[|\\]]", "");
-                    years.add(yearOrYearRange.length() > 4 ? yearOrYearRange.substring(0, 4) : yearOrYearRange);
-                }
+            String yearOrYearRange = getIssueInfoYear(record);
+            if(!yearOrYearRange.isEmpty()){
+                yearOrYearRange = yearOrYearRange.replaceAll("^[\\D\\[\\]]+", "");
+                // Make sure we do away with brackets
+                yearOrYearRange = yearOrYearRange.replaceAll("[\\[|\\]]", "");
+                years.add(yearOrYearRange.length() > 4 ? yearOrYearRange.substring(0, 4) : yearOrYearRange);
             }
             if (!years.isEmpty())
                 return years;
@@ -2808,23 +2799,16 @@ public class TueFindBiblio extends TueFind {
 
     // Try to get a numerically sortable representation of an issue
     public String getIssueSort(final Record record) {
-        for (final VariableField variableField : record.getVariableFields("936")) {
-            final DataField dataField = (DataField) variableField;
-            final char ind1 = dataField.getIndicator1();
-            final char ind2 = dataField.getIndicator2();
-            if (ind1 == 'u' && ind2 == 'w') {
-                final Subfield subfieldE = dataField.getSubfield('e');
-                if (subfieldE != null) {
-                    final String issueString = subfieldE.getData();
-                    if (issueString.matches("^\\d+$"))
-                        return issueString;
-                    // Handle Some known special cases
-                    if (issueString.matches("[\\[]\\d+[\\]]"))
-                        return issueString.replaceAll("[\\[\\]]", "");
-                    if (issueString.matches("\\d+/\\d+"))
-                        return issueString.split("/")[0];
-                }
-            }
+        final String issueString = getIssueInfoIssue(record);
+        
+        if(!issueString.isEmpty()){
+            if (issueString.matches("^\\d+$"))
+                return issueString;
+            // Handle Some known special cases
+            if (issueString.matches("[\\[]\\d+[\\]]"))
+                return issueString.replaceAll("[\\[\\]]", "");
+            if (issueString.matches("\\d+/\\d+"))
+                return issueString.split("/")[0];
         }
         return "0";
     }
@@ -2832,30 +2816,19 @@ public class TueFindBiblio extends TueFind {
     // Returns a canonized number for volume sorting
     public String getVolumeSort(final Record record) {
         String volumeString = "";
-        for (final VariableField variableField : record.getVariableFields("936")) {
-            if (!volumeString.isEmpty())
-                break;
-            final DataField dataField = (DataField) variableField;
-            final Subfield subfieldD = dataField.getSubfield('d');
-            if (subfieldD != null)
-                volumeString = subfieldD.getData();
-        }
-        for (final VariableField variableField : record.getVariableFields("830")) {
-            if (!volumeString.isEmpty())
-                break;
-            final DataField dataField = (DataField) variableField;
-            final Subfield subfield9 = dataField.getSubfield('9');
-            if (subfield9 != null)
-                volumeString = subfield9.getData();
-        }
+        String tmpVolumeString = getIssueInfoVolume(record);
+        
+        if(!tmpVolumeString.isEmpty()){
+            volumeString = tmpVolumeString;
 
-        if (volumeString.matches("^\\d+$"))
-            return volumeString;
-        // Handle Some known special cases
-        if (volumeString.matches("[\\[]\\d+[\\]]"))
-            return volumeString.replaceAll("[\\[\\]]","");
-        if (volumeString.matches("\\d+/\\d+"))
-            return volumeString.split("/")[0];
+            if (volumeString.matches("^\\d+$"))
+                return volumeString;
+            // Handle Some known special cases
+            if (volumeString.matches("[\\[]\\d+[\\]]"))
+                return volumeString.replaceAll("[\\[\\]]","");
+            if (volumeString.matches("\\d+/\\d+"))
+                return volumeString.split("/")[0];
+        }
 
         return "0";
     }
