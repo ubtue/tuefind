@@ -12,3 +12,19 @@ AllFields:
 MainHeading:
   DismaxFields:
     - heading_search^500
+
+MainHeadingPerson:
+  DismaxFields:
+    - heading_search^500
+  FilterQuery: "type: person"
+
+MainHeadingCorporate:
+  DismaxFields:
+    - heading_search^500
+  FilterQuery: "type: corporate"
+
+MainHeadingMeeting:
+  DismaxFields:
+    - heading_search^500
+  FilterQuery: "type: meeting"
+
