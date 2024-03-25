@@ -54,8 +54,8 @@ class IssueInfo {
     public IssueInfo() { }
 
     public IssueInfo(final Record record) {
-        boolean isOldVersion = true;
         // start on 2024 the issue information will take from file 773 rather than 936
+        this.volume_ = this.issue_ = this.pages_ = this.year_ = this.month_ = "";
         for (final VariableField variableField : record.getVariableFields("773")) {
             final DataField dataField_ = (DataField) variableField;
 
@@ -78,45 +78,65 @@ class IssueInfo {
 
                         if (subfield_content[0].equals("month"))
                             this.month_ = subfield_content[1];
+                        
                     }
                 }
-                isOldVersion = false;
-                break;
+
+                if(this.year_.isEmpty()){
+                    final ControlField _008_field = (ControlField) record.getVariableField("008");
+                    if (_008_field != null) {
+                        String year_temp =  _008_field.getData();
+                        if(year_temp.length() > 11)
+                            this.year_ = year_temp.substring(7,10);
+                        else
+                            this.year_ = year_temp.substring(7, year_temp.length() - 1);
+                    }
+                }
+                return;
             }
         }
 
         // for compatibility with old version
-        if (isOldVersion) {
-            for (final VariableField variableField : record.getVariableFields("936")) {
-                final DataField dataField_ = (DataField) variableField;
-                if (dataField_.getIndicator1() == 'u' && dataField_.getIndicator2() == 'w') {
-                    if ((dataField_.getSubfield('d') != null) && (!dataField_.getSubfield('d').getData().isEmpty()))
-                        this.volume_ = dataField_.getSubfield('d').getData();
-                    else {
-                        for (final VariableField variableField_830 : record.getVariableFields("830")) {
-                            final DataField dataField_830 = (DataField) variableField_830;
-                            if (dataField_830.getIndicator2() == '0') {
-                                if ((dataField_830.getSubfield('9') != null)
-                                        && (!dataField_830.getSubfield('9').getData().isEmpty()))
-                                    this.volume_ = dataField_830.getSubfield('9').getData();
-                            }
+        for (final VariableField variableField : record.getVariableFields("936")) {
+            final DataField dataField_ = (DataField) variableField;
+            if (dataField_.getIndicator1() == 'u' && dataField_.getIndicator2() == 'w') {
+                if ((dataField_.getSubfield('d') != null) && (!dataField_.getSubfield('d').getData().isEmpty()))
+                    this.volume_ = dataField_.getSubfield('d').getData();
+                else {
+                    for (final VariableField variableField_830 : record.getVariableFields("830")) {
+                        final DataField dataField_830 = (DataField) variableField_830;
+                        if (dataField_830.getIndicator2() == '0') {
+                            if ((dataField_830.getSubfield('9') != null)
+                                    && (!dataField_830.getSubfield('9').getData().isEmpty()))
+                                this.volume_ = dataField_830.getSubfield('9').getData();
                         }
                     }
-
-                    if ((dataField_.getSubfield('j') != null) && (!dataField_.getSubfield('j').getData().isEmpty()))
-                        this.year_ = dataField_.getSubfield('j').getData();
-
-                    if ((dataField_.getSubfield('e') != null) && (!dataField_.getSubfield('e').getData().isEmpty()))
-                        this.issue_ = dataField_.getSubfield('e').getData();
-
-                    if ((dataField_.getSubfield('c') != null) && (!dataField_.getSubfield('c').getData().isEmpty()))
-                        this.month_ = dataField_.getSubfield('c').getData();
-
-                    if ((dataField_.getSubfield('h') != null) && (!dataField_.getSubfield('h').getData().isEmpty()))
-                        this.pages_ = dataField_.getSubfield('h').getData();
                 }
-            }
 
+                if ((dataField_.getSubfield('j') != null) && (!dataField_.getSubfield('j').getData().isEmpty()))
+                    this.year_ = dataField_.getSubfield('j').getData();
+
+
+                if ((dataField_.getSubfield('e') != null) && (!dataField_.getSubfield('e').getData().isEmpty()))
+                    this.issue_ = dataField_.getSubfield('e').getData();
+
+                if ((dataField_.getSubfield('c') != null) && (!dataField_.getSubfield('c').getData().isEmpty()))
+                    this.month_ = dataField_.getSubfield('c').getData();
+
+                if ((dataField_.getSubfield('h') != null) && (!dataField_.getSubfield('h').getData().isEmpty()))
+                    this.pages_ = dataField_.getSubfield('h').getData();
+            }
+        }
+
+        if(this.year_.isEmpty()){
+            final ControlField _008_field = (ControlField) record.getVariableField("008");
+            if (_008_field != null) {
+                String year_temp =  _008_field.getData();
+                if(year_temp.length() > 11)
+                    this.year_ = year_temp.substring(7,10);
+                else
+                    this.year_ = year_temp.substring(7, year_temp.length() - 1);
+            }
         }
     }
 }
@@ -1112,7 +1132,7 @@ public class TueFindBiblio extends TueFind {
      */
     public String getContainerYear(final Record record) {
         final String field_value = getIssueInfoYear(record);
-        if (field_value == null)
+        if (field_value.isEmpty())
             return null;
 
         final Matcher matcher = VALID_FOUR_DIGIT_YEAR_PATTERN.matcher(field_value);
@@ -1125,7 +1145,7 @@ public class TueFindBiblio extends TueFind {
      */
     public String getContainerVolume(final Record record) {
         final String field_value = getIssueInfoVolume(record);
-        if (field_value == null)
+        if (field_value.isEmpty())
             return null;
 
         final Matcher matcher = VOLUME_PATTERN.matcher(field_value);
@@ -2764,7 +2784,7 @@ public class TueFindBiblio extends TueFind {
 
     public String getStartPage(final Record record) {
         final String pages = getIssueInfoPages(record);
-        if (pages == null)
+        if (pages.isEmpty())
             return null;
         final Matcher matcher = PAGE_MATCH_PATTERN.matcher(pages);
         if (matcher.matches())
@@ -2774,7 +2794,7 @@ public class TueFindBiblio extends TueFind {
 
     public String getEndPage(final Record record) {
         final String pages = getIssueInfoPages(record);
-        if (pages == null)
+        if (pages.isEmpty())
             return null;
         final Matcher matcher = PAGE_MATCH_PATTERN.matcher(pages);
         if (matcher.matches()) {
