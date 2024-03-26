@@ -86,10 +86,7 @@ class IssueInfo {
                     final ControlField _008_field = (ControlField) record.getVariableField("008");
                     if (_008_field != null) {
                         String year_temp =  _008_field.getData();
-                        if(year_temp.length() > 11)
-                            this.year_ = year_temp.substring(7,10);
-                        else
-                            this.year_ = year_temp.substring(7, year_temp.length() - 1);
+                        this.year_ = year_temp.substring(7,10);
                     }
                 }
                 return;
@@ -115,6 +112,13 @@ class IssueInfo {
 
                 if ((dataField_.getSubfield('j') != null) && (!dataField_.getSubfield('j').getData().isEmpty()))
                     this.year_ = dataField_.getSubfield('j').getData();
+                else{
+                    final ControlField _008_field = (ControlField) record.getVariableField("008");
+                    if (_008_field != null) {
+                        String year_temp =  _008_field.getData();
+                        this.year_ = year_temp.substring(7,10);
+                    }
+                }
 
 
                 if ((dataField_.getSubfield('e') != null) && (!dataField_.getSubfield('e').getData().isEmpty()))
@@ -125,17 +129,8 @@ class IssueInfo {
 
                 if ((dataField_.getSubfield('h') != null) && (!dataField_.getSubfield('h').getData().isEmpty()))
                     this.pages_ = dataField_.getSubfield('h').getData();
-            }
-        }
 
-        if(this.year_.isEmpty()){
-            final ControlField _008_field = (ControlField) record.getVariableField("008");
-            if (_008_field != null) {
-                String year_temp =  _008_field.getData();
-                if(year_temp.length() > 11)
-                    this.year_ = year_temp.substring(7,10);
-                else
-                    this.year_ = year_temp.substring(7, year_temp.length() - 1);
+                return;
             }
         }
     }
