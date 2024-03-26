@@ -55,7 +55,7 @@ class IssueInfo {
 
     public IssueInfo(final Record record) {
         // start on 2024 the issue information will take from file 773 rather than 936
-        this.volume_ = this.issue_ = this.pages_ = this.year_ = this.month_ = "";
+        volume_ = issue_ = pages_ = year_ = month_ = "";
         for (final VariableField variableField : record.getVariableFields("773")) {
             final DataField dataField_ = (DataField) variableField;
 
@@ -65,28 +65,20 @@ class IssueInfo {
                         final String[] subfield_content = subfield_.getData().split(":");
 
                         if (subfield_content[0].equals("volume"))
-                            this.volume_ = subfield_content[1];
+                            volume_ = subfield_content[1];
 
                         if (subfield_content[0].equals("number"))
-                            this.issue_ = subfield_content[1];
+                            issue_ = subfield_content[1];
 
                         if (subfield_content[0].equals("pages"))
-                            this.pages_ = subfield_content[1];
+                            pages_ = subfield_content[1];
 
                         if (subfield_content[0].equals("year"))
-                            this.year_ = subfield_content[1];
+                            year_ = subfield_content[1];
 
                         if (subfield_content[0].equals("month"))
-                            this.month_ = subfield_content[1];
+                            month_ = subfield_content[1];
                         
-                    }
-                }
-
-                if(this.year_.isEmpty()){
-                    final ControlField _008_field = (ControlField) record.getVariableField("008");
-                    if (_008_field != null) {
-                        String year_temp =  _008_field.getData();
-                        this.year_ = year_temp.substring(7,10);
                     }
                 }
                 return;
@@ -111,15 +103,7 @@ class IssueInfo {
                 }
 
                 if ((dataField_.getSubfield('j') != null) && (!dataField_.getSubfield('j').getData().isEmpty()))
-                    this.year_ = dataField_.getSubfield('j').getData();
-                else{
-                    final ControlField _008_field = (ControlField) record.getVariableField("008");
-                    if (_008_field != null) {
-                        String year_temp =  _008_field.getData();
-                        this.year_ = year_temp.substring(7,10);
-                    }
-                }
-
+                    year_ = dataField_.getSubfield('j').getData();
 
                 if ((dataField_.getSubfield('e') != null) && (!dataField_.getSubfield('e').getData().isEmpty()))
                     this.issue_ = dataField_.getSubfield('e').getData();
