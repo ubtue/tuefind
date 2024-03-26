@@ -49,7 +49,7 @@ import static java.util.stream.Collectors.joining;
 */
 
 class IssueInfo {
-    public String volume_, issue_, pages_, year_, month_;
+    public String volume_, issue_, pages_, year_, month_, parentId_, title_;
 
     public IssueInfo() { }
 
@@ -63,6 +63,8 @@ class IssueInfo {
                 for (final Subfield subfield_ : dataField_.getSubfields('g')) {
                     if (subfield_ != null && !subfield_.getData().isEmpty()) {
                         final String[] subfield_content = subfield_.getData().split(":");
+                        this.parentId_ = getPPNFromWSubfield(dataField_);
+                        this.title_ = getFirstNonEmptySubfield(dataField_, 't', 'a').getData();
 
                         if (subfield_content[0].equals("volume"))
                             this.volume_ = subfield_content[1];
@@ -90,6 +92,9 @@ class IssueInfo {
             for (final VariableField variableField : record.getVariableFields("936")) {
                 final DataField dataField_ = (DataField) variableField;
                 if (dataField_.getIndicator1() == 'u' && dataField_.getIndicator2() == 'w') {
+                    this.parentId_ = getPPNFromWSubfield(dataField_);
+                    this.title_ = getFirstNonEmptySubfield(dataField_, 't', 'a').getData();
+
                     if ((dataField_.getSubfield('d') != null) && (!dataField_.getSubfield('d').getData().isEmpty()))
                         this.volume_ = dataField_.getSubfield('d').getData();
                     else {
@@ -663,7 +668,18 @@ public class TueFindBiblio extends TueFind {
     public Set<String> getContainerIdsWithTitles(final Record record) {
         final Set<String> containerIdsTitlesAndOptionalVolumes = new TreeSet<>();
 
-        for (final String tag : new String[] { "773", "800", "810", "830" }) {
+        IssueInfo issue_info_773_or_936(getIssueInfo(record));
+
+        if(issue_info_773_or_936 != null){
+            if(issue_info_773_or_936.parentId_ != null){
+                containerIdsTitlesAndOptionalVolumes.add(issue_info_773_or_936.parentId_ + (char)0x1F + issue_info_773_or_936.title_ +(char) 0x1F + (issue_info_773_or_936.volume_ == null ? "": issue_info_773_or_936.volume_));
+
+                return containerIdsTitlesAndOptionalVolumes;
+            }
+
+        }
+
+        for (final String tag : new String[] { "800", "810", "830" }) {
             for (final VariableField variableField : record.getVariableFields(tag)) {
                 final DataField field = (DataField) variableField;
                 final Subfield titleSubfield = getFirstNonEmptySubfield(field, 't', 'a');
