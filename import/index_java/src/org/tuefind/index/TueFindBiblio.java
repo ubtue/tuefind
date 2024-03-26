@@ -114,7 +114,6 @@ class IssueInfo {
                 if ((dataField_.getSubfield('h') != null) && (!dataField_.getSubfield('h').getData().isEmpty()))
                     this.pages_ = dataField_.getSubfield('h').getData();
 
-                return;
             }
         }
     }
