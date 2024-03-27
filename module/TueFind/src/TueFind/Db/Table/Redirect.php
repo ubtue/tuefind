@@ -34,7 +34,7 @@ class Redirect extends \TueFind\Db\Table\Gateway
      */
     public function insertUrl(string $url, string $group=null) {
         // Do not save senseless group_name entries
-        if ($group != null or in_array($group, 
+        if ($group != null or !in_array($group, 
             array("ixtheo-rss-short", "relbib-rss-short", "ixtheo-rss-full", "relbib-rss-full")))
                 return;
 
