@@ -41,11 +41,12 @@ class RedirectController extends \VuFind\Controller\AbstractBase implements \VuF
         * See https://maxchadwick.xyz/blog/http-response-header-size-limit-with-mod-proxy-fcgi
         */
         if ($url = $this->params('url')) {
+
             // URL needs to be base64, else we will have problems with slashes,
             // even if they are url encoded
             $url = $this->decoder->base64UrlDecode($url);
             $protocol = strpos($url, '://');
-            if ($protocol !== false && $protocol < 5) {
+            if ($protocol !== false && $protocol <= 5) {
                 $group = $this->params('group') ?? null;
                 $this->getDbTable('redirect')->insertUrl($url, $group);
                 $view = $this->createViewModel();
