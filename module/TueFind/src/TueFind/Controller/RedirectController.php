@@ -52,6 +52,13 @@ class RedirectController extends \VuFind\Controller\AbstractBase implements \VuF
         $url = $this->decoder->base64UrlDecode($rawUrl);
         $group = $this->params('group') ?? null;
 
+        // Deny invalid URLs
+        if (!parse_url($url)) {
+            $this->getResponse()->setStatusCode(404);
+            $this->getResponse()->setReasonPhrase('Not Found (Invalid URL: ' . $url . ')');
+            return;
+        }
+
         // Security check: Only allow known target URLs
         if (!$this->getDbTable('rss_feed')->hasUrl($url) && !$this->getDbTable('rss_item')->hasUrl($url)) {
             $this->getResponse()->setStatusCode(404);
