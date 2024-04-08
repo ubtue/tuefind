@@ -11,6 +11,11 @@ class RedirectController extends \VuFind\Controller\AbstractBase implements \VuF
     use \VuFind\Db\Table\DbTableAwareTrait;
 
     /**
+     * Allowed Group IDs in Redirects
+     */
+    const GROUPS_ALLOWED = ["ixtheo-rss-short", "relbib-rss-short", "ixtheo-rss-full", "relbib-rss-full"];
+
+    /**
      * Decoder for URL in GET params
      * @var \TueFind\View\Helper\TueFind\TueFind
      */
@@ -45,18 +50,23 @@ class RedirectController extends \VuFind\Controller\AbstractBase implements \VuF
         // https://base64.guru/standards/base64url
         $rawUrl = $this->params('url');
         $url = $this->decoder->base64UrlDecode($rawUrl);
+        $group = $this->params('group') ?? null;
 
         // Security check: Only allow known target URLs
         if (!$this->getDbTable('rss_feed')->hasUrl($url) && !$this->getDbTable('rss_item')->hasUrl($url)) {
             $this->getResponse()->setStatusCode(404);
             $this->getResponse()->setReasonPhrase('Not Found (Unknown Redirect Target URL: ' . $url . ')');
         } else {
-            $group = $this->params('group') ?? null;
-            $this->getDbTable('redirect')->insertUrl($url, $group);
-            $view = $this->createViewModel();
-            $view->redirectTarget = $url;
-            $view->redirectDelay = 0;
-            return $view;
+            if ($group != null and !in_array($group, static::GROUPS_ALLOWED)) {
+                $this->getResponse()->setStatusCode(404);
+                $this->getResponse()->setReasonPhrase('Not Found (Invalid Group: ' . $group . ')');
+            } else {
+                $this->getDbTable('redirect')->insertUrl($url, $group);
+                $view = $this->createViewModel();
+                $view->redirectTarget = $url;
+                $view->redirectDelay = 0;
+                return $view;
+            }
         }
     }
 
