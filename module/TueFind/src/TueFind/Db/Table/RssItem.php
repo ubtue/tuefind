@@ -34,4 +34,12 @@ class RssItem extends RssBase
         $select->order('pub_date DESC');
         return $this->selectWith($select);
     }
+
+    public function hasUrl($url)
+    {
+        $select = $this->getSql()->select();
+        $select->where(['item_url' => $url]);
+        $rows = $this->selectWith($select);
+        return (count($rows) > 0);
+    }
 }

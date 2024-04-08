@@ -40,23 +40,24 @@ class RedirectController extends \VuFind\Controller\AbstractBase implements \VuF
         *
         * See https://maxchadwick.xyz/blog/http-response-header-size-limit-with-mod-proxy-fcgi
         */
-        if ($url = $this->params('url')) {
 
-            // URL needs to be base64, else we will have problems with slashes,
-            // even if they are url encoded
-            $url = $this->decoder->base64UrlDecode($url);
-            $protocol = strpos($url, '://');
-            if ($protocol !== false && $protocol <= 5) {
-                $group = $this->params('group') ?? null;
-                $this->getDbTable('redirect')->insertUrl($url, $group);
-                $view = $this->createViewModel();
-                $view->redirectTarget = $url;
-                $view->redirectDelay = 0;
-                return $view;
-            }
+        // URL is Base64URL encoded, which is different than the regular Base64:
+        // https://base64.guru/standards/base64url
+        $rawUrl = $this->params('url');
+        $url = $this->decoder->base64UrlDecode($rawUrl);
+
+        // Security check: Only allow known target URLs
+        if (!$this->getDbTable('rss_feed')->hasUrl($url) && !$this->getDbTable('rss_item')->hasUrl($url)) {
+            $this->getResponse()->setStatusCode(404);
+            $this->getResponse()->setReasonPhrase('Not Found (Unknown Redirect Target URL: ' . $url . ')');
+        } else {
+            $group = $this->params('group') ?? null;
+            $this->getDbTable('redirect')->insertUrl($url, $group);
+            $view = $this->createViewModel();
+            $view->redirectTarget = $url;
+            $view->redirectDelay = 0;
+            return $view;
         }
-
-        $this->getResponse()->setStatusCode(404);
     }
 
     public function licenseAction()
