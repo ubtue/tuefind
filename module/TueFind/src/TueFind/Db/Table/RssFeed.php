@@ -5,6 +5,7 @@ namespace TueFind\Db\Table;
 use VuFind\Db\Row\RowGateway;
 use VuFind\Db\Table\PluginManager;
 use Laminas\Db\Adapter\Adapter;
+use Laminas\Db\Sql\Predicate\PredicateSet;
 
 class RssFeed extends RssBase
 {
@@ -21,5 +22,13 @@ class RssFeed extends RssBase
         $select->where(['active'=>'1']);
         $select->order('feed_name ASC');
         return $this->selectWith($select);
+    }
+
+    public function hasUrl($url)
+    {
+        $select = $this->getSql()->select();
+        $select->where(['website_url' => $url, 'feed_url' => $url], PredicateSet::OP_OR);
+        $rows = $this->selectWith($select);
+        return (count($rows) > 0);
     }
 }
