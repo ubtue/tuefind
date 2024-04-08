@@ -56,19 +56,20 @@ class RedirectController extends \VuFind\Controller\AbstractBase implements \VuF
         if (!$this->getDbTable('rss_feed')->hasUrl($url) && !$this->getDbTable('rss_item')->hasUrl($url)) {
             $this->getResponse()->setStatusCode(404);
             $this->getResponse()->setReasonPhrase('Not Found (Unknown Redirect Target URL: ' . $url . ')');
-        } else {
-            // Security check: Only allow known groups
-            if ($group != null and !in_array($group, static::GROUPS_ALLOWED)) {
-                $this->getResponse()->setStatusCode(404);
-                $this->getResponse()->setReasonPhrase('Not Found (Invalid Group: ' . $group . ')');
-            } else {
-                $this->getDbTable('redirect')->insertUrl($url, $group);
-                $view = $this->createViewModel();
-                $view->redirectTarget = $url;
-                $view->redirectDelay = 0;
-                return $view;
-            }
+            return;
         }
+        // Security check: Only allow known groups
+        if ($group != null and !in_array($group, static::GROUPS_ALLOWED)) {
+            $this->getResponse()->setStatusCode(404);
+            $this->getResponse()->setReasonPhrase('Not Found (Invalid Group: ' . $group . ')');
+            return;
+        }
+
+        $this->getDbTable('redirect')->insertUrl($url, $group);
+        $view = $this->createViewModel();
+        $view->redirectTarget = $url;
+        $view->redirectDelay = 0;
+        return $view;
     }
 
     public function licenseAction()
