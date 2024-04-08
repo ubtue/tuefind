@@ -59,13 +59,13 @@ class RedirectController extends \VuFind\Controller\AbstractBase implements \VuF
             return;
         }
 
-        // Security check: Only allow known target URLs
+        // Deny unknown URLs
         if (!$this->getDbTable('rss_feed')->hasUrl($url) && !$this->getDbTable('rss_item')->hasUrl($url)) {
             $this->getResponse()->setStatusCode(404);
             $this->getResponse()->setReasonPhrase('Not Found (Unknown Redirect Target URL: ' . $url . ')');
             return;
         }
-        // Security check: Only allow known groups
+        // Deny unknown groups
         if ($group != null and !in_array($group, static::GROUPS_ALLOWED)) {
             $this->getResponse()->setStatusCode(404);
             $this->getResponse()->setReasonPhrase('Not Found (Invalid Group: ' . $group . ')');
