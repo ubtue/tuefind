@@ -33,11 +33,6 @@ class Redirect extends \TueFind\Db\Table\Gateway
      * @param string $group A group which might be use for later statistics
      */
     public function insertUrl(string $url, string $group=null) {
-        // Do not save senseless group_name entries
-        if ($group != null and !in_array($group, 
-            array("ixtheo-rss-short", "relbib-rss-short", "ixtheo-rss-full", "relbib-rss-full")))
-                return;
-
         $this->insert(['url' => $url, 'group_name' => $group]);
     }
 }
