@@ -57,6 +57,7 @@ class RedirectController extends \VuFind\Controller\AbstractBase implements \VuF
             $this->getResponse()->setStatusCode(404);
             $this->getResponse()->setReasonPhrase('Not Found (Unknown Redirect Target URL: ' . $url . ')');
         } else {
+            // Security check: Only allow known groups
             if ($group != null and !in_array($group, static::GROUPS_ALLOWED)) {
                 $this->getResponse()->setStatusCode(404);
                 $this->getResponse()->setReasonPhrase('Not Found (Invalid Group: ' . $group . ')');
