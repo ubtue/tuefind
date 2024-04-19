@@ -2,7 +2,6 @@
 
 namespace TueFind\Sitemap\Plugin\Index;
 
-use VuFindSearch\ParamBag;
 use VuFindSearch\Query\Query;
 use TueFindSearch\Command\GetSitemapFieldsCommand;
 
@@ -25,7 +24,10 @@ class CursorMarkIdFetcher extends \VuFind\Sitemap\Plugin\Index\CursorMarkIdFetch
 
         $getKeyCommand = new \VuFindSearch\Command\GetUniqueKeyCommand($backend, []);
         $key = $this->searchService->invoke($getKeyCommand)->getResult();
-        $params = new ParamBag(
+
+        // TueFind: It is necessary to use the TueFindSearch ParamBag here
+        // to mitigate a bug which will be removed in VuFind 10
+        $params = new \TueFindSearch\ParamBag(
             $this->defaultParams + [
                 'rows' => $countPerPage,
                 'sort' => $key . ' asc',
