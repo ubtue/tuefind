@@ -11,6 +11,11 @@ class RedirectController extends \VuFind\Controller\AbstractBase implements \VuF
     use \VuFind\Db\Table\DbTableAwareTrait;
 
     /**
+     * Allowed Group IDs in Redirects
+     */
+    const GROUPS_ALLOWED = ["ixtheo-rss-short", "relbib-rss-short", "ixtheo-rss-full", "relbib-rss-full"];
+
+    /**
      * Decoder for URL in GET params
      * @var \TueFind\View\Helper\TueFind\TueFind
      */
@@ -40,19 +45,39 @@ class RedirectController extends \VuFind\Controller\AbstractBase implements \VuF
         *
         * See https://maxchadwick.xyz/blog/http-response-header-size-limit-with-mod-proxy-fcgi
         */
-        if ($url = $this->params('url')) {
-            // URL needs to be base64, else we will have problems with slashes,
-            // even if they are url encoded
-            $url = $this->decoder->base64UrlDecode($url);
-            $group = $this->params('group') ?? null;
-            $this->getDbTable('redirect')->insertUrl($url, $group);
-            $view = $this->createViewModel();
-            $view->redirectTarget = $url;
-            $view->redirectDelay = 0;
-            return $view;
+
+        // URL is Base64URL encoded, which is different than the regular Base64:
+        // https://base64.guru/standards/base64url
+        $rawUrl = $this->params('url');
+        $url = $this->decoder->base64UrlDecode($rawUrl);
+        $group = $this->params('group') ?? null;
+
+        // Deny invalid URLs
+        if (!parse_url($url)) {
+            $this->getResponse()->setStatusCode(404);
+            $this->getResponse()->setReasonPhrase('Not Found (Invalid URL: ' . $url . ')');
+            return;
         }
 
-        $this->getResponse()->setStatusCode(404);
+        // Deny unknown URLs
+        if (!$this->getDbTable('rss_feed')->hasUrl($url) && !$this->getDbTable('rss_item')->hasUrl($url)) {
+            $this->getResponse()->setStatusCode(404);
+            $this->getResponse()->setReasonPhrase('Not Found (Unknown Redirect Target URL: ' . $url . ')');
+            return;
+        }
+
+        // Deny unknown groups
+        if ($group != null and !in_array($group, static::GROUPS_ALLOWED)) {
+            $this->getResponse()->setStatusCode(404);
+            $this->getResponse()->setReasonPhrase('Not Found (Invalid Group: ' . $group . ')');
+            return;
+        }
+
+        $this->getDbTable('redirect')->insertUrl($url, $group);
+        $view = $this->createViewModel();
+        $view->redirectTarget = $url;
+        $view->redirectDelay = 0;
+        return $view;
     }
 
     public function licenseAction()

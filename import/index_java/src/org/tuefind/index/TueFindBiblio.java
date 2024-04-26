@@ -54,8 +54,8 @@ class IssueInfo {
     public IssueInfo() { }
 
     public IssueInfo(final Record record) {
-        boolean isOldVersion = true;
         // start on 2024 the issue information will take from file 773 rather than 936
+        volume_ = issue_ = pages_ = year_ = month_ = "";
         for (final VariableField variableField : record.getVariableFields("773")) {
             final DataField dataField_ = (DataField) variableField;
 
@@ -65,58 +65,56 @@ class IssueInfo {
                         final String[] subfield_content = subfield_.getData().split(":");
 
                         if (subfield_content[0].equals("volume"))
-                            this.volume_ = subfield_content[1];
+                            volume_ = subfield_content[1];
 
                         if (subfield_content[0].equals("number"))
-                            this.issue_ = subfield_content[1];
+                            issue_ = subfield_content[1];
 
                         if (subfield_content[0].equals("pages"))
-                            this.pages_ = subfield_content[1];
+                            pages_ = subfield_content[1];
 
                         if (subfield_content[0].equals("year"))
-                            this.year_ = subfield_content[1];
+                            year_ = subfield_content[1];
 
                         if (subfield_content[0].equals("month"))
-                            this.month_ = subfield_content[1];
+                            month_ = subfield_content[1];
+                        
                     }
                 }
-                isOldVersion = false;
-                break;
+                return;
             }
         }
 
         // for compatibility with old version
-        if (isOldVersion) {
-            for (final VariableField variableField : record.getVariableFields("936")) {
-                final DataField dataField_ = (DataField) variableField;
-                if (dataField_.getIndicator1() == 'u' && dataField_.getIndicator2() == 'w') {
-                    if ((dataField_.getSubfield('d') != null) && (!dataField_.getSubfield('d').getData().isEmpty()))
-                        this.volume_ = dataField_.getSubfield('d').getData();
-                    else {
-                        for (final VariableField variableField_830 : record.getVariableFields("830")) {
-                            final DataField dataField_830 = (DataField) variableField_830;
-                            if (dataField_830.getIndicator2() == '0') {
-                                if ((dataField_830.getSubfield('9') != null)
-                                        && (!dataField_830.getSubfield('9').getData().isEmpty()))
-                                    this.volume_ = dataField_830.getSubfield('9').getData();
-                            }
+        for (final VariableField variableField : record.getVariableFields("936")) {
+            final DataField dataField_ = (DataField) variableField;
+            if (dataField_.getIndicator1() == 'u' && dataField_.getIndicator2() == 'w') {
+                if ((dataField_.getSubfield('d') != null) && (!dataField_.getSubfield('d').getData().isEmpty()))
+                    this.volume_ = dataField_.getSubfield('d').getData();
+                else {
+                    for (final VariableField variableField_830 : record.getVariableFields("830")) {
+                        final DataField dataField_830 = (DataField) variableField_830;
+                        if (dataField_830.getIndicator2() == '0') {
+                            if ((dataField_830.getSubfield('9') != null)
+                                    && (!dataField_830.getSubfield('9').getData().isEmpty()))
+                                this.volume_ = dataField_830.getSubfield('9').getData();
                         }
                     }
-
-                    if ((dataField_.getSubfield('j') != null) && (!dataField_.getSubfield('j').getData().isEmpty()))
-                        this.year_ = dataField_.getSubfield('j').getData();
-
-                    if ((dataField_.getSubfield('e') != null) && (!dataField_.getSubfield('e').getData().isEmpty()))
-                        this.issue_ = dataField_.getSubfield('e').getData();
-
-                    if ((dataField_.getSubfield('c') != null) && (!dataField_.getSubfield('c').getData().isEmpty()))
-                        this.month_ = dataField_.getSubfield('c').getData();
-
-                    if ((dataField_.getSubfield('h') != null) && (!dataField_.getSubfield('h').getData().isEmpty()))
-                        this.pages_ = dataField_.getSubfield('h').getData();
                 }
-            }
 
+                if ((dataField_.getSubfield('j') != null) && (!dataField_.getSubfield('j').getData().isEmpty()))
+                    year_ = dataField_.getSubfield('j').getData();
+
+                if ((dataField_.getSubfield('e') != null) && (!dataField_.getSubfield('e').getData().isEmpty()))
+                    this.issue_ = dataField_.getSubfield('e').getData();
+
+                if ((dataField_.getSubfield('c') != null) && (!dataField_.getSubfield('c').getData().isEmpty()))
+                    this.month_ = dataField_.getSubfield('c').getData();
+
+                if ((dataField_.getSubfield('h') != null) && (!dataField_.getSubfield('h').getData().isEmpty()))
+                    this.pages_ = dataField_.getSubfield('h').getData();
+
+            }
         }
     }
 }
@@ -983,7 +981,7 @@ public class TueFindBiblio extends TueFind {
      *            the record
      */
     public String getPageRange(final Record record) {
-        final String field_value = getFirstSubfieldValue(record, "936", 'h');
+        final String field_value = getIssueInfoPages(record);
         if (field_value == null)
             return null;
 
@@ -1111,8 +1109,8 @@ public class TueFindBiblio extends TueFind {
      *            the record
      */
     public String getContainerYear(final Record record) {
-        final String field_value = getFirstSubfieldValue(record, "936", 'u', 'w', 'j');
-        if (field_value == null)
+        final String field_value = getIssueInfoYear(record);
+        if (field_value.isEmpty())
             return null;
 
         final Matcher matcher = VALID_FOUR_DIGIT_YEAR_PATTERN.matcher(field_value);
@@ -1124,8 +1122,8 @@ public class TueFindBiblio extends TueFind {
      *            the record
      */
     public String getContainerVolume(final Record record) {
-        final String field_value = getFirstSubfieldValue(record, "936", 'd');
-        if (field_value == null)
+        final String field_value = getIssueInfoVolume(record);
+        if (field_value.isEmpty())
             return null;
 
         final Matcher matcher = VOLUME_PATTERN.matcher(field_value);
@@ -1956,21 +1954,12 @@ public class TueFindBiblio extends TueFind {
         // (Format YYYY/YY for older and Format YYYY/YYYY) for
         // newer entries
         if (format.contains("Article") || (format.contains("Review") && !format.contains("Book"))) {
-            final List<VariableField> _936Fields = record.getVariableFields("936");
-            for (final VariableField _936VField : _936Fields) {
-                final DataField _936Field = (DataField) _936VField;
-                if (_936Field.getIndicator1() != 'u' || _936Field.getIndicator2() != 'w')
-                    continue;
-
-                final Subfield jSubfield = _936Field.getSubfield('j');
-                if (jSubfield != null) {
-                    String yearOrYearRange = jSubfield.getData();
-                    // Partly, we have additional text like "Post annum domini" in the front, so do away with that
-                    yearOrYearRange = yearOrYearRange.replaceAll("^[\\D\\[\\]]+", "");
-                    // Make sure we do away with brackets
-                    yearOrYearRange = yearOrYearRange.replaceAll("[\\[|\\]]", "");
-                    years.add(yearOrYearRange.length() > 4 ? yearOrYearRange.substring(0, 4) : yearOrYearRange);
-                }
+            String yearOrYearRange = getIssueInfoYear(record);
+            if(!yearOrYearRange.isEmpty()){
+                yearOrYearRange = yearOrYearRange.replaceAll("^[\\D\\[\\]]+", "");
+                // Make sure we do away with brackets
+                yearOrYearRange = yearOrYearRange.replaceAll("[\\[|\\]]", "");
+                years.add(yearOrYearRange.length() > 4 ? yearOrYearRange.substring(0, 4) : yearOrYearRange);
             }
             if (!years.isEmpty())
                 return years;
@@ -2773,7 +2762,7 @@ public class TueFindBiblio extends TueFind {
 
     public String getStartPage(final Record record) {
         final String pages = getIssueInfoPages(record);
-        if (pages == null)
+        if (pages.isEmpty())
             return null;
         final Matcher matcher = PAGE_MATCH_PATTERN.matcher(pages);
         if (matcher.matches())
@@ -2783,7 +2772,7 @@ public class TueFindBiblio extends TueFind {
 
     public String getEndPage(final Record record) {
         final String pages = getIssueInfoPages(record);
-        if (pages == null)
+        if (pages.isEmpty())
             return null;
         final Matcher matcher = PAGE_MATCH_PATTERN.matcher(pages);
         if (matcher.matches()) {
@@ -2808,23 +2797,16 @@ public class TueFindBiblio extends TueFind {
 
     // Try to get a numerically sortable representation of an issue
     public String getIssueSort(final Record record) {
-        for (final VariableField variableField : record.getVariableFields("936")) {
-            final DataField dataField = (DataField) variableField;
-            final char ind1 = dataField.getIndicator1();
-            final char ind2 = dataField.getIndicator2();
-            if (ind1 == 'u' && ind2 == 'w') {
-                final Subfield subfieldE = dataField.getSubfield('e');
-                if (subfieldE != null) {
-                    final String issueString = subfieldE.getData();
-                    if (issueString.matches("^\\d+$"))
-                        return issueString;
-                    // Handle Some known special cases
-                    if (issueString.matches("[\\[]\\d+[\\]]"))
-                        return issueString.replaceAll("[\\[\\]]", "");
-                    if (issueString.matches("\\d+/\\d+"))
-                        return issueString.split("/")[0];
-                }
-            }
+        final String issueString = getIssueInfoIssue(record);
+        
+        if(!issueString.isEmpty()){
+            if (issueString.matches("^\\d+$"))
+                return issueString;
+            // Handle Some known special cases
+            if (issueString.matches("[\\[]\\d+[\\]]"))
+                return issueString.replaceAll("[\\[\\]]", "");
+            if (issueString.matches("\\d+/\\d+"))
+                return issueString.split("/")[0];
         }
         return "0";
     }
@@ -2832,30 +2814,19 @@ public class TueFindBiblio extends TueFind {
     // Returns a canonized number for volume sorting
     public String getVolumeSort(final Record record) {
         String volumeString = "";
-        for (final VariableField variableField : record.getVariableFields("936")) {
-            if (!volumeString.isEmpty())
-                break;
-            final DataField dataField = (DataField) variableField;
-            final Subfield subfieldD = dataField.getSubfield('d');
-            if (subfieldD != null)
-                volumeString = subfieldD.getData();
-        }
-        for (final VariableField variableField : record.getVariableFields("830")) {
-            if (!volumeString.isEmpty())
-                break;
-            final DataField dataField = (DataField) variableField;
-            final Subfield subfield9 = dataField.getSubfield('9');
-            if (subfield9 != null)
-                volumeString = subfield9.getData();
-        }
+        String tmpVolumeString = getIssueInfoVolume(record);
+        
+        if(!tmpVolumeString.isEmpty()){
+            volumeString = tmpVolumeString;
 
-        if (volumeString.matches("^\\d+$"))
-            return volumeString;
-        // Handle Some known special cases
-        if (volumeString.matches("[\\[]\\d+[\\]]"))
-            return volumeString.replaceAll("[\\[\\]]","");
-        if (volumeString.matches("\\d+/\\d+"))
-            return volumeString.split("/")[0];
+            if (volumeString.matches("^\\d+$"))
+                return volumeString;
+            // Handle Some known special cases
+            if (volumeString.matches("[\\[]\\d+[\\]]"))
+                return volumeString.replaceAll("[\\[\\]]","");
+            if (volumeString.matches("\\d+/\\d+"))
+                return volumeString.split("/")[0];
+        }
 
         return "0";
     }

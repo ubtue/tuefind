@@ -148,7 +148,7 @@ class SolrMarc extends SolrDefault
                     $x = $subfield['data'];
             }
 
-            if ($is866 && $x != null) {
+            if ($is866 && $x != null && strpos($x, 'SPQUE') !== false) {
                 $markers = ['SPQUE', 'SPSAM', 'SPUSM', 'SPSYS'];
                 $parts = explode('#', $x);
                 $relevantParts = array_values(array_diff($parts, $markers));

@@ -597,7 +597,9 @@ $(document).ready(function () {
 
     // Home search: set focus on first input field of first search group
     if (window.location.pathname.match(/\/Search(2)?\/Home$/i) || window.location.pathname === '/') {
-        TueFind.SetFocus('#searchForm_lookfor');
+        if($('.ixtheo2-form').html() == undefined) { //for now disabled in Ixhteo2 template
+            TueFind.SetFocus('#searchForm_lookfor');
+        }
     // advanced search: set focus on first input field of first search group
     } else if (window.location.pathname.match(/\/Search\/Advanced$/i)) {
         TueFind.SetFocus('#search_lookfor0_0');
