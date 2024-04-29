@@ -89,7 +89,7 @@ class RedirectController extends \VuFind\Controller\AbstractBase implements \VuF
 
         $id = $this->params()->fromRoute('id');
 
-        if (preg_match('"^rx-"', $id)) {
+        if (preg_match('"^(kx|rx)-"', $id)) {
             // This call will happen when the user opened the document earlier
             // and the KfL HAN server will have a timeout, so the proxy will call
             // our page again with the HAN ID and a Proxy URL containing a direct
