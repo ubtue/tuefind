@@ -1,4 +1,4 @@
-<?php $infos =  array(); ?>
+<?php $infos = []; ?>
 <?php $issue = $this->driver->getIssue(); ?>
 <?php $pages = $this->driver->getPages(); ?>
 <?php $volume = $this->driver->getVolume(); ?>
@@ -9,14 +9,17 @@
 <?php if (!empty($pages)) { $infos[] = $this->transEsc('Pages') . ': ' . $this->escapeHtml($pages); }?>
 <?php $ids_and_titles = $this->driver->getContainerIDsAndTitles();?>
 <?php if (sizeof($ids_and_titles)): ?>
+  <?php $i=0; ?>
   <?php foreach ($ids_and_titles as $id => $title): ?>
-    <a href="<?=$this->url("record", array("id" => $id));?>">
+    <a href="<?=$this->url("record", ["id" => $id]);?>">
       <?=$this->escapeHtml($title[0])?>
       <?php if (!empty($title[1])): ?>
         (<?=$title[1]?>)
       <?php endif; ?>
     </a>
     <br/>
+    <?php if ($i == 0): ?><?=$this->escapeHtml(implode(', ', $infos));?><br/><?php endif; ?>
+    <?php ++$i; ?>
   <?php endforeach; ?>
 <?php elseif (!empty($this->driver->getSuperiorFrom773())): ?>
   <?=nl2br($this->escapeHtml(implode("\n\n", $this->driver->getSuperiorFrom773())));?>
