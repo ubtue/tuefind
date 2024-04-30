@@ -823,4 +823,8 @@ class SolrDefault extends \VuFind\RecordDriver\SolrMarc
 
         return true;
     }
+
+    public function getOCLCNums() {
+        return $this->fields['oclc_num'] ?? [];
+    }
 }
