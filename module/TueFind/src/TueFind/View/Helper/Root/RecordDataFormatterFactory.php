@@ -59,6 +59,12 @@ class RecordDataFormatterFactory extends \VuFind\View\Helper\Root\RecordDataForm
         );
     }
 
+    protected function addWorldcat(&$spec) {
+         $spec->setTemplateLine(
+            'WorldCat', 'showWorldCat', 'data-WorldCat.phtml'
+        );
+    }
+
     protected function addLanguages(&$spec) {
         // note: translation added, will probably be fixed in VuFind 6
         $spec->setLine('Language', 'getLanguages', null, ['translate' => true]);
