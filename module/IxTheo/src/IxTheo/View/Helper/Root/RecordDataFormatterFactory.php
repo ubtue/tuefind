@@ -45,7 +45,6 @@ class RecordDataFormatterFactory extends \TueFind\View\Helper\Root\RecordDataFor
     public function getDefaultCoreSpecs()
     {
         $spec = new SpecBuilder();
-        $this->addPublishedIn($spec);
         $this->addFollowingTitle($spec); // TueFind specific
         $this->addPrecedingTitle($spec);  // TueFind specific
         // Other Titles (IxTheo-specific)
