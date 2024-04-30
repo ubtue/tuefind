@@ -258,7 +258,7 @@ class SolrMarc extends SolrDefault
 
 
     public function showWorldCat() {
-       return count($this->getOCLCNums());
+       return count($this->getOCLC());
     }
 
     public function showPDA()
