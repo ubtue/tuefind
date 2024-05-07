@@ -3,7 +3,7 @@
 namespace TueFind\Controller;
 
 use Laminas\ServiceManager\ServiceLocatorInterface;
-use TueFind\Http\CachingDownloader;
+use VuFind\Http\CachingDownloader;
 
 /**
  * Use Wikidata API to search for specific information (e.g. a picture)
@@ -207,7 +207,7 @@ class WikidataProxyController extends AbstractProxyController
      */
     public function searchEntities($search, $language) {
         $url = self::API_URL . '&action=wbsearchentities&search=' . urlencode($search) . '&language=' . $language;
-        return $this->cachingDownloader->download($url, $this->downloaderClientOptions, [CachingDownloader::class, 'DecodeCallbackJson']);
+        return $this->cachingDownloader->downloadJson($url, $this->downloaderClientOptions);
     }
 
     /**
@@ -219,7 +219,7 @@ class WikidataProxyController extends AbstractProxyController
      */
     public function getEntities($ids) {
         $url = self::API_URL . '&action=wbgetentities&ids=' . urlencode(implode('|', $ids));
-        return $this->cachingDownloader->download($url, $this->downloaderClientOptions, [CachingDownloader::class, 'DecodeCallbackJson']);
+        return $this->cachingDownloader->downloadJson($url, $this->downloaderClientOptions);
     }
 
     /**
@@ -242,7 +242,7 @@ class WikidataProxyController extends AbstractProxyController
      */
     public function getImageMetadata($filename) {
         $lookupUrl = self::API_URL . '&action=query&prop=imageinfo&iiprop=url|mime|extmetadata&titles=File:' . urlencode($filename);
-        $lookupResult = $this->cachingDownloader->download($lookupUrl, $this->downloaderClientOptions, [CachingDownloader::class, 'DecodeCallbackJson']);
+        $lookupResult = $this->cachingDownloader->downloadJson($lookupUrl, $this->downloaderClientOptions);
         $subindex = '-1';
 
         $imageInfo = $lookupResult->query->pages->$subindex->imageinfo[0] ?? null;

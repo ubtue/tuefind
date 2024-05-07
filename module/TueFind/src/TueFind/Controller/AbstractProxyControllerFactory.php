@@ -25,7 +25,7 @@ class AbstractProxyControllerFactory extends \VuFind\Controller\AbstractBaseFact
     ) {
         $instance = parent::__invoke($container, $requestedName, $options);
 
-        $instance->setCachingDownloader($container->get(\TueFind\Http\CachingDownloader::class));
+        $instance->setCachingDownloader($container->get(\VuFind\Http\CachingDownloader::class));
 
         return $instance;
     }
