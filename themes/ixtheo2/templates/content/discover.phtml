@@ -5,11 +5,11 @@
     </div>
 
     <!-- one block -->
-    <div class="col-md-6 ix-panel-news">
+    <div class="col-md-4 ix-panel-news">
         <div class="panel-default">
             <div class="panel-heading">
                 <h4 class="panel-title">
-                    <b>Bibelstellensuche</b>
+                    Bibelstellensuche
                 </h4>
             </div>
             <div class="panel-collapse">
@@ -66,12 +66,69 @@
         </div>
     </div>
     <!-- end one block -->
+
     <!-- one block -->
-    <div class="col-md-6 ix-panel-news">
+    <div class="col-md-4 ix-panel-news">
         <div class="panel-default">
             <div class="panel-heading">
                 <h4 class="panel-title">
-                    <b>Suche nach Kirchenrechtsquellen</b>
+                    Suche nach Zeiträumen
+                </h4>
+            </div>
+            <div class="panel-collapse">
+                <div class="panel-body">
+                    <input type="checkbox" class="read-more-state" id="post-3" />
+                    <div class="read-more-wrap">
+                        <p>Die Suche nach Zeitbereichen ermöglicht die gezielte Recherche nach Publikationen, die einen bestimmten Zeitraum behandeln. Es kann nach Jahreszahlen und Zeiträumen gesucht werden.</p>
+                        <div class="read-more-target">
+                        <p>Um die Suche nach Zeiträumen zu aktivieren, muss rechts neben dem Suchschlitz die Option „Zeitbereiche“ ausgewählt werden.</p>
+                        <p>Bei Jahreszahlen vor der Zeitenwende muss ein „v“ hinzugefügt werden. Eingegebene Jahreszahlen ohne Zusatz werden automatisch als „nach der Zeitenwende“ interpretiert.</p>
+                        <p>Beispiele:</p>
+                            • Suche eines bestimmten Jahrs nach der Zeitenwende: Eingabe der Jahreszahl (z.B. 1970) 
+                            • Suche eines Zeitraums nach der Zeitenwende: Eingabe beider Zahlen ohne Leerstellen (z.B. 1526-1530)
+                            • Suche nach einem Jahr vor der Zeitenwende: Eingabe des Kürzels v vor dem Datum (z.B. v70)
+                            • Suche eines Zeitraums vor der Zeitenwende: Eingabe des Kürzels v vor beiden Zahlen (z.B. v70-v60)
+                            • Suche über die Zeitenwende hinweg: Kombination dieser Optionen (z.B. v566-100)
+                            
+                        <p>Sie erhalten als Treffer nicht nur die Einträge, bei denen genau dieser Zeitraum angegeben ist, sondern auch alle Einträge, bei denen es eine Überschneidung zu dem gesuchten Zeitraum gibt:</p>
+                            
+                            • Der eingegebene Zeitraum stimmt genau mit dem gefundenen überein.
+                              Beispiel: Suche nach 1648 findet 1648.
+
+                            • Der gesuchte Zeitraum ist in dem gefundenen Zeitraum enthalten.
+                              Beispiel: Suche nach v70 findet auch v76-v60.
+
+                            • Der gefundene Zeitraum ist in dem gesuchten Zeitraum enthalten.
+                              Beispiel: Suche nach 1800-1850 findet auch 1800-1848.
+
+                            • Der gefundene und der gesuchte Zeitraum überschneiden sich.
+                              Beispiel: Suche nach 1517-1522 findet auch 1520-1525.
+
+                            • Außerdem werden Datensätze gefunden, die mit einem Schlagwort verknüpft sind, das einen zur Suche passenden Zeitraum bezeichnet.
+                              Beispiel: Suche nach 30-100 findet auch Treffer mit dem Schlagwort „Urchristentum“.
+                        
+                        <p>Die Treffer werden nach Nähe zur gesuchten Stelle sortiert. Exakte Treffer stehen ganz oben; die übrigen Treffer werden danach sortiert, wie gut sie zu dem gesuchten Zeitraum passen.</p>
+                        <p>Damit Sie die Relevanz der Treffer einschätzen können, werden die Stellenangaben in der Kurztitelliste direkt angezeigt.</p>
+
+                        <img src="/themes/ixtheo2/images/content_img/block_3_img_1.jpg"  />
+
+                        <p>Technisch funktioniert die Zeitraumsuche analog zur Bibelstellensuche. Bei Interesse finden <br />  Sie nähere Informationen hier: https://github.com/ubtue/tuefind/wiki/Times </p>
+                        </div>
+                    </div>
+                    <label for="post-3" class="read-more-trigger"></label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end one block -->
+
+
+    <!-- one block -->
+    <div class="col-md-4 ix-panel-news">
+        <div class="panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    Suche nach Kirchenrechtsquellen
                 </h4>
             </div>
             <div class="panel-collapse">
@@ -130,66 +187,13 @@
         </div>
     </div>
     <!-- end one block -->
+ 
     <!-- one block -->
     <div class="col-md-6 ix-panel-news">
         <div class="panel-default">
             <div class="panel-heading">
                 <h4 class="panel-title">
-                    <b>Suche nach Zeiträumen</b>
-                </h4>
-            </div>
-            <div class="panel-collapse">
-                <div class="panel-body">
-                    <input type="checkbox" class="read-more-state" id="post-3" />
-                    <div class="read-more-wrap">
-                        <p>Die Suche nach Zeitbereichen ermöglicht die gezielte Recherche nach Publikationen, die einen bestimmten Zeitraum behandeln. Es kann nach Jahreszahlen und Zeiträumen gesucht werden.</p>
-                        <div class="read-more-target">
-                        <p>Um die Suche nach Zeiträumen zu aktivieren, muss rechts neben dem Suchschlitz die Option „Zeitbereiche“ ausgewählt werden.</p>
-                        <p>Bei Jahreszahlen vor der Zeitenwende muss ein „v“ hinzugefügt werden. Eingegebene Jahreszahlen ohne Zusatz werden automatisch als „nach der Zeitenwende“ interpretiert.</p>
-                        <p>Beispiele:</p>
-                            • Suche eines bestimmten Jahrs nach der Zeitenwende: Eingabe der Jahreszahl (z.B. 1970) 
-                            • Suche eines Zeitraums nach der Zeitenwende: Eingabe beider Zahlen ohne Leerstellen (z.B. 1526-1530)
-                            • Suche nach einem Jahr vor der Zeitenwende: Eingabe des Kürzels v vor dem Datum (z.B. v70)
-                            • Suche eines Zeitraums vor der Zeitenwende: Eingabe des Kürzels v vor beiden Zahlen (z.B. v70-v60)
-                            • Suche über die Zeitenwende hinweg: Kombination dieser Optionen (z.B. v566-100)
-                            
-                        <p>Sie erhalten als Treffer nicht nur die Einträge, bei denen genau dieser Zeitraum angegeben ist, sondern auch alle Einträge, bei denen es eine Überschneidung zu dem gesuchten Zeitraum gibt:</p>
-                            
-                            • Der eingegebene Zeitraum stimmt genau mit dem gefundenen überein.
-                              Beispiel: Suche nach 1648 findet 1648.
-
-                            • Der gesuchte Zeitraum ist in dem gefundenen Zeitraum enthalten.
-                              Beispiel: Suche nach v70 findet auch v76-v60.
-
-                            • Der gefundene Zeitraum ist in dem gesuchten Zeitraum enthalten.
-                              Beispiel: Suche nach 1800-1850 findet auch 1800-1848.
-
-                            • Der gefundene und der gesuchte Zeitraum überschneiden sich.
-                              Beispiel: Suche nach 1517-1522 findet auch 1520-1525.
-
-                            • Außerdem werden Datensätze gefunden, die mit einem Schlagwort verknüpft sind, das einen zur Suche passenden Zeitraum bezeichnet.
-                              Beispiel: Suche nach 30-100 findet auch Treffer mit dem Schlagwort „Urchristentum“.
-                        
-                        <p>Die Treffer werden nach Nähe zur gesuchten Stelle sortiert. Exakte Treffer stehen ganz oben; die übrigen Treffer werden danach sortiert, wie gut sie zu dem gesuchten Zeitraum passen.</p>
-                        <p>Damit Sie die Relevanz der Treffer einschätzen können, werden die Stellenangaben in der Kurztitelliste direkt angezeigt.</p>
-
-                        <img src="/themes/ixtheo2/images/content_img/block_3_img_1.jpg"  />
-
-                        <p>Technisch funktioniert die Zeitraumsuche analog zur Bibelstellensuche. Bei Interesse finden <br />  Sie nähere Informationen hier: https://github.com/ubtue/tuefind/wiki/Times </p>
-                        </div>
-                    </div>
-                    <label for="post-3" class="read-more-trigger"></label>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- end one block -->
-    <!-- one block -->
-    <div class="col-md-6 ix-panel-news">
-        <div class="panel-default">
-            <div class="panel-heading">
-                <h4 class="panel-title">
-                    <b>IxTheo-Klassifikation</b>
+                    IxTheo-Klassifikation
                 </h4>
             </div>
             <div class="panel-collapse">
@@ -217,14 +221,14 @@
         <div class="panel-default">
             <div class="panel-heading">
                 <h4 class="panel-title">
-                    <b>Verbale Suchbegriffe</b>
+                    Verbale Suchbegriffe
                 </h4>
             </div>
             <div class="panel-collapse">
                 <div class="panel-body">
                     <input type="checkbox" class="read-more-state" id="post-5" />
                     <div class="read-more-wrap">
-                        <p>Zahlreiche Titel im IxTheo sind mit Schlagwörtern und Keywords erschlossen. Diese können ebenfalls gezielt durchsucht werden.</p>
+                        <p>Zahlreiche Titel im IxTheo sind mit Schlagwörtern und Keywords erschlossen. Diese können ebenfalls gezielt durchsucht werden. Tippen Sie den Suchbegriff in den Suchschlitz und belassen Sie den Suchaspekt „Alle Felder“.</p>
                         <div class="read-more-target">
                             <p>Tippen Sie den Suchbegriff in den Suchschlitz und belassen Sie den Suchaspekt „Alle Felder“. Der eingegebene Begriff wird dann in allen Suchfeldern gesucht.</p>
 
@@ -241,21 +245,23 @@
     </div>
     <!-- end one block -->
     <!-- one block -->
-    <div class="col-md-6 ix-panel-news">
+    <div class="col-md-4 ix-panel-news">
         <div class="panel-default">
             <div class="panel-heading">
                 <h4 class="panel-title">
-                    <b>IxTheo-Themen Browsing</b>
+                    IxTheo-Themen Browsing
                 </h4>
             </div>
             <div class="panel-collapse">
                 <div class="panel-body">
                     <input type="checkbox" class="read-more-state" id="post-6" />
                     <div class="read-more-wrap">
-                        <p>Das IxTheo Themen-Browsing ermöglicht Ihnen, sich einen Überblick über die Kontexte zu verschaffen, in denen ein bestimmtes Schlagwort vorkommt.</p>
+                        <p>Das IxTheo Themen-Browsing ermöglicht Ihnen, sich einen Überblick über die Kontexte zu verschaffen, in denen ein bestimmtes Schlagwort vorkommt.
+                        Sie finden den Browsing-Modus durch Klick auf „Browsen“ unterhalb des Suchschlitzes. Wählen Sie „Thema browsen“.
+                        </p>
                         <div class="read-more-target">
 
-                        <p>Sie finden den Browsing-Modus durch Klick auf „Browsen“ unterhalb des Suchschlitzes. Wählen Sie „Thema browsen“.</p>
+                        <p>&nbsp;</p>
 
                         <img src="/themes/ixtheo2/images/content_img/block_6_img_1.jpg"  />
 
@@ -277,20 +283,22 @@
     </div>
     <!-- end one block -->
     <!-- one block -->
-    <div class="col-md-6 ix-panel-news">
+    <div class="col-md-4 ix-panel-news">
         <div class="panel-default">
             <div class="panel-heading">
                 <h4 class="panel-title">
-                    <b>Katalogbrowsen</b>
+                    Katalogbrowsen
                 </h4>
             </div>
             <div class="panel-collapse">
                 <div class="panel-body">
                     <input type="checkbox" class="read-more-state" id="post-7" />
                     <div class="read-more-wrap">
-                        <p>Die Katalog-Browsing-Funktion des IxTheo ermöglicht das Browsen in verschiedenen Feldern: Thema (Schlagwort), Verfasser, DDC-Klassifikation, IxTheo-Klassifikation und Verlag.</p>
+                        <p>Die Katalog-Browsing-Funktion des IxTheo ermöglicht das Browsen in verschiedenen Feldern: Thema (Schlagwort), Verfasser, DDC-Klassifikation, IxTheo-Klassifikation und Verlag.
+                        Sie finden den Browsing-Modus durch Klick auf „Browsen“ unterhalb des Suchschlitzes. Wählen Sie „Katalog browsen“.
+                        </p>
                         <div class="read-more-target">
-                        <p>Sie finden den Browsing-Modus durch Klick auf „Browsen“ unterhalb des Suchschlitzes. Wählen Sie „Katalog browsen“.</p>
+                        <p>&nbsp;</p>
 
                         <img src="/themes/ixtheo2/images/content_img/block_7_img_1.jpg"  />
 
@@ -308,20 +316,22 @@
     </div>
     <!-- end one block -->
     <!-- one block -->
-    <div class="col-md-6 ix-panel-news">
+    <div class="col-md-4 ix-panel-news">
         <div class="panel-default">
             <div class="panel-heading">
                 <h4 class="panel-title">
-                    <b>Alphabetisch browsen</b>
+                    Alphabetisch browsen
                 </h4>
             </div>
             <div class="panel-collapse">
                 <div class="panel-body">
                     <input type="checkbox" class="read-more-state" id="post-8" />
                     <div class="read-more-wrap">
-                        <p>Die Funktion „Alphabetisch browsen“ ermöglicht Ihnen, in einer alphabetisch sortierten Liste von Themen, Verfasser*innen, Titeln oder Klassifikationen zu blätterns.</p>
+                        <p>Die Funktion „Alphabetisch browsen“ ermöglicht Ihnen, in einer alphabetisch sortierten Liste von Themen, Verfasser*innen, Titeln oder Klassifikationen zu blätterns.
+                        Sie finden den Browsing-Modus durch Klick auf „Browsen“ unterhalb des Suchschlitzes. Wählen Sie „Alphabetisch browsen“.
+                        </p>
                         <div class="read-more-target">
-                          <p>Sie finden den Browsing-Modus durch Klick auf „Browsen“ unterhalb des Suchschlitzes. Wählen Sie „Alphabetisch browsen“.</p>
+                          <p>&nbsp;</p>
 
                           <img src="/themes/ixtheo2/images/content_img/block_8_img_1.jpg"  />
 
@@ -364,4 +374,10 @@
     border-top-left-radius: 3px;
     border-top-right-radius: 3px;
 }
+
+.panel-collapse p {
+    text-align: justify !important;
+    font-size: 14px;
+}
+
 </style>
