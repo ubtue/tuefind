@@ -374,7 +374,8 @@ class BrowseController extends \VuFind\Controller\BrowseController
         } else {
             $query = $facet . ':' . $query;
         }
-        $params->setOverrideQuery($query);
+        // Setting the handler is explictly needed for proper funtioning of language association
+        $params->setBasicSearch($query, $params->getOptions()->getDefaultHandler());
         $params->getOptions()->disableHighlighting();
         $params->getOptions()->spellcheckEnabled(false);
         // Get limit from config
