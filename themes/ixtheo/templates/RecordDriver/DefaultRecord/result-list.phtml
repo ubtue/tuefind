@@ -202,7 +202,7 @@
       <?php $timeRangesString = $this->driver->tryMethod('getTimeRangesString');
         if (!empty($timeRangesString)) {
           foreach($timeRangesString as $timeRangeOne) {
-            $rangeAndDate = strpos($timeRangeOne, ' '); 
+            $rangeAndDate = strpos($timeRangeOne, " "); 
             if ($rangeAndDate !== false) {
               $oneRange = explode(" ",$timeRangeOne);
               if(count($oneRange) == 2){
