@@ -201,7 +201,19 @@
 
       <?php $timeRangesString = $this->driver->tryMethod('getTimeRangesString');
         if (!empty($timeRangesString)) {
-          echo '<div>' . $this->transEsc($timeRangesString) . '</div>';
+          foreach($timeRangesString as $timeRangeOne) {
+            $rangeAndDate = strpos($timeRangeOne, ' '); 
+            if ($rangeAndDate !== false) {
+              $oneRange = explode(" ",$timeRangeOne);
+              if(count($oneRange) == 2){
+                echo '<div>' . $this->transEsc($oneRange[0]) . ' ' . $oneRange[1] . '</div>';
+              }else{
+                echo '<div>' . $this->transEsc($timeRangeOne) . '</div>';
+              }
+            }else{
+              echo '<div>' . $this->transEsc($timeRangeOne) . '</div>';
+            }
+          }
         }
       ?>
 
