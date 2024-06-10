@@ -701,4 +701,9 @@ class SolrMarc extends SolrDefault
     {
         return $this->getLOKBlock(static::ISIL_DEFAULT);
     }
+
+    public function getMarcRecord() {
+        return $this->getMarcReader()->getRawMarcRecords();
+    }
+
 }
