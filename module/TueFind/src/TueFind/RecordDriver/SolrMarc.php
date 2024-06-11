@@ -256,6 +256,11 @@ class SolrMarc extends SolrDefault
         return (count($this->getFormats()) > 0);
     }
 
+
+    public function showWorldCat() {
+       return count($this->getOCLC());
+    }
+
     public function showPDA()
     {
         $formats = $this->getFormats();
@@ -696,4 +701,9 @@ class SolrMarc extends SolrDefault
     {
         return $this->getLOKBlock(static::ISIL_DEFAULT);
     }
+
+    public function getMarcRecord() {
+        return $this->getMarcReader()->getRawMarcRecords();
+    }
+
 }

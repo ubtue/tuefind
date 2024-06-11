@@ -69,16 +69,26 @@
             <?php endif; ?>
           <?php else: ?>
             <?php // Handle corporation information... ?>
-            <?php $corporation = !is_null($this->driver->tryMethod('getCorporation')) ? implode(" ", $this->driver->tryMethod('getCorporation')) : ""?>
-            <?php if (!empty($corporation)): ?>
-               <a href="<?=$this->record($this->driver)->getLink('author', $corporation)?>"><?php
-                $summCorporation = "";
-                echo !empty($summCorporation)
-                  ? $this->highlight($summCorporation)
-                  : $this->escapeHtml($corporation);
-               ?></a>
-            <?php endif; ?>
-          <?php endif; ?>
+            <?php
+            if(!is_null($this->driver->tryMethod('getCorporateAuthorsIds'))){
+              $corporationsIds = $this->driver->tryMethod('getCorporateAuthorsIds');
+              $corporation = $this->driver->tryMethod('getCorporation');
+              if (!empty($corporationsIds)){
+                $corporetionIndex = 0;
+                foreach($corporationsIds as $corporationID) { ?>
+                  <?=$this->escapeHtml($corporation[$corporetionIndex])?>
+                  <?php if ($corporationID && $authorityDriver = $this->authority()->recordExists($corporationID)): ?>
+                    <a href="<?=$this->record($authorityDriver)->getLink('titles-by', $authorityDriver)?>"><i class="fa fa-book" aria-hidden="true" title="<?=$this->transEsc('author_all_titles_tooltip')?>"></i></a>
+                    <a href="<?=$this->recordLinker()->getUrl($authorityDriver)?>"><i class="fa fa-user-circle" aria-hidden="true" title="<?=$this->transEsc('author_details_tooltip')?>"></i></a>
+                  <?php else: ?>
+                    <a href="<?=$this->record($this->driver)->getLink('author', $corporation[$corporetionIndex])?>"><i class="fa fa-book" aria-hidden="true" title="<?=$this->transEsc('author_all_titles_tooltip')?>"></i></a>
+                  <?php endif; ?>
+                  <br/>
+                  <?php $corporetionIndex++;
+                }
+              }
+            }
+          endif; ?>
           <?php // Handle superior data according to Issue 131 / Rule 5 ?>
           <?php $journal_issue = $this->driver->tryMethod('getJournalIssue'); ?>
           <?php if (is_array($journal_issue) && count($journal_issue) > 1): ?>
@@ -201,26 +211,7 @@
 
       <?php $timeRangesString = $this->driver->tryMethod('getTimeRangesString');
         if (!empty($timeRangesString)) {
-            foreach($timeRangesString as $timeRangeOne) {
-              $rangeAndDate = strpos($timeRangeOne, ' '); 
-              if ($rangeAndDate !== false) {
-                $oneRange = explode(" ",$timeRangeOne);
-                if(count($oneRange) == 2){
-                  print_r($oneRange);
-                  echo $this->transEsc('Loading');
-                  echo '<div>' . $this->transEsc($oneRange[0]) . ' ' . $oneRange[1] . '</div>';
-                }else{
-                  echo '<div>' . $this->transEsc($timeRangeOne) . '</div>';
-                }
-              }else{
-                echo '<div>' . $this->transEsc($timeRangeOne) . '</div>';
-              }
-            }
-          
-
-          /*
-          
-          */
+          echo '<div>' . implode('<br>', $timeRangesString) . '</div>';
         }
       ?>
 
