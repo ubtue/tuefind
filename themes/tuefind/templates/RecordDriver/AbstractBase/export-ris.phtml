@@ -11,11 +11,11 @@ $journalTitle = $this->driver->tryMethod('getContainerTitle');
 $formats = $this->driver->tryMethod('getFormats');
 if ($marcProceedingsField) {
     $format = 'CONF';
-} else if ($marcPhdField) {
+} elseif ($marcPhdField) {
     $format = 'THES';
-} else if (!empty($journalTitle) || (is_array($formats) && in_array('Article', $formats))) {
+} elseif (!empty($journalTitle) || (is_array($formats) && in_array('Article', $formats))) {
     $format = 'JOUR';
-} else if (is_array($formats) && in_array('Journal', $formats)) {
+} elseif (is_array($formats) && in_array('Journal', $formats)) {
     $format = 'JFULL';
 } else {
     $format = 'BOOK';
@@ -59,20 +59,16 @@ if (!empty($journalTitle)) {
 $series = $this->driver->tryMethod('getSeries');
 if (is_array($series)) {
     foreach ($series as $current) {
-        echo ($format == 'BOOK' ? 'T2' : 'T3') . '  - ' . (is_array($current) ? $current['name'] : $current) . "\r\n";
+        echo 'T3  - ' . (is_array($current) ? $current['name'] : $current) . "\r\n";
     }
 }
 
-$author = $this->driver->tryMethod('getPrimaryAuthor');
-if (!empty($author)) {
-    echo 'AU  - ' . "$author\r\n";
+foreach (array_unique($this->driver->tryMethod('getPrimaryAuthors', [], [])) as $current) {
+    echo 'AU  - ' . $this->driver->stripTrailingDates($current) . "\r\n";
 }
 
-$secondaryAuthors = $this->driver->tryMethod('getSecondaryAuthors');
-if (is_array($secondaryAuthors)) {
-    foreach ($secondaryAuthors as $current) {
-        echo 'A2  - ' . "$current\r\n";
-    }
+foreach (array_unique($this->driver->tryMethod('getSecondaryAuthors', [], [])) as $current) {
+    echo 'A2  - ' . $this->driver->stripTrailingDates($current) . "\r\n";
 }
 
 $pubPlaces = $this->driver->tryMethod('getPlacesOfPublication');
@@ -86,7 +82,7 @@ if (is_array($pubPlaces) && is_array($pubDates) && is_array($pubNames)) {
     }
     for ($i = 0; $i < $total; $i++) {
         if (isset($pubPlaces[$i])) {
-            echo "CY  - " . rtrim(str_replace(array('[', ']'), '', $pubPlaces[$i]), ': '). "\r\n";
+            echo "CY  - " . rtrim(str_replace(['[', ']'], '', $pubPlaces[$i]), ': ') . "\r\n";
         }
         if (isset($pubNames[$i])) {
             echo "PB  - " . rtrim($pubNames[$i], ", ") . "\r\n";
@@ -108,14 +104,14 @@ if (is_array($languages)) {
     }
 }
 
-$genres =  $this->driver->tryMethod('getGenres');
+$genres = $this->driver->tryMethod('getGenres');
 if (is_array($genres)) {
     foreach ($genres as $genre) {
         echo 'M3  - ' . "$genre\r\n";
     }
 }
 
-$topics =  $this->driver->tryMethod('getTopics');
+$topics = $this->driver->tryMethod('getTopics');
 if (is_array($topics)) {
     foreach ($topics as $topic) {
         echo 'KW  - ' . "$topic\r\n";
@@ -157,6 +153,9 @@ foreach ($this->record($this->driver)->getUrlList() as $url) {
     echo 'UR  - ' . "$url\r\n";
 }
 
+if ($doi = $this->driver->tryMethod('getCleanDOI')) {
+    echo "DO  - $doi\r\n";
+}
+
 // End of Record:
 echo "ER  -\r\n\r\n";
-?>
