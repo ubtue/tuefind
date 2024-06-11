@@ -99,35 +99,49 @@ class SolrMarc extends SolrDefault
         return in_array('kreb', $this->getRecordSelectors());
     }
 
+
+    const AKB_HOLDING_PREFIX = 'Bestand Albert-Krebs-Bibliothek: ';
+
     public function getAlbertKrebsLibraryAvailability(): ?array
     {
-        $availability = ['signature' => null, 'holding' => null];
+        $availability = ['signature' => null, 'holding' => []];
 
         foreach ($this->getLOKBlockDefault() as $lokField) {
             $isHolding = false;
             $isSignature = false;
             $a = null;
             $c = null;
+            $e = null;
             foreach ($lokField['subfields'] as $subfield) {
                 if ($subfield['code'] == '0') {
                     if ($subfield['data'] == '852 1')
                         $isSignature = true;
                     elseif ($subfield['data'] == '86630')
                         $isHolding = true;
+                    elseif ($subfield['data'] == '541  ')
+                        $isHolding = true;
                 } elseif ($subfield['code'] == 'a') {
                     $a = $subfield['data'];
                 } elseif ($subfield['code'] == 'c') {
                     $c = $subfield['data'];
+                } elseif ($subfield['code'] == 'e') {
+                    $e = $subfield['data'];
                 }
             }
 
             if ($isSignature && $c !== null)
                 $availability['signature'] = $c;
-            elseif ($isHolding && $a !== null)
-                $availability['holding'] = str_replace('Bestand Albert-Krebs-Bibliothek: ', '', $a);
+            elseif ($isHolding && $a !== null && str_starts_with($a, self::AKB_HOLDING_PREFIX)) {
+                $holding = str_replace(self::AKB_HOLDING_PREFIX, '', $a);
+                array_push($availability['holding'], $holding);
+            }
+            elseif ($isHolding && $e !== null && str_starts_with($e, self::AKB_HOLDING_PREFIX)) {
+                $holding = str_replace(self::AKB_HOLDING_PREFIX, '', $e);
+                array_push($availability['holding'], $holding);
+            }
         }
 
-        if ($availability['signature'] != null || $availability['holding'] != null)
+        if ($availability['signature'] || $availability['holding'])
             return $availability;
 
         // Special case for articles: Check superior work availability information

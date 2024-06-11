@@ -756,7 +756,7 @@
   <queryParser class="de.uni_tuebingen.ub.ixTheo.multiLanguageQuery.MultiLanguageQueryParserPlugin" name="multiLanguageQueryParser" />
   <transformer class="de.uni_tuebingen.ub.ixTheo.MultiLanguageDocTransformerFactory" name="multiLanguageDocTransformer">
     <bool name="enabled">true</bool>
-    <str name="fields">topic_standardized,topic_non_standardized,topic_facet,geographic_facet,era_facet,genre_facet,time_range_display</str>
+    <str name="fields">topic_standardized,topic_non_standardized,topic_facet,geographic_facet,era_facet,genre_facet,time_range_display,topic,key_word_chain_bag,key_word_chains,key_word_chains_sorted</str>
     <str name="lang_extensions">_de,_en,_fr,_it,_es,_hant,_hans,_pt,_ru,_el</str>
   </transformer>
 

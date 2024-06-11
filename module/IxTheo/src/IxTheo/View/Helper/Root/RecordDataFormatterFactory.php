@@ -57,6 +57,7 @@ class RecordDataFormatterFactory extends \TueFind\View\Helper\Root\RecordDataFor
         $this->addSubito($spec);
         $this->addHBZ($spec);
         $this->addJOP($spec);
+        $this->addWorldCat($spec);
         // PDA (IxTheo-specific)
         if ($this->accountCapabilities->getPdaSetting()) {
             $spec->setTemplateLine(
