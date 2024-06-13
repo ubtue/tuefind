@@ -12,6 +12,13 @@
     // - disabled, because we use the non-ajax-version.
     // - see also "recordDocReady" at the bottom of this file.
     //$this->headScript()->appendFile("record.js");
+
+    /*
+     * TueFind: Add canonical URL (for SEO), Backport from 10.0 => 9.1,
+     *          see also: https://github.com/vufind-org/vufind/pull/3655/files
+     */
+    $canonicalUrl = $this->recordLinker()->getUrl($this->driver, ['excludeSearchId' => true]);
+    $this->headLink(['rel' => 'canonical', 'href' => $canonicalUrl]);
 ?>
 
 <?php /* User Authority Access */ ?>
