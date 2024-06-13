@@ -24,7 +24,7 @@
             }
           }
         ?>
-        <a href="<?=$authorUrl?>"><?=$authorLabel?><?php /* count disabled -- uncomment to add: echo ' - ' . $author['count']; */ ?></a>
+        <a href="<?=$authorUrl?>"><?=$this->escapeHtml($authorLabel)?><?php /* count disabled -- uncomment to add: echo ' - ' . $author['count']; */ ?></a>
         <?php if ($i + 1 < count($similarAuthors['list'])): ?>
           <br>
         <?php endif; ?>
