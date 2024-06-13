@@ -4,7 +4,6 @@ $formats = $this->driver->getFormats();
 $media_types = $this->driver->tryMethod('getMediaTypes', [], []);
 $is_hybrid = $this->driver->tryMethod('isHybrid') || (in_array("Electronic", $media_types) && in_array("Non-Electronic", $media_types));
 if (isset($media_types)) {
-
   if ($is_hybrid):
     $formats = array_merge(["Electronic/Print"], $formats);
   elseif (in_array("Electronic", $media_types)):
@@ -14,6 +13,6 @@ if (isset($media_types)) {
   endif;
   $i = 0;
   foreach ($formats as $format) { ?>
-    <span class="iconlabel <?=$this->record($this->driver)->getFormatClass($format)?>"><?=$this->transEsc($format)?><?=(++$i < count($formats) - 1) ? " |" : ""?> </span>
+    <span class="format iconlabel <?=$this->record($this->driver)->getFormatClass($format)?>"><?=$this->transEsc($format)?><?=(++$i < count($formats) - 1) ? " |" : ""?> </span>
   <?php }
 }?>
