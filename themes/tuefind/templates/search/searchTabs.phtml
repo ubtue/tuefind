@@ -1,9 +1,11 @@
 <?php
+  $hasSelectedTab = false;
   $routeParams = $this->tuefind()->getRouteParams();
   if($routeParams['controller'] == "Authority" && $routeParams['action'] == "Home") {
     foreach($searchTabs as &$sTabs) {
       if($sTabs['id'] == "SolrAuth") {
         $sTabs['selected'] = 1;
+        $hasSelectedTab = true;
       }else{
         $sTabs['selected'] = '';
       }
