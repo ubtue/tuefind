@@ -23,5 +23,13 @@
             <?=$block?>
         <?php endif; ?>
     <?php endforeach; ?>
+    <?php if (!$hasSelectedTab && !$this->translationEmpty('temporary_search_tab_title')): ?>
+      <li class="active">
+        <a><?=$this->transEsc('temporary_search_tab_title')?></a>
+      </li>
+    <?php endif; ?>
   </ul>
+  <?php if ($this->showCounts): ?>
+    <?php $this->headScript()->appendFile('resultcount.js'); ?>
+  <?php endif; ?>
 <?php endif; ?>
