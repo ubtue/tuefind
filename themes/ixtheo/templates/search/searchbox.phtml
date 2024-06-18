@@ -141,7 +141,7 @@
               <a href="<?=$this->url('search-newitem')?>"><?=$this->transEsc('New Items')?></a>
             </button>
           <?php endif; ?>
-          <button class="dropdown under-button pull-right">
+          <span class="dropdown under-button pull-right">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                   <?=$this->transEsc('Virtual Keyboard')?> <span class="caret"></span>
             </a>
@@ -151,7 +151,7 @@
                 <?php $virtualKeyboardSnippet = '$(triggerVirtualKeyboard(\'' . $this->transEsc("Accept") . ':' . $this->transEsc("Accept") . '\', \'' . $this->transEsc("Enter") . ':' . $this->transEsc("Enter") . '\'));'; ?>
                 <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $virtualKeyboardSnippet, 'SET')?>
             </ul>
-          </button>
+          </span>
         </div>
     <?php if ($geoUrl = $this->geocoords()->getSearchUrl($options)) : ?>
         <a href="<?=$geoUrl ?>" class="btn btn-link"><?=$this->transEsc('Geographic Search')?></a>
