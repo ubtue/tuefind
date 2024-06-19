@@ -37,6 +37,7 @@ use Symfony\Component\Yaml\Yaml;
 use VuFind\Config\PathResolver;
 use VuFind\Config\Writer as ConfigWriter;
 
+use function call_user_func;
 use function floatval;
 use function in_array;
 use function intval;
@@ -515,11 +516,12 @@ abstract class MinkTestCase extends \PHPUnit\Framework\TestCase
      * Set a value within an element selected via CSS; retry if set fails
      * due to browser bugs.
      *
-     * @param Element $page     Page element
-     * @param string  $selector CSS selector
-     * @param string  $value    Value to set
-     * @param int     $timeout  Wait timeout for CSS selection (in ms)
-     * @param int     $retries  Retry count for set loop
+     * @param Element $page        Page element
+     * @param string  $selector    CSS selector
+     * @param string  $value       Value to set
+     * @param int     $timeout     Wait timeout for CSS selection (in ms)
+     * @param int     $retries     Retry count for set loop
+     * @param bool    $verifyValue Whether to verify that the value was written
      *
      * @return mixed
      */
@@ -528,38 +530,120 @@ abstract class MinkTestCase extends \PHPUnit\Framework\TestCase
         $selector,
         $value,
         $timeout = null,
-        $retries = 6
+        $retries = 6,
+        $verifyValue = true
     ) {
         $timeout ??= $this->getDefaultTimeout();
-        $field = $this->findCss($page, $selector, $timeout, 0);
-
-        $session = $this->getMinkSession();
-        $session->wait(
-            $timeout,
-            "typeof $ !== 'undefined' && $('$selector:focusable').length > 0"
-        );
-        $results = $page->findAll('css', $selector);
-        $this->assertIsArray($results, "Selector not found: $selector");
-        $field = $results[0];
 
         // Workaround for Chromedriver bug; sometimes setting a value
         // doesn't work on the first try.
         for ($i = 1; $i <= $retries; $i++) {
-            $field->setValue($value);
-
-            // Did it work? If so, we're done and can leave....
-            if ($field->getValue() === $value) {
-                return;
+            try {
+                $field = $this->findCss($page, $selector, $timeout, 0);
+                $field->setValue($value);
+                if (!$verifyValue) {
+                    return;
+                }
+                // Did it work? If so, we're done and can leave....
+                if ($field->getValue() === $value) {
+                    return;
+                }
+                $this->logWarning(
+                    'RETRY setValue after failure in ' . $this->getTestName()
+                    . " (try $i)."
+                );
+            } catch (\Exception $e) {
+                $this->logWarning(
+                    'RETRY setValue after exception in ' . $this->getTestName()
+                    . " (try $i): " . (string)$e
+                );
             }
-            $this->logWarning(
-                'RETRY setValue after failure in ' . $this->getTestName()
-                . " (try $i)."
-            );
 
             $this->snooze();
         }
 
         throw new \Exception('Failed to set value after ' . $retries . ' attempts.');
+    }
+
+    /**
+     * Get text of an element selected via CSS; retry if it fails due to DOM change.
+     *
+     * @param Element $page     Page element
+     * @param string  $selector CSS selector
+     * @param int     $timeout  Wait timeout for CSS selection (in ms)
+     * @param int     $index    Index of the element (0-based)
+     * @param int     $retries  Retry count for set loop
+     *
+     * @return string
+     */
+    protected function findCssAndGetText(
+        Element $page,
+        $selector,
+        $timeout = null,
+        $index = 0,
+        $retries = 6
+    ) {
+        return $this->findCssAndCallMethod($page, $selector, 'getText', $timeout, $index, $retries);
+    }
+
+    /**
+     * Get text of an element selected via CSS; retry if it fails due to DOM change.
+     *
+     * @param Element $page     Page element
+     * @param string  $selector CSS selector
+     * @param int     $timeout  Wait timeout for CSS selection (in ms)
+     * @param int     $index    Index of the element (0-based)
+     * @param int     $retries  Retry count for set loop
+     *
+     * @return string
+     */
+    protected function findCssAndGetHtml(
+        Element $page,
+        $selector,
+        $timeout = null,
+        $index = 0,
+        $retries = 6
+    ) {
+        return $this->findCssAndCallMethod($page, $selector, 'getHtml', $timeout, $index, $retries);
+    }
+
+    /**
+     * Return value of a method of an element selected via CSS; retry if it fails due to DOM change.
+     *
+     * @param Element  $page     Page element
+     * @param string   $selector CSS selector
+     * @param callable $method   Method to call
+     * @param int      $timeout  Wait timeout for CSS selection (in ms)
+     * @param int      $index    Index of the element (0-based)
+     * @param int      $retries  Retry count for set loop
+     *
+     * @return string
+     */
+    protected function findCssAndCallMethod(
+        Element $page,
+        $selector,
+        $method,
+        $timeout = null,
+        $index = 0,
+        $retries = 6,
+    ) {
+        $timeout ??= $this->getDefaultTimeout();
+
+        for ($i = 1; $i <= $retries; $i++) {
+            try {
+                $element = $this->findCss($page, $selector, $timeout, $index);
+                return call_user_func([$element, $method]);
+            } catch (\Exception $e) {
+                $this->logWarning(
+                    'RETRY findCssAndGetText after exception in ' . $this->getTestName()
+                    . " (try $i): " . (string)$e
+                );
+            }
+
+            $this->snooze();
+        }
+
+        throw new \Exception('Failed to get text after ' . $retries . ' attempts.');
     }
 
     /**
@@ -630,20 +714,39 @@ abstract class MinkTestCase extends \PHPUnit\Framework\TestCase
      * @param string $handler Search type (optional)
      * @param string $path    Path to use as search starting point (optional)
      *
-     * @return \Behat\Mink\Element\Element
+     * @return Element
      */
     protected function performSearch($query, $handler = null, $path = '/Search')
     {
         $session = $this->getMinkSession();
         $session->visit($this->getVuFindUrl() . $path);
         $page = $session->getPage();
+        $this->submitSearchForm($page, $query, $handler);
+        return $page;
+    }
+
+    /**
+     * Submit a search on the provided page.
+     *
+     * @param Element $page    Current page object
+     * @param string  $query   Search term(s)
+     * @param string  $handler Search type (optional)
+     *
+     * @return void
+     *
+     * @throws \Exception
+     */
+    protected function submitSearchForm(
+        Element $page,
+        string $query,
+        ?string $handler = null
+    ): void {
         $this->findCss($page, '#searchForm_lookfor')->setValue($query);
         if ($handler) {
             $this->findCss($page, '#searchForm_type')->setValue($handler);
         }
         $this->clickCss($page, '.btn.btn-primary');
         $this->waitForPageLoad($page);
-        return $page;
     }
 
     /**
