@@ -113,8 +113,9 @@ class RedirectController extends \VuFind\Controller\AbstractBase implements \VuF
             $viewParams['driver'] = $this->getRecordLoader()->load($id);
 
             if ($user == false) {
+                $tuefindHelper = $this->serviceLocator->get('ViewHelperManager')->get('tuefind');
                 $msg = 'FID-Lizenz: "' . $viewParams['driver']->getShortTitle() . '". ';
-                $msg .= 'Diese Lizenz wurde vom Fachinformationsdienst (FID) Religionswissenschaft erworben. Die kostenfreie Nutzung der Ressource ist mit einem RelBib-Konto möglich.';
+                $msg .= 'Diese Lizenz wurde vom Fachinformationsdienst (FID) ' . $tuefindHelper->getTueFindFID(/*$short=*/true) . ' erworben. Die kostenfreie Nutzung der Ressource ist mit einem ' . $tuefindHelper->getTueFindType() . '-Konto möglich.';
                 return $this->forceLogin($msg);
             }
 

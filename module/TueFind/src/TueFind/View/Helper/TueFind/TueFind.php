@@ -382,20 +382,28 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
       * Derive the German FID denomination
       * @return string or false of no matching value could be found
       */
-    public function getTueFindFID() {
+    public function getTueFindFID($short=false) {
         $instance = $this->getTueFindInstance();
         $instance = preg_replace('/\d+$/', "", $instance);
+        $fid = false;
         switch($instance) {
             case 'ixtheo':
             case 'bibstudies':
             case 'churchlaw':
-                return 'FID Theologie';
+                $fid = 'Theologie';
+                break;
             case 'relbib':
-                return 'FID Religionswissenschaften';
+                $fid = 'Religionswissenschaft';
+                break;
             case 'krimdok':
-                return 'FID Kriminologie';
-         }
-         return false;
+                $fid = 'Kriminologie';
+                break;
+        }
+
+        if ($fid == false || $short)
+            return $fid;
+        else
+            return 'FID ' . $fid;
     }
 
     /**
