@@ -19,7 +19,8 @@
     <?php if ($this->accountCapabilities()->getSavedSearchSetting() === 'enabled'): ?>
       <li>
         <a href="<?=$this->url('search-history')?>?require_login"<?=$this->active == 'history' ? ' class="active"' : ''?>>
-          <i class="fa fa-fw fa-search" aria-hidden="true"></i> <?=$this->transEsc('history_saved_searches')?>
+          <?=$this->icon('search', 'icon-link__icon') ?>
+          <span class="icon-link__label"><?=$this->transEsc('Search History')?></span>
         </a>
       </li>
     <?php endif; ?>
@@ -27,7 +28,8 @@
     <?php if ($this->accountCapabilities()->getSubscriptionSetting() === 'enabled'): ?>
       <li>
         <a href="<?=$this->url('myresearch-subscriptions')?>"<?=$this->active == 'subscriptions' ? ' class="active"' : ''?>>
-          <i class="fa fa-fw fa-bell"></i> <?=$this->transEsc('Subscriptions')?>
+          <?=$this->icon('notification') ?>
+          <span class="icon-link__label"><?=$this->transEsc('Subscriptions')?></span>
         </a>
       </li>
     <?php endif; ?>
@@ -35,7 +37,8 @@
     <?php if ($this->accountCapabilities()->getRssSubscriptionSetting() === 'enabled'): ?>
       <li>
         <a href="<?=$this->url('myresearch-rssfeedsettings')?>"<?=$this->active == 'rssFeedSettings' ? ' class="active"' : ''?>>
-          <i class="fa fa-fw fa-rss" aria-hidden="true"></i> <?=$this->transEsc("My newsfeeds")?>
+          <?=$this->icon('search-rss') ?>
+          <span class="icon-link__label"><?=$this->transEsc('My newsfeeds')?></span>
         </a>
       </li>
     <?php endif; ?>
@@ -43,7 +46,8 @@
     <?php if ($this->accountCapabilities()->getPdaSetting() === 'enabled'): ?>
       <li>
         <a href="<?=$this->url('myresearch-pdasubscriptions')?>"<?=$this->active == 'pdasubscriptions' ? ' class="active"' : ''?>>
-          <i class="fa fa-fw fa-book" aria-hidden="true"></i> <?=$this->transEsc('PDA')?>
+          <?=$this->icon('format-book') ?>
+          <span class="icon-link__label"><?=$this->transEsc('PDA')?></span>
         </a>
       </li>
     <?php endif; ?>
@@ -51,7 +55,8 @@
     <?php if ($this->accountCapabilities()->getPublicationSetting() === 'enabled'): ?>
       <li>
         <a href="<?=$this->url('myresearch-publications')?>"<?=$this->active == 'publications' ? ' class="active"' : ''?>>
-          <i class="fa fa-fw fa-upload" aria-hidden="true"></i> <?=$this->transEsc('My Publications')?>
+          <?=$this->icon('upload') ?>
+          <span class="icon-link__label"><?=$this->transEsc('My Publications')?></span>
         </a>
       </li>
     <?php endif; ?>
@@ -135,6 +140,8 @@
       </a>
     </li>
   <?php endif; ?>
+  <!--
+    TueFind: This point has been moved to the top, so hide it here
   <?php if ($this->accountCapabilities()->getSavedSearchSetting() === 'enabled'): ?>
     <li>
       <a href="<?=$this->url('search-history')?>" class="icon-link <?=$this->active == 'history' ? ' active' : ''?>">
@@ -143,6 +150,7 @@
       </a>
     </li>
   <?php endif; ?>
+  -->
   <?php if ($user): ?>
     <li>
       <a href="<?=$this->url('myresearch-logout')?>" class="icon-link">
@@ -156,7 +164,7 @@
 <?php if ($user && $this->userlist()->getMode() !== 'disabled'): ?>
   <h3 id="acc-menu-lists-header"><?=$this->transEsc('Your Lists')?></h3>
   <nav class="myresearch-menu" aria-labelledby="acc-menu-lists-header">
-    <ul>
+    <ul class="account-menu">
       <?php /* TueFind: Hide duplicate menu entry for "myresearch-favorites" */ ?>
       <!--
       <li>
@@ -204,33 +212,38 @@
 <?php if ($user && $user->tuefind_rights != null): ?>
   <h3>Admin</h3>
   <nav class="myresearch-menu">
-    <ul>
+    <ul class="account-menu">
       <li>
         <a href="<?=$this->url('adminfrontend-showadmins') ?>"<?=$this->active == 'showadmins' ? ' class="active"' : ''?>>
-          <i class="fa fa-fw fa-user-secret" aria-hidden="true"></i> Show admins
+          <?=$this->icon('user-secret', 'icon-link__icon') ?>
+          <span class="icon-link__label"><?=$this->transEsc('Show admins')?></span>
         </a>
       </li>
     <?php if ($this->accountCapabilities()->getRequestAuthorityRightsSetting() == 'enabled'): ?>
       <li>
         <a href="<?=$this->url('adminfrontend-showuserauthorities') ?>"<?=$this->active == 'showuserauthorities' ? ' class="active"' : ''?>>
-          <i class="fa fa-fw fa-user-plus" aria-hidden="true"></i> Show user authorities
+          <?=$this->icon('user-plus', 'icon-link__icon') ?>
+          <span class="icon-link__label"><?=$this->transEsc('Show user authorities')?></span>
         </a>
       </li>
       <li>
         <a href="<?=$this->url('adminfrontend-showuserauthorityhistory') ?>"<?=$this->active == 'showuserauthorityhistory' ? ' class="active"' : ''?>>
-          <i class="fa fa-fw fa-user-plus" aria-hidden="true"></i> Show user authority history
+          <?=$this->icon('user-plus', 'icon-link__icon') ?>
+          <span class="icon-link__label"><?=$this->transEsc('Show user authority history')?></span>
         </a>
       </li>
     <?php endif; ?>
     <?php if ($this->accountCapabilities()->getPublicationSetting() === 'enabled'): ?>
       <li>
         <a href="<?=$this->url('adminfrontend-showuserpublications') ?>"<?=$this->active == 'showuserpublications' ? ' class="active"' : ''?>>
-          <i class="fa fa-fw fa-user-plus" aria-hidden="true"></i> Show user publications
+          <?=$this->icon('user-plus', 'icon-link__icon') ?>
+          <span class="icon-link__label"><?=$this->transEsc('Show user publications')?></span>
         </a>
       </li>
       <li>
         <a href="<?=$this->url('adminfrontend-showuserpublicationstatistics') ?>"<?=$this->active == 'showuserpublicationstatistics' ? ' class="active"' : ''?>>
-          <i class="fa fa-fw fa-user-plus" aria-hidden="true"></i> Show user publication statistics
+          <?=$this->icon('user-plus', 'icon-link__icon') ?>
+          <span class="icon-link__label"><?=$this->transEsc('Show user publication statistics')?></span>
         </a>
       </li>
     <?php endif; ?>
