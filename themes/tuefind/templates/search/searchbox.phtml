@@ -115,7 +115,7 @@
         <a href="<?=$geoUrl ?>" class="btn btn-link"><?=$this->transEsc('Geographic Search')?></a>
     <?php endif; ?>
 
-    <?php $shards = $options->getShards(); ?> 
+    <?php $shards = $options->getShards(); ?>
         <?php if ($options->showShardCheckboxes() && !empty($shards)): ?>
       <?php
       $selectedShards = $this->selectedShards ?? $options->getDefaultSelectedShards();
@@ -150,7 +150,7 @@
       if (!empty($lastLimit)) {
         echo '<input type="hidden" name="limit" value="' . $this->escapeHtmlAttr($lastLimit) . '">';
       }
-      if (!empty($lastSort)) {
+      if (!empty($lastSort) && $lastSort !== $params?->getDefaultSort()) {
         echo '<input type="hidden" name="sort" value="' . $this->escapeHtmlAttr($lastSort) . '">';
       }
     ?>
