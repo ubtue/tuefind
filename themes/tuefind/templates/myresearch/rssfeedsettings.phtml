@@ -3,6 +3,8 @@
     foreach ($rssSubscriptions as $rssSubscription) {
         $subscribedFeedIds[] = $rssSubscription['rss_feeds_id'];
     }
+
+    $this->layout()->breadcrumbs = '<li><a href="' . $this->url('myresearch-home') . '">' . $this->transEsc('Your Account') . '</a></li> <li class="active">' . $this->transEsc('My newsfeeds') . '</li>';
 ?>
 
 <div class="mainbody left">
