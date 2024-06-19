@@ -5,13 +5,27 @@
   }
   $seeAlso = $this->driver->getSeeAlso();
   $useFor = $this->driver->getUseFor();
+  $recordLinker = $this->recordLinker($this->results);
+  $thumbnailAlignment = $this->record($this->driver)->getThumbnailAlignment('result');
+  $coverDetails = $this->record($this->driver)->getCoverDetails('result-list', 'medium', $recordLinker->getUrl($this->driver));
+  $cover = $coverDetails['html'];
   $schemaOrgType = $this->authority()->getSchemaOrgType($this->driver);
   $occupations = $this->authority()->getOccupations($this->driver);
   $birth = $this->authority()->getBirth($this->driver);
   $death = $this->authority()->getDeath($this->driver);
   $resultItemLine = 0;
 ?>
-<div class="media">
+<?php if ($cover): ?>
+  <?php ob_start(); ?>
+  <div class="media-<?=$thumbnailAlignment ?> <?=$this->escapeHtmlAttr($coverDetails['size'])?>">
+    <?=$cover ?>
+  </div>
+  <?php $thumbnail = ob_get_clean(); ?>
+<?php endif; ?>
+<div class="media authority-record">
+   <?php if ($thumbnail && $thumbnailAlignment === 'left'): ?>
+    <?=$thumbnail ?>
+  <?php endif ?>
   <div class="media-body" vocab="http://schema.org/" typeof="<?=$schemaOrgType?>">
     <div class="resultItemLine1">
       <!-- TueFind: Override by solrauthrecord on purpose! -->
@@ -57,4 +71,7 @@
     </div>
     -->
   </div>
+  <?php if ($thumbnail && $thumbnailAlignment === 'right'): ?>
+    <?=$thumbnail ?>
+  <?php endif ?>
 </div>
