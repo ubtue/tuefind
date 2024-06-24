@@ -327,6 +327,8 @@ class BrowseController extends \VuFind\Controller\BrowseController
     {
         $categoryList = [
             'alphabetical' => 'By Categories',
+            'topic' => 'By Topic',
+            'publisher' => 'By Publisher'
         ];
 
         return $this->performBrowse('RelBib-Classification', $categoryList, true);
