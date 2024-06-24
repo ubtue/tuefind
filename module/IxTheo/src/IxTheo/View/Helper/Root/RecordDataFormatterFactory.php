@@ -117,9 +117,12 @@ class RecordDataFormatterFactory extends \TueFind\View\Helper\Root\RecordDataFor
         $this->addRecordLinks($spec);
         $this->addTags($spec);
         // Collections (IxTheo-specific)
+        /*
+        Temporarily disabled
         $spec->setTemplateLine(
             'Sammlungen', 'getCollectionsHierarchyRaw', 'data-collectionsHierarchy.phtml'
         );
+        */
 
         return $spec->getArray();
     }
