@@ -6,8 +6,8 @@
   </p>
 <?php else: ?>
   <p>
-    Diese Lizenz wurde vom Fachinformationsdienst (FID) Religionswissenschaft erworben.<br>
-    Die kostenfreie Nutzung der Ressource ist mit einem RelBib-Konto möglich.
+    Diese Lizenz wurde vom Fachinformationsdienst (FID) <?=$this->tuefind()->getTueFindFID(/*short=*/true)?> erworben.<br>
+    Die kostenfreie Nutzung der Ressource ist mit einem <?=$this->tuefind()->getTueFindType()?>-Konto möglich.
   </p>
 
   <?php if ($this->countryAllowed == false): ?>
