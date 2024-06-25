@@ -163,7 +163,7 @@ class SolrMarc extends SolrDefault
             if ($urlSubfield != false)
                 $url = $urlSubfield;
 
-            if ($id == null && preg_match('"^http(s)?:' . preg_quote('//rightsstatements.org/vocab/InC/1.0/', '"') . '$"', $url)) {
+            if ($id == null && preg_match('"^http(s)?:' . preg_quote('//rightsstatements.org/vocab/InC/1.0', '"') . '(/?)$"', $url)) {
                 // force correct ID + english URL
                 $id = 'InC 1.0';
                 $url = 'https://rightsstatements.org/page/InC/1.0/?language=en';
