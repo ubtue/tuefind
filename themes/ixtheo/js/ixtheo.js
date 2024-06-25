@@ -64,7 +64,20 @@ var IxTheo = {
 	}
       }
     });
+  },
+
+  DeleteMyresearchSubscription: function(URL,ID,Source) {
+    $.post(URL, {
+            'delete':ID,
+            'source':Source,
+            'confirm':true
+        },
+        function(){
+            location.reload(true);
+        }
+    )
   }
+
 };
 
 
@@ -84,5 +97,12 @@ $(document).ready(function() {
       return false;
     }
   });
+
+  $('.confirm_delete_subscription').click(function(){
+    let URL = $(this).data('url');
+    let ID = $(this).data('id');
+    let Source = $(this).data('source');
+    IxTheo.DeleteMyresearchSubscription(URL,ID,Source);
+  })
 
 });
