@@ -23,7 +23,7 @@
   } elseif (!empty($this->facet['value'])) {
     $displayText = $this->escapeHtml($this->facet['value']);
   }
-  $displayText = '<span class="facet-value' . ($hasCheckbox ? ' icon-link__label' : '') . '">' . $displayText . '</span>';
+  $displayText = '<span class="facet-value' . ($hasCheckbox ? ' icon-link__label' : '') . '">' . $this->transEsc($displayText) . '</span>';
 
   if ($hasCheckbox) {
     $displayText = $this->icon($this->facet['isApplied'] ? 'facet-checked' : 'facet-unchecked', 'icon-link__icon') . $displayText;
