@@ -1,6 +1,6 @@
 {
     "require": {
-        "elasticsearch/elasticsearch": "8.9.0",
+        "elasticsearch/elasticsearch": "8.14.0",
         "symfony/intl": "^5.4"
     }
 }
