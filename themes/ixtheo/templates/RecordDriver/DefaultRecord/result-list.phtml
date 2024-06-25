@@ -92,14 +92,17 @@
           <?php // Handle superior data according to Issue 131 / Rule 5 ?>
           <?php $journal_issue = $this->driver->tryMethod('getJournalIssue'); ?>
           <?php $superior_ppn = null; ?>
-          <?php if (is_array($journal_issue) && count($journal_issue) > 1): ?>
-            <?php $superior_ppn_index = !empty($journal_issue[2]) ? 2 : 1; ?>
-            <?php if (isset($journal_issue[$superior_ppn_index]) && preg_match('/^\(.*\)/', $journal_issue[$superior_ppn_index])): ?>
-                <?php $superior_ppn = preg_replace('/^\(.*\)/', '', $journal_issue[$superior_ppn_index]); ?>
-                <?php unset($journal_issue[$superior_ppn_index]); ?>
-            <?php endif; ?>
+          <?php if (is_array($journal_issue) && count($journal_issue) > 0): ?>
+            <?php $journal_issue_display_parts = []; ?>
+            <?php foreach ($journal_issue as $journal_issue_index => $journal_issue_part): ?>
+              <?php if (preg_match('/^\(.*\)/', $journal_issue_part)): ?>
+                <?php $superior_ppn = preg_replace('/^\(.*\)/', '', $journal_issue_part); ?>
+              <?php else: ?>
+                <?php $journal_issue_display_parts[] = $journal_issue_part; ?>
+              <?php endif; ?>
+            <?php endforeach; ?>
             <div>
-              <?php $journal_issue_display = preg_replace('/(\d+)(\()/','$1 $2', implode(", ", $journal_issue)) ?>
+              <?php $journal_issue_display = preg_replace('/(\d+)(\()/','$1 $2', implode(", ", $journal_issue_display_parts)) ?>
               <?=$this->transEsc('in')?>:
               <?php if(!empty($superior_ppn)): ?>
                 <a href="<?=$this->url('record', ['id' => $superior_ppn]) ?>"><?=$journal_issue_display?></a>
