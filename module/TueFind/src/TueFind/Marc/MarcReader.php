@@ -20,4 +20,11 @@ class MarcReader extends \VuFind\Marc\MarcReader
 
         return $matches;
     }
+
+
+    public function getMarcRecord() {
+        return $this->getMarcReader()->getRawMarcRecords();
+
+    }
+
 }
