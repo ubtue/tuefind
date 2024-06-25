@@ -105,7 +105,8 @@
         </div>
         <div id="<?= $panelId++; ?>" class="panel-collapse">
             <div class="panel-body flex-col">
-                    Mit der <a href="/Search2/Home?hiddenFilters[]=has_fulltext%3A1">Volltextsuche</a> besteht nun eine Möglichkeit, kommerzielle und freie Volltexte, Inhaltsverzeichnisse und Abstracts direkt zu durchsuchen.<br/> Ausführliche Informationen finden sich in der <a href="/docs/Volltextsuche_Beschreibung.pdf" target="_blank">Beschreibung</a>.
+                Mit der <a href="/Search2/Home?hiddenFilters[]=has_fulltext%3A1">Volltextsuche</a> besteht nun eine Möglichkeit, kommerzielle und freie Volltexte, Inhaltsverzeichnisse und Abstracts direkt zu durchsuchen.<br/> Ausführliche Informationen finden sich in der <a href="/docs/Volltextsuche_Beschreibung.pdf" target="_blank">Beschreibung</a>.
+                <br><br>
             </div>
         </div>
     </div>
@@ -167,16 +168,27 @@
     <div class="panel <?= $panelClass; ?>">
         <div class="panel-heading">
             <h4 class="panel-title">
-                <i class="fa fa-puzzle-piece"></i> IxTheo - <a target="_blank" href="https://www.uibk.ac.at/bildi/"><img src="<?=$this->imageLink('bildi.jpg')?>" width="50" alt="BILDI"></a> / <a target="_blank" href="https://www.uibk.ac.at/praktheol/kaldi/"><img src="<?=$this->imageLink('kaldi.png')?>" width="50" alt="KALDI"></a> Kooperation
+                <i class="fa fa-puzzle-piece"></i> IxTheo - <img src="<?=$this->imageLink('bildi.jpg')?>" height="15" alt="BILDI">/<img src="<?=$this->imageLink('bibil.png')?>" height="15" alt="BiBIL"> - <img src="<?=$this->imageLink('kaldi.png')?>" height="15" alt="KALDI">/DaKaR Kooperation
             </h4>
         </div>
         <div id="<?= $panelId++; ?>" class="panel-collapse">
             <div class="panel-body">
                 <input type="checkbox" class="read-more-state" id="post-<?= $panelId; ?>" />
                 <div class="read-more-wrap">
-                    <p>Der Fachinformationsdienst (FID) Theologie kooperiert mit der Katholisch-Theologischen Fakultät in Innsbruck (Österreich) bei der Erstellung einer Fachbibliographie <div class="read-more-target">  für Bibelwissenschaften und für das Kirchenrecht.</p>
-                                            <p>Die Metadaten von <a target="_blank" href="https://www.uibk.ac.at/bildi/">BILDI</a> wurden vollständig in den IxTheo migriert. Mehr als 200.000 sehr gut erschlossene Daten bereichern nun den Nachweis bibelwissenschaftlicher Literatur in IxTheo/BILDI. Ein eigenständiger Zugang für die bibelwissenschaftliche Literatur steht Ende 2019 zur Verfügung und wird zukünftig gemeinsam von BILDI und IxTheo verantwortet.</p>
-                        <p>Ebenso wurden die Metadaten von <a target="_blank" href="https://www.uibk.ac.at/praktheol/kaldi/">KALDI</a> vollständig in den IxTheo migriert. Mehr als 34.000 sehr gut erschlossene Daten bereichern nun den Nachweis kirchenrechtlicher Literatur in IxTheo/KALDI. Ein eigenständiger Zugang für die kirchenrechtliche Literatur steht Ende 2019 zur Verfügung und wird zukünftig gemeinsam von KALDI, DaKaR (Münster) und IxTheo verantwortet.</p>
+                    <p>Der Fachinformationsdienst (FID) Theologie kooperiert mit der Katholisch-Theologischen Fakultät in Innsbruck (Österreich) und dem Institut romand des sciences bibliques in Lausanne (Schweiz) bei der Erstellung einer Fachbibliographie für die <b>Bibelwissenschaften</b>. Zusammen mit der Katholisch-Theologischen Fakultät in Innsbruck (Österreich) und dem Institut für Kanonisches Recht in Münster wird die Fachbibliographie für das <b>Kirchenrecht</b> erstellt.</p>
+                    <div class="read-more-target">
+                        <p><b>Index Biblicus</b></p>
+                        <p>Bei der Erfassung und Erschließung der exegetischen Literatur kooperiert IxTheo mit den beiden Spezialbibliographien <b>BILDI</b> (Katholisch-Theologische Fakultät, Innsbruck) und <b>BiBIL</b> (Institut romand des sciences bibliques, Lausanne).</p>
+                        <p>Die Metadaten von BILDI wurden vollständig in den IxTheo migriert. Mehr als 200.000 sehr gut erschlossene Daten bereichern den Nachweis bibelwissenschaftlicher Literatur in der Datenbank. Nach der Aufbereitung der Metadaten von BiBIL werden diese ebenfalls in den IxTheo migriert.</p>
+                        <p>Seit 2019 steht für die bibelwissenschaftliche Literatur ein eigenständiger Zugang für die Bibelwissenschaften zur Verfügung: der Index Biblicus wird gemeinsam von BILDI, BiBIL und IxTheo herausgegeben und verantwortet.</p>
+                        <p><a target="_blank" href="https://bible.ixtheo.de">https://bible.ixtheo.de</a></p>
+
+                        <p><b>Index Canonicus</b></p>
+                        <p>Bei der Erfassung und Erschließung der kanonischen Literatur kooperiert IxTheo mit den beiden Spezialbibliographien <b>KALDI</b> (Katholisch-Theologische Fakultät, Innsbruck) und <b>DaKaR</b> (Institut für Kanonisches Recht, Münster).</p>
+                        <p>Die Metadaten von KALDI und DaKaR wurden vollständig in den IxTheo migriert. Mehr als 115.000 sehr gut erschlossene Daten bereichern den Nachweis kirchenrechtlicher Literatur in der Datenbank.</p>
+                        <p>Ein eigenständiger Zugang für die kirchenrechtliche Literatur steht seit Ende 2019 zur Verfügung: der Index Canonicus wird gemeinsam von KALDI, DaKaR und IxTheo herausgegeben und verantwortet.</p>
+                        <p><a target="_blank" href="https://churchlaw.ixtheo.de">https://churchlaw.ixtheo.de</a></p>
+
                     </div>
                 </div>
                 <label for="post-<?= $panelId; ?>" class="read-more-trigger"></label>
