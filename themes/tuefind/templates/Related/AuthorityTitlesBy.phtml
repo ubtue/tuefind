@@ -7,9 +7,7 @@
       <li class="list-group-item"><a href="<?=$this->recordLinker()->getUrl($record)?>"><?=$record->getTitle()?></a></li>
     <?php endforeach; ?>
   </ul>
-  <?php if ($response->getTotal() > $titlePreviewLimit): ?>
-    <p>
-      <a href="<?=$this->record($this->driver)->getLink('titles-by', $this->driver)?>"><?=$this->transEsc('see all')?> (<?=$response->getTotal()?>)</a>
-    </p>
-  <?php endif; ?>
+  <p>
+    <a href="<?=$this->record($this->driver)->getLink('titles-by', $this->driver)?>"><?=$this->transEsc('see all')?> (<?=$response->getTotal()?>)</a>
+  </p>
 <?php endif; ?>
