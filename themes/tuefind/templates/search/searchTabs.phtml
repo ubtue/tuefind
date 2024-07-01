@@ -1,9 +1,11 @@
 <?php
+  $hasSelectedTab = false;
   $routeParams = $this->tuefind()->getRouteParams();
   if($routeParams['controller'] == "Authority" && $routeParams['action'] == "Home") {
     foreach($searchTabs as &$sTabs) {
       if($sTabs['id'] == "SolrAuth") {
         $sTabs['selected'] = 1;
+        $hasSelectedTab = true;
       }else{
         $sTabs['selected'] = '';
       }
@@ -23,5 +25,15 @@
             <?=$block?>
         <?php endif; ?>
     <?php endforeach; ?>
+    <?php if (!$hasSelectedTab && !$this->translationEmpty('temporary_search_tab_title')): ?>
+      <!-- TueFind: Disable custom search tab -->
+      <!--<li class="active">
+        <a><?=$this->transEsc('temporary_search_tab_title')?></a>
+      </li>
+      -->
+    <?php endif; ?>
   </ul>
+  <?php if ($this->showCounts): ?>
+    <?php $this->headScript()->appendFile('resultcount.js'); ?>
+  <?php endif; ?>
 <?php endif; ?>

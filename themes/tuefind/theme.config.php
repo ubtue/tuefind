@@ -47,4 +47,9 @@ return [
         'vendor/keyboard-layouts-greywyvern.js',
         'virtualkeyboard.js'
     ],
+    'icons' => [
+        'upload' => 'FontAwesome:upload',
+        'user-plus' => 'FontAwesome:user-plus',
+        'user-secret' => 'FontAwesome:user-secret',
+    ],
 ];

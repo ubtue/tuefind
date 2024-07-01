@@ -3,7 +3,7 @@
 /**
  * Factory for Util/SwitchDbHashCommand.
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2020.
  *
@@ -71,6 +71,7 @@ class SwitchDbHashCommandFactory implements FactoryInterface
         return new $requestedName(
             $config,
             $tableManager->get(\VuFind\Db\Table\User::class),
+            $tableManager->get(\VuFind\Db\Table\UserCard::class),
             null,
             $container->get(\VuFind\Config\PathResolver::class),
             ...($options ?? [])

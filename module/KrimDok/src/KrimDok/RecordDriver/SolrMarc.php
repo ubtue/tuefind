@@ -85,11 +85,6 @@ class SolrMarc extends SolrDefault
         // merge, unique, sort
         $headings = array_merge($defaultHeadings, $customHeadings);
         $headings = array_unique($headings, SORT_REGULAR);
-        uasort($headings, function($a, $b) {
-            $aSortKey = implode('#', $a);
-            $bSortKey = implode('#', $b);
-            return strnatcmp($aSortKey, $bSortKey);
-        });
 
         return $headings;
     }

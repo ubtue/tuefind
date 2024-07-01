@@ -3,7 +3,7 @@
 /**
  * VuFind CSV importer configuration
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2021.
  *
@@ -31,6 +31,8 @@ namespace VuFind\CSV;
 
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use VuFindSearch\Backend\Solr\Document\RawJSONDocument;
+
+use function count;
 
 /**
  * VuFind CSV importer configuration
@@ -230,7 +232,7 @@ class Importer
         $config = new ImporterConfig($options['General'] ?? []);
         $this->processHeader($config, $in, $options['General']['header'] ?? 'none');
         foreach ($options as $section => $settings) {
-            if (strpos($section, ':') !== false) {
+            if (str_contains($section, ':')) {
                 [$type, $details] = explode(':', $section);
                 switch (strtolower(trim($type))) {
                     case 'column':
@@ -245,6 +247,38 @@ class Importer
             }
         }
         return $config;
+    }
+
+    /**
+     * Inject dependencies into the callback, if necessary.
+     *
+     * @param string $callable Callback function
+     *
+     * @return void
+     */
+    protected function injectCallbackDependencies(string $callable): void
+    {
+        // Use a static property to keep track of which static classes
+        // have already had dependencies injected.
+        static $alreadyInjected = [];
+
+        // $callable is one of two formats: "function" or "class::method".
+        // We only want to proceed if we have a class name.
+        $parts = explode('::', $callable);
+        if (count($parts) < 2) {
+            return;
+        }
+        $class = $parts[0];
+
+        // If we haven't already injected dependencies, do it now! This makes
+        // it possible to use callbacks from the XSLT importer
+        // (e.g. \VuFind\XSLT\Import\VuFind::harvestWithParser)
+        if (!isset($alreadyInjected[$class])) {
+            if (method_exists($class, 'setServiceLocator')) {
+                $class::setServiceLocator($this->serviceLocator);
+            }
+            $alreadyInjected[$class] = true;
+        }
     }
 
     /**
@@ -263,6 +297,7 @@ class Importer
     ): array {
         preg_match('/([^(]+)(\(.*\))?/', $callback, $matches);
         $callable = $matches[1];
+        $this->injectCallbackDependencies($callable);
         $arglist = array_map(
             'trim',
             explode(

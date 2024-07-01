@@ -5,13 +5,28 @@
   }
   $seeAlso = $this->driver->getSeeAlso();
   $useFor = $this->driver->getUseFor();
+  $recordLinker = $this->recordLinker($this->results);
+  $thumbnail = false;
+  $thumbnailAlignment = $this->record($this->driver)->getThumbnailAlignment('result');
+  $coverDetails = $this->record($this->driver)->getCoverDetails('result-list', 'medium', $recordLinker->getUrl($this->driver));
+  $cover = $coverDetails['html'];
   $schemaOrgType = $this->authority()->getSchemaOrgType($this->driver);
   $occupations = $this->authority()->getOccupations($this->driver);
   $birth = $this->authority()->getBirth($this->driver);
   $death = $this->authority()->getDeath($this->driver);
   $resultItemLine = 0;
 ?>
-<div class="media">
+<?php if ($cover): ?>
+  <?php ob_start(); ?>
+  <div class="media-<?=$thumbnailAlignment ?> <?=$this->escapeHtmlAttr($coverDetails['size'])?>">
+    <?=$cover ?>
+  </div>
+  <?php $thumbnail = ob_get_clean(); ?>
+<?php endif; ?>
+<div class="media authority-record">
+   <?php if ($thumbnail && $thumbnailAlignment === 'left'): ?>
+    <?=$thumbnail ?>
+  <?php endif ?>
   <div class="media-body" vocab="http://schema.org/" typeof="<?=$schemaOrgType?>">
     <div class="resultItemLine1">
       <!-- TueFind: Override by solrauthrecord on purpose! -->
@@ -40,21 +55,25 @@
     <!--
     <div class="resultItemLine2">
       <?php if (!empty($seeAlso)): ?>
-        <?=$this->transEsc("See also")?>:<br/>
+        <?=$this->transEsc('See also')?>:<br>
         <?php foreach ($seeAlso as $current): ?>
-          <a href="<?=$this->url('authority-search')?>?lookfor=%22<?=urlencode($current)?>%22&amp;type=MainHeading"><?=$this->escapeHtml($current)?></a><br/>
+          <a href="<?=$this->url('authority-search')?>?lookfor=%22<?=urlencode($current)?>%22&amp;type=MainHeading"><?=$this->escapeHtml($current)?></a><br>
         <?php endforeach; ?>
       <?php endif; ?>
     </div>
 
     <div class="resultItemLine3">
       <?php if (!empty($useFor)): ?>
-        <?=$this->transEsc("Use for")?>:<br/>
+        <?=$this->transEsc('Use for')?>:<br>
         <?php foreach ($useFor as $current): ?>
-          <?=$this->escapeHtml($current)?><br/>
+          <?=$this->escapeHtml($current)?><br>
         <?php endforeach; ?>
       <?php endif; ?>
+      <?=$this->record($this->driver)->getLabelList() ?>
     </div>
     -->
   </div>
+  <?php if ($thumbnail && $thumbnailAlignment === 'right'): ?>
+    <?=$thumbnail ?>
+  <?php endif ?>
 </div>

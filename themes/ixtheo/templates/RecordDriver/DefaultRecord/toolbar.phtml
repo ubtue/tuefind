@@ -8,42 +8,42 @@
   <ul class="action-toolbar" aria-label="<?=$this->transEscAttr('ajaxview_label_tools'); ?>">
     <?php if (count($this->driver->getCitationFormats()) > 0): ?>
       <li role="none">
-        <a class="cite-record toolbar-btn btn-type-cite" data-lightbox href="<?=$this->recordLinker()->getActionUrl($this->driver, 'Cite')?>" rel="nofollow">
-          <span class="icon icon--font fa fa-asterisk" role="img" aria-hidden="true"></span>
-          <span><?=$this->transEsc('Cite this')?></span>
+        <a class="cite-record toolbar-btn" data-lightbox href="<?=$this->escapeHtmlAttr($this->recordLinker()->getActionUrl($this->driver, 'Cite'))?>" rel="nofollow">
+          <?=$this->icon('cite') ?>
+          <?=$this->transEsc('Cite this')?>
         </a>
       </li>
     <?php endif; ?>
 
     <?php if ($this->accountCapabilities()->getSmsSetting() !== 'disabled'): ?>
       <li role="none">
-        <a class="sms-record toolbar-btn btn-type-phone" data-lightbox href="<?=$this->recordLinker()->getActionUrl($this->driver, 'SMS')?>" rel="nofollow">
-          <span class="icon icon--font fa fa-phone" role="img" aria-hidden="true"></span>
-          <span><?=$this->transEsc('Text this')?></span>
+        <a class="sms-record toolbar-btn" data-lightbox href="<?=$this->escapeHtmlAttr($this->recordLinker()->getActionUrl($this->driver, 'SMS'))?>" rel="nofollow">
+          <?=$this->icon('send-sms') ?>
+          <?=$this->transEsc('Text this')?>
       </a>
     </li>
     <?php endif; ?>
 
     <li role="none">
-      <a class="mail-record toolbar-btn btn-type-email" data-lightbox href="<?=$this->recordLinker()->getActionUrl($this->driver, 'Email')?>" rel="nofollow">
-        <span class="icon icon--font fa fa-envelope" role="img" aria-hidden="true"></span>
-        <span><?=$this->transEsc('Email this')?></span>
+      <a class="mail-record toolbar-btn" data-lightbox href="<?=$this->escapeHtmlAttr($this->recordLinker()->getActionUrl($this->driver, 'Email'))?>" rel="nofollow">
+        <?=$this->icon('send-email') ?>
+        <?=$this->transEsc('Email this')?>
       </a>
     </li>
 
     <li>
-      <a class="print-record toolbar-btn btn-type-print" href="<?=$this->url()->addQueryParameters(['print' => true])?>" rel="nofollow">
-        <span class="icon icon--font fa fa-print" role="img" aria-hidden="true"></span>
-        <span><?=$this->transEsc('Print')?></span>
+      <a class="print-record toolbar-btn" href="<?=$this->url()->addQueryParameters(['print' => true])?>" rel="nofollow">
+        <?=$this->icon('print') ?>
+        <?=$this->transEsc('Print')?>
       </a>
     </li>
 
     <?php $exportFormats = $this->export()->getFormatsForRecord($this->driver); ?>
     <?php if(count($exportFormats) > 0): ?>
       <li role="none" class="dropdown">
-        <a class="export-toggle toolbar-btn btn-type-export dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" href="<?=$this->recordLinker()->getActionUrl($this->driver, 'Export')?>" rel="nofollow" aria-expanded="false" aria-controls="export-options">
-          <span class="icon icon--font fa fa-external-link" role="img" aria-hidden="true"></span>
-          <span><?=$this->transEsc('Export Record') ?></span>
+        <a class="export-toggle toolbar-btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" href="<?=$this->escapeHtmlAttr($this->recordLinker()->getActionUrl($this->driver, 'Export', [], '', ['excludeSearchId' => true]))?>" rel="nofollow" aria-expanded="false" aria-controls="export-options">
+          <?=$this->icon('export') ?>
+          <?=$this->transEsc('Export Record') ?>
         </a>
         <ul class="dropdown-menu" id="export-options" role="menu">
           <?php foreach ($exportFormats as $exportFormat): ?>
@@ -56,9 +56,9 @@
     <?php if ($this->userlist()->getMode() !== 'disabled'): ?>
       <li role="none">
         <?php if ($this->permission()->allowDisplay('feature.Favorites')): ?>
-          <a class="save-record toolbar-btn btn-type-save" data-lightbox href="<?=$this->recordLinker()->getActionUrl($this->driver, 'Save')?>" rel="nofollow">
-            <span class="icon icon--font fa fa-star" role="img" aria-hidden="true"></span>
-            <span><?=$this->transEsc('Add to favorites')?></span>
+          <a class="save-record toolbar-btn" data-lightbox href="<?=$this->escapeHtmlAttr($this->recordLinker()->getActionUrl($this->driver, 'Save'))?>" rel="nofollow">
+            <?=$this->icon('user-favorites') ?>
+            <?=$this->transEsc('Add to favorites')?>
           </a>
         <?php elseif ($block = $this->permission()->getAlternateContent('feature.Favorites')): ?>
           <?=$block?>
@@ -82,7 +82,7 @@
       <?php elseif ($this->driver->isSubscribable()): ?>
         <li>
           <a class="subscribe-record toolbar-btn" data-lightbox href="<?=$this->recordLinker()->getActionUrl($this->driver, 'Subscribe')?>" rel="nofollow">
-            <span class="icon icon--font fa fa-bell" role="img" aria-hidden="true"></span>
+            <?=$this->icon('external-link') ?>
             <span><?=$this->transEsc('Subscribe')?></span>
           </a>
         </li>

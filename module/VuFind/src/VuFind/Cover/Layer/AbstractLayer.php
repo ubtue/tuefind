@@ -3,7 +3,7 @@
 /**
  * Abstract cover layer
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2018.
  *
@@ -28,6 +28,8 @@
  */
 
 namespace VuFind\Cover\Layer;
+
+use function strlen;
 
 /**
  * Abstract cover layer
@@ -70,7 +72,7 @@ abstract class AbstractLayer implements LayerInterface
      * @param resource $im    Image resource being updated
      * @param string   $color Legal color name from HTML4
      *
-     * @return allocated color
+     * @return int|false allocated color
      */
     protected function getColor($im, $color)
     {

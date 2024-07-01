@@ -163,17 +163,26 @@
     <div class="panel <?= $panelClass; ?>">
         <div class="panel-heading">
             <h4 class="panel-title">
-                <i class="fa fa-puzzle-piece"></i> Collaboration IxTheo - <a target="_blank" href="https://www.uibk.ac.at/bildi/"><img src="<?=$this->imageLink('bildi.jpg')?>" width="50" alt="BILDI"></a> / <a target="_blank" href="https://www.uibk.ac.at/praktheol/kaldi/"><img src="<?=$this->imageLink('kaldi.png')?>" width="50" alt="KALDI"></a>
+                <i class="fa fa-puzzle-piece"></i> Collaboration IxTheo - <img src="<?=$this->imageLink('bildi.jpg')?>" height="15" alt="BILDI">/<img src="<?=$this->imageLink('bibil.png')?>" height="15" alt="BiBIL"> - <img src="<?=$this->imageLink('kaldi.png')?>" height="15" alt="KALDI">/DaKaR
             </h4>
         </div>
         <div id="<?= $panelId++; ?>" class="panel-collapse">
             <div class="panel-body">
                 <input type="checkbox" class="read-more-state" id="post-<?= $panelId; ?>" />
                 <div class="read-more-wrap">
-                    <p>IxTheo collabore avec la Faculté de Théologique Catholique de l'Université d'Innsbruck (Autriche) dans la production d'une bibliographie spécialisée en exégèse biblique et en droit canonique.</p>
+                    <p>Le Service d’Information Spécialisé en Théologie (FID Theologie) offre en coopération avec la Katholisch-Theologische Fakultät de l’université d’Innsbruck (Autriche) et l’Institut Romand des Sciences Bibliques à Lausanne (Suisse) une bibliographie spécialisée en <b>Sciences Bibliques</b>. Le FID Theologie offre également en coopération avec la Katholisch-Theologische Fakultät de l’université d’Innsbruck (Autriche) et l’Institut für Kanonisches Recht à Münster (Allemagne) une bibliographie spécialisée en <b>Droit Canonique / Ecclésiastique</b>.</p>
                     <div class="read-more-target">
-                        <p>La migration complète des métadonnées de la bibliographie <a target="_blank" href="https://www.uibk.ac.at/bildi/">BILDI</a> dans IxTheo a déjà été effectuée. Plus de 200 000 titres indexés avec soin ont ainsi enrichit notre bibliographie dans le domaine de l'exégèse biblique. Un accès indépendant à la littérature exégétique, géré conjointement par BILDI et IxTheo, sera offert vers la fin de 2019.</p>
-                        <p>La migration des métadonnées de la bibliographie <a target="_blank" href="https://www.uibk.ac.at/praktheol/kaldi/">KALDI</a> est également terminée, ajoutant de ce fait plus de 34 000 titres de droit canonique avec une indexation de haut niveau à IxTheo. Un accès indépendant à la littérature sur le droit canonique, géré conjointement par KALDI, DaKaR (bibliographie basée à Münster) et IxTheo, sera offert vers la fin de 2019.</p>
+                        <p><b>Index Biblicus</b></p>
+                        <p>IxTheo catalogue et indexe la littérature exégétique en coopération avec les bibliographies spécialisées <b>BILDI</b> (Katholisch-Theologische Fakultät, Innsbruck) et <b>BiBIL</b> (Institut Romand des Sciences Bibliques, Lausanne).</p>
+                        <p>Les métadonnées de BILDI ont été complètement migrées dans IxTheo, ce qui a enrichi notre base de données de plus de 200 000 données indexées de haute qualité en littérature de Sciences Bibliques. Après une phase de préparation, les métadonnées de BiBIL vont également être migrées dans IxTheo.</p>
+                        <p>Depuis 2019, IxTheo, BILDI et BiBIL produisent et gèrent conjointement l’Index Biblicus qui est offert en tant qu’accès indépendant à la littérature exégétique pour le bénéfice de la communauté des Sciences Bibliques.</p>
+                        <p><a target="_blank" href="https://bible.ixtheo.de">https://bible.ixtheo.de</a></p>
+
+                        <p><b>Index Canonicus</b></p>
+                        <p>IxTheo catalogue et indexe la littérature en droit canonique et ecclésiastique en coopération avec les bibliographies spécialisées <b>KALDI</b> (Katholisch-Theologische Fakultät, Innsbruck) et <b>DaKaR</b> (Institut für Kanonisches Recht, Münster).</p>
+                        <p>Les métadonnées de KALDI et de DaKaR ont été complètement migrées dans IxTheo, ce qui a enrichi notre base de données de plus de 115 000 données indexées de haute qualité en littérature de droit ecclésiastique.</p>
+                        <p>Depuis 2019, IxTheo, KALDI et DaKaR produisent et gèrent conjointement l’Index Canonicus qui est offert en tant qu’accès indépendant à la littérature de droit canonique et ecclésiastique.</p>
+                        <p><a target="_blank" href="https://churchlaw.ixtheo.de">https://churchlaw.ixtheo.de</a></p>
                     </div>
                 </div>
                 <label for="post-<?= $panelId; ?>" class="read-more-trigger"></label>

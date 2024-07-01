@@ -83,12 +83,7 @@ class RedirectController extends \VuFind\Controller\AbstractBase implements \VuF
     public function licenseAction()
     {
         $user = $this->getUser();
-        if ($user == false) {
-            return $this->forceLogin();
-        }
-
         $id = $this->params()->fromRoute('id');
-
         if (preg_match('"^(kx|rx)-"', $id)) {
             // This call will happen when the user opened the document earlier
             // and the KfL HAN server will have a timeout, so the proxy will call
@@ -97,7 +92,10 @@ class RedirectController extends \VuFind\Controller\AbstractBase implements \VuF
             // to before.
             // The timeout will happen after 1 hour of inactivity + trying to navigate
             // inside the document afterwards.
-            if ($user->isLicenseAccessLocked()) {
+
+            if ($user == false) {
+                return $this->forceLogin();
+            } elseif ($user->isLicenseAccessLocked()) {
                 throw new \Exception("The user's access has been locked!");
             } else {
                 // Example for a URL sent by the proxy (will not work if you try manually):
@@ -113,6 +111,14 @@ class RedirectController extends \VuFind\Controller\AbstractBase implements \VuF
             // This is the regular case, a user requesting fulltext access via the frontend.
             $viewParams = [];
             $viewParams['driver'] = $this->getRecordLoader()->load($id);
+
+            if ($user == false) {
+                $tuefindHelper = $this->serviceLocator->get('ViewHelperManager')->get('tuefind');
+                $msg = 'FID-Lizenz: "' . $viewParams['driver']->getShortTitle() . '". ';
+                $msg .= 'Diese Lizenz wurde vom Fachinformationsdienst (FID) ' . $tuefindHelper->getTueFindFID(/*$short=*/true) . ' erworben. Die kostenfreie Nutzung der Ressource ist mit einem ' . $tuefindHelper->getTueFindType() . '-Konto möglich.';
+                return $this->forceLogin($msg);
+            }
+
             $viewParams['locked'] = $user->isLicenseAccessLocked();
 
             // Check country restriction

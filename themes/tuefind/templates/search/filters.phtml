@@ -33,7 +33,9 @@
           $removeLink = isset($urlQuery)
             ? $urlQuery->removeFilter($filter['filter'])
             : $this->searchMemory()->getEditLink(
-              $this->searchClassId, 'removeFilter', $filter['filter']
+              $this->searchClassId, 
+              'removeFilter', 
+              $filter['filter']
             );
           $desc = $this->translate($filter['desc']);
           $ariaLabel = $this->translate('Remove filter') . ' ' . $this->escapeHtmlAttr($desc);
@@ -121,18 +123,21 @@
   ?>
   <?php // Normal view ?>
   <div class="active-filters hidden-xs">
+    <span class="sr-only"><?=$this->transEscAttr('page_reload_on_deselect_hint') ?></span>
       <?php if ($resetLink && $options->getRetainFilterSetting()): ?>
         <a class="reset-filters-btn" href="<?=$resetLink?>"><?=$this->transEsc('reset_filters_button')?></a>
     <?php elseif ($advancedSearch): ?>
       <p class="adv_search_filters"><?=$this->transEsc('adv_search_filters')?>:</p>
       <?php endif; ?>
     <div class="filters">
+      <span class="sr-only"><?=$this->transEscAttr('applied_filters') ?></span>
       <?=$filters ?>
     </div>
     <div class="clearfix"></div>
   </div>
   <?php // Narrow view ?>
   <div class="active-filters visible-xs">
+    <span class="sr-only"><?=$this->transEscAttr('page_reload_on_deselect_hint') ?></span>
     <div class="filters-toggle-bar">
       <?php if ($resetLink && $options->getRetainFilterSetting()): ?>
         <a class="reset-filters-btn" href="<?=$resetLink?>"><?=$this->transEsc('reset_filters_button')?></a>

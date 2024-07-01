@@ -3,7 +3,7 @@
 /**
  * Mink favorites test class.
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2011.
  *
@@ -29,7 +29,13 @@
 
 namespace VuFindTest\Mink;
 
+use Behat\Mink\Element\DocumentElement;
 use Behat\Mink\Element\Element;
+use Behat\Mink\Exception\DriverException;
+use Behat\Mink\Exception\UnsupportedDriverActionException;
+use InvalidArgumentException;
+
+use function count;
 
 /**
  * Mink favorites test class.
@@ -65,7 +71,7 @@ final class FavoritesTest extends \VuFindTest\Integration\MinkTestCase
      *
      * @return Element
      */
-    protected function gotoSearch($query = 'Dewey')
+    protected function gotoSearch(string $query = 'Dewey'): element
     {
         $session = $this->getMinkSession();
         $session->visit($this->getVuFindUrl() . '/Search/Home');
@@ -84,7 +90,7 @@ final class FavoritesTest extends \VuFindTest\Integration\MinkTestCase
      *
      * @return Element
      */
-    protected function gotoRecord($query = 'Dewey')
+    protected function gotoRecord(string $query = 'Dewey'): Element
     {
         $page = $this->gotoSearch($query);
         $this->clickCss($page, '.result a.title');
@@ -99,7 +105,7 @@ final class FavoritesTest extends \VuFindTest\Integration\MinkTestCase
      *
      * @return string
      */
-    protected function stripHash($url)
+    protected function stripHash(string $url): string
     {
         $parts = explode('#', $url);
         return $parts[0];
@@ -113,7 +119,7 @@ final class FavoritesTest extends \VuFindTest\Integration\MinkTestCase
      *
      * @return void
      */
-    public function testAddRecordToFavoritesNewAccount()
+    public function testAddRecordToFavoritesNewAccount(): void
     {
         $page = $this->gotoRecord();
 
@@ -173,7 +179,7 @@ final class FavoritesTest extends \VuFindTest\Integration\MinkTestCase
      *
      * @return void
      */
-    public function testAddRecordToFavoritesLogin()
+    public function testAddRecordToFavoritesLogin(): void
     {
         $page = $this->gotoRecord();
 
@@ -223,7 +229,7 @@ final class FavoritesTest extends \VuFindTest\Integration\MinkTestCase
      *
      * @return void
      */
-    public function testAddRecordToFavoritesLoggedIn()
+    public function testAddRecordToFavoritesLoggedIn(): void
     {
         $page = $this->gotoRecord();
         // Login
@@ -249,9 +255,9 @@ final class FavoritesTest extends \VuFindTest\Integration\MinkTestCase
      *
      * @return void
      */
-    public function testAddSearchItemToFavoritesNewAccount()
+    public function testAddSearchItemToFavoritesNewAccount(): void
     {
-        $page = $this->gotoSearch();
+        $page = $this->gotoSearch('id:"017791359-1"');
 
         $this->clickCss($page, '.save-record');
         $this->waitForPageLoad($page);
@@ -284,7 +290,7 @@ final class FavoritesTest extends \VuFindTest\Integration\MinkTestCase
         );
         $this->clickCss($page, '.modal-body .btn.btn-primary');
         $this->waitForPageLoad($page);
-        $this->assertLightboxTitle($page, 'Add Dewey browse test to saved items');
+        $this->assertLightboxTitle($page, 'Add Fake Record 1 with multiple relators/ to saved items');
         $this->findCss($page, '.modal-body #save_list');
         // Make list
         $this->clickCss($page, '.modal-body #make-list');
@@ -309,7 +315,6 @@ final class FavoritesTest extends \VuFindTest\Integration\MinkTestCase
         $this->closeLightbox($page);
         // Check list page
         $this->clickCss($page, '.result a.title');
-        $session = $this->getMinkSession();
         $recordURL = $this->getCurrentUrlWithoutSid();
         $this->clickCss($page, '.savedLists a');
         $this->clickCss($page, '.resultItemLine1 a');
@@ -325,7 +330,7 @@ final class FavoritesTest extends \VuFindTest\Integration\MinkTestCase
      *
      * @return void
      */
-    public function testAddSearchItemToFavoritesLogin()
+    public function testAddSearchItemToFavoritesLogin(): void
     {
         $page = $this->gotoSearch();
 
@@ -370,7 +375,7 @@ final class FavoritesTest extends \VuFindTest\Integration\MinkTestCase
      *
      * @return void
      */
-    public function testAddSearchItemToFavoritesLoggedIn()
+    public function testAddSearchItemToFavoritesLoggedIn(): void
     {
         $page = $this->gotoSearch();
         // Login
@@ -402,13 +407,60 @@ final class FavoritesTest extends \VuFindTest\Integration\MinkTestCase
     }
 
     /**
+     * Assert that the page contains titles in the specified order.
+     *
+     * @param Element $page  Active page
+     * @param array   $order Titles in expected order
+     *
+     * @return void
+     * @throws InvalidArgumentException
+     * @throws UnsupportedDriverActionException
+     * @throws DriverException
+     */
+    protected function assertFavoriteTitleOrder(Element $page, array $order): void
+    {
+        $titles = $page->findAll('css', '.result .title');
+        $this->assertCount(count($order), $titles);
+        foreach ($order as $i => $current) {
+            $this->assertEquals($current, $titles[$i]->getText());
+        }
+    }
+
+    /**
+     * Test that we can sort lists.
+     *
+     * @return void
+     */
+    public function testListSorting(): void
+    {
+        $session = $this->getMinkSession();
+        $session->visit($this->getVuFindUrl() . '/MyResearch/Favorites');
+        $page = $session->getPage();
+        $this->fillInLoginForm($page, 'username2', 'test', false);
+        $this->submitLoginForm($page, false);
+        $this->waitForPageLoad($page);
+        $this->findCssAndSetValue($page, '#sort_options_1', 'year', verifyValue: false);
+        $this->waitForPageLoad($page);
+        $this->assertFavoriteTitleOrder(
+            $page,
+            ['Fake Record 1 with multiple relators/', 'Dewey browse test']
+        );
+        $this->findCssAndSetValue($page, '#sort_options_1', 'year DESC', verifyValue: false);
+        $this->waitForPageLoad($page);
+        $this->assertFavoriteTitleOrder(
+            $page,
+            ['Dewey browse test', 'Fake Record 1 with multiple relators/']
+        );
+    }
+
+    /**
      * Test that lists can be tagged when the optional setting is activated.
      *
      * @depends testAddSearchItemToFavoritesNewAccount
      *
      * @return void
      */
-    public function testTaggedList()
+    public function testTaggedList(): void
     {
         $this->changeConfigs(
             ['config' =>
@@ -446,9 +498,9 @@ final class FavoritesTest extends \VuFindTest\Integration\MinkTestCase
     /**
      * Login and go to account home
      *
-     * @return \Behat\Mink\Element\DocumentElement
+     * @return DocumentElement
      */
-    protected function gotoUserAccount()
+    protected function gotoUserAccount(): DocumentElement
     {
         // Go home
         $session = $this->getMinkSession();
@@ -470,9 +522,9 @@ final class FavoritesTest extends \VuFindTest\Integration\MinkTestCase
     /**
      * Adjust configs for bulk testing, then go to user account.
      *
-     * @return \Behat\Mink\Element\DocumentElement
+     * @return DocumentElement
      */
-    protected function setupBulkTest()
+    protected function setupBulkTest(): DocumentElement
     {
         $this->changeConfigs(
             ['config' =>
@@ -492,7 +544,7 @@ final class FavoritesTest extends \VuFindTest\Integration\MinkTestCase
      *
      * @return void
      */
-    protected function checkForNonSelectedMessage(Element $page)
+    protected function checkForNonSelectedMessage(Element $page): void
     {
         $warning = $this->findCss($page, '.modal-body .alert');
         $this->assertEquals(
@@ -509,7 +561,7 @@ final class FavoritesTest extends \VuFindTest\Integration\MinkTestCase
      *
      * @return void
      */
-    protected function selectAllItemsInList(Element $page)
+    protected function selectAllItemsInList(Element $page): void
     {
         $selectAll = $this
             ->findCss($page, '[name=bulkActionForm] .checkbox-select-all');
@@ -523,7 +575,7 @@ final class FavoritesTest extends \VuFindTest\Integration\MinkTestCase
      *
      * @return void
      */
-    public function testBulkEmail()
+    public function testBulkEmail(): void
     {
         $page = $this->setupBulkTest();
 
@@ -553,7 +605,7 @@ final class FavoritesTest extends \VuFindTest\Integration\MinkTestCase
      *
      * @return void
      */
-    public function testBulkExport()
+    public function testBulkExport(): void
     {
         $page = $this->setupBulkTest();
 
@@ -584,7 +636,7 @@ final class FavoritesTest extends \VuFindTest\Integration\MinkTestCase
      *
      * @return void
      */
-    public function testBulkPrint()
+    public function testBulkPrint(): void
     {
         $page = $this->setupBulkTest();
 
@@ -616,7 +668,7 @@ final class FavoritesTest extends \VuFindTest\Integration\MinkTestCase
      *
      * @return void
      */
-    public function testEmailPublicList()
+    public function testEmailPublicList(): void
     {
         $page = $this->setupBulkTest();
 
@@ -651,6 +703,119 @@ final class FavoritesTest extends \VuFindTest\Integration\MinkTestCase
             'Your item(s) were emailed',
             $this->findCss($page, '.modal .alert-success')->getText()
         );
+    }
+
+    /**
+     * Data provider for testListTaggingToDisplayChannel
+     *
+     * @return array
+     */
+    public function getListTagData(): array
+    {
+        $defaultChannelConfig = ['tags' => ['channel'], 'displayPublicLists' => false];
+        return [
+            'case insensitive channel match' => [
+                'CHANNEL',
+                $defaultChannelConfig,
+                false, // case insensitive
+                true,   // match expected
+            ],
+            'case sensitive channel match' => [
+                'channel',
+                $defaultChannelConfig,
+                true, // case sensitive
+                true,  // match expected
+            ],
+            'case sensitive channel mismatch' => [
+                'Channel',
+                $defaultChannelConfig,
+                true, // case sensitive
+                false, // mismatch expected
+            ],
+            'case sensitive AND mismatch' => [
+                'channel',
+                ['tags' => ['channel', 'banana'], 'displayPublicLists' => false],
+                true, // case sensitive
+                false, // mismatch expected
+            ],
+            'case sensitive AND match' => [
+                'channel banana',
+                ['tags' => ['channel', 'banana'], 'displayPublicLists' => false],
+                true, // case sensitive
+                true,  // match expected
+            ],
+            'case sensitive OR match' => [
+                'channel',
+                ['tags' => ['channel', 'banana'], 'displayPublicLists' => false, 'tagsOperator' => 'OR'],
+                true, // case sensitive
+                true,  // match expected
+            ],
+            'case insensitive OR match' => [
+                'channel',
+                ['tags' => ['chAnnEl', 'banana'], 'displayPublicLists' => false, 'tagsOperator' => 'OR'],
+                false, // case insensitive
+                true,   // match expected
+            ],
+        ];
+    }
+
+    /**
+     * Test that a public list can be tagged and displayed as a channel.
+     *
+     * @param string $listTags      Tags to assign to the list
+     * @param array  $channelConfig Config array for listitems channel
+     * @param bool   $caseSensitive Use case sensitive tags?
+     * @param bool   $matchExpected Do we expect the list to show up in channel?
+     *
+     * @depends testEmailPublicList
+     *
+     * @dataProvider getListTagData
+     *
+     * @return void
+     */
+    public function testListTaggingToDisplayChannel(
+        string $listTags,
+        array $channelConfig,
+        bool $caseSensitive,
+        bool $matchExpected
+    ): void {
+        $this->changeConfigs(
+            [
+                'channels' => [
+                    'General' => [
+                        'cache_home_channels' => false,
+                    ],
+                    'source.Solr' => [
+                        'home' => ['listitems'],
+                    ],
+                    'provider.listitems' => $channelConfig,
+                ],
+                'config' => [
+                    'Social' => [
+                        'listTags' => 'enabled',
+                        'case_sensitive_tags' => $caseSensitive,
+                    ],
+                ],
+            ]
+        );
+        $page = $this->gotoUserAccount();
+        // Click on the first list and tag it:
+        $link = $this->findAndAssertLink($page, 'Test List');
+        $link->click();
+        $button = $this->findAndAssertLink($page, 'Edit List');
+        $button->click();
+        $this->findCssAndSetValue($page, '#list_tags', $listTags);
+        $this->clickCss($page, 'input[name="submit"]'); // submit button
+
+        // Now go to the channel page, where the tagged public list should appear:
+        $this->getMinkSession()->visit($this->getVuFindUrl() . '/Channels');
+        $this->waitForPageLoad($page);
+        if ($matchExpected) {
+            $this->assertEquals('Test List', $this->findCss($page, '.channel-title h2')->getText());
+            $this->assertCount(1, $page->findAll('css', '.channel-record'));
+        } else {
+            $this->unfindCss($page, '.channel-title h2');
+        }
     }
 
     /**
@@ -702,7 +867,7 @@ final class FavoritesTest extends \VuFindTest\Integration\MinkTestCase
      *
      * @return void
      */
-    public function testBulkDelete()
+    public function testBulkDelete(): void
     {
         $page = $this->setupBulkTest();
 

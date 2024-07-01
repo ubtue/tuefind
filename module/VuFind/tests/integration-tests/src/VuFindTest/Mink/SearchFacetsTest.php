@@ -3,9 +3,10 @@
 /**
  * Mink search facet/filter functionality test class.
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2011.
+ * Copyright (C) The National Library of Finland 2023.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -23,11 +24,16 @@
  * @category VuFind
  * @package  Tests
  * @author   Demian Katz <demian.katz@villanova.edu>
+ * @author   Ere Maijala <ere.maijala@helsinki.fi>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org Main Page
  */
 
 namespace VuFindTest\Mink;
+
+use Behat\Mink\Element\Element;
+
+use function count;
 
 /**
  * Mink search facet/filter functionality test class.
@@ -35,6 +41,7 @@ namespace VuFindTest\Mink;
  * @category VuFind
  * @package  Tests
  * @author   Demian Katz <demian.katz@villanova.edu>
+ * @author   Ere Maijala <ere.maijala@helsinki.fi>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org Main Page
  * @retry    4
@@ -42,18 +49,60 @@ namespace VuFindTest\Mink;
 class SearchFacetsTest extends \VuFindTest\Integration\MinkTestCase
 {
     /**
-     * CSS selector for finding active filters
+     * CSS selector for finding the active filter values
      *
      * @var string
      */
     protected $activeFilterSelector = '.active-filters.hidden-xs .filters .filter-value';
 
     /**
+     * CSS selector for finding the active filter labels
+     *
+     * @var string
+     */
+    protected $activeFilterLabelSelector = '.active-filters.hidden-xs .filters .filters-title';
+
+    /**
+     * CSS selector for finding the first hierarchical facet expand button
+     *
+     * @var string
+     */
+    protected $facetExpandSelector = '.facet-tree .facet-tree__toggle-expanded .facet-tree__expand';
+
+    /**
+     * CSS selector for finding the first expanded hierarchical facet
+     *
+     * @var string
+     */
+    protected $facetExpandedSelector = '.facet-tree button[aria-expanded=true] ~ ul';
+
+    /**
+     * CSS selector for finding the first second level hierarchical facet
+     *
+     * @var string
+     */
+    protected $facetSecondLevelLinkSelector = '.facet-tree button[aria-expanded=true] ~ ul a';
+
+    /**
+     * CSS selector for finding the first active second level hierarchical facet
+     *
+     * @var string
+     */
+    protected $facetSecondLevelActiveLinkSelector = '.facet-tree button[aria-expanded=true] ~ ul a.active';
+
+    /**
+     * CSS selector for finding the first second level hierarchical facet
+     *
+     * @var string
+     */
+    protected $facetSecondLevelExcludeLinkSelector = '.facet-tree button[aria-expanded=true] ~ ul a.exclude';
+
+    /**
      * Get filtered search
      *
-     * @return \Behat\Mink\Element\Element
+     * @return Element
      */
-    protected function getFilteredSearch()
+    protected function getFilteredSearch(): Element
     {
         $session = $this->getMinkSession();
         $session->visit($this->getVuFindUrl() . '/Search/Results?filter%5B%5D=building%3A"weird_ids.mrc"');
@@ -63,11 +112,11 @@ class SearchFacetsTest extends \VuFindTest\Integration\MinkTestCase
     /**
      * Helper function for simple facet application test
      *
-     * @param \Behat\Mink\Element\Element $page Mink page object
+     * @param Element $page Mink page object
      *
      * @return void
      */
-    protected function facetApplyProcedure($page)
+    protected function facetApplyProcedure(Element $page): void
     {
         // Confirm that we have 9 results and no filters to begin with:
         $time = $this->findCss($page, '.search-query-time');
@@ -99,13 +148,13 @@ class SearchFacetsTest extends \VuFindTest\Integration\MinkTestCase
     /**
      * Helper function for facets lists
      *
-     * @param \Behat\Mink\Element\Element $page            Mink page object
-     * @param int                         $limit           Configured lightbox length
-     * @param bool                        $exclusionActive Is facet exclusion on?
+     * @param Element $page            Mink page object
+     * @param int     $limit           Configured lightbox length
+     * @param bool    $exclusionActive Is facet exclusion on?
      *
      * @return void
      */
-    protected function facetListProcedure($page, $limit, $exclusionActive = false)
+    protected function facetListProcedure(Element $page, int $limit, bool $exclusionActive = false): void
     {
         $this->waitForPageLoad($page);
         $items = $page->findAll('css', '#modal #facet-list-count .js-facet-item');
@@ -173,7 +222,7 @@ class SearchFacetsTest extends \VuFindTest\Integration\MinkTestCase
      *
      * @return void
      */
-    public function testApplyFacet()
+    public function testApplyFacet(): void
     {
         $page = $this->performSearch('building:weird_ids.mrc');
 
@@ -190,7 +239,7 @@ class SearchFacetsTest extends \VuFindTest\Integration\MinkTestCase
      *
      * @return void
      */
-    public function testApplyFacetDeferred()
+    public function testApplyFacetDeferred(): void
     {
         $this->changeConfigs(
             [
@@ -216,7 +265,7 @@ class SearchFacetsTest extends \VuFindTest\Integration\MinkTestCase
      *
      * @return void
      */
-    public function testFacetLightbox()
+    public function testFacetLightbox(): void
     {
         $limit = 4;
         $this->changeConfigs(
@@ -245,7 +294,7 @@ class SearchFacetsTest extends \VuFindTest\Integration\MinkTestCase
      *
      * @return void
      */
-    public function testFacetLightboxMoreSetting()
+    public function testFacetLightboxMoreSetting(): void
     {
         $limit = 4;
         $this->changeConfigs(
@@ -275,7 +324,7 @@ class SearchFacetsTest extends \VuFindTest\Integration\MinkTestCase
      *
      * @return void
      */
-    public function testFacetLightboxExclusion()
+    public function testFacetLightboxExclusion(): void
     {
         $limit = 4;
         $this->changeConfigs(
@@ -297,22 +346,74 @@ class SearchFacetsTest extends \VuFindTest\Integration\MinkTestCase
     }
 
     /**
-     * Support method to click a hierarchical facet.
-     *
-     * @param \Behat\Mink\Element\Element $page Mink page object
+     * Test that filtering out facet values does not break lightbox pagination.
      *
      * @return void
      */
-    protected function clickHierarchyFacet($page)
+    public function testFilteredLightboxPagination(): void
     {
-        $this->clickCss($page, '#j1_1.jstree-closed .jstree-icon');
-        $this->findCss($page, '#j1_1.jstree-open .jstree-icon');
-        $this->clickCss($page, '#j1_2 a');
+        $limit = 4;
+        $this->changeConfigs(
+            [
+                'facets' => [
+                    'HideFacetValue' => [
+                        'genre_facet' => [
+                            'Fiction',
+                        ],
+                    ],
+                    'Results_Settings' => [
+                        'showMoreInLightbox[*]' => true,
+                        'lightboxLimit' => $limit,
+                    ],
+                ],
+            ]
+        );
+        $page = $this->performSearch('building:weird_ids.mrc');
+        // Open the genre facet
+        $this->clickCss($page, '#side-collapse-genre_facet .more-facets');
+        $this->waitForPageLoad($page);
+        $items = $page->findAll('css', '#modal #facet-list-count .js-facet-item');
+        $this->assertCount($limit - 1, $items); // (-1 is for the filtered value)
+        // more
+        $this->clickCss($page, '#modal .js-facet-next-page');
+        $this->waitForPageLoad($page);
+        $items = $page->findAll('css', '#modal #facet-list-count .js-facet-item');
+        $this->assertEquals($limit * 2 - 1, count($items));
+        $this->assertEquals(
+            'Weird IDs 9 results 9 '
+            . 'The Study Of P|pes 1 results 1 '
+            . 'The Study and Scor_ng of Dots.and-Dashes:Colons 1 results 1 '
+            . 'The Study of "Important" Things 1 results 1 '
+            . 'The Study of %\'s? 1 results 1 '
+            . 'The Study of +\'s? 1 results 1 '
+            . 'The Study of @Twitter #test 1 results 1 '
+            . 'more…',
+            $this->findCss($page, '#modal #facet-list-count')->getText()
+        );
+    }
+
+    /**
+     * Support method to click a hierarchical facet.
+     *
+     * @param Element $page Mink page object
+     *
+     * @return void
+     */
+    protected function clickHierarchyFacet(Element $page): void
+    {
+        // Open second level:
+        $this->clickCss($page, $this->facetExpandSelector);
+        // Check results:
+        $this->findCss($page, $this->facetExpandedSelector);
+        // Click second level facet:
+        $this->clickCss($page, $this->facetSecondLevelLinkSelector);
+        // Check the active filter:
         $filter = $this->findCss($page, $this->activeFilterSelector);
-        $label = $this->findCss($page, '.filters .filters-title');
+        $label = $this->findCss($page, $this->activeFilterLabelSelector);
         $this->assertEquals('hierarchy:', $label->getText());
         $this->assertEquals('Remove Filter level1a/level2a', $filter->getText());
-        $this->findCss($page, '#j1_2 .applied');
+        // Check that the applied facet is displayed properly:
+        $this->findCss($page, $this->facetSecondLevelActiveLinkSelector);
     }
 
     /**
@@ -320,7 +421,7 @@ class SearchFacetsTest extends \VuFindTest\Integration\MinkTestCase
      *
      * @return void
      */
-    public function testHierarchicalFacets()
+    public function testHierarchicalFacets(): void
     {
         $this->changeConfigs(
             [
@@ -343,7 +444,7 @@ class SearchFacetsTest extends \VuFindTest\Integration\MinkTestCase
      *
      * @return void
      */
-    public function testHierarchicalFacetExclude()
+    public function testHierarchicalFacetExclude(): void
     {
         $this->changeConfigs(
             [
@@ -370,9 +471,8 @@ class SearchFacetsTest extends \VuFindTest\Integration\MinkTestCase
             'Showing 1 - 10 results of 10 for search \'building:"hierarchy.mrc"\'',
             $extractCount($stats->getText())
         );
-        $this->clickCss($page, '#j1_1.jstree-closed .jstree-icon');
-        $this->findCss($page, '#j1_1.jstree-open .jstree-icon');
-        $this->clickCss($page, '#j1_2 a.exclude');
+        $this->clickCss($page, $this->facetExpandSelector);
+        $this->clickCss($page, $this->facetSecondLevelExcludeLinkSelector);
         $filter = $this->findCss($page, $this->activeFilterSelector);
         $label = $this->findCss($page, '.filters .filters-title');
         $this->assertEquals('hierarchy:', $label->getText());
@@ -389,7 +489,7 @@ class SearchFacetsTest extends \VuFindTest\Integration\MinkTestCase
      *
      * @return void
      */
-    public function testCollapseStatePersistence()
+    public function testCollapseStatePersistence(): void
     {
         $this->changeConfigs(
             [
@@ -425,11 +525,11 @@ class SearchFacetsTest extends \VuFindTest\Integration\MinkTestCase
     /**
      * Assert that the filter used by these tests is still applied.
      *
-     * @param \Behat\Mink\Element\Element $page Mink page object
+     * @param Element $page Mink page object
      *
      * @return void
      */
-    protected function assertFilterIsStillThere($page)
+    protected function assertFilterIsStillThere(Element $page): void
     {
         $filter = $this->findCss($page, $this->activeFilterSelector);
         $this->assertEquals('Remove Filter weird_ids.mrc', $filter->getText());
@@ -438,11 +538,11 @@ class SearchFacetsTest extends \VuFindTest\Integration\MinkTestCase
     /**
      * Assert that no filters are applied.
      *
-     * @param \Behat\Mink\Element\Element $page Mink page object
+     * @param Element $page Mink page object
      *
      * @return void
      */
-    protected function assertNoFilters($page)
+    protected function assertNoFilters(Element $page): void
     {
         $items = $page->findAll('css', $this->activeFilterSelector);
         $this->assertCount(0, $items);
@@ -451,11 +551,11 @@ class SearchFacetsTest extends \VuFindTest\Integration\MinkTestCase
     /**
      * Assert that the "reset filters" button is not present.
      *
-     * @param \Behat\Mink\Element\Element $page Mink page object
+     * @param Element $page Mink page object
      *
      * @return void
      */
-    protected function assertNoResetFiltersButton($page)
+    protected function assertNoResetFiltersButton(Element $page): void
     {
         $reset = $page->findAll('css', '.reset-filters-btn');
         $this->assertCount(0, $reset);
@@ -466,7 +566,7 @@ class SearchFacetsTest extends \VuFindTest\Integration\MinkTestCase
      *
      * @return void
      */
-    public function testDefaultRetainFiltersBehavior()
+    public function testDefaultRetainFiltersBehavior(): void
     {
         $page = $this->getFilteredSearch();
         $this->assertFilterIsStillThere($page);
@@ -485,7 +585,7 @@ class SearchFacetsTest extends \VuFindTest\Integration\MinkTestCase
      *
      * @return void
      */
-    public function testRetainFiltersOnHomePageBehavior()
+    public function testRetainFiltersOnHomePageBehavior(): void
     {
         $page = $this->getFilteredSearch();
         // Back to home spage:
@@ -504,7 +604,7 @@ class SearchFacetsTest extends \VuFindTest\Integration\MinkTestCase
      *
      * @return void
      */
-    public function testFiltersOnRecord()
+    public function testFiltersOnRecord(): void
     {
         $page = $this->getFilteredSearch();
         $this->assertFilterIsStillThere($page);
@@ -523,7 +623,7 @@ class SearchFacetsTest extends \VuFindTest\Integration\MinkTestCase
      *
      * @return void
      */
-    public function testNeverRetainFiltersBehavior()
+    public function testNeverRetainFiltersBehavior(): void
     {
         $this->changeConfigs(
             [
@@ -546,7 +646,7 @@ class SearchFacetsTest extends \VuFindTest\Integration\MinkTestCase
      *
      * @return void
      */
-    public function testDefaultFiltersWithResetButton()
+    public function testDefaultFiltersWithResetButton(): void
     {
         // Unlike the other tests, which use $this->getFilteredSearch() to set up
         // the weird_ids.mrc filter through a URL parameter, this test sets up the
@@ -585,7 +685,7 @@ class SearchFacetsTest extends \VuFindTest\Integration\MinkTestCase
      *
      * @return void
      */
-    public function testOrFacets()
+    public function testOrFacets(): void
     {
         $this->changeConfigs(
             [

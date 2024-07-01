@@ -6,6 +6,12 @@ namespace TueFind\Controller;
  * Use Findbuch API to search for BEACON links (via GND number)
  * - Sample API call: https://beacon.findbuch.de/seealso/pnd-aks?format=seealso&id=100001718
  * - API documentation: https://beacon.findbuch.de/seealso/pnd-aks
+ *
+ * Note: This service is no longer available since End 2023,
+ *       so this class will also no longer be actively maintained
+ *       and we e.g. won't optimize it for cachingDownloader changes
+ *       related to VuFind 9.1.
+ *
  */
 class FindbuchProxyController extends AbstractProxyController
 {

@@ -30,24 +30,26 @@
   }
 ?>
 <button class="close-offcanvas btn btn-link" data-toggle="offcanvas"><?=$this->transEsc('navigate_back') ?></button>
-<?php if ($results->getResultTotal() > 0): ?>
-  <h2><?=$this->transEsc(isset($this->overrideSideFacetCaption) ? $this->overrideSideFacetCaption : 'Narrow Search')?></h2>
-<?php endif; ?>
-<?php $checkboxFilters = $this->recommend->getCheckboxFacetSet(); ?>
-<?php $checkboxesShown = false; ?>
-<?php if (count($checkboxFilters) > 0):
+<?php 
+  $checkboxFilters = $this->recommend->getCheckboxFacetSet(); 
+  $hasVisibleCheckboxes = false;
+  if (count($checkboxFilters) > 0) {
     foreach ($checkboxFilters as $current) {
       if ($results->getResultTotal() > 0 || $current['alwaysVisible']) {
-        $checkboxesShown = true;
+        $hasVisibleCheckboxes = true;
         break;
       }
     }
+  }
   ?>
-  <?php if ($checkboxesShown): ?>
+<?php if ($results->getResultTotal() > 0 || $hasVisibleCheckboxes): ?>
+  <h2><?=$this->transEsc($this->slot('side-facet-caption')->get('Refine Results')) ?></h2>
+  <span class="sr-only"><?=$this->transEscAttr('page_reload_on_select_hint') ?></span>
+<?php endif; ?>
+<?php if ($hasVisibleCheckboxes): ?>
     <div class="checkboxFilter">
       <?=$this->context($this)->renderInContext('Recommend/SideFacets/checkbox-filters.phtml', ['checkboxFilters' => $checkboxFilters, 'results' => $results]); ?>
     </div>
-  <?php endif; ?>
 <?php endif; ?>
 
 <?php
@@ -69,7 +71,7 @@
 
 <?= isset($this->sideFacetExtraControls) ? $this->sideFacetExtraControls : '' ?>
 <?php $sideFacetSet = $this->recommend->getFacetSet(); ?>
-<?php $hierarchicalFacets = $this->recommend->getHierarchicalFacets() ?>
+<?php $hierarchicalFacets = $this->recommend->getHierarchicalFacets(); ?>
 <?php $hierarchicalFacetSortOptions = $this->recommend->getHierarchicalFacetSortOptions() ?>
 <?php if (!empty($sideFacetSet) && $results->getResultTotal() > 0): ?>
   <?php foreach ($sideFacetSet as $title => $cluster): ?>
@@ -95,4 +97,4 @@
     </div>
   <?php endforeach; ?>
 <?php endif; ?>
-<?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, "registerSideFacetTruncation();", 'SET');?>
+<?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, 'registerSideFacetTruncation();', 'SET');?>

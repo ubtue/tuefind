@@ -119,8 +119,8 @@ function GenerateIndexForSystem {
     system_flag="$1"
     echo build_browse "hierarchy" "hierarchy_browse" 1 "" ${system_flag}
     time build_browse "hierarchy" "hierarchy_browse" 1 "" ${system_flag}
-    echo build_browse "title" "title_fullStr" 1 "-Dbibleech=StoredFieldLeech -Dsortfield=title_fullStr -Dvaluefield=title_fullStr" ${system_flag}
-    time build_browse "title" "title_fullStr" 1 "-Dbibleech=StoredFieldLeech -Dsortfield=title_fullStr -Dvaluefield=title_fullStr" ${system_flag}
+    echo build_browse "title" "title_fullStr" 1 "-Dbibleech=StoredFieldLeech -Dsortfield=title_fullStr -Dvaluefield=title_fullStr -Dbrowse.normalizer=org.vufind.util.TitleNormalizer" ${system_flag}
+    time build_browse "title" "title_fullStr" 1 "-Dbibleech=StoredFieldLeech -Dsortfield=title_fullStr -Dvaluefield=title_fullStr -Dbrowse.normalizer=org.vufind.util.TitleNormalizer" ${system_flag}
     echo build_browse "topic" "topic_browse" 1 "" ${system_flag}
     time build_browse "topic" "topic_browse" 1 "" ${system_flag}
     echo build_browse "author" "author_browse" "" 1 ${system_flag}

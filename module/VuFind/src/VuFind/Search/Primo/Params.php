@@ -3,7 +3,7 @@
 /**
  * Primo Central Search Parameters
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2011.
  *
@@ -71,6 +71,7 @@ class Params extends \VuFind\Search\Base\Params
         'reference_entrys' => 'Reference Entries',
         'newsletterarticle' => 'Newsletter Articles',
         'archival_material_manuscripts' => 'Archival Materials / Manuscripts',
+        'magazinearticle' => 'Magazine Articles',
     ];
 
     /**

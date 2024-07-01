@@ -4,7 +4,7 @@
  * VuFind controller base class (defines some methods that can be shared by other
  * controllers).
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2010.
  *
@@ -35,11 +35,15 @@ use Laminas\Mvc\MvcEvent;
 use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\View\Model\ViewModel;
+use VuFind\Controller\Feature\AccessPermissionInterface;
 use VuFind\Exception\Auth as AuthException;
 use VuFind\Exception\ILS as ILSException;
 use VuFind\Http\PhpEnvironment\Request as HttpRequest;
 use VuFind\I18n\Translator\TranslatorAwareInterface;
 use VuFind\I18n\Translator\TranslatorAwareTrait;
+
+use function intval;
+use function is_object;
 
 /**
  * VuFind controller base class (defines some methods that can be shared by other
@@ -69,7 +73,7 @@ use VuFind\I18n\Translator\TranslatorAwareTrait;
  *
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
-class AbstractBase extends AbstractActionController implements TranslatorAwareInterface
+class AbstractBase extends AbstractActionController implements AccessPermissionInterface, TranslatorAwareInterface
 {
     use TranslatorAwareTrait;
 
@@ -78,7 +82,7 @@ class AbstractBase extends AbstractActionController implements TranslatorAwareIn
      * restriction, null to use configured default (which is usually the same
      * as false)).
      *
-     * @var string|bool
+     * @var string|bool|null
      */
     protected $accessPermission = null;
 
@@ -131,9 +135,10 @@ class AbstractBase extends AbstractActionController implements TranslatorAwareIn
     }
 
     /**
-     * Getter for access permission.
+     * Getter for access permission (string for required permission name, false
+     * for no permission required, null to use default permission).
      *
-     * @return string|bool
+     * @return string|bool|null
      */
     public function getAccessPermission()
     {
@@ -143,7 +148,7 @@ class AbstractBase extends AbstractActionController implements TranslatorAwareIn
     /**
      * Getter for access permission.
      *
-     * @param string $ap Permission to require for access to the controller (false
+     * @param string|false $ap Permission to require for access to the controller (false
      * for no requirement)
      *
      * @return void
@@ -407,7 +412,8 @@ class AbstractBase extends AbstractActionController implements TranslatorAwareIn
                     $routeMatch = $this->getEvent()->getRouteMatch();
                     $routeName = $routeMatch ? $routeMatch->getMatchedRouteName()
                         : 'myresearch-profile';
-                    $ilsAuth->sendEmailLoginLink($username, $routeName);
+                    $routeParams = $routeMatch ? $routeMatch->getParams() : [];
+                    $ilsAuth->sendEmailLoginLink($username, $routeName, $routeParams, ['catalogLogin' => 'true']);
                     $this->flashMessenger()
                         ->addSuccessMessage('email_login_link_sent');
                 } else {
@@ -691,7 +697,7 @@ class AbstractBase extends AbstractActionController implements TranslatorAwareIn
         // want internal post-login redirects.
         $baseUrl = $this->getServerUrl('home');
         $baseUrlNorm = $this->normalizeUrlForComparison($baseUrl);
-        if (0 !== strpos($refererNorm, $baseUrlNorm)) {
+        if (!str_starts_with($refererNorm, $baseUrlNorm)) {
             return;
         }
 
@@ -709,7 +715,7 @@ class AbstractBase extends AbstractActionController implements TranslatorAwareIn
         // ignore this and instead rely on any previously stored referer.
         $myUserLogin = $this->getServerUrl('myresearch-userlogin');
         $mulNorm = $this->normalizeUrlForComparison($myUserLogin);
-        if (0 === strpos($refererNorm, $mulNorm)) {
+        if (str_starts_with($refererNorm, $mulNorm)) {
             return;
         }
 

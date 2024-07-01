@@ -3,7 +3,7 @@
 /**
  * Abstract factory for SOLR backends.
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2013.
  *
@@ -52,6 +52,9 @@ use VuFindSearch\Backend\Solr\Response\Json\RecordCollection;
 use VuFindSearch\Backend\Solr\Response\Json\RecordCollectionFactory;
 use VuFindSearch\Backend\Solr\SimilarBuilder;
 use VuFindSearch\Response\RecordCollectionFactoryInterface;
+
+use function count;
+use function is_object;
 
 /**
  * Abstract factory for SOLR backends.
@@ -329,7 +332,7 @@ abstract class AbstractSolrBackendFactory extends AbstractBackendFactory
             isset($search->ConditionalHiddenFilters)
             && $search->ConditionalHiddenFilters->count() > 0
         ) {
-            $this->getInjectConditionalFilterListener($search)->attach($events);
+            $this->getInjectConditionalFilterListener($backend, $search)->attach($events);
         }
 
         // Spellcheck
@@ -683,19 +686,22 @@ abstract class AbstractSolrBackendFactory extends AbstractBackendFactory
         Config $search
     ) {
         $fl = $search->General->highlighting_fields ?? '*';
-        return new InjectHighlightingListener($backend, $fl);
+        $extras = $search->General->extra_hl_params ?? [];
+        return new InjectHighlightingListener($backend, $fl, $extras);
     }
 
     /**
      * Get a Conditional Filter Listener
      *
-     * @param Config $search Search configuration
+     * @param BackendInterface $backend Search backend
+     * @param Config           $search  Search configuration
      *
      * @return InjectConditionalFilterListener
      */
-    protected function getInjectConditionalFilterListener(Config $search)
+    protected function getInjectConditionalFilterListener(BackendInterface $backend, Config $search)
     {
         $listener = new InjectConditionalFilterListener(
+            $backend,
             $search->ConditionalHiddenFilters->toArray()
         );
         $listener->setAuthorizationService(

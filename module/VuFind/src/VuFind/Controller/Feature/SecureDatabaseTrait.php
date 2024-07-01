@@ -3,7 +3,7 @@
 /**
  * VuFind Action Feature Trait - Secure database detection trait
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2023.
  *
@@ -28,6 +28,8 @@
  */
 
 namespace VuFind\Controller\Feature;
+
+use function count;
 
 /**
  * VuFind Action Feature Trait - Configuration file path methods
@@ -69,8 +71,9 @@ trait SecureDatabaseTrait
         // If we're correctly configured, check that the data in the database is ok:
         if ($status) {
             try {
-                $rows = $this->getTable('user')->getInsecureRows();
-                $status = (count($rows) == 0);
+                $userRows = $this->getTable('user')->getInsecureRows();
+                $cardRows = $this->getTable('usercard')->getInsecureRows();
+                $status = (count($userRows) + count($cardRows) == 0);
             } catch (\Exception $e) {
                 // Any exception means we have a problem!
                 $status = false;

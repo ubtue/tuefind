@@ -81,7 +81,8 @@ VuFind.register("saveStatuses", function ItemStatuses() {
   });
 
   function checkSaveStatus(el) {
-    if (!userIsLoggedIn) {
+    const savedListsEl = el.querySelector(".savedLists");
+    if (!userIsLoggedIn || !savedListsEl) {
       VuFind.emit("save-status-done");
 
       return;
@@ -100,7 +101,6 @@ VuFind.register("saveStatuses", function ItemStatuses() {
 
     el.classList.add("js-save-pending");
 
-    const savedListsEl = el.querySelector(".savedLists");
     savedListsEl.classList.remove("loaded", "hidden");
     savedListsEl.innerHTML +=
       '<span class="js-load">' +
@@ -121,10 +121,18 @@ VuFind.register("saveStatuses", function ItemStatuses() {
 
   function checkAllSaveStatuses(container = document) {
     if (!userIsLoggedIn) {
+      VuFind.emit("save-status-done");
       return;
     }
 
-    container.querySelectorAll(".result,.record").forEach(checkSaveStatus);
+    const records = container.querySelectorAll(".result,.record");
+
+    if (records.length === 0) {
+      VuFind.emit("save-status-done");
+      return;
+    }
+
+    records.forEach(checkSaveStatus);
   }
 
   function refresh() {

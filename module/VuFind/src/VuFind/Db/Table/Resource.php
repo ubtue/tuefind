@@ -3,7 +3,7 @@
 /**
  * Table Definition for resource
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2010.
  *
@@ -35,6 +35,8 @@ use Laminas\Db\Sql\Select;
 use VuFind\Date\Converter as DateConverter;
 use VuFind\Db\Row\RowGateway;
 use VuFind\Record\Loader;
+
+use function in_array;
 
 /**
  * Table Definition for resource
@@ -171,18 +173,16 @@ class Resource extends Gateway
         $limit = null
     ) {
         // Set up base query:
-        $obj = & $this;
         return $this->select(
-            function ($s) use ($user, $list, $tags, $sort, $offset, $limit, $obj) {
-                $s->columns(
-                    [
-                        new Expression(
-                            'DISTINCT(?)',
-                            ['resource.id'],
-                            [Expression::TYPE_IDENTIFIER]
-                        ), Select::SQL_STAR,
-                    ]
-                );
+            function ($s) use ($user, $list, $tags, $sort, $offset, $limit) {
+                $columns = [
+                    new Expression(
+                        'DISTINCT(?)',
+                        ['resource.id'],
+                        [Expression::TYPE_IDENTIFIER]
+                    ), Select::SQL_STAR,
+                ];
+                $s->columns($columns);
                 $s->join(
                     ['ur' => 'user_resource'],
                     'resource.id = ur.resource_id',
@@ -204,7 +204,7 @@ class Resource extends Gateway
 
                 // Adjust for tags if necessary:
                 if (!empty($tags)) {
-                    $linkingTable = $obj->getDbTable('ResourceTags');
+                    $linkingTable = $this->getDbTable('ResourceTags');
                     foreach ($tags as $tag) {
                         $matches = $linkingTable
                             ->getResourcesForTag($tag, $user, $list)->toArray();
@@ -217,7 +217,7 @@ class Resource extends Gateway
 
                 // Apply sorting, if necessary:
                 if (!empty($sort)) {
-                    Resource::applySort($s, $sort);
+                    Resource::applySort($s, $sort, 'resource', $columns);
                 }
             }
         );
@@ -291,15 +291,16 @@ class Resource extends Gateway
     /**
      * Apply a sort parameter to a query on the resource table.
      *
-     * @param \Laminas\Db\Sql\Select $query Query to modify
-     * @param string                 $sort  Field to use for sorting (may include
+     * @param \Laminas\Db\Sql\Select $query   Query to modify
+     * @param string                 $sort    Field to use for sorting (may include
      * 'desc' qualifier)
-     * @param string                 $alias Alias to the resource table (defaults to
+     * @param string                 $alias   Alias to the resource table (defaults to
      * 'resource')
+     * @param array                  $columns Existing list of columns to select
      *
      * @return void
      */
-    public static function applySort($query, $sort, $alias = 'resource')
+    public static function applySort($query, $sort, $alias = 'resource', $columns = [])
     {
         // Apply sorting, if necessary:
         $legalSorts = [
@@ -317,11 +318,13 @@ class Resource extends Gateway
             // The title field can't be null, so don't bother with the extra
             // isnull() sort in that case.
             if (strtolower($rawField) != 'title') {
-                $order[] = new Expression(
-                    'isnull(?)',
+                $expression = new Expression(
+                    'case when ? is null then 1 else 0 end',
                     [$alias . '.' . $rawField],
                     [Expression::TYPE_IDENTIFIER]
                 );
+                $query->columns(array_merge($columns, [$expression]));
+                $order[] = $expression;
             }
 
             // Apply the user-specified sort:

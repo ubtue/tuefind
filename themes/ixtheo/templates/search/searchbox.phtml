@@ -50,7 +50,7 @@
   <div class="navbar-form navbar-left flip">
     <?php $tabs = $this->context($this)->renderInContext('search/searchTabs', ['searchTabs' => $tabConfig['tabs'], 'showCounts' => false]); ?>
     <?php if (!empty($tabs)): ?><?=$tabs ?><div class="tab-content clearfix"><?php endif; ?>
-      <p class="adv_search_terms"><?=$this->transEsc("Your search terms")?>: "<strong><?=$this->escapeHtml($this->lookfor)?></strong>"</p>
+      <p class="adv_search_terms"><?=$this->transEsc('Your search terms')?>: "<strong><?=$this->escapeHtml($this->lookfor)?></strong>"</p>
       <p class="adv_search_links">
         <a href="<?=$this->url($advSearch)?>?edit=<?=$this->escapeHtmlAttr($this->searchId)?>"><?=$this->transEsc("Edit this Advanced Search")?></a> |
         <a href="<?=$this->url($advSearch, [], ['query' => $hiddenFilters])?>"><?=$this->transEsc("Start a new Advanced Search")?></a> |
@@ -106,7 +106,7 @@
         <?php elseif ($handlerCount == 1): ?>
           <input type="hidden" name="type" value="<?=$this->escapeHtmlAttr($handlers[0]['value'])?>">
         <?php endif; ?>
-        <button type="submit" class="btn btn-primary"><?=$this->icon('search') ?> <?=$this->transEsc("Find")?></button>
+        <button type="submit" class="btn btn-primary"><?=$this->icon('search') ?> <?=$this->transEsc('Find')?></button>
         </section>
 
         <div class="nav nav-pills row">
@@ -141,7 +141,7 @@
               <a href="<?=$this->url('search-newitem')?>"><?=$this->transEsc('New Items')?></a>
             </button>
           <?php endif; ?>
-          <button class="dropdown under-button pull-right">
+          <span class="dropdown under-button pull-right">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                   <?=$this->transEsc('Virtual Keyboard')?> <span class="caret"></span>
             </a>
@@ -151,13 +151,14 @@
                 <?php $virtualKeyboardSnippet = '$(triggerVirtualKeyboard(\'' . $this->transEsc("Accept") . ':' . $this->transEsc("Accept") . '\', \'' . $this->transEsc("Enter") . ':' . $this->transEsc("Enter") . '\'));'; ?>
                 <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $virtualKeyboardSnippet, 'SET')?>
             </ul>
-          </button>
+          </span>
         </div>
     <?php if ($geoUrl = $this->geocoords()->getSearchUrl($options)) : ?>
         <a href="<?=$geoUrl ?>" class="btn btn-link"><?=$this->transEsc('Geographic Search')?></a>
     <?php endif; ?>
 
-    <?php $shards = $options->getShards(); if ($options->showShardCheckboxes() && !empty($shards)): ?>
+    <?php $shards = $options->getShards(); ?>
+     <?php if ($options->showShardCheckboxes() && !empty($shards)): ?>
       <?php
       $selectedShards = $this->selectedShards ?? $options->getDefaultSelectedShards();
       ?>
@@ -195,7 +196,7 @@
       if (!empty($lastLimit)) {
         echo '<input type="hidden" name="limit" value="' . $this->escapeHtmlAttr($lastLimit) . '">';
       }
-      if (!empty($lastSort)) {
+      if (!empty($lastSort) && $lastSort !== $params?->getDefaultSort()) {
         echo '<input type="hidden" name="sort" value="' . $this->escapeHtmlAttr($lastSort) . '">';
       }
     ?>
