@@ -16,8 +16,8 @@
 
   $help = $form->getHelp();
   $helpPre = $helpPost = null;
-  $helpPre = isset($help['pre']) ? $form->getDisplayString($help['pre'], $translateParams) : null;
-  $helpPost = isset($help['post']) ? $form->getDisplayString($help['post'], $translateParams) : null;
+  $helpPre = isset($help['pre']) ? $form->getDisplayString($help['pre'], null, $translateParams) : null;
+  $helpPost = isset($help['post']) ? $form->getDisplayString($help['post'], null, $translateParams) : null;
 ?>
 <?php if (!$this->inLightbox): ?><div class="feedback-content"><?php endif; ?>
   <?php if ($title): ?>

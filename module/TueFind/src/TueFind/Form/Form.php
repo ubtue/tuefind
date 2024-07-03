@@ -47,4 +47,15 @@ class Form extends \VuFind\Form\Form {
 
         return $recipients;
     }
+
+    /**
+     * We override this function in TueFind so we can also add placeholders (tokens)
+     * which will be injected into the translation via the default mechanism.
+     */
+    public function getDisplayString($translationKey, $escape = null, $tokens=[])
+    {
+        $escape ??= substr($translationKey, -5) !== '_html';
+        $helper = $this->viewHelperManager->get($escape ? 'transEsc' : 'translate');
+        return $helper($translationKey, $tokens);
+    }
 }
