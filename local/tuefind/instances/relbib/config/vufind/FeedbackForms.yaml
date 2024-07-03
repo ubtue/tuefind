@@ -217,3 +217,37 @@ forms:
       - name: message
         type: textarea
         label: Comments
+
+  # Example for an Digitisation on Demand form
+  DoD:
+    enabled: true
+    title: Digitisation on Demand (DoD)
+    onlyForLoggedUsers: false
+    emailSubject: Digitisation on Demand (DoD)
+    response: Thank you for request.
+    primaryHandler: email
+    senderInfoRequired: true
+
+    recipient:
+      name: Digitisation on Demand (DoD) Form
+      email: relbib@ub.uni-tuebingen.de
+
+    fields:
+      - name: title
+        type: text
+        label: Title Request
+        required: true
+
+      - name: author
+        type: text
+        label: Author
+        required: true
+
+      - name: year_of_publication
+        type: text
+        label: Year of publication
+        required: true
+
+      - name: message
+        type: textarea
+        label: Comments (e.g. information on the edition)
