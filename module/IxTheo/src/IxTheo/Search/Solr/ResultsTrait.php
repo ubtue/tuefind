@@ -37,6 +37,12 @@ trait ResultsTrait {
                     }
                 }
             }
+            if (preg_match('"^collections_hierarchy"', $facetKey)) {
+                foreach($facet['list'] as $listKey => $listItem) {
+                    $list[$facetKey]['list'][$listKey]['displayText'] =
+                        $this->translate(['SpecialCollections', $listItem['displayText']]);
+                }
+            }
         }
         return $list;
     }
