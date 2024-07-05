@@ -232,9 +232,6 @@ forms:
       name: Digitisation on Demand (DoD) Form
       email: relbib@ub.uni-tuebingen.de
 
-    help:
-      pre: digitisation_on_demand_form_relbib_html
-
     fields:
       - name: title
         type: text
