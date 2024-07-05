@@ -20,13 +20,9 @@
   $helpPost = isset($help['post']) ? $form->getDisplayString($help['post'], null, $translateParams) : null;
 
   if($this->formId == "DoD") {
-    $language = $this->layout()->userLang;
-    if ($language == 'de') {
-      $helpPre = $this->render('feedback/dod_de.phtml');
-    } else {
-      $helpPre = $this->render('feedback/dod.phtml');
-    }
+    $helpPre = $this->content()->renderTranslated('feedback/dod');
   }
+
 ?>
 <?php if (!$this->inLightbox): ?><div class="feedback-content"><?php endif; ?>
   <?php if ($title): ?>

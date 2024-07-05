@@ -16,19 +16,6 @@ $config = [
                         'action'     => 'Home',
                     ],
                 ],
-            ],
-            'feedback-DoD' => [
-                'type' => 'Laminas\Router\Http\Segment',
-                'options' => [
-                    'route'    => '/Feedback/Form/:DoD',
-                    'constraints' => [
-                        'DoD' => '[DoD]',
-                    ],
-                    'defaults' => [
-                        'controller' => 'Feedback',
-                        'action'     => 'Form',
-                    ]
-                ],
             ]
         ],
     ],
