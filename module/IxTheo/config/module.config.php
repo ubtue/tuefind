@@ -16,7 +16,7 @@ $config = [
                         'action'     => 'Home',
                     ],
                 ],
-            ],
+            ]
         ],
     ],
     'controllers' => [
