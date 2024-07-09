@@ -47,7 +47,7 @@ fi
 ##################################################
 if [ -z "$INDEX_OPTIONS" ]
 then
-  INDEX_OPTIONS='-Xms512m -Xmx4096m -DentityExpansionLimit=0 -Dsolrmarc.indexer.threadcount=4'
+  INDEX_OPTIONS='-Xms512m -Xmx6192m -DentityExpansionLimit=0 -Dsolrmarc.indexer.threadcount=4'
 fi
 
 ##################################################
