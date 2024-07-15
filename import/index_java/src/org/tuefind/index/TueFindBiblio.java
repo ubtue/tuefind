@@ -2510,7 +2510,7 @@ public class TueFindBiblio extends TueFind {
                     formats.remove("Book");
                     formats.add("SoundRecording");
         // Karte
-                } else if (bSubfield.getData().equals("tdi")) {
+                } else if (bSubfield.getData().equals("cri")) {
                     formats.remove("Book");
                     formats.add("Map");
                 }
