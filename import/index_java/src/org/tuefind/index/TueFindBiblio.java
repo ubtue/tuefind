@@ -2514,7 +2514,7 @@ public class TueFindBiblio extends TueFind {
                     formats.remove("Book");
                     formats.add("Map");
         // Bilder
-                } else if (bSubfield.getData().equals("sti") {
+                } else if (bSubfield.getData().equals("sti")) {
                     formats.remove("Book");
                     formats.add("Image");
                 }
