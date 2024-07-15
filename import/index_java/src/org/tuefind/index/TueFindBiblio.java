@@ -78,7 +78,7 @@ class IssueInfo {
 
                         if (subfield_content[0].equals("month"))
                             month_ = subfield_content[1];
-                        
+
                     }
                 }
                 return;
@@ -2494,14 +2494,28 @@ public class TueFindBiblio extends TueFind {
             }
         }
 
-        //Software
         final List<VariableField> _336Fields = record.getVariableFields("336");
         for (final VariableField variableField : _336Fields) {
             final DataField _336Field = (DataField) variableField;
+
+        // Software
             for (final Subfield aSubfield : _336Field.getSubfields('a')) {
                 if (aSubfield.getData().equals("Computerprogramm")) {
                     formats.add("Software");
                 }
+            }
+        // Tonaufnahme
+            for (final Subfield bSubfield : _336Field.getSubfields('b')) {
+                if (bSubfield.getData().equals("spw")) {
+                    formats.remove("Book")
+                    formats.add("SoundRecording");
+        // Karte
+                } else if (bSubfield.getData().equals("tdi")) {
+                    formats.remove("Book")
+                    formats.add("Map");
+                }
+
+
             }
         }
 
@@ -2583,6 +2597,12 @@ public class TueFindBiblio extends TueFind {
                     formats.add("ResearchData");
                     break;
                 }
+
+                if (Subfield.getData().startsWith("Postkarte") & dataField.getIndicator1() == ' '
+                    && dataField.getIndicator2() == '7')
+                     formats.remove("Book");
+                    formats.add("Postcard");
+                    break;
             }
         }
 
@@ -2799,7 +2819,7 @@ public class TueFindBiblio extends TueFind {
     // Try to get a numerically sortable representation of an issue
     public String getIssueSort(final Record record) {
         final String issueString = getIssueInfoIssue(record);
-        
+
         if(!issueString.isEmpty()){
             if (issueString.matches("^\\d+$"))
                 return issueString;
@@ -2816,7 +2836,7 @@ public class TueFindBiblio extends TueFind {
     public String getVolumeSort(final Record record) {
         String volumeString = "";
         String tmpVolumeString = getIssueInfoVolume(record);
-        
+
         if(!tmpVolumeString.isEmpty()){
             volumeString = tmpVolumeString;
 
