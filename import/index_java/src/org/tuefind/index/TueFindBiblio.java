@@ -2608,6 +2608,13 @@ public class TueFindBiblio extends TueFind {
                     formats.add("Postcard");
                     break;
                 }
+
+                if (aSubfield.getData().startsWith("Handschrift") & dataField.getIndicator1() == ' '
+                    && dataField.getIndicator2() == '7')
+                {
+                    formats.remove("Book");
+                    formats.add("Manuscript");
+                }
             }
         }
 
