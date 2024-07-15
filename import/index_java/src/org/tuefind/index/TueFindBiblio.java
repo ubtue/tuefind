@@ -2596,7 +2596,7 @@ public class TueFindBiblio extends TueFind {
                     break;
                 }
 
-                if (Subfield.getData().startsWith("Postkarte") & dataField.getIndicator1() == ' '
+                if (aSubfield.getData().startsWith("Postkarte") & dataField.getIndicator1() == ' '
                     && dataField.getIndicator2() == '7')
                      formats.remove("Book");
                     formats.add("Postcard");
