@@ -2507,11 +2507,11 @@ public class TueFindBiblio extends TueFind {
         // Tonaufnahme
             for (final Subfield bSubfield : _336Field.getSubfields('b')) {
                 if (bSubfield.getData().equals("spw")) {
-                    formats.remove("Book")
+                    formats.remove("Book");
                     formats.add("SoundRecording");
         // Karte
                 } else if (bSubfield.getData().equals("tdi")) {
-                    formats.remove("Book")
+                    formats.remove("Book");
                     formats.add("Map");
                 }
             }
