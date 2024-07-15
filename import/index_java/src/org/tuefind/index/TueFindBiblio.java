@@ -2513,6 +2513,10 @@ public class TueFindBiblio extends TueFind {
                 } else if (bSubfield.getData().equals("cri")) {
                     formats.remove("Book");
                     formats.add("Map");
+        // Bilder
+                } else if (bSubfield.getData().equals("sti") {
+                    formats.remove("Book");
+                    formats.add("Image");
                 }
             }
         }
@@ -2600,8 +2604,16 @@ public class TueFindBiblio extends TueFind {
                     && dataField.getIndicator2() == '7')
                 {
                     formats.remove("Book");
+                    formats.remove("Image");
                     formats.add("Postcard");
                     break;
+                }
+
+                if (aSubfield.getData().startsWith("Handschrift") & dataField.getIndicator1() == ' '
+                    && dataField.getIndicator2() == '7')
+                {
+                    formats.remove("Book");
+                    formats.add("Manuscript");
                 }
             }
         }
