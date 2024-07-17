@@ -137,25 +137,33 @@ class RedirectController extends \VuFind\Controller\AbstractBase implements \VuF
                 $driver = $this->getRecordLoader()->load($id);
             }
             $viewParams['driver'] = $driver;
+            $viewParams['available'] = !empty($driver->getKflUrl());
 
             if ($user == false) {
-                $tuefindHelper = $this->serviceLocator->get('ViewHelperManager')->get('tuefind');
-                $msg = 'FID-Lizenz: "' . $viewParams['driver']->getShortTitle() . '". ';
-                $msg .= 'Diese Lizenz wurde vom Fachinformationsdienst (FID) ' . $tuefindHelper->getTueFindFID(/*$short=*/true) . ' erworben. Die kostenfreie Nutzung der Ressource ist mit einem ' . $tuefindHelper->getTueFindType() . '-Konto möglich.';
+                $msg = null;
+                if (!$viewParams['available']) {
+                    $msg = 'Für diesen Titel ist keine Lizenz verfügbar.';
+                } else {
+                    $tuefindHelper = $this->serviceLocator->get('ViewHelperManager')->get('tuefind');
+                    $msg = 'FID-Lizenz: "' . $viewParams['driver']->getShortTitle() . '". ';
+                    $msg .= 'Diese Lizenz wurde vom Fachinformationsdienst (FID) ' . $tuefindHelper->getTueFindFID(/*$short=*/true) . ' erworben. Die kostenfreie Nutzung der Ressource ist mit einem ' . $tuefindHelper->getTueFindType() . '-Konto möglich.';
+                }
                 return $this->forceLogin($msg);
             }
 
-            $viewParams['locked'] = $user->isLicenseAccessLocked();
+            if ($viewParams['available']) {
+                $viewParams['locked'] = $user->isLicenseAccessLocked();
 
-            // Check country restriction
-            $viewParams['countryMode'] = $this->kfl->getCountryModeByDriver($viewParams['driver']);
-            if ($viewParams['countryMode'] == 'DACH') {
-                $viewParams['countryAllowed'] = in_array($user->tuefind_country, ['DE', 'AT', 'CH']);
-            } else {
-                $viewParams['countryAllowed'] = true;
+                // Check country restriction
+                $viewParams['countryMode'] = $this->kfl->getCountryModeByDriver($viewParams['driver']);
+                if ($viewParams['countryMode'] == 'DACH') {
+                    $viewParams['countryAllowed'] = in_array($user->tuefind_country, ['DE', 'AT', 'CH']);
+                } else {
+                    $viewParams['countryAllowed'] = true;
+                }
+                $viewParams['licenseUrl'] = !$viewParams['locked'] ? $this->kfl->getUrlByDriver($viewParams['driver']) : null;
             }
 
-            $viewParams['licenseUrl'] = !$viewParams['locked'] ? $this->kfl->getUrlByDriver($viewParams['driver']) : null;
             return $this->createViewModel($viewParams);
         }
     }
