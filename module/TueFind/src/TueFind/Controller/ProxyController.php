@@ -43,8 +43,6 @@ class ProxyController extends \VuFind\Controller\AbstractBase
             throw new ForbiddenException('The specified target URL is not allowed: ' . $url);
 
         $client = $this->serviceLocator->get('VuFind\Http')->createClient();
-        // This does NOT seem to have any effect
-        $client->setHeaders(['X-Robots-Tag' => 'noindex']);
         return $client->setUri($url)->send();
     }
 }
