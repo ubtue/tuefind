@@ -2,6 +2,9 @@
 
 namespace TueFind\Controller;
 
+use VuFindSearch\Command\SearchCommand;
+use VuFindSearch\Query\Query;
+
 /**
  * This controller is used to redirect to a given URL and save it with a timestamp.
  * (e.g. to Track how many times an external service is used, without storing person-related data.)
@@ -110,7 +113,30 @@ class RedirectController extends \VuFind\Controller\AbstractBase implements \VuF
         } else {
             // This is the regular case, a user requesting fulltext access via the frontend.
             $viewParams = [];
-            $viewParams['driver'] = $this->getRecordLoader()->load($id);
+
+            // Note: The ID can either be a PPN, or a PPN with a prefix e.g. "(EBP)089562895", example from KrimDok.
+            //       In this case, we need to use a different Record Loading Mechanism since we need to lookup by a different Solr field.
+            $driver = null;
+            if (preg_match('"^\([^)]+\)"', $id)) {
+                // This part is hardcoded now as proof-of-concept but will be replaced by a custom Record Loader soon
+                $searchService = $this->serviceLocator->get(\VuFindSearch\Service::class);
+                $identifier = 'Solr';
+                $query = new Query('ctrlnum:"' . $id . '"', null, 'AllFields');
+                $searchCommand = new SearchCommand($identifier, $query);
+                $recordCollection = $searchService->invoke($searchCommand)->getResult();
+                if ($recordCollection->getTotal() == 0) {
+                    throw new \Exception('ID not found: ' . $id);
+                } elseif ($recordCollection->getTotal() > 1) {
+                    throw new \Exception('ID is ambiguous: ' . $id);
+                }
+                foreach ($recordCollection as $record) {
+                    $driver = $record;
+                    break;
+                }
+            } else {
+                $driver = $this->getRecordLoader()->load($id);
+            }
+            $viewParams['driver'] = $driver;
 
             if ($user == false) {
                 $tuefindHelper = $this->serviceLocator->get('ViewHelperManager')->get('tuefind');
