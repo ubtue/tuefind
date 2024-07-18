@@ -7,7 +7,7 @@
         <?php $urlHierarchyLevels[] = $hierarchyLevel; ?>
         <?php if ($i > 0): ?>&gt;<?php endif; ?>
         <?php $url = $this->url('search-results', [], ['query' => ['filter' => 'collections_hierarchy:"' . count($urlHierarchyLevels) - 1 . '/' . implode('/', $urlHierarchyLevels) . '/"']]); ?>
-        <a href="<?=$this->escapeHtmlAttr($url)?>"><?=$this->transEscAttr(['SpecialCollections', $hierarchyLevel])?></a>
+        <a href="<?=$this->escapeHtmlAttr($url)?>"><?=$this->transEsc(['SpecialCollections', $hierarchyLevel])?></a>
       <?php endforeach; ?>
     </li>
   <?php endforeach; ?>
