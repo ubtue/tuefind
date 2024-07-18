@@ -4,7 +4,7 @@
 UTIL_DIR="$(dirname $(readlink --canonicalize "$0"))"
 
 if [ -z "$1" ]; then
-    echo "Usage: $0 <ixtheo/relbib/krimdok>"
+    echo "Usage: $0 <ixtheo/relbib/bibstudies/churchlaw/krimdok>"
 else
     export VUFIND_LOCAL_DIR="$VUFIND_LOCAL_DIR/../$1"
     php $UTIL_DIR/sitemap.php
