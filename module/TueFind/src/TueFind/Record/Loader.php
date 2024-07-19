@@ -6,31 +6,45 @@ use VuFind\Exception\RecordMissing as RecordMissingException;
 use VuFindSearch\ParamBag;
 use VuFindSearch\Command\RetrieveCommand;
 use VuFindSearch\Command\SearchCommand;
-use VuFindSearch\Query;
+use VuFindSearch\Query\Query;
 
-class Loader extends \VuFind\Record\Loader {
-    public function load($id, $source = DEFAULT_SEARCH_BACKEND,
-        $tolerateMissing = false, ParamBag $params = null
+class Loader extends \VuFind\Record\Loader
+{
+    public function load(
+        $id,
+        $source = DEFAULT_SEARCH_BACKEND,
+        $tolerateMissing = false,
+        ParamBag $params = null
     ) {
         if (null !== $id && '' !== $id) {
             $results = [];
-            if (null !== $this->recordCache
-            && $this->recordCache->isPrimary($source)
+            if (
+                null !== $this->recordCache
+                && $this->recordCache->isPrimary($source)
             ) {
                 $results = $this->recordCache->lookup($id, $source);
             }
             if (empty($results)) {
                 try {
-                    $command = new RetrieveCommand($source, $id, $params); 
+                    $command = new RetrieveCommand($source, $id, $params);
                     $results = $this->searchService->invoke($command)->getResult()->getRecords();
-                } catch (BackendException $e){
-                    if(!$tolerateMissing){
+                } catch (BackendException $e) {
+                    if (!$tolerateMissing) {
                         throw $e;
                     }
                 }
             }
-            if (empty($results) && null !== $this->recordCache
-            && $this->recordCache->isFallback($source)
+
+            // try to get data by ppn 
+            if (empty($results)) {
+                $query = new Query('ctrlnum:"' . $id . '"', null, 'Allfields');
+                $command = new SearchCommand($source, $query);
+                $results = $this->searchService->invoke($command)->getResult()->getRecords();
+            }
+
+            if (
+                empty($results) && null !== $this->recordCache
+                && $this->recordCache->isFallback($source)
             ) {
                 $results = $this->recordCache->lookup($id, $source);
             }
@@ -38,10 +52,11 @@ class Loader extends \VuFind\Record\Loader {
             if (count($results) == 1) {
                 return $results[0];
             }
-            
+
             // TueFind: use fallback like in parent's "loadBatchForSource" function
             // (this change might also be sent to vufind.org for future versions)
-            if ($this->fallbackLoader
+            if (
+                $this->fallbackLoader
                 && $this->fallbackLoader->has($source)
             ) {
                 $fallbackRecords = $this->fallbackLoader->get($source)
@@ -63,7 +78,8 @@ class Loader extends \VuFind\Record\Loader {
         );
     }
 
-    public function loadAuthorityRecordByGNDNumber($gndNumber) {
+    public function loadAuthorityRecordByGNDNumber($gndNumber)
+    {
         $source = 'SolrAuth';
 
         if (null !== $gndNumber && '' !== $gndNumber) {
@@ -73,20 +89,19 @@ class Loader extends \VuFind\Record\Loader {
 
             // use search instead of lookup logic
             if (empty($results)) {
-                
+
                 try {
                     $query = new Query('gnd:' . $gndNumber);
-                    $command = new SearchCommand($source, $query); 
+                    $command = new SearchCommand($source, $query);
                     $results = $this->searchService->invoke($command)->getResult()->getRecords();
                     if ($results->first() !== null)
                         return $results->first();
                     $results = [];
-                } catch (BackendException $e){
-                    if(!$tolerateMissing){
+                } catch (BackendException $e) {
+                    if (!$tolerateMissing) {
                         throw $e;
                     }
                 }
-                
             }
 
             // no fallback cache
