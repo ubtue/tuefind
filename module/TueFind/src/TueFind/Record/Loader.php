@@ -6,7 +6,7 @@ use VuFind\Exception\RecordMissing as RecordMissingException;
 use VuFindSearch\ParamBag;
 use VuFindSearch\Command\RetrieveCommand;
 use VuFindSearch\Command\SearchCommand;
-use VuFindSearch\Query;
+use VuFindSearch\Query\Query;
 
 class Loader extends \VuFind\Record\Loader {
     public function load($id, $source = DEFAULT_SEARCH_BACKEND,
@@ -28,6 +28,12 @@ class Loader extends \VuFind\Record\Loader {
                         throw $e;
                     }
                 }
+            }
+            // fallback: search for record by ID with ISIL prefix, e.g. "(DE-599)ZDB2985306-0"
+            if (empty($results)) {
+                $query = new Query('ctrlnum:"' . $id . '"', null, 'Allfields');
+                $command = new SearchCommand($source, $query);
+                $results = $this->searchService->invoke($command)->getResult()->getRecords();
             }
             if (empty($results) && null !== $this->recordCache
             && $this->recordCache->isFallback($source)
