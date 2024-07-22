@@ -29,7 +29,7 @@ class Loader extends \VuFind\Record\Loader {
                     }
                 }
             }
-            // try to get data by ppn 
+            // fallback: search for record by ID with ISIL prefix, e.g. "(DE-599)ZDB2985306-0"
             if (empty($results)) {
                 $query = new Query('ctrlnum:"' . $id . '"', null, 'Allfields');
                 $command = new SearchCommand($source, $query);
