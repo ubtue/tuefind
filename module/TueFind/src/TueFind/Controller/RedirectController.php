@@ -30,7 +30,8 @@ class RedirectController extends \VuFind\Controller\AbstractBase implements \VuF
      */
     protected $kfl;
 
-    public function setDecoder(\TueFind\View\Helper\TueFind\TueFind $decoder) {
+    public function setDecoder(\TueFind\View\Helper\TueFind\TueFind $decoder)
+    {
         $this->decoder = $decoder;
     }
 
@@ -42,12 +43,12 @@ class RedirectController extends \VuFind\Controller\AbstractBase implements \VuF
     public function redirectAction()
     {
         /**
-        * Use HTML Meta redirect page instead of HTTP header.
-        * HTTP header redirect may fail when using php-fpm if the header
-        * is larger than 8192 Bytes.
-        *
-        * See https://maxchadwick.xyz/blog/http-response-header-size-limit-with-mod-proxy-fcgi
-        */
+         * Use HTML Meta redirect page instead of HTTP header.
+         * HTTP header redirect may fail when using php-fpm if the header
+         * is larger than 8192 Bytes.
+         *
+         * See https://maxchadwick.xyz/blog/http-response-header-size-limit-with-mod-proxy-fcgi
+         */
 
         // URL is Base64URL encoded, which is different than the regular Base64:
         // https://base64.guru/standards/base64url
@@ -115,27 +116,7 @@ class RedirectController extends \VuFind\Controller\AbstractBase implements \VuF
             $viewParams = [];
 
             // Note: The ID can either be a PPN, or a PPN with a prefix e.g. "(EBP)089562895", example from KrimDok.
-            //       In this case, we need to use a different Record Loading Mechanism since we need to lookup by a different Solr field.
-            $driver = null;
-            if (preg_match('"^\([^)]+\)"', $id)) {
-                // This part is hardcoded now as proof-of-concept but will be replaced by a custom Record Loader soon
-                $searchService = $this->serviceLocator->get(\VuFindSearch\Service::class);
-                $identifier = 'Solr';
-                $query = new Query('ctrlnum:"' . $id . '"', null, 'AllFields');
-                $searchCommand = new SearchCommand($identifier, $query);
-                $recordCollection = $searchService->invoke($searchCommand)->getResult();
-                if ($recordCollection->getTotal() == 0) {
-                    throw new \Exception('ID not found: ' . $id);
-                } elseif ($recordCollection->getTotal() > 1) {
-                    throw new \Exception('ID is ambiguous: ' . $id);
-                }
-                foreach ($recordCollection as $record) {
-                    $driver = $record;
-                    break;
-                }
-            } else {
-                $driver = $this->getRecordLoader()->load($id);
-            }
+            $driver = $this->getRecordLoader()->load($id);
             $viewParams['driver'] = $driver;
             $viewParams['available'] = !empty($driver->getKflUrl());
 
