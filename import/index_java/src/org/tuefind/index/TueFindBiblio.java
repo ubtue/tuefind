@@ -2522,21 +2522,10 @@ public class TueFindBiblio extends TueFind {
         }
 
         // Special case for Princeton data "archive file" - hopefully only temporarily
-        archiveFileLoop:
-        for (final VariableField variableField : record.getVariableFields("LOK")) {
-            final DataField lokfield = (DataField) variableField;
-            final Subfield subfield_0 = lokfield.getSubfield('0');
-            if (subfield_0 == null || !subfield_0.getData().equals("689  ")) {
-                continue;
-            }
-
-            for (final Subfield subfield_a : lokfield.getSubfields('a')) {
-                if (subfield_a.getData().equalsIgnoreCase("Archival file")) {
-                    formats.remove("Book");
-                    formats.add("ArchivedMaterial");
-                    break archiveFileLoop;
-                }
-            }
+        final Set<String> local689Topics = getLocal689Topics(record);
+        if (local689Topics.stream().anyMatch("Archival File"::equalsIgnoreCase)) {
+             formats.remove("Book");
+             formats.add("ArchivedMaterial");
         }
 
         // Festschrift

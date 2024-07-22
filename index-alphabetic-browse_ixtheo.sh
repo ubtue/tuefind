@@ -33,18 +33,45 @@ else
   JAVA="java"
 fi
 
+
+##################################################
+# Set VUFIND_HOME
+##################################################
 if [ -z "$VUFIND_HOME" ]
 then
-  VUFIND_HOME=`dirname $0`
+  # set VUFIND_HOME to the absolute path of the directory containing this script
+  # https://stackoverflow.com/questions/4774054/reliable-way-for-a-bash-script-to-get-the-full-path-to-itself
+  VUFIND_HOME="$(cd "$(dirname "$0")" && pwd -P)"
+  if [ -z "$VUFIND_HOME" ]
+  then
+    exit 1
+  fi
 fi
+
 
 if [ -z "$SOLR_HOME" ]
 then
   SOLR_HOME="$VUFIND_HOME/solr/vufind"
 fi
 
+# This can point to an external Solr in e.g. a Docker container
+if [ -z "$SOLR_JAR_PATH" ]
+then
+  SOLR_JAR_PATH="${SOLR_HOME}/../vendor"
+fi
+
+set -e
+set -x
+
 cd "`dirname $0`/import"
-CLASSPATH="browse-indexing.jar:${VUFIND_HOME}/import/lib/*:${SOLR_HOME}/jars/*:${SOLR_HOME}/../vendor/modules/analysis-extras/lib/*:${SOLR_HOME}/../vendor/server/solr-webapp/webapp/WEB-INF/lib/*"
+SOLRMARC_CLASSPATH=$(echo solrmarc_core*.jar)
+if [[ `wc -w <<<"$SOLRMARC_CLASSPATH"` -gt 1 ]]
+then
+  echo "Error: more than one solrmarc_core*.jar in import/; exiting."
+  exit 1
+fi
+CLASSPATH="browse-indexing.jar:${SOLRMARC_CLASSPATH}:${VUFIND_HOME}/import/lib/*:${SOLR_HOME}/jars/*:${SOLR_JAR_PATH}/modules/analysis-extras/lib/*:${SOLR_JAR_PATH}/server/solr-webapp/webapp/WEB-INF/lib/*"
+
 
 
 mkdir -p ${TMP_RAMDISK_DIR}
