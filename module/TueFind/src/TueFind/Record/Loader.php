@@ -21,7 +21,7 @@ class Loader extends \VuFind\Record\Loader {
             }
             if (empty($results)) {
                 try {
-                    $command = new RetrieveCommand($source, $id, $params); 
+                    $command = new RetrieveCommand($source, $id, $params);
                     $results = $this->searchService->invoke($command)->getResult()->getRecords();
                 } catch (BackendException $e){
                     if(!$tolerateMissing){
@@ -30,7 +30,9 @@ class Loader extends \VuFind\Record\Loader {
                 }
             }
             // fallback: search for record by ID with ISIL prefix, e.g. "(DE-599)ZDB2985306-0"
-            if (empty($results)) {
+            // Note: The strpos call in the following line is just for performance reasons
+            //       to avoid a Solr query in case the ID does not fit the case
+            if (empty($results) && strpos($id, '(') === 0) {
                 $query = new Query('ctrlnum:"' . $id . '"', null, 'Allfields');
                 $command = new SearchCommand($source, $query);
                 $results = $this->searchService->invoke($command)->getResult()->getRecords();
@@ -44,7 +46,7 @@ class Loader extends \VuFind\Record\Loader {
             if (count($results) == 1) {
                 return $results[0];
             }
-            
+
             // TueFind: use fallback like in parent's "loadBatchForSource" function
             // (this change might also be sent to vufind.org for future versions)
             if ($this->fallbackLoader
@@ -79,10 +81,10 @@ class Loader extends \VuFind\Record\Loader {
 
             // use search instead of lookup logic
             if (empty($results)) {
-                
+
                 try {
                     $query = new Query('gnd:' . $gndNumber);
-                    $command = new SearchCommand($source, $query); 
+                    $command = new SearchCommand($source, $query);
                     $results = $this->searchService->invoke($command)->getResult()->getRecords();
                     if ($results->first() !== null)
                         return $results->first();
@@ -92,7 +94,7 @@ class Loader extends \VuFind\Record\Loader {
                         throw $e;
                     }
                 }
-                
+
             }
 
             // no fallback cache
