@@ -24,6 +24,7 @@ Disallow: /Combined
 Disallow: /Feedback
 Disallow: /FindbuchProxy
 Disallow: /fulltextsnippetproxy
+Disallow: /MyResearch
 Disallow: /pdaproxy
 Disallow: /proxy
 Disallow: /RssFeed
