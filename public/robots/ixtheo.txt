@@ -25,6 +25,7 @@ Disallow: /Feedback
 Disallow: /FindbuchProxy
 Disallow: /fulltextsnippetproxy
 Disallow: /Keywordchainsearch
+Disallow: /MyResearch
 Disallow: /pdaproxy
 Disallow: /proxy
 Disallow: /RssFeed
