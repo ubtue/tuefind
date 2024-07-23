@@ -38,3 +38,4 @@ Disallow: /Summon
 Disallow: /SummonRecord
 Disallow: /WikidataProxy
 Sitemap: https://krimdok.uni-tuebingen.de/sitemaps/krimdok/sitemapIndex.xml
+Crawl-delay: 10

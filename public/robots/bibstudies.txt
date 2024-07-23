@@ -39,3 +39,4 @@ Disallow: /Summon
 Disallow: /SummonRecord
 Disallow: /WikidataProxy
 Sitemap: https://bible.ixtheo.de/sitemaps/bibstudies/sitemapIndex.xml
+Crawl-delay: 10

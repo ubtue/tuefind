@@ -39,3 +39,4 @@ Disallow: /Summon
 Disallow: /SummonRecord
 Disallow: /WikidataProxy
 Sitemap: https://churchlaw.ixtheo.de/sitemaps/churchlaw/sitemapIndex.xml
+Crawl-delay: 10

@@ -39,3 +39,4 @@ Disallow: /Summon
 Disallow: /SummonRecord
 Disallow: /WikidataProxy
 Sitemap: https://relbib.de/sitemaps/relbib/sitemapIndex.xml
+Crawl-delay: 10
