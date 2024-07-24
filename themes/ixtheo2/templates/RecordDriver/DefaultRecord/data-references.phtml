@@ -1,1 +1,8 @@
-../../../../ixtheo/templates/RecordDriver/DefaultRecord/data-references.phtml
+<?php foreach ($data as $reference): ?>
+  <?php if (!empty($reference['id'])): ?>
+    <a href="<?=$this->recordLinker()->getUrl($reference['id'])?>"><?=$reference['description']?></a>
+  <?php else: ?>
+    <?=$reference['description']?>
+  <?php endif; ?>
+  <br>
+<?php endforeach; ?>
