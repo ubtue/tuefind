@@ -1,1 +1,0 @@
-../../ixtheo/js/ixtheo.js
