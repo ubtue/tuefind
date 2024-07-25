@@ -42,6 +42,7 @@ import org.solrmarc.tools.Utils;
 import org.solrmarc.driver.Boot;
 import org.vufind.index.DatabaseManager;
 import java.sql.*;
+import java.util.stream.Collectors;
 import static java.util.stream.Collectors.joining;
 
 /*
@@ -3299,6 +3300,11 @@ public class TueFindBiblio extends TueFind {
                 results.add(newValue);
         }
         return results;
+    }
+
+    public Collection<String> normalizeSortableStringSingleValue(Collection<String> extractedValues) {
+        final Collection<String> normalizedSortableStrings = normalizeSortableString(extractedValues);
+        return normalizedSortableStrings.stream().limit(1).collect(Collectors.toList());
     }
 
     public List<String> getKflIDs(final Record record) {
