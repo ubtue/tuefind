@@ -46,17 +46,12 @@
     </div>
 </div>
 
-<div class="tf-panel-collapse">
-    <a data-toggle="collapse" href="#col4">
-        <div class="tf-panel-collapse-heading">
-            <span><b>ProQuest EBook Collection for the Study of Religion</b> – in Vorbereitung für 2024</span>
-        </div>
-    </a>
-    <div id="col4" class="collapse tf-panel-collapse-body">
-        <h2>Informationen zum Nutzerkreis des FID Religionswissenschaft</h2>
-        <p>Bei den Lizenzangeboten wird zwischen FID Community-Lizenzen und Nationallizenzen unterschieden.</p>
-    </div>
-</div>
+<h2><b>ProQuest EBook Collection for the Study of Religion</b></h2>
+<p> in Vorbereitung für 2024</p>
+
+<h2><b>Informationen zum Nutzerkreis des FID Religionswissenschaft</b></h2>
+<p>Bei den Lizenzangeboten wird zwischen FID Community-Lizenzen und Nationallizenzen unterschieden.</p>
+
 <div class="tf-panel-collapse">
     <a data-toggle="collapse" href="#col5">
         <div class="tf-panel-collapse-heading">
@@ -141,8 +136,23 @@
     </a>
     <div id="col9" class="collapse tf-panel-collapse-body">
         <p>Folgende Lizenzprodukte des <a target="_blank" href="https://fid-lateinamerika.de/">FID Lateinamerika, Karibik und Latino Studies</a> könnten auch für RelBib-Nutzer*innen relevant sein:</p>
-        <ul style="margin-bottom:200px;">
+        <ul>
             <li><a target="_blank" href="https://dbis.ur.de/dbinfo/detail.php?titel_id=104456&bib_id=iai">Archivdatenbank Government and Church Documents for Sacatepéquez (1587-1991)</a> – Zugang mit Benutzer-ID des FID Lateinamerika möglich: Bitte wenden Sie sich mit dem Hinweis, dass Sie RelBib-Nutzer*in sind, an das Team des <a target="_blank" href="mailto:fid@iai.spk-berlin.de">FID Lateinamerika</a>.</li>
         </ul>
     </div>
 </div>    
+
+<?php
+$jsSnippet = <<< 'EOD'
+    $(document).ready(function () {
+        let URL_string = window.location.href;
+        if (URL_string.indexOf("#") > -1) {
+            let URL_anchor = URL_string.split("#");
+            if(URL_anchor[1].length > 0) {
+                $('#'+URL_anchor[1]).next().find('a').click();
+            }
+        }
+    });
+EOD;
+?>
+<?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $jsSnippet, 'SET')?>
