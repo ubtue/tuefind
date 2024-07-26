@@ -1,0 +1,13 @@
+<?php // This is a text-only email template; do not include HTML! ?>
+<?=$this->translate('This email was sent from')?>: <?=$this->from?>
+
+------------------------------------------------------------
+  <?=$this->driver->getBreadcrumb()?>
+
+  <?php $realm = basename(getenv('VUFIND_LOCAL_DIR'))?>
+<?=$this->translate('email_link_' . $realm)?>: <?=$this->serverUrl($this->recordLinker()->getUrl($this->driver))?>
+
+------------------------------------------------------------
+<?php if (!empty($this->message)): ?><?=$this->translate("Message From Sender")?>:
+<?=$this->message?>
+<?php endif; ?>

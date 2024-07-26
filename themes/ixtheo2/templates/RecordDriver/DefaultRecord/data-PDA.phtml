@@ -1,1 +1,14 @@
-../../../../ixtheo/templates/RecordDriver/DefaultRecord/data-PDA.phtml
+<?php $formats = $this->driver->getFormats(); ?>
+<?php // We do not use the getCleanISBN-function since it converts ISBN down to ISBN 10 ?>
+<?php // and we miss matches in GVI ?>
+<?php $isbns = $this->driver->tryMethod('getISBNs'); ?>
+<?php $isbn = count($isbns) ? $isbns[0] : 0; ?>
+<div id="pda_place_holder"><?=$this->transEsc("Loading")?>...</div>
+<?php
+  $ajaxUrl = $this->url('home') . 'pdaproxy/load?isbn=' . $isbn;
+  $pdaSubscribeUrl = $this->recordLinker()->getActionUrl($this->driver, 'PDASubscribe');
+  $pdaSubscribeText = $this->transEsc("Go to PDA Order");
+  $jsParams = [$isbn, $ajaxUrl, $pdaSubscribeUrl, $pdaSubscribeText];
+  $jsSnippet = "IxTheo.GetPDAInformation('" . implode("','", $jsParams) . "');";
+?>
+<?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $jsSnippet, 'SET')?>

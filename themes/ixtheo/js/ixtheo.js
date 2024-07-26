@@ -17,7 +17,7 @@ var IxTheo = {
   GetPDAInformation: function(isbn, ajaxUrl, pdaSubscribeUrl, pdaSubscribeText) {
     // Suppress entire field if no isbn is present
     if (isbn == "0") {
-      $("#pda_row").remove();
+      $("#pda_place_holder").closest("tr").remove();
     }
     // Try to determine status
     $.ajax({
@@ -32,7 +32,7 @@ var IxTheo = {
 	    if ((received_isbn == isbn) && (pda_status == "OFFER_PDA")) {
 	      $(this).replaceWith('<a href="' + pdaSubscribeUrl + '">' + pdaSubscribeText + '</a>');
 	    } else
-	      $("#pda_row").remove();
+          $("#pda_place_holder").closest("tr").remove();
 	  });
 	});
       }, // end success
