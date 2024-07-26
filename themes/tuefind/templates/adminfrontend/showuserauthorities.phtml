@@ -34,7 +34,7 @@ $this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') 
             <td><?=$user->lastname?></td>
             <td><?=$user->email?></td>
             <td><?=$user->tuefind_institution?></td>
-            <td><a href="/Authority/<?=urlencode($user->authority_id)?>"><?=$user->authority_id?></a></td>
+            <td><a href="/AuthorityRecord/<?=urlencode($user->authority_id)?>"><?=$user->authority_id?></a></td>
             <td><?=$this->transEsc(ucfirst($user->access_state))?></td>
             <td data-sort="<?=date("Y-m-d H:i:s",strtotime($user->requested_datetime));?>"><?=date("d.m.Y H:i:s",strtotime($user->requested_datetime));?></td>
             <td data-sort="<?=($user->granted_datetime)?date("Y-m-d H:i:s",strtotime($user->granted_datetime)):""?>"><?=($user->granted_datetime)?date("d.m.Y H:i:s",strtotime($user->granted_datetime)):"";?></td>
