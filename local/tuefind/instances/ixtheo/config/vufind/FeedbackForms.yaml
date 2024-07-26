@@ -250,7 +250,7 @@ forms:
 
       - name: language
         label: "Sprache des Beitrags"
-        type: text
+        type: language
 
       - name: superior_work
         label: "Wo/In welchem übergeordneten Werk ist der Beitrag enthalten?"

@@ -58,4 +58,13 @@ class Form extends \VuFind\Form\Form {
         $helper = $this->viewHelperManager->get($escape ? 'transEsc' : 'translate');
         return $helper($translationKey, $tokens);
     }
+
+    protected function getFormElementClass($type)
+    {
+        $map = [
+            'language' => '\TueFind\Form\Element\Language',
+        ];
+
+        return $map[$type] ?? parent::getFormElementClass($type);
+    }
 }
