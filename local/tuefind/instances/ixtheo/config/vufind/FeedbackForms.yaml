@@ -216,3 +216,57 @@ forms:
       - name: message
         type: textarea
         label: Comments
+
+  SelfArchivingAddMetadata:
+    enabled: true
+    onlyForLoggedUsers: true
+    title: "Self-Archiving: Metadaten-Formular"
+
+    fields:
+      - name: print_online
+        label: "Handelt es sich um eine Print- oder eine Online-Publikation?"
+        type: radio
+        options:
+          - value: online
+            label: "Online"
+          - value: print
+            label: "print"
+
+      - name: authors
+        label: "Verfasser*innen"
+        type: text
+
+      - name: publication_year
+        label: "Erscheinungsjahr"
+        type: text
+
+      - name: title
+        label: "Titel"
+        type: text
+
+      - name: subtitle
+        label: "Untertitel"
+        type: text
+
+      - name: language
+        label: "Sprache des Beitrags"
+        type: text
+
+      - name: superior_work
+        label: "Wo/In welchem übergeordneten Werk ist der Beitrag enthalten?"
+        type: radio
+        options:
+          - value: journal
+            label: "In einer Zeitschrift"
+          - value: collection
+            label: "In einem Sammelband"
+
+      - name: online_exists
+        label: "Ist bereits ein Link zu einer Onlineversion des Beitrags verfügbar?"
+        type: radio
+        options:
+          - value: yes
+            label: "Ja"
+          - value: no
+            label: "Nein"
+
