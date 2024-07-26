@@ -24,7 +24,7 @@
   } else if ($this->formId == 'SelfArchivingAddMetadata') {
     $script = <<<JS
       $(document).ready(function() {
-        // Show/Hide superior work-specific fields
+        // Show/Hide superior_work_type-specific fields
         $('input[type=radio][name=superior_work_type]').change(function() {
           if (this.value == 'o1') {
             $('.group-superior_issn').show();
@@ -46,7 +46,7 @@
         });
         $('#form_SelfArchivingAddMetadata_superior_work_type_o1').trigger('click');
 
-        // Show/Hide online-specific fields
+        // Show/Hide online_exists-specific fields
         $('input[type=radio][name=online_exists]').change(function() {
           // Show options depending on which field is selected
           if (this.value == 'o1') {

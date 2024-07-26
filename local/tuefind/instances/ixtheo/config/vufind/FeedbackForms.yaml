@@ -260,7 +260,8 @@ forms:
             label: "In einer Zeitschrift"
           - value: collection
             label: "In einem Sammelband"
-      # START superior_work-specific fields (see JS)
+
+      # START superior_work_type-specific fields (see JS)
       - name: superior_title
         label: Titel
         type: text
