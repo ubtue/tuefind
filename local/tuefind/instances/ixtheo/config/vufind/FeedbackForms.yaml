@@ -327,3 +327,32 @@ forms:
             label: "Open Access"
       # END online_exists-specific fields (see JS)
 
+  SelfArchivingRegisterLink:
+    enabled: true
+    onlyForLoggedUsers: true
+    title: "Link zu einer vorhandenen Zweitveröffentlichung ergänzen"
+
+    help:
+      pre: "Hier können Sie den Link zu einer bereits vorhandenen Open-Access-Zweitveröffentlichung Ihrer Publikation eintragen. Bitte verwenden Sie dauerhafte Links (doi, handle oder urn)."
+
+    fields:
+      - name: ppn
+        type: text
+        label: "PPN"
+
+      - name: title
+        type: text
+        label: "Title"
+
+      - name: author
+        type: text
+        label: "Autor"
+
+      - name: link
+        type: text
+        label: "Link"
+
+    prefillFields:
+      - ppn
+      - title
+      - author
