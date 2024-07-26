@@ -23,6 +23,9 @@
     $helpPre = $this->content()->renderTranslated('feedback/dod');
   }
 
+  // TueFind: load a custom PHTML template for this form if it exists
+  print $this->content()->renderTranslated($this->formId, 'feedback');
+
 ?>
 <?php if (!$this->inLightbox): ?><div class="feedback-content"><?php endif; ?>
   <?php if ($title): ?>

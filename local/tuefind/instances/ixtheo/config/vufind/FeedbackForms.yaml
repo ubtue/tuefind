@@ -216,3 +216,114 @@ forms:
       - name: message
         type: textarea
         label: Comments
+
+  SelfArchivingAddMetadata:
+    enabled: true
+    onlyForLoggedUsers: true
+    title: "Self-Archiving: Metadaten-Formular"
+
+    fields:
+      - name: print_online
+        label: "Handelt es sich um eine Print- oder eine Online-Publikation?"
+        type: radio
+        options:
+          - value: online
+            label: "Online"
+          - value: print
+            label: "print"
+
+      - name: authors
+        label: "Verfasser*innen"
+        type: text
+
+      - name: publication_year
+        label: "Erscheinungsjahr"
+        type: text
+
+      - name: title
+        label: "Titel"
+        type: text
+
+      - name: subtitle
+        label: "Untertitel"
+        type: text
+
+      - name: language
+        label: "Sprache des Beitrags"
+        type: language
+
+      - name: superior_work_type
+        label: "Wo/In welchem übergeordneten Werk ist der Beitrag enthalten?"
+        type: radio
+        options:
+          - value: journal
+            label: "In einer Zeitschrift"
+          - value: collection
+            label: "In einem Sammelband"
+
+      # START superior_work_type-specific fields (see JS)
+      - name: superior_title
+        label: Titel
+        type: text
+
+      - name: superior_issn
+        label: ISSN
+        type: text
+
+      - name: superior_isbn
+        label: ISBN
+        type: text
+
+      - name: superior_ixtheo_url
+        label: IxTheo-Link
+        type: text
+
+      - name: superior_volume
+        label: Band
+        type: text
+
+      - name: superior_year
+        label: Jahr
+        type: text
+
+      - name: superior_issue
+        label: Heft
+        type: text
+
+      - name: superior_article_id
+        label: Aufsatz-ID
+        type: text
+
+      - name: superior_publishers
+        label: Herausgeber*innen
+        type: text
+
+      - name: superior_pages
+        label: Seiten
+        type: text
+      # END superior_work-specific fields (see JS)
+
+      - name: online_exists
+        label: "Ist bereits ein Link zu einer Onlineversion des Beitrags verfügbar?"
+        type: radio
+        options:
+          - value: yes
+            label: "Ja"
+          - value: no
+            label: "Nein"
+
+      # START online_exists-specific fields (see JS)
+      - name: online_url
+        label: Link
+        type: text
+
+      - name: online_license
+        label: Verfügbarkeit
+        type: radio
+        options:
+          - value: yes
+            label: "Volltext nicht frei verfügbar"
+          - value: no
+            label: "Open Access"
+      # END online_exists-specific fields (see JS)
+
