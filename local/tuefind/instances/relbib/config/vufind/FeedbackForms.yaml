@@ -245,9 +245,9 @@ forms:
 
       - name: year_of_publication
         type: text
-        label: Year of publication
+        label: Year of Publication
         required: true
 
       - name: message
         type: textarea
-        label: Comments (e.g. information on the edition)
+        label: dod_comments
