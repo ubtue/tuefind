@@ -230,7 +230,7 @@ forms:
           - value: online
             label: "Online"
           - value: print
-            label: "print"
+            label: "Print " # Note: The whitespace at the end is intentional so this will not be translated
 
       - name: authors
         label: "Verfasser*innen"
@@ -326,6 +326,10 @@ forms:
           - value: no
             label: "Open Access"
       # END online_exists-specific fields (see JS)
+
+      - name: comments
+        type: textarea
+        label: Comments
 
   SelfArchivingRegisterLink:
     enabled: true
