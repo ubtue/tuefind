@@ -2,6 +2,15 @@
 
 $script = <<<JS
     $(document).ready(function() {
+      // Show/Hide print_online-specific fields
+      $('input[type=radio][name=print_online]').change(function() {
+        if (this.value == 'o1') {
+          $('.group-superior_article_id').show();
+        } else {
+          $('.group-superior_article_id').hide();
+        }
+      });
+
       // Show/Hide superior_work_type-specific fields
       $('input[type=radio][name=superior_work_type]').change(function() {
         if (this.value == 'o1') {
@@ -10,7 +19,11 @@ $script = <<<JS
           $('.group-superior_volume').show();
           $('.group-superior_year').show();
           $('.group-superior_issue').show();
-          $('.group-superior_article_id').show();
+          if ($('input[name="print_online"]:checked').val() == 'o1') {
+            $('.group-superior_article_id').show();
+          } else {
+            $('.group-superior_article_id').hide();
+          }
           $('.group-superior_publishers').hide();
         } else {
           $('.group-superior_issn').hide();
