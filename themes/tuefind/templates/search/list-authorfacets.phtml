@@ -18,7 +18,7 @@
             <?php else: ?>
               <a href="<?=$this->authority()->getTitlesByUrlNameOrID($record['relatedAuthorTitle'],$record['relatedAuthorID'])?>"><i class="fa fa-book" aria-hidden="true" title="Show more titles for this author"></i></a>
                 <?php if(!empty($record['relatedAuthorID'])):?>
-                <a href="/Authority/<?=$record['relatedAuthorID']?>"><i class="fa fa-user-circle" aria-hidden="true" title="Show more details for this author"></i></a>
+                <a href="/AuthorityRecord/<?=$record['relatedAuthorID']?>"><i class="fa fa-user-circle" aria-hidden="true" title="Show more details for this author"></i></a>
               <?php endif; ?>
             <?php endif; ?>
           <?php else: ?>

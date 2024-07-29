@@ -19,9 +19,14 @@
   $helpPre = isset($help['pre']) ? $form->getDisplayString($help['pre'], null, $translateParams) : null;
   $helpPost = isset($help['post']) ? $form->getDisplayString($help['post'], null, $translateParams) : null;
 
+  $formInfo = true;
   if($this->formId == "DoD") {
     $helpPre = $this->content()->renderTranslated('feedback/dod');
+    $formInfo = false;
   }
+
+  // TueFind: load a custom PHTML template for this form if it exists
+  print $this->content()->renderTranslated($this->formId, 'feedback');
 
 ?>
 <?php if (!$this->inLightbox): ?><div class="feedback-content"><?php endif; ?>
@@ -35,9 +40,9 @@
   <?= $this->form()->openTag($form); ?>
   <?php if ($helpPre): ?>
   <div class="form-group">
-    <div class="form-info pre">
+    <?php $formInfo ? '<div class="form-info pre">' : '' ?>
       <?=$helpPre?>
-    </div>
+    <?php $formInfo ? '</div>' : '' ?>
   </div>
   <?php endif ?>
 

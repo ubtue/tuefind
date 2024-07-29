@@ -1,1 +1,14 @@
-../../../../ixtheo/templates/RecordDriver/DefaultRecord/data-collectionsHierarchy.phtml
+<ul class="list-unstyled">
+  <?php foreach ($this->data as $hierarchy): ?>
+    <li>
+      <?=$this->icon('tree-context')?>
+      <?php $urlHierarchyLevels = []; ?>
+      <?php foreach ($hierarchy as $i => $hierarchyLevel): ?>
+        <?php $urlHierarchyLevels[] = $hierarchyLevel; ?>
+        <?php if ($i > 0): ?>&gt;<?php endif; ?>
+        <?php $url = $this->url('search-results', [], ['query' => ['filter' => 'collections_hierarchy:"' . count($urlHierarchyLevels) - 1 . '/' . implode('/', $urlHierarchyLevels) . '/"']]); ?>
+        <a href="<?=$this->escapeHtmlAttr($url)?>"><?=$hierarchyLevel?></a>
+      <?php endforeach; ?>
+    </li>
+  <?php endforeach; ?>
+</ul>

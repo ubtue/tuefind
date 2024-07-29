@@ -1,1 +1,11 @@
-../../../../ixtheo/templates/RecordDriver/DefaultRecord/data-reviewed_records.phtml
+<?php foreach ($data as $reviewed): ?>
+  <?php $linked_ppn = $reviewed['id']; ?>
+  <?php $label = $this->escapeHtml($reviewed['title']); ?>
+  <?php if (!empty($reviewed['author'])): $label .= ' (' . $this->escapeHtml($reviewed['author']) . ')'; endif; ?>
+  <?php if ($linked_ppn != ''): ?>
+    <a href="<?=$this->recordLinker()->getUrl($linked_ppn)?>"><?=$label?></a>
+  <?php else: ?>
+    <?=$label?>
+  <?php endif; ?>
+  <br/>
+<?php endforeach; ?>

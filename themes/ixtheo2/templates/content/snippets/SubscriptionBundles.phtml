@@ -1,1 +1,8 @@
-../../../../ixtheo/templates/content/snippets/SubscriptionBundles.phtml
+<div class="panel panel-info">
+  <div class="panel-body">
+    You can also subscribe to alerting bundles<br/>
+    Currently the following are available<br/>
+  </div>
+</div>
+<?php $helper = $this->getHelperPluginManager()->get('IxTheo');?>
+<?php echo $helper->getSubscriptionBundlesTitles();?>
