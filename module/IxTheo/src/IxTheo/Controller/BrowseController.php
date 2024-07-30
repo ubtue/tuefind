@@ -184,10 +184,10 @@ class BrowseController extends \VuFind\Controller\BrowseController
 
         // Put numbers in the front for Era since years are important:
         if ($this->getCurrentAction() === 'IxTheo-Classification') {
-            $chars = 'ABCFHKNRSTVXZ';
+            $chars = 'ABCFHKNRSTVXYZ';
             $callback = $ixtheo_notation_callback;
         } else if ($this->getCurrentAction() === 'RelBib-Classification') {
-            $chars = 'ABHKNTVXZ';
+            $chars = 'ABHKNTVXYZ';
             $callback = $relbib_notation_callback;
         }  else if ($this->getCurrentAction() == 'Era') {
             $chars = '0123456789' . $chars;
