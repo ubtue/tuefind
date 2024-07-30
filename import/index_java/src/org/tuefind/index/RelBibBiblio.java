@@ -14,7 +14,7 @@ public class RelBibBiblio extends IxTheoBiblio {
     protected final static Pattern RELBIB_POSITIVE_MATCH_PATTERN =
         Pattern.compile("^A.*|^B.*|^HD.*|^HH.*|^KB.*|" +
                         "KCA|KCG|KDG|KDH|NBC|NBD|NBE|NBH|NBK|NBQ|NCB|NCC|NCD|NCE|NCF|NCG|NCH|NCJ|" +
-                        "^T.*|^V.*|^X.*|^Z.*|^.*Unassigned.*");
+                        "^T.*|^V.*|^X.*|^Y.*|^Z.*|^.*Unassigned.*");
     final static String TRUE = "true";
     final static String FALSE = "false";
 
