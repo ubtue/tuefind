@@ -20,10 +20,13 @@ import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 
+
+import org.marc4j.marc.ControlField;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Record;
 import org.marc4j.marc.Subfield;
 import org.marc4j.marc.VariableField;
+import org.marc4j.marc.MarcFactory;
 import org.solrmarc.index.SolrIndexer;
 import org.solrmarc.index.SolrIndexerMixin;
 import org.vufind.index.FieldSpecTools;
@@ -345,7 +348,7 @@ public class TueFind extends SolrIndexerMixin {
             throw new IllegalArgumentException("Invalid language shortcut: " + langAbbrev);
         }
 
-        
+
         final String dir = "/usr/local/ub_tools/bsz_daten/";
         final String ext = "txt";
         final String basename = "normdata_translations";
@@ -405,5 +408,66 @@ public class TueFind extends SolrIndexerMixin {
         final Map<String, String> translationMap = getTranslationMap(langAbbrev);
         final String translatedString = translationMap.get(string);
         return (translatedString != null) ? translatedString : string;
+    }
+
+
+    public static List<Record> getLocalDataAsRecords(final Record record) {
+         List<Record> LOKrecords;
+         final List<VariableField> _LOKFields = record.getVariableFields("LOK");
+         LOKrecords = _LOKFields.stream().collect(
+                           LOKRecordCollector::new,
+                           LOKRecordCollector::accumulate,
+                           LOKRecordCollector::combine).getLOKRecords();
+         return LOKrecords;
+    }
+
+    static class LOKRecordCollector {
+       final MarcFactory factory = MarcFactory.newInstance();
+       Record currentRecord = factory.newRecord();
+       private final List<Record> records = new ArrayList<>();
+
+       public void accumulate(VariableField lokField) {
+            final DataField lokDataField = (DataField) lokField;
+            final String lokSubfield0 = lokDataField.getSubfield('0').getData();
+            if (lokSubfield0.startsWith("000")) {
+                records.add(currentRecord);
+                currentRecord = factory.newRecord();
+                currentRecord.setLeader(factory.newLeader(lokSubfield0.substring(5)));
+            } else {
+                if (lokSubfield0.startsWith("00")) {
+                    ControlField controlField = factory.newControlField(lokSubfield0.substring(0,3));
+                    controlField.setData(lokSubfield0.substring(5));
+                    currentRecord.addVariableField(controlField);
+                } else {
+                    DataField dataField = factory.newDataField(lokSubfield0.substring(0,3),
+                                                               lokSubfield0.charAt(3),
+                                                               lokSubfield0.charAt(4));
+                    for (final Subfield subfield: lokDataField.getSubfields()) {
+                        if (subfield.getCode() == '0')
+                            continue;
+                        dataField.addSubfield(subfield);
+                    }
+                    currentRecord.addVariableField(dataField);
+                }
+            }
+        }
+
+
+        public void combine(LOKRecordCollector other) {
+            if (currentRecord.getLeader() != null) {
+                records.add(currentRecord);
+            }
+            records.addAll(other.getLOKRecords());
+        }
+
+
+        public List<Record> getLOKRecords() {
+            if (currentRecord.getLeader() != null)
+                records.add(currentRecord);
+            return records;
+
+        }
+
+
     }
 }
