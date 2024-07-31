@@ -226,6 +226,7 @@ forms:
       - name: print_online
         label: "Handelt es sich um eine Print- oder eine Online-Publikation?"
         type: radio
+        required: true
         options:
           - value: online
             label: "Online"
@@ -235,26 +236,32 @@ forms:
       - name: authors
         label: "Verfasser*innen"
         type: text
+        required: true
 
       - name: publication_year
         label: "Erscheinungsjahr"
         type: text
+        required: true
 
       - name: title
         label: "Titel"
         type: text
+        required: true
 
       - name: subtitle
         label: "Untertitel"
         type: text
+        required: true
 
       - name: language
         label: "Sprache des Beitrags"
         type: language
+        required: true
 
       - name: superior_work_type
         label: "Wo/In welchem übergeordneten Werk ist der Beitrag enthalten?"
         type: radio
+        required: true
         options:
           - value: journal
             label: "In einer Zeitschrift"
@@ -265,6 +272,7 @@ forms:
       - name: superior_title
         label: Titel
         type: text
+        required: true
 
       - name: superior_issn
         label: ISSN
@@ -285,6 +293,7 @@ forms:
       - name: superior_year
         label: Jahr
         type: text
+        required: true
 
       - name: superior_issue
         label: Heft
@@ -297,15 +306,18 @@ forms:
       - name: superior_publishers
         label: Herausgeber*innen
         type: text
+        required: true
 
       - name: superior_pages
         label: Seiten
         type: text
+        required: true
       # END superior_work-specific fields (see JS)
 
       - name: online_exists
         label: "Ist bereits ein Link zu einer Onlineversion des Beitrags verfügbar?"
         type: radio
+        required: true
         options:
           - value: yes
             label: "Ja"
@@ -316,10 +328,12 @@ forms:
       - name: online_url
         label: Link
         type: text
+        required: true
 
       - name: online_license
         label: Verfügbarkeit
         type: radio
+        required: true
         options:
           - value: yes
             label: "Volltext nicht frei verfügbar"
