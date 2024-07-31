@@ -430,13 +430,15 @@ public class TueFind extends SolrIndexerMixin {
             final DataField lokDataField = (DataField) lokField;
             final String lokSubfield0 = lokDataField.getSubfield('0').getData();
             if (lokSubfield0.startsWith("000")) {
-                records.add(currentRecord);
+                if (currentRecord.getControlNumberField() != null)
+                    records.add(currentRecord);
                 currentRecord = factory.newRecord();
                 currentRecord.setLeader(factory.newLeader(lokSubfield0.substring(5)));
             } else {
                 if (lokSubfield0.startsWith("00")) {
-                    ControlField controlField = factory.newControlField(lokSubfield0.substring(0,3));
-                    controlField.setData(lokSubfield0.substring(5));
+                    final String lokTag = lokSubfield0.substring(0,3);
+                    ControlField controlField = factory.newControlField(lokTag);
+                    controlField.setData(lokSubfield0.substring(lokTag.equals("001") ? 4 : 5));
                     currentRecord.addVariableField(controlField);
                 } else {
                     DataField dataField = factory.newDataField(lokSubfield0.substring(0,3),
@@ -454,7 +456,7 @@ public class TueFind extends SolrIndexerMixin {
 
 
         public void combine(LOKRecordCollector other) {
-            if (currentRecord.getLeader() != null) {
+            if (currentRecord.getControlNumberField() != null) {
                 records.add(currentRecord);
             }
             records.addAll(other.getLOKRecords());
@@ -462,12 +464,10 @@ public class TueFind extends SolrIndexerMixin {
 
 
         public List<Record> getLOKRecords() {
-            if (currentRecord.getLeader() != null)
+            if (currentRecord.getControlNumberField() != null)
                 records.add(currentRecord);
             return records;
 
         }
-
-
     }
 }
