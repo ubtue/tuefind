@@ -27,7 +27,7 @@
    *          In addition, we take the full URL of our main domain from the config file
    *          to provide better information for crawlers.
    */
-  $canonicalUrl = $this->tuefind()->getConfig('config')->Site->url . '/' . $this->recordLinker()->getUrl($this->driver, ['excludeSearchId' => true]);
+  $canonicalUrl = $this->tuefind()->getConfig('config')->Site->url . $this->recordLinker()->getUrl($this->driver, ['excludeSearchId' => true]);
   $this->headLink(['rel' => 'canonical', 'href' => $canonicalUrl]);
 
   // Set up breadcrumbs:
