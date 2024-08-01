@@ -30,7 +30,7 @@ var IxTheo = {
 	  var pda_status = json['pda_status'];
 	  $("#pda_place_holder").each(function() {
 	    if ((received_isbn == isbn) && (pda_status == "OFFER_PDA")) {
-	      $(this).replaceWith('<a href="' + pdaSubscribeUrl + '">' + pdaSubscribeText + '</a>');
+	      $(this).replaceWith('<a href="' + pdaSubscribeUrl + '" rel="nofollow">' + pdaSubscribeText + '</a>');
 	    } else
           $("#pda_place_holder").closest("tr").remove();
 	  });
