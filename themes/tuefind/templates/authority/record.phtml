@@ -16,8 +16,10 @@
     /*
      * TueFind: Add canonical URL (for SEO), Backport from 10.0 => 9.1,
      *          see also: https://github.com/vufind-org/vufind/pull/3655/files
+     *          In addition, we take the full URL of our main domain from the config file
+     *          to provide better information for crawlers.
      */
-    $canonicalUrl = $this->recordLinker()->getUrl($this->driver, ['excludeSearchId' => true]);
+    $canonicalUrl = $this->tuefind()->getConfig('config')->Site->url . '/' . $this->recordLinker()->getUrl($this->driver, ['excludeSearchId' => true]);
     $this->headLink(['rel' => 'canonical', 'href' => $canonicalUrl]);
 ?>
 
