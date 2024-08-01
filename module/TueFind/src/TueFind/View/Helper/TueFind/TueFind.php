@@ -95,8 +95,8 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
      *
      * @return \Laminas\Config\Config
      */
-    public function getConfig($id = 'tuefind') {
-        return $this->container->get('VuFind\Config\PluginManager')->get($id);
+    public function getConfig($id = 'tuefind', ?array $options = null) {
+        return $this->container->get('VuFind\Config\PluginManager')->get($id, $options);
     }
 
     /**
