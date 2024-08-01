@@ -19,6 +19,8 @@ Allow: /Record/
 Disallow: /AJAX
 Disallow: /Alphabrowse
 Disallow: /Author
+Disallow: /Authority/RequestAccess
+Disallow: /Authority/Search
 Disallow: /Browse
 Disallow: /Combined
 Disallow: /Feedback
