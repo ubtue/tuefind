@@ -39,7 +39,7 @@ var IxTheo = {
       error: function(xhr, ajaxOptions, thrownError) {
 	$("#pda_place_holder").each(function() {
 	  $(this).replaceWith('Invalid server response!!!!!');
-	})
+	});
       }
     }); // end ajax
   },
@@ -75,7 +75,7 @@ var IxTheo = {
         function(){
             location.reload(true);
         }
-    )
+    );
   }
 
 };
@@ -103,6 +103,6 @@ $(document).ready(function() {
     let ID = $(this).data('id');
     let Source = $(this).data('source');
     IxTheo.DeleteMyresearchSubscription(URL,ID,Source);
-  })
+  });
 
 });

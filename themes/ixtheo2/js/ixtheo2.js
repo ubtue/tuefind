@@ -21,7 +21,7 @@ var IxTheo2 = {
             $('#searchForm_typeCaption').html($(this).html());
             $('#searchForm_type').attr('value', $(this).data('value'));
             return false;
-        })
+        });
     },
 
     IxTheoSimpleGalley: function(setIDs, setClickAttr) {
