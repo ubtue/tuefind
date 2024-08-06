@@ -11,6 +11,7 @@ class SolrMarc extends SolrDefault
     const ISIL_DEFAULT = 'DE-21'; // Universitätsbibliothek der Eberhard Karls Universität
 
     use Feature\MarcAdvancedTrait;
+    use \VuFindResultsGrouping\RecordDriver\SubrecordTrait;
 
     protected $marcReaderClass = \TueFind\Marc\MarcReader::class;
 

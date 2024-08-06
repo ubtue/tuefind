@@ -299,6 +299,102 @@
 
       <?=$this->driver->supportsCoinsOpenUrl()?'<span class="Z3988" title="' . $this->escapeHtmlAttr($this->driver->getCoinsOpenUrl()) . '"></span>':''?>
     </div>
+
+    <!-- BEGIN result-list-grouping-button.phtml -->
+      <?php
+        $hasSubRecords = $this->driver->hasSubRecords();
+        $subRecords = $this->driver->getSubRecords();
+        $subRecordsCount = 0;
+        if ($subRecords) {
+            $subRecordsCount = sizeof($subRecords);
+        }
+        ?>
+        <?php if ($hasSubRecords): ?>
+          <!-- grouping button -->
+          <?php
+            $rand = rand(1, 10000);
+            // beware that pgid and pid must be forwarded to be used in result-list-grouped-subrecords.phtml
+            $this->pgid = $pgid = 'accordion-' . $rand;
+            $this->pid = $pid = 'panel-' . $rand . '-';
+          ?>
+          <div>
+            <a class="btn result-link-label results-group-toggle" data-toggle="collapse" href="#<?=$pgid?>">
+              <i class="result-link-icon fa fa-arrow-down"></i>
+              <?=$this->transEsc('show_grouped_items')?>
+              <span class="badge pull-right"><?=$subRecordsCount?></span>
+            </a>
+          </div>
+          <!-- grouping button - END -->
+        <?php endif; ?>
+      <!-- END result-list-grouping-button.phtml -->
+
+      <!-- BEGIN result-list-grouped-subrecords.phtml -->
+        <?php
+          $hasSubRecords = $this->driver->hasSubRecords();
+          $subRecords = $this->driver->getSubRecords();
+          $subRecordsCount = 0;
+          if ($subRecords) {
+            $subRecordsCount = sizeof($subRecords);
+          }
+        ?>
+
+        <?php if ($hasSubRecords): ?>
+        <!-- Begin subrecords -->
+        <div class="row">
+            <div class="col-xs-11 col-xs-offset-1">
+                <div class="panel-group grouped-items collapse" id="<?=$pgid?>">
+                    <?php foreach ($subRecords as $count => $sub): ?>
+                        <div class="panel panel-default">
+                            <?php
+                            $dates = $sub->getPublicationDates();
+                            $date = array_shift($dates);
+                            $edition = current((array)$sub->getEdition());
+                            $header = [
+                                $this->escapeHtml($sub->tryMethod('getTitle')),
+                            ];
+                            ?>
+                            <div id="<?=$pid . $count?>" class="panel-collapse">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-xs-4 col-sm-2">
+                                            <?php
+                                            $subCoverDetails = $this->record($sub)->getCoverDetails('result-list', 'small', $recordLinker->getUrl($this->driver));
+                                            $subCover = $subCoverDetails['html'];
+
+                                            ?>
+                                            <?=$subCover?>
+
+                                        </div>
+                                        <div class="col-xs-8 col-sm-10">
+                                            <a class="title markjs" href="<?=$recordLinker->getUrl($sub)?>">
+                                                <?=$this->record($sub)->getTitleHtml()?>
+                                            </a>
+                                            <?php if ($titlesection = $sub->getTitleSection()):?>
+                                                / <?= $titlesection ?>
+                                            <?php endif; ?>
+
+                                            <?php if (!empty($edition)): ?>
+                                                <div>
+                                                    <strong><?=$this->transEsc('Edition')?>: </strong>
+                                                    <span property="bookEdition" class="markjs"><?=$this->escapeHtml($edition)?></span>
+                                                </div>
+                                            <?php endif; ?>
+                                            <div class="result-formats">
+                                                <?=$this->record($sub)->getFormatList() ?>
+                                            </div>
+                                        </div> <!-- end of "content" column -->
+                                    </div> <!-- end row -->
+                                </div> <!-- end panel-body -->
+                            </div> <!-- end colllappsible part -->
+                        </div> <!-- end panel -->
+                    <?php endforeach; ?>
+                </div> <!-- end panel group -->
+            </div> <!--end column -->
+        </div><!--end row -->
+        <!-- end subrecords -->
+        <?php endif; ?>
+      <!-- END result-list-grouped-subrecords.phtml -->
+
   </div>
   <?php if ($thumbnail && $thumbnailAlignment == 'right'): ?>
     <?=$thumbnail ?>

@@ -34,7 +34,7 @@ class SolrDefaultBackendFactory extends \TueFind\Search\Factory\SolrDefaultBacke
         return $backend;
     }
 
-    
+
     /**
      * Create the SOLR connector
      * Set the language code
@@ -108,7 +108,7 @@ class SolrDefaultBackendFactory extends \TueFind\Search\Factory\SolrDefaultBacke
         }
         return $connector;
     }
-    
+
     /**
      * Create the query builder.
      *

@@ -19,5 +19,7 @@ class PluginManager extends \VuFind\Search\Params\PluginManager {
         $this->aliases['solrauthorfacets'] = \TueFind\Search\SolrAuthorFacets\Params::class;
         $this->factories[\TueFind\Search\SolrAuthorFacets\Params::class] = \VuFind\Search\Solr\ParamsFactory::class;
         $this->aliases['search3'] = \TueFind\Search\Search3\Params::class;
+        $this->aliases['solr'] = \VuFindResultsGrouping\Search\Solr\Params::class;
+        $this->factories[\VuFindResultsGrouping\Search\Solr\Params::class] = '\VuFindResultsGrouping\Search\Params\Factory::getSolr';
     }
 }
