@@ -8,5 +8,6 @@ class PluginManager extends \TueFind\Search\Params\PluginManager {
         parent::_addAliasesAndFactories();
         $this->aliases['solr'] = \IxTheo\Search\Solr\Params::class;
         $this->aliases['keywordchainsearch'] = \IxTheo\Search\KeywordChainSearch\Params::class;
+        $this->factories[\IxTheo\Search\Solr\Params::class] = '\VuFindResultsGrouping\Search\Params\Factory::getSolr';
     }
 }

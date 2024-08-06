@@ -45,6 +45,7 @@ return [
         'vendor/jquery.keyboard.js',
         'vendor/jquery.dataTable.js',
         'vendor/keyboard-layouts-greywyvern.js',
+        'vendor/resultGrouping.js',
         'virtualkeyboard.js'
     ],
     'icons' => [
