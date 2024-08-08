@@ -28,10 +28,10 @@
           <div class="title-alt">
             <?=$this->escapeHtml($altTitle)?>
           </div>
-        <?php endforeach; ?>  
+        <?php endforeach; ?>
       </div>
       <div>
-          
+
         <?php if($this->driver->isCollection()): ?>
           <?=implode('<br>', array_map([$this, 'escapeHtml'], $this->driver->getSummary())); ?>
         <?php else: ?>
@@ -44,10 +44,10 @@
                 <?=$this->highlight(rtrim($summAuthor, ','))?> <?=$this->tuefind()->formatRoles($summAuthorProperties['role'] ?? [])?>
                 <?php $authorityId = $summAuthorProperties['id'][0] ?? '';?>
                 <?php if ($authorityId && $authorityDriver = $this->authority()->recordExists($authorityId)): ?>
-                  <a href="<?=$this->record($authorityDriver)->getLink('titles-by', $authorityDriver)?>"><i class="fa fa-book" aria-hidden="true" title="<?=$this->transEsc('author_all_titles_tooltip')?>"></i></a>
+                  <a href="<?=$this->record($authorityDriver)->getLink('titles-by', $authorityDriver)?>" rel="nofollow"><i class="fa fa-book" aria-hidden="true" title="<?=$this->transEsc('author_all_titles_tooltip')?>"></i></a>
                   <a href="<?=$this->recordLinker()->getUrl($authorityDriver)?>"><i class="fa fa-user-circle" aria-hidden="true" title="<?=$this->transEsc('author_details_tooltip')?>"></i></a>
                 <?php else: ?>
-                  <a href="<?=$this->record($this->driver)->getLink('author', $this->highlight($summAuthor, null, true, false))?>"><i class="fa fa-book" aria-hidden="true" title="<?=$this->transEsc('author_all_titles_tooltip')?>"></i></a>
+                  <a href="<?=$this->record($this->driver)->getLink('author', $this->highlight($summAuthor, null, true, false))?>" rel="nofollow"><i class="fa fa-book" aria-hidden="true" title="<?=$this->transEsc('author_all_titles_tooltip')?>"></i></a>
                 <?php endif; ?>
               <?php else: ?>
               <?php /* Simple link to title search by author */ ?>

@@ -28,8 +28,8 @@
       <?php $this->slot('footer-left')->start(); ?>
         <p><strong><?=$this->transEsc('footer_header_search_options')?></strong></p>
         <ul>
-          <li><a href="<?=$this->url('search-history')?>"><?=$this->transEsc('Search History')?></a></li>
-          <li><a href="<?=$this->url('search-advanced')?>"><?=$this->transEsc('Advanced Search')?></a></li>
+          <li><a href="<?=$this->url('search-history')?>" rel="nofollow"><?=$this->transEsc('Search History')?></a></li>
+          <li><a href="<?=$this->url('search-advanced')?>" rel="nofollow"><?=$this->transEsc('Advanced Search')?></a></li>
         </ul>
       <?=$this->slot('footer-left')->end(); ?>
     </div>
@@ -37,10 +37,10 @@
       <?php $this->slot('footer-center')->start(); ?>
         <p><strong><?=$this->transEsc('Find More')?></strong></p>
         <ul>
-          <li><a href="<?=$this->url('keywordchainsearch-home')?>"><?=$this->transEsc('Browse Keywordchains')?></a></li>
-          <li><a href="<?=$this->url('browse-home')?>"><?=$this->transEsc('Browse the Catalog')?></a></li>
-          <li><a href="<?=$this->url('alphabrowse-home')?>"><?=$this->transEsc('Browse Alphabetically')?></a></li>
-          <li><a href="<?=$this->url('search-newitem')?>"><?=$this->transEsc('New Items')?></a></li>
+          <li><a href="<?=$this->url('keywordchainsearch-home')?>" rel="nofollow"><?=$this->transEsc('Browse Keywordchains')?></a></li>
+          <li><a href="<?=$this->url('browse-home')?>" rel="nofollow"><?=$this->transEsc('Browse the Catalog')?></a></li>
+          <li><a href="<?=$this->url('alphabrowse-home')?>" rel="nofollow"><?=$this->transEsc('Browse Alphabetically')?></a></li>
+          <li><a href="<?=$this->url('search-newitem')?>" rel="nofollow"><?=$this->transEsc('New Items')?></a></li>
         </ul>
       <?=$this->slot('footer-center')->end(); ?>
     </div>
@@ -48,8 +48,8 @@
       <?php $this->slot('footer-right')->start(); ?>
         <p><strong><?=$this->transEsc('link_text_need_help')?></strong></p>
         <ul>
-          <li><a href="<?=$this->url('help-home')?>?topic=search" data-lightbox class="help-link" title="<?=$this->transEsc('Search Tips')?>"><?=$this->transEsc('Search Tips')?></a></li>
-          <li><a href="/Feedback/Form/AcquisitionRequest"><?=$this->transEsc('Acquisition Request')?></a></li>
+          <li><a href="<?=$this->url('help-home')?>?topic=search" data-lightbox class="help-link" title="<?=$this->transEsc('Search Tips')?>" rel="nofollow"><?=$this->transEsc('Search Tips')?></a></li>
+          <li><a href="/Feedback/Form/AcquisitionRequest" rel="nofollow"><?=$this->transEsc('Acquisition Request')?></a></li>
         </ul>
       <?=$this->slot('footer-right')->end(); ?>
     </div>

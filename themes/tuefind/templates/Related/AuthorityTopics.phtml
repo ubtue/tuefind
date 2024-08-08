@@ -10,7 +10,7 @@
 
     $jsData = '';
     foreach($responseTopicsData as $topic) {
-        $jsData .= '{text: "'.$topic['topicTitle'].'", weight: '.$topic['topicNumber'].', html: {title: "'.$topic['topicTitle'].'", "class": "custom-class"}, link: {href: '. json_encode($topic['topicLink']).', target: "_blank"}},';
+        $jsData .= '{text: "'.$topic['topicTitle'].'", weight: '.$topic['topicNumber'].', html: {title: "'.$topic['topicTitle'].'", "class": "custom-class"}, link: {href: '. json_encode($topic['topicLink']).', target: "_blank", rel: "nofollow"}},';
     }
 
     $ascSortingTopicsData = $responseTopicsData;
@@ -54,7 +54,7 @@ EOD;
           <div class="lightbox-scroll full-facets" style="max-height: 350px;">
             <div class="facet-group" id="facet-list-count">
               <?php foreach($ascSortingTopicsData as $topic): ?>
-              <a href='<?=$topic['topicLink'];?>' class="facet js-facet-item facetAND">
+              <a href='<?=$topic['topicLink'];?>' class="facet js-facet-item facetAND" rel="nofollow">
                 <span class="text">
                   <span class="facet-value"><?php echo $topic['topicTitle'];?></span>
                 </span>
@@ -68,7 +68,7 @@ EOD;
           <div class="lightbox-scroll full-facets" style="max-height: 350px;">
             <div class="facet-group" id="facet-list-count">
               <?php foreach($countSortingTopicsData as $topic): ?>
-              <a href='<?=$topic['topicLink'];?>' class="facet js-facet-item facetAND">
+              <a href='<?=$topic['topicLink'];?>' class="facet js-facet-item facetAND" rel="nofollow">
                 <span class="text">
                   <span class="facet-value"><?php echo $topic['topicTitle'];?></span>
                 </span>
