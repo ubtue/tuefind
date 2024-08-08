@@ -8,6 +8,6 @@
     <?php endforeach; ?>
   </ul>
   <p>
-    <a href="<?=$this->record($this->driver)->getLink('titles-by', $this->driver)?>"><?=$this->transEsc('see all')?> (<?=$response->getTotal()?>)</a>
+    <a href="<?=$this->record($this->driver)->getLink('titles-by', $this->driver)?>" rel="nofollow"><?=$this->transEsc('see all')?> (<?=$response->getTotal()?>)</a>
   </p>
 <?php endif; ?>
