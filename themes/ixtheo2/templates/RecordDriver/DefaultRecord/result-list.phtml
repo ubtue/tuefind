@@ -275,16 +275,16 @@
           </div>
           <div class="ix-result-list-actions">
             <?php /* Add to favorites */ ?>
-            <a href="<?=$this->recordLinker()->getActionUrl($this->driver, 'Save')?>" class="save-record modal-link" id="<?=$this->driver->getUniqueId() ?>" title="<?=$this->transEsc('Add to favorites')?>">
+            <a href="<?=$this->recordLinker()->getActionUrl($this->driver, 'Save')?>" class="save-record modal-link" id="<?=$this->driver->getUniqueId() ?>" title="<?=$this->transEsc('Add to favorites')?>" rel="nofollow">
               <i class="fa fa-fw fa-star"></i>
             </a><br/>
             <?php if ($this->accountCapabilities()->getSubscriptionSetting() === 'enabled'): ?>
               <?php if ($this->IxTheo()->isRecordSubscribed($this->driver) || $this->IxTheo()->isRecordSubscribedViaBundle($this->driver)): ?>
-                <a class="subscribe-record save-record modal-link" data-lightbox id="<?=$this->driver->getUniqueId() ?>" href="<?=$this->recordLinker()->getActionUrl($this->driver, 'Subscribe')?>" rel="nofollow" title="<?=$this->transEsc('Unsubscribe')?>">
+                <a class="subscribe-record save-record modal-link" data-lightbox id="<?=$this->driver->getUniqueId() ?>" href="<?=$this->recordLinker()->getActionUrl($this->driver, 'Subscribe')?>" rel="nofollow" title="<?=$this->transEsc('Unsubscribe')?>" rel="nofollow">
                   <i class="result-link-icon fa fa-fw fa-bell-slash"></i>
                 </a>
               <?php elseif ($this->driver->tryMethod('isSubscribable')): ?>
-                <a class="subscribe-record save-record modal-link" data-lightbox id="<?=$this->driver->getUniqueId() ?>" href="<?=$this->recordLinker()->getActionUrl($this->driver, 'Subscribe')?>" rel="nofollow" title="<?=$this->transEsc('Subscribe')?>">
+                <a class="subscribe-record save-record modal-link" data-lightbox id="<?=$this->driver->getUniqueId() ?>" href="<?=$this->recordLinker()->getActionUrl($this->driver, 'Subscribe')?>" rel="nofollow" title="<?=$this->transEsc('Subscribe')?>" rel="nofollow">
                   <i class="result-link-icon fa fa-fw fa-bell"></i>
                 </a>
               <?php endif; ?>
