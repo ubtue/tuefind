@@ -238,7 +238,7 @@
         <?php if ($this->permission()->allowDisplay('feature.Favorites')): ?>
           <?php /* Add to favorites */ ?>
           <div class="tf-result-link-block">
-            <a href="<?=$this->recordLinker()->getActionUrl($this->driver, 'Save')?>" data-lightbox class="save-record result-link icon-link" data-id="<?=$this->escapeHtmlAttr($this->driver->getUniqueId()) ?>">
+            <a href="<?=$this->recordLinker()->getActionUrl($this->driver, 'Save')?>" data-lightbox class="save-record result-link icon-link" data-id="<?=$this->escapeHtmlAttr($this->driver->getUniqueId()) ?>" rel="nofollow">
               <?=$this->icon('user-favorites', 'icon-link__icon') ?>
               <span class="result-link-label icon-link__label"><?=$this->transEsc('Add to favorites')?></span>
             </a>
