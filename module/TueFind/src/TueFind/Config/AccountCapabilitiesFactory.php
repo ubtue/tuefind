@@ -14,7 +14,10 @@ class AccountCapabilitiesFactory extends \VuFind\Config\AccountCapabilitiesFacto
         }
         return new $requestedName(
             $container->get(\VuFind\Config\PluginManager::class)->get('config'),
-            $container->get(\VuFind\Auth\Manager::class),
+            // $container->get(\VuFind\Auth\Manager::class)->getUserObject(),
+            function () use ($container) {
+                return $container->get(\VuFind\Auth\Manager::class);
+            },
             $container->get(\VuFind\Config\PluginManager::class)->get('tuefind')
         );
     }
