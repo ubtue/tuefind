@@ -3,6 +3,7 @@
 namespace TueFindSearch\Backend\Solr;
 
 use VuFindSearch\Query\AbstractQuery;
+use VuFindSearch\ParamBag;
 
 class QueryBuilder extends \VuFindSearch\Backend\Solr\QueryBuilder {
 
@@ -155,9 +156,9 @@ class QueryBuilder extends \VuFindSearch\Backend\Solr\QueryBuilder {
          return $query_string;
     }
 
-    public function build(AbstractQuery $query)
+    public function build(AbstractQuery $query, ?ParamBag $params = null)
     {
-        $params = parent::build($query);
+        $params = parent::build($query, $params);
         if ($this->includeFulltextSnippets) {
             if (!empty($this->selectedFulltextTypes)) {
                 $query_terms = !empty($query->getString()) ? $query->getString() :  '[* TO *]';
