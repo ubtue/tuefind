@@ -43,7 +43,7 @@ public class KrimDokBiblio extends TueFindBiblio {
     }
 
     public boolean HasFormalKeywordSelector(final Record record, String selector) {
-        for (final String tag : new String[] { "655", "689", "650" } ) {
+        for (final String tag : new String[] { "655", "689" } ) {
             for (final VariableField variableField : record.getVariableFields(tag)) {
                  DataField _dataField = (DataField) variableField;
                  final Subfield _subfieldA = _dataField.getSubfield('a');
