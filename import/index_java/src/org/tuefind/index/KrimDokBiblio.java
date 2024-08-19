@@ -43,7 +43,7 @@ public class KrimDokBiblio extends TueFindBiblio {
     }
 
     public boolean HasFormalKeywordSelector(final Record record, String selector) {
-        for (final String tag : new String[] { "655", "689" } ) {
+        for (final String tag : new String[] { "655", "689", "650" } ) {
             for (final VariableField variableField : record.getVariableFields(tag)) {
                  DataField _dataField = (DataField) variableField;
                  final Subfield _subfieldA = _dataField.getSubfield('a');
@@ -57,11 +57,11 @@ public class KrimDokBiblio extends TueFindBiblio {
     public Collection<String> getKrimSpecialCollection(final Record record) {
         Collection<String> results = new ArrayList<String>();
         if (HasLocalSelector(record, "kreb"))
-            results.add("0/Albert Krebs Bibliothek");
+            results.add("0/Albert Krebs Bibliothek/");
         if (HasFormalKeywordSelector(record, "Statistik"))
-            results.add("0/Statistiken");
+            results.add("0/Statistiken/");
         if (HasFormalKeywordSelector(record, "Forschungsdaten"))
-            results.add("0/Forschungsdaten");
+            results.add("0/Forschungsdaten/");
         return results;
     }
 }
