@@ -22,8 +22,8 @@
     <div id="history" class="collapse tf-panel-collapse-body">
         <p>Desde 1969, en la Universidad de Tubinga se adquiere y recopila de forma intensiva literatura criminológica especial en el marco de una cooperación entre el Instituto de Criminología y la Biblioteca Universitaria de Tubinga, con el apoyo financiero de la Sociedad Alemana de Investigación (DFG).
             Este fondo especial, inicialmente creado como una "colección centrada en la criminología", pasó a formar parte del programa de financiación suprarregional de áreas de colección especiales de la DFG de 2011 a 2013, tras una evaluación de dicha Sociedad, y continuó como "área de colección especial de criminología" (SSG).
-            Desde 2014, la adquisición de literatura especializada (tras una reestructuración general del 
-            <a target="_blank" href="https://www.dfg.de/foerderung/programme/infrastruktur/lis/lis_foerderangebote/fachinfodienste_wissenschaft/index.html">programa de la DFG</a>  
+            Desde 2014, la adquisición de literatura especializada (tras una reestructuración general del
+            <a target="_blank" href="https://www.dfg.de/foerderung/programme/infrastruktur/lis/lis_foerderangebote/fachinfodienste_wissenschaft/index.html">programa de la DFG</a>
             orientada hacia la provisión suprarregional de literatura e información en las disciplinas científicas) se financia en el marco del "Servicio de Información Especializada sobre Criminología» (FID de Criminología).
         </p>
     </div>
@@ -57,7 +57,7 @@
             Además de la continua ampliación de los fondos bibliográficos de Tubinga y la indización de contribuciones individuales de una selección de revistas especializadas, series de publicaciones y obras colectivas para enriquecer el KrimDok, en el primer periodo de financiación del FID se llevaron a cabo principalmente proyectos técnicos como base para otros módulos de proyectos. Por ejemplo, la base de datos del KrimDok se migró del sistema Allegro al sistema VuFind y ahora ofrece opciones de búsqueda facetada. Además, se creó el entorno para el repositorio y para DigiKrimDok, que se llenó con los primeros documentos. Al poner a disposición los textos completos, se hizo hincapié en la digitalización de la literatura que ha pasado a ser de dominio público o para la que se han obtenido los correspondientes derechos de publicación secundaria.
         </p>
         <p>
-        En cuanto a la ampliación del contenido del KrimDok de un registro de existencias a una base de datos 
+        En cuanto a la ampliación del contenido del KrimDok de un registro de existencias a una base de datos
         bibliográfica, se buscó la <a href="<?=$this->url('content-page', ['page' => 'partners'])?>">cooperación</a> con otras instituciones. A través del coloquio que tuvo lugar en Tubinga en marzo de 2015 con una treintena de representantes de diversas instituciones, se sentaron las bases para una interconexión más estrecha de las instituciones de información de relevancia criminológica y el establecimiento de (posibles) relaciones de cooperación con el FID.
         </p>
     </div>
@@ -71,21 +71,21 @@
     </a>
     <div id="2017-2019" class="collapse tf-panel-collapse-body">
         <p>
-            Durante este periodo de financiación, se sigue adquiriendo, indexando y referenciando bibliografía especializada específica. 
-            La base de datos también se complementará mediante la <a href="<?=$this->url('content-page', ['page' => 'partners'])?>">cooperación</a> con otras instituciones pertinentes y 
-            las referencias que de ella surjan. Este enfoque se irá ampliando sucesivamente. El objetivo es proporcionar 
-            la documentación más amplia posible de la literatura criminológica, principalmente en alemán, pero también 
-            en lenguas extranjeras. Se presta especial atención al acceso a textos completos electrónicos, por ejemplo, 
-            poniendo a disposición más documentos a través del repositorio, incluyendo libros electrónicos relevantes o la 
+            Durante este periodo de financiación, se sigue adquiriendo, indexando y referenciando bibliografía especializada específica.
+            La base de datos también se complementará mediante la <a href="<?=$this->url('content-page', ['page' => 'partners'])?>">cooperación</a> con otras instituciones pertinentes y
+            las referencias que de ella surjan. Este enfoque se irá ampliando sucesivamente. El objetivo es proporcionar
+            la documentación más amplia posible de la literatura criminológica, principalmente en alemán, pero también
+            en lenguas extranjeras. Se presta especial atención al acceso a textos completos electrónicos, por ejemplo,
+            poniendo a disposición más documentos a través del repositorio, incluyendo libros electrónicos relevantes o la
             lista de <a href="<?=$this->url('content-page', ['page' => 'journals'])?>">revistas de acceso abierto</a> interesantes para la criminología.
         </p>
         <p>
-            Además, se sigue desarrollando la base de datos <a href="<?=$this->url('content-page', ['page' => 'krimdok'])?>">KrimDok</a> desde el punto de vista técnico en lo que respecta a la 
-            indexación de texto completo y la ampliación de la clasificación facetada, entre otras cosas. La anterior página de 
-            inicio de KrimDok se está rediseñando como plataforma de información central sobre el departamento y 
-            el FID. Así se podrá, por ejemplo, anunciar las novedades de las distintas instituciones 
-            (como anuncios de conferencias y reuniones, ofertas de empleo, etc.) en la página del portal KrimDok 
-            bajo la sección <a href="<?=$this->url('content-page', ['page' => 'news'])?>">Noticias y fechas importantes</a>. Le invitamos a que nos envíe 
+            Además, se sigue desarrollando la base de datos <a href="<?=$this->url('content-page', ['page' => 'krimdok'])?>">KrimDok</a> desde el punto de vista técnico en lo que respecta a la
+            indexación de texto completo y la ampliación de la clasificación facetada, entre otras cosas. La anterior página de
+            inicio de KrimDok se está rediseñando como plataforma de información central sobre el departamento y
+            el FID. Así se podrá, por ejemplo, anunciar las novedades de las distintas instituciones
+            (como anuncios de conferencias y reuniones, ofertas de empleo, etc.) en la página del portal KrimDok
+            bajo la sección <a href="<?=$this->url('content-page', ['page' => 'news'])?>">Noticias y fechas importantes</a>. Le invitamos a que nos envíe
             sus sugerencias para esta sección a: <a href="mailto:fidkrim@ifk.uni-tuebingen.de">fidkrim@ifk.uni-tuebingen.de</a>.
         </p>
     </div>
@@ -165,9 +165,13 @@
             </ul>
         </p>
     </div>
-    <script>
+    <?php
+        $script = <<<JS
         // auto-expand if anchor is given, e.g. if linked from footer
-        if (window.location.href.includes("#contact"))
+        if (window.location.href.includes("#contact")) {
             $('#contact_toggle').click();
-    </script>
+        }
+        JS;
+    ?>
+    <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $script, 'SET')?>
 </div>
