@@ -166,10 +166,14 @@
             </ul>
         <p></p>
     </div>
-    <script type="text/javascript">
+
+    <?php
+        $script = <<<JS
         // auto-expand if anchor is given, e.g. if linked from footer
         if (window.location.href.includes("#contact")) {
             $('#contact_toggle').click();
         }
-    </script>
+        JS;
+    ?>
+    <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $script, 'SET')?>
 </div>
