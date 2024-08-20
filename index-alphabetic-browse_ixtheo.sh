@@ -23,6 +23,12 @@ function ShutdownRamdisk() {
 }
 
 
+mkdir -p ${TMP_RAMDISK_DIR}
+if ! mountpoint --quiet ${TMP_RAMDISK_DIR}; then
+   ${mount_command} -t tmpfs -o size=10G tmpfs ${TMP_RAMDISK_DIR}
+fi
+
+
 #####################################################
 # Build java command
 #####################################################
@@ -33,24 +39,44 @@ else
   JAVA="java"
 fi
 
+
+##################################################
+# Set VUFIND_HOME
+##################################################
 if [ -z "$VUFIND_HOME" ]
 then
-  VUFIND_HOME=`dirname $0`
+  # set VUFIND_HOME to the absolute path of the directory containing this script
+  # https://stackoverflow.com/questions/4774054/reliable-way-for-a-bash-script-to-get-the-full-path-to-itself
+  VUFIND_HOME="$(cd "$(dirname "$0")" && pwd -P)"
+  if [ -z "$VUFIND_HOME" ]
+  then
+    exit 1
+  fi
 fi
+
 
 if [ -z "$SOLR_HOME" ]
 then
   SOLR_HOME="$VUFIND_HOME/solr/vufind"
 fi
 
-cd "`dirname $0`/import"
-CLASSPATH="browse-indexing.jar:${VUFIND_HOME}/import/lib/*:${SOLR_HOME}/jars/*:${SOLR_HOME}/../vendor/modules/analysis-extras/lib/*:${SOLR_HOME}/../vendor/server/solr-webapp/webapp/WEB-INF/lib/*"
-
-
-mkdir -p ${TMP_RAMDISK_DIR}
-if ! mountpoint --quiet ${TMP_RAMDISK_DIR}; then
-   ${mount_command} -t tmpfs -o size=10G tmpfs ${TMP_RAMDISK_DIR}
+# This can point to an external Solr in e.g. a Docker container
+if [ -z "$SOLR_JAR_PATH" ]
+then
+  SOLR_JAR_PATH="${SOLR_HOME}/../vendor"
 fi
+
+set -e
+set -x
+
+cd "`dirname $0`/import"
+SOLRMARC_CLASSPATH=$(echo solrmarc_core*.jar)
+if [[ `wc -w <<<"$SOLRMARC_CLASSPATH"` -gt 1 ]]
+then
+  echo "Error: more than one solrmarc_core*.jar in import/; exiting."
+  exit 1
+fi
+CLASSPATH="browse-indexing.jar:${SOLRMARC_CLASSPATH}:${VUFIND_HOME}/import/lib/*:${SOLR_HOME}/jars/*:${SOLR_JAR_PATH}/modules/analysis-extras/lib/*:${SOLR_JAR_PATH}/server/solr-webapp/webapp/WEB-INF/lib/*"
 
 # make index work with replicated index
 # current index is stored in the last line of index.properties
@@ -91,10 +117,17 @@ function build_browse
 
     [[ ! -z $filter ]] && browse_unique=${TMP_RAMDISK_DIR}/${browse}-${filter} || browse_unique=${TMP_RAMDISK_DIR}/${browse}
 
+    # Get the browse headings from Solr
     if [ "$skip_authority" = "1" ]; then
-        $JAVA ${extra_jvm_opts} -Dfile.encoding="UTF-8" -Dfield.preferred=heading -Dfield.insteadof=use_for -cp $CLASSPATH PrintBrowseHeadings "$bib_index" "$field" "" "${browse_unique}.tmp" "$filter"
+        if ! output=$($JAVA ${extra_jvm_opts} -Dfile.encoding="UTF-8" -Dfield.preferred=heading -Dfield.insteadof=use_for -cp $CLASSPATH org.vufind.solr.indexing.PrintBrowseHeadings "$bib_index" "$field" "" "${browse_unique}.tmp" "$filter" 2>&1); then
+            echo "ERROR: Failed to create browse headings for ${browse}. ${output}."
+            exit 1
+        fi
     else
-        $JAVA ${extra_jvm_opts} -Dfile.encoding="UTF-8" -Dfield.preferred=heading -Dfield.insteadof=use_for -cp $CLASSPATH PrintBrowseHeadings "$bib_index" "$field" "$auth_index" "${browse_unique}.tmp" "$filter"
+        if ! output=$($JAVA ${extra_jvm_opts} -Dfile.encoding="UTF-8" -Dfield.preferred=heading -Dfield.insteadof=use_for -cp $CLASSPATH org.vufind.solr.indexing.PrintBrowseHeadings "$bib_index" "$field" "$auth_index" "${browse_unique}.tmp" "$filter" 2>&1); then
+            echo "ERROR: Failed to create browse headings for ${browse}. ${output}."
+            exit 1
+        fi
     fi
 
     if [[ ! -z $filter ]]; then
@@ -105,12 +138,40 @@ function build_browse
         out_dir="$index_dir"
     fi
 
-    sort -T ${TMP_RAMDISK_DIR} -u -t$'\1' -k1 "${browse_unique}.tmp" -o "${browse_unique}_sorted.tmp"
-    $JAVA -Dfile.encoding="UTF-8" -cp $CLASSPATH CreateBrowseSQLite "${browse_unique}_sorted.tmp" "${browse_unique}_browse.db"
+    # Sort the browse headings
+    if ! output=$(sort -T ${TMP_RAMDISK_DIR} -u -t$'\1' -k1 "${browse_unique}.tmp" -o "${browse_unique}_sorted.tmp" 2>&1); then
+        echo "ERROR: Failed to sort ${browse}. ${output}."
+        exit 1
+    fi
 
+    # Build the SQLite database
+    if ! output=$($JAVA -Dfile.encoding="UTF-8" -cp $CLASSPATH org.vufind.solr.indexing.CreateBrowseSQLite "${browse_unique}_sorted.tmp" "${browse_unique}_browse.db" 2>&1); then
+        echo "ERROR: Failed to build the SQLite database for ${browse}. ${output}."
+        exit 1
+    fi
 
-    mv "${browse_unique}_browse.db" "$out_dir/${browse}_browse.db-updated"
-    touch "$out_dir/${browse}_browse.db-ready"
+    # Clear up temp files
+    if ! output=$(rm -f *.tmp 2>&1); then
+        echo "ERROR: Failed to clear out temp files for ${browse}. ${output}."
+        exit 1
+    fi
+
+    # Move the new database to the index directory
+    if ! output=$(mv "${browse_unique}_browse.db" "$out_dir/${browse}_browse.db-updated" 2>&1); then
+        echo "ERROR: Failed to move ${browse}_browse.db database to ${out_dir}/${browse}_browse.db-updated. ${output}."
+        exit 1
+    fi
+
+    # Indicate that the new database is ready for use
+    if ! output=$(touch "$out_dir/${browse}_browse.db-ready" 2>&1); then
+        echo "ERROR: Failed to mark the new ${browse} database as ready for use. ${error}."
+        exit 1
+    fi
+
+    # tuefind specific:
+    # set user of out file to solr, so if script is accidentally executed as root
+    # the output files will be owned by solr user.
+    # (else solr service can't import it)
     chown -R solr:solr "$out_dir"
 }
 
