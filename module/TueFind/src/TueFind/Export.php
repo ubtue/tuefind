@@ -2,7 +2,7 @@
 
 // Custom logic for handling export output as parameter to external link
 
-namespace IxTheo;
+namespace TueFind;
 
 class Export extends \VuFind\Export
 {
