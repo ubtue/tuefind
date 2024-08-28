@@ -12,6 +12,7 @@ AllFields:
 MainHeading:
   DismaxFields:
     - heading_search^500
+  FilterQuery: "title_count_ixtheo: [1 TO *]"
 
 MainHeadingPerson:
   DismaxFields:
