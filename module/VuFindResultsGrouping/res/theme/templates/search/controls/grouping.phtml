@@ -1,0 +1,16 @@
+<?php use VuFind\Search\Solr\Results;
+
+if ($this->results instanceof Results): ?>
+    <form class="form-inline search-grouping" action="<?= $this->currentPath() ?>"
+          method="POST" id="grouping">
+        <div class="form-group">
+            <label for="grouping-checkbox"><?= $this->transEsc('group hits') ?></label>
+            <input type="checkbox" name="grouping-enabled" value=""
+                   id="grouping-checkbox"
+                   <?php if ($this->grouping): ?>checked<?php endif; ?>/>
+        </div>
+        <noscript>
+            <p>Please enable JavaScript</p>
+        </noscript>
+    </form>
+<?php endif; ?>
