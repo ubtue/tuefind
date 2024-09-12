@@ -50,7 +50,7 @@
 
                             <!-- ixtheo2 search button box -->
                             <!-- FAQ -->
-
+                            <?php /*
                             <li class="language dropdown">
                                 <a class="nav-link" href="/Search/Advanced"><i class='fa fa-search-plus'></i> Search <span class="caret"></span></a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -63,7 +63,7 @@
                                   <li><a class="dropdown-item" href="https://churchlaw.ixtheo.de/"><?=$this->transEsc('Kirchenrecht')?></a></li>
                                 </ul>
                             </li>
-
+                            */ ?>
 
                             <!-- ixtheo2 login button box -->
                             <?=$this->render('header/login');?>
@@ -150,7 +150,7 @@ if(isset($this->layout()->headerImage)) {
     </div><!-- .cover-header-inner -->
   </div><!-- .cover-header-inner-wrapper -->
 </div>
-
+<span class="ix-copyright">© <span class="ix-copyright-name">Marco Varenkamp</span></span>
 <!-- Breadcrumbs -->
 <?php if(!empty($this->layout()->breadcrumbs)): ?>
   <div class="container breadcrumb-wrapper hidden-print <?=$advancedSearch;?>">
@@ -176,3 +176,27 @@ if(isset($this->layout()->headerImage)) {
 
 <!-- IxTheo2: Display searchbox as separate section -->
 <?=$this->layout()->searchbox ?>
+
+<style>
+  .ix-copyright {
+    float: right;
+    margin-top: -25px;
+    margin-right: 10px;
+    color: #fff;
+    cursor: pointer;
+  }
+  .ix-copyright-name {
+    display: none;
+  }
+</style>
+
+<?php
+$jsSnippet = <<< 'EOD'
+$(document).ready(function(){
+  $('.ix-copyright').click(function(){
+    $(this).find('.ix-copyright-name').toggle();
+    //alert('ok');
+  })
+});
+EOD;?>
+<?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $jsSnippet, 'SET')?>
