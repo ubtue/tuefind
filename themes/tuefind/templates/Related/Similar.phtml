@@ -37,7 +37,7 @@ EOD;
             $attrs['title'] = $format;
           }
         ?>
-        <a class="related__title" href="<?=$this->escapeHtmlAttr($this->recordLinker()->getUrl($data))?>">
+        <a class="related__title" href="<?=$this->escapeHtmlAttr($this->recordLinker()->getUrl($data))?>" rel="nofollow">
           <?=$this->icon('format-' . $icon, $attrs) ?>
           <?=$this->escapeHtml($data->getTitle())?>
         </a>
