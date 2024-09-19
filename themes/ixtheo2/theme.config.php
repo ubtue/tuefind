@@ -2,15 +2,16 @@
 return [
     'extends' => 'tuefind2',
     'favicon' => 'ixtheo-favicon.ico',
+    // Note: leaflet is included in original bootstrap3+bootstrap5 themes, but inactive there
     'css' => [
-        'vendor/cw/leaflet.css',
         'vendor/cw/swiper.css',
+        'vendor/leaflet/leaflet.css',
     ],
     'js' => [
         'ixtheo.js',
         'ixtheo2.js',
-        'vendor/cw/leaflet.js',
         'vendor/cw/swiper.js',
+        'vendor/leaflet/leaflet.js',
     ],
     'helpers' => [
         'factories' => [

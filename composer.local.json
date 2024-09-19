@@ -1,6 +1,5 @@
 {
     "require": {
-        "drmonty/leaflet": "^1.6.0",
         "elasticsearch/elasticsearch": "8.14.0",
         "symfony/intl": "^5.4"
     }
