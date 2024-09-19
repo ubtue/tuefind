@@ -1,5 +1,5 @@
-<?=$this->headScript()->appendFile("vendor/openstreetmap/openstreetmap.js");?>
-<?=$this->headLink()->appendStylesheet('vendor/openstreetmap/openstreetmap.css');?>
+<?=$this->headScript()->appendFile("vendor/leaflet/leaflet.min.js");?>
+<?=$this->headLink()->appendStylesheet('vendor/leaflet/leaflet.css');?>
 <div id="osm-map"></div>
 
 <section class="cw-p-2">
@@ -309,15 +309,15 @@
                 10719 Berlin</p></font></div>',
                 'name' => 'Fachinformationsverbund Internationale Beziehungen und Länderkunde (IREON)'
             ]
-           
+
         ];
         $partners = json_encode($partners);
     ?>
 
 <?php $jsSnippet = <<<EOD
 $(function () {
-    
-    
+
+
     let partnersArray = {$partners};
 
     // Initial drawing of the map
@@ -328,7 +328,7 @@ $(function () {
             L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
         }).addTo(cmap);
-        
+
         let markers = {
             'default': "{$this->imageLink('ol/marker.svg')}",
             'comm': "{$this->imageLink('ol/marker.svg')}",
@@ -345,18 +345,18 @@ $(function () {
                     iconSize:[20,32.5],
                 }
                 let myIcon = L.icon(customIcon);
-            
+
                 let iconOptions = {
                     title: oneParter.name,
                     draggable:false,
                     icon:myIcon
                 }
-                
+
                 let marker = new L.Marker([oneParter.lat, oneParter.lon] , iconOptions);
                 marker.addTo(cmap);
                 marker.bindPopup(oneParter.popup).openPopup();
             }
-            
+
         });
 
         // Target's GPS coordinates.
@@ -372,7 +372,7 @@ $(function () {
             $(this).removeClass( "btn-primary" );
         })
         $(this).find('button').addClass("btn-primary");
-        $(this).find('button').blur(); 
+        $(this).find('button').blur();
 
         cmap.remove();
         let lightGroup = $(this).data('group');
@@ -409,7 +409,7 @@ EOD;
                     <li>Globethics</li>
                     <li>International Academy of Practical Theology (IAPT)</li>
                     <li>RESILIENCE (Religious Studies Infrastructure: Tools, Innovation, Experts, Connections and Centres in Europe)</li>
-                </ul>    
+                </ul>
                 <p>IxTheo ist offen für neue Kooperationen und Partnerschaften innerhalb der theologischen Community. Wenn Sie Interesse an einer Zusammenarbeit haben, wenden Sie sich gerne an <a href="mailto:ixtheo@ub.uni-tuebingen.de">ixtheo@ub.uni-tuebingen.de</a> </p>
 
                 <p><em>Bibliothekarische Verbände</em></p>
@@ -420,7 +420,7 @@ EOD;
                     <li>BETH (Bibliothèques Européennes de Théologie)</li>
                     <li>VkwB (Verband kirchlich-wissenschaftlicher Bibliotheken)</li>
                 </ul>
-                
+
                 <p>IxTheo ist offen für neue Kooperationen und Partnerschaften mit bibliothekarischen Verbänden und Zusammenschlüssen. Wenn Sie Interesse an einer Zusammenarbeit haben, wenden Sie sich gerne an <a href="mailto:ixtheo@ub.uni-tuebingen.de">ixtheo@ub.uni-tuebingen.de</a> </p>
 
                 <p><em>Fachreferent*innen und theologische Bibliothekar*innen</em></p>
@@ -445,9 +445,9 @@ EOD;
                             <li>Institut für Kanonisches Recht der Universität Münster</li>
                             <li>Bischöfliches Generalvikariat Osnabrück</li>
                             <li>Abteilung für Kirchenrecht an der Katholisch-Theologischen Fakultät der Universität Tübingen</li>
-                        </ul> 
+                        </ul>
                     <li>KALDI (Innsbruck)</li>
-                </ul>    
+                </ul>
 
                 <p>IxTheo ist offen für neue Kooperationen mit bereits bestehenden Bibliographien. Wenn Sie Interesse an einer Zusammenarbeit haben, wenden Sie sich gerne an <a href="mailto:ixtheo@ub.uni-tuebingen.de">ixtheo@ub.uni-tuebingen.de</a> </p>
 
@@ -468,8 +468,8 @@ EOD;
                     <li>Princeton Theological Seminary</li>
                     <li>Reformationsgeschichtliche Forschungsbibliothek Wittenberg</li>
                     <li>Zentrum für Augustinus-Forschung (ZAF), Würzburg</li>
-                </ul>    
-               
+                </ul>
+
                 <p>IxTheo ist offen für Kooperationen und Partnerschaften mit weiteren Bibliotheken. Wenn Sie Interesse an einer Zusammenarbeit haben, wenden Sie sich gerne an <a href="mailto:ixtheo@ub.uni-tuebingen.de">ixtheo@ub.uni-tuebingen.de</a> </p>
 
                 <p><em>Fachinformationsdienste (FID)</em></p>
@@ -485,7 +485,7 @@ EOD;
                     <li><a target="_blank" href="https://ub.uni-koeln.de/forschen-publizieren/projekte/fachinformationsdienst-philosophie">FID Philosophie</a> <a target="_blank" href="https://philportal.de/">(philportal)</a></li>
                     <li><a target="_blank" href="https://uni-tuebingen.de/einrichtungen/universitaetsbibliothek/ueber-uns/bibliotheksbestand/fachinformationsdienste/religionswissenschaft/">FID Religionswissenschaft</a> <a target="_blank" href="https://relbib.de/">(RelBib)</a></li>
                     <li><a target="_blank" href="https://fiviblk.de/">Fachinformationsverbund Internationale Beziehungen und Länderkunde</a> <a target="_blank" href="https://ireon-portal.de/">(IREON)</a></li>
-                </ul>    
+                </ul>
 
                 <p>IxTheo ist offen für Kooperationen und Partnerschaften mit weiteren Fachinformationsdiensten. Wenn Sie Interesse an einer Zusammenarbeit haben, wenden Sie sich gerne an <a href="mailto:ixtheo@ub.uni-tuebingen.de">ixtheo@ub.uni-tuebingen.de</a> </p>
 
@@ -507,7 +507,7 @@ EOD;
                     <li>Pustet</li>
                     <li>Taylor & Francis</li>
                     <li>Vandenhoeck & Ruprecht</li>
-                </ul>    
+                </ul>
                 <p>IxTheo ist offen für Kooperationen und Partnerschaften mit weiteren Verlagen. Wenn Sie Interesse an einer Zusammenarbeit haben, wenden Sie sich gerne an <a href="mailto:ixtheo@ub.uni-tuebingen.de">ixtheo@ub.uni-tuebingen.de</a></p>
             </div>
     </div>
