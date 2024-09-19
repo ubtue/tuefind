@@ -36,7 +36,7 @@
 ?>
 <?php if (!$this->facet['isApplied'] && null !== $this->facet['count']): ?>
     <span class="badge">
-      <?php $isAtLeastOneFilterActive = count($this->results->getParams()->getFilterSettings()) > 0; ?>
+      <?php $isAtLeastOneFilterActive = isset($this->results) && count($this->results->getParams()->getFilterSettings()) > 0; ?>
       <?php $currentCount = ($this->tuefind()->isUnassigned($this->facet['displayText'])
                             && !($this->facet['operator'] == 'OR' && $isAtLeastOneFilterActive))
                             ? $this->tuefind()->getLocalizedOverallPercentage($this, $this->facet['count'], $this->results) . ' %'
