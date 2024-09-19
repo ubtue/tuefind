@@ -52,7 +52,7 @@ class FulltextSnippetProxyController extends \VuFind\Controller\AbstractBase imp
     const DOTS = '...';
 
 
-    public function __construct(\Elastic\Elasticsearch\ClientBuilder $builder, \Laminas\ServiceManager\ServiceLocatorInterface $sm, \VuFind\Log\Logger $logger) {
+    public function __construct(\Elastic\Elasticsearch\ClientBuilder $builder, \Laminas\ServiceManager\ServiceLocatorInterface $sm, \VuFind\Log\LoggerProxy $logger) {
         parent::__construct($sm);
         $this->logger = $logger;
         $config = $this->getConfig(self::fulltextsnippetIni);
