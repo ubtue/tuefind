@@ -17,7 +17,7 @@ var IxTheo = {
   GetPDAInformation: function(isbn, ajaxUrl, pdaSubscribeUrl, pdaSubscribeText) {
     // Suppress entire field if no isbn is present
     if (isbn == "0") {
-      $("#pda_row").remove();
+      $("#pda_place_holder").closest("tr").remove();
     }
     // Try to determine status
     $.ajax({
@@ -30,16 +30,16 @@ var IxTheo = {
 	  var pda_status = json['pda_status'];
 	  $("#pda_place_holder").each(function() {
 	    if ((received_isbn == isbn) && (pda_status == "OFFER_PDA")) {
-	      $(this).replaceWith('<a href="' + pdaSubscribeUrl + '">' + pdaSubscribeText + '</a>');
+	      $(this).replaceWith('<a href="' + pdaSubscribeUrl + '" rel="nofollow">' + pdaSubscribeText + '</a>');
 	    } else
-	      $("#pda_row").remove();
+          $("#pda_place_holder").closest("tr").remove();
 	  });
 	});
       }, // end success
       error: function(xhr, ajaxOptions, thrownError) {
 	$("#pda_place_holder").each(function() {
 	  $(this).replaceWith('Invalid server response!!!!!');
-	})
+	});
       }
     }); // end ajax
   },
@@ -75,7 +75,7 @@ var IxTheo = {
         function(){
             location.reload(true);
         }
-    )
+    );
   }
 
 };
@@ -103,6 +103,6 @@ $(document).ready(function() {
     let ID = $(this).data('id');
     let Source = $(this).data('source');
     IxTheo.DeleteMyresearchSubscription(URL,ID,Source);
-  })
+  });
 
 });

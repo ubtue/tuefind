@@ -52,9 +52,9 @@
     <?php if (!empty($tabs)): ?><?=$tabs ?><div class="tab-content clearfix"><?php endif; ?>
       <p class="adv_search_terms"><?=$this->transEsc('Your search terms')?>: "<strong><?=$this->escapeHtml($this->lookfor)?></strong>"</p>
       <p class="adv_search_links">
-        <a href="<?=$this->url($advSearch)?>?edit=<?=$this->escapeHtmlAttr($this->searchId)?>"><?=$this->transEsc("Edit this Advanced Search")?></a> |
-        <a href="<?=$this->url($advSearch, [], ['query' => $hiddenFilters])?>"><?=$this->transEsc("Start a new Advanced Search")?></a> |
-        <a href="<?=$this->url($searchHome, [], ['query' => $hiddenFilters])?>"><?=$this->transEsc("Start a new Basic Search")?></a>
+        <a href="<?=$this->url($advSearch)?>?edit=<?=$this->escapeHtmlAttr($this->searchId)?>" rel="nofollow"><?=$this->transEsc("Edit this Advanced Search")?></a> |
+        <a href="<?=$this->url($advSearch, [], ['query' => $hiddenFilters])?>" rel="nofollow"><?=$this->transEsc("Start a new Advanced Search")?></a> |
+        <a href="<?=$this->url($searchHome, [], ['query' => $hiddenFilters])?>" rel="nofollow"><?=$this->transEsc("Start a new Basic Search")?></a>
       </p>
       <?=
         $this->context($this)->renderInContext(
@@ -123,9 +123,9 @@
                     <?=$this->transEsc('Browse')?> <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
-                    <li><a href="<?=$this->url('keywordchainsearch-home')?>"><?=$this->transEsc('Browse Keywordchains')?></a></li>
-                    <li><a href="<?=$this->url('browse-home')?>"><?=$this->transEsc('Browse the Catalog')?></a></li>
-                    <li><a href="<?=$this->url('alphabrowse-home')?>"><?=$this->transEsc('Browse Alphabetically')?></a></li>
+                    <li><a href="<?=$this->url('keywordchainsearch-home')?>" rel="nofollow"><?=$this->transEsc('Browse Keywordchains')?></a></li>
+                    <li><a href="<?=$this->url('browse-home')?>" rel="nofollow"><?=$this->transEsc('Browse the Catalog')?></a></li>
+                    <li><a href="<?=$this->url('alphabrowse-home')?>" rel="nofollow"><?=$this->transEsc('Browse Alphabetically')?></a></li>
                 </ul>
 
             </button>
@@ -138,7 +138,7 @@
                 </ul>
             </button>
             <button class="under-button">
-              <a href="<?=$this->url('search-newitem')?>"><?=$this->transEsc('New Items')?></a>
+              <a href="<?=$this->url('search-newitem')?>" rel="nofollow"><?=$this->transEsc('New Items')?></a>
             </button>
           <?php endif; ?>
           <span class="dropdown under-button pull-right">

@@ -1,5 +1,11 @@
 <ul class="rb-news-list text-justify">
     <li>
+        <h1 id="07_2024">Neues Open-Access-Angebot: Digitalisierung on Demand</h1>
+        <p class="rb-news-date">(Juli 2024)</p>
+        <p>Es gibt einen neuen Service in RelBib, mit dem wir gemeinfreie Titel besser zugänglich machen können: Digitalisierung on Demand (DoD). Es handelt sich um ein bedarfsorientiertes Angebot. D.h., Sie schlagen uns einen Titel aus dem umfangreichen Altbestand der UB Tübingen vor – wir digitalisieren diesen nach Möglichkeit und für Sie kostenfrei. Über die RelBib-Suche stehen die Titel anschließend allen Nutzenden im Open Access zur Verfügung. Das genaue Prozedere haben wir auf einer gesonderten Seite beschrieben:</p>
+        <p><a href="<?=$this->url('feedback-form', ['id' => 'DoD'])?>" target="_blank"><button>Zum Formular</button></a></p>
+    </li>
+    <li>
         <h1 id="04_2024">Handbuch der Religionen als FID-Lizenz freigeschaltet</h1>
         <p class="rb-news-date">(April 2024)</p>
         <p>RelBib-Nutzer*innen des deutschsprachigen Raums steht ab sofort das Handbuch der Religionen als FID-Lizenz zur Verfügung. Sie benötigen dafür nur ein RelBib-Konto: Wenn Sie das <a href="https://www.relbib.de/Record/1677766123" target="_blank">Handbuch in RelBib aufrufen</a>, gelangen Sie über den entsprechenden Link ("FID-Lizenz: Zugriff mit RelBib-Konto") auf den Volltext. Dieses Angebot wird ermöglicht mit Unterstützung des Kompetenzzentrums für Lizenzierung (KfL) und Fördermitteln der DFG.</p>
@@ -13,7 +19,7 @@
 		</ul>
 		<p>Bei Fragen rund um das Thema FID-Lizenzen steht Ihnen das <a href="mailto:relbib@ub.uni-tuebingen.de">RelBib-Team</a> wie immer gerne zur Verfügung.</p>
     </li>
-	<li>
+    <li>
         <h1 id="03_2024">Ergebnisse der RelBib-Umfrage 2023</h1>
         <p class="rb-news-date">(März 2024)</p>
         <p>Der FID Religionswissenschaft führte vom 25.09. – 22.10.2023 eine Online-Umfrage durch, die zum Ziel hatte, Angaben zur aktuellen Nutzung von RelBib sowie Bedarfe nach neuen und verbesserten FID-Angeboten in der religionswissenschaftlichen Fachcommunity zu ermitteln. Die Ergebnisse werden bei der Antragsstellung für die vierte Förderphase des FID (2025-2027) berücksichtigt und in die weiteren Planungen und Tätigkeiten des FID einfließen.</p>
@@ -25,6 +31,10 @@
         <p>Am 30.11.2023 und 01.12.2023 begrüßte der FID Religionswissenschaft Fachreferent*innen und Bibliothekar*innen der Religionswissenschaft im Historischen Lesesaal der Universitätsbibliothek (UB) Tübingen. Der Workshop fand unter dem Titel „Der Fachinformationsdienst Religionswissenschaft stellt sich vor: RelBib, FID-Services und die Vernetzung mit Fachreferent*innen und Bibliothekar*innen der Religionswissenschaft“ statt. Die Teilnehmenden waren aus verschiedenen Standorten in Deutschland – von Rostock bis Freiburg – angereist. </p>
         <p><a href="<?= $this->url('content-page', ['page' => 'vdb_workshop_2024']) ?>"><button>Weitere Informationen</button></a></p>
     </li>
+
+    <!-- anchor for "archive" link on start page -->
+    <span id="archive"></span>
+
     <li>
         <h1 id="10_2023">RelBib LunchTalk "Zweitveröffentlichen mit RelBib – Der neue Self-Archiving Service des FID Religionswissenschaft" am 15.11.2023</h1>
         <p class="rb-news-date">(Oktober 2023)</p>
@@ -34,10 +44,6 @@
         <p>Über Thema und Termin des nächsten RelBib LunchTalks informieren wir Sie rechtzeitig vor der Veranstaltung. </p>
 		<p>Haben Sie Ideen oder Themen, zu denen wir einen RelBib LunchTalk anbieten können? Schicken Sie Ihre Vorschläge gerne an <a href="mailto:relbib@ub.uni-tuebingen.de">uns</a>.</p>
     </li>
-
-	<!-- anchor for "archive" link on start page -->
-    <span id="archive"></span>
-
 	<li>
         <h1 id="02_2023">RelBib LunchTalk "Open Access publizieren – Allgemeine Informationen und Angebote des FID Religionswissenschaft" am 22.03.2023</h1>
         <p class="rb-news-date">(Februar 2023)</p>
@@ -82,12 +88,12 @@
 	<p>Übrigens: Sie können auch aus jeder normalen RelBib-Suche heraus die Personenseiten normiert erfasster Autorinnen und Autoren aufrufen: Klicken Sie dafür einfach auf das Symbol <a><i class="fa fa-user-circle" aria-hidden="true" title="<?=$this->transEscAttr('author_details_tooltip')?>"></i></a> neben dem angezeigten Personennamen, um weitere Informationen über diese*n Autor*in zu erhalten. Wenn Sie alle in RelBib vorhandenen Titel derselben Person aufrufen möchten, nutzen Sie am besten das Symbol <a><i class="fa fa-book" aria-hidden="true" title="<?=$this->transEscAttr('author_all_titles_tooltip')?>"></i></a> neben dem Autorennamen.</p>
         <p>Ein paar prominente Beispiele:</p>
         <ul>
-            <li><a href="https://www.relbib.de/Authority/077476107" target="_blank">Peter Antes</a></li>
-            <li><a href="https://www.relbib.de/Authority/374216355" target="_blank">Eileen Barker</a></li>
-            <li><a href="https://www.relbib.de/Authority/598845674" target="_blank">Grace Davie</a></li>
-            <li><a href="https://www.relbib.de/Authority/500674582" target="_blank">Burkhard Gladigow</a></li>
-            <li><a href="https://www.relbib.de/Authority/077492714" target="_blank">Hans G. Kippenberg</a></li>
-            <li><a href="https://www.relbib.de/Authority/569003709" target="_blank">Annette Wilke</a></li>
+            <li><a href="https://www.relbib.de/AuthorityRecord/077476107" target="_blank">Peter Antes</a></li>
+            <li><a href="https://www.relbib.de/AuthorityRecord/374216355" target="_blank">Eileen Barker</a></li>
+            <li><a href="https://www.relbib.de/AuthorityRecord/598845674" target="_blank">Grace Davie</a></li>
+            <li><a href="https://www.relbib.de/AuthorityRecord/500674582" target="_blank">Burkhard Gladigow</a></li>
+            <li><a href="https://www.relbib.de/AuthorityRecord/077492714" target="_blank">Hans G. Kippenberg</a></li>
+            <li><a href="https://www.relbib.de/AuthorityRecord/569003709" target="_blank">Annette Wilke</a></li>
         </ul>
         <p>Wir laden Sie herzlich dazu ein, diese neue Suchmöglichkeit und die Personenseiten in RelBib auszuprobieren! Bei Fragen oder Anregungen freuen wir uns auf Ihr Feedback.</p>
     </li>

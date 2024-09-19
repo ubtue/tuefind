@@ -1,125 +1,313 @@
+<div id="osm-map"></div>
+
 <section class="cw-p-2">
-    <?php $this->headScript()->appendFile('vendor/ol/ol.js');?>
-    <?php $this->headScript()->appendFile('vendor/ol/wrapper.js');?>
-    <?php $this->headLink()->appendStylesheet('vendor/ol/ol.css');?>
     <div id="map" class="map"></div>
-    <div id="popup" class="ol-popup">
-        <a href="#" id="popup-closer" class="ol-popup-closer">x</a>
-        <div id="popup-content"></div>
-    </div>
     <?php
         $partners = [
-            // Cooperations
-            [   'lon' => '11.384495',
-                'lat' => '47.263359',
-                'group' => 'cooperation',
-                'logo' => $this->imageLink('partners/logo-uibk.svg'),
-                'url' => '//www.uibk.ac.at/theol/theoldi/index.html.de',
-                'popup' => '<font color="black"><b><a href="//www.uibk.ac.at/theol/theoldi/index.html.de" target="_blank">Theoldi</a></b><br>Universität Innsbruck<br>Innrain 52<br>A-6020 Innsbruck<br><br><img src="'.$this->imageLink('partners/logo-uibk.svg').'" width="180"></font>',
+            // comm
+            [   'lon' => '7.110015253718861',
+                'lat' => '50.72319649759073',
+                'group' => 'comm',
+                'popup' => '<div style="width: 200px;"><font color="black"><p style="margin-top:15px;"><a href="https://www.katholische-theologie.info/zusammenschl%C3%BCsse" target="_blank">Vereinigung der Arbeitsgemeinschaften für Katholische Theologie (VAKT)</a></p><p>c/o Sekretariat der Deutschen Bischofskonferenz Kaiserstr. 161 53113 Bonn</p></font></div>',
+                'name' => 'Vereinigung der Arbeitsgemeinschaften für Katholische Theologie (VAKT)'
             ],
-            [   'lon' => '7.62560',
-                'lat' => '51.96262',
-                'group' => 'cooperation',
-                'logo' => $this->imageLink('partners/wwu.svg'),
-                'url' => '//www.uni-muenster.de/FB2/ikr/datenbank/index.shtml',
-                'popup' => '<font color="black"><b><a href="//www.uni-muenster.de/FB2/ikr/datenbank/index.shtml" target="_blank">DaKaR</a></b><br>Institut für Kanonisches Recht<br>Domplatz 23<br>D-48143 Münster<br><br><img src="'.$this->imageLink('partners/wwu.svg').'" width="180"></font>',
+            [   'lon' => '13.310539926813998',
+                'lat' => '52.460591726851824',
+                'group' => 'comm',
+                'popup' => '<div style="width: 200px;"><font color="black"><p style="margin-top:15px;"><a href="https://wgth.de/" target="_blank">Wissenschaftliche Gesellschaft für Theologie (WGTh)</a></p><p>Haus der Diakonie
+                Paulsenstrasse 55-56
+                12163 Berlin  </p></font></div>',
+                'name' => 'Wissenschaftliche Gesellschaft für Theologie (WGTh)'
             ],
-            [   'lon' => '9.93202',
-                'lat' => '49.79608',
-                'group' => 'cooperation',
-                'logo' => $this->imageLink('partners/ZAF_Logo_3.png'),
-                'logo_wrap' => ['start' => '<div style="background-color: red; text-align: center;">', 'end' => '</div>'],
-                'url' => '//www.augustinus.de',
-                'popup' => '<font color="black"><b><a href="//www.augustinus.de" target="_blank">Augustinus-Forschungsdatenbank</a></b><br>Zentrum für Augustinusforschung<br>Dominikanerplatz 4<br>D-97070 Würzburg<br><br><div style="background-color: red; text-align: center;"><img src="'.$this->imageLink('partners/ZAF_Logo_3.png').'" width="180"></div></font>',
+            [   'lon' => '8.771853669066896',
+                'lat' => '50.80808118848182',
+                'group' => 'comm',
+                'popup' => '<div style="width: 200px;"><font color="black"><p style="margin-top:15px;"><a href="https://etft.de/" target="_blank">Evangelisch-Theologischer Fakultätentag</a></p><p>c/o Prof. Dr. Malte Dominik Krüger
+                Theologische Fakultät
+                Lahntor 3
+                35032 Marburg</p></font></div>',
+                'name' => 'Evangelisch-Theologischer Fakultätentag'
             ],
-            [   'lon' => '6.95137',
-                'lat' => '50.94415',
-                'group' => 'cooperation',
-                'logo' => $this->imageLink('partners/logo_bibliothek_2017_10_24_420x70.jpg'),
-                'url' => '//dombibliothek-koeln.de',
-                'popup' => '<font color="black"><b><a href="//dombibliothek-koeln.de" target="_blank">Erzbischöfliche Diözesan- und Dombibliothek Köln</a></b><br> Kardinal-Frings-Straße 1-3<br>D-50668 Köln<br><br><img src="'.$this->imageLink('partners/logo_bibliothek_2017_10_24_420x70.jpg').'" width="180"></font>',
+            [   'lon' => '8.713223734379403',
+                'lat' => '50.09896744010327',
+                'group' => 'comm',
+                'popup' => '<div style="width: 200px;"><font color="black"><p style="margin-top:15px;"><a href="http://kthf.de/" target="_blank">Katholisch-Theologischer Fakultätentag</a></p><p>c/o Prof. Dr. Dirk Ansorge
+                Offenbacher Landstraße 224
+                60599 Frankfurt am Main</p></font></div>',
+                'name' => 'Katholisch-Theologischer Fakultätentag'
             ],
-            // Protestant Community
-            [   'lon' => '8.77202',
-                'lat' => '50.80794',
-                'group' => 'protestant',
-                'logo' => $this->imageLink('partners/logo-marburg.svg'),
-                'url' => '//www.uni-marburg.de/de/fb05/fachgebiete/fachgebiete/systematische-theologie/personal/prof-dr-krueger-1',
-                'popup' => '<font color="black"><b><a href="//www.uni-marburg.de/de/fb05/fachgebiete/fachgebiete/systematische-theologie/personal/prof-dr-krueger-1" target="_blank">Prof. Dr. Malte Krüger</a></b><br>Philipps-Universität Marburg<br>Lahntor 3<br>D-35032 Marburg<br><br><img src="'.$this->imageLink('partners/logo-marburg.svg').'" width="180"></font>',
+            [   'lon' => '12.427325055201944',
+                'lat' => '41.89718307461863',
+                'group' => 'comm',
+                'popup' => '<div style="width: 200px;"><font color="black"><p style="margin-top:15px;"><a href="https://www.chiesacattolica.it/" target="_blank">Conferenza Episcopale Italiana</a></p><p>Circonvallazione Aurelia, 50
+                00165 Roma
+                Italia</p></font></div>',
+                'name' => 'Conferenza Episcopale Italiana'
             ],
-            [   'lon' => '9.98460',
-                'lat' => '53.55749',
-                'group' => 'protestant',
-                'logo' => $this->imageLink('partners/logo-hamburg.svg'),
-                'url' => '//www.theologie.uni-hamburg.de/einrichtungen/kontakt/kristin-merle.html',
-                'popup' => '<font color="black"><b><a href="//www.theologie.uni-hamburg.de/einrichtungen/kontakt/kristin-merle.html" target="_blank">Prof. Dr. Kristin Merle</a></b><br>Universität Hamburg<br>Institut für Praktische Theologie<br>Gorch-Fock-Wall 7<br>D-20354 Hamburg<br><br><img src="'.$this->imageLink('partners/logo-hamburg.svg').'" width="180"></font>',
+            [   'lon' => '6.102331538202423',
+                'lat' => '46.277782969097665',
+                'group' => 'comm',
+                'popup' => '<div style="width: 200px;"><font color="black"><p style="margin-top:15px;"><a href="https://globethics.net/" target="_blank">Globethics</a></p><p>Chemin du Pavillon 2
+                1218 Le Grand-Saconnex Geneve
+                Suisse</p></font></div>',
+                'name' => 'Globethics'
             ],
-            [   'lon' => '10.11030',
-                'lat' => '54.34504',
-                'group' => 'protestant',
-                'logo' => $this->imageLink('partners/logo-kiel.svg'),
-                'url' => '//www.theol.uni-kiel.de/de/professuren/kg-mueller/team/mueller',
-                'popup' => '<font color="black"><b><a href="//www.theol.uni-kiel.de/de/professuren/kg-mueller/team/mueller" target="_blank">Prof. Dr. Andreas Müller</a></b><br>Christian-Albrechts-Universität zu Kiel<br>Theologische Fakultät<br>Leibnitzstr. 4<br>D-24118 Kiel<br><br><img src="'.$this->imageLink('partners/logo-kiel.svg').'" width="180"></font>',
+            [   'lon' => '9.062030126638184',
+                'lat' => '48.525289783373935',
+                'group' => 'comm',
+                'popup' => '<div style="width: 200px;"><font color="black"><p style="margin-top:15px;"><a href="https://www.ia-practicaltheology.org/" target="_blank">International Academy of Practical Theology (IAPT)</a></p><p>Wilhelmstr. 32
+                Postfach 2620
+                D-72016 Tuebingen</p></font></div>',
+                'name' => 'International Academy of Practical Theology (IAPT)'
             ],
-            [   'lon' => '8.54461',
-                'lat' => '47.37001',
-                'group' => 'protestant',
-                'logo' => $this->imageLink('partners/logo-zuerich.jpg'),
-                'url' => '//www.theologie.uzh.ch/de/faecher/altes-testament/Lehrst%C3%BChle-und-Personen/konrad-schmid.html',
-                'popup' => '<font color="black"><b><a href="//www.theologie.uzh.ch/de/faecher/altes-testament/Lehrst%C3%BChle-und-Personen/konrad-schmid.html" target="_blank">Prof. Dr. Konrad Schmid</a></b><br>Universität Zürich<br>Kirchgasse 9<br>CH-8001 Zürich<br><br><img src="'.$this->imageLink('partners/logo-zuerich.jpg').'" width="180"></font>',
+            [   'lon' => '11.3557404534526',
+                'lat' => '44.4942705145582',
+                'group' => 'comm',
+                'popup' => '<div style="width: 200px;"><font color="black"><p style="margin-top:15px;"><a href="https://www.resilience-ri.eu/" target="_blank">RESILIENCE (Religious Studies Infrastructure: Tools, Innovation, Experts, Connections and Centres in Europe)</a></p><p>Fscire
+                Via San Vitale, 114
+                40125 Bologna
+                Italia</p></font></div>',
+                'name' => 'RESILIENCE (Religious Studies Infrastructure: Tools, Innovation, Experts, Connections and Centres in Europe)'
             ],
-            [   'lon' => '9.05533',
-                'lat' => '48.52535',
-                'group' => 'protestant',
-                'logo' => $this->imageLink('Logo_Universitaet_Tuebingen.svg'),
-                'url' => '//uni-tuebingen.de/fakultaeten/evangelisch-theologische-fakultaet/lehrstuehle-und-institute/kirchengeschichte/kirchengeschichte-i/mitarbeiter/leppin-volker-prof-dr/',
-                'popup' => '<font color="black"><b><a href="//uni-tuebingen.de/fakultaeten/evangelisch-theologische-fakultaet/lehrstuehle-und-institute/kirchengeschichte/kirchengeschichte-i/mitarbeiter/leppin-volker-prof-dr/" target="_blank">Prof. Dr. Volker Leppin</a></b><br>Eberhard Karls Universität Tübingen<br>Evangelisch-Theologische Fakultät<br>Liebermeisterstr. 12<br>D-72076 Tübingen<br><br><img src="'.$this->imageLink('Logo_Universitaet_Tuebingen.svg').'" width="180"></font>',
+            //Bibliographien
+            [   'lon' => '9.931387440185757',
+                'lat' => '49.796449754346156',
+                'group' => 'bibliographien',
+                'popup' => '<div style="width: 200px;"><font color="black"><p style="margin-top:15px;"><a href="https://www.augustinus.de/" target="_blank">Augustinus-Bibliographie</a></p><p>Dominikanerplatz 4
+                97070 Würzburg</p></font></div>',
+                'name' => 'Augustinus-Bibliographie'
             ],
-            // Catholic Community
-            [   'lon' => '8.77052',
-                'lat' => '51.70649',
-                'group' => 'catholic',
-                'logo' => $this->imageLink('partners/logo-paderborn.png'),
-                'url' => '//kw.uni-paderborn.de/institut-fuer-katholische-theologie/praktische-theologie/team/prof-dr-rita-burrichter/',
-                'popup' => '<font color="black"><b><a href="//kw.uni-paderborn.de/institut-fuer-katholische-theologie/praktische-theologie/team/prof-dr-rita-burrichter/" target="_blank">Prof. Dr. Rita Burrichter</a></b><br>Universität Paderborn<br>Pohlweg 55<br>D-33098 Paderborn<br><br><img src="'.$this->imageLink('partners/logo-paderborn.png').'" width="180"></font>',
+            [   'lon' => '6.584317040044625',
+                'lat' => '46.52381424741675',
+                'group' => 'bibliographien',
+                'popup' => '<div style="width: 200px;"><font color="black"><p style="margin-top:15px;"><a href="https://www.unil.ch/irsb/fr/home/menuguid/bibil.html" target="_blank">Bibliographie biblique informatisée de Lausanne (BiBIL)</a></p><p>Institut romand des sciences bibliques
+                Anthropole
+                1015 Lausanne
+                Suisse</p></font></div>',
+                'name' => 'Bibliographie biblique informatisée de Lausanne (BiBIL)'
             ],
-            [   'lon' => '11.57980',
-                'lat' => '48.15049',
-                'group' => 'catholic',
-                'logo' => $this->imageLink('partners/logo-muenchen.jpg'),
-                'url' => '//www.kaththeol.uni-muenchen.de/lehrstuehle/bibl_einleitung/personen/haefner/index.html',
-                'popup' => '<font color="black"><b><a href="//www.kaththeol.uni-muenchen.de/lehrstuehle/bibl_einleitung/personen/haefner/" target="_blank">Prof. Dr. Gerd Häfner</a></b><br>Ludwig-Maximilians-Universität München<br>Katholisch-Theologische Fakultät<br>Geschwister-Scholl-Platz 1<br>D-80539 München<br><br><img src="'.$this->imageLink('partners/logo-muenchen.jpg').'" width="180"></font>',
+            [   'lon' => '11.398208440076123',
+                'lat' => '47.269034873840944',
+                'group' => 'bibliographien',
+                'popup' => '<div style="width: 200px;"><font color="black"><p style="margin-top:15px;"><a href="https://www.uibk.ac.at/bildi/" target="_blank">Biblische Literaturdokumentation Innsbruck (BILDI)</a></p><p>Karl-Rahner-Platz 1 6020 Innsbruck
+                Österreich</p></font></div>',
+                'name' => 'Biblische Literaturdokumentation Innsbruck (BILDI)'
             ],
-            [   'lon' => '7.60707',
-                'lat' => '51.95951',
-                'group' => 'catholic',
-                'logo' => $this->imageLink('partners/wwu.svg'),
-                'url' => '//www.uni-muenster.de/FB2/personen/ics/heimbach-steins.html',
-                'popup' => '<font color="black"><b><a href="//www.uni-muenster.de/FB2/personen/ics/heimbach-steins.html" target="_blank">Prof. Dr. Marianne Heimbach-Steins</a></b><br>WWU Münster<br>Institut für Christliche Sozialwissenschaft<br>Robert-Koch-Str. 29<br>D-48149 Münster<br><br><img src="'.$this->imageLink('partners/wwu.svg').'" width="180"></font>',
+            [   'lon' => '7.6236567979551655',
+                'lat' => '51.9626552214986',
+                'group' => 'bibliographien',
+                'popup' => '<div style="width: 200px;"><font color="black"><p style="margin-top:15px;"><a href="https://www.uni-muenster.de/FB2/ikr/datenbank/index.shtml" target="_blank">Datenbank Kanonisches Recht (DaKaR)</a></p><p>Institut für Kanonisches Recht
+                Domplatz 23
+                48143 Münster</p></font></div>',
+                'name' => 'Datenbank Kanonisches Recht (DaKaR)'
             ],
-            [   'lon' => '12.0962',
-                'lat' => '48.9964',
-                'group' => 'catholic',
-                'logo' => $this->imageLink('partners/logo-regensburg.gif'),
-                'url' => '//www.uni-regensburg.de/theologie/mittlere-und-neue-kirchengeschichte/personen/prof-dr-klaus-unterburger/',
-                'popup' => '<font color="black"><b><a href="//www.uni-regensburg.de/theologie/mittlere-und-neue-kirchengeschichte/personen/prof-dr-klaus-unterburger/" target="_blank">Prof. Dr. Klaus Unterburger</a></b><br>Universität Regensburg<br>Fakultät für Katholische Theologie<br>Universitätsstr. 31<br>D-93040 Regensburg<br><br><img src="'.$this->imageLink('partners/logo-regensburg.gif').'" width="180"></font>',
+            [   'lon' => '11.396423555420242',
+                'lat' => '47.26878951416234',
+                'group' => 'bibliographien',
+                'popup' => '<div style="width: 200px;"><font color="black"><p style="margin-top:15px;"><a href="https://www.uibk.ac.at/praktheol/kaldi/" target="_blank">Kanonistische Literaturdokumentation Innsbruck (KALDI)</a></p><p>Institut für Praktische Theologie
+                Karl-Rahner-Platz 1
+                6020 Innsbruck
+                Österreich</p></font></div>',
+                'name' => 'Kanonistische Literaturdokumentation Innsbruck (KALDI)'
             ],
-            [   'lon' => '9.05555',
-                'lat' => '48.52561',
-                'group' => 'catholic',
-                'logo' => $this->imageLink('Logo_Universitaet_Tuebingen.svg'),
-                'url' => '//uni-tuebingen.de/fakultaeten/katholisch-theologische-fakultaet/lehrstuehle/praktische-theologie/lehrstuhl-fuer-praktische-theologie/team/prof-dr-michael-schuessler/',
-                'popup' => '<font color="black"><b><a href="//uni-tuebingen.de/fakultaeten/katholisch-theologische-fakultaet/lehrstuehle/praktische-theologie/lehrstuhl-fuer-praktische-theologie/team/prof-dr-michael-schuessler/" target="_blank">Prof. Dr. Michael Schüßler</a></b><br>Eberhard Karls Universität Tübingen<br>Katholisch-Theologische Fakultät<br>Liebermeisterstr. 12<br>D-72076 Tübingen<br><br><img src="'.$this->imageLink('Logo_Universitaet_Tuebingen.svg').'" width="180"></font>',
+            //bibliotheken
+            [   'lon' => '4.707481255577383',
+                'lat' => '50.86064339810748',
+                'group' => 'bibliotheken',
+                'popup' => '<div style="width: 200px;"><font color="black"><p style="margin-top:15px;"><a href="https://www.augustiniana.be/" target="_blank">Augustijns Historisch Instituut</a></p><p>Pakenstraat 65
+                3001 Heverlee
+                Belgium</p></font></div>',
+                'name' => 'Augustijns Historisch Instituut'
             ],
-            // Tuebingen (should be last entries so they overwrite earlier drawn markers)
-            [
-                'lon' => '9.06178',
-                'lat' => '48.52515',
-                'group' => 'tuebingen',
-                'logo' => $this->imageLink('Logo_Universitaet_Tuebingen.svg'),
-                'url' => '//uni-tuebingen.de/fakultaeten/katholisch-theologische-fakultaet/lehrstuehle/praktische-theologie/lehrstuhl-fuer-praktische-theologie/team/prof-dr-michael-schuessler/',
-                'popup' => '<font color="black"><b><a href="//ub.uni-tuebingen.de" target="_blank">Index Theologicus</a></b><br>Universitätsbibliothek Tübingen<br>Wilhelmstr. 32<br>D-72074 Tübingen<br><br><img src="' . $this->imageLink('Logo_Universitaet_Tuebingen.svg'). '" width="180"></font>',
+            [   'lon' => '6.075049269064763',
+                'lat' => '50.76167534226919',
+                'group' => 'bibliotheken',
+                'popup' => '<div style="width: 200px;"><font color="black"><p style="margin-top:15px;"><a href="https://mikado-ac.info/" target="_blank">Bibliothek des Internationalen Katholischen Missionswerkes missio e.V.</a></p><p>Goethestraße 43
+                52064 Aachen</p></font></div>',
+                'name' => 'Bibliothek des Internationalen Katholischen Missionswerkes missio e.V.'
             ],
+            [   'lon' => '6.951674384417203',
+                'lat' => '50.94479261008212',
+                'group' => 'bibliotheken',
+                'popup' => '<div style="width: 200px;"><font color="black"><p style="margin-top:15px;"><a href="https://www.dombibliothek-koeln.de/" target="_blank">Diözesan- und Dombibliothek Köln</a></p><p>Kardinal-Frings-Straße 1-3
+                50668 Köln</p></font></div>',
+                'name' => 'Diözesan- und Dombibliothek Köln'
+            ],
+            [   'lon' => '7.622197697955276',
+                'lat' => '51.964666693546256',
+                'group' => 'bibliotheken',
+                'popup' => '<div style="width: 200px;"><font color="black"><p style="margin-top:15px;"><a href="https://www.dioezesanbibliothek-muenster.de/" target="_blank">Diözesanbibliothek Münster</a></p><p>Überwasserkirchplatz 2
+                48143 Münster</p></font></div>',
+                'name' => 'Diözesanbibliothek Münster'
+            ],
+            [   'lon' => '9.141429953630837',
+                'lat' => '48.729964254476116',
+                'group' => 'bibliotheken',
+                'popup' => '<div style="width: 200px;"><font color="black"><p style="margin-top:15px;"><a href="https://www.ehz-bibliothek.elk-wue.de/" target="_blank">Evangelische Hochschul- und Zentralbibliothek Württemberg</a></p><p>Balinger Str. 33/1
+                70567 Stuttgart</p></font></div>',
+                'name' => 'Evangelische Hochschul- und Zentralbibliothek Württemberg'
+            ],
+            [   'lon' => '10.70555979976137',
+                'lat' => '50.94367079300774',
+                'group' => 'bibliotheken',
+                'popup' => '<div style="width: 200px;"><font color="black"><p style="margin-top:15px;"><a href="https://www.uni-erfurt.de/forschungsbibliothek-gotha" target="_blank">Forschungsbibliothek Gotha </a></p><p>Schlossplatz 1
+                99867 Gotha</p></font></div>',
+                'name' => 'Forschungsbibliothek Gotha'
+            ],
+            [   'lon' => '11.970895996080776',
+                'lat' => '51.47806422090299',
+                'group' => 'bibliotheken',
+                'popup' => '<div style="width: 200px;"><font color="black"><p style="margin-top:15px;"><a href="https://www.francke-halle.de/de/studienzentrum" target="_blank">Franckesche Stiftungen zu Halle </a></p><p>Franckeplatz 1
+                06110 Halle</p></font></div>',
+                'name' => 'Franckesche Stiftungen zu Halle'
+            ],
+            [   'lon' => '9.983290211520224',
+                'lat' => '53.548993713747855',
+                'group' => 'bibliotheken',
+                'popup' => '<div style="width: 200px;"><font color="black"><p style="margin-top:15px;"><a href="https://ithf.de/" target="_blank">Institut für Theologie und Frieden (ithf)</a></p><p>Herrengraben 4
+                20459 Hamburg</p></font></div>',
+                'name' => 'Institut für Theologie und Frieden (ithf)'
+            ],
+            [   'lon' => '7.201928284527916',
+                'lat' => '53.36566432753402',
+                'group' => 'bibliotheken',
+                'popup' => '<div style="width: 200px;"><font color="black"><p style="margin-top:15px;"><a href="https://www.jalb.de/" target="_blank">Johannes a Lasco Bibliothek</a></p><p>Kirchstraße 22
+                26721 Emden</p></font></div>',
+                'name' => 'Johannes a Lasco Bibliothek'
+            ],
+            [   'lon' => '4.702528699758339',
+                'lat' => '50.87632481841027',
+                'group' => 'bibliotheken',
+                'popup' => '<div style="width: 200px;"><font color="black"><p style="margin-top:15px;"><a href="https://bib.kuleuven.be/" target="_blank">Maurits Sabbebibliotheek</a></p><p>Charles Deberiotstraat 26
+                3000 Leuven
+                Belgium</p></font></div>',
+                'name' => 'Maurits Sabbebibliotheek'
+            ],
+            [   'lon' => '-74.6663950736932',
+                'lat' => '40.34602383399463',
+                'group' => 'bibliotheken',
+                'popup' => '<div style="width: 200px;"><font color="black"><p style="margin-top:15px;"><a href="https://commons.ptsem.edu/" target="_blank">Princeton Theological Seminary</a></p><p>Wright Library
+                25 Library Place
+                Princeton, NJ 08540
+                USA</p></font></div>',
+                'name' => 'Princeton Theological Seminary'
+            ],
+            [   'lon' => '12.63775312678687',
+                'lat' => '51.86630604784259',
+                'group' => 'bibliotheken',
+                'popup' => '<div style="width: 200px;"><font color="black"><p style="margin-top:15px;"><a href="https://www.rfb-wittenberg.de/" target="_blank">Reformationsgeschichtliche Forschungsbibliothek Wittenberg</a></p><p>Schlossplatz 1
+                06886 Lutherstadt Wittenberg</p></font></div>',
+                'name' => 'Reformationsgeschichtliche Forschungsbibliothek Wittenberg'
+            ],
+            [   'lon' => '9.931365982513663',
+                'lat' => '49.79650515845315',
+                'group' => 'bibliotheken',
+                'popup' => '<div style="width: 200px;"><font color="black"><p style="margin-top:15px;"><a href="https://www.augustinus.de/" target="_blank">Zentrum für Augustinus-Forschung (ZAF)</a></p><p>Dominikanerplatz 4
+                97070 Würzburg</p></font></div>',
+                'name' => 'Zentrum für Augustinus-Forschung (ZAF)'
+            ],
+            //ver
+            [   'lon' => '8.755412855615948',
+                'lat' => '51.71397921606403',
+                'group' => 'ver',
+                'popup' => '<div style="width: 200px;"><font color="black"><p style="margin-top:15px;"><a href="https://www.akthb.de/" target="_blank">AKThB (Arbeitsgemeinschaft Katholisch-Theologischer Bibliotheken)</a></p><p>c/o Erzbischöfliche Akademische Bibliothek Paderborn
+                Leostraße 21
+                33098 Paderborn</p></font></div>',
+                'name' => 'AKThB (Arbeitsgemeinschaft Katholisch-Theologischer Bibliotheken)'
+            ],
+            [   'lon' => '5.890728113326436',
+                'lat' => '52.55379857836274',
+                'group' => 'ver',
+                'popup' => '<div style="width: 200px;"><font color="black"><p style="margin-top:15px;"><a href="https://beth.eu/" target="_blank">BETH (Bibliothèques Européennes de Théologie)</a></p><p>Waterkers 1
+                8265 JJ Kampen
+                Netherlands</p></font></div>',
+                'name' => 'BETH (Bibliothèques Européennes de Théologie)'
+            ],
+            [   'lon' => '8.532867524941635',
+                'lat' => '52.02174711455926',
+                'group' => 'ver',
+                'popup' => '<div style="width: 200px;"><font color="black"><p style="margin-top:15px;"><a href="https://vkwb.info/" target="_blank">VkwB (Verband kirchlich-wissenschaftlicher Bibliotheken)</a></p><p>c/o Evangelische Kirche von Westfalen
+                Bibliothek des Landeskirchenamtes
+                Altstädter Kirchplatz 5
+                33602 Bielefeld</p></font></div>',
+                'name' => 'VkwB (Verband kirchlich-wissenschaftlicher Bibliotheken)'
+            ],
+            //fachin
+            [   'lon' => '13.28832141332175',
+                'lat' => '52.452024786987835',
+                'group' => 'fachin',
+                'popup' => '<div style="width: 200px;"><font color="black"><p style="margin-top:15px;"><a href="https://www.propylaeum.de/" target="_blank">FID Altertumswissenschaften</a></p><p>Philologische Bibliothek der Freien Universität Berlin
+                Habelschwerdter Allee 45
+                14195 Berlin</p></font></div>',
+                'name' => 'FID Altertumswissenschaften'
+            ],
+            [   'lon' => '11.580364613130008',
+                'lat' => '48.147593189363796',
+                'group' => 'fachin',
+                'popup' => '<div style="width: 200px;"><font color="black"><p style="margin-top:15px;"><a href="https://www.historicum.net/home" target="_blank">FID Geschichtswissenschaft</a></p><p>Bayerische Staatsbibliothek
+                Ludwigstr. 16
+                80539 München</p></font></div>',
+                'name' => 'FID Geschichtswissenschaft'
+            ],
+            [   'lon' => '8.653098749724524',
+                'lat' => '50.12064052585044',
+                'group' => 'fachin',
+                'popup' => '<div style="width: 200px;"><font color="black"><p style="margin-top:15px;"><a href="https://portal.jewishstudies.de/" target="_blank">FID Jüdische Studien</a></p><p>Universitätsbibliothek Frankfurt am Main
+                Freimannplatz 1
+                60325 Frankfurt am Main</p></font></div>',
+                'name' => 'FID Jüdische Studien'
+            ],
+            [   'lon' => '8.70593708434894',
+                'lat' => '49.40981580401877',
+                'group' => 'fachin',
+                'popup' => '<div style="width: 200px;"><font color="black"><p style="margin-top:15px;"><a href="https://www.arthistoricum.net/" target="_blank">FID Kunst, Fotografie, Design</a></p><p>Universitätsbibliothek Heidelberg
+                Plöck 107-109
+                69117 Heidelberg</p></font></div>',
+                'name' => 'FID Kunst, Fotografie, Design'
+            ],
+            [   'lon' => '11.963601655605949',
+                'lat' => '51.49396906564426',
+                'group' => 'fachin',
+                'popup' => '<div style="width: 200px;"><font color="black"><p style="margin-top:15px;"><a href="https://www.menalib.de/" target="_blank">FID Nahost-, Nordafrika- und Islamstudien</a></p><p>Universitäts- und Landesbibliothek Sachsen-Anhalt
+                Zweigbibliothek Vorderer Orient / Ethnologie
+                Mühlweg 15
+                06114 Halle (Saale)</p></font></div>',
+                'name' => 'FID Nahost-, Nordafrika- und Islamstudien'
+            ],
+            [   'lon' => '11.580246595933493',
+                'lat' => '48.147686248870635',
+                'group' => 'fachin',
+                'popup' => '<div style="width: 200px;"><font color="black"><p style="margin-top:15px;"><a href="https://www.osmikon.de/" target="_blank">FID Ost-, Ostmittel-, Südosteuropa (osmikon)</a></p><p>Bayerische Staatsbibliothek
+                Ludwigstr. 16
+                80539 München</p></font></div>',
+                'name' => 'FID Ost-, Ostmittel-, Südosteuropa (osmikon)'
+            ],
+            [   'lon' => '6.928387325417541',
+                'lat' => '50.92607082896188',
+                'group' => 'fachin',
+                'popup' => '<div style="width: 200px;"><font color="black"><p style="margin-top:15px;"><a href="https://philportal.de/" target="_blank">FID Philosophie</a></p><p>Universitäts- und Stadtbibliothek Köln
+                Universitätsstraße 33
+                50931 Köln</p></font></div>',
+                'name' => 'FID Philosophie'
+            ],
+            [   'lon' => '9.061992455474284',
+                'lat' => '48.52540627744962',
+                'group' => 'fachin',
+                'popup' => '<div style="width: 200px;"><font color="black"><p style="margin-top:15px;"><a href="https://relbib.de/" target="_blank">FID Religionswissenschaft</a></p><p>Universitätsbibliothek Tübingen
+                Wilhelmstr. 32
+                72074 Tübingen</p></font></div>',
+                'name' => 'FID Religionswissenschaft'
+            ],
+            [   'lon' => '13.32153185565181',
+                'lat' => '52.4982173456587',
+                'group' => 'fachin',
+                'popup' => '<div style="width: 200px;"><font color="black"><p style="margin-top:15px;"><a href="https://ireon-portal.de/" target="_blank">Fachinformationsverbund Internationale Beziehungen und Länderkunde (IREON)</a></p><p>Stiftung Wissenschaft und Politik (SWP)
+                Deutsches Institut für Internationale Politik und Sicherheit
+                Ludwigkirchplatz 3-4
+                10719 Berlin</p></font></div>',
+                'name' => 'Fachinformationsverbund Internationale Beziehungen und Länderkunde (IREON)'
+            ]
+
         ];
         $partners = json_encode($partners);
     ?>
@@ -127,77 +315,201 @@
 <?php $jsSnippet = <<<EOD
 $(function () {
 
-    let partnersArray = {$partners};
-   
-    // Add markers to new or existing map
-    function AddMarkers(highlightGroup=null) {
-        let markers = {
-            'default': "{$this->imageLink('ol/marker.svg')}",
-            'highlight': "{$this->imageLink('ol/marker-tuebingen.png')}",
-            'tuebingen': "{$this->imageLink('ol/marker-tuebingen.png')}",
-            'cooperation': "{$this->imageLink('ol/marker-green.png')}",
-            'protestant': "{$this->imageLink('ol/marker-purple.png')}",
-            'catholic': "{$this->imageLink('ol/marker-black.png')}"
-        };
 
-        let marker = markers.default;
-        partnersArray.forEach(function(oneParter){
-            marker = markers.default;
-            if (highlightGroup != null && highlightGroup === oneParter.group){
-                if(markers.hasOwnProperty(highlightGroup)) {
-                    marker = markers[highlightGroup];
-                }
-            }
-            OpenStreetMapWrapper.AddLocation(oneParter.lon, oneParter.lat, marker, oneParter.popup);
-        });
-        
-    }
+    let partnersArray = {$partners};
 
     // Initial drawing of the map
-    function DrawMap() {
-        OpenStreetMapWrapper.DrawMap(12.810, 51.352, /* zoom */ 5, /* proxy */ '/proxy/load?');
-        AddMarkers();
-        OpenStreetMapWrapper.BuildLocationLayer();
-    }
+    function DrawMap(start=null) {
 
-    // Re-use existing map, remove location/marker layer and re-draw markers
-    function HighlightMarkerGroup(highlightGroup) {
-        OpenStreetMapWrapper.ResetLocationLayer();
-        AddMarkers(highlightGroup);
-        OpenStreetMapWrapper.BuildLocationLayer();
+        cmap = L.map('map');
+
+            L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+        }).addTo(cmap);
+
+        let markers = {
+            'default': "{$this->imageLink('ol/marker.svg')}",
+            'comm': "{$this->imageLink('ol/marker.svg')}",
+            'bibliographien': "{$this->imageLink('ol/marker-tuebingen.png')}",
+            'bibliotheken': "{$this->imageLink('ol/marker-green.png')}",
+            'ver': "{$this->imageLink('ol/marker-purple.png')}",
+            'fachin': "{$this->imageLink('ol/marker-black.png')}"
+        };
+
+        partnersArray.forEach(function(oneParter){
+            if(start == oneParter.group) {
+                let customIcon = {
+                    iconUrl: markers[oneParter.group],
+                    iconSize:[20,32.5],
+                }
+                let myIcon = L.icon(customIcon);
+
+                let iconOptions = {
+                    title: oneParter.name,
+                    draggable:false,
+                    icon:myIcon
+                }
+
+                let marker = new L.Marker([oneParter.lat, oneParter.lon] , iconOptions);
+                marker.addTo(cmap);
+                marker.bindPopup(oneParter.popup).openPopup();
+            }
+
+        });
+
+        // Target's GPS coordinates.
+        var target = L.latLng(partnersArray[0].lat, partnersArray[0].lon);
+
+        // Set map's center to target with zoom 5.
+        cmap.setView(target, 5);
     }
 
     $('.high-light-marker-group').click(function(){
+
+        $(this).parents('.map-navigation').find('button').each(function(){
+            $(this).removeClass( "btn-primary" );
+        })
+        $(this).find('button').addClass("btn-primary");
+        $(this).find('button').blur();
+
+        cmap.remove();
         let lightGroup = $(this).data('group');
-        OpenStreetMapWrapper.ResetLocationLayer();
-        AddMarkers(lightGroup);
-        OpenStreetMapWrapper.BuildLocationLayer();
+        DrawMap(lightGroup);
     })
 
-    $(function() {
-        DrawMap();
-    });
+    DrawMap('comm');
 });
 EOD;
 ?>
 <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $jsSnippet, 'SET')?>
-
     <div class="cw-py-2 map-navigation">
-        <div class="map-cooperation high-light-marker-group" data-group="cooperation" ><button>Kooperationen</button></div>
-        <div class="map-catholic high-light-marker-group" data-group="catholic"><button>Katholische Fachcommunity</button></div>
-        <div class="map-protestant high-light-marker-group" data-group="protestant"><button>Evangelische Fachcommunity</button></div>
-        <div class="map-tuebingen high-light-marker-group" data-group="tuebingen"><button>Tübingen</button></div>
+        <div class="map-comm high-light-marker-group" data-group="comm"><button class="btn btn-primary">Theologische Community</button></div>
+        <div class="map-bibliographien high-light-marker-group" data-group="bibliographien"><button class="btn">Bibliographien</button></div>
+        <div class="map-bibliotheken high-light-marker-group" data-group="bibliotheken"><button class="btn">Bibliotheken</button></div>
+        <div class="map-ver high-light-marker-group" data-group="ver"><button class="btn">Bibliothekarische Verbände</button></div>
+        <div class="map-fachin high-light-marker-group" data-group="fachin"><button class="btn">Fachinformationsdienste</button></div>
     </div>
 </section>
 
-<section class="cw-py-5 bg-gray-100 shadow">
-    <div class="cw-container">
-        <h1 class="cw-h1">Networking</h1>
-        <p class="cw-lead">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi.
-        </p>
+<div class="cw-row">
+    <div class="cw-col-lg-12 cw-ml-lg-4">
+        <div class="cw-text-block"><br>
+            <h1 class="cw-h1">Netzwerke und Kooperationen</h1>
+                            <p><em>Theologische Community</em></p>
+                <p>Die Zusammenarbeit mit verschiedenen Organisationen der theologischen Community ermöglicht vielfältige Synergien. Regelmäßig werden die Gremien über Neuerungen im IxTheo informiert. </p>
+                <p>Aktuell arbeitet IxTheo mit folgenden Institutionen aus der theologischen Community zusammen:</p>
+                <ul>
+                    <li>Vereinigung der Arbeitsgemeinschaften für Katholische Theologie (VAKT)</li>
+                    <li>Wissenschaftliche Gesellschaft für Theologie (WGTh)</li>
+                    <li>Evangelisch-Theologischer Fakultätentag</li>
+                    <li>Katholisch-Theologischer Fakultätentag</li>
+                    <li>Conferenza Episcopale Italiana</li>
+                    <li>Globethics</li>
+                    <li>International Academy of Practical Theology (IAPT)</li>
+                    <li>RESILIENCE (Religious Studies Infrastructure: Tools, Innovation, Experts, Connections and Centres in Europe)</li>
+                </ul>
+                <p>IxTheo ist offen für neue Kooperationen und Partnerschaften innerhalb der theologischen Community. Wenn Sie Interesse an einer Zusammenarbeit haben, wenden Sie sich gerne an <a href="mailto:ixtheo@ub.uni-tuebingen.de">ixtheo@ub.uni-tuebingen.de</a> </p>
+
+                <p><em>Bibliothekarische Verbände</em></p>
+                <p>IxTheo ist eng mit verschiedenen theologisch-bibliothekarischen Verbänden vernetzt. Im Rahmen von Tagungen und Konferenzen findet ein regelmäßiger Austausch statt.</p>
+                <p>Aktuell gibt es Kooperationen mit folgenden bibliothekarischen Verbänden:</p>
+                <ul>
+                    <li>AKThB (Arbeitsgemeinschaft Katholisch-Theologischer Bibliotheken)</li>
+                    <li>BETH (Bibliothèques Européennes de Théologie)</li>
+                    <li>VkwB (Verband kirchlich-wissenschaftlicher Bibliotheken)</li>
+                </ul>
+
+                <p>IxTheo ist offen für neue Kooperationen und Partnerschaften mit bibliothekarischen Verbänden und Zusammenschlüssen. Wenn Sie Interesse an einer Zusammenarbeit haben, wenden Sie sich gerne an <a href="mailto:ixtheo@ub.uni-tuebingen.de">ixtheo@ub.uni-tuebingen.de</a> </p>
+
+                <p><em>Fachreferent*innen und theologische Bibliothekar*innen</em></p>
+                <p>Im Kontakt zu Studierenden und Wissenschaftler*innen an den Universitätsstandorten sind Fachreferent*innen für Theologie und theologische Bibliothekar*innen wichtige Multiplikator*innen. Sie bilden die Schnittstelle zwischen Bibliotheken und Fakultäten oder Instituten.</p>
+                <p>Der FID Theologie bietet Vernetzungstreffen für Fachreferent*innen und theologische Bibliothekar*innen an. Weiterhin gibt es eine Mailingliste, die über neue Entwicklungen informiert:</p>
+                <p><a target="_blank" href="https://listserv.uni-tuebingen.de/mailman/listinfo/fachreferat_theol">https://listserv.uni-tuebingen.de/mailman/listinfo/fachreferat_theol</a>.</p>
+
+
+                <p><em>Bibliographien</em></p>
+                <p>IxTheo wird in Zusammenarbeit mit weiteren Bibliographien erstellt. Die Kooperationspartner beteiligen sich an der Aufnahme neuer Titel und der Sacherschließung. Alle vormals nur in den jeweiligen Bibliographien auffindbaren Daten sind im IxTheo recherchierbar.</p>
+                <p>Aktuell arbeitet IxTheo mit folgenden Bibliographien zusammen:</p>
+                <ul>
+                    <li>Augustinus-Bibliographie (Würzburg)</li>
+                    <li>BiBIL (Lausanne) [in Vorbereitung]</li>
+                    <li>BILDI (Innsbruck)</li>
+                    <li>DaKaR (Münster)</li>
+                        <ul>
+                            <li>Lehrstuhl für Kirchenrecht und kirchliche Rechtsgeschichte an der Katholischen Universität Eichstätt-Ingolstadt</li>
+                            <li>Lehrstuhl für Kirchenrecht und Kirchliche Rechtsgeschichte an der Albert-Ludwigs-Universität Freiburg</li>
+                            <li>Generalvikariat im Erzbistum Hamburg</li>
+                            <li>Seminar für Kirchenrecht, kirchliche Rechtsgeschichte und Staatskirchenrecht der Johannes-Gutenberg-Universität Mainz</li>
+                            <li>Institut für Kanonisches Recht der Universität Münster</li>
+                            <li>Bischöfliches Generalvikariat Osnabrück</li>
+                            <li>Abteilung für Kirchenrecht an der Katholisch-Theologischen Fakultät der Universität Tübingen</li>
+                        </ul>
+                    <li>KALDI (Innsbruck)</li>
+                </ul>
+
+                <p>IxTheo ist offen für neue Kooperationen mit bereits bestehenden Bibliographien. Wenn Sie Interesse an einer Zusammenarbeit haben, wenden Sie sich gerne an <a href="mailto:ixtheo@ub.uni-tuebingen.de">ixtheo@ub.uni-tuebingen.de</a> </p>
+
+                <p><em>Bibliotheken</em></p>
+                <p>Theologisch relevante Bestände aus verschiedenen Bibliotheken werden im IxTheo nachgewiesen. Auch darüber hinaus gibt es vielfältige gemeinsame Projekte.</p>
+                <p>Aktuell arbeitet IxTheo mit folgenden Bibliotheken zusammen:</p>
+                <ul>
+                    <li>Augustijns Historisch Instituut (AHI), Leuven (Heverlee)</li>
+                    <li>Bibliothek des Internationalen Katholischen Missionswerkes missio e.V. (mikado), Aachen [vorgesehen]</li>
+                    <li>Diözesan- und Dombibliothek Köln</li>
+                    <li>Diözesanbibliothek Münster</li>
+                    <li>Evangelische Hochschul- und Zentralbibliothek Württemberg (EHZ-Bibliothek)</li>
+                    <li>Forschungsbibliothek Gotha </li>
+                    <li>Franckesche Stiftungen zu Halle </li>
+                    <li>Institut für Theologie und Frieden (ithf), Hamburg</li>
+                    <li>Johannes a Lasco Bibliothek, Emden</li>
+                    <li>Maurits-Sabbe-Bibliothek, Leuven</li>
+                    <li>Princeton Theological Seminary</li>
+                    <li>Reformationsgeschichtliche Forschungsbibliothek Wittenberg</li>
+                    <li>Zentrum für Augustinus-Forschung (ZAF), Würzburg</li>
+                </ul>
+
+                <p>IxTheo ist offen für Kooperationen und Partnerschaften mit weiteren Bibliotheken. Wenn Sie Interesse an einer Zusammenarbeit haben, wenden Sie sich gerne an <a href="mailto:ixtheo@ub.uni-tuebingen.de">ixtheo@ub.uni-tuebingen.de</a> </p>
+
+                <p><em>Fachinformationsdienste (FID)</em></p>
+                <p>Mit zahlreichen weiteren Fachinformationsdiensten bestehen Kooperationen oder Absprachen zum Nachweis von Titeln, die für beide Fachbereiche einschlägig sind. Auch im Hinblick auf Lizenzen, Erwerbung und Datenaustausch gibt es eine enge Zusammenarbeit.</p>
+                <p>Aktuell gibt es Kooperationen mit folgenden Fachinformationsdiensten:</p>
+                <ul>
+                    <li><a target="_blank" href="https://www.fu-berlin.de/sites/philbib/02Service/service-fuer-die-forschung/Fachinformationsdienste/FID-Altertumswissenschaften.html">FID Altertumswissenschaften</a> <a target="_blank" href="https://www.propylaeum.de/">(Propylaeum)</a></li>
+                    <li><a target="_blank" href="https://www.bsb-muenchen.de/ueber-uns/projekte/fachinformationsdienst-geschichtswissenschaft/">FID Geschichtswissenschaft</a> <a target="_blank" href="https://www.historicum.net/home">(historicum.net)</a></li>
+                    <li><a target="_blank" href="https://www.ub.uni-frankfurt.de/judaica3/">FID Jüdische Studien</a> <a target="_blank" href="https://portal.jewishstudies.de/">(portal.jewishstudies)</a></li>
+                    <li><a target="_blank" href="https://www.ub.uni-heidelberg.de/fachinfo/kunst/Welcome.html">FID Kunst, Fotografie, Design</a> <a target="_blank" href="https://www.arthistoricum.net/">(arthistoricum.net)</a></li>
+                    <li><a target="_blank" href="https://bibliothek.uni-halle.de/nutzen-besuchen/fachspezifische-services/fachinformationsdienst-fid-nahost-nordafrika-und-islamstudien/">FID Nahost-, Nordafrika- und Islamstudien</a> <a target="_blank" href="https://www.menalib.de/">(menalib)</a></li>
+                    <li><a target="_blank" href="https://www.bsb-muenchen.de/sammlungen/osteuropa/fachinformationsdienst/">FID Ost-, Ostmittel-, Südosteuropa</a> <a target="_blank" href="https://www.osmikon.de/">(osmikon)</a></li>
+                    <li><a target="_blank" href="https://ub.uni-koeln.de/forschen-publizieren/projekte/fachinformationsdienst-philosophie">FID Philosophie</a> <a target="_blank" href="https://philportal.de/">(philportal)</a></li>
+                    <li><a target="_blank" href="https://uni-tuebingen.de/einrichtungen/universitaetsbibliothek/ueber-uns/bibliotheksbestand/fachinformationsdienste/religionswissenschaft/">FID Religionswissenschaft</a> <a target="_blank" href="https://relbib.de/">(RelBib)</a></li>
+                    <li><a target="_blank" href="https://fiviblk.de/">Fachinformationsverbund Internationale Beziehungen und Länderkunde</a> <a target="_blank" href="https://ireon-portal.de/">(IREON)</a></li>
+                </ul>
+
+                <p>IxTheo ist offen für Kooperationen und Partnerschaften mit weiteren Fachinformationsdiensten. Wenn Sie Interesse an einer Zusammenarbeit haben, wenden Sie sich gerne an <a href="mailto:ixtheo@ub.uni-tuebingen.de">ixtheo@ub.uni-tuebingen.de</a> </p>
+
+                <p><em>Verlage</em></p>
+                <p>IxTheo kooperiert mit zahlreichen Verlagen. Von Seiten der Verlage werden bibliographische Daten oder durchsuchbare Volltexte bereitgestellt. Weiterhin bestehen Kooperationen im Blick auf verschiedene Digitalisierungsprojekte.</p>
+                <p>Aktuell arbeitet IxTheo mit folgenden Verlagen zusammen:</p>
+                <ul>
+                    <li>Aschendorff</li>
+                    <li>Brill</li>
+                    <li>De Gruyter</li>
+                    <li>Duncker & Humblot</li>
+                    <li>Echter</li>
+                    <li>Evangelische Verlagsanstalt</li>
+                    <li>Harrassowitz</li>
+                    <li>Herder</li>
+                    <li>Kohlhammer</li>
+                    <li>Mohr Siebeck</li>
+                    <li>Patmos</li>
+                    <li>Pustet</li>
+                    <li>Taylor & Francis</li>
+                    <li>Vandenhoeck & Ruprecht</li>
+                </ul>
+                <p>IxTheo ist offen für Kooperationen und Partnerschaften mit weiteren Verlagen. Wenn Sie Interesse an einer Zusammenarbeit haben, wenden Sie sich gerne an <a href="mailto:ixtheo@ub.uni-tuebingen.de">ixtheo@ub.uni-tuebingen.de</a></p>
+            </div>
     </div>
-</section>
+</div>
 
 
 <section class="cw-py-5">
@@ -258,7 +570,7 @@ EOD;
                         <div class="cw-card h-100 border-0 shadow">
                             <div class="cw-card-img-top cw-overflow-hidden cw-dark-overlay cw-bg-cover networking-image-4">
                                 <div class="cw-card-img-overlay-bottom cw-z-index-20">
-                                    <h4 class="cw-h4 cw-text-white cw-text-shadow">Bibliographies</h4>
+                                    <h4 class="cw-h4 cw-text-white cw-text-shadow">Bibliographien</h4>
                                 </div>
                             </div>
                         </div>
@@ -290,7 +602,7 @@ EOD;
                         <div class="cw-card h-100 border-0 shadow">
                             <div class="cw-card-img-top cw-overflow-hidden cw-dark-overlay cw-bg-cover networking-image-6">
                                 <div class="cw-card-img-overlay-bottom cw-z-index-20">
-                                    <h4 class="cw-h4 cw-text-white cw-text-shadow">Fachinformationsdienste (FID)</h4>
+                                    <h4 class="cw-h4 cw-text-white cw-text-shadow" style="font-size: 15px;">Fachinformationsdienste (FID)</h4>
                                 </div>
                             </div>
                         </div>
@@ -347,5 +659,8 @@ EOD;
 .networking-image-7 {
     background-image: url(/themes/ixtheo2/images/networking/Verlage.jpg);
     min-height: 200px;
+}
+.ol-popup-closer {
+    float: right;
 }
 </style>

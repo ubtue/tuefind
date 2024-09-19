@@ -19,11 +19,11 @@
 
   $displayText = '-';
   if (!empty($this->facet['displayText'])) {
-    $displayText = $this->escapeHtml($this->facet['displayText']);
+    $displayText = $this->transEsc($this->facet['displayText']);
   } elseif (!empty($this->facet['value'])) {
-    $displayText = $this->escapeHtml($this->facet['value']);
+    $displayText = $this->transEsc($this->facet['value']);
   }
-  $displayText = '<span class="facet-value' . ($hasCheckbox ? ' icon-link__label' : '') . '">' . $this->transEsc($displayText) . '</span>';
+  $displayText = '<span class="facet-value' . ($hasCheckbox ? ' icon-link__label' : '') . '">' . $displayText . '</span>';
 
   if ($hasCheckbox) {
     $displayText = $this->icon($this->facet['isApplied'] ? 'facet-checked' : 'facet-unchecked', 'icon-link__icon') . $displayText;
@@ -37,8 +37,8 @@
 <?php if (!$this->facet['isApplied'] && null !== $this->facet['count']): ?>
     <span class="badge">
       <?php $isAtLeastOneFilterActive = count($this->results->getParams()->getFilterSettings()) > 0; ?>
-      <?php $currentCount = ($this->tuefind()->isUnassigned($this->facet['displayText']) 
-                            && !($this->facet['operator'] == 'OR' && $isAtLeastOneFilterActive)) 
+      <?php $currentCount = ($this->tuefind()->isUnassigned($this->facet['displayText'])
+                            && !($this->facet['operator'] == 'OR' && $isAtLeastOneFilterActive))
                             ? $this->tuefind()->getLocalizedOverallPercentage($this, $this->facet['count'], $this->results) . ' %'
                             : $this->localizedNumber($this->facet['count']); ?>
       <span class="sr-only"><?=$this->transEsc('result_count', ['%%count%%' => $currentCount]) ?></span>
@@ -58,13 +58,13 @@
 <?php // Render the element: ?>
 <?php if ($hasSubLinks): ?>
   <div class="<?=implode(' ', $classList) ?>">
-    <a class="text<?=$hasCheckbox ? ' icon-link' : ''?>" href="<?=$toggleUrl ?>" data-lightbox-ignore data-title="<?=$this->escapeHtmlAttr($this->transEsc($this->facet['displayText'])) ?>" data-count="<?=$this->facet['count'] ?>"<?php if ($this->facet['isApplied']): ?> title="<?=$this->transEscAttr('applied_filter') ?>"<?php endif;?>>
+    <a class="text<?=$hasCheckbox ? ' icon-link' : ''?>" href="<?=$toggleUrl ?>" data-lightbox-ignore data-title="<?=$this->transEscAttr($this->facet['displayText']) ?>" data-count="<?=$this->facet['count'] ?>"<?php if ($this->facet['isApplied']): ?> title="<?=$this->transEscAttr('applied_filter') ?>"<?php endif;?> rel="nofollow">
       <?=$displayText ?>
     </a>
     <?=$badgeExclude?>
   </div>
 <?php else: ?>
-  <a href="<?=$toggleUrl ?>" class="<?=implode(' ', $classList) ?><?=$hasCheckbox ? ' icon-link' : ''?>" data-title="<?=$this->escapeHtmlAttr($this->transEsc($this->facet['displayText'])) ?>" data-count="<?=$this->facet['count'] ?>"<?php if ($this->facet['isApplied']): ?> title="<?=$this->transEscAttr('applied_filter') ?>"<?php endif;?> data-lightbox-ignore>
+  <a href="<?=$toggleUrl ?>" class="<?=implode(' ', $classList) ?><?=$hasCheckbox ? ' icon-link' : ''?>" data-title="<?=$this->transEscAttr($this->facet['displayText']) ?>" data-count="<?=$this->facet['count'] ?>"<?php if ($this->facet['isApplied']): ?> title="<?=$this->transEscAttr('applied_filter') ?>"<?php endif;?> data-lightbox-ignore rel="nofollow">
     <span class="text">
       <?=$displayText ?>
     </span>

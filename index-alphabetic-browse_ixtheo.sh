@@ -23,12 +23,6 @@ function ShutdownRamdisk() {
 }
 
 
-mkdir -p ${TMP_RAMDISK_DIR}
-if ! mountpoint --quiet ${TMP_RAMDISK_DIR}; then
-   ${mount_command} -t tmpfs -o size=10G tmpfs ${TMP_RAMDISK_DIR}
-fi
-
-
 #####################################################
 # Build java command
 #####################################################
@@ -77,6 +71,13 @@ then
   exit 1
 fi
 CLASSPATH="browse-indexing.jar:${SOLRMARC_CLASSPATH}:${VUFIND_HOME}/import/lib/*:${SOLR_HOME}/jars/*:${SOLR_JAR_PATH}/modules/analysis-extras/lib/*:${SOLR_JAR_PATH}/server/solr-webapp/webapp/WEB-INF/lib/*"
+
+
+
+mkdir -p ${TMP_RAMDISK_DIR}
+if ! mountpoint --quiet ${TMP_RAMDISK_DIR}; then
+   ${mount_command} -t tmpfs -o size=10G tmpfs ${TMP_RAMDISK_DIR}
+fi
 
 # make index work with replicated index
 # current index is stored in the last line of index.properties

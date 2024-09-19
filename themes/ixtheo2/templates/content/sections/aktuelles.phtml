@@ -7,35 +7,40 @@
                     <h2 class="cw-h2 cw-mb-5">IxTheo News</h2>
                 </div>
 
-                <div class="slick-slider-single-item" align="center">
-                    <a href="<?=$this->url('content-page', ['page' => 'news']) ?>">
-                        <div class="ix-slick-slider-item" style="background-image: url(<?=$this->imageLink('frontpage/authors.jpg')?>);">
-                            <div class="ix-slick-slider-item-title">Aktuelles</div>
+                <div class="slick-slider-multiple-item" align="center">
+                    <a href="<?=$this->url('content-page', ['page' => 'news']) ?>#self-archiving">
+                        <div class="ix-slick-slider-item" style="background-image: url(<?=$this->imageLink('slider/pexels-anete-lusina.jpg')?>);">
+                            <div class="ix-slick-slider-item-title">Self-Archiving</div>
                         </div>
                     </a>
-                    <div class="ix-slick-slider-item" style="background-image: url(<?=$this->imageLink('frontpage/discover.jpg')?>);">
-                        <div class="ix-slick-slider-item-title">Blog-Aggregator</div>
-                    </div>
-                    <div class="ix-slick-slider-item" style="background-image: url(<?=$this->imageLink('frontpage/publishers.jpg')?>);">
-                        <div class="ix-slick-slider-item-title">Workshop 2.-3.12.19</div>
-                    </div>
+                    <a href="<?=$this->url('content-page', ['page' => 'news']) ?>#aggregator">
+                        <div class="ix-slick-slider-item" style="background-image: url(<?=$this->imageLink('slider/pexels-george-milton.jpg')?>);">
+                            <div class="ix-slick-slider-item-title">Alerting für Blogs und Podcasts</div>
+                        </div>
+                    </a>
+                    <a href="<?=$this->url('content-page', ['page' => 'news']) ?>#personenseiten">
+                        <div class="ix-slick-slider-item" style="background-image: url(<?=$this->imageLink('slider/pexels-gabby.jpg')?>);">
+                            <div class="ix-slick-slider-item-title">Personenseiten</div>
+                        </div>
+                    </a>
                 </div>
 
-                <?php
-                  $jsSnippet = <<< 'EOD'
-                    $(document).ready(function(){
-                        $('.slick-slider-single-item').slick({
-                            dots: true,
-                            infinite: true,
-                            speed: 300,
-                            fade: true,
-                            cssEase: 'linear',
-                            arrows: true
-                        });
-                    });
-EOD;
-              ?>
-              <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $jsSnippet, 'SET')?>
+<?php
+$jsSnippet = <<< 'EOD'
+$(document).ready(function(){
+    $('.slick-slider-multiple-item').slick({
+        dots: true,
+        autoplay:true,
+        infinite: true,
+        speed: 100,
+        fade: true,
+        cssEase: 'linear',
+        arrows: true
+    });
+});
+EOD;?>
+<?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $jsSnippet, 'SET')?>
+
             </div>
             <div class="col-md-6">
                 <div class="cw-text-center">
@@ -58,7 +63,7 @@ EOD;
                             <div class="ix-news-panel ix-news-panel-3">
                                 <a href="<?=$this->url('content-page', ['page' => 'full_text_search'])?>">
                                     <div><b>Volltextsuche</b></div>
-                                    <div><small>Theologica durchsuchen</small></div>
+                                    <div><small>Inhalte multilingual durchsuchen</small></div>
                                 </a>
                             </div>
                             <div class="ix-news-panel ix-news-panel-4">

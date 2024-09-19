@@ -18,7 +18,7 @@ $this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') 
       </tr>
       <?php foreach ($this->authorityUsers as $user): ?>
         <tr>
-          <td><a href="/Authority/<?=urlencode($user['id'])?>"><?=$user['title']." (".$user['id'].")";?></a></td>
+          <td><a href="/AuthorityRecord/<?=urlencode($user['id'])?>"><?=$user['title']." (".$user['id'].")";?></a></td>
           <td><?=$user['access_state']?></td>
         </tr>
       <?php endforeach; ?>

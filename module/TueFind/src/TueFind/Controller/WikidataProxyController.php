@@ -75,7 +75,7 @@ class WikidataProxyController extends AbstractProxyController
                 $filters['P570'] = ['value' => $parameters['deathYear'], 'type' => 'year'];
 
             if (count($filters) == 0)
-                throw new \Exception('No suitable image found (at least one additional filter must be given!)');
+                throw new \Exception('No suitable image found (at least one additional filter must be given!) when searching for: ' . PHP_EOL . print_r($searches,true));
 
             foreach ($searches as $search) {
                 try {

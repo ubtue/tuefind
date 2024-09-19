@@ -4,7 +4,7 @@
 <?php /* TueFind: Intentionally omit schema.org type "Product".
        * For testing: https://search.google.com/test/rich-results
        */ ?>
-<div class="media" vocab="http://schema.org/" resource="#record" typeof="<?=$this->driver->getSchemaOrgFormats()?> Product">
+<div class="media" vocab="http://schema.org/" resource="#record" typeof="<?=$this->driver->getSchemaOrgFormats()?>">
   <?php
     $QRCode = $this->record($this->driver)->getQRCode('core');
     $coverDetails = $this->record($this->driver)->getCoverDetails('core', 'medium', $this->record($this->driver)->getThumbnail('large'));

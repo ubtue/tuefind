@@ -207,7 +207,7 @@ class KfL
      *
      * @return string
      */
-    public function getCountryModeByDriver(\TueFind\RecordDriver\SolrMarc $driver): string
+    public function getCountryModeByDriver(\TueFind\RecordDriver\SolrMarc $driver): ?string
     {
         $licenseInfo = $this->getLicenseInfoByDriver($driver);
         return $licenseInfo['countryMode'] ?? null;

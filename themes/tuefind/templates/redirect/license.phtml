@@ -1,5 +1,9 @@
 <h1>FID-Lizenz: <?=$this->driver->getShortTitle()?></h1>
-<?php if ($locked): ?>
+<?php if (!$available): ?>
+  <div class="alert alert-warning">
+    Für diesen Titel ist keine Lizenz verfügbar.
+  </div>
+<?php elseif ($locked): ?>
   <h2><?=$this->transEsc('access_denied')?></h2>
   <p>
     <?=$this->translate('access_denied_fid_license', ['%%url%%' => $this->url('content-page', ['page' => 'Impressum'])])?>
@@ -11,9 +15,9 @@
   </p>
 
   <?php if ($this->countryAllowed == false): ?>
-    <p>
+    <div class="alert alert-warning">
       Der Zugriff ist auf Personen aus dem DACH-Raum beschränkt. Falls Sie aus dem DACH-Raum zugreifen, ändern Sie bitte die Ländereinstellung in Ihrem Benutzerkonto um auf die Ressource zugreifen zu können.
-    </p>
+    </div>
   <?php else: ?>
     <?php if ($this->countryMode == 'DACH'): ?>
       <p>

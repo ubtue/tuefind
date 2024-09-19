@@ -21,8 +21,46 @@ var IxTheo2 = {
             $('#searchForm_typeCaption').html($(this).html());
             $('#searchForm_type').attr('value', $(this).data('value'));
             return false;
-        })
+        });
     },
+
+    IxTheoSimpleGalley: function(setIDs, setClickAttr) {
+        var current_image,
+        selector,
+        counter = 0;
+
+        $('#show-next-image, #show-previous-image').click(function(){
+            if($(this).attr('id') == 'show-previous-image'){
+                current_image--;
+            } else {
+                current_image++;
+            }
+
+            selector = $('[data-image-id="' + current_image + '"]');
+            updateGallery(selector);
+        });
+
+        function updateGallery(selector) {
+            let $sel = selector;
+            console.log($sel.data('image'));
+            current_image = $sel.data('image-id');
+            $('#image-gallery-caption').text($sel.data('caption'));
+            $('#image-gallery-title').text($sel.data('title'));
+            $('#image-gallery-image').attr('src', $sel.data('image'));
+            //disableButtons(counter, $sel.data('image-id'));
+        }
+
+        if(setIDs == true){
+            $('[data-image-id]').each(function(){
+                counter++;
+                $(this).attr('data-image-id',counter);
+            });
+        }
+        $(setClickAttr).on('click',function(){
+            updateGallery($(this));
+        });
+    }
+
 }; //end Ixtheo2
 
 // Enable bootstrap3 popovers
@@ -30,10 +68,13 @@ var IxTheo2 = {
 $(function () {
     $('[data-toggle="popover"]').popover();
 
-    IxTheo2.ScrollToSearchForm();
-    IxTheo2.ChangeHandlerMenuSearchForm();
+    //IxTheo2.ScrollToSearchForm(); //for now disabled
+    //IxTheo2.ChangeHandlerMenuSearchForm();
 
     if($('.ixtheo2-form').html() == undefined && $('.relbib-form').html() == undefined) { //for now disabled
-        $(".searchForm_lookfor:visible").focus();
+        //$(".searchForm_lookfor:visible").focus();
     }
+
+    IxTheo2.IxTheoSimpleGalley(true, 'a.thumbnail');
+
 });

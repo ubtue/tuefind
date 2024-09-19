@@ -2,6 +2,9 @@
 
 namespace TueFind\Controller;
 
+use VuFindSearch\Command\SearchCommand;
+use VuFindSearch\Query\Query;
+
 /**
  * This controller is used to redirect to a given URL and save it with a timestamp.
  * (e.g. to Track how many times an external service is used, without storing person-related data.)
@@ -27,7 +30,8 @@ class RedirectController extends \VuFind\Controller\AbstractBase implements \VuF
      */
     protected $kfl;
 
-    public function setDecoder(\TueFind\View\Helper\TueFind\TueFind $decoder) {
+    public function setDecoder(\TueFind\View\Helper\TueFind\TueFind $decoder)
+    {
         $this->decoder = $decoder;
     }
 
@@ -39,12 +43,12 @@ class RedirectController extends \VuFind\Controller\AbstractBase implements \VuF
     public function redirectAction()
     {
         /**
-        * Use HTML Meta redirect page instead of HTTP header.
-        * HTTP header redirect may fail when using php-fpm if the header
-        * is larger than 8192 Bytes.
-        *
-        * See https://maxchadwick.xyz/blog/http-response-header-size-limit-with-mod-proxy-fcgi
-        */
+         * Use HTML Meta redirect page instead of HTTP header.
+         * HTTP header redirect may fail when using php-fpm if the header
+         * is larger than 8192 Bytes.
+         *
+         * See https://maxchadwick.xyz/blog/http-response-header-size-limit-with-mod-proxy-fcgi
+         */
 
         // URL is Base64URL encoded, which is different than the regular Base64:
         // https://base64.guru/standards/base64url
@@ -110,26 +114,37 @@ class RedirectController extends \VuFind\Controller\AbstractBase implements \VuF
         } else {
             // This is the regular case, a user requesting fulltext access via the frontend.
             $viewParams = [];
-            $viewParams['driver'] = $this->getRecordLoader()->load($id);
+
+            // Note: The ID can either be a PPN, or a PPN with a prefix e.g. "(EBP)089562895", example from KrimDok.
+            $driver = $this->getRecordLoader()->load($id);
+            $viewParams['driver'] = $driver;
+            $viewParams['available'] = !empty($driver->getKflUrl());
 
             if ($user == false) {
-                $tuefindHelper = $this->serviceLocator->get('ViewHelperManager')->get('tuefind');
-                $msg = 'FID-Lizenz: "' . $viewParams['driver']->getShortTitle() . '". ';
-                $msg .= 'Diese Lizenz wurde vom Fachinformationsdienst (FID) ' . $tuefindHelper->getTueFindFID(/*$short=*/true) . ' erworben. Die kostenfreie Nutzung der Ressource ist mit einem ' . $tuefindHelper->getTueFindType() . '-Konto möglich.';
+                $msg = null;
+                if (!$viewParams['available']) {
+                    $msg = 'Für diesen Titel ist keine Lizenz verfügbar.';
+                } else {
+                    $tuefindHelper = $this->serviceLocator->get('ViewHelperManager')->get('tuefind');
+                    $msg = 'FID-Lizenz: "' . $viewParams['driver']->getShortTitle() . '". ';
+                    $msg .= 'Diese Lizenz wurde vom Fachinformationsdienst (FID) ' . $tuefindHelper->getTueFindFID(/*$short=*/true) . ' erworben. Die kostenfreie Nutzung der Ressource ist mit einem ' . $tuefindHelper->getTueFindType() . '-Konto möglich.';
+                }
                 return $this->forceLogin($msg);
             }
 
-            $viewParams['locked'] = $user->isLicenseAccessLocked();
+            if ($viewParams['available']) {
+                $viewParams['locked'] = $user->isLicenseAccessLocked();
 
-            // Check country restriction
-            $viewParams['countryMode'] = $this->kfl->getCountryModeByDriver($viewParams['driver']);
-            if ($viewParams['countryMode'] == 'DACH') {
-                $viewParams['countryAllowed'] = in_array($user->tuefind_country, ['DE', 'AT', 'CH']);
-            } else {
-                $viewParams['countryAllowed'] = true;
+                // Check country restriction
+                $viewParams['countryMode'] = $this->kfl->getCountryModeByDriver($viewParams['driver']);
+                if ($viewParams['countryMode'] == 'DACH') {
+                    $viewParams['countryAllowed'] = in_array($user->tuefind_country, ['DE', 'AT', 'CH']);
+                } else {
+                    $viewParams['countryAllowed'] = true;
+                }
+                $viewParams['licenseUrl'] = !$viewParams['locked'] ? $this->kfl->getUrlByDriver($viewParams['driver']) : null;
             }
 
-            $viewParams['licenseUrl'] = !$viewParams['locked'] ? $this->kfl->getUrlByDriver($viewParams['driver']) : null;
             return $this->createViewModel($viewParams);
         }
     }
