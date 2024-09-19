@@ -1689,6 +1689,47 @@
             "time": "2019-03-08T08:55:37+00:00"
         },
         {
+            "name": "drmonty/leaflet",
+            "version": "1.9.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mrohnstock/leaflet.git",
+                "reference": "9de8818ac4a667a8468ccf6fb0cbc0b6db38cff9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mrohnstock/leaflet/zipball/9de8818ac4a667a8468ccf6fb0cbc0b6db38cff9",
+                "reference": "9de8818ac4a667a8468ccf6fb0cbc0b6db38cff9",
+                "shasum": ""
+            },
+            "type": "component",
+            "extra": {
+                "component": {
+                    "scripts": [
+                        "js/leaflet.js"
+                    ],
+                    "files": [
+                        "js/*.js",
+                        "js/*.map",
+                        "css/*.css",
+                        "images/*.png"
+                    ]
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "description": "JavaScript library for mobile-friendly interactive maps http://leafletjs.com",
+            "homepage": "http://leafletjs.com/",
+            "keywords": [
+                "gis",
+                "map"
+            ],
+            "support": {
+                "issues": "https://github.com/mrohnstock/leaflet/issues",
+                "source": "https://github.com/mrohnstock/leaflet/tree/1.9.4"
+            },
+            "time": "2023-05-24T05:55:15+00:00"
+        },
+        {
             "name": "elastic/transport",
             "version": "v8.8.0",
             "source": {
