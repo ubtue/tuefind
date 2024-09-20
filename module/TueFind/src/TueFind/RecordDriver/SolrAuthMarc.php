@@ -418,17 +418,17 @@ class SolrAuthMarc extends SolrAuthDefault {
             foreach ($fields as $field) {
 
                 $aSubfield = $this->getMarcReader()->getSubfield($field, 'a');
-                if ($aSubfield !== false) {
+                if ($aSubfield != false) {
 
                     $relationName = $aSubfield;
 
                     $bSubfield = $this->getMarcReader()->getSubfield($field, 'b');
-                    if ($bSubfield !== false) {
+                    if ($bSubfield != false) {
                         $relationName .= " " . $bSubfield;
                     }
 
                     $cSubfield = $this->getMarcReader()->getSubfield($field, 'c');
-                    if ($cSubfield !== false) {
+                    if ($cSubfield != false) {
                         $relationName .= ", " . $cSubfield;
                     }
 
@@ -436,21 +436,29 @@ class SolrAuthMarc extends SolrAuthDefault {
 
                     $idPrefixPattern = '/^\(DE-627\)/';
                     $idSubfield = $this->getMarcReader()->getSubfield($field, '0', $idPrefixPattern);
-                    if ($idSubfield !== false) {
+                    if ($idSubfield != false) {
                         $relation['id'] = preg_replace($idPrefixPattern, '', $idSubfield);
                     }
-                    $typeSubfield = $this->getMarcReader()->getSubfield($field, '9');
 
-                    if ($typeSubfield !== false) {
+                    $typeSubfield = $this->getMarcReader()->getSubfield($field, '9');
+                    if ($typeSubfield != false) {
                         $relationType = preg_replace('/^v:/', '', $typeSubfield);
                         if(empty($relationType)) {
                             $dSubfield = $this->getMarcReader()->getSubfield($field, 'd');
-                            if ($dSubfield !== false) {
+                            if ($dSubfield != false) {
                                 $relationType .= $dSubfield;
                             }
                         }
                         $relation['type'] = $relationType;
                     }
+
+                    if (!isset($relation['type'])) {
+                        $typeSubfield = $this->getMarcReader()->getSubfield($field, 'i');
+                        if ($typeSubfield != false) {
+                            $relation['type'] = $typeSubfield;
+                        }
+                    }
+
                     $relations[] = $relation;
                 }
             }
