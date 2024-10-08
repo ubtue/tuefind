@@ -26,16 +26,12 @@ class Params extends \TueFind\Search\Solr\Params implements \VuFind\I18n\Transla
 
     protected function formatFilterListEntry($field, $value, $operator, $translate)
     {
-        $rawDisplayText = $this->getFacetValueRawDisplayText($field, $value);
+        $facet = parent::formatFilterListEntry($field, $value, $operator, $translate);
         if($field == 'ixtheo_notation_facet') {
             $prefix = 'ixtheo-';
-            $rawDisplayText = $this->translate($prefix . $rawDisplayText);
+            $facet['displayText'] = $this->translate($prefix . $facet['displayText']);
         }
-        $displayText = $translate
-            ? $this->translateFacetValue($field, $rawDisplayText)
-            : $rawDisplayText;
-
-        return compact('value', 'displayText', 'field', 'operator');
+        return $facet;
     }
 
     public function getDisplayQuery()
