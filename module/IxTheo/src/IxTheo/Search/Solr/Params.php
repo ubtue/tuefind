@@ -24,6 +24,16 @@ class Params extends \TueFind\Search\Solr\Params implements \VuFind\I18n\Transla
         }
     }
 
+    protected function formatFilterListEntry($field, $value, $operator, $translate)
+    {
+        $facet = parent::formatFilterListEntry($field, $value, $operator, $translate);
+        if($field == 'ixtheo_notation_facet') {
+            $prefix = 'ixtheo-';
+            $facet['displayText'] = $this->translate($prefix . $facet['displayText']);
+        }
+        return $facet;
+    }
+
     public function getDisplayQuery()
     {
         // Rewrite English style bible searches in the English interface
