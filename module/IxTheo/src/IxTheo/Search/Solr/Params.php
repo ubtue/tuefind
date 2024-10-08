@@ -24,6 +24,20 @@ class Params extends \TueFind\Search\Solr\Params implements \VuFind\I18n\Transla
         }
     }
 
+    protected function formatFilterListEntry($field, $value, $operator, $translate)
+    {
+        $rawDisplayText = $this->getFacetValueRawDisplayText($field, $value);
+
+        $prefix = 'ixtheo-';
+        $rawDisplayText = $this->translate($prefix . $rawDisplayText);
+
+        $displayText = $translate
+            ? $this->translateFacetValue($field, $rawDisplayText)
+            : $rawDisplayText;
+
+        return compact('value', 'displayText', 'field', 'operator');
+    }
+
     public function getDisplayQuery()
     {
         // Rewrite English style bible searches in the English interface

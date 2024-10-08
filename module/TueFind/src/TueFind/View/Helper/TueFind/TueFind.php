@@ -630,7 +630,6 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
     }
 
     public function getHierarchicalDisplayText($filterDisplayText): string {
-        $prefix = 'ixtheo';
-        return $this->translate($prefix . '-' . $filterDisplayText);
+        return $this->container->get(\VuFind\Search\Solr\HierarchicalFacetHelper::class)->formatDisplayText($filterDisplayText)->getDisplayString();
     }
 }
