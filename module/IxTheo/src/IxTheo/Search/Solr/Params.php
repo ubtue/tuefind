@@ -27,10 +27,10 @@ class Params extends \TueFind\Search\Solr\Params implements \VuFind\I18n\Transla
     protected function formatFilterListEntry($field, $value, $operator, $translate)
     {
         $rawDisplayText = $this->getFacetValueRawDisplayText($field, $value);
-
-        $prefix = 'ixtheo-';
-        $rawDisplayText = $this->translate($prefix . $rawDisplayText);
-
+        if($field == 'ixtheo_notation_facet') {
+            $prefix = 'ixtheo-';
+            $rawDisplayText = $this->translate($prefix . $rawDisplayText);
+        }
         $displayText = $translate
             ? $this->translateFacetValue($field, $rawDisplayText)
             : $rawDisplayText;
