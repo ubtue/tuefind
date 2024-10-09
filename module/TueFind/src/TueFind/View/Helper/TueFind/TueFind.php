@@ -351,7 +351,7 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
             case 'relbib':
                 return 'RelBib';
             case 'krimdok':
-               return 'Krimdok';
+               return 'KrimDok';
         }
         return false;
     }
