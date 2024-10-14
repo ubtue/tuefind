@@ -13,7 +13,7 @@ EOD;
 ?>
 <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $jsSnippet, 'SET')?>
 <style>
-#mlt li:nth-child(n+6) {
+#mlt li:nth-child(1n+6) {
     display:none;
     list-style-type: none;
 }
@@ -21,7 +21,7 @@ EOD;
 <h2><?=$this->transEsc('Similar Items')?></h2>
 <?php $similarRecords = $this->related->getResults(); ?>
 <?php if (!empty($similarRecords)): ?>
-  <ul class="list-group">
+  <ul class="list-group" id="mlt">
     <?php foreach ($similarRecords as $data): ?>
       <li class="list-group-item">
         <?php
@@ -37,7 +37,7 @@ EOD;
             $attrs['title'] = $format;
           }
         ?>
-        <a class="related__title" href="<?=$this->escapeHtmlAttr($this->recordLinker()->getUrl($data))?>">
+        <a class="related__title" href="<?=$this->escapeHtmlAttr($this->recordLinker()->getUrl($data))?>" rel="nofollow">
           <?=$this->icon('format-' . $icon, $attrs) ?>
           <?=$this->escapeHtml($data->getTitle())?>
         </a>
