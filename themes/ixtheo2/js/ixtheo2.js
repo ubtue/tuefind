@@ -3,11 +3,17 @@ TueFind2.ExpandDropdownsOnHover = true;
 var IxTheo2 = {
     ScrollToSearchForm: function() {
         if($('#searchForm').html() != undefined) {
+            let anchor = false;
             let content_block_element = $("#content").html();
             let index_page = $(".index-page").html();
             let search_form_element = document.getElementById("searchForm");
             let ix2_search_form = $(".ix2-searchForm").html();
-            if(search_form_element.length > 0 && content_block_element != undefined && index_page == undefined && ix2_search_form != undefined) {
+            let URL = $(location).attr("href");
+            const find_anchor = URL.split("#");
+            if(find_anchor.length == 2) {
+                anchor = true;
+            }
+            if(search_form_element.length > 0 && content_block_element != undefined && index_page == undefined && ix2_search_form != undefined && anchor === false) {
                 const y = search_form_element.getBoundingClientRect().top + window.scrollY;
                 window.scroll({
                 top: y-100,
@@ -29,7 +35,7 @@ var IxTheo2 = {
         selector,
         counter = 0;
 
-        $('#show-next-image, #show-previous-image').click(function(){
+        $('#show-next-image, #show-previous-image').click(function() {
             if($(this).attr('id') == 'show-previous-image'){
                 current_image--;
             } else {
@@ -68,11 +74,11 @@ var IxTheo2 = {
 $(function () {
     $('[data-toggle="popover"]').popover();
 
-    //IxTheo2.ScrollToSearchForm(); //for now disabled
-    //IxTheo2.ChangeHandlerMenuSearchForm();
+    IxTheo2.ScrollToSearchForm();
+    IxTheo2.ChangeHandlerMenuSearchForm();
 
-    if($('.ixtheo2-form').html() == undefined && $('.relbib-form').html() == undefined) { //for now disabled
-        //$(".searchForm_lookfor:visible").focus();
+    if($('.ixtheo2-form').html() == undefined && $('.relbib-form').html() == undefined) {
+        $(".searchForm_lookfor:visible").focus();
     }
 
     IxTheo2.IxTheoSimpleGalley(true, 'a.thumbnail');
