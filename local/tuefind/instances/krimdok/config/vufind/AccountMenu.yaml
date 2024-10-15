@@ -1,0 +1,96 @@
+# If this file is empty or missing, default settings will be used, matching
+# the examples provided below. The format of this configuration is as follows:
+# array keys for every menu item could be:
+#   - name: name of an item
+#   - label: the text shown as link, will be translated - required
+#   - route: route name used to generate link target - required
+#   - icon: icon used for the item, has to be defined in theme config
+#   - iconMethod: method to dynamically create the icon name; ignored when
+#     icon is explicitly set.
+#   - checkMethod: the name of an AccountMenu view helper method to perform
+#     a check whether to show the item. If omitted, item will always display.
+#   - status: whether to show status label, defaults to false
+#   - section: Added in TueFind to move items to separate admin menu.
+
+MenuItems:
+  - name: favorites
+    label: saved_items
+    route: myresearch-favorites
+    icon: user-favorites
+    checkMethod: checkFavorites
+
+  - name: history
+    label: Search History
+    route: search-history
+    icon: search
+    checkMethod: checkHistory
+
+  - name: subscriptions
+    label: Subscriptions
+    route: myresearch-subscriptions
+    icon: notification
+    checkMethod: checkSubscriptions
+
+  - name: RssFeedSettings
+    label: My newsfeeds
+    route: myresearch-rssfeedsettings
+    icon: search-rss
+    checkMethod: checkRssSubscriptions
+
+  - name: PDASubscriptions
+    label: PDA
+    route: myresearch-pdasubscriptions
+    icon: format-book
+    checkMethod: checkPda
+
+  - name: publications
+    label: My Publications
+    route: myresearch-publications
+    icon: upload
+    checkMethod: checkPublications
+
+  - name: profile
+    label: Profile
+    route: myresearch-profile
+    icon: profile
+
+  - name: logout
+    label: Log Out
+    route: myresearch-logout
+    icon: sign-out
+    checkMethod: checkLogout
+
+  - name: showadmins
+    label: Show admins
+    route: adminfrontend-showadmins
+    icon: user-secret
+    checkMethod: checkAdmins
+    section: admin
+
+  - name: showuserauthorities
+    label: Show user authorities
+    route: adminfrontend-showuserauthorities
+    icon: user-plus
+    checkMethod: checkUserAuthorities
+    section: admin
+
+  - name: showuserauthorityhistory
+    label: Show user authority history
+    route: adminfrontend-showuserauthorityhistory
+    icon: user-plus
+    checkMethod: checkUserAuthorities
+    section: admin
+
+  - name: showuserpublications
+    label: Show user publications
+    route: adminfrontend-showuserpublications
+    icon: user-plus
+    checkMethod: checkUserPublications
+    section: admin
+
+  - name: showuserpublicationstatistics
+    label: Show user publication statistics
+    route: adminfrontend-showuserpublicationstatistics
+    icon: user-plus
+    checkMethod: checkUserPublications
+    section: admin
