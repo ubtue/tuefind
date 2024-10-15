@@ -32,7 +32,13 @@ class SolrDefault extends \VuFind\RecordDriver\SolrMarc
     protected $hasFulltextMatch;
 
 
-    function __construct() {
+    function __construct(
+        $mainConfig = null,
+        $recordConfig = null,
+        $searchSettings = null
+    ) {
+        parent::__construct($mainConfig, $recordConfig, $searchSettings);
+
         $this->authorImplode = function ($array) {
             if (is_null($array)) {
                 return null;
