@@ -4,7 +4,7 @@
   $cover = $coverDetails['html'];
   $thumbnail = false;
   $thumbnailAlignment = $this->record($this->driver)->getThumbnailAlignment('result');
-  $searcHandler = $this->params->getSearchHandler();
+  $searchHandler = $this->params->getSearchHandler();
   if ($cover):
     ob_start(); ?>
     <div class="media-<?=$thumbnailAlignment ?> <?=$this->escapeHtmlAttr($coverDetails['size'])?>">
@@ -178,7 +178,7 @@
       -->
 
       <?php /* Time Range section */ ?>
-      <?php if (!empty($searcHandler) && $searcHandler == 'TimeRangeBBox'): ?>
+      <?php if (!empty($searchHandler) && $searchHandler == 'TimeRangeBBox'): ?>
         <?php $timeRangesString = $this->driver->tryMethod('getTimeRangesString'); ?>
         <?php if (!empty($timeRangesString)): ?>
           <div><?=$this->transEsc($timeRangesString)?></div>
