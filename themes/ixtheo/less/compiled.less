@@ -43,8 +43,12 @@ mark {
   display: block;
 }
 
-a.navbar-brand, nav > .nav > li > a {
+a.navbar-brand {
   color: white;
+}
+
+nav#ix-nav-header > .nav > li > a {
+    color: white;
 }
 
 .nav > li > a:focus,
@@ -241,11 +245,16 @@ section.section-home {
   #searchForm {
     width: 100%;
 
-    #searchForm_row {
+    .searchForm-inputs {
         display: flex;
 
-        #searchForm_lookfor {
+        .searchForm-query {
             flex: 1;
+            display: flex;
+
+            .searchForm_lookfor {
+                flex: 1;
+            }
         }
     }
   }

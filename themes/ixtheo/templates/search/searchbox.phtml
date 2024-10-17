@@ -107,9 +107,8 @@
           $searchboxAttributes['class'] .= ' with-keyboard-selection';
         }
       ?>
-      <div id="tf-searchForm-mid" style="display: flex">
-      <div class="searchForm-query" style="flex: 1; display: flex">
-        <input<?=$this->htmlAttributes($searchboxAttributes)?> style="flex: 1">
+      <div class="searchForm-query">
+        <input<?=$this->htmlAttributes($searchboxAttributes)?>>
         <div id="searchForm_controls">
           <button id="searchForm-reset" class="searchForm-reset hidden" type="reset" tabindex="-1" aria-label="<?=$this->transEscAttr('searchform_reset_button')?>"><?=$this->icon('ui-reset-search');?></button>
           <?php if (!empty($keyboardLayouts)): ?>
@@ -166,41 +165,6 @@
           <input type="hidden" name="type" value="<?=$this->escapeHtmlAttr($handlers[0]['value'])?>">
         <?php endif; ?>
         <button type="submit" class="btn btn-primary"><?=$this->icon('search') ?> <?=$this->transEsc('Find')?></button>
-        </div>
-
-        <ul class="nav nav-pills">
-          <?php if ($advSearch): ?>
-            <?php
-              $advSearchQuery = $results ? ['edit' => $results->getSearchId()] : $hiddenFilters;
-              $advSearchLink = $this->url($advSearch, [], ['query' => $advSearchQuery]);
-            ?>
-            <li><a href="<?=$advSearchLink?>" class="advanced-search-link btn btn-link" rel="nofollow"><?=$this->transEsc('Advanced')?></a></li>
-          <?php endif; ?>
-
-          <li class="dropdown">
-            <a class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-              <?=$this->transEsc('Browse')?>
-              <span class="caret"></span>
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-              <li><a href="<?=$this->url('keywordchainsearch-home')?>" rel="nofollow"><?=$this->transEsc('Browse Keywordchains')?></a></li>
-              <li><a href="<?=$this->url('browse-home')?>" rel="nofollow"><?=$this->transEsc('Browse the Catalog')?></a></li>
-              <li><a href="<?=$this->url('alphabrowse-home')?>" rel="nofollow"><?=$this->transEsc('Browse Alphabetically')?></a></li>
-            </ul>
-          </li>
-
-          <li class="dropdown">
-            <a class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-              <?=$this->transEsc('link_text_need_help')?>
-              <span class="caret"></span>
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-              <li><a href="<?=$this->url('help-home')?>?topic=search" data-lightbox class="help-link" title="<?=$this->transEsc('Search Tips')?>"><?=$this->transEsc('Search Tips')?></a></li>
-            </ul>
-          </li>
-
-          <li><a href="<?=$this->url('search-newitem')?>" class="advanced-search-link btn btn-link" rel="nofollow"><?=$this->transEsc('New Items')?></a></li>
-        </ul>
     <?php if ($geoUrl = $this->geocoords()->getSearchUrl($options)) : ?>
         <a href="<?=$geoUrl ?>" class="btn btn-link"><?=$this->transEsc('Geographic Search')?></a>
     <?php endif; ?>
@@ -249,6 +213,40 @@
       }
     ?>
     </div>
+
+    <ul class="nav nav-pills">
+      <?php if ($advSearch): ?>
+        <?php
+          $advSearchQuery = $results ? ['edit' => $results->getSearchId()] : $hiddenFilters;
+          $advSearchLink = $this->url($advSearch, [], ['query' => $advSearchQuery]);
+        ?>
+        <li><a href="<?=$advSearchLink?>" class="advanced-search-link btn btn-link" rel="nofollow"><?=$this->transEsc('Advanced')?></a></li>
+      <?php endif; ?>
+
+      <li class="dropdown">
+        <a class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+          <?=$this->transEsc('Browse')?>
+          <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+          <li><a href="<?=$this->url('keywordchainsearch-home')?>" rel="nofollow"><?=$this->transEsc('Browse Keywordchains')?></a></li>
+          <li><a href="<?=$this->url('browse-home')?>" rel="nofollow"><?=$this->transEsc('Browse the Catalog')?></a></li>
+          <li><a href="<?=$this->url('alphabrowse-home')?>" rel="nofollow"><?=$this->transEsc('Browse Alphabetically')?></a></li>
+        </ul>
+      </li>
+
+      <li class="dropdown">
+        <a class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+          <?=$this->transEsc('link_text_need_help')?>
+          <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+          <li><a href="<?=$this->url('help-home')?>?topic=search" data-lightbox class="help-link" title="<?=$this->transEsc('Search Tips')?>"><?=$this->transEsc('Search Tips')?></a></li>
+        </ul>
+      </li>
+
+      <li><a href="<?=$this->url('search-newitem')?>" class="advanced-search-link btn btn-link" rel="nofollow"><?=$this->transEsc('New Items')?></a></li>
+    </ul>
     <?=$this->context($this)->renderInContext(
       'search/filters.phtml',
       [
