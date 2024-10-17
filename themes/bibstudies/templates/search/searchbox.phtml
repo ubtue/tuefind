@@ -109,9 +109,8 @@
           $searchboxAttributes['class'] .= ' with-keyboard-selection';
         }
       ?>
-      <div id="tf-searchForm-mid" style="display: flex">
-      <div class="searchForm-query" style="flex: 1; display: flex">
-        <input<?=$this->htmlAttributes($searchboxAttributes)?> style="flex: 1">
+      <div class="searchForm-query">
+        <input<?=$this->htmlAttributes($searchboxAttributes)?>>
         <div id="searchForm_controls">
           <button id="searchForm-reset" class="searchForm-reset hidden" type="reset" tabindex="-1" aria-label="<?=$this->transEscAttr('searchform_reset_button')?>"><?=$this->icon('ui-reset-search');?></button>
           <?php if (!empty($keyboardLayouts)): ?>
@@ -168,13 +167,16 @@
           <input type="hidden" name="type" value="<?=$this->escapeHtmlAttr($handlers[0]['value'])?>">
         <?php endif; ?>
         <button type="submit" class="btn btn-primary"><?=$this->icon('search') ?> <?=$this->transEsc('Find')?></button>
-        </div>
+    <?php if ($geoUrl = $this->geocoords()->getSearchUrl($options)) : ?>
+        <a href="<?=$geoUrl ?>" class="btn btn-link"><?=$this->transEsc('Geographic Search')?></a>
+    <?php endif; ?>
 
     <?php
       // Bibstudies / Churchlaw: nav-pills needs to be behind the current form
       // Please have a look at the bottom of this file.
     ?>
-    <?php $shards = $options->getShards(); if ($options->showShardCheckboxes() && !empty($shards)): ?>
+    <?php $shards = $options->getShards(); ?>
+     <?php if ($options->showShardCheckboxes() && !empty($shards)): ?>
       <?php
       $selectedShards = $this->selectedShards ?? $options->getDefaultSelectedShards();
       ?>
@@ -234,55 +236,54 @@
   // Bibstudies / Churchlaw: The small search box MUST be moved here at the end because we need a separate <form>.
   // Else the 2nd form will always override inputs of the 1st form.
   ?>
-  <?php if ($advSearch): ?>
-    <div>
-      <ul class="nav nav-pills">
-          <li>
-            <?php
-              $advSearchQuery = $results ? ['edit' => $results->getSearchId()] : $hiddenFilters;
-              $advSearchLink = $this->url($advSearch, [], ['query' => $advSearchQuery]);
-            ?>
-            <a href="<?=$advSearchLink?>" class="advanced-search-link btn btn-link" rel="nofollow"><?=$this->transEsc("Advanced")?></a>
-          </li>
-          <li class="dropdown">
-              <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                  <?=$this->transEsc('Browse')?> <span class="caret"></span>
-              </a>
-              <ul class="dropdown-menu">
-                  <li><a href="<?=$this->url('keywordchainsearch-home')?>"><?=$this->transEsc('Browse Keywordchains')?></a></li>
-                  <li><a href="<?=$this->url('browse-home')?>"><?=$this->transEsc('Browse the Catalog')?></a></li>
-                  <li><a href="<?=$this->url('alphabrowse-home')?>"><?=$this->transEsc('Browse Alphabetically')?></a></li>
-              </ul>
-          </li>
-          <li class="dropdown">
-              <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                  <?=$this->transEsc('link_text_need_help')?> <span class="caret"></span>
-              </a>
-              <ul class="dropdown-menu">
-                  <li><a href="<?=$this->url('help-home')?>?topic=search" data-lightbox class="help-link" title="<?=$this->transEsc('Search Tips')?>"><?=$this->transEsc('Search Tips')?></a></li>
-              </ul>
-          </li>
-          <li>
-            <a href="<?=$this->url('search-newitem')?>"><?=$this->transEsc('New Items')?></a>
-          </li>
-          <li>
-            <form class="searchForm" method="get" action="<?=$this->url($basicSearch)?>" name="searchForm" autocomplete="off">
-               <div class="input-group input-group-sm pull-right" style="padding-top:10px; padding-bottom:10px; max-width: 200px">
-                 <input id="searchForm_bibleranges" class="searchForm form-control search-query" type="text" name="lookfor" placeholder="<?=$this->transEsc("Bible Ranges")?>"
-                        value="<?=($currentHandler == "BibleRangeSearch") ? $this->escapeHtmlAttr($this->lookfor) : ''?>"/>
+  <ul class="nav nav-pills">
+    <?php if ($advSearch): ?>
+      <?php
+        $advSearchQuery = $results ? ['edit' => $results->getSearchId()] : $hiddenFilters;
+        $advSearchLink = $this->url($advSearch, [], ['query' => $advSearchQuery]);
+      ?>
+      <li><a href="<?=$advSearchLink?>" class="advanced-search-link btn btn-link" rel="nofollow"><?=$this->transEsc("Advanced")?></a></li>
+    <?php endif; ?>
 
-                 <div class="input-group-btn">
-                     <input type="hidden" name="type" value="<?=$this->escapeHtmlAttr("BibleRangeSearch")?>" data-type-protected="1"/>
-                     <input type="hidden" name="activeSearchClassId" value='Solr'>
-                     <?php if (!empty($lastLimit)) {
-                         echo '<input type="hidden" name="limit" value="' . $this->escapeHtmlAttr($lastLimit) . '" />';
-                     }?>
-                     <button type="submit" class="btn btn-primary search-button" value="bibleRange"><i class="fa fa-search"></i></button>
-                 </div>
-              </div>
-            </form>
-          </li>
-      </ul>
-    </div>
+      <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+          <?=$this->transEsc('Browse')?> <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu">
+          <li><a href="<?=$this->url('keywordchainsearch-home')?>"><?=$this->transEsc('Browse Keywordchains')?></a></li>
+          <li><a href="<?=$this->url('browse-home')?>"><?=$this->transEsc('Browse the Catalog')?></a></li>
+          <li><a href="<?=$this->url('alphabrowse-home')?>"><?=$this->transEsc('Browse Alphabetically')?></a></li>
+        </ul>
+      </li>
+
+      <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+          <?=$this->transEsc('link_text_need_help')?> <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu">
+          <li><a href="<?=$this->url('help-home')?>?topic=search" data-lightbox class="help-link" title="<?=$this->transEsc('Search Tips')?>"><?=$this->transEsc('Search Tips')?></a></li>
+        </ul>
+      </li>
+
+      <li>
+        <a href="<?=$this->url('search-newitem')?>"><?=$this->transEsc('New Items')?></a>
+      </li>
+      <li>
+        <form class="searchForm" method="get" action="<?=$this->url($basicSearch)?>" name="searchForm" autocomplete="off">
+          <div class="input-group input-group-sm pull-right" style="padding-top:10px; padding-bottom:10px; max-width: 200px">
+            <input id="searchForm_bibleranges" class="searchForm form-control search-query" type="text" name="lookfor" placeholder="<?=$this->transEsc("Bible Ranges")?>"
+                   value="<?=($currentHandler == "BibleRangeSearch") ? $this->escapeHtmlAttr($this->lookfor) : ''?>"/>
+
+            <div class="input-group-btn">
+              <input type="hidden" name="type" value="<?=$this->escapeHtmlAttr("BibleRangeSearch")?>" data-type-protected="1"/>
+              <input type="hidden" name="activeSearchClassId" value='Solr'>
+                <?php if (!empty($lastLimit)) {
+                  echo '<input type="hidden" name="limit" value="' . $this->escapeHtmlAttr($lastLimit) . '" />';
+                }?>
+                <button type="submit" class="btn btn-primary search-button" value="bibleRange"><i class="fa fa-search"></i></button>
+            </div>
+          </div>
+        </form>
+      </li>
+    </ul>
   <?php endif; ?>
-<?php endif; ?>
