@@ -214,16 +214,16 @@
     ?>
     </div>
 
-    <ul class="nav nav-pills">
+    <div class="nav nav-pills row">
       <?php if ($advSearch): ?>
         <?php
           $advSearchQuery = $results ? ['edit' => $results->getSearchId()] : $hiddenFilters;
           $advSearchLink = $this->url($advSearch, [], ['query' => $advSearchQuery]);
         ?>
-        <li><a href="<?=$advSearchLink?>" class="advanced-search-link btn btn-link" rel="nofollow"><?=$this->transEsc('Advanced')?></a></li>
+        <button class="ix-under-button"><a href="<?=$advSearchLink?>" class="advanced-search-link btn btn-link" rel="nofollow"><?=$this->transEsc('Advanced')?></a></button>
       <?php endif; ?>
 
-      <li class="dropdown">
+      <button class="ix-under-button">
         <a class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
           <?=$this->transEsc('Browse')?>
           <span class="caret"></span>
@@ -233,9 +233,9 @@
           <li><a href="<?=$this->url('browse-home')?>" rel="nofollow"><?=$this->transEsc('Browse the Catalog')?></a></li>
           <li><a href="<?=$this->url('alphabrowse-home')?>" rel="nofollow"><?=$this->transEsc('Browse Alphabetically')?></a></li>
         </ul>
-      </li>
+      </button>
 
-      <li class="dropdown">
+      <button class="ix-under-button">
         <a class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
           <?=$this->transEsc('link_text_need_help')?>
           <span class="caret"></span>
@@ -243,10 +243,10 @@
         <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
           <li><a href="<?=$this->url('help-home')?>?topic=search" data-lightbox class="help-link" title="<?=$this->transEsc('Search Tips')?>"><?=$this->transEsc('Search Tips')?></a></li>
         </ul>
-      </li>
+      </button>
 
-      <li><a href="<?=$this->url('search-newitem')?>" class="advanced-search-link btn btn-link" rel="nofollow"><?=$this->transEsc('New Items')?></a></li>
-    </ul>
+      <button class="ix-under-button"><a href="<?=$this->url('search-newitem')?>" class="advanced-search-link btn btn-link" rel="nofollow"><?=$this->transEsc('New Items')?></a></button>
+    </div>
     <?=$this->context($this)->renderInContext(
       'search/filters.phtml',
       [
