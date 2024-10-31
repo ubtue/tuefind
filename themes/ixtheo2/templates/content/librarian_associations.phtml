@@ -1,3 +1,49 @@
+<?php
+    $this->headLink()->appendStylesheet('vendor/fontawesome-free-6/awesome.css');
+    $this->headLink()->appendStylesheet('vendor/fontawesome-free-6/solid.css');
+
+    $partners = [
+        //ver
+        [   'lon' => '8.755412855615948',
+            'lat' => '51.71397921606403',
+            'group' => 'ver',
+            'popup' => '<div><font color="black"><p><a href="https://www.akthb.de/" target="_blank">AKThB (Arbeitsgemeinschaft Katholisch-Theologischer Bibliotheken)</a></p><p>c/o Erzbischöfliche Akademische Bibliothek Paderborn<br />
+            Leostraße 21<br />
+            33098 Paderborn</p></font></div>',
+            'name' => 'AKThB (Arbeitsgemeinschaft Katholisch-Theologischer Bibliotheken)'
+        ],
+        [   'lon' => '5.890728113326436',
+            'lat' => '52.55379857836274',
+            'group' => 'ver',
+            'popup' => '<div><font color="black"><p><a href="https://beth.eu/" target="_blank">BETH (Bibliothèques Européennes de Théologie)</a></p><p>Waterkers 1<br />
+            8265 JJ Kampen<br />
+            Netherlands</p></font></div>',
+            'name' => 'BETH (Bibliothèques Européennes de Théologie)'
+        ],
+        [   'lon' => '8.532867524941635',
+            'lat' => '52.02174711455926',
+            'group' => 'ver',
+            'popup' => '<div><font color="black"><p><a href="https://vkwb.info/" target="_blank">VkwB (Verband kirchlich-wissenschaftlicher Bibliotheken)</a></p><p>c/o Evangelische Kirche von Westfalen<br />
+            Bibliothek des Landeskirchenamtes<br />
+            Altstädter Kirchplatz 5<br />
+            33602 Bielefeld</p></font></div>',
+            'name' => 'VkwB (Verband kirchlich-wissenschaftlicher Bibliotheken)'
+        ]
+    ];
+    $partners = json_encode($partners);
+?>
+
+<section class="cw-p-2">
+    <div id="map" class="map"></div>
+    <?php $jsSnippet = <<<EOD
+    $(function () {
+        let partnersArray = {$partners};
+        IxTheo2.DrawMap('ver',partnersArray);
+    });
+    EOD;
+    ?>
+    <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $jsSnippet, 'SET')?>
+</section>
 <div class="cw-row">
     <div class="cw-col-lg-12 cw-ml-lg-4">
         <div class="cw-text-block"><br>

@@ -6,6 +6,8 @@ return [
     'css' => [
         'vendor/cw/swiper.css',
         'vendor/leaflet/leaflet.css',
+        'vendor/fontawesome-free-6/awesome.css',
+        'vendor/fontawesome-free-6/solid.css',
     ],
     'js' => [
         'ixtheo.js',

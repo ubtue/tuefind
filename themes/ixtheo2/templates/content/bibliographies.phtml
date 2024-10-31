@@ -1,3 +1,74 @@
+<?php
+    $this->headLink()->appendStylesheet('vendor/fontawesome-free-6/awesome.css');
+    $this->headLink()->appendStylesheet('vendor/fontawesome-free-6/solid.css');
+
+    $partners = [
+        //Bibliographien
+        [   'lon' => '9.931387440185757',
+            'lat' => '49.796449754346156',
+            'group' => 'bibliographien',
+            'popup' => '<div><font color="black"><p><a href="https://www.uibk.ac.at/bildi/" target="_blank">Biblische Literaturdokumentation Innsbruck (BILDI)</a></p><p>Karl-Rahner-Platz 1<br />
+            6020 Innsbruck<br />
+            Österreich
+            </p></font></div>',
+            'name' => 'Biblische Literaturdokumentation Innsbruck (BILDI)'
+        ],
+        [   'lon' => '9.931387440185757',
+            'lat' => '49.796449754346156',
+            'group' => 'bibliographien',
+            'popup' => '<div><font color="black"><p><a href="https://www.augustinus.de/" target="_blank">Augustinus-Bibliographie</a></p><p>Dominikanerplatz 4<br />
+            97070 Würzburg</p></font></div>',
+            'name' => 'Augustinus-Bibliographie'
+        ],
+        [   'lon' => '6.584317040044625',
+            'lat' => '46.52381424741675',
+            'group' => 'bibliographien',
+            'popup' => '<div><font color="black"><p><a href="https://www.unil.ch/irsb/fr/home/menuguid/bibil.html" target="_blank">Bibliographie biblique informatisée de Lausanne (BiBIL)</a></p><p>Institut romand des sciences bibliques<br />
+            Anthropole<br />
+            1015 Lausanne<br />
+            Suisse</p></font></div>',
+            'name' => 'Bibliographie biblique informatisée de Lausanne (BiBIL)'
+        ],
+        [   'lon' => '11.398208440076123',
+            'lat' => '47.269034873840944',
+            'group' => 'bibliographien',
+            'popup' => '<div><font color="black"><p><a href="https://www.uibk.ac.at/bildi/" target="_blank">Biblische Literaturdokumentation Innsbruck (BILDI)</a></p><p>Karl-Rahner-Platz 1<br />
+            6020 Innsbruck<br />
+            Österreich</p></font></div>',
+            'name' => 'Biblische Literaturdokumentation Innsbruck (BILDI)'
+        ],
+        [   'lon' => '7.6236567979551655',
+            'lat' => '51.9626552214986',
+            'group' => 'bibliographien',
+            'popup' => '<div><font color="black"><p><a href="https://www.uni-muenster.de/FB2/ikr/datenbank/index.shtml" target="_blank">Datenbank Kanonisches Recht (DaKaR)</a></p><p>Institut für Kanonisches Recht<br />
+            Domplatz 23<br />
+            48143 Münster</p></font></div>',
+            'name' => 'Datenbank Kanonisches Recht (DaKaR)'
+        ],
+        [   'lon' => '11.396423555420242',
+            'lat' => '47.26878951416234',
+            'group' => 'bibliographien',
+            'popup' => '<div><font color="black"><p><a href="https://www.uibk.ac.at/praktheol/kaldi/" target="_blank">Kanonistische Literaturdokumentation Innsbruck (KALDI)</a></p><p>Institut für Praktische Theologie<br />
+            Karl-Rahner-Platz 1<br />
+            6020 Innsbruck<br />
+            Österreich</p></font></div>',
+            'name' => 'Kanonistische Literaturdokumentation Innsbruck (KALDI)'
+        ]
+    ];
+    $partners = json_encode($partners);
+?>
+
+<section class="cw-p-2">
+    <div id="map" class="map"></div>
+    <?php $jsSnippet = <<<EOD
+    $(function () {
+        let partnersArray = {$partners};
+        IxTheo2.DrawMap('bibliographien',partnersArray);
+    });
+    EOD;
+    ?>
+    <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $jsSnippet, 'SET')?>
+</section>
 <div class="cw-row">
     <div class="cw-col-lg-12 cw-ml-lg-4">
         <div class="cw-text-block"><br>

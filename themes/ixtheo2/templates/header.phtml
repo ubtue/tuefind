@@ -150,7 +150,8 @@ if(isset($this->layout()->headerImage)) {
     </div><!-- .cover-header-inner -->
   </div><!-- .cover-header-inner-wrapper -->
 </div>
-<span class="ix-copyright">© <span class="ix-copyright-name">Marco Varenkamp</span></span>
+
+<span class="ix-copyright logo-tooltip" title="test" >© <span class="ix-copyright-name"><img src="<?=$this->imageLink('searchbar.jpg');?>" width="600" /> © Marco Varenkamp</span></span>
 <!-- Breadcrumbs -->
 <?php if(!empty($this->layout()->breadcrumbs)): ?>
   <div class="container breadcrumb-wrapper hidden-print <?=$advancedSearch;?>">
@@ -179,23 +180,50 @@ if(isset($this->layout()->headerImage)) {
 
 <style>
   .ix-copyright {
-    float: right;
-    margin-top: -25px;
-    margin-right: 10px;
-    color: #fff;
+    float: left;
+    margin-top: -33px;
+    margin-left: 13px;
+    color: #495057;
     cursor: pointer;
+    font-size: 20px;
   }
   .ix-copyright-name {
     display: none;
+    color: #495057;
+  }
+
+  .ui-tooltip, .arrow:after {
+    color: #495057;
+    border: 2px solid white;
+    background-color: white;
+  }
+  .ui-tooltip {
+    padding: 10px 10px;
+    border-radius: 20px;
+    font: bold 14px "Helvetica Neue", Sans-Serif;
+    text-transform: uppercase;
+    box-shadow: 0 0 7px black;
+  }
+  .arrow {
+    width: 70px;
+    height: 16px;
+    overflow: hidden;
+    position: absolute;
+    left: 50%;
+    margin-left: -35px;
+    bottom: -14px;
+  }
+  .arrow.left {
+    left: 25px;
+  }
+  .arrow:after {
+    content: "";
+    position: absolute;
+    left: 20px;
+    top: -20px;
+    width: 25px;
+    height: 25px;
+    box-shadow: 6px 5px 9px -9px black;
+    transform: rotate(45deg);
   }
 </style>
-
-<?php
-$jsSnippet = <<< 'EOD'
-$(document).ready(function(){
-  $('.ix-copyright').click(function(){
-    $(this).find('.ix-copyright-name').toggle();
-  })
-});
-EOD;?>
-<?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $jsSnippet, 'SET')?>
