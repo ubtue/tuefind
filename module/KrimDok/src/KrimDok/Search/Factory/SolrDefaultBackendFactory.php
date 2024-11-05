@@ -1,13 +1,13 @@
 <?php
 namespace KrimDok\Search\Factory;
 
-use KrimDok\Search\Backend\Solr\Backend;
-use KrimDok\Search\Backend\Solr\QueryBuilder;
 use VuFindSearch\Backend\Solr\LuceneSyntaxHelper;
 use VuFind\I18n\Translator\TranslatorAwareInterface;
 use VuFindSearch\Backend\Solr\Connector;
-use VuFindSearch\Backend\Solr\HandlerMap;
+use TueFindSearch\Backend\Solr\HandlerMap;
 use TueFindSearch\Backend\Solr\Response\Json\RecordCollectionFactory;
+use KrimDok\Search\Backend\Solr\Backend;
+use KrimDok\Search\Backend\Solr\QueryBuilder;
 
 class SolrDefaultBackendFactory extends \TueFind\Search\Factory\SolrDefaultBackendFactory implements TranslatorAwareInterface
 {
@@ -38,6 +38,7 @@ class SolrDefaultBackendFactory extends \TueFind\Search\Factory\SolrDefaultBacke
             array_push($handlers['select']['appends']['fq'], $filter);
         }
 
+        // Careful: Inherited TueFind HandlerMap is used here, see "use" statement at top
         $connector = new $this->connectorClass(
             $this->getSolrUrl(),
             new HandlerMap($handlers),
