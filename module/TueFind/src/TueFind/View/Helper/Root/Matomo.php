@@ -47,7 +47,11 @@ class Matomo extends \VuFind\View\Helper\Root\Matomo {
 
     protected function getCustomVarsCode(array $customData): string
     {
-        $customData['isLoggedIn'] = ((isset($this->auth) && $this->auth->isLoggedIn()) ? 'true' : 'false');
+        // see VuFind 10.0 changelog:
+        // Use getIdentity() if you only need a basic login status from the RBAC system;
+        // use getUserObject if you need to interact with VuFind®-specific user properties.
+        // => Since this is just a basic login check, we use getIdentity() here.
+        $customData['isLoggedIn'] = ((isset($this->auth) && $this->auth->getIdentity()) ? 'true' : 'false');
         if ($this->isValidFulltextSearch()) {
             $customData['SearchType'] = 'fulltext';
         }

@@ -103,7 +103,7 @@ class IxTheo extends \Laminas\View\Helper\AbstractHelper
      *   if a lot of items are shown at once (e.g. check search result items)
      */
     protected function isRecordIdSubscribed($recordId) {
-        $user = $this->container->get(\VuFind\Auth\Manager::class)->isLoggedIn();
+        $user = $this->container->get(\VuFind\Auth\Manager::class)->getUserObject();
         if (!$user)
             return false;
 
