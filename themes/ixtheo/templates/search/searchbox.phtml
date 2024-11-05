@@ -223,27 +223,25 @@
         <button class="ix-under-button"><a href="<?=$advSearchLink?>" class="advanced-search-link btn btn-link" rel="nofollow"><?=$this->transEsc('Advanced')?></a></button>
       <?php endif; ?>
 
-      <button class="ix-under-button">
-        <a class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-          <?=$this->transEsc('Browse')?>
-          <span class="caret"></span>
-        </a>
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+      <div class="btn-group">
+        <button type="button" class="btn dropdown-toggle ix-under-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <?=$this->transEsc('Browse')?> <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
           <li><a href="<?=$this->url('keywordchainsearch-home')?>" rel="nofollow"><?=$this->transEsc('Browse Keywordchains')?></a></li>
           <li><a href="<?=$this->url('browse-home')?>" rel="nofollow"><?=$this->transEsc('Browse the Catalog')?></a></li>
           <li><a href="<?=$this->url('alphabrowse-home')?>" rel="nofollow"><?=$this->transEsc('Browse Alphabetically')?></a></li>
         </ul>
-      </button>
+      </div>
 
-      <button class="ix-under-button">
-        <a class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-          <?=$this->transEsc('link_text_need_help')?>
-          <span class="caret"></span>
-        </a>
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-          <li><a href="<?=$this->url('help-home')?>?topic=search" data-lightbox class="help-link" title="<?=$this->transEsc('Search Tips')?>"><?=$this->transEsc('Search Tips')?></a></li>
+      <div class="btn-group">
+        <button type="button" class="btn dropdown-toggle ix-under-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <?=$this->transEsc('link_text_need_help')?> <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+        <li><a href="<?=$this->url('help-home')?>?topic=search" data-lightbox class="help-link" title="<?=$this->transEsc('Search Tips')?>"><?=$this->transEsc('Search Tips')?></a></li>
         </ul>
-      </button>
+      </div>
 
       <button class="ix-under-button"><a href="<?=$this->url('search-newitem')?>" class="advanced-search-link btn btn-link" rel="nofollow"><?=$this->transEsc('New Items')?></a></button>
     </div>
