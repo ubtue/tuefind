@@ -179,7 +179,7 @@ var TueFind = {
                             const status = json['snippets'][element['id']]['status'];
                             const doc_id = element['id'];
                             const verbose = element['verbose'];
-                            const fulltext_types = element['fulltext_types'];
+                            const fulltext_types = (element['fulltext_type_filters'] !== "") ? element['fulltext_type_filters'] : element['fulltext_types'];
                             const query = element['query'];
                             let valid_synonym_terms = new RegExp('lang|all');
                             const synonyms = element['synonym_type'].match(valid_synonym_terms) ? element['synonym_type'] : false;

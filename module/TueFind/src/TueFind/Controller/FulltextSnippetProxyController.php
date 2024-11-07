@@ -483,7 +483,8 @@ class FulltextSnippetProxyController extends \VuFind\Controller\AbstractBase imp
                 if(!empty($doc->id)){
                     $snippets[$doc->id] = [];
                     $snippets[$doc->id]['snippets'] = [];
-                    $types_filter = !empty($doc->fulltext_types) ? $doc->fulltext_types : implode(',', array_keys(self::description_to_text_type_map));
+                    $types_filter = (!empty($doc->fulltext_type_filter) ? $doc->fulltext_type_filter : (!empty($doc->fulltext_types) ? $doc->fulltext_types : implode(',', array_keys(self::description_to_text_type_map))));
+                    
                     $synonyms = preg_match('/lang|all/',$doc->synonym_type) ? $doc->synonym_type : "";
                     $verbose = $doc->verbose;
                     if(empty($doc->query)){
