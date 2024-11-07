@@ -410,12 +410,45 @@ class FulltextSnippetProxyController extends \VuFind\Controller\AbstractBase imp
         return $formatted_snippets;
     }
 
+    protected function constructFulltextSnippet($doc_id, $search_query, $verbose, $synonyms, $types_filter){
+        $snippets['status'] = "";
+        $snippets['snippets'] = [];
+        foreach (explode(',', $types_filter) as $type_filter) {
+            try {
+                $html_snippets = $this->getHTMLFulltext($doc_id, $search_query, $verbose, $synonyms, $type_filter);
+                if (!empty($html_snippets)) {
+                    $snippets['snippets'] = array_merge($snippets['snippets'], $html_snippets['snippets']);
+                    continue;
+                }
+                // Use plain text as fallback
+                $text_snippets = $this->getPlainFulltext($doc_id, $search_query, $verbose, $synonyms, $type_filter);
+                if (!empty($text_snippets))
+                    $snippets['snippets'] = array_merge($snippets['snippets'], $text_snippets['snippets']);
+            }
+            catch (\Exception $e) {
+                error_log($e);
+                $snippets['status'] = "PROXY_ERROR";
+                return $snippets;
+            }
+        }
+        if (empty($snippets['snippets'])) {
+            $snippets['status'] = "NO RESULTS";
+            return $snippets;
+        }
+        // Deduplicate snippets (array_values for fixing indices)
+        $snippets['snippets'] = array_values(array_unique($snippets['snippets'], SORT_REGULAR));
+        $snippets['snippets'] = array_slice($snippets['snippets'], 0, $this->maxSnippets);
+        $snippets['snippets'] = $this->formatHighlighting($snippets['snippets']);
+
+        return $snippets;
+    }
 
     public function loadAction() : JsonModel
     {
         $query = $this->getRequest()->getUri()->getQuery();
         $parameters = [];
         parse_str($query, $parameters);
+        $snippets = [];
         // keep the compatibility with old version 
         if(array_key_exists('doc_id', $parameters)){
             $doc_id = $parameters['doc_id'];
@@ -432,57 +465,17 @@ class FulltextSnippetProxyController extends \VuFind\Controller\AbstractBase imp
             $synonyms = isset($parameters['synonyms']) && preg_match('/lang|all/', $parameters['synonyms']) ? $parameters['synonyms'] : "";
             $types_filter = isset($parameters['fulltext_types']) ? $parameters['fulltext_types'] :
                             implode(',', array_keys(self::description_to_text_type_map)); // Iterate over all possible types
-            $snippets['snippets'] = [];
-            foreach (explode(',', $types_filter) as $type_filter) {
-                try {
-                    $html_snippets = $this->getHTMLFulltext($doc_id, $search_query, $verbose, $synonyms, $type_filter);
-                    if (!empty($html_snippets)) {
-                        $snippets['snippets'] = array_merge($snippets['snippets'], $html_snippets['snippets']);
-                        continue;
-                    }
-                    // Use plain text as fallback
-                    $text_snippets = $this->getPlainFulltext($doc_id, $search_query, $verbose, $synonyms, $type_filter);
-                    if (!empty($text_snippets))
-                        $snippets['snippets'] = array_merge($snippets['snippets'], $text_snippets['snippets']);
-                }
-                catch (\Exception $e) {
-                    error_log($e);
-                    return new JsonModel([
-                        'status' => 'PROXY_ERROR'
-                    ]);
-                }
-            }
-            if (empty($snippets['snippets'])) {
-                return new JsonModel([
-                    'status' => 'NO RESULTS'
-                ]);
-            }
-            // Deduplicate snippets (array_values for fixing indices)
-            $snippets['snippets'] = array_values(array_unique($snippets['snippets'], SORT_REGULAR));
-            $snippets['snippets'] = array_slice($snippets['snippets'], 0, $this->maxSnippets);
-            $snippets['snippets'] = $this->formatHighlighting($snippets['snippets']);
-
-            try {
-                $model =  new JsonModel([
-                    'status' => 'SUCCESS',
-                    'snippets' => $snippets['snippets']
-                ]);
-            }
-            catch (\Exception $e) {
-                error_log($e);
-            }
+            $snippets[$doc_id] = $this->constructFulltextSnippet($doc_id, $search_query, $verbose, $synonyms, $types_filter);
         }
         // the new api
         if(array_key_exists('docs', $parameters)){
             $docs_get = $parameters['docs'];
 
             $docs = json_decode(html_entity_decode($docs_get));
-            $snippets = [];
             foreach($docs as $doc){ 
                 // $snippets[$item->id] = $item->id;
                 if(!empty($doc->id)){
                     $snippets[$doc->id] = [];
-                    $snippets[$doc->id]['snippets'] = [];
                     $types_filter = (!empty($doc->fulltext_type_filter) ? $doc->fulltext_type_filter : (!empty($doc->fulltext_types) ? $doc->fulltext_types : implode(',', array_keys(self::description_to_text_type_map))));
                     
                     $synonyms = preg_match('/lang|all/',$doc->synonym_type) ? $doc->synonym_type : "";
@@ -490,45 +483,20 @@ class FulltextSnippetProxyController extends \VuFind\Controller\AbstractBase imp
                     if(empty($doc->query)){
                         $snippets[$doc->id]['status'] = 'EMPTY QUERY';
                     }else{
-                        foreach(explode(',', $types_filter) as $type_filter){
-                            try{
-                                $html_snippets = $this->getHTMLFulltext($doc->id, $doc->query, $verbose, $synonyms, $type_filter);
-                                if (!empty($html_snippets)) {
-                                    $snippets[$doc->id]['snippets'] = array_merge($snippets[$doc->id]['snippets'], $html_snippets['snippets']);
-                                    $snippets[$doc->id]['status'] = 'SUCCESS';
-                                    continue;
-                                }
-                                // Use plain text as fallback
-                                $text_snippets = $this->getPlainFulltext($doc->id, $doc->query, $verbose, $synonyms, $type_filter);
-                                if (!empty($text_snippets)){
-                                    $snippets[$doc->id]['snippets'] = array_merge($snippets[$doc->id]['snippets'], $text_snippets['snippets']);
-                                    $snippets[$doc->id]['status'] = 'SUCCESS';
-                                }
-                            }catch(\Exception $e){
-                                error_log($e);
-                                $snippets[$doc->id]['status'] = 'PROXY_ERROR';
-                            }
-                        }
-                        if (empty($snippets[$doc->id]['snippets'])){
-                            $snippets[$doc->id]['status'] = 'NO RESULTS';
-                        }
-                        $snippets[$doc->id]['snippets'] = array_values(array_unique($snippets[$doc->id]['snippets'], SORT_REGULAR));
-                        $snippets[$doc->id]['snippets'] = array_slice($snippets[$doc->id]['snippets'], 0, $this->maxSnippets);
-                        $snippets[$doc->id]['snippets'] = $this->formatHighlighting($snippets[$doc->id]['snippets']);
+                        $snippets[$doc->id] = $this->constructFulltextSnippet($doc->id, $doc->query, $verbose, $synonyms, $types_filter);
                     }
                     
                 }
-
             }
-            try {
-                $model =  new JsonModel([
-                    'status' => 'SUCCESS',
-                    'snippets' => $snippets
-                ]);
-            }
-            catch (\Exception $e) {
-                error_log($e);
-            }
+        }
+        try {
+            $model =  new JsonModel([
+                'status' => 'SUCCESS',
+                'snippets' => $snippets
+            ]);
+        }
+        catch (\Exception $e) {
+            error_log($e);
         }
         return $model;
     }
