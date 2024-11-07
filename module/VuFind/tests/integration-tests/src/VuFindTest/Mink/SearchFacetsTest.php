@@ -1202,12 +1202,12 @@ class SearchFacetsTest extends \VuFindTest\Integration\MinkTestCase
         $filter = $this->findCss($page, '.checkbox-filter');
         $this->assertNotNull($filter);
         $this->assertEquals('Books', $this->findCssAndGetText($filter->getParent(), '.icon-link__label'));
-        $this->assertEquals($counts ? '9' : '', $this->findCssAndGetText($filter, '.avail-count'));
+        $this->assertEquals($counts ? '9' : '', $this->findCssAndGetText($filter->getParent(), '.avail-count'));
 
         // illustrated:Illustrated is only a checkbox facet:
         $filter2 = $this->findCss($page, '.checkbox-filter', null, 1);
         $this->assertNotNull($filter2);
-        $this->assertEquals('Illustrated', $this->findCssAndGetText($filter2, '.icon-link__label'));
+        $this->assertEquals('Illustrated', $this->findCssAndGetText($filter2->getParent(), '.icon-link__label'));
         $illustratedCount = $this->findCssAndGetText($filter2->getParent(), '.avail-count');
         $this->assertEquals($counts ? '2' : '', $illustratedCount);
 
