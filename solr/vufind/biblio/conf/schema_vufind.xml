@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<schema name="VuFind Bibliographic Index" version="1.2">
+<schema name="VuFind Bibliographic Index" version="1.2" xmlns:xi="http://www.w3.org/2001/XInclude">
   <types>
     <!-- Define fieldType long as it is needed by the _version_ field required by Solr 4.x -->
     <fieldType name="long" class="solr.LongPointField" positionIncrementGap="0"/>
@@ -14,21 +14,23 @@
     <fieldType name="text" class="solr.TextField" positionIncrementGap="100">
       <analyzer type="index">
         <tokenizer class="solr.ICUTokenizerFactory"/>
-        <filter class="solr.WordDelimiterGraphFilterFactory" generateWordParts="1" generateNumberParts="1" catenateWords="1" catenateNumbers="1" catenateAll="0" splitOnCaseChange="1"/>
+        <filter class="solr.WordDelimiterGraphFilterFactory" generateWordParts="1" generateNumberParts="1" catenateWords="1" catenateNumbers="1" catenateAll="0" splitOnCaseChange="1" splitOnNumerics="0"/>
         <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt"/>
+        <charFilter class="solr.MappingCharFilterFactory" mapping="charfiltermap.txt"/>
         <filter class="solr.ICUFoldingFilterFactory"/>
         <filter class="solr.KeywordMarkerFilterFactory" protected="protwords.txt"/>
-        <filter class="solr.SnowballPorterFilterFactory" language="English"/>
+        <filter class="solr.SnowballPorterFilterFactory" protected="protwords.txt" language="German2"/>
         <filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
       </analyzer>
       <analyzer type="query">
         <tokenizer class="solr.ICUTokenizerFactory"/>
         <filter class="solr.SynonymGraphFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="true"/>
-        <filter class="solr.WordDelimiterGraphFilterFactory" generateWordParts="1" generateNumberParts="1" catenateWords="0" catenateNumbers="0" catenateAll="0" splitOnCaseChange="1"/>
+        <filter class="solr.WordDelimiterGraphFilterFactory" generateWordParts="1" generateNumberParts="1" catenateWords="0" catenateNumbers="0" catenateAll="0" splitOnCaseChange="1" splitOnNumerics="0"/>
         <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt"/>
+        <charFilter class="solr.MappingCharFilterFactory" mapping="charfiltermap.txt"/>
         <filter class="solr.ICUFoldingFilterFactory"/>
         <filter class="solr.KeywordMarkerFilterFactory" protected="protwords.txt"/>
-        <filter class="solr.SnowballPorterFilterFactory" language="English"/>
+        <filter class="solr.SnowballPorterFilterFactory" protected="protwords.txt" language="German2"/>
         <filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
       </analyzer>
     </fieldType>
@@ -36,16 +38,14 @@
     <fieldType name="textProper" class="solr.TextField" positionIncrementGap="100">
       <analyzer type="index">
         <tokenizer class="solr.ICUTokenizerFactory"/>
-        <filter class="solr.WordDelimiterGraphFilterFactory" generateWordParts="1" generateNumberParts="1" catenateWords="1" catenateNumbers="1" catenateAll="0"/>
+        <filter class="solr.WordDelimiterGraphFilterFactory" generateWordParts="1" generateNumberParts="1" catenateWords="1" catenateNumbers="1" catenateAll="0" splitOnNumerics="0"/>
         <filter class="solr.ICUFoldingFilterFactory"/>
-        <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt"/>
         <filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
       </analyzer>
       <analyzer type="query">
         <tokenizer class="solr.ICUTokenizerFactory"/>
-        <filter class="solr.WordDelimiterGraphFilterFactory" generateWordParts="1" generateNumberParts="1" catenateWords="0" catenateNumbers="0" catenateAll="0"/>
+        <filter class="solr.WordDelimiterGraphFilterFactory" generateWordParts="1" generateNumberParts="1" catenateWords="0" catenateNumbers="0" catenateAll="0" splitOnNumerics="0"/>
         <filter class="solr.ICUFoldingFilterFactory"/>
-        <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt"/>
         <filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
       </analyzer>
     </fieldType>
@@ -53,9 +53,8 @@
     <fieldType name="textSpell" class="solr.TextField" positionIncrementGap="100">
       <analyzer>
         <tokenizer class="solr.ICUTokenizerFactory"/>
-        <filter class="solr.WordDelimiterGraphFilterFactory" generateWordParts="1" generateNumberParts="1" catenateWords="0" catenateNumbers="0" catenateAll="0"/>
+        <filter class="solr.WordDelimiterGraphFilterFactory" generateWordParts="1" generateNumberParts="1" catenateWords="0" catenateNumbers="0" catenateAll="0" splitOnNumerics="0"/>
         <filter class="solr.ICUFoldingFilterFactory"/>
-        <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt"/>
         <filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
       </analyzer>
     </fieldType>
@@ -64,14 +63,12 @@
       <analyzer type="index">
         <tokenizer class="solr.ICUTokenizerFactory"/>
         <filter class="solr.ICUFoldingFilterFactory"/>
-        <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt"/>
         <filter class="solr.ShingleFilterFactory" maxShingleSize="2" outputUnigrams="false"/>
         <filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
       </analyzer>
       <analyzer type="query">
         <tokenizer class="solr.ICUTokenizerFactory"/>
         <filter class="solr.ICUFoldingFilterFactory"/>
-        <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt"/>
         <filter class="solr.ShingleFilterFactory" maxShingleSize="2" outputUnigrams="false"/>
         <filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
       </analyzer>
@@ -112,12 +109,16 @@
     <fieldType name="boolean" class="solr.BoolField" sortMissingLast="true" omitNorms="true"/>
     <!-- add geo field to handle geographic search and display capabilities -->
     <fieldType name="geo" class="solr.SpatialRecursivePrefixTreeFieldType" distErrPct="0.025" maxDistErr="0.000009" distanceUnits="degrees" />
+
+    <!-- TueFind custom field types -->
+    <xi:include href="schema_local_types.xml" xpointer="xpointer(descendant::fieldType)"/>
   </types>
  <fields>
    <!-- Required by Solr 4.x -->
    <field name="_version_" type="long" indexed="true" stored="true"/>
    <!-- Core Fields  -->
-   <field name="id" type="string" indexed="true" stored="true"/>
+   <!-- Attention: For being able to use the export handler 'docValues="true" omitTermFreqAndPositions="true"' (jr 240110) -->
+   <field name="id" type="string" indexed="true" stored="true" docValues="true" omitTermFreqAndPositions="true"/>
    <field name="fullrecord" type="string" indexed="false" stored="true"/>
    <field name="marc_error" type="string" indexed="false" stored="true" multiValued="true"/>
    <field name="allfields" type="text" indexed="true" stored="false" multiValued="true"/>
@@ -144,7 +145,7 @@
    <field name="title_short" type="text" indexed="true" stored="true"/>
    <field name="title_full" type="text" indexed="true" stored="true"/>
    <field name="title_full_unstemmed" type="textProper" indexed="true" stored="true"/>
-   <field name="title_fullStr" type="string" indexed="true" stored="true"/>
+   <field name="title_fullStr" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="title_auth" type="text" indexed="true" stored="true"/>
    <field name="physical" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="publisher" type="textProper" indexed="true" stored="true" multiValued="true"/>
@@ -243,6 +244,9 @@
    <dynamicField name="*_geo" type="geo" indexed="true" stored="true" multiValued="false" />
    <dynamicField name="*_geo_mv" type="geo" indexed="true" stored="true" multiValued="true" />
    <dynamicField name="*_autocomplete" type="text_autocomplete" indexed="true" stored="true" multiValued="false"/>
+
+    <!-- TueFind custom fields -->
+    <xi:include href="schema_local_fields.xml" xpointer="xpointer(descendant::field)"/>
  </fields>
  <uniqueKey>id</uniqueKey>
  <!-- CopyFields for Spelling -->
@@ -256,6 +260,7 @@
  <copyField source="topic"    dest="spellingShingle"/>
  <!-- CopyFields for Faceting on Text -->
  <copyField source="title_full" dest="title_fullStr"/>
+ <copyField source="title_alt" dest="title_fullStr"/>
  <copyField source="title_full" dest="title_full_unstemmed"/>
  <copyField source="author" dest="author_facet"/>
  <copyField source="author2" dest="author_facet"/>
@@ -275,4 +280,7 @@
  <!-- CopyFields for call numbers -->
  <copyField source="dewey-raw" dest="dewey-search"/>
  <copyField source="callnumber-raw" dest="callnumber-search"/>
+
+  <!-- TueFind custom copyField instructions -->
+  <xi:include href="schema_local_fields.xml" xpointer="xpointer(descendant::copyField)"/>
 </schema>
