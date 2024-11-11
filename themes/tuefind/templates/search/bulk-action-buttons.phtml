@@ -1,4 +1,7 @@
-<?php if (isset($this->showCheckboxes) && $this->showCheckboxes): ?>
+<?php
+  $searchSettings = $this->searchSettings($this->params);
+?>
+<?php if ($searchSettings->checkboxesEnabled()): ?>
   <nav class="bulkActionButtons">
     <div class="bulk-checkbox">
       <input type="checkbox" class="checkbox-select-all" name="selectAll" id="<?=$this->idPrefix?>addFormCheckboxSelectAll"<?php if ($this->formAttr): ?> form="<?=$this->escapeHtmlAttr($this->formAttr) ?>"<?php endif; ?>>

@@ -1,5 +1,5 @@
 <?php $account = $this->auth()->getManager(); ?>
-<div class="banner search container navbar">
+<div class="banner container navbar search">
   <div class="navbar-header">
     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#header-collapse" aria-label="<?=$this->transEscAttr('mobile_toggle_navigation_text')?>">
       <?=$this->icon('ui-menu') ?>
@@ -41,7 +41,7 @@
             </li>
           <?php endif; ?>
           <?php if (is_object($account) && $account->loginEnabled()): // hide login/logout if unavailable ?>
-            <?php if ($account->isLoggedIn()): ?>
+            <?php if ($account->getIdentity()): ?>
               <li class="logoutOptions<?php if ($account->dropdownEnabled()): ?> with-dropdown<?php endif ?>">
                 <a href="<?=$this->url('myresearch-home', [], ['query' => ['redirect' => 0]])?>" class="icon-link">
                   <span id="account-icon" class="icon-link__icon"><?=$this->icon('my-account') ?></span>
@@ -49,7 +49,7 @@
                 </a>
             </li>
               <?php if ($account->dropdownEnabled()): ?>
-                <li id="login-dropdown" class="dropdown<?php if(!$account->isLoggedIn()): ?> hidden<?php endif ?>">
+                <li id="login-dropdown" class="dropdown<?php if(!$account->isLoggedIn()): ?> hidden-xs<?php endif ?>">
                 <a href="#" data-toggle="dropdown"><?=$this->icon('dropdown-caret') ?></a>
                 <div class="dropdown-menu">
                   <?=$this->render('myresearch/menu'); ?>
@@ -82,6 +82,7 @@
           <?php if (isset($this->layout()->themeOptions) && count($this->layout()->themeOptions) > 1): ?>
               <?=$this->component('menu-button', [
                   'toggleLabel' => 'Theme',
+                  'wrapperClass' => 'theme-selector',
                   'wrapperTag' => 'li',
                   'menuItems' => array_map(
                       function ($item) {

@@ -32,6 +32,15 @@
   // Set up breadcrumbs:
   $this->layout()->breadcrumbs .= '<li class="active">' . $this->escapeHtml($headTitle) . '</li>';
 
+  // Set up search controls (avoiding unnecessary rendering):
+  if (!$this->slot('search-controls')->isset()) {
+      $this->slot('search-controls')->set(
+          $this->render('search/controls/limit.phtml')
+          . ' ' . $this->render('search/controls/sort.phtml')
+          . ' ' . $this->render('search/controls/view.phtml')
+      );
+  }
+
   // Store search id:
   $this->layout()->searchId = $this->results->getSearchId();
 
@@ -56,6 +65,7 @@
       $this->headScript()->appendFile('record.js');
       $this->headScript()->appendFile('embedded_record.js');
   }
+  $recommendations = $this->results->getRecommendations('side');
 ?>
 
 <div class="<?=$this->layoutClass('mainbody')?>">
@@ -123,9 +133,11 @@
 <?php /* End Main Listing */ ?>
 
 <?php /* Refine Search Options */ ?>
-<div class="<?=$this->layoutClass('sidebar')?>" id="search-sidebar">
-  <?php foreach ($this->results->getRecommendations('side') as $index => $current): ?>
+<?php if ($recommendations): ?>
+  <div class="<?=$this->layoutClass('sidebar')?>" id="search-sidebar" role="region" aria-label="<?=$this->transEscAttr('Search sidebar') ?>">
+    <?php foreach ($recommendations as $index => $current): ?>
     <?=$this->recommend($current, 'side', $index)?>
   <?php endforeach; ?>
 </div>
+<?php endif; ?>
 <?php /* End Refine Search Options */ ?>
