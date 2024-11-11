@@ -181,7 +181,7 @@
       -->
 
       <?php /* Time Range section */ ?>
-      <?php if (!empty($searchHandler) && $searchHandler == 'TimeRangeBBox'): ?>
+      <?php if ($searchHandler !== false && $searchHandler == 'TimeRangeBBox'): ?>
         <?php $timeRangesString = $this->driver->tryMethod('getTimeRangesString'); ?>
         <?php if (!empty($timeRangesString)): ?>
           <div><?=$this->transEsc($timeRangesString)?></div>
