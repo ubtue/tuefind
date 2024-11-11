@@ -31,6 +31,7 @@
 namespace VuFindTest\Mink;
 
 use Behat\Mink\Element\Element;
+use VuFindTest\Feature\SearchLimitTrait;
 
 use function intval;
 
@@ -43,10 +44,11 @@ use function intval;
  * @author   Ere Maijala <ere.maijala@helsinki.fi>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org Main Page
- * @retry    4
  */
 class SearchLimitTest extends \VuFindTest\Integration\MinkTestCase
 {
+    use SearchLimitTrait;
+
     /**
      * Selector for limit control
      *
@@ -85,43 +87,9 @@ class SearchLimitTest extends \VuFindTest\Integration\MinkTestCase
      */
     protected function assertResultSize(Element $page, int $size)
     {
-        $text = $this->findCss($page, '.search-stats strong')->getText();
+        $text = $this->findCssAndGetText($page, '.search-stats strong');
         [, $actualSize] = explode(' - ', $text);
         $this->assertEquals($size, intval($actualSize));
-    }
-
-    /**
-     * Assert the contents and selected element of the limit control.
-     *
-     * @param Element $page    Current page
-     * @param int[]   $options Expected options
-     * @param int     $active  Expected active option
-     *
-     * @return void
-     */
-    protected function assertLimitControl(Element $page, array $options, int $active)
-    {
-        $limit = $this->findCss($page, $this->limitControlSelector);
-        $this->assertEquals((string)$active, $limit->getValue());
-        $optionElements
-            = $page->findAll('css', $this->limitControlSelector . ' option');
-        $callback = function (Element $element): string {
-            return intval($element->getText());
-        };
-        $actualOptions = array_map($callback, $optionElements);
-        $this->assertEquals($options, $actualOptions);
-    }
-
-    /**
-     * Assert that no limit control is present on the page.
-     *
-     * @param Element $page Current page
-     *
-     * @return void
-     */
-    protected function assertNoLimitControl(Element $page)
-    {
-        $this->assertNull($page->find('css', $this->limitControlSelector));
     }
 
     /**
@@ -227,11 +195,12 @@ class SearchLimitTest extends \VuFindTest\Integration\MinkTestCase
         $this->assertResultTitles($page, 'Test Publication 20001', 'Test Publication 20020', 20);
 
         // Go to second page:
-        $this->clickCss($page, '.pagination li > a');
+        $this->clickCss($page, '.pagination li:not(.active) > a');
+        $this->waitForPageLoad($page);
         $this->assertResultTitles($page, 'Test Publication 20021', 'Test Publication 20040', 20);
 
         // Change limit and verify:
-        $this->clickCss($page, $this->limitControlSelector . ' option', null, 1);
+        $this->setResultLimit($page, 40);
         $this->waitForPageLoad($page);
         // Check expected first and last record (page should be reset):
         $this->assertResultTitles($page, 'Test Publication 20001', 'Test Publication 20040', 40);

@@ -9,7 +9,7 @@ class AccountCapabilities extends \VuFind\Config\AccountCapabilities
 {
     protected $tuefindConfig;
 
-    public function __construct(Config $config, AuthManager $auth, Config $tuefindConfig)
+    public function __construct(Config $config, callable $auth, Config $tuefindConfig)
     {
         parent::__construct($config, $auth);
         $this->tuefindConfig = $tuefindConfig;

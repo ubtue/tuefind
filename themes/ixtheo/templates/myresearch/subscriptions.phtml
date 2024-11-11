@@ -37,9 +37,6 @@ $user = $this->auth()->isLoggedIn();
     <?php endif; ?>
 </div>
 
-<div class="<?=$this->layoutClass('sidebar')?>">
-    <?=$this->context($this)->renderInContext("myresearch/menu.phtml", array('active' => 'subscriptions'))?>
-    <?php foreach ($this->results->getRecommendations('side') as $current): ?>
-        <?=$this->recommend($current)?>
-    <?php endforeach; ?>
+<div class="<?=$this->layoutClass('sidebar')?>" id="myresearch-sidebar" role="navigation" aria-label="<?=$this->transEsc('account_menu_label')?>">
+  <?=$this->accountMenu()->render('subscriptions')?>
 </div>

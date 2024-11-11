@@ -3,6 +3,7 @@ return [
     'extends' => 'bootstrap3',
     'helpers' => [
         'factories' => [
+            'TueFind\View\Helper\Root\AccountMenu' => 'VuFind\View\Helper\Root\AccountMenuFactory',
             'TueFind\View\Helper\Root\Matomo' => 'TueFind\View\Helper\Root\MatomoFactory',
             'TueFind\View\Helper\Root\Record' => 'VuFind\View\Helper\Root\RecordFactory',
             'TueFind\View\Helper\Root\RecordDataFormatter' => 'TueFind\View\Helper\Root\RecordDataFormatterFactory',
@@ -15,6 +16,7 @@ return [
             'TueFind\View\Helper\SetupThemeResources' => 'VuFindTheme\View\Helper\SetupThemeResourcesFactory',
         ],
         'aliases' => [
+            'accountMenu' => 'TueFind\View\Helper\Root\AccountMenu',
             'authority' => 'TueFind\View\Helper\TueFind\Authority',
             'matomo' => 'TueFind\View\Helper\Root\Matomo',
             'record' => 'TueFind\View\Helper\Root\Record',
@@ -31,21 +33,13 @@ return [
     ],
     'css' => [
         'vendor/jquery-ui.min.css',
-        'vendor/keyboard-basic.css',
-        'vendor/keyboard.css',
-        'vendor/keyboard-dark.css',
         'vendor/jquery.dataTable.css',
-        'vendor/keyboard-previewkeyset.css',
         'botprotect.css',
-        'keyboard-tuefind.css'
     ],
     'js' => [
         'tuefind.js',
         'vendor/jquery-ui.min.js',
-        'vendor/jquery.keyboard.js',
         'vendor/jquery.dataTable.js',
-        'vendor/keyboard-layouts-greywyvern.js',
-        'virtualkeyboard.js'
     ],
     'icons' => [
         'upload' => 'FontAwesome:upload',

@@ -1,14 +1,29 @@
-<?php if (!isset($this->indexStart)) $this->indexStart = 0; ?>
-<?php $i = $this->indexStart; ?>
-<?php foreach ($this->results->getResults() as $current): ?>
-  <?php $recordNumber = $this->results->getStartRecord() + $i - $this->indexStart; ?>
-  <div id="result<?=$i++ ?>" class="result<?=$current->supportsAjaxStatus()?' ajaxItem':''?> <?=$i%2==1?' panel-gray ':' panel-body '?>">
-    <?php if (isset($this->showCheckboxes) && $this->showCheckboxes): ?>
-      <?=$this->record($current)->getCheckbox('', 'search-cart-form', $recordNumber)?>
-    <?php endif; ?>
-    <div class="record-number">
-      <?=$recordNumber ?>
+<?php
+  if (!isset($this->indexStart)) {
+    $this->indexStart = 0;
+  }
+  $i = $this->indexStart;
+  $listStart = $this->results->getStartRecord() + $i - $this->indexStart;
+  $showCheckboxes = $this->searchSettings($this->results->getParams())->checkboxesEnabled();
+?>
+<ol class="<?=$this->escapeHtmlAttr(trim('record-list ' . ($this->resultsClass ?? '')))?>" start="<?=$listStart?>"<?=isset($this->resultsAttrs) ? ' ' . $this->resultsAttrs : ''?>>
+  <?php foreach ($this->results->getResults() as $current): ?>
+    <?php $recordNumber = $this->results->getStartRecord() + $i - $this->indexStart; ?>
+    <?php // Data-record-number attribute is for analytics use.  Do not remove. ?>
+    <div id="result<?=$i?>" class="row result<?=$current->supportsAjaxStatus()?' ajaxItem':''?> clearfix <?=$i%2==0?' panel-gray ':' panel-body '?>" data-record-number="<?=$this->escapeHtmlAttr($recordNumber)?>">
+      <div class="col-xs-1 hidden-print">
+        <?php if ($showCheckboxes): ?>
+          <?=$this->record($current)->getCheckbox('', 'search-cart-form', $recordNumber)?>
+        <?php endif; ?>
+        <div class="record-number">
+          <?=$recordNumber ?>
+        </div>
+      </div>
+      <?=$this->record($current)->getSearchResult('list', $this->results)?>
     </div>
-    <?=$this->record($current)->getSearchResult('list')?>
-    </div>
-<?php endforeach; ?>
+    <?php
+      // First record is 0, so increment the counter after each record:
+      $i++;
+    ?>
+  <?php endforeach; ?>
+</ol>

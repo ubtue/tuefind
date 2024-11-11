@@ -6,7 +6,7 @@ $config = [
         'factories' => [
             'KrimDok\Controller\BrowseController' => 'VuFind\Controller\AbstractBaseWithConfigFactory',
             'KrimDok\Controller\HelpController' => 'VuFind\Controller\AbstractBaseFactory',
-            'KrimDok\Controller\MyResearchController' => 'VuFind\Controller\AbstractBaseFactory',
+            'KrimDok\Controller\MyResearchController' => 'VuFind\Controller\MyResearchControllerFactory',
         ],
         'aliases' => [
             'Browse' => 'KrimDok\Controller\BrowseController',

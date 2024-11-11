@@ -24,7 +24,7 @@ $config = [
             'IxTheo\Controller\AlphabrowseController' => 'VuFind\Controller\AbstractBaseFactory',
             'IxTheo\Controller\BrowseController' => 'VuFind\Controller\AbstractBaseWithConfigFactory',
             'IxTheo\Controller\ClassificationController' => 'VuFind\Controller\AbstractBaseFactory',
-            'IxTheo\Controller\MyResearchController' => 'VuFind\Controller\AbstractBaseFactory',
+            'IxTheo\Controller\MyResearchController' => 'VuFind\Controller\MyResearchControllerFactory',
             'IxTheo\Controller\RecordController' => 'VuFind\Controller\AbstractBaseWithConfigFactory',
             'IxTheo\Controller\Search\KeywordChainSearchController' => 'VuFind\Controller\AbstractBaseFactory',
         ],

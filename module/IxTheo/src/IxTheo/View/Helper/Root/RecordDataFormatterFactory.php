@@ -30,7 +30,7 @@ class RecordDataFormatterFactory extends \TueFind\View\Helper\Root\RecordDataFor
     public function __invoke(ContainerInterface $container, $requestedName,
         array $options = null
     ) {
-        $this->user = $container->get('ViewHelperManager')->get('auth')->getManager()->isLoggedIn();
+        $this->user = $container->get('ViewHelperManager')->get('auth')->getUserObject();
         $this->tuefind = $container->get('ViewHelperManager')->get('tuefind');
         $this->dbTablePluginManager = $container->get('VuFind\Db\Table\PluginManager');
         $this->accountCapabilities = $container->get(\VuFind\Config\AccountCapabilities::class);
