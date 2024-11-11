@@ -12,12 +12,7 @@ $(function () {
 EOD;
 ?>
 <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $jsSnippet, 'SET')?>
-<style>
-#mlt li:nth-child(1n+6) {
-    display:none;
-    list-style-type: none;
-}
-</style>
+
 <h2><?=$this->transEsc('Similar Items')?></h2>
 <?php $similarRecords = $this->related->getResults(); ?>
 <?php if (!empty($similarRecords)): ?>

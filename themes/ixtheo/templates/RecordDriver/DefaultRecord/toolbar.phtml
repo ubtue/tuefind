@@ -39,7 +39,7 @@
     </li>
 
     <?php $exportFormats = $this->export()->getFormatsForRecord($this->driver); ?>
-    <?php if(count($exportFormats) > 0): ?>
+    <?php if (count($exportFormats) > 0): ?>
       <li role="none" class="dropdown">
         <a class="export-toggle toolbar-btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" href="<?=$this->escapeHtmlAttr($this->recordLinker()->getActionUrl($this->driver, 'Export', [], '', ['excludeSearchId' => true]))?>" rel="nofollow" aria-expanded="false" aria-controls="export-options">
           <?=$this->icon('export') ?>
@@ -47,7 +47,11 @@
         </a>
         <ul class="dropdown-menu" id="export-options" role="menu">
           <?php foreach ($exportFormats as $exportFormat): ?>
-            <li role="none"><a <?php if ($this->export()->needsRedirect($exportFormat)): ?>target="<?=$this->escapeHtmlAttr($exportFormat)?>Main" <?php endif; ?>href="<?=$this->escapeHtmlAttr($this->recordLinker()->getActionUrl($this->driver, 'Export',[],'', ['excludeSearchId' => true]))?>?style=<?=$this->escapeHtmlAttr($exportFormat)?>" rel="nofollow" role="menuitem"><?=$this->transEsc('Export to')?> <?=$this->transEsc($this->export()->getLabelForFormat($exportFormat))?></a></li>
+            <li role="none">
+              <a <?php if ($this->export()->needsRedirect($exportFormat)): ?>target="<?=$this->escapeHtmlAttr($exportFormat)?>Main" <?php endif; ?>href="<?=$this->escapeHtmlAttr($this->recordLinker()->getActionUrl($this->driver, 'Export',[],'', ['excludeSearchId' => true]))?>?style=<?=$this->escapeHtmlAttr($exportFormat)?>" rel="nofollow" role="menuitem">
+                <?=$this->transEsc('Export to')?> <?=$this->transEsc($this->export()->getLabelForFormat($exportFormat))?>
+                </a>
+            </li>
           <?php endforeach; ?>
         </ul>
       </li>
@@ -61,12 +65,17 @@
             <?=$this->transEsc('Add to favorites')?>
           </a>
         <?php elseif ($block = $this->permission()->getAlternateContent('feature.Favorites')): ?>
-          <?=$block?>
+          <?=$block ?>
         <?php endif; ?>
       </li>
     <?php endif; ?>
     <?php if (!empty($addThis)): ?>
-      <li role="none"><a class="addThis addthis_button" href="https://www.addthis.com/bookmark.php?v=250&amp;pub=<?=urlencode($addThis)?>"><i class="fa fa-bookmark" aria-hidden="true"></i> <?=$this->transEsc('Bookmark')?></a></li>
+      <li role="none">
+          <a class="addThis addthis_button" href="https://www.addthis.com/bookmark.php?v=250&amp;pub=<?=urlencode($addThis)?>">
+            <?=$this->icon('addthis-bookmark') ?>
+            <?=$this->transEsc('Bookmark')?>
+          </a>
+      </li>
     <?php endif; ?>
     <?=$this->render('record/cart-buttons.phtml', ['id' => $this->driver->getUniqueId(), 'source' => $this->driver->getSourceIdentifier()]); ?>
 

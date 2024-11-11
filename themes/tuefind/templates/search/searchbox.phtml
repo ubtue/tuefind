@@ -21,8 +21,15 @@
       $lastLimit = $this->searchMemory()->getLastLimit($this->searchClassId);
       $params = null;
     }
+    // Override search class ID with searchbox-specific settings, if necessary:
+    $overrideSearchClassId = $options->getSearchBoxSearchClassId();
+    if ($overrideSearchClassId !== $this->searchClassId) {
+      $this->searchClassId = $overrideSearchClassId;
+      $options = $this->searchOptions($overrideSearchClassId);
+    }
 
     // Load search actions and settings (if any):
+    $keyboardLayouts = $this->searchbox()->getKeyboardLayouts();
     $handlers = $this->searchbox()->getHandlers(
         $this->searchClassId,
         $this->searchIndex ?? null
