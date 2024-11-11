@@ -4,7 +4,10 @@
   $cover = $coverDetails['html'];
   $thumbnail = false;
   $thumbnailAlignment = $this->record($this->driver)->getThumbnailAlignment('result');
-  $searchHandler = $this->params->getSearchHandler();
+  $searchHandler = false;
+  if(isset($this->params)) {
+    $searchHandler = $this->params->getSearchHandler();
+  }
   if ($cover):
     ob_start(); ?>
     <div class="media-<?=$thumbnailAlignment ?> <?=$this->escapeHtmlAttr($coverDetails['size'])?>">
