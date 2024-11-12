@@ -15,7 +15,7 @@
   $thumbnail = false;
   $thumbnailAlignment = $this->record($this->driver)->getThumbnailAlignment('list');
 ?>
-<div class="row result<?php if($this->driver->supportsAjaxStatus()): ?> ajaxItem<?php endif ?>">
+<li class="row result<?php if($this->driver->supportsAjaxStatus()): ?> ajaxItem<?php endif ?>">
   <div class="col-xs-1 left">
     <label class="pull-left flip"><?=$this->record($this->driver)->getCheckbox() ?></label>
     <input type="hidden" value="<?=$id ?>" class="hiddenId"/>
@@ -25,12 +25,12 @@
     <?php if (!$missing):?>
       <div class="resultItemLine1">
         <a href="<?=$this->recordLinker()->getUrl($this->driver)?>">
-         <?=$this->record($this->driver)->getTitleHtml()?>
+        <?=$this->record($this->driver)->getTitleHtml()?>
         </a>
       </div>
     <?php else: ?>
-         <div class="text-muted">
-         <?=$this->record($this->driver)->getTitleHtml()?>
+        <div class="text-muted">
+        <?=$this->record($this->driver)->getTitleHtml()?>
       </div>
     <?php endif; ?>
 
@@ -87,7 +87,7 @@
                 $list_id,
         $user_id,
         'tag'
-       ) : [];
+      ) : [];
     ?>
     <?php if (count($listTags) > 0): ?>
       <strong><?=$this->transEsc('Your Tags')?>:</strong>
@@ -114,7 +114,7 @@
       <br>
     <?php endif; ?>
 
-        <div class="callnumAndLocation ajax-availability hidden">
+      <div class="callnumAndLocation ajax-availability hidden">
         <?php if ($this->driver->supportsAjaxStatus()): ?>
           <strong class="hideIfDetailed"><?=$this->transEsc('Call Number')?>:</strong>
           <span class="callnumber ajax-availability hidden">
@@ -186,37 +186,37 @@
       <?=$this->record($this->driver)->getPreviews()?>
     </div>
   </div>
-
-      <div class="result-links hidden-print">
-        <a href="<?=$this->url('myresearch-edit')?>?id=<?=urlencode($id)?>&amp;source=<?=urlencode($source)?><?php if (null !== $list_id):?>&amp;list_id=<?=urlencode($list_id)?><?php endif; ?>" class="edit tool icon-link">
-          <?=$this->icon('user-list-entry-edit', 'icon-link__icon') ?>
-          <span class="icon-link__label"><?=$this->transEsc('Edit')?></span>
-        </a><br>
-       <?php /* Use a different delete URL if we're removing from a specific list or the overall favorites: */
-         $deleteUrl = null === $list_id
-             ? $this->url('myresearch-favorites')
-            : $this->url('userList', ['id' => $list_id]);
-         $deleteUrlGet = $deleteUrl . '?delete=' . urlencode($id) . '&amp;source=' . urlencode($source);
-       ?>
-        <?=
-          $this->component(
-              'confirm-button',
-              [
-                  'buttonClass' => 'btn-link',
-                  'buttonLink' => $deleteUrlGet,
-                  'buttonIcon' => 'user-list-remove',
-                  'buttonLabel' => 'Delete',
-                  'confirmId' => 'confirm_delete_item_' . urlencode($id),
-              ]
-          )
-        ?>
-        <?=$this->driver->supportsCoinsOpenUrl() ? '<span class="Z3988" aria-hidden="true" title="' . $this->escapeHtmlAttr($this->driver->getCoinsOpenUrl()) . '"></span>' : ''?>
-      </div>
+  <div class="col-xs-2">
+    <div class="hidden-print">
+      <a href="<?=$this->url('myresearch-edit')?>?id=<?=urlencode($id)?>&amp;source=<?=urlencode($source)?><?php if (null !== $list_id):?>&amp;list_id=<?=urlencode($list_id)?><?php endif; ?>" class="edit tool icon-link">
+        <?=$this->icon('user-list-entry-edit', 'icon-link__icon') ?>
+        <span class="icon-link__label"><?=$this->transEsc('Edit')?></span>
+      </a><br>
+      <?php /* Use a different delete URL if we're removing from a specific list or the overall favorites: */
+        $deleteUrl = null === $list_id
+            ? $this->url('myresearch-favorites')
+          : $this->url('userList', ['id' => $list_id]);
+        $deleteUrlGet = $deleteUrl . '?delete=' . urlencode($id) . '&amp;source=' . urlencode($source);
+      ?>
+      <?=
+        $this->component(
+            'confirm-button',
+            [
+                'buttonClass' => 'btn-link',
+                'buttonLink' => $deleteUrlGet,
+                'buttonIcon' => 'user-list-remove',
+                'buttonLabel' => 'Delete',
+                'confirmId' => 'confirm_delete_item_' . urlencode($id),
+            ]
+        )
+      ?>
+      <?=$this->driver->supportsCoinsOpenUrl() ? '<span class="Z3988" aria-hidden="true" title="' . $this->escapeHtmlAttr($this->driver->getCoinsOpenUrl()) . '"></span>' : ''?>
+    </div>
   </div>
-    <?php if ($thumbnail && $thumbnailAlignment == 'right'): ?>
-      <?=$thumbnail ?>
-    <?php endif; ?>
-</div>
+  <?php if ($thumbnail && $thumbnailAlignment == 'right'): ?>
+    <?=$thumbnail ?>
+  <?php endif; ?>
+
 <?php
 $escId = $this->escapeJs($id);
 $escSource = $this->escapeJs($source);
@@ -236,3 +236,4 @@ $('#confirm_delete_item_${escId}').click(function(e) {
 JS;
 ?>
 <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $script, 'SET');?>
+</li>
