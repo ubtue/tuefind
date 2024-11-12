@@ -1,4 +1,5 @@
 <?php
+
   if (!isset($this->params)) {
     // No current search, use last search in memory
     $params = $this->searchMemory()->getLastSearchParams($this->searchClassId);
@@ -41,14 +42,8 @@
           $ariaLabel = $this->translate('Remove filter') . ' ' . $this->escapeHtmlAttr($desc);
         ?>
         <?=$desc?>
-        <?php if ($removeLink): ?>
-        <a class="filter-value" href="<?=$removeLink?>">
-          <span class="sr-only">
-            <?=$this->translate('Remove filter') ?>
-          </span>
-          <span class="text"><?=$this->transEsc($filter['desc'])?></span>
-          <?=$this->icon('search-filter-remove') ?>
-          </a>
+        <?php if($removeLink): ?>
+          <a class="search-filter-remove" aria-label="<?=$ariaLabel?>" href="<?=$removeLink?>"><!--icon from css --></a>
         <?php endif; ?>
       </span>
     <?php endif ?>
@@ -130,7 +125,7 @@
   <?php // Normal view ?>
   <div class="active-filters hidden-xs">
     <span class="sr-only"><?=$this->transEscAttr('page_reload_on_deselect_hint') ?></span>
-    <?php if ($resetLink && $options->shouldDisplayResetFilters()): ?>
+      <?php if ($resetLink && $options->getRetainFilterSetting()): ?>
         <a class="reset-filters-btn" href="<?=$resetLink?>"><?=$this->transEsc('reset_filters_button')?></a>
     <?php elseif ($advancedSearch): ?>
       <p class="adv_search_filters"><?=$this->transEsc('adv_search_filters')?>:</p>
@@ -145,7 +140,7 @@
   <div class="active-filters visible-xs">
     <span class="sr-only"><?=$this->transEscAttr('page_reload_on_deselect_hint') ?></span>
     <div class="filters-toggle-bar">
-      <?php if ($resetLink && $options->shouldDisplayResetFilters()): ?>
+      <?php if ($resetLink && $options->getRetainFilterSetting()): ?>
         <a class="reset-filters-btn" href="<?=$resetLink?>"><?=$this->transEsc('reset_filters_button')?></a>
       <?php endif; ?>
       <div class="filters-toggle collapsed" data-toggle="collapse" data-target="#active-filters-mobile">
@@ -159,3 +154,14 @@
     <div class="clearfix"></div>
   </div>
 <?php endif; ?>
+
+<style>
+  .ix2-searchForm .active-filters {
+    display: block;
+    margin-block-start: 5px;
+  }
+  .ix2-searchForm .reset-filters-btn {
+    white-space: nowrap;
+    margin-top: 0;
+  }
+</style>

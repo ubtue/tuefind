@@ -64,7 +64,7 @@
     <?=$badgeExclude?>
   </span>
 <?php else: ?>
-  <a href="<?=$toggleUrl ?>" class="<?=implode(' ', $classList) ?><?=$hasCheckbox ? ' icon-link-checkbox' : ''?>" data-title="<?=$this->transEscAttr($this->facet['displayText']) ?>" data-count="<?=$this->facet['count'] ?>"<?php if ($this->facet['isApplied']): ?> title="<?=$this->transEscAttr('applied_filter') ?>"<?php endif;?> data-lightbox-ignore rel="nofollow">
+  <a href="<?=$toggleUrl ?>" class="<?=implode(' ', $classList) ?><?=$hasCheckbox ? ' icon-link-checkbox' : ''?>" data-title="<?=$this->escapeHtmlAttr($this->facet['displayText']) ?>" data-count="<?=$this->facet['count'] ?>"<?php if ($this->facet['isApplied']): ?> title="<?=$this->transEscAttr('applied_filter') ?>"<?php endif;?> data-lightbox-ignore rel="nofollow">
     <span class="text">
       <?=$displayText ?>
     </span>
