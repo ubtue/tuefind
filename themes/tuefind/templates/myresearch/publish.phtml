@@ -3,29 +3,37 @@
 <?=$this->flashmessages()?>
 
 <?php if($this->showForm):?>
-  <form method="post" enctype="multipart/form-data">
-    <!-- DC.creator -->
-    <div class="form-group">
-      <label><?=$this->transEsc('Author')?></label>
-      <select class="form-control" name="creator" disabled>
-        <?php foreach ($this->userAuthorities as $userAuthority): ?>
-          <option value="<?=$userAuthority['authority_GNDNumber']?>" <?php echo $userAuthority['selected'] ? "selected" : "";?> ><?=$userAuthority['select_title']?></option>
-        <?php endforeach; ?>
-      </select>
-    </div>
+  <p>
+    <form method="post" enctype="multipart/form-data">
+      <!-- DC.creator -->
+      <div class="form-group">
+        <label><?=$this->transEsc('Author')?></label>
+        <select class="form-control" name="creator" disabled>
+          <?php foreach ($this->userAuthorities as $userAuthority): ?>
+            <option value="<?=$userAuthority['authority_GNDNumber']?>" <?php echo $userAuthority['selected'] ? "selected" : "";?> ><?=$userAuthority['select_title']?></option>
+          <?php endforeach; ?>
+        </select>
+      </div>
 
-    <!-- File -->
-    <div class="form-group">
-      <label><?=$this->transEsc('publication_upload_file', ['%%max_size%%' => $this->uploadMaxFilesizeMB])?></label>
-      <input class="form-control" type="file" name="file" required>
-    </div>
+      <!-- File -->
+      <div class="form-group">
+        <label><?=$this->transEsc('publication_upload_file', ['%%max_size%%' => $this->uploadMaxFilesizeMB])?></label>
+        <input class="form-control" type="file" name="file" required>
+      </div>
 
-    <div class="form-group">
+      <div class="form-group">
         <label>
           <?=$this->translate('publication_upload_terms_agree', ['%%link_start%%' => '<a href="/publication_terms/' . urlencode($termFile['fileName']) . '" target="_blank">', '%%link_end%%' => '</a>'])?>
           <input type="checkbox" value="term" name="term" required="required">
         </label>
-    </div>
-    <button type="submit" class="btn btn-primary" name="action" value="publish"><?=$this->transEsc('Submit')?></button>
-  </form>
+      </div>
+      <button type="submit" class="btn btn-primary" name="action" value="publish"><?=$this->transEsc('Submit')?></button>
+    </form>
+  </p>
+
+  <!-- Work in Progress: -->
+  <!--
+    <?php $url = $this->url('feedback-form', ['id' => 'SelfArchivingRegisterLink']) . '?ppn=' . urlencode($this->dublinCore['DC.identifier'][0]) . '&title=' . urlencode($this->dublinCore['DC.title'][0]) . '&author=' . urlencode($this->dublinCore['DC.creator'][0]); ?>
+    <p>Liegt Ihr Beitrag bereits als Zweitveröffentlichung auf einem anderen Repositorium vor? Dann können Sie statt eines erneuten Uploads <a href="<?=$this->escapeHtmlAttr($url)?>">hier</a> den Permalink eintragen, damit die vorhandene Zweitveröffentlichung in IxTheo verknüpft wird.</p>
+  -->
 <?php endif;?>
