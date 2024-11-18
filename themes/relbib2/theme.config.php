@@ -15,5 +15,10 @@ return [
             'relbib' => 'IxTheo\View\Helper\IxTheo\RelBib',
             'RelBib' => 'IxTheo\View\Helper\IxTheo\RelBib'
         ],
+    ],
+    'icons' => [
+        'aliases' => [
+            'external-link' => 'FontAwesome:external-link'
+        ]
     ]
 ];
