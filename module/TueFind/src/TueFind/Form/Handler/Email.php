@@ -3,13 +3,14 @@
 namespace TueFind\Form\Handler;
 
 use Laminas\Mail\Address;
+use VuFind\Db\Entity\UserEntityInterface;
 use VuFind\Exception\Mail as MailException;
 
 class Email extends \VuFind\Form\Handler\Email {
     public function handle(
         \VuFind\Form\Form $form,
         \Laminas\Mvc\Controller\Plugin\Params $params,
-        ?\VuFind\Db\Row\User $user = null
+        ?UserEntityInterface $user = null
     ): bool {
         $fields = $form->mapRequestParamsToFieldValues($params->fromPost());
         $emailMessage = $this->viewRenderer->partial(
