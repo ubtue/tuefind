@@ -32,6 +32,7 @@
 namespace VuFindTest\Feature;
 
 use Behat\Mink\Element\Element;
+use Behat\Mink\Element\NodeElement;
 
 /**
  * Trait for working with faceting and filtering of search results.
@@ -59,6 +60,13 @@ trait SearchFacetFilterTrait
     protected $activeFilterLabelSelector = '.active-filters.hidden-xs .filters .filters-title';
 
     /**
+     * CSS selector for finding the active filter list
+     *
+     * @var string
+     */
+    protected $activeFilterListSelector = '.active-filters.hidden-xs .filters .title-value-pair';
+
+    /**
      * CSS selector for finding the first hierarchical facet expand button
      *
      * @var string
@@ -84,7 +92,7 @@ trait SearchFacetFilterTrait
      *
      * @var string
      */
-    protected $facetSecondLevelActiveLinkSelector = '.facet-tree button[aria-expanded=true] ~ ul a.active';
+    protected $facetSecondLevelActiveLinkSelector = '.facet-tree button[aria-expanded=true] ~ ul .active a';
 
     /**
      * CSS selector for finding the first second level hierarchical facet
@@ -107,5 +115,72 @@ trait SearchFacetFilterTrait
         $label = $this->findCss($page, $this->activeFilterLabelSelector);
         $this->assertEquals('hierarchy:', $label->getText());
         $this->assertEquals("Remove Filter $expectedFilter", $filter->getText());
+    }
+
+    /**
+     * Get textual content of a facet element by facet link CSS selector
+     *
+     * @param Element $page     Page
+     * @param string  $selector CSS selector for facet link
+     *
+     * @return string
+     */
+    protected function getFacetTextByLinkSelector(Element $page, string $selector): string
+    {
+        return $this->findCssAndCallMethod(
+            $page,
+            $selector,
+            function (NodeElement $node): string {
+                return $node->getParent()->getText();
+            }
+        );
+    }
+
+    /**
+     * Assert that no filters are applied.
+     *
+     * @param Element $page Mink page object
+     *
+     * @return void
+     */
+    protected function assertNoFilters(Element $page): void
+    {
+        $this->assertFilterCount($page, 0);
+    }
+
+    /**
+     * Assert that the given number of filters are applied.
+     *
+     * @param Element $page     Mink page object
+     * @param int     $expected Expected filter count
+     *
+     * @return void
+     */
+    protected function assertFilterCount(Element $page, int $expected): void
+    {
+        $items = $page->findAll('css', $this->activeFilterSelector);
+        $this->assertCount($expected, $items);
+    }
+
+    /**
+     * Assert that the given number of facets are present in the full facet list
+     *
+     * @param Element $page            Mink page object
+     * @param string  $list            List type ('count' or 'index')
+     * @param int     $expected        Expected filter count
+     * @param bool    $exclusionActive Should exclude links be present?
+     *
+     * @return void
+     */
+    protected function assertFullListFacetCount(
+        Element $page,
+        string $list,
+        int $expected,
+        bool $exclusionActive
+    ): void {
+        $items = $page->findAll('css', "#modal #facet-list-$list .js-facet-item");
+        $this->assertCount($expected, $items);
+        $excludes = $page->findAll('css', "#modal #facet-list-$list .exclude");
+        $this->assertCount($exclusionActive ? $expected : 0, $excludes);
     }
 }
