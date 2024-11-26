@@ -140,7 +140,14 @@ var TueFind = {
                         else
                             $(this).html("");
                     });
-                    $("[id^=snippets_] > p").each(function () { this.style.transform="none"; });
+                    $("[id^=snippets_] > p").each(function () {
+                                                      this.style.transform="none";
+                                                      // Try to fix erroneous snippets with huge font-sizes (c.f. tuefind/issues/3072)
+                                                      let currentFontValue = $(this).css('font-size');
+                                                      const [full, currentFontSize, unit] = currentFontValue.match(/(\d+(?:\.\d+)?)(.*)/);
+                                                      if (unit == 'px' && currentFontSize >= 50)
+                                                          $(this).css('font-size', '14px');
+                                                 });
                     if (!verbose && snippets)
                         $("#snippets_" + doc_id).after(TueFind.ItemFulltextLink(doc_id, query, synonyms));
                 });
