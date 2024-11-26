@@ -37,4 +37,88 @@ class Results extends \VuFind\Search\Solr\Results
         // Send back data:
         return $facets;
     }
+
+    // TueFind: Similar to parent, with additional handling for "translatedFacetsUnassigned"
+    protected function buildFacetList(array $facetList, array $filter = null): array
+    {
+        // If there is no filter, we'll use all facets as the filter:
+        if (null === $filter) {
+            $filter = $this->getParams()->getFacetConfig();
+        }
+
+        // Start building the facet list:
+        $result = [];
+
+        // Loop through every field returned by the result set
+        $translatedFacets = $this->getOptions()->getTranslatedFacets();
+        $translatedFacetsUnassigned = $this->getOptions()->getTranslatedFacetsUnassigned();
+        $hierarchicalFacets
+            = is_callable([$this->getOptions(), 'getHierarchicalFacets'])
+            ? $this->getOptions()->getHierarchicalFacets()
+            : [];
+        $hierarchicalFacetSortSettings
+            = is_callable([$this->getOptions(), 'getHierarchicalFacetSortSettings'])
+            ? $this->getOptions()->getHierarchicalFacetSortSettings()
+            : [];
+
+        foreach (array_keys($filter) as $field) {
+            $data = $facetList[$field] ?? [];
+            // Skip empty arrays:
+            if (count($data) < 1) {
+                continue;
+            }
+            // Initialize the settings for the current field
+            $result[$field] = [
+                'label' => $filter[$field],
+                'list' => [],
+            ];
+            // Should we translate values for the current facet?
+            $translate = in_array($field, $translatedFacets);
+            $translateUnassigned = in_array($field, $translatedFacetsUnassigned);
+            $hierarchical = in_array($field, $hierarchicalFacets);
+            $operator = $this->getParams()->getFacetOperator($field);
+            $resultList = [];
+            // Loop through values:
+            foreach ($data as $value => $count) {
+                $displayText = $this->getParams()
+                    ->getFacetValueRawDisplayText($field, $value);
+                if ($hierarchical) {
+                    if (!$this->hierarchicalFacetHelper) {
+                        throw new \Exception(
+                            get_class($this)
+                            . ': hierarchical facet helper unavailable'
+                        );
+                    }
+                    $displayText = $this->hierarchicalFacetHelper
+                        ->formatDisplayText($displayText);
+                }
+                $displayText = ($translate || ($translateUnassigned && $displayText == '[Unassigned]'))
+                    ? $this->getParams()->translateFacetValue($field, $displayText)
+                    : $displayText;
+                $isApplied = $this->getParams()->hasFilter("$field:" . $value)
+                    || $this->getParams()->hasFilter("~$field:" . $value);
+
+                // Store the collected values:
+                $resultList[] = compact(
+                    'value',
+                    'displayText',
+                    'count',
+                    'operator',
+                    'isApplied'
+                );
+            }
+
+            if ($hierarchical) {
+                $sort = $hierarchicalFacetSortSettings[$field]
+                    ?? $hierarchicalFacetSortSettings['*'] ?? 'count';
+                $this->hierarchicalFacetHelper->sortFacetList($resultList, $sort);
+
+                $resultList
+                    = $this->hierarchicalFacetHelper->buildFacetArray($field, $resultList);
+            }
+
+            $result[$field]['list'] = $resultList;
+        }
+        return $result;
+    }
 }
