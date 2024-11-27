@@ -21,7 +21,7 @@ class AccountMenu extends \VuFind\View\Helper\Root\AccountMenu {
 
     public function checkAdmins(): bool {
         $user = $this->getAuthHelper()->getUserObject();
-        return $user->tuefind_rights != null;
+        return isset($user->tuefind_rights);
     }
 
     public function checkUserAuthorities(): bool {
