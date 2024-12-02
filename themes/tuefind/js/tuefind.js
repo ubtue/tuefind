@@ -650,6 +650,8 @@ $(document).ready(function () {
         $("#searchForm").submit();
     });
 
-    $('.dataTable').DataTable();
+    new DataTable('.dataTable',{
+        scrollX: true
+    });
 
 });
