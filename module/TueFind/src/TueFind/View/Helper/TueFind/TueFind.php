@@ -636,10 +636,6 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
     }
 
     public function isNewItem(string $searchClassId): bool {
-        $currentRoute = $this->getRouteParams();
-        if($currentRoute['controller'] == 'Search' && $currentRoute['action'] == 'NewItem') {
-            return true;
-        }
         $hiddenFilters = $this->getView()->plugin('searchTabs')->getHiddenFilters($searchClassId);
         if(isset($hiddenFilters['first_indexed'])) {
             return true;
