@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "02a8cc52d964620e6b3da0451a0baa47",
+    "content-hash": "7e1c15f8a7e2c3bcd7643f47036c4144",
     "packages": [
         {
             "name": "ahand/mobileesp",
@@ -3620,28 +3620,28 @@
         },
         {
             "name": "laminas/laminas-mvc",
-            "version": "3.7.0",
+            "version": "3.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-mvc.git",
-                "reference": "3f65447addf487189000e54dc1525cd952951da4"
+                "reference": "53ba28b7222d3a3b49747a26babef43d1b17fb6f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-mvc/zipball/3f65447addf487189000e54dc1525cd952951da4",
-                "reference": "3f65447addf487189000e54dc1525cd952951da4",
+                "url": "https://api.github.com/repos/laminas/laminas-mvc/zipball/53ba28b7222d3a3b49747a26babef43d1b17fb6f",
+                "reference": "53ba28b7222d3a3b49747a26babef43d1b17fb6f",
                 "shasum": ""
             },
             "require": {
                 "container-interop/container-interop": "^1.2",
                 "laminas/laminas-eventmanager": "^3.4",
                 "laminas/laminas-http": "^2.15",
-                "laminas/laminas-modulemanager": "^2.8",
+                "laminas/laminas-modulemanager": "^2.16",
                 "laminas/laminas-router": "^3.11.1",
                 "laminas/laminas-servicemanager": "^3.20.0",
-                "laminas/laminas-stdlib": "^3.6",
-                "laminas/laminas-view": "^2.14",
-                "php": "~8.1.0 || ~8.2.0 || ~8.3.0"
+                "laminas/laminas-stdlib": "^3.19",
+                "laminas/laminas-view": "^2.18.0",
+                "php": "~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0"
             },
             "conflict": {
                 "zendframework/zend-mvc": "*"
@@ -3649,9 +3649,7 @@
             "require-dev": {
                 "laminas/laminas-coding-standard": "^2.5.0",
                 "laminas/laminas-json": "^3.6",
-                "phpspec/prophecy": "^1.17.0",
-                "phpspec/prophecy-phpunit": "^2.0.2",
-                "phpunit/phpunit": "^9.6.13",
+                "phpunit/phpunit": "^10.5.38",
                 "webmozart/assert": "^1.11"
             },
             "suggest": {
@@ -3697,7 +3695,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2023-11-14T09:44:53+00:00"
+            "time": "2024-11-18T00:14:29+00:00"
         },
         {
             "name": "laminas/laminas-mvc-i18n",
@@ -7119,16 +7117,16 @@
         },
         {
             "name": "phing/phing",
-            "version": "3.0.0",
+            "version": "3.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phingofficial/phing.git",
-                "reference": "52a1dffa3c8f1fb7c4106d6645fe18407112b31c"
+                "reference": "96d3b6f37b6b63a710ae7daf1c50b5c28151e695"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phingofficial/phing/zipball/52a1dffa3c8f1fb7c4106d6645fe18407112b31c",
-                "reference": "52a1dffa3c8f1fb7c4106d6645fe18407112b31c",
+                "url": "https://api.github.com/repos/phingofficial/phing/zipball/96d3b6f37b6b63a710ae7daf1c50b5c28151e695",
+                "reference": "96d3b6f37b6b63a710ae7daf1c50b5c28151e695",
                 "shasum": ""
             },
             "require": {
@@ -7138,9 +7136,9 @@
                 "ext-simplexml": "*",
                 "ext-xml": "*",
                 "php": ">= 7.4",
-                "sebastian/version": "^3.0|^4.0",
-                "symfony/console": "^5.3.10|^6.0",
-                "symfony/yaml": "^5.0|^6.0"
+                "sebastian/version": "^3.0|^4.0|^5.0",
+                "symfony/console": "^5.3.10|^6.0|^7.0",
+                "symfony/yaml": "^5.0|^6.0|^7.0"
             },
             "replace": {
                 "phing/task-analyzers": "self.version",
@@ -7204,7 +7202,7 @@
                 "phpunit/phpunit": "^9.5.10",
                 "psr/http-message": "^2.0",
                 "roave/security-advisories": "dev-master",
-                "scssphp/scssphp": "~1.12.0",
+                "scssphp/scssphp": "^1.13",
                 "siad007/versioncontrol_hg": "^1.0",
                 "smarty/smarty": "^5.0",
                 "squizlabs/php_codesniffer": "^3.5",
@@ -7216,10 +7214,11 @@
             },
             "suggest": {
                 "aws/aws-sdk-php": "Used for Amazon tasks",
-                "ext-gettext": "*",
-                "ext-posix": "*",
-                "ext-sockets": "*",
-                "ext-tidy": "*",
+                "ext-gettext": "Used for gettext translation filter",
+                "ext-intl": "Used for Tstamp task",
+                "ext-posix": "Used for Posix selector and ACLs",
+                "ext-sockets": "Used for the Socket condition",
+                "ext-tidy": "Used for the Tidy filter",
                 "guzzlehttp/guzzle": "Used for Http tasks",
                 "jawira/plantuml-encoding": "Required by VisualizerTask",
                 "mehr-als-nix/parallel": "̈Used for Parallel task",
@@ -7368,6 +7367,7 @@
                 "build",
                 "build-automation",
                 "build-tool",
+                "dev",
                 "make",
                 "phing",
                 "php",
@@ -7395,7 +7395,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2024-05-01T18:28:58+00:00"
+            "time": "2024-12-04T19:56:50+00:00"
         },
         {
             "name": "ppito/laminas-whoops",
