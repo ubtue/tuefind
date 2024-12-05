@@ -43,7 +43,7 @@
         <a href="<?=$this->url('search-newitem')?>"
            class="btn <?php if(!empty($this->isNewItemActiveClass)) { echo 'btn-primary isNewItemActiveClass'; }else{ echo 'btn-light';} ?>" role="button"
            rel="nofollow"><?=$this->transEsc('New Items')?></a>
-           <?php if (!empty($this->isNewItemActiveClass)) { ?><a class="btn-primary isNewItemActiveClass" href="<?=$this->resetNewItemsURL;?>"><span class="fa fa-times"></span></a><? }?>
+           <?php if (!empty($this->isNewItemActiveClass)) { ?><a class="btn-primary isNewItemActiveClass" href="<?=$this->resetNewItemsURL;?>"><span class="fa fa-times"></span></a><?php }?>
     </li>
     <li>
         <a href="/Feedback/Form/AcquisitionRequest"
