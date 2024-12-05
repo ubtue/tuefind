@@ -45,6 +45,9 @@ class RecordDataFormatterFactory extends \TueFind\View\Helper\Root\RecordDataFor
         $this->addTags($spec);
         $this->addRecordLinks($spec);
 
+        $spec->setTemplateLine(
+            'Parallel Edition', true, 'data-parallel_edition.phtml'
+        );
         return $spec->getArray();
     }
 }

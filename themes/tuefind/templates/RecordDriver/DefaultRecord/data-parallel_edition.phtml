@@ -5,7 +5,6 @@
     <br/>
   <?php endforeach; ?>
 <?php endif; ?>
-
 <?php $parallel_editions = $this->driver->tryMethod('getUnlinkedParallelEditions'); ?>
 <?php if (!empty($parallel_editions)): ?>
   <?php foreach ($parallel_editions as $parallel_edition): ?>
