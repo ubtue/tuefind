@@ -14,11 +14,12 @@
     }
 
     $ascSortingTopicsData = $responseTopicsData;
-    $toptitle = array();
-    foreach ($ascSortingTopicsData as $key => $row) {
-        $toptitle[$key]  = $row['topicTitle'];
-    }
-    array_multisort($toptitle, SORT_ASC,SORT_LOCALE_STRING, $ascSortingTopicsData);
+
+    $collator = collator_create($this->tuefind()->getTranslatorLocale());
+    
+    usort($ascSortingTopicsData, function($a, $b) use($collator){
+      return $collator->compare($a['topicTitle'], $b['topicTitle']);
+    });
 
     $countSortingTopicsData = $responseTopicsData;
     array_multisort(array_column($countSortingTopicsData, 'topicCount'), SORT_DESC, $countSortingTopicsData);
