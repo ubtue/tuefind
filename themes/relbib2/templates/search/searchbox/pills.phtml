@@ -41,9 +41,9 @@
     <!-- RelBib-specific: put New Items at back, add Acquisition Request behind it -->
     <li class="<?=$this->isNewItemActiveClass?>">
         <a href="<?=$this->url('search-newitem')?>"
-           class="btn <?=(!empty($this->isNewItemActiveClass))? 'btn-primary isNewItemActiveClass' : 'btn-light' ?>" role="button"
+           class="btn <?php if(!empty($this->isNewItemActiveClass)) { echo 'btn-primary isNewItemActiveClass'; }else{ echo 'btn-light';} ?>" role="button"
            rel="nofollow"><?=$this->transEsc('New Items')?></a>
-           <?php if (!empty($this->isNewItemActiveClass)): ?><a class="btn-primary isNewItemActiveClass" href="<?=$this->resetNewItemsURL;?>"><span class="fa fa-times"></span></a><? endif;?>
+           <?php if (!empty($this->isNewItemActiveClass)) { ?><a class="btn-primary isNewItemActiveClass" href="<?=$this->resetNewItemsURL;?>"><span class="fa fa-times"></span></a><? }?>
     </li>
     <li>
         <a href="/Feedback/Form/AcquisitionRequest"
