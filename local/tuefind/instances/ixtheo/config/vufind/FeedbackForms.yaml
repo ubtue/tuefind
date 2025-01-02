@@ -374,3 +374,508 @@ forms:
       - ppn
       - title
       - author
+
+  SelfArchivingLexikonartikel:
+    enabled: true
+    onlyForLoggedUsers: true
+    title: "Lexikonartikel"
+
+    help:
+      pre: "help text"
+
+    fields:
+      - name: print_online
+        label: "Handelt es sich um eine Print- oder eine Online-Publikation?"
+        type: radio
+        required: true
+        options:
+          - value: online
+            label: "Online"
+          - value: print
+            label: "Print " # Note: The whitespace at the end is intentional so this will not be translated
+
+      - name: authors
+        label: "Verfasser*innen"
+        type: text
+        required: true
+
+      - name: publication_year
+        label: "Erscheinungsjahr"
+        type: text
+        required: true
+
+      - name: title
+        label: "Lemma/Titel"
+        type: text
+        required: true
+
+      - name: teilaspekt
+        label: "Teilaspekt "
+        type: text
+        required: true
+
+      - name: language
+        label: "Sprache des Beitrags"
+        type: language
+        required: true
+
+      #In Werk group open
+      - name: rezensiertes_werk_group_name
+        label: "Wo/In welchem Lexikon ist der Beitrag enthalten?"
+        type: hidden
+        group: inwerkgroup_6
+
+      - name: zeitschrift_werk_group_title
+        label: "Title"
+        type: text
+        required: true
+        group: inwerkgroup_6
+
+      - name: zeitschrift_werk_group_band
+        label: "Band"
+        type: text
+        required: true
+        group: inwerkgroup_6
+
+      - name: sammelband_werk_group_ISBN
+        label: "ISBN"
+        type: text
+        required: true
+        group: inwerkgroup_6
+
+      - name: zeitschrift_werk_group_IxTheo_Link
+        label: "IxTheo-Link"
+        type: text
+        required: true
+        group: inwerkgroup_6
+
+      - name: facultativ
+        label: "Seiten/Spalten (bei Online fakultativ)"
+        type: text
+        required: true
+        group: inwerkgroup_6
+
+      #In Werk group close
+
+      - name: onlineversion
+        label: "Ist bereits ein Link zu einer Onlineversion des Beitrags verfügbar?"
+        type: radio
+        required: true
+        options:
+          - value: bereit1
+            label: "Ja"
+          - value: bereit2
+            label: "Nein"
+
+      - name: onlineversion_werk_group_fulltext
+        label: "Volltext nicht frei verfügbar"
+        type: text
+        required: true
+
+      - name: onlineversion_werk_group_openaccess
+        label: "Open Access"
+        type: text
+        required: true
+
+  SelfArchivingRezension:
+    enabled: true
+    onlyForLoggedUsers: true
+    title: "Rezension"
+
+    help:
+      pre: "help text"
+
+    fields:
+      - name: print_online
+        label: "Handelt es sich um eine Print- oder eine Online-Publikation?"
+        type: radio
+        required: true
+        options:
+          - value: online
+            label: "Online"
+          - value: print
+            label: "Print " # Note: The whitespace at the end is intentional so this will not be translated
+
+      - name: authors
+        label: "Verfasser*innen"
+        type: text
+        required: true
+
+      - name: publication_year
+        label: "Erscheinungsjahr"
+        type: text
+        required: true
+
+      - name: title
+        label: "Titel"
+        type: text
+        required: true
+
+      #Rezensiertes Werk group open
+      - name: rezensiertes_werk_group_name
+        label: "Rezensiertes Werk group"
+        type: hidden
+        group: werkgroup_6
+
+      - name: rezensiertes_werk_group_autor
+        label: "Autor*in / Herausgeber*In"
+        type: text
+        required: true
+        group: werkgroup_6
+
+      - name: rezensiertes_werk_group_title
+        label: "Titel"
+        type: text
+        required: true
+        group: werkgroup_6
+
+      - name: rezensiertes_werk_group_jahr
+        label: "Jahr"
+        type: text
+        required: true
+        group: werkgroup_6
+
+      - name: rezensiertes_werk_group_ISBN
+        label: "ISBN"
+        type: text
+        required: true
+        group: werkgroup_6
+
+      - name: rezensiertes_werk_group_IxTheo_Link
+        label: "IxTheo-Link"
+        type: text
+        required: true
+        group: werkgroup_6
+      #Rezensiertes Werk group close
+
+      - name: language
+        label: "Sprache des Beitrags"
+        type: language
+        required: true
+
+      #In Werk group open
+      - name: rezensiertes_werk_group_name
+        label: "Wo/In welchem übergeordneten Werk ist die Rezension enthalten?"
+        type: hidden
+        group: inwerkgroup_11
+
+      - name: inwerkradio
+        label: ""
+        type: radio
+        required: true
+        options:
+          - value: inwerkradio1
+            label: "In einer Zeitschrift "
+          - value: inwerkradio2
+            label: "In einem Sammelband"
+
+      - name: zeitschrift_werk_group_title
+        label: "Title"
+        type: text
+        required: true
+        group: inwerkgroup_11
+
+      - name: zeitschrift_werk_group_ISSN
+        label: "ISSN"
+        type: text
+        required: true
+        group: inwerkgroup_11
+
+      - name: sammelband_werk_group_ISBN
+        label: "ISBN"
+        type: text
+        required: true
+        group: inwerkgroup_11
+
+      - name: zeitschrift_werk_group_IxTheo_Link
+        label: "IxTheo-Link"
+        type: text
+        required: true
+        group: inwerkgroup_11
+
+      - name: sammelband_werk_group_Herausgeber
+        label: "Herausgeber*innen"
+        type: text
+        required: true
+        group: inwerkgroup_11
+
+      - name: zeitschrift_werk_group_band
+        label: "Band"
+        type: text
+        required: true
+        group: inwerkgroup_11
+
+      - name: zeitschrift_werk_group_jahr
+        label: "Jahr"
+        type: text
+        required: true
+        group: inwerkgroup_11
+
+      - name: zeitschrift_werk_group_heft
+        label: "Heft"
+        type: text
+        required: true
+        group: inwerkgroup_11
+
+      - name: zeitschrift_werk_group_aufsatz_ID
+        label: "Aufsatz-ID"
+        type: text
+        required: true
+        group: inwerkgroup_11
+
+      - name: zeitschrift_werk_group_seiten
+        label: "Seiten"
+        type: text
+        required: true
+        group: inwerkgroup_11
+
+
+      #In Werk group close
+
+      - name: onlineversion
+        label: "Ist bereits ein Link zu einer Onlineversion des Beitrags verfügbar?"
+        type: radio
+        required: true
+        options:
+          - value: bereit1
+            label: "Ja"
+          - value: bereit2
+            label: "Nein"
+
+      - name: onlineversion_werk_group_fulltext
+        label: "Volltext nicht frei verfügbar"
+        type: text
+        required: true
+
+      - name: onlineversion_werk_group_openaccess
+        label: "Open Access"
+        type: text
+        required: true
+
+
+  SelfArchivingAufsatz:
+    enabled: true
+    onlyForLoggedUsers: true
+    title: "Aufsatz"
+
+    help:
+      pre: "help text"
+
+    fields:
+      - name: print_online
+        label: "Handelt es sich um eine Print- oder eine Online-Publikation?"
+        type: radio
+        required: true
+        options:
+          - value: online
+            label: "Online"
+          - value: print
+            label: "Print " # Note: The whitespace at the end is intentional so this will not be translated
+
+      - name: authors
+        label: "Verfasser*innen"
+        type: text
+        required: true
+
+      - name: publication_year
+        label: "Erscheinungsjahr"
+        type: text
+        required: true
+
+      - name: title
+        label: "Titel"
+        type: text
+        required: true
+
+      - name: untertitel
+        label: "Untertitel"
+        type: text
+        required: true
+
+      - name: language
+        label: "Sprache des Beitrags"
+        type: language
+        required: true
+
+      #In Werk group open
+      - name: rezensiertes_werk_group_name
+        label: "Wo/In welchem übergeordneten Werk ist der Beitrag enthalten?"
+        type: hidden
+        group: inwerkgroup_11
+
+      - name: inwerkradio
+        label: ""
+        type: radio
+        required: true
+        options:
+          - value: inwerkradio1
+            label: "In einer Zeitschrift "
+          - value: inwerkradio2
+            label: "In einem Sammelband"
+
+      - name: zeitschrift_werk_group_title
+        label: "Title"
+        type: text
+        required: true
+        group: inwerkgroup_11
+
+      - name: zeitschrift_werk_group_ISSN
+        label: "ISSN"
+        type: text
+        required: true
+        group: inwerkgroup_11
+
+      - name: sammelband_werk_group_ISBN
+        label: "ISBN"
+        type: text
+        required: true
+        group: inwerkgroup_11
+
+      - name: zeitschrift_werk_group_IxTheo_Link
+        label: "IxTheo-Link"
+        type: text
+        required: true
+        group: inwerkgroup_11
+
+      - name: sammelband_werk_group_Herausgeber
+        label: "Herausgeber*innen"
+        type: text
+        required: true
+        group: inwerkgroup_11
+
+      - name: zeitschrift_werk_group_band
+        label: "Band"
+        type: text
+        required: true
+        group: inwerkgroup_11
+
+      - name: zeitschrift_werk_group_jahr
+        label: "Jahr"
+        type: text
+        required: true
+        group: inwerkgroup_11
+
+      - name: zeitschrift_werk_group_heft
+        label: "Heft"
+        type: text
+        required: true
+        group: inwerkgroup_11
+
+      - name: zeitschrift_werk_group_aufsatz_ID
+        label: "Aufsatz-ID"
+        type: text
+        required: true
+        group: inwerkgroup_11
+
+      - name: zeitschrift_werk_group_seiten
+        label: "Seiten"
+        type: text
+        required: true
+        group: inwerkgroup_11
+
+
+      #In Werk group close
+
+      - name: onlineversion
+        label: "Ist bereits ein Link zu einer Onlineversion des Beitrags verfügbar?"
+        type: radio
+        required: true
+        options:
+          - value: bereit1
+            label: "Ja"
+          - value: bereit2
+            label: "Nein"
+
+      - name: onlineversion_werk_group_fulltext
+        label: "Volltext nicht frei verfügbar"
+        type: text
+        required: true
+
+      - name: onlineversion_werk_group_openaccess
+        label: "Open Access"
+        type: text
+        required: true
+
+  SelfArchivingMonographie:
+    enabled: true
+    onlyForLoggedUsers: true
+    title: "Monographie"
+
+    help:
+      pre: "help text"
+
+    fields:
+      - name: print_online
+        label: "Handelt es sich um eine Print- oder eine Online-Publikation?"
+        type: radio
+        required: true
+        options:
+          - value: online
+            label: "Online"
+          - value: print
+            label: "Print " # Note: The whitespace at the end is intentional so this will not be translated
+
+      - name: authors
+        label: "Verfasser*innen"
+        type: text
+        required: true
+
+      - name: publication_year
+        label: "Erscheinungsjahr"
+        type: text
+        required: true
+
+      - name: title
+        label: "Titel"
+        type: text
+        required: true
+
+      - name: untertitel
+        label: "Untertitel"
+        type: text
+        required: true
+
+      - name: language
+        label: "Sprache des Beitrags"
+        type: language
+        required: true
+
+      - name: ISBN
+        label: "ISBN"
+        type: text
+        required: true
+
+      - name: link
+        label: "IxTheo-Link"
+        type: text
+        required: true
+
+      - name: reihe
+        label: "Reihe"
+        type: text
+        required: true
+
+      - name: reihennummer
+        label: "Reihennummer"
+        type: text
+        required: true
+
+      - name: onlineversion
+        label: "Ist bereits ein Link zu einer Onlineversion des Beitrags verfügbar?"
+        type: radio
+        required: true
+        options:
+          - value: bereit1
+            label: "Ja"
+          - value: bereit2
+            label: "Nein"
+
+      - name: onlineversion_werk_group_fulltext
+        label: "Volltext nicht frei verfügbar"
+        type: text
+        required: true
+
+      - name: onlineversion_werk_group_openaccess
+        label: "Open Access"
+        type: text
+        required: true
