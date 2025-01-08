@@ -381,7 +381,7 @@ forms:
     title: "Lexikonartikel"
 
     help:
-      pre: "help text"
+      pre: ""
 
     fields:
       - name: print_online
@@ -483,7 +483,7 @@ forms:
     title: "Rezension"
 
     help:
-      pre: "help text"
+      pre: ""
 
     fields:
       - name: print_online
@@ -513,7 +513,7 @@ forms:
 
       #Rezensiertes Werk group open
       - name: rezensiertes_werk_group_name
-        label: "Rezensiertes Werk group"
+        label: "Rezensiertes Werk"
         type: hidden
         group: werkgroup_6
 
@@ -659,7 +659,7 @@ forms:
     title: "Aufsatz"
 
     help:
-      pre: "help text"
+      pre: ""
 
     fields:
       - name: print_online
@@ -802,7 +802,7 @@ forms:
     title: "Monographie"
 
     help:
-      pre: "help text"
+      pre: ""
 
     fields:
       - name: print_online
