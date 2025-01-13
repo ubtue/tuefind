@@ -4,8 +4,10 @@ $marc = $this->driver->tryMethod('getMarcReader');
 if (is_object($marc)) {
     $marcPhdField = $marc->getField('502');
     $marcProceedingsField = $marc->getField('711');
+    $isDefinitelyAMonograph = $this->driver->getBibliographicLevel() == 'Monograph';
 } else {
     $marcPhdField = $marcProceedingsField = false;
+    $isDefinitelyAMonograph = false;
 }
 $journalTitle = $this->driver->tryMethod('getContainerTitle');
 $formats = $this->driver->tryMethod('getFormats');
@@ -13,8 +15,15 @@ if ($marcProceedingsField) {
     $format = 'CONF';
 } elseif ($marcPhdField) {
     $format = 'THES';
+} elseif ($isDefinitelyAMonograph) {
+    $format = 'BOOK';
 } elseif (!empty($journalTitle) || (is_array($formats) && in_array('Article', $formats))) {
-    $format = 'JOUR';
+    // Possibly the superior work is a book although all the above criteria match
+    $superior_formats = $this->driver->tryMethod('getSuperiorFormats');
+    if (!empty($superior_formats) && in_array('Book', $superior_formats))
+        $format = 'CHAP';
+    else
+        $format = 'JOUR';
 } elseif (is_array($formats) && in_array('Journal', $formats)) {
     $format = 'JFULL';
 } else {
@@ -29,37 +38,64 @@ if (!empty($title)) {
     echo 'TI  - ' . "$title\r\n";
 }
 
-if (!empty($journalTitle)) {
-    if (empty($title)) {
-        echo 'TI  - ' . "$journalTitle\r\n";
+$ids_and_titles = $this->driver->tryMethod('getContainerIdsAndTitles');
+if (!empty($ids_and_titles)) {
+    echo 'T2  - ';
+    $superior_record = $this->driver->tryMethod('getSuperiorRecord');
+    if ($format == 'CHAP' && $superior_record != NULL) {
+        echo $superior_record->getAuthorsAndRoleAsString() . ", " . $superior_record->getTitle();
     } else {
-        echo 'T2  - ' . "$journalTitle\r\n";
+        $i = 0;
+        foreach ($ids_and_titles as $id => $title):
+            echo $title[0];
+            if (++$i < count($ids_and_titles))
+                echo ", ";
+        endforeach;
     }
-    $volume = $this->driver->tryMethod('getContainerVolume');
-    if (!empty($volume)) {
-        echo 'VL  - ' . "$volume\r\n";
-    }
-    $number = $this->driver->tryMethod('getContainerIssue');
-    if (!empty($number)) {
-        echo 'IS  - ' . "$number\r\n";
-    }
-    $start = $this->driver->tryMethod('getContainerStartPage');
-    $end = $this->driver->tryMethod('getContainerEndPage');
-    if (!empty($start)) {
-        // use page range if possible
-        if (!empty($end)) {
-            echo 'EP  - ' . "$end\r\n";
-        } else {
-            // use only start page
-            echo 'SP  - ' . "$start\r\n";
-        }
-    }
+    echo "\r\n";
+}
+
+$issue = $this->driver->tryMethod('getIssue');
+if (!empty($issue)) {
+    echo 'IS  - ' . "$issue\r\n";
+}
+
+$pages = $this->driver->tryMethod('getPages');
+if (!empty($pages)) {
+    $split_pages = explode('-', $pages);
+    if (!empty($split_pages[0]))
+        echo 'SP  - ' . trim($split_pages[0]) . "\r\n";
+    if (!empty($split_pages[1]))
+        echo 'EP  - ' . trim($split_pages[1]) . "\r\n";
+}
+
+$volume = $this->driver->tryMethod('getVolume');
+if (!empty($volume)) {
+    echo 'VL  - ' . "$volume\r\n";
 }
 
 $series = $this->driver->tryMethod('getSeries');
-if (is_array($series)) {
+if (is_array($series) && !empty($series)) {
     foreach ($series as $current) {
         echo 'T3  - ' . (is_array($current) ? $current['name'] : $current) . "\r\n";
+        // If we do not have a volume yet, derive it from here
+        if (empty($volume) && !empty($current['number'])) {
+            $volume = $current['number'];
+            echo 'VL  - ' . "$volume\r\n";
+        }
+    }
+} else {
+    // Possibly our superior work is part of a series again, check this
+    $superior_record = $this->driver->tryMethod('getSuperiorRecord');
+    if (isset($superior_record)) {
+        if ($this->tuefind()->printSuperiorSeries($superior_record))
+            ;
+        // Try the next level of superior work
+        else {
+            $superior_of_superior = $superior_record->driver->tryMethod('getSuperiorRecord');
+            if (isset($superior_of_superior))
+                $this->tuefind()->printSuperiorSeries($superior_of_superior);
+        }
     }
 }
 
@@ -71,30 +107,20 @@ foreach (array_unique($this->driver->tryMethod('getSecondaryAuthors', [], [])) a
     echo 'A2  - ' . $this->driver->stripTrailingDates($current) . "\r\n";
 }
 
-$pubPlaces = $this->driver->tryMethod('getPlacesOfPublication');
-$pubDates = $this->driver->tryMethod('getPublicationDates');
-$pubNames = $this->driver->tryMethod('getPublishers');
-if (is_array($pubPlaces) && is_array($pubDates) && is_array($pubNames)) {
-    $total = min(count($pubPlaces), count($pubDates), count($pubNames));
-    // if we have pub dates but no other details, we still want to export the year:
-    if ($total == 0 && count($pubDates) > 0) {
-        $total = 1;
+
+if ($format == 'CHAP') {
+    $superior_record = $this->driver->getSuperiorRecord();
+    if (isset($superior_record)) {
+        $superiorPubPlaces = $superior_record->tryMethod('getPlacesOfPublication');
+        $superiorPubDates = $superior_record->tryMethod('getPublicationDates');
+        $superiorPubNames = $superior_record->tryMethod('getPublishers');
+        $this->tuefind()->printPublicationInformation($superiorPubPlaces, $superiorPubDates, $superiorPubNames);
     }
-    for ($i = 0; $i < $total; $i++) {
-        if (isset($pubPlaces[$i])) {
-            echo "CY  - " . rtrim(str_replace(['[', ']'], '', $pubPlaces[$i]), ': ') . "\r\n";
-        }
-        if (isset($pubNames[$i])) {
-            echo "PB  - " . rtrim($pubNames[$i], ", ") . "\r\n";
-        }
-        $date = trim($pubDates[$i], '[]. ');
-        if (strlen($date) > 4) {
-            $date = $this->dateTime()->extractYear($date);
-        }
-        if ($date) {
-            echo 'PY  - ' . "$date\r\n";
-        }
-    }
+} else {
+    $pubPlaces = $this->driver->tryMethod('getPlacesOfPublication');
+    $pubDates = $this->driver->tryMethod('getPublicationDates');
+    $pubNames = $this->driver->tryMethod('getPublishers');
+    $this->tuefind()->printPublicationInformation($pubPlaces, $pubDates, $pubNames);
 }
 
 $languages = $this->driver->tryMethod('getLanguages');
@@ -153,9 +179,10 @@ foreach ($this->record($this->driver)->getUrlList() as $url) {
     echo 'UR  - ' . "$url\r\n";
 }
 
-if ($doi = $this->driver->tryMethod('getCleanDOI')) {
-    echo "DO  - $doi\r\n";
-}
+$identifiers = $this->driver->tryMethod('getTypesAndPersistentIdentifiers');
+if (isset($identifiers['DOI'][0]))
+    echo 'DO  - ' . $identifiers['DOI'][0] . "\r\n";
 
 // End of Record:
 echo "ER  -\r\n\r\n";
+?>
