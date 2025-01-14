@@ -33,7 +33,7 @@ var IxTheo2 = {
             }else{
                 if(content_block_element != undefined && index_page == undefined && ix2_search_form != undefined && anchor_name.length > 0) {
                     let search_form_element = document.getElementById(anchor_name);
-                    var y = search_form_element.getBoundingClientRect().top + window.scrollY;
+                    let y = search_form_element.getBoundingClientRect().top + window.scrollY;
                     let toggle_block = $('#'+anchor_name);
                     if(is_js_anchor === true) {
                         y = toggle_block.prev().offset().top;
