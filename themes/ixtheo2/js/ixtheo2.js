@@ -43,7 +43,6 @@ var IxTheo2 = {
                         y = toggle_block.parent().offset().top;
                         toggle_block.parent().find('.read-more-trigger').click();
                     }
-                    console.log(y);
                     window.scroll({
                         top: y-default_scroll,
                         behavior: 'smooth'
