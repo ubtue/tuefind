@@ -1,5 +1,5 @@
 <?php $entries = array_map(function ($entry) { ?>
-  <?php list($ppn, $preceding_title) = $entry; ?>
-  <?php return '<a href="' . $this->recordLinker()->getUrl($ppn) . '">' . htmlspecialchars($preceding_title) . '</a>'; ?>
+  <?php list($ppn, $following_title) = $entry; ?>
+  <?php return '<a href="' . $this->recordLinker()->getUrl($ppn) . '">' . htmlspecialchars($following_title) . '</a>'; ?>
   <?php }, $data ?? []);?>
 <?=implode('</br>', $entries);?>
