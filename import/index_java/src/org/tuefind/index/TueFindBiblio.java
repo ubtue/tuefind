@@ -3165,6 +3165,30 @@ public class TueFindBiblio extends TueFind {
     }
 
 
+    public Collection<String> extractReferringPPNsAndTitles(final Record record, final String fieldAndSubfieldCode) throws IllegalArgumentException {
+        List<String> results = new ArrayList<String>();
+        if (fieldAndSubfieldCode.length() != 3 + 1)
+            throw new IllegalArgumentException("expected a field tag plus a subfield code, got \"" + fieldAndSubfieldCode + "\"!");
+
+        for (final VariableField variableField : record.getVariableFields(fieldAndSubfieldCode.substring(0, 3))) {
+            final DataField field = (DataField) variableField;
+
+            for (final Subfield subfield : field.getSubfields(fieldAndSubfieldCode.charAt(3))) {
+                final Matcher matcher = PPN_WITH_K10PLUS_ISIL_PREFIX_PATTERN.matcher(subfield.getData());
+                if (matcher.matches()) {
+                    Subfield titleSubfield = field.getSubfield('t');
+                    if (titleSubfield == null)
+                        titleSubfield = field.getSubfield('a');
+                    final String title = (titleSubfield != null) ? titleSubfield.getData() : "";
+                    results.add(matcher.group(1) + ":" + title);
+                }
+            }
+        }
+        return results;
+    }
+
+
+
     public Set<String> getAuthorsAndIds(final Record record, String tagList) {
         final String separator = ":";
         Set<String> result = new HashSet<>();
