@@ -4,8 +4,11 @@ namespace TueFind\RecordDriver\Feature;
 
 trait MarcAdvancedTrait
 {
-    use \VuFind\RecordDriver\Feature\MarcAdvancedTrait  { getSeriesFromMARC as getVuFindSeriesFromMARC;
-                                                  getSeries as getVuFindSeries;
+    use \VuFind\RecordDriver\Feature\MarcBasicTrait, \VuFind\RecordDriver\Feature\MarcAdvancedTrait  {
+         \VuFind\RecordDriver\Feature\MarcAdvancedTrait::getNewerTitles insteadof \VuFind\RecordDriver\Feature\MarcBasicTrait;
+         \VuFind\RecordDriver\Feature\MarcAdvancedTrait::getPreviousTitles insteadof \VuFind\RecordDriver\Feature\MarcBasicTrait;
+         \VuFind\RecordDriver\Feature\MarcAdvancedTrait::getSeriesFromMARC as getVuFindSeriesFromMARC;
+         \VuFind\RecordDriver\Feature\MarcAdvancedTrait::getSeries as getVuFindSeries;
     }
 
     public function getSubfieldsWithCustomSeparator($currentField, $subfields, $subfieldSeparatorMap = null) {

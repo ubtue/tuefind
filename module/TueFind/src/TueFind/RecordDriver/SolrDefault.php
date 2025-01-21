@@ -332,7 +332,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrMarc
      *  but here in the RecordDriver we want to treat non-creative authors
      *  the same way as secondary authors.
      */
-    public function getSecondaryAuthors(): array
+    public function getSecondaryAuthors()
     {
         $secondaryAuthors = parent::getSecondaryAuthors();
         $nonCreativeAuthors = (array)($this->fields['author3'] ?? []);
