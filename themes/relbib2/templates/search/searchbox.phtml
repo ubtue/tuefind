@@ -20,6 +20,8 @@
       $params = null;
     }
 
+    $isNewItemActiveClass = $tuefind->isNewItem($this->searchClassId) ? 'isNewItemActiveClass': '';
+
     // Load search actions and settings (if any):
     $handlers = $this->searchbox()->getHandlers(
         $this->searchClassId,
@@ -42,6 +44,7 @@
     $showFilters = $filterDetails && ($results || $options->getRetainFilterSetting());
 ?>
 <?php $tabConfig = $this->searchTabs()->getTabConfig($this->searchClassId, $this->lookfor, $this->searchIndex, $this->searchType, $hiddenFilters); ?>
+<?php $resetNewItemsURL = (isset($tabConfig['tabs'][0])) ? $tabConfig['tabs'][0]['url'] : ''; ?>
 
 <div class="row tf-row-home">
     <!--  Begin section searchbar -->
@@ -99,9 +102,10 @@
                             <?php if (!empty($tabs)): ?></div><?php endif; ?>
                         </div>
                     <?php else: ?>
-                        <form id="searchForm" class="searchForm tuefind-event-searchForm-on-submit" method="get" action="<?=$this->url($basicSearch)?>" name="searchForm" autocomplete="off">
+                        <form id="searchForm" class="searchForm tuefind-event-searchForm-on-submit <?=$tuefind->getTueFindSubsystem()."-searchForm";?> <?=$isNewItemActiveClass?>" method="get" action="<?=$this->url($basicSearch)?>" name="searchForm" autocomplete="off">
                             <?=$this->context($this)->renderInContext('search/searchTabs', ['searchTabs' => $tabConfig['tabs']]); ?>
                             <?php $placeholder = $this->searchbox()->getPlaceholderText($tabConfig['selected']['id'] ?? null); ?>
+                            <?php if(!empty($isNewItemActiveClass)) { $placeholder = 'Search in New items'; } ?>
 
                             <div class="form-group row">
                                 <!-- Begin search input field -->
@@ -163,7 +167,7 @@
                                   $advSearchQuery = $results ? ['edit' => $results->getSearchId()] : $hiddenFilters;
                                   $advSearchLink = $this->url($advSearch, [], ['query' => $advSearchQuery]);
                                 ?>
-                                <?=$this->context($this)->renderInContext('search/searchbox/pills.phtml', ['advSearchLink' => $advSearchLink])?>
+                                <?=$this->context($this)->renderInContext('search/searchbox/pills.phtml', ['advSearchLink' => $advSearchLink, 'isNewItemActiveClass' => $isNewItemActiveClass, 'resetNewItemsURL' => $resetNewItemsURL] )?>
                             <?php endif; ?>
                             <?php if ($geoUrl = $this->geocoords()->getSearchUrl($options)) : ?>
                                 <a href="<?=$geoUrl ?>" class="btn btn-link"><?=$this->transEsc('Geographic Search')?></a>

@@ -3,6 +3,8 @@
 namespace TueFind\View\Helper\TueFind;
 
 use Interop\Container\ContainerInterface;
+use VuFind\Search\SearchTabsHelper;
+use VuFind\View\Helper\Root\SearchTabs;
 
 /**
  * General View Helper for TueFind, containing miscellaneous functions
@@ -631,5 +633,13 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
 
     public function getHierarchicalDisplayText($filterDisplayText): string {
         return $this->container->get(\VuFind\Search\Solr\HierarchicalFacetHelper::class)->formatDisplayText($filterDisplayText)->getDisplayString();
+    }
+
+    public function isNewItem(string $searchClassId): bool {
+        $hiddenFilters = $this->getView()->plugin('searchTabs')->getHiddenFilters($searchClassId);
+        if(isset($hiddenFilters['first_indexed'])) {
+            return true;
+        }
+        return false;
     }
 }

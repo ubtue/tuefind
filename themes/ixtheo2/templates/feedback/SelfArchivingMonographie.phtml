@@ -1,0 +1,130 @@
+<?php
+
+$script = <<<JS
+    $(function() {
+
+      function linkOnlineversion() {
+        $('.group-onlineversion_werk_group_fulltext').toggle();
+        $('.group-onlineversion_werk_group_openaccess').toggle();
+      }
+
+      function zeitschriftSelected() {
+        $('.group-sammelband_werk_group_ISBN').hide();
+        $('.group-sammelband_werk_group_Herausgeber').hide();
+
+        $('.group-zeitschrift_werk_group_ISSN').show();
+        $('.group-zeitschrift_werk_group_band').show();
+        $('.group-zeitschrift_werk_group_heft').show();
+        $('.group-zeitschrift_werk_group_jahr').show();
+        $('.group-zeitschrift_werk_group_aufsatz_ID').show();
+      }
+
+      function sammelbandSelected() {
+        $('.group-zeitschrift_werk_group_ISSN').hide();
+        $('.group-zeitschrift_werk_group_band').hide();
+        $('.group-zeitschrift_werk_group_heft').hide();
+        $('.group-zeitschrift_werk_group_jahr').hide();
+        $('.group-zeitschrift_werk_group_aufsatz_ID').hide();
+
+        $('.group-sammelband_werk_group_ISBN').show();
+        $('.group-sammelband_werk_group_Herausgeber').show();
+      }
+      
+      zeitschriftSelected();
+
+      function addIconForAuthor() {
+        let parentBlock = $("#form_SelfArchivingMonographie_authors").parent();
+        let addButton = "<i class='fa fa-plus-circle addjsicon' aria-hidden='true'></i>";
+        parentBlock.after(addButton); 
+      }
+      
+      addIconForAuthor();
+
+      function addIconForEditor() {
+        let parentBlock = $("#form_SelfArchivingMonographie_sammelband_werk_group_Herausgeber").parent();
+        let addButton = "<i class='fa fa-plus-circle addjsiconEditor' aria-hidden='true'></i>";
+        parentBlock.after(addButton); 
+      }
+      
+      addIconForEditor();
+
+      $('.addjsicon').click(function(){
+        let El = $(this).prev('.form-group');
+        let endElement = $('.group-publication_year');
+        let removeButton = "<i class='fa fa-minus-circle removejsicon' aria-hidden='true'></i>";
+        let cloneElement = El.clone();
+        cloneElement.find('input').val('');
+        endElement.before(cloneElement);
+        endElement.before(removeButton).trigger('click');
+      })
+
+      $('.addjsiconEditor').click(function(){
+        let El = $(this).prev('.form-group');
+        let endElement = $('.group-zeitschrift_werk_group_band');
+        let removeButton = "<i class='fa fa-minus-circle removejsiconEditor' aria-hidden='true'></i>";
+        let cloneElement = El.clone();
+        cloneElement.find('input').val('');
+        endElement.before(cloneElement);
+        endElement.before(removeButton).trigger('click');
+      })
+      
+      $(document).on("click", ".removejsicon,.removejsiconEditor", function() {
+        $(this).prev().remove();
+        $(this).remove();
+      })
+
+      $(document).on("change", "#form_SelfArchivingMonographie_inwerkradio_o2", function() {
+        $(this).parents('.inwerkgroup').find('i').show();
+        sammelbandSelected();
+      })
+
+      $(document).on("change", "#form_SelfArchivingMonographie_inwerkradio_o1", function() {
+        $(this).parents('.inwerkgroup').find('i').hide();
+
+        zeitschriftSelected();
+      })
+
+      $('#form_SelfArchivingMonographie_onlineversion_o1,#form_SelfArchivingMonographie_onlineversion_o2').change(function(){
+        linkOnlineversion();
+      })
+
+    });
+
+  JS;
+
+print $this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $script, 'SET');
+?>
+<style>
+  .fa-plus-circle {
+    color:#089DE3; 
+  }
+  .fa-minus-circle {
+    color:red; 
+  }
+  .addjsicon, .removejsicon {
+    font-size: 18px;
+    float: right;
+    cursor: pointer;
+    position: relative;
+    top: -40px;
+    right: -20px;
+  }
+
+  .addjsiconEditor {
+    display: none;
+  }
+
+  .addjsiconEditor, .removejsiconEditor {
+    font-size: 18px;
+    float: right;
+    cursor: pointer;
+    position: relative;
+    top: -40px;
+    right: -30px;
+  }
+  .werkgroup, .inwerkgroup {
+    background-color: #f5f5f5;
+    padding: 10px;
+    border-radius: 5px;
+  }  
+</style>

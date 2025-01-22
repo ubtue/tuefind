@@ -223,13 +223,6 @@ class SolrDefault extends \VuFind\RecordDriver\SolrMarc
         return parent::getDeduplicatedAuthors($dataFields);
     }
 
-    public function getFollowingPPNAndTitle()
-    {
-        $retval = [];
-        if (!empty($this->fields['following_ppn_and_title']))
-            $retval = explode(':', $this->fields['following_ppn_and_title'], 2);
-        return $retval;
-    }
 
     /**
      * Get the issue of the current record.
@@ -279,12 +272,19 @@ class SolrDefault extends \VuFind\RecordDriver\SolrMarc
             $this->fields['pages'] : '';
     }
 
-    public function getPrecedingPPNAndTitle()
+    public function getPrecedingPPNsAndTitles()
     {
-        $retval = [];
-        if (!empty($this->fields['preceding_ppn_and_title']))
-            $retval = explode(':', $this->fields['preceding_ppn_and_title'], 2);
-        return $retval;
+        return array_map(function ($ppn_and_title) {
+                return explode(':', $ppn_and_title, 2);
+            }, $this->fields['preceding_ppns_and_titles'] ?? []);
+    }
+
+
+    public function getFollowingPPNsAndTitles()
+    {
+        return array_map(function ($ppn_and_title) {
+                return explode(':', $ppn_and_title, 2);
+            }, $this->fields['following_ppns_and_titles'] ?? []);
     }
 
     public function getPrimaryAuthorsGnds(): array
@@ -332,7 +332,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrMarc
      *  but here in the RecordDriver we want to treat non-creative authors
      *  the same way as secondary authors.
      */
-    public function getSecondaryAuthors(): array
+    public function getSecondaryAuthors()
     {
         $secondaryAuthors = parent::getSecondaryAuthors();
         $nonCreativeAuthors = (array)($this->fields['author3'] ?? []);
