@@ -37,6 +37,9 @@
         $this->searchClassId,
         $this->searchIndex ?? null
     );
+
+    $handlerSeparatorArray = [1,3,6,9];
+
     $handlerCount = count($handlers);
     $basicSearch = $this->searchbox()->combinedHandlersActive() ? 'combined-searchbox' : $options->getSearchAction();
     $searchHome = $options->getSearchHomeAction();
@@ -116,17 +119,17 @@
                         $searchboxAttributes['class'] .= ' with-keyboard-selection';
                         }
                     ?>
-                    <div class="searchForm-query col-md-6 ix2-nomargin">
+                    <div class="searchForm-query col-12 col-sm-6 col-md-6 col-lg-6 ix2-nomargin">
                         <input<?=$this->htmlAttributes($searchboxAttributes)?>>
                         <div id="searchForm_controls">
                         <button id="searchForm-reset" class="searchForm-reset hidden" type="reset" tabindex="-1" aria-label="<?=$this->transEscAttr('searchform_reset_button')?>"><?=$this->icon('ui-reset-search');?></button>
                         </div>
                     </div>
                     <?php if ($handlerCount > 1): ?>
-                        <div class="col-md-3 col ix2-nomargin ix2-searchForm-element-height ix2-main-searchForm-type">
+                        <div class="col-12 col-sm-2 col-md-2 col ix2-nomargin ix2-searchForm-element-height ix2-main-searchForm-type">
                             <select id="searchForm_type" class="searchForm_type form-control " name="type" data-native-menu="false" aria-label="<?=$this->transEscAttr('Search type')?>">
                             <?php $currentGroup = $insideGroup = false; ?>
-                            <?php foreach ($handlers as $handler): ?>
+                            <?php $optionCount=1; foreach ($handlers as $handler): ?>
                                 <?php
                                 if ($currentGroup !== ($handler['group'] ?? false)) {
                                     $currentGroup = $handler['group'];
@@ -142,7 +145,8 @@
                                 }
                                 ?>
                                 <option value="<?=$this->escapeHtmlAttr($handler['value'])?>"<?=$handler['selected'] ? ' selected="selected"' : ''?>><?=$handler['indent'] ? '-- ' : ''?><?=$this->transEsc($handler['label'])?></option>
-                            <?php endforeach; ?>
+                                <?php if (in_array($optionCount, $handlerSeparatorArray)) { echo "<hr />"; }?>
+                            <?php $optionCount++; endforeach; ?>
                             <?php if ($insideGroup): ?>
                                 </optgroup>
                             <?php endif; ?>
@@ -151,11 +155,11 @@
                             <input type="hidden" name="type" value="<?=$this->escapeHtmlAttr($handlers[0]['value'])?>">
                             <?php endif; ?>
                         </div>
-                        <div class="col-md-3 col ix2-nomargin ix2-searchForm-element-height">
-                            <button type="submit" class="btn btn-primary col-md-2 search-button"><i class="fa fa-search" aria-hidden="true"></i></button>
+                        <div class="col-12 col-sm-3 col-md-3 col ix2-nomargin ix2-searchForm-element-height">
+                            <button type="submit" class="col-12 col-sm-3 col-md-3 btn btn-primary  search-button"><i class="fa fa-search" aria-hidden="true"></i></button>
                             <!-- IxTheo 2: Advanced search -->
                             <?php if ($advSearch != ''):?>
-                                <div class="ix2-searchbox-adv-search col-md-10">
+                                <div class="col-12 col-sm-9 col-md-9 ix2-searchbox-adv-search">
                                     <a href="<?=$this->url($advSearch) .  ((isset($this->searchId) && $this->searchId) ? '?edit=' . $this->escapeHtmlAttr($this->searchId) : $this->hiddenFilterParams)?>"
                                     class="btn btn-link" role="button"
                                     rel="nofollow"><?= $this->transEsc("Advanced Search") ?></a>
@@ -228,12 +232,12 @@
             </div>
             <div class="col-md-1"></div>
         </div>
-        <div class="row">
+        <div class="row ix2-search-form-bottom-nav">
             <div class="col-md-1"></div>
-            <div class="col-md-10">
+            <div class="col-1 col-sm-12 col-md-10">
                 <div class="navbar navbar-default home-navbar">
                     <div class="container">
-                        <div class="navbar-collapse collapse ix-paddind-left-0">
+                        <div class="ix-paddind-left-0">
                             <ul class="nav navbar-nav">
                                 <li class="dropdown">
                                     <a class="dropdown-toggle"><?=$this->transEsc('Browse')?>&nbsp;<span class="caret"></span></a>
@@ -272,7 +276,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-1"></div>
+            <div class="col-1 col-sm-1 col-md-1"></div>
           <br />
         </div>
     </div>
