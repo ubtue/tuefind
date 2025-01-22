@@ -10,7 +10,14 @@ class SolrMarc extends SolrDefault
     // ISIL to e.g. determine the correct default local data block. Should be overridden in child classes.
     const ISIL_DEFAULT = 'DE-21'; // Universitätsbibliothek der Eberhard Karls Universität
 
-    use Feature\MarcAdvancedTrait;
+    use Feature\MarcAdvancedTrait {
+            \TueFind\RecordDriver\Feature\MarcAdvancedTrait::getFormats as getMarcTraitFormats;
+            \TueFind\RecordDriver\Feature\MarcAdvancedTrait::getTitle as getMarcTraitTitle;
+            \TueFind\RecordDriver\Feature\MarcAdvancedTrait::getLanguages as getMarcTraitLanguages;
+            \TueFind\RecordDriver\Feature\MarcAdvancedTrait::getISSNs as getMarcTraitISSNs;
+            \TueFind\RecordDriver\Feature\MarcAdvancedTrait::getISBNs as getMarcTraitISBNs;
+            // c.f. the overwritten functions below
+    }
 
     protected $marcReaderClass = \TueFind\Marc\MarcReader::class;
 
@@ -706,4 +713,31 @@ class SolrMarc extends SolrDefault
         return $this->getMarcReader()->getRawMarcRecords();
     }
 
+    // Needed to overcome MarcBasicTrait overwriting
+    public function getFormats()
+    {
+        return parent::getFormats();
+    }
+
+    // Needed to overcome MarcBasicTrait overwriting
+    public function getLanguages()
+    {
+        return parent::getLanguages();
+    }
+
+    // Needed to overcome MarcBasicTrait overwriting
+    public function getTitle() {
+        return parent::getTitle();
+    }
+
+    // Needed to overcome MarcBasicTrait overwriting
+    public function getISSNs()
+    {
+        return parent::getISSNs();
+    }
+
+    // Needed to overcome MarcBasicTrait overwriting
+    public function getISBNs() {
+        return parent::getISBNs();
+    }
 }
