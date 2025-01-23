@@ -166,7 +166,7 @@ trait TranslatorAwareTrait
             if ($str instanceof \VuFind\I18n\TranslatableStringInterface) {
                 return $this->translate($str, $tokens, $default, $useIcuFormatter);
             } else {
-                [$domain, $str] = $this->extractTextDomain($str);
+                [$domain, $str] = $this->extractTextDomain($domain ? $domain . '::' . $str : $str);
             }
         }
 
