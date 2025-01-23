@@ -93,4 +93,9 @@ trait MarcAdvancedTrait
         return preg_replace('!(((f|ht)tp(s)?://)[-a-zA-Zа-яА-Я()0-9@:%_+.~#?&;//=]+)!i', '<a href="$1" target="blank_">$1</a>', $description);
     }
 
+
+    public function getPhysicalDescriptions() {
+         return $this->getFieldArray('300', ['a', 'b', 'c', 'e', 'f', 'g'], true, ', ');
+    }
+
 }
