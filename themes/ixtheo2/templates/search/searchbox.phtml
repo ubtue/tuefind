@@ -1,6 +1,12 @@
 <?php
     $tuefind = $this->tuefind();
     $helper = $this->IxTheo();
+    // Get Handler delimiter
+    $searchBoxConfig = $this->config()->get('searchbox');
+    $handlerDelimiter = [];
+    if(isset($searchBoxConfig->General->setHrDelimiterInHandler) && !empty($searchBoxConfig->General->setHrDelimiterInHandler)) {
+        $handlerDelimiter = explode(',',$searchBoxConfig->General->setHrDelimiterInHandler);
+    }
     // Initialize from current search (if available) or defaults:
     if ($results = ($this->results ?? $this->searchMemory()->getCurrentSearch())) {
       $params = $results->getParams();
@@ -37,8 +43,6 @@
         $this->searchClassId,
         $this->searchIndex ?? null
     );
-
-    $handlerSeparatorArray = [1,3,6,9];
 
     $handlerCount = count($handlers);
     $basicSearch = $this->searchbox()->combinedHandlersActive() ? 'combined-searchbox' : $options->getSearchAction();
@@ -145,7 +149,7 @@
                                 }
                                 ?>
                                 <option value="<?=$this->escapeHtmlAttr($handler['value'])?>"<?=$handler['selected'] ? ' selected="selected"' : ''?>><?=$handler['indent'] ? '-- ' : ''?><?=$this->transEsc($handler['label'])?></option>
-                                <?php if (in_array($optionCount, $handlerSeparatorArray)) { echo "<hr />"; }?>
+                                <?php if (in_array($optionCount, $handlerDelimiter)) { echo "<hr />"; }?>
                             <?php $optionCount++; endforeach; ?>
                             <?php if ($insideGroup): ?>
                                 </optgroup>
