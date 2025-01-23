@@ -133,7 +133,7 @@
     <?=$this->cookieConsent()->render()?>
     <?=$this->headScript() ?>
   </head>
-  <body class="template-dir-<?=$this->templateDir?> template-name-<?=$this->templateName?> <?=$this->layoutClass('offcanvas-row')?><?php if ($this->layout()->rtl): ?> rtl<?php endif; ?>">
+  <body class="template-ix2 template-dir-<?=$this->templateDir?> template-name-<?=$this->templateName?> <?=$this->layoutClass('offcanvas-row')?><?php if ($this->layout()->rtl): ?> rtl<?php endif; ?>">
     <?=$this->render('header.phtml');?>
     <?php $routeParams = $this->tuefind()->getRouteParams(); $searchResults = ""; $indexPage = '';
     if($routeParams['controller'] == "Search" && $routeParams['action'] == "Results") {

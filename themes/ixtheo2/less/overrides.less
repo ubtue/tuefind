@@ -261,7 +261,6 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 400px;
 }
 
 .ix-news-container {
@@ -278,8 +277,7 @@
 
 .ix-news-panel {
     &:extend(.tf-col-xs-6);
-    min-height: 100px;
-    height: 187px;
+    min-height: 187px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -441,15 +439,15 @@
 }
 
 @supports ( -webkit-overflow-scrolling: touch ) {
-    .bg-attachment-fixed {
-        background-attachment: scroll;
-    }
+  .bg-attachment-fixed {
+    background-attachment: scroll;
+  }
 }
 
 @media ( prefers-reduced-motion: reduce ) {
-    .bg-attachment-fixed {
-        background-attachment: scroll;
-    }
+  .bg-attachment-fixed {
+    background-attachment: scroll;
+  }
 }
 
 .bg-image {
@@ -459,70 +457,111 @@
 }
 
 @supports ( -webkit-overflow-scrolling: touch ) {
-    .bg-attachment-fixed {
-        background-attachment: scroll;
-    }
+  .bg-attachment-fixed {
+    background-attachment: scroll;
+  }
 }
 
 @media ( prefers-reduced-motion: reduce ) {
-    .bg-attachment-fixed {
-        background-attachment: scroll;
-    }
+  .bg-attachment-fixed {
+    background-attachment: scroll;
+  }
 }
 
 .ix-navbar a{
-    color:white;
+  color:white;
 }
 
 .ix-navbar a.navbar-brand, .ix-navbar nav>.nav>li>a {
-    color: #495057;
+  color: #495057;
 }
 
-.bg-attachment-fixed {
+.template-ix2 .bg-attachment-fixed {
   background-image: url(/themes/ixtheo2/images/searchbar.jpg);
   min-height: 650px;
 }
 
-
-@media (max-width: 767px) {
-  .bg-attachment-fixed {
-    min-height: 250px
+/* Extra small devices (portrait phones, less than 576px) */
+@media (max-width: 575.98px) {
+  .template-ix2 .bg-attachment-fixed {
+    background-image: url(/themes/ixtheo2/images/searchbar_small_extra.jpg);
+    min-height: 260px;
+    background-attachment: local;
   }
-  .panel-home {
-    min-height: 100px !important;
+  .template-ix2 .logo-font {
+    display: none;
   }
-  .panel-home h1 {
-    font-size:40px;
+  .template-ix2 .bg-attachment-fixed .panel-home {
+    margin-top: -50px;
   }
-}
-
-@media (max-width: 1200px) {
-  .bg-attachment-fixed {
-    min-height: 450px
+  .template-ix2 .bg-attachment-fixed .panel-home h1 a{
+    font-size: 25px;
   }
-  .panel-home {
-    min-height: 200px;
+  .template-ix2 .bg-attachment-fixed .panel-home small{
+    margin-top: -18px;
   }
-}
-
-@media (min-width: 767px) {
-    .panel-home h1 {
-    font-size:40px;
+  .template-ix2 .ix2-search-form-bottom-nav {
+    margin-top: 20px;
   }
-}
-
-@media (min-width: 992px) {
-  .panel-home h1 {
-    font-size:60px;
+  .ix-networking-block {
+    padding-bottom: 60px;
+  }
+  .ix-networking-block h3 {
+    font-size: 40px;
   }
 }
 
-
-@media (min-width: 1200px) {
-  .panel-home h1 {
-    font-size:70px;
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) and (max-width: 767.98px) {
+  .template-ix2 .bg-attachment-fixed {
+    background-image: url(/themes/ixtheo2/images/searchbar_small.jpg);
+    min-height: 350px;
+    background-attachment: local;
+  }
+  .template-ix2 .ix2-search-form-bottom-nav {
+    margin-top: 20px;
   }
 }
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .template-ix2 .bg-attachment-fixed {
+    background-image: url(/themes/ixtheo2/images/searchbar_mid.jpg);
+    margin-top: 50px;
+    min-height: 310px;
+    background-attachment: local;
+  }
+  .template-ix2 .bg-attachment-fixed .panel-home {
+    margin-top: -50px;
+    min-height: 300px;
+    margin-bottom: 50px;
+  }
+  .ix-networking-block {
+    padding-bottom: 60px;
+  }
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) and (max-width: 1199.98px) {
+  .template-ix2 .bg-attachment-fixed {
+    background-image: url(/themes/ixtheo2/images/searchbar_mid.jpg);
+    min-height: 310px;
+    background-attachment: local;
+  }
+  .template-ix2 .bg-attachment-fixed .panel-home {
+    margin-top: -50px;
+  }
+  .template-ix2 .bg-attachment-fixed .panel-home h1 a{
+    font-size: 45px;
+  }
+  .ix-networking-block {
+  padding-bottom: 60px;
+  }
+}
+
+/* Extra large devices (large desktops, 1200px and up)
+@media (min-width: 1200px) { ... }
+*/
 
 .nav-tabs>li>a {
   background: rgba(235, 230, 227, 0.4) 10%;
