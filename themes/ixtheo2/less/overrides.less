@@ -435,37 +435,13 @@
 /* new design ixtheo2 */
 /* Only enabled when no touch events are detected */
 .bg-attachment-fixed {
-	background-attachment: fixed;
-}
-
-@supports ( -webkit-overflow-scrolling: touch ) {
-  .bg-attachment-fixed {
-    background-attachment: scroll;
-  }
-}
-
-@media ( prefers-reduced-motion: reduce ) {
-  .bg-attachment-fixed {
-    background-attachment: scroll;
-  }
+	background-attachment: local;
 }
 
 .bg-image {
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: cover;
-}
-
-@supports ( -webkit-overflow-scrolling: touch ) {
-  .bg-attachment-fixed {
-    background-attachment: scroll;
-  }
-}
-
-@media ( prefers-reduced-motion: reduce ) {
-  .bg-attachment-fixed {
-    background-attachment: scroll;
-  }
 }
 
 .ix-navbar a{
@@ -486,7 +462,6 @@
   .template-ix2 .bg-attachment-fixed {
     background-image: url(/themes/ixtheo2/images/searchbar_small_extra.jpg);
     min-height: 260px;
-    background-attachment: local;
   }
   .template-ix2 .logo-font {
     display: none;
@@ -516,7 +491,6 @@
   .template-ix2 .bg-attachment-fixed {
     background-image: url(/themes/ixtheo2/images/searchbar_small.jpg);
     min-height: 350px;
-    background-attachment: local;
   }
   .template-ix2 .ix2-search-form-bottom-nav {
     margin-top: 20px;
@@ -529,7 +503,6 @@
     background-image: url(/themes/ixtheo2/images/searchbar_mid.jpg);
     margin-top: 50px;
     min-height: 310px;
-    background-attachment: local;
   }
   .template-ix2 .bg-attachment-fixed .panel-home {
     margin-top: -50px;
@@ -546,7 +519,6 @@
   .template-ix2 .bg-attachment-fixed {
     background-image: url(/themes/ixtheo2/images/searchbar_mid.jpg);
     min-height: 310px;
-    background-attachment: local;
   }
   .template-ix2 .bg-attachment-fixed .panel-home {
     margin-top: -50px;
@@ -555,7 +527,7 @@
     font-size: 45px;
   }
   .ix-networking-block {
-  padding-bottom: 60px;
+    padding-bottom: 60px;
   }
 }
 
@@ -564,7 +536,6 @@
   .template-ix2 .bg-attachment-fixed {
     background-image: url(/themes/ixtheo2/images/searchbar.jpg);
     min-height: 520px;
-    background-attachment: local;
   }
   .template-ix2 .bg-attachment-fixed .panel-home {
     margin-top: 130px;
