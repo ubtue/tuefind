@@ -3,8 +3,13 @@
     $advancedSearch = "advancedSearch";
   }
 ?>
-<div class="cover-header screen-height screen-width bg-image bg-attachment-fixed <?=$advancedSearch;?>">
-  <div class="cover-header-inner-wrapper">
+<div class="cover-header screen-height screen-width bg-image <?=$advancedSearch;?>">
+<div class="parent-bg-attachment">
+  <div class="first-bg-attachment"></div>
+  <div class="slave-bg-attachment bg-attachment-fixed"></div>
+  <div class="last-bg-attachment"></div>
+<div>
+<div class="cover-header-inner-wrapper">
     <div class="cover-header-inner">
       <div class="cover-color-overlay color-accent opacity-60 blend-mode-normal"></div>
       <div class="section-inner fade-block" style="opacity: 1;">
