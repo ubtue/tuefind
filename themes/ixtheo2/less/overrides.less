@@ -434,8 +434,45 @@
 
 /* new design ixtheo2 */
 /* Only enabled when no touch events are detected */
+
+.parent-bg-attachment {
+  height: 380px;
+  position: relative;
+}
+.first-bg-attachment {
+  position: absolute;
+  z-index: -9996;
+  background-image: url(/themes/ixtheo2/images/header_bd_left.png);
+  width: 50%;
+  height: 100%;
+  margin-top: 1px;
+}
+.last-bg-attachment {
+  position: absolute;
+  z-index: -9998;
+  background-image: url(/themes/ixtheo2/images/header_bd_right.png);
+  width: 100%;
+  height: 100%;
+  margin-top: 1px;
+}
+.parent-bg-attachment .slave-bg-attachment{
+  position: absolute;
+  top: 360px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: -9995;
+  height: 700px;
+  width: 1200px;
+}
+.justify-content-center {
+  z-index: 9999;
+}
+.template-ix2 .panel-home {
+  min-height: 380px;
+}
+
 .bg-attachment-fixed {
-	background-attachment: local;
+	background-attachment: fixed;
 }
 
 .bg-image {
@@ -454,14 +491,24 @@
 
 .template-ix2 .bg-attachment-fixed {
   background-image: url(/themes/ixtheo2/images/searchbar.jpg);
-  min-height: 650px;
+  min-height: 450px;
+  background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+.ix2-z-index9999 {
+  z-index: 9999 !important;
+}
+
+.template-ix2 .container-fluid >.row{
+  background-color: white;
 }
 
 /* Extra small devices (portrait phones, less than 576px) */
 @media (max-width: 575.98px) {
   .template-ix2 .bg-attachment-fixed {
     background-image: url(/themes/ixtheo2/images/searchbar_small_extra.jpg);
-    min-height: 260px;
   }
   .template-ix2 .logo-font {
     display: none;
@@ -490,7 +537,6 @@
 @media (min-width: 576px) and (max-width: 767.98px) {
   .template-ix2 .bg-attachment-fixed {
     background-image: url(/themes/ixtheo2/images/searchbar_small.jpg);
-    min-height: 350px;
   }
   .template-ix2 .ix2-search-form-bottom-nav {
     margin-top: 20px;
@@ -499,11 +545,6 @@
 
 /* Medium devices (tablets, 768px and up) */
 @media (min-width: 768px) and (max-width: 991.98px) {
-  .template-ix2 .bg-attachment-fixed {
-    background-image: url(/themes/ixtheo2/images/searchbar_mid.jpg);
-    margin-top: 50px;
-    min-height: 310px;
-  }
   .template-ix2 .bg-attachment-fixed .panel-home {
     margin-top: -50px;
     min-height: 300px;
@@ -516,10 +557,6 @@
 
 /* Large devices (desktops, 992px and up) */
 @media (min-width: 992px) and (max-width: 1199.98px) {
-  .template-ix2 .bg-attachment-fixed {
-    background-image: url(/themes/ixtheo2/images/searchbar_mid.jpg);
-    min-height: 310px;
-  }
   .template-ix2 .bg-attachment-fixed .panel-home {
     margin-top: -50px;
   }
@@ -535,7 +572,6 @@
 @media (min-width: 1921px) {
   .template-ix2 .bg-attachment-fixed {
     background-image: url(/themes/ixtheo2/images/searchbar.jpg);
-    min-height: 520px;
   }
   .template-ix2 .bg-attachment-fixed .panel-home {
     margin-top: 130px;
