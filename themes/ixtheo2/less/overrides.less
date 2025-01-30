@@ -505,70 +505,186 @@
   background-color: white;
 }
 
+/* styles for networking block */
+.ix2-networking-block {
+  height: 540px;
+  position: relative;
+}
+.ix2-networking-block .left-bg-networking {
+  position: absolute;
+  background-image: url(/themes/ixtheo2/images/net_bd_left.png);
+  float: left;
+  width: 50%;
+  height: 100%;
+  z-index: 97;
+  margin-top: -2px;
+}
+.ix2-networking-block .center-bg-networking {
+  position: absolute;
+  background-image: url(/themes/ixtheo2/images/net_bd_center.png);
+  width: 1170px;
+  height: 100%;
+  margin: auto;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  z-index: 98;
+  left: 50%;
+  top:270px;
+  transform: translate(-50%, -50%);
+}
+.ix2-networking-block .right-bg-networking {
+  position: absolute;
+  background-image: url(/themes/ixtheo2/images/net_bd_right.png);
+  float: left;
+  width: 100%;
+  height: 100%;
+  z-index: 96;
+  margin-top: -2px;
+}
+.sub-title-networking {
+  position: relative;
+  padding-bottom: 20px;
+}
+.cw-overlay-content.ixtheo2-networking-block, .cw-overlay-content.sub-nav-networking{
+  z-index: 99 !important;
+}
+.cw-overlay-content.ixtheo2-networking-block {
+  padding-bottom: 0px !important;
+}
+
 /* Extra small devices (portrait phones, less than 576px) */
 @media (max-width: 575.98px) {
-  .template-ix2 .bg-attachment-fixed {
-    background-image: url(/themes/ixtheo2/images/searchbar_small_extra.jpg);
+  .parent-bg-attachment {
+    background-image: url(/themes/ixtheo2/images/header_bd_medium.png);
+    height: 330px;
+  }
+  .parent-bg-attachment .slave-bg-attachment, .parent-bg-attachment .first-bg-attachment, .parent-bg-attachment .last-bg-attachment {
+    display: none;
   }
   .template-ix2 .logo-font {
     display: none;
   }
-  .template-ix2 .bg-attachment-fixed .panel-home {
-    margin-top: -50px;
+  .template-ix2 .panel-home {
+    margin-top: -10px;
+    min-height: 328px;
   }
-  .template-ix2 .bg-attachment-fixed .panel-home h1 a{
+  .template-ix2 .panel-home h1 a{
     font-size: 25px;
   }
-  .template-ix2 .bg-attachment-fixed .panel-home small{
+  .template-ix2 .panel-home small{
     margin-top: -18px;
   }
   .template-ix2 .ix2-search-form-bottom-nav {
     margin-top: 20px;
   }
-  .ix-networking-block {
-    padding-bottom: 60px;
+  .cw-overlay-content.ixtheo2-networking-block {
+    padding-top: 20px !important;
+    padding-left: 30px;
   }
-  .ix-networking-block h3 {
-    font-size: 40px;
+  .cw-overlay-content.sub-nav-networking {
+    padding-left: 30px;
+  }
+  .ix2-networking-block .ixtheo2-networking-link {
+    font-size: 35px !important;
+  }
+  .col-mob-none {
+    display: none !important;
   }
 }
 
 /* Small devices (landscape phones, 576px and up) */
 @media (min-width: 576px) and (max-width: 767.98px) {
-  .template-ix2 .bg-attachment-fixed {
-    background-image: url(/themes/ixtheo2/images/searchbar_small.jpg);
+  .parent-bg-attachment {
+    background-image: url(/themes/ixtheo2/images/header_bd_medium.png);
+    height: 330px;
+  }
+  .parent-bg-attachment .slave-bg-attachment, .parent-bg-attachment .first-bg-attachment, .parent-bg-attachment .last-bg-attachment {
+    display: none;
+  }
+  .template-ix2 .panel-home {
+    min-height: 320px;
+  }
+  .template-ix2 .panel-home h1 a{
+    font-size: 40px;
   }
   .template-ix2 .ix2-search-form-bottom-nav {
     margin-top: 20px;
+  }
+  .cw-overlay-content.ixtheo2-networking-block {
+    padding-top: 20px !important;
+    padding-left: 30px;
+  }
+  .cw-overlay-content.sub-nav-networking {
+    padding-left: 30px;
+  }
+  .ix2-networking-block .ixtheo2-networking-link {
+    font-size: 35px !important;
+  }
+  .col-mob-none {
+    display: none !important;
   }
 }
 
 /* Medium devices (tablets, 768px and up) */
 @media (min-width: 768px) and (max-width: 991.98px) {
-  .template-ix2 .bg-attachment-fixed .panel-home {
-    margin-top: -50px;
-    min-height: 300px;
-    margin-bottom: 50px;
+  .parent-bg-attachment {
+    background-image: url(/themes/ixtheo2/images/header_bd_medium.png);
+    height: 330px;
   }
-  .ix-networking-block {
-    padding-bottom: 60px;
+  .parent-bg-attachment .slave-bg-attachment, .parent-bg-attachment .first-bg-attachment, .parent-bg-attachment .last-bg-attachment {
+    display: none;
+  }
+  .template-ix2 .panel-home {
+    min-height: 320px;
+  }
+  .template-ix2 .panel-home h1 a{
+    font-size: 40px;
+  }
+  .cw-overlay-content.ixtheo2-networking-block {
+    padding-top: 20px !important;
+    padding-left: 30px;
+  }
+  .cw-overlay-content.sub-nav-networking {
+    padding-left: 30px;
+  }
+  .ix2-networking-block .ixtheo2-networking-link {
+    font-size: 35px !important;
+  }
+  .col-mob-none {
+    display: none !important;
   }
 }
 
 /* Large devices (desktops, 992px and up) */
 @media (min-width: 992px) and (max-width: 1199.98px) {
-  .template-ix2 .bg-attachment-fixed .panel-home {
-    margin-top: -50px;
+  .parent-bg-attachment {
+    background-image: url(/themes/ixtheo2/images/header_bd_medium.png);
+    height: 330px;
   }
-  .template-ix2 .bg-attachment-fixed .panel-home h1 a{
+  .parent-bg-attachment .slave-bg-attachment, .parent-bg-attachment .first-bg-attachment, .parent-bg-attachment .last-bg-attachment {
+    display: none;
+  }
+  .template-ix2 .panel-home {
+    min-height: 320px;
+  }
+  .template-ix2 .panel-home h1 a{
     font-size: 45px;
   }
-  .ix-networking-block {
-    padding-bottom: 60px;
+  .cw-overlay-content.ixtheo2-networking-block {
+    padding-top: 20px !important;
+    padding-left: 30px;
+  }
+  .cw-overlay-content.sub-nav-networking {
+    padding-left: 30px;
+  }
+  .col-mob-none {
+    display: none !important;
   }
 }
 
 /* Extra large devices (large desktops, 1200px and up) */
+/*
 @media (min-width: 1921px) {
   .template-ix2 .bg-attachment-fixed {
     background-image: url(/themes/ixtheo2/images/searchbar.jpg);
@@ -578,7 +694,7 @@
   }
  }
 
-
+*/
 .nav-tabs>li>a {
   background: rgba(235, 230, 227, 0.4) 10%;
 }
