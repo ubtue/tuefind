@@ -8,8 +8,7 @@ use Laminas\Mime\Message as MimeMessage;
 use Laminas\Mime\Part as MimePart;
 use VuFind\Exception\Mail as MailException;
 
-class Mailer extends \VuFind\Mailer\Mailer
-{
+class Mailer extends \VuFind\Mailer\Mailer{
     protected $container;
 
     protected $config;
