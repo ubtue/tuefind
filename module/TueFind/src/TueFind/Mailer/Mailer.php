@@ -77,22 +77,18 @@ class Mailer extends \VuFind\Mailer\Mailer
             throw new MailException('Invalid Recipient Email Address');
         }
         foreach ($recipients as $current) {
-            if (strrchr($current->getEmail(), '@') == "@localhost") {
-                $validator->setOptions([
+            $validator_ = new \Laminas\Validator\EmailAddress();
+            if ($current->getEmail() == "pica_template_generator@localhost") {
+                $validator_->setOptions([
                     'allow' => \Laminas\Validator\Hostname::ALLOW_ALL
                 ]);
-            } else {
-                $validator->setOptions([
-                    'allow' => \Laminas\Validator\Hostname::ALLOW_DNS
-                ]);
             }
-            if (!$validator->isValid($current->getEmail())) {
+            if (!$validator_->isValid($current->getEmail())) {
                 throw new MailException('Invalid Recipient Email Address');
             }
         }
-        $validator->setOptions([
-            'allow' => \Laminas\Validator\Hostname::ALLOW_DNS
-        ]);
+
+
         foreach ($replyTo as $current) {
             if (!$validator->isValid($current->getEmail())) {
                 throw new MailException('Invalid Reply-To Email Address');
