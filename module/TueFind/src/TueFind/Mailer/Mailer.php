@@ -1,4 +1,5 @@
 <?php
+
 namespace TueFind\Mailer;
 
 use Laminas\Mail\Address;
@@ -7,8 +8,8 @@ use Laminas\Mime\Message as MimeMessage;
 use Laminas\Mime\Part as MimePart;
 use VuFind\Exception\Mail as MailException;
 
-class Mailer extends \VuFind\Mailer\Mailer {
-
+class Mailer extends \VuFind\Mailer\Mailer
+{
     protected $container;
 
     protected $config;
@@ -76,10 +77,22 @@ class Mailer extends \VuFind\Mailer\Mailer {
             throw new MailException('Invalid Recipient Email Address');
         }
         foreach ($recipients as $current) {
+            if (strrchr($current->getEmail(), '@') == "@localhost") {
+                $validator->setOptions([
+                    'allow' => \Laminas\Validator\Hostname::ALLOW_ALL
+                ]);
+            } else {
+                $validator->setOptions([
+                    'allow' => \Laminas\Validator\Hostname::ALLOW_DNS
+                ]);
+            }
             if (!$validator->isValid($current->getEmail())) {
                 throw new MailException('Invalid Recipient Email Address');
             }
         }
+        $validator->setOptions([
+            'allow' => \Laminas\Validator\Hostname::ALLOW_DNS
+        ]);
         foreach ($replyTo as $current) {
             if (!$validator->isValid($current->getEmail())) {
                 throw new MailException('Invalid Reply-To Email Address');
