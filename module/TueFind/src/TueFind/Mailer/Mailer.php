@@ -78,9 +78,9 @@ class Mailer extends \VuFind\Mailer\Mailer
         }
         foreach ($recipients as $current) {
             $validator_ = new \Laminas\Validator\EmailAddress();
-            if ($current->getEmail() == "pica_template_generator@localhost") {
+            if ($current->getEmail() == "root@localhost") {
                 $validator_->setOptions([
-                    'allow' => \Laminas\Validator\Hostname::ALLOW_ALL
+                    'allow' => \Laminas\Validator\Hostname::ALLOW_LOCAL
                 ]);
             }
             if (!$validator_->isValid($current->getEmail())) {
