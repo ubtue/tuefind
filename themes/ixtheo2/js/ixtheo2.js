@@ -29,7 +29,7 @@ var IxTheo2 = {
         }
         if($('#searchForm').html() != undefined) {
             if(is_anchor === false) {
-                $(".searchForm_lookfor:visible").focus();
+                //$(".searchForm_lookfor:visible").focus();
             }else{
                 if(content_block_element != undefined && index_page == undefined && ix2_search_form != undefined && anchor_name.length > 0) {
                     let search_form_element = document.getElementById(anchor_name);
@@ -48,7 +48,7 @@ var IxTheo2 = {
                         behavior: 'smooth'
                     });
                 }else{
-                    $(".searchForm_lookfor:visible").focus();
+                    //$(".searchForm_lookfor:visible").focus();
                 }
             }
         }
