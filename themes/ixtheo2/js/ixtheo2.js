@@ -229,4 +229,38 @@ $(function () {
         }
     });
 
+    /* ========================================================================= */
+    /*	Page Preloader
+    /* ========================================================================= */
+    $(window).on('load', function () {
+        $('#preloader').fadeOut('slow', function () {
+          $(this).remove();
+        });
+      });
+      // navbarDropdown
+        if ($(window).width() < 992) {
+            $('#navigation .dropdown-toggle').on('click', function () {
+                $(this).siblings('.dropdown-menu').animate({
+                    height: 'toggle'
+                }, 300);
+            });
+      }
+      /*
+      /* ========================================================================= */
+      /*	On scroll fade/bounce effect
+      /* ========================================================================= */
+      var scroll = new SmoothScroll('a[href*="#"]');
+      // -----------------------------
+      //  On Scroll
+      // -----------------------------
+      $(window).scroll(function () {  
+        var scroll = $(window).scrollTop();
+        if (scroll > 50) {
+          $('.navigation').addClass('sticky-header');
+        } else {
+          $('.navigation').removeClass('sticky-header');
+        }
+      });
+    
+
 });
