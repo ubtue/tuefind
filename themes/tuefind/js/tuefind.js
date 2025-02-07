@@ -433,7 +433,7 @@ var TueFind = {
         // intentionally use .each so we do not need to test if empty
         $(input_selector).each(function() {
             // here we use native JS instead of jQuery to avoid problems
-            this.focus();
+            //this.focus();
             this.setSelectionRange(this.value.length, this.value.length);
         });
     },
