@@ -507,7 +507,6 @@
 
 /* styles for networking block */
 .ix2-networking-block {
-  height: 540px;
   position: relative;
 }
 .ix2-networking-block .left-bg-networking {
@@ -553,149 +552,6 @@
   padding-bottom: 0px !important;
 }
 
-/* Extra small devices (portrait phones, less than 576px) */
-@media (max-width: 575.98px) {
-  .parent-bg-attachment {
-    background-image: url(/themes/ixtheo2/images/header_bd_medium.png);
-    height: 330px;
-  }
-  .parent-bg-attachment .slave-bg-attachment, .parent-bg-attachment .first-bg-attachment, .parent-bg-attachment .last-bg-attachment {
-    display: none;
-  }
-  .template-ix2 .logo-font {
-    display: none;
-  }
-  .template-ix2 .panel-home {
-    margin-top: -10px;
-    min-height: 328px;
-  }
-  .template-ix2 .panel-home h1 a{
-    font-size: 25px;
-  }
-  .template-ix2 .panel-home small{
-    margin-top: -18px;
-  }
-  .template-ix2 .ix2-search-form-bottom-nav {
-    margin-top: 20px;
-  }
-  .cw-overlay-content.ixtheo2-networking-block {
-    padding-top: 20px !important;
-    padding-left: 30px;
-  }
-  .cw-overlay-content.sub-nav-networking {
-    padding-left: 30px;
-  }
-  .ix2-networking-block .ixtheo2-networking-link {
-    font-size: 35px !important;
-  }
-  .col-mob-none {
-    display: none !important;
-  }
-}
-
-/* Small devices (landscape phones, 576px and up) */
-@media (min-width: 576px) and (max-width: 767.98px) {
-  .parent-bg-attachment {
-    background-image: url(/themes/ixtheo2/images/header_bd_medium.png);
-    height: 330px;
-  }
-  .parent-bg-attachment .slave-bg-attachment, .parent-bg-attachment .first-bg-attachment, .parent-bg-attachment .last-bg-attachment {
-    display: none;
-  }
-  .template-ix2 .panel-home {
-    min-height: 320px;
-  }
-  .template-ix2 .panel-home h1 a{
-    font-size: 40px;
-  }
-  .template-ix2 .ix2-search-form-bottom-nav {
-    margin-top: 20px;
-  }
-  .cw-overlay-content.ixtheo2-networking-block {
-    padding-top: 20px !important;
-    padding-left: 30px;
-  }
-  .cw-overlay-content.sub-nav-networking {
-    padding-left: 30px;
-  }
-  .ix2-networking-block .ixtheo2-networking-link {
-    font-size: 35px !important;
-  }
-  .col-mob-none {
-    display: none !important;
-  }
-}
-
-/* Medium devices (tablets, 768px and up) */
-@media (min-width: 768px) and (max-width: 991.98px) {
-  .parent-bg-attachment {
-    background-image: url(/themes/ixtheo2/images/header_bd_medium.png);
-    height: 330px;
-  }
-  .parent-bg-attachment .slave-bg-attachment, .parent-bg-attachment .first-bg-attachment, .parent-bg-attachment .last-bg-attachment {
-    display: none;
-  }
-  .template-ix2 .panel-home {
-    min-height: 320px;
-  }
-  .template-ix2 .panel-home h1 a{
-    font-size: 40px;
-  }
-  .cw-overlay-content.ixtheo2-networking-block {
-    padding-top: 20px !important;
-    padding-left: 30px;
-  }
-  .cw-overlay-content.sub-nav-networking {
-    padding-left: 30px;
-  }
-  .ix2-networking-block .ixtheo2-networking-link {
-    font-size: 35px !important;
-  }
-  .col-mob-none {
-    display: none !important;
-  }
-}
-
-/* Large devices (desktops, 992px and up) */
-@media (min-width: 992px) and (max-width: 1199.98px) {
-  .parent-bg-attachment {
-    background-image: url(/themes/ixtheo2/images/header_bd_medium.png);
-    height: 330px;
-  }
-  .parent-bg-attachment .slave-bg-attachment, .parent-bg-attachment .first-bg-attachment, .parent-bg-attachment .last-bg-attachment {
-    display: none;
-  }
-  .template-ix2 .panel-home {
-    margin-top: -30px;
-    min-height: 360px;
-  }
-  .template-ix2 .panel-home h1 a{
-    font-size: 45px;
-  }
-  .cw-overlay-content.ixtheo2-networking-block {
-    padding-top: 20px !important;
-    padding-left: 30px;
-  }
-  .cw-overlay-content.sub-nav-networking {
-    padding-left: 30px;
-  }
-  .col-mob-none {
-    display: none !important;
-  }
-}
-
-/* Extra large devices (large desktops, 1200px and up) */
-/*
-@media (min-width: 1921px) {
-  .template-ix2 .bg-attachment-fixed {
-    background-image: url(/themes/ixtheo2/images/searchbar.jpg);
-  }
-  .template-ix2 .bg-attachment-fixed .panel-home {
-    margin-top: 130px;
-  }
- }
-
-*/
 .nav-tabs>li>a {
   background: rgba(235, 230, 227, 0.4) 10%;
 }
@@ -857,4 +713,145 @@ background-color: #00000085;
 }
 #header-collapse .dropdown-menu .sub-menu {
   padding-left: 25px;
+}
+
+#ui-id-1 {
+  display: none;
+}
+
+.navigation {
+  transition: 0.3s all
+}
+
+.navigation .logo-default {
+  display: none
+}
+
+.navigation .dropdown-toggle::before,.navigation .dropdown-toggle::after {
+  display: none
+}
+
+.navigation .dropdown-toggle i {
+  font-size: 10px;
+  margin-left: 2px;
+  vertical-align: 2px
+}
+
+.navigation .navbar-light .navbar-nav .nav-item .nav-link {
+  color: #000;
+  font-size: 14px;
+  line-height: 26px;
+  padding: 20px 15px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: 0.2s ease-in-out 0s
+}
+
+a.black-icon {
+  color: #000;
+}
+
+.navigation .navbar-light .navbar-nav .nav-item .nav-link:hover,.navigation .navbar-light .navbar-nav .nav-item .nav-link:active,.navigation .navbar-light .navbar-nav .nav-item .nav-link:focus {
+  background: none;
+  color: #28ABE3
+}
+
+.navigation .navbar-light .navbar-nav .nav-item.active .nav-link {
+  color: #000 !important;
+  margin-top: 20px;
+}
+
+.navigation .navbar {
+  padding-top: 15px;
+}
+
+.navbar-nav {
+  list-style: none;
+}
+
+.navbar-nav li.nav-item i.fa {
+  font-size: 17px;
+  vertical-align: 0 !important;
+}
+.sticky-header {
+  box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.06);
+  background: #fff;
+}
+
+.sticky-header .navbar-light .navbar-nav .nav-item .nav-link {
+  color: #000;
+}
+.sticky-header .logo-white {
+  display: none;
+}
+.sticky-header .logo-default {
+  display: block;
+}
+.navbar-brand {
+  height: auto;
+  padding: 8px 0;
+}
+.navbar-brand h1 {
+  margin: 0;
+}
+.fixed-top {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 1030;
+}
+
+.dark-bg {
+  background: rgba(0, 0, 0, 0.7);
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  z-index: -1;
+}
+
+
+.navbar-brand.logo {
+  font-size: 25px;
+  font-family: "Source Sans Pro", sans-serif;
+  color: #000;
+  padding-top: 0;
+}
+
+
+.sub-title-networking a {
+  position: relative;
+  padding-bottom: 20px;
+  color: #3586B2 !important;
+  font-size: 1.3vw;
+}
+
+.sub-title-networking a:hover {
+  text-decoration: none;
+}
+
+.ixtheo2-networking-link {
+  font-weight: 400 !important;
+  font-family: 'Open Sans', Arial, Helvetica, sans-serif !important;
+  font-size: 2.5vw;
+}
+
+.hr-support {
+  border-top:1px solid #000;
+  width: 230px;
+  float: left;
+}
+
+.ix2-networking-block .net-main {
+  position: absolute;
+  top:0;
+  left:0;
+  right:0;
+  bottom: 0;
+  padding:3vw;
+}
+
+.ix2-networking-block img {
+  width: 100%;
+  height: auto;
 }
