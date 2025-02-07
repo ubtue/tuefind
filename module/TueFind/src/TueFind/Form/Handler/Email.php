@@ -3,6 +3,9 @@
 namespace TueFind\Form\Handler;
 
 use Laminas\Mail\Address;
+use Laminas\Mime\Message as MimeMessage;
+use Laminas\Mime\Part as MimePart;
+use Laminas\Mime\Mime;
 use VuFind\Db\Entity\UserEntityInterface;
 use VuFind\Exception\Mail as MailException;
 
@@ -35,6 +38,28 @@ class Email extends \VuFind\Form\Handler\Email {
                 "Invalid reply-to address (spam?): '$replyToEmail'"
             );
             return false;
+        }
+
+        $formId = $params->fromRoute('id', $params->fromQuery('id'));
+        if ($formId == "SelfArchivingMonographie") {
+            $newEmailMessage = new MimeMessage();
+
+            $attachment = new MimePart($emailMessage);
+            $attachment->type = Mime::TYPE_TEXT;
+            $attachment->charset = 'utf-8';
+            $attachment->filename = "selfArcMono.txt";
+            $attachment->description = "selfArcMono.txt";
+            $attachment->disposition = Mime::DISPOSITION_ATTACHMENT;
+            $attachment->encoding = Mime::ENCODING_QUOTEDPRINTABLE;
+
+            $att = new MimePart("the attachment will process next!");
+            $att->type = Mime::TYPE_TEXT;
+            $att->charset = 'utf-8';
+            $att->encoding = Mime::ENCODING_QUOTEDPRINTABLE;
+
+            $newEmailMessage->setParts([$att, $attachment]);
+            $emailMessage = $newEmailMessage;
+
         }
 
         $recipients = $form->getRecipient($params->fromPost());
