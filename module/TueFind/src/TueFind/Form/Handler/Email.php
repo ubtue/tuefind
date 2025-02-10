@@ -9,7 +9,8 @@ use Laminas\Mime\Mime;
 use VuFind\Db\Entity\UserEntityInterface;
 use VuFind\Exception\Mail as MailException;
 
-class Email extends \VuFind\Form\Handler\Email {
+class Email extends \VuFind\Form\Handler\Email
+{
     public function handle(
         \VuFind\Form\Form $form,
         \Laminas\Mvc\Controller\Plugin\Params $params,
@@ -44,7 +45,10 @@ class Email extends \VuFind\Form\Handler\Email {
         if ($formId == "SelfArchivingMonographie") {
             $newEmailMessage = new MimeMessage();
 
-            $attachment = new MimePart($emailMessage);
+            $attachment = new MimePart($this->viewRenderer->partial(
+                'Email/form-feedback-monographic.phtml',
+                compact('fields')
+            ));
             $attachment->type = Mime::TYPE_TEXT;
             $attachment->charset = 'utf-8';
             $attachment->filename = "selfArcMono.txt";
@@ -76,7 +80,8 @@ class Email extends \VuFind\Form\Handler\Email {
                 $replyToEmail,
                 $emailSubject,
                 $emailMessage,
-                /*TueFind: $enableSpamfilter=*/true
+                /*TueFind: $enableSpamfilter=*/
+                true
             );
 
             $result = $result && $success;
