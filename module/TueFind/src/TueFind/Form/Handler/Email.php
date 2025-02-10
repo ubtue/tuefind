@@ -41,30 +41,51 @@ class Email extends \VuFind\Form\Handler\Email
             return false;
         }
 
+        $recipients = $form->getRecipient($params->fromPost());
+        $emailSubject = $form->getEmailSubject($params->fromPost());
+
         $formId = $params->fromRoute('id', $params->fromQuery('id'));
-        if ($formId == "SelfArchivingMonographie" || $formId == "SelfArchivingAufsatz" || $formId == "SelfArchivingRezension") {
+        if ($formId == "SelfArchivingMonographie" || $formId == "SelfArchivingAufsatz" || $formId == "SelfArchivingRezension" || $formId == "SelfArchivingLexikonartikel") {
             $newEmailMessage = new MimeMessage();
 
-            $body_ = $formId . PHP_EOL;
+            $body_ = '';
+
             foreach ($fields as $data) {
-                if ($data['name'] == 'title') {
-                    $body_ .= "Title: " . $data['value'];
+                if ($data['name'] == 'title' && $data['value'] != '') {
+                    $emailSubject = $data['value'];
+                }
+
+                if ($data['name'] == 'name' && $data['value'] != '') {
+                    $body_ .= ("Sender: " . $data['value'] . PHP_EOL);
+                }
+
+                if ($data['name'] == 'email' && $data['value'] != '') {
+                    $body_ .= ("email: " . $data['value'] . PHP_EOL);
+                }
+
+            }
+            // putting the subtitle after the title
+            foreach ($fields as $data) {
+                if ($data['name'] == 'untertitel' && $data['value'] != '') {
+                    $emailSubject .= " (Subtitle: " . $data['value'] . ")";
                 }
             }
+
             $email_body = new MimePart($body_);
             $email_body->type = Mime::TYPE_TEXT;
             $email_body->charset = 'utf-8';
             $email_body->encoding = Mime::ENCODING_QUOTEDPRINTABLE;
 
 
+            $attachment_name = strtolower(substr($formId, strlen("SelfArchiving"), strlen($formId) - 1));
             $attachment = new MimePart($this->viewRenderer->partial(
-                'Email/form-feedback-monographic.phtml',
+                'Email/form-feedback-self-archiving.phtml',
                 compact('fields')
             ));
             $attachment->type = Mime::TYPE_TEXT;
             $attachment->charset = 'utf-8';
-            $attachment->filename = "selfArcMono.txt";
-            $attachment->description = "selfArcMono.txt";
+            $attachment->filename = "$attachment_name.txt";
+            $attachment->description = "$attachment_name.txt";
             $attachment->disposition = Mime::DISPOSITION_ATTACHMENT;
             $attachment->encoding = Mime::ENCODING_QUOTEDPRINTABLE;
 
@@ -73,8 +94,7 @@ class Email extends \VuFind\Form\Handler\Email
 
         }
 
-        $recipients = $form->getRecipient($params->fromPost());
-        $emailSubject = $form->getEmailSubject($params->fromPost());
+
 
         $result = true;
         foreach ($recipients as $recipient) {

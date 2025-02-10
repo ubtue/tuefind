@@ -1,4 +1,5 @@
 <?php foreach ($this->fields as $data): ?>
+<?php if($data['name'] != 'name' && $data['name'] != 'email'): ?>
 <?php $name_ = ($data['name'] ?? '') ?>
 <?php if ($data['type'] === 'textarea'): ?>
 <?=$name_ ? "$name_=" : ''?>
@@ -9,5 +10,6 @@
 <?=($name_ ? "$name_=" : '') . implode(', ', array_map([$this, 'translate'], (array)$data['value'])) . PHP_EOL ?>
 <?php else: ?>
 <?=($name_ ? "$name_=" : '') . $data['value'] . PHP_EOL ?>
+<?php endif ?>
 <?php endif ?>
 <?php endforeach ?>
