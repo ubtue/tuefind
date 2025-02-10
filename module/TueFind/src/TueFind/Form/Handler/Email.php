@@ -42,8 +42,20 @@ class Email extends \VuFind\Form\Handler\Email
         }
 
         $formId = $params->fromRoute('id', $params->fromQuery('id'));
-        if ($formId == "SelfArchivingMonographie") {
+        if ($formId == "SelfArchivingMonographie" || $formId == "SelfArchivingAufsatz" || $formId == "SelfArchivingRezension") {
             $newEmailMessage = new MimeMessage();
+
+            $body_ = $formId . PHP_EOL;
+            foreach ($fields as $data) {
+                if ($data['name'] == 'title') {
+                    $body_ .= "Title: " . $data['value'];
+                }
+            }
+            $email_body = new MimePart($body_);
+            $email_body->type = Mime::TYPE_TEXT;
+            $email_body->charset = 'utf-8';
+            $email_body->encoding = Mime::ENCODING_QUOTEDPRINTABLE;
+
 
             $attachment = new MimePart($this->viewRenderer->partial(
                 'Email/form-feedback-monographic.phtml',
@@ -56,12 +68,7 @@ class Email extends \VuFind\Form\Handler\Email
             $attachment->disposition = Mime::DISPOSITION_ATTACHMENT;
             $attachment->encoding = Mime::ENCODING_QUOTEDPRINTABLE;
 
-            $att = new MimePart("the attachment will process next!");
-            $att->type = Mime::TYPE_TEXT;
-            $att->charset = 'utf-8';
-            $att->encoding = Mime::ENCODING_QUOTEDPRINTABLE;
-
-            $newEmailMessage->setParts([$att, $attachment]);
+            $newEmailMessage->setParts([$email_body, $attachment]);
             $emailMessage = $newEmailMessage;
 
         }
