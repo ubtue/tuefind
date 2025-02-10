@@ -49,10 +49,16 @@ class Email extends \VuFind\Form\Handler\Email
             $newEmailMessage = new MimeMessage();
 
             $body_ = '';
+            $title_ = '';
+            $sub_title_ = '';
 
             foreach ($fields as $data) {
                 if ($data['name'] == 'title' && $data['value'] != '') {
-                    $emailSubject = $data['value'];
+                    $title_ = $data['value'];
+                }
+
+                if ($data['name'] == 'untertitel' && $data['value'] != '') {
+                    $sub_title_ = $data['value'];
                 }
 
                 if ($data['name'] == 'name' && $data['value'] != '') {
@@ -63,13 +69,10 @@ class Email extends \VuFind\Form\Handler\Email
                     $body_ .= ("email: " . $data['value'] . PHP_EOL);
                 }
 
+
             }
-            // putting the subtitle after the title
-            foreach ($fields as $data) {
-                if ($data['name'] == 'untertitel' && $data['value'] != '') {
-                    $emailSubject .= " (Subtitle: " . $data['value'] . ")";
-                }
-            }
+
+            $emailSubject = $title_ . ($sub_title_ != '' ? " (Subtitle: $sub_title_)" : '');
 
             $email_body = new MimePart($body_);
             $email_body->type = Mime::TYPE_TEXT;
