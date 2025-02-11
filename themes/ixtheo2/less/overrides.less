@@ -838,8 +838,7 @@ a.black-icon {
 
 .hr-support {
   border-top:1px solid #000;
-  width: 230px;
-  float: left;
+  width: 66%;
 }
 
 .ix2-networking-block .net-main {
@@ -909,11 +908,17 @@ a.black-icon {
 /* Extra small devices (portrait phones, less than 576px) */
 
 @media (max-width: 575.98px) {
+  .navigation .navbar-right > li {
+    float: left;
+    margin-right: 10px;
+  }
+  /*
   ul.navbar-nav.navbar-right li{
     float: left;
     margin-right: 10px;
   }
-  .navbar-nav {
+  */
+  .navigation .navbar-nav {
     margin: 0;
     padding: 0;
     margin-right: -10px;
@@ -925,16 +930,35 @@ a.black-icon {
   .navbar-brand.logo {
     display: none;
   }
+
+  .ixtheo2-networking-link {
+    font-size: 24px;
+    margin-bottom: 0;
+  }
+  .col-mob-none {
+    display: none;
+  }
+  .ixtheo2-networking-block {
+    padding-top: 20px !important;
+  }
+  .sub-title-networking {
+    display: none;
+  }
+  .ix2-search-form-bottom-nav {
+    margin-top: 20px;
+  }
 }
 
 /* Small devices (landscape phones, 576px and up) */
 
 @media (min-width: 576px) and (max-width: 767.98px) {
-  ul.navbar-nav.navbar-right li{
+
+  .navigation .navbar-right > li {
     float: left;
     margin-right: 10px;
   }
-  .navbar-nav {
+
+  .navigation .navbar-nav {
     padding: 0;
     margin: 0;
     margin-right: -10px;
@@ -943,24 +967,46 @@ a.black-icon {
   .navigation .navbar-light .navbar-nav .nav-item .nav-link{
     padding:0;
   }
+  .ixtheo2-networking-link {
+    font-size: 24px;
+    margin-bottom: 0;
+  }
+  .col-mob-none {
+    display: none;
+  }
+  .ixtheo2-networking-block {
+    padding-top: 20px !important;
+  }
+  .ix2-search-form-bottom-nav {
+    margin-top: 20px;
+  }
 }
 
 /* Medium devices (tablets, 768px and up) */
-/*
 @media (min-width: 768px) and (max-width: 991.98px) {
-  .hero-area {
-    background-image: url(../themes/ixtheo2/images/slider/searchbar_520.png);
+  .ixtheo2-networking-link {
+    font-size: 24px;
+    margin-bottom: 0;
+  }
+  .ixtheo2-networking-block {
+    padding-top: 20px !important;
+  }
+  .col-mob-none {
+    display: none;
   }
 }
 
 /* Large devices (desktops, 992px and up) */
-/*
 @media (min-width: 992px) and (max-width: 1199.98px) {
-  .hero-area {
-    background-image: url(../themes/ixtheo2/images/slider/searchbar_980.png);
+  .ixtheo2-networking-link {
+    font-size: 30px;
+    margin-bottom: 0;
+  }
+  .col-mob-none {
+    display: none;
   }
 }
-*/
+
 /* Extra large devices (large desktops, 1200px and up) */
 /*
 @media (min-width: 1200px) and (max-width: 1919.98px) {
@@ -1024,7 +1070,6 @@ a.black-icon {
   left: 25px;
 }
 .arrow:after {
-  content: "";
   position: absolute;
   left: 20px;
   top: -20px;
@@ -1032,4 +1077,24 @@ a.black-icon {
   height: 25px;
   box-shadow: 6px 5px 9px -9px black;
   transform: rotate(45deg);
+}
+
+.contentLogoBlock {
+  background-image: url(../themes/ixtheo2/images/contentLogo.jpg);
+  height: 200px;
+}
+
+.contentLogoBlock h1 {
+  padding-top: 70px;
+  margin: 0;
+  text-align: center;
+}
+
+.contentLogoBlock small {
+  text-align: center;
+  display: block;
+}
+
+.cw-text-center {
+  text-align: center !important;
 }

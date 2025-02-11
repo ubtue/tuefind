@@ -11,6 +11,7 @@ return [
         'ixtheo.js',
         'ixtheo2.js',
         'vendor/cw/swiper.js',
+        'vendor/cw/smooth-scroll.js',
         'vendor/leaflet/leaflet.js',
     ],
     'helpers' => [
