@@ -1,6 +1,9 @@
-<?php $routeParams = $this->tuefind()->getRouteParams(); $advancedSearch = "";
+<?php $routeParams = $this->tuefind()->getRouteParams(); $advancedSearch = ""; $homePage = false;
   if($routeParams['controller'] == "Search" && $routeParams['action'] == "Advanced") {
     $advancedSearch = "advancedSearch";
+  }
+  if($routeParams['controller'] == "index" && $routeParams['action'] == "Home") {
+    $homePage = true;
   }
 ?>
 
@@ -62,7 +65,6 @@ Fixed Navigation
             <ul class="dropdown-menu">
               <?php
                 //TueFind: Basic VuFind functionality changed, removed author ID from URL
-                $routeParams = $this->tuefind()->getRouteParams();
                 foreach ($this->layout()->allLangs as $langCode => $langName): ?>
                   <li<?=$this->layout()->userLang == $langCode ? ' class="active"' : ''?>>
                     <?php $langURL = $this->escapeHtmlAttr($this->url()->addQueryParameters(['lng' => $langCode]));
@@ -96,12 +98,19 @@ End Fixed Navigation
 Welcome Slider
 ==================================== -->
 <div class="logo-wrapper">
+  <?php if($homePage):?>
   <img class="searchbar_horizontal" src="<?=$this->imageLink('searchbar_origin.jpg');?>" />
   <img class="searchbar_vertical" src="<?=$this->imageLink('searchbar_vertical.jpg');?>" />
   <div class="text-content">
     <h1><a href="<?=$this->url('home')?>" title="Index Theologicus">Index Theologicus</a></h1>
     <small><?=$this->transEsc("ixtheo_subtitle")?></small>
   </div>
+  <?php else: ?>
+  <div class="contentLogoBlock">
+    <h1><a href="<?=$this->url('home')?>" title="Index Theologicus">Index Theologicus</a></h1>
+    <small><?=$this->transEsc("ixtheo_subtitle")?></small>
+  </div>
+  <?php endif;?>
 </div>
 
 <span class="ix-copyright logo-tooltip" title="test" >© <span class="ix-copyright-name"><img src="<?=$this->imageLink('Seezeichen.jpg');?>" width="600" />Seezeichen, © Marco Varenkamp</span></span>
