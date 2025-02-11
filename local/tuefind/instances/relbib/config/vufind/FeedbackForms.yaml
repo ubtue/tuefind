@@ -154,7 +154,6 @@
 #-----------------------------------------------------------------------------------
 
 forms:
-
   # Main Feedback form
 
   FeedbackSite:
@@ -177,8 +176,8 @@ forms:
     senderInfoRequired: true
 
     help:
-    #  pre: feedback_help_pre
-       post: Feedback_Disclaimer
+      #  pre: feedback_help_pre
+      post: Feedback_Disclaimer
 
     fields:
       - name: message
@@ -224,7 +223,7 @@ forms:
     title: Digitisation on Demand (DoD)
     onlyForLoggedUsers: false
     emailSubject: Digitisation on Demand (DoD)
-    response: Thank you for request.
+    response: dod_thank_you
     primaryHandler: email
     senderInfoRequired: true
 
