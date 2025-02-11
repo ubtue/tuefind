@@ -53,12 +53,12 @@ class Email extends \VuFind\Form\Handler\Email
             $sub_title_ = '';
 
             foreach ($fields as $data) {
-                if ($data['name'] == 'title' && preg_replace('/\s+/', '', $data['value']) != '') {
-                    $title_ = $data['value'];
+                if ($data['name'] == 'title') {
+                    $title_ = trim($data['value']);
                 }
 
-                if ($data['name'] == 'untertitel' && preg_replace('/\s+/', '', $data['value']) != '') {
-                    $sub_title_ = $data['value'];
+                if ($data['name'] == 'untertitel') {
+                    $sub_title_ = trim($data['value']);
                 }
 
                 if ($data['name'] == 'name' && $data['value'] != '') {
