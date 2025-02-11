@@ -159,7 +159,7 @@ forms:
   FeedbackSite:
     title: feedback_title
     enabled: true
-    useCaptcha: false
+    useCaptcha: true
     reportReferrer: true
     reportUserAgent: true
     #emailFrom:
