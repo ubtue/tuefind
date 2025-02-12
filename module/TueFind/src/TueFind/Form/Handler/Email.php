@@ -61,12 +61,16 @@ class Email extends \VuFind\Form\Handler\Email
                     $sub_title_ = trim($data['value']);
                 }
 
-                if ($data['name'] == 'name' && $data['value'] != '') {
-                    $body_ .= ("Sender: " . $data['value'] . PHP_EOL);
+                if ($data['name'] == 'name' && trim($data['value']) != '') {
+                    $body_ .= ("Sender: " . trim($data['value']) . PHP_EOL);
                 }
 
-                if ($data['name'] == 'email' && $data['value'] != '') {
-                    $body_ .= ("email: " . $data['value'] . PHP_EOL);
+                if ($data['name'] == 'email' && trim($data['value']) != '') {
+                    $body_ .= ("email: " . trim($data['value']) . PHP_EOL);
+                }
+
+                if ($data['name'] == 'comment' && trim($data['value']) != '') {
+                    $body_ .= ("comment: " . trim($data['value']) . PHP_EOL);
                 }
 
 
