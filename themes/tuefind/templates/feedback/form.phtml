@@ -101,7 +101,7 @@
     <?php if (in_array($handleGroup, ['close', 'openAndClose'])): ?>
       </div>
     <?php endif ?>
-    <?php if($allElementsInGroup != 0 && $elementsInGroup == 1): ?> <div class="<?php echo $groupClass; ?>"> <h3><?php echo $groupName;?></h3> <?php endif;?>
+    <?php if($allElementsInGroup != 0 && $elementsInGroup == 1): ?> <div class="<?php echo $groupClass; ?>"> <h3><?php echo $this->translate($groupName);?></h3> <?php endif;?>
     <?php if (in_array($handleGroup, ['open', 'openAndClose'])): ?>
       <?php if (in_array($el['type'], ['checkbox', 'radio'])): ?>
         <div class="field-set" role="group"<?= !empty($el['label']) ? ' aria-labelledby="' . $this->escapeHtmlAttr($el['name']) . '"' : ''?>>
