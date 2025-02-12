@@ -383,23 +383,8 @@ forms:
       pre: ""
 
     fields:
-      - name: print_online
-        label: SA_online_or_print
-        type: radio
-        required: true
-        options:
-          - value: online
-            label: "Online"
-          - value: print
-            label: "Print " # Note: The whitespace at the end is intentional so this will not be translated
-
       - name: authors
         label: SA_authors
-        type: text
-        required: true
-
-      - name: publication_year
-        label: SA_year_of_publication
         type: text
         required: true
 
@@ -422,37 +407,43 @@ forms:
       - name: rezensiertes_werk_group_name
         label: SA_source_of_work_lexicon
         type: hidden
-        group: inwerkgroup_6
+        group: inwerkgroup_7
 
       - name: zeitschrift_werk_group_title
         label: SA_title
         type: text
         required: true
-        group: inwerkgroup_6
+        group: inwerkgroup_7
 
       - name: zeitschrift_werk_group_band
         label: SA_volume
         type: text
         required: true
-        group: inwerkgroup_6
+        group: inwerkgroup_7
 
-      - name: sammelband_werk_group_ISBN
+      - name: zeitschrift_werk_group_year
+        label: SA_year_of_publication
+        type: text
+        required: true
+        group: inwerkgroup_7
+
+      - name: zeitschrift_werk_group_ISBN
         label: "ISBN"
         type: text
         required: false
-        group: inwerkgroup_6
+        group: inwerkgroup_7
 
       - name: zeitschrift_werk_group_IxTheo_Link
         label: "IxTheo-Link"
         type: text
         required: false
-        group: inwerkgroup_6
+        group: inwerkgroup_7
 
-      - name: facultativ
-        label: SA_pages_or_columns_optional_for_online
+      - name: zeitschrift_werk_group_seiten_oder_spalten
+        label: SA_pages_or_columns
         type: text
         required: false
-        group: inwerkgroup_6
+        group: inwerkgroup_7
 
       #In Werk group close
 
@@ -476,6 +467,11 @@ forms:
         type: text
         required: true
 
+      - name: comment
+        label: SA_comment
+        type: text
+        required: true
+
   SelfArchivingRezension:
     enabled: true
     onlyForLoggedUsers: true
@@ -486,28 +482,13 @@ forms:
       pre: ""
 
     fields:
-      - name: print_online
-        label: SA_online_or_print
-        type: radio
-        required: true
-        options:
-          - value: online
-            label: "Online"
-          - value: print
-            label: "Print " # Note: The whitespace at the end is intentional so this will not be translated
-
       - name: authors
         label: SA_authors
         type: text
         required: true
 
-      - name: publication_year
-        label: SA_year_of_publication
-        type: text
-        required: true
-
       - name: title
-        label: SA_title
+        label: SA_title_review
         type: text
         required: true
 
@@ -529,8 +510,8 @@ forms:
         required: true
         group: werkgroup_6
 
-      - name: rezensiertes_werk_group_jahr
-        label: Year
+      - name: rezensiertes_werk_group_publication_year
+        label: SA_year_of_publication
         type: text
         required: true
         group: werkgroup_6
@@ -557,7 +538,7 @@ forms:
       - name: rezensiertes_werk_group_name
         label: SA_source_of_work
         type: hidden
-        group: inwerkgroup_11
+        group: inwerkgroup_12
 
       - name: inwerkradio
         label: ""
@@ -573,60 +554,67 @@ forms:
         label: SA_title
         type: text
         required: true
-        group: inwerkgroup_11
+        group: inwerkgroup_12
 
       - name: zeitschrift_werk_group_ISSN
         label: "ISSN"
         type: text
         required: false
-        group: inwerkgroup_11
+        group: inwerkgroup_12
 
       - name: sammelband_werk_group_ISBN
         label: "ISBN"
         type: text
         required: false
-        group: inwerkgroup_11
+        group: inwerkgroup_12
 
       - name: zeitschrift_werk_group_IxTheo_Link
         label: "IxTheo-Link"
         type: text
         required: false
-        group: inwerkgroup_11
+        group: inwerkgroup_12
 
       - name: sammelband_werk_group_Herausgeber
         label: SA_editor
         type: text
-        group: inwerkgroup_11
+        require: true
+        group: inwerkgroup_12
+
+      - name: sammelband_werk_group_erscheinungsjahr
+        label: SA_year_of_publication
+        type: text
+        require: true
+        group: inwerkgroup_12
 
       - name: zeitschrift_werk_group_band
         label: SA_volume
         type: text
         required: false
-        group: inwerkgroup_11
+        group: inwerkgroup_12
 
       - name: zeitschrift_werk_group_jahr
         label: Year
         type: text
         required: true
-        group: inwerkgroup_11
+        group: inwerkgroup_12
 
       - name: zeitschrift_werk_group_heft
         label: SA_issue
         type: text
         required: false
-        group: inwerkgroup_11
+        group: inwerkgroup_12
 
       - name: zeitschrift_werk_group_aufsatz_ID
         label: SA_article_id
         type: text
         required: false
-        group: inwerkgroup_11
+        group: inwerkgroup_12
 
       - name: zeitschrift_werk_group_seiten
         label: Pages
         type: text
         required: true
-        group: inwerkgroup_11
+        group: inwerkgroup_12
 
       #In Werk group close
 
@@ -650,6 +638,11 @@ forms:
         type: text
         required: true
 
+      - name: comment
+        label: SA_comment
+        type: text
+        required: true
+
   SelfArchivingAufsatz:
     enabled: true
     onlyForLoggedUsers: true
@@ -659,23 +652,8 @@ forms:
       pre: ""
 
     fields:
-      - name: print_online
-        label: SA_online_or_print
-        type: radio
-        required: true
-        options:
-          - value: online
-            label: "Online"
-          - value: print
-            label: "Print " # Note: The whitespace at the end is intentional so this will not be translated
-
       - name: authors
         label: SA_authors
-        type: text
-        required: true
-
-      - name: publication_year
-        label: SA_year_of_publication
         type: text
         required: true
 
@@ -714,60 +692,66 @@ forms:
         label: SA_title
         type: text
         required: true
-        group: inwerkgroup_11
+        group: inwerkgroup_12
+
+      - name: zeitschrift_werk_group_erscheinungsjahr
+        label: SA_year_of_publication
+        type: text
+        required: true
+        group: inwerkgroup_12
 
       - name: zeitschrift_werk_group_ISSN
         label: "ISSN"
         type: text
         required: false
-        group: inwerkgroup_11
+        group: inwerkgroup_12
 
       - name: sammelband_werk_group_ISBN
         label: "ISBN"
         type: text
         required: false
-        group: inwerkgroup_11
+        group: inwerkgroup_12
 
       - name: zeitschrift_werk_group_IxTheo_Link
         label: "IxTheo-Link"
         type: text
         required: false
-        group: inwerkgroup_11
+        group: inwerkgroup_12
 
       - name: sammelband_werk_group_Herausgeber
         label: SA_editor
         type: text
-        group: inwerkgroup_11
+        group: inwerkgroup_12
 
       - name: zeitschrift_werk_group_band
         label: SA_volume
         type: text
         required: true
-        group: inwerkgroup_11
+        group: inwerkgroup_12
 
       - name: zeitschrift_werk_group_jahr
         label: Year
         type: text
         required: true
-        group: inwerkgroup_11
+        group: inwerkgroup_12
 
       - name: zeitschrift_werk_group_heft
         label: SA_issue
         type: text
         required: true
-        group: inwerkgroup_11
+        group: inwerkgroup_12
 
       - name: zeitschrift_werk_group_aufsatz_ID
         label: SA_article_id
         type: text
         required: true
-        group: inwerkgroup_11
+        group: inwerkgroup_12
 
       - name: zeitschrift_werk_group_seiten
         label: Pages
         type: text
         required: false
-        group: inwerkgroup_11
+        group: inwerkgroup_12
 
       #In Werk group close
 
@@ -788,6 +772,11 @@ forms:
 
       - name: onlineversion_werk_group_openaccess
         label: "Open Access"
+        type: text
+        required: true
+
+      - name: comment
+        label: SA_comment
         type: text
         required: true
 
