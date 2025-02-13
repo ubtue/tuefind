@@ -5,36 +5,76 @@
             <h2 class="cw-h2 cw-mb-5">Spezialbibliographien</h2>
         </div>
         <div class="row">
-            <a target="_blank" href="https://relbib.de">
-                <div class="col-lg-4 cw-mb-3 cw-mb-lg-0 text-center">
-                    <div class="cw-px-0 cw-px-lg-3">
-                        <img src="<?=$this->imageLink('smallRelBibLogo.png')?>" alt="Card image" >
-                        <div><small>Religionswissenschaftliche Bibliografie</small></div>
+            <div class="swiper-container cw-guides-slider-special mx-n2 cw-pt-3 swiper-container-horizontal">
+                <!-- Additional required wrapper-->
+                <div class="swiper-wrapper">
+                    <!-- Slides-->
+                    <div class="swiper-slide cw-h-auto cw-px-2">
+                        <a target="_blank" href="https://relbib.de">
+                            <div class="cw-mb-lg-0 text-center">
+                                <div class="cw-px-0 cw-px-lg-3">
+                                    <img src="<?=$this->imageLink('smallRelBibLogo.png')?>" alt="Card image" >
+                                    <div><small>Religionswissenschaftliche Bibliografie</small></div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="swiper-slide cw-h-auto cw-px-2">
+                        <a target="_blank" href="https://bible.ixtheo.de/">
+                            <div class="cw-mb-lg-0 text-center">
+                                <div class="cw-px-0 cw-px-lg-3">
+                                    <h1 class="cw-h1 ix-spez">Index <br /> Biblicus</h1>
+                                    <div style="margin-top:-12px;"><small>BILDI / IxTheo / BiBIL</small></div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="swiper-slide cw-h-auto cw-px-2">
+                        <a target="_blank" href="https://churchlaw.ixtheo.de/">
+                            <div class="cw-mb-lg-0 text-center">
+                                <div class="cw-px-0 cw-px-lg-3">
+                                    <h1 class="cw-h1 ix-spez">Index <br /> Canonicus</h1>
+                                    <div style="margin-top:-12px;"><small>IxTheo / KALDI / DaKaR</small></div>
+                                </div>
+                            </div>
+                        </a>
                     </div>
                 </div>
-            </a>
-            <a target="_blank" href="https://bible.ixtheo.de/">
-                <div class="col-lg-4 cw-mb-3 cw-mb-lg-0 text-center">
-                    <div class="cw-px-0 cw-px-lg-3">
-                        <h1 class="cw-h1 ix-spez">Index <br /> Biblicus</h1>
-                        <div style="margin-top:-12px;"><small>BILDI / IxTheo / BiBIL</small></div>
-                    </div>
+                <div class="cw-mt-3 swiper-pagination-parent">
+                    <div class="swiper-pagination-special"></div>
                 </div>
-            </a>
-            <a target="_blank" href="https://churchlaw.ixtheo.de/">
-                <div class="col-lg-4 cw-mb-3 cw-mb-lg-0 text-center">
-                    <div class="cw-px-0 cw-px-lg-3">
-                        <h1 class="cw-h1 ix-spez">Index <br /> Canonicus</h1>
-                        <div style="margin-top:-12px;"><small>IxTheo / KALDI / DaKaR</small></div>
-                    </div>
-                </div>
-            </a>
+            </div>
         </div>
     </div>
 </section>
 
-<style>
-    .cw-h1.ix-spez {
-        line-height: 1.2 !important;
-    }
-</style>
+<?php
+  $jsSnippet = <<< 'EOD'
+    var guidesSlider = new Swiper('.cw-guides-slider-special', {
+        slidesPerView: 3,
+        spaceBetween: 15,
+        /*loop: true,*/
+        roundLengths: true,
+        breakpoints: {
+            1200: {
+                slidesPerView: 4
+            },
+            991: {
+                slidesPerView: 3
+            },
+            768: {
+                slidesPerView: 2
+            },
+            400: {
+                slidesPerView: 1
+            }
+        },
+        pagination: {
+            el: '.swiper-pagination-special',
+            clickable: true,
+            dynamicBullets: true
+        },
+    });
+EOD;
+?>
+<?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $jsSnippet, 'SET')?>
