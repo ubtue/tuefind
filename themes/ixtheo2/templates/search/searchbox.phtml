@@ -66,8 +66,7 @@
 <section class="cw-py-5 cw-bg-gray-100">
     <div class="container">
         <div class="row">
-            <div class="col-md-1"></div>
-            <div class="col-md-10">
+            <div class="col-md-12">
                 <div class="clearfix searchbox_home">
                 <?php if ($this->searchType == 'advanced'): ?>
                 <div class="navbar-form navbar-left flip">
@@ -112,25 +111,25 @@
                         'aria-label' => $this->translate('search_terms'),
                         ];
                         if ($placeholder = $this->searchbox()->getPlaceholderText($tabConfig['selected']['id'] ?? $this->searchClassId)) {
-                        $searchboxAttributes['placeholder'] = $this->translate($placeholder);
+                            $searchboxAttributes['placeholder'] = $this->translate($placeholder);
                         }
                         if ($this->searchbox()->autocompleteEnabled($this->searchClassId)) {
-                        $searchboxAttributes['class'] .= " autocomplete searcher:{$this->searchClassId}"
+                            $searchboxAttributes['class'] .= " autocomplete searcher:{$this->searchClassId}"
                             . ($this->searchbox()->autocompleteAutoSubmit($this->searchClassId) ? ' ac-auto-submit' : '');
-                        $searchboxAttributes['data-autocomplete-formatting-rules'] = $this->searchbox()->autocompleteFormattingRulesJson($this->searchClassId);
+                            $searchboxAttributes['data-autocomplete-formatting-rules'] = $this->searchbox()->autocompleteFormattingRulesJson($this->searchClassId);
                         }
                         if (!empty($keyboardLayouts)) {
-                        $searchboxAttributes['class'] .= ' with-keyboard-selection';
+                            $searchboxAttributes['class'] .= ' with-keyboard-selection';
                         }
                     ?>
-                    <div class="searchForm-query col-12 col-sm-8 col-md-6 col-lg-6 ix2-nomargin">
+                    <div class="searchForm-query col-12 col-xs-8 col-sm-8 col-md-8 col-lg-8 ix2-nomargin">
                         <input<?=$this->htmlAttributes($searchboxAttributes)?>>
                         <div id="searchForm_controls">
-                        <button id="searchForm-reset" class="searchForm-reset hidden" type="reset" tabindex="-1" aria-label="<?=$this->transEscAttr('searchform_reset_button')?>"><?=$this->icon('ui-reset-search');?></button>
+                            <button id="searchForm-reset" class="searchForm-reset hidden" type="reset" tabindex="-1" aria-label="<?=$this->transEscAttr('searchform_reset_button')?>"><?=$this->icon('ui-reset-search');?></button>
                         </div>
                     </div>
                     <?php if ($handlerCount > 1): ?>
-                        <div class="col-12 col-sm-2 col-md-2 col-lg-2 col ix2-nomargin ix2-searchForm-element-height ix2-main-searchForm-type">
+                        <div class="col-12 col-xs-2 col-sm-2 col-md-2 col-lg-2 col ix2-nomargin ix2-searchForm-element-height ix2-main-searchForm-type">
                             <select id="searchForm_type" class="searchForm_type form-control " name="type" data-native-menu="false" aria-label="<?=$this->transEscAttr('Search type')?>">
                             <?php $currentGroup = $insideGroup = false; ?>
                             <?php $optionCount=1; foreach ($handlers as $handler): ?>
@@ -138,13 +137,13 @@
                                 if ($currentGroup !== ($handler['group'] ?? false)) {
                                     $currentGroup = $handler['group'];
                                     if ($insideGroup) {
-                                    echo '</optgroup>';
+                                        echo '</optgroup>';
                                     }
                                     if ($currentGroup) {
-                                    echo '<optgroup label="' . $this->escapeHtmlAttr($currentGroup) . '">';
-                                    $insideGroup = true;
+                                        echo '<optgroup label="' . $this->escapeHtmlAttr($currentGroup) . '">';
+                                        $insideGroup = true;
                                     } else {
-                                    $insideGroup = false;
+                                        $insideGroup = false;
                                     }
                                 }
                                 ?>
@@ -159,18 +158,8 @@
                             <input type="hidden" name="type" value="<?=$this->escapeHtmlAttr($handlers[0]['value'])?>">
                             <?php endif; ?>
                         </div>
-                        <div class="col-12 col-sm-2 col-md-1 col-lg-1 col ix2-nomargin ix2-searchForm-element-height">
+                        <div class="col-12 col-xs-2 col-sm-2 col-md-2 col-lg-2 col ix2-nomargin ix2-searchForm-element-height">
                             <button type="submit" class="btn btn-primary  search-button"><i class="fa fa-search" aria-hidden="true"></i></button>
-                        </div>
-                        <div class="col-12 col-sm-12 col-md-1 col-lg-1 col">
-                            <!-- IxTheo 2: Advanced search -->
-                            <?php if ($advSearch != ''):?>
-                                <div class="ix2-searchbox-adv-search">
-                                    <a href="<?=$this->url($advSearch) .  ((isset($this->searchId) && $this->searchId) ? '?edit=' . $this->escapeHtmlAttr($this->searchId) : $this->hiddenFilterParams)?>"
-                                    class="btn btn-link" role="button"
-                                    rel="nofollow"><?= $this->transEsc("Advanced Search") ?></a>
-                                </div>
-                            <?php endif;?>
                         </div>
                     <?php if ($geoUrl = $this->geocoords()->getSearchUrl($options)) : ?>
                         <a href="<?=$geoUrl ?>" class="btn btn-link"><?=$this->transEsc('Geographic Search')?></a>
@@ -178,33 +167,32 @@
 
                     <?php $shards = $options->getShards(); ?>
                     <?php if ($options->showShardCheckboxes() && !empty($shards)): ?>
-                    <?php
-                    $selectedShards = $this->selectedShards ?? $options->getDefaultSelectedShards();
-                    ?>
-                    <br>
-                    <?php foreach ($shards as $shard => $val): ?>
-                        <?php $isSelected = empty($selectedShards) || in_array($shard, $selectedShards); ?>
-                        <input type="checkbox" <?=$isSelected ? 'checked="checked" ' : ''?>name="shard[]" value='<?=$this->escapeHtmlAttr($shard)?>'> <?=$this->transEsc($shard)?>
-                    <?php endforeach; ?>
+                        <?php $selectedShards = $this->selectedShards ?? $options->getDefaultSelectedShards(); ?>
+                        <br>
+                        <?php foreach ($shards as $shard => $val): ?>
+                            <?php $isSelected = empty($selectedShards) || in_array($shard, $selectedShards); ?>
+                            <input type="checkbox" <?=$isSelected ? 'checked="checked" ' : ''?>name="shard[]" value='<?=$this->escapeHtmlAttr($shard)?>'> <?=$this->transEsc($shard)?>
+                        <?php endforeach; ?>
                     <?php endif; ?>
                     <?php if (($hasDefaultsApplied ?? false) || !empty($filterDetails)): ?>
-                    <?php if ($options->getRetainFilterSetting()): ?>
-                        <?php foreach ($filterDetails as $current): ?>
-                        <input class="applied-filter" id="<?=$this->escapeHtmlAttr($current['id'])?>" type="hidden" name="filter[]" value="<?=$this->escapeHtmlAttr($current['value'])?>">
-                        <?php endforeach; ?>
-                        <?php if ($hasDefaultsApplied ?? false): ?>
-                        <input class="applied-filter" id="dfApplied" type="hidden" name="dfApplied" value="1">
+                        <?php if ($options->getRetainFilterSetting()): ?>
+                            <?php foreach ($filterDetails as $current): ?>
+                                <input class="applied-filter" id="<?=$this->escapeHtmlAttr($current['id'])?>" type="hidden" name="filter[]" value="<?=$this->escapeHtmlAttr($current['value'])?>">
+                            <?php endforeach; ?>
+                            <?php if ($hasDefaultsApplied ?? false): ?>
+                                <input class="applied-filter" id="dfApplied" type="hidden" name="dfApplied" value="1">
+                            <?php endif; ?>
                         <?php endif; ?>
-                    <?php endif; ?>
                     <?php endif; ?>
                     <?php foreach ($hiddenFilters as $key => $filter): ?>
-                    <?php foreach ($filter as $value): ?>
-                        <?php preg_match ( '/\[NOW-(\d+)DAY TO NOW\]-id:LR\*/', $value, $matchesValue ); if (count($filter) == 1 && !empty($matchesValue) && $routeParams['controller'] == 'Search' && $routeParams['action'] == 'NewItem'): ?>
-                        <input type="hidden" name="hiddenFilters[]" value="">
-                        <?php else: ?>
-                        <input type="hidden" name="hiddenFilters[]" value="<?=$this->escapeHtmlAttr($key) . ':' . $this->escapeHtmlAttr('"' . $value . '"')?>">
-                        <?php endif; ?>
-                    <?php endforeach; ?>
+                        <?php foreach ($filter as $value): ?>
+                                <?php preg_match ( '/\[NOW-(\d+)DAY TO NOW\]-id:LR\*/', $value, $matchesValue ); ?>
+                                <?php if (count($filter) == 1 && !empty($matchesValue) && $routeParams['controller'] == 'Search' && $routeParams['action'] == 'NewItem'): ?>
+                                    <input type="hidden" name="hiddenFilters[]" value="">
+                                <?php else: ?>
+                                    <input type="hidden" name="hiddenFilters[]" value="<?=$this->escapeHtmlAttr($key) . ':' . $this->escapeHtmlAttr('"' . $value . '"')?>">
+                                <?php endif; ?>
+                        <?php endforeach; ?>
                     <?php endforeach; ?>
                     <?php
                     /* Show hidden field for active search class when in combined handler mode. */
@@ -236,16 +224,22 @@
                 <?php endif;?>
                 </div>
             </div>
-            <div class="col-md-1"></div>
         </div>
         <div class="row ix2-search-form-bottom-nav">
-            <div class="col-1 col-md-1"></div>
-            <div class="col-1 col-md-10">
+            <div class="col-1 col-md-12">
                 <div class="navbar navbar-default home-navbar">
                     <div class="container-navbar">
                         <div class="ix-paddind-left-0">
-                            <ul class="nav navbar-nav">
-                                <li class="dropdown">
+                            <ul class="nav navbar-nav row search-nav-list col-sm-12 col-md-12 col-lg-12 ix2-nopadding">
+                                <!-- IxTheo 2: Advanced search -->
+                                <?php if ($advSearch != ''):?>
+                                    <li class="">
+                                        <a href="<?=$this->url($advSearch) .  ((isset($this->searchId) && $this->searchId) ? '?edit=' . $this->escapeHtmlAttr($this->searchId) : $this->hiddenFilterParams)?>" class="" role="button" rel="nofollow">
+                                            <?= $this->transEsc("Advanced Search") ?>
+                                        </a>
+                                    </li>
+                                <?php endif;?>
+                                <li class="dropdown ">
                                     <a class="dropdown-toggle"><?=$this->transEsc('Browse')?>&nbsp;<span class="caret"></span></a>
                                     <ul class="dropdown-menu">
                                         <li><a class="dropdown-item" href="<?=$this->url('keywordchainsearch-home')?>"><?=$this->transEsc('Browse Keywordchains')?></a></li>
@@ -253,21 +247,21 @@
                                         <li><a class="dropdown-item" href="<?=$this->url('alphabrowse-home')?>"><?=$this->transEsc('Browse Alphabetically')?></a></li>
                                     </ul>
                                 </li>
-                                <li><a href="<?=$this->url('search-results')?>?lookfor=4+esra+1-2&type=BibleRangeSearch" role="button" rel="nofollow">Bibelstellensuche</a></li>
-                                <li><a href="<?=$this->url('search-newitem')?>" role="button" rel="nofollow"><?=$this->transEsc('New Items')?></a></li>
-                                <li><a href="<?=$this->url('search-history')?>" role="button" rel="nofollow"><?=$this->transEsc('Search History')?></a></li>
+                                <li class=""><a href="<?=$this->url('search-results')?>?lookfor=4+esra+1-2&type=BibleRangeSearch" role="button" rel="nofollow">Bibelstellensuche</a></li>
+                                <li class=""><a href="<?=$this->url('search-newitem')?>" role="button" rel="nofollow"><?=$this->transEsc('New Items')?></a></li>
+                                <li class=""><a href="<?=$this->url('search-history')?>" role="button" rel="nofollow"><?=$this->transEsc('Search History')?></a></li>
                                 <?php if (!empty($keyboardLayouts)): ?>
-                                <li class="dropdown ix2-keyboard-dropdown">
+                                <li class="dropdown ix2-keyboard-dropdown ">
                                     <a class="dropdown-toggle"><?=$this->transEsc('Virtual Keyboard')?>&nbsp;<span class="caret"></span></a>
                                     <ul class="dropdown-menu">
                                         <?php
-                                        $this->headScript()->appendFile('vendor/js.cookie.js');
-                                        $this->headScript()->appendFile('vendor/simple-keyboard/index.js');
-                                        $this->headScript()->appendFile('vendor/simple-keyboard-layouts/index.js');
-                                        $this->headLink()->appendStylesheet('vendor/simple-keyboard/index.css');
+                                            $this->headScript()->appendFile('vendor/js.cookie.js');
+                                            $this->headScript()->appendFile('vendor/simple-keyboard/index.js');
+                                            $this->headScript()->appendFile('vendor/simple-keyboard-layouts/index.js');
+                                            $this->headLink()->appendStylesheet('vendor/simple-keyboard/index.css');
                                         ?>
                                         <li>
-                                        <a class="dropdown-item keyboard-selection-item" href="#" data-value="none"><?= $this->transEsc('None') ?></a>
+                                            <a class="dropdown-item keyboard-selection-item" href="#" data-value="none"><?= $this->transEsc('None') ?></a>
                                         </li>
                                         <?php foreach ($keyboardLayouts as $keyboardLayout): ?>
                                         <li>
@@ -282,8 +276,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-1 col-md-1"></div>
-          <br />
+           <br />
         </div>
     </div>
 </section>
