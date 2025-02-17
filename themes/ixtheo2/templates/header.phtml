@@ -42,6 +42,15 @@ Fixed Navigation
 
       <ul class="navbar-nav navbar-right text-center">
 
+        <!-- s-media -->
+        <li class="social-media nav-item dropdown active">
+            <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown"><i class="fa fa-share-alt" aria-hidden="true"></i> <?=$this->transEsc("Social media")?><b class="caret"></b></a>
+            <ul class="dropdown-menu">
+              <li class="sub-menu"><a target="blank" href="//bsky.app/profile/ixtheo.bsky.social"><img src="<?=$this->imageLink('bluesky.svg')?>" height="16" alt="Bluesky"> Bluesky</a></li>
+              <li class="sub-menu"><a target="blank" href="//hcommons.social/@ixtheo"><img src="<?=$this->imageLink('mastodon.svg')?>" height="16" alt="Mastodon"> Mastodon</a></li>
+            </ul>
+        </li>
+
         <?=$this->render('header/login');?>
       
         <?php if (isset($this->layout()->themeOptions) && count($this->layout()->themeOptions) > 1): ?>
