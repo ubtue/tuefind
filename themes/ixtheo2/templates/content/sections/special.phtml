@@ -52,12 +52,12 @@
   $jsSnippet = <<< 'EOD'
     var guidesSlider = new Swiper('.cw-guides-slider-special', {
         slidesPerView: 3,
-        spaceBetween: 15,
+        spaceBetween: 0,
         /*loop: true,*/
         roundLengths: true,
         breakpoints: {
             1200: {
-                slidesPerView: 4
+                slidesPerView: 3
             },
             991: {
                 slidesPerView: 3
@@ -73,7 +73,7 @@
             el: '.swiper-pagination-special',
             clickable: true,
             dynamicBullets: true
-        },
+        }
     });
 EOD;
 ?>

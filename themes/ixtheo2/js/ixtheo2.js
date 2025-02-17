@@ -203,6 +203,12 @@ var IxTheo2 = {
 // Enable bootstrap3 popovers
 
 $(function () {
+
+    var defaultScroll = $(window).scrollTop();
+    if(defaultScroll > 50) {
+        $('.navigation').addClass('sticky-header');
+    }
+
     $('[data-toggle="popover"]').popover();
 
     IxTheo2.ChangeHandlerMenuSearchForm();
@@ -238,7 +244,7 @@ $(function () {
         });
       });
       // navbarDropdown
-        if ($(window).width() < 992) {
+      if ($(window).width() < 992) {
             $('#navigation .dropdown-toggle').on('click', function () {
                 $(this).siblings('.dropdown-menu').animate({
                     height: 'toggle'
@@ -250,6 +256,7 @@ $(function () {
       /*	On scroll fade/bounce effect
       /* ========================================================================= */
       var scroll = new SmoothScroll('a[href*="#"]');
+
       // -----------------------------
       //  On Scroll
       // -----------------------------
