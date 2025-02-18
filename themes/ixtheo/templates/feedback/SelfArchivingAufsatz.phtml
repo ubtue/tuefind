@@ -3,6 +3,30 @@
 $script = <<<JS
     $(function() {
 
+      hideDefaultMultifield();
+
+      function hideDefaultMultifield() {
+
+        let addButton = "<i class='fa fa-plus-circle addjsicon' aria-hidden='true'></i>";
+        let removeButton = "<i class='fa fa-minus-circle removejsicon' aria-hidden='true'></i>";
+        $('.multifieldtext').each(function(){
+          $(this).find('input').after(addButton);
+          $(this).find('input').after(removeButton);
+        })
+        $('.multifieldtext').hide();
+        $('.multifieldtext:first').show();
+        $('.addjsicon:first').addClass('mainaddjsicon');
+        $('.removejsicon:first').hide();
+      }
+
+      $('.addjsicon').click(function(){
+        $(this).parents('.multifieldtext').next().show();
+      })
+
+      $('.removejsicon').click(function(){
+        $(this).parents('.multifieldtext').hide();
+      })
+
       function linkOnlineversion() {
         $('.group-onlineversion_werk_group_fulltext').toggle();
         $('.group-onlineversion_werk_group_openaccess').toggle();
@@ -33,47 +57,6 @@ $script = <<<JS
       
       zeitschriftSelected();
 
-      function addIconForAuthor() {
-        let parentBlock = $("#form_SelfArchivingAufsatz_authors").parent();
-        let addButton = "<i class='fa fa-plus-circle addjsicon' aria-hidden='true'></i>";
-        parentBlock.after(addButton); 
-      }
-      
-      addIconForAuthor();
-
-      function addIconForEditor() {
-        let parentBlock = $("#form_SelfArchivingAufsatz_sammelband_werk_group_Herausgeber").parent();
-        let addButton = "<i class='fa fa-plus-circle addjsiconEditor' aria-hidden='true'></i>";
-        parentBlock.after(addButton); 
-      }
-      
-      addIconForEditor();
-
-      $('.addjsicon').click(function(){
-        let El = $(this).prev('.form-group');
-        let endElement = $('.group-publication_year');
-        let removeButton = "<i class='fa fa-minus-circle removejsicon' aria-hidden='true'></i>";
-        let cloneElement = El.clone();
-        cloneElement.find('input').val('');
-        endElement.before(cloneElement);
-        endElement.before(removeButton).trigger('click');
-      })
-
-      $('.addjsiconEditor').click(function(){
-        let El = $(this).prev('.form-group');
-        let endElement = $('.group-zeitschrift_werk_group_band');
-        let removeButton = "<i class='fa fa-minus-circle removejsiconEditor' aria-hidden='true'></i>";
-        let cloneElement = El.clone();
-        cloneElement.find('input').val('');
-        endElement.before(cloneElement);
-        endElement.before(removeButton).trigger('click');
-      })
-      
-      $(document).on("click", ".removejsicon,.removejsiconEditor", function() {
-        $(this).prev().remove();
-        $(this).remove();
-      })
-
       $(document).on("change", "#form_SelfArchivingAufsatz_inwerkradio_o2", function() {
         $(this).parents('.inwerkgroup').find('i').show();
         sammelbandSelected();
@@ -102,30 +85,33 @@ print $this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $script, 'SET
   .fa-minus-circle {
     color:red; 
   }
-  .addjsicon, .removejsicon {
+
+  .addjsicon.mainaddjsicon {
+    top: -26px;
+    right: -22px;
+  }
+
+  .addjsicon {
     font-size: 18px;
     float: right;
     cursor: pointer;
     position: relative;
-    top: -40px;
+    top: -18px;
+    right: -35px;
+  }
+
+  .removejsicon {
+    font-size: 18px;
+    float: right;
+    cursor: pointer;
+    position: relative;
+    top: -36px;
     right: -20px;
   }
 
-  .addjsiconEditor {
-    display: none;
-  }
-
-  .addjsiconEditor, .removejsiconEditor {
-    font-size: 18px;
-    float: right;
-    cursor: pointer;
-    position: relative;
-    top: -40px;
-    right: -30px;
-  }
   .werkgroup, .inwerkgroup {
     background-color: #f5f5f5;
     padding: 10px;
     border-radius: 5px;
-  }  
+  }
 </style>
