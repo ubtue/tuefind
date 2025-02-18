@@ -115,6 +115,7 @@ if($el['type'] == 'multifieldtext') {
     } else {
         if($groupMultiFieldtext != $el['groupMultiFieldtext']) {
             echo "</div>\n";
+            $isOpen_groupMultiFieldtext = true;
             $groupMultiFieldtext = $el['groupMultiFieldtext'];
             echo "<div class='multifieldtext_group'>";
 
@@ -127,56 +128,63 @@ if($el['type'] == 'multifieldtext') {
     }
 }
       ?>
-<?php if($allElementsInGroup != 0 && $elementsInGroup == 1): ?> <div class="<?php echo $groupClass; ?>">
-  <h3><?php echo $this->translate($groupName);?></h3> <?php endif;?>
+  <?php if($allElementsInGroup != 0 && $elementsInGroup == 1): ?> 
+    <div class="<?php echo $groupClass; ?>">
+    <h3><?php echo $this->translate($groupName);?></h3> 
+  <?php endif;?>
   <?php if (in_array($handleGroup, ['open', 'openAndClose'])): ?>
-  <?php if (in_array($el['type'], ['checkbox', 'radio'])): ?>
-  <div class="field-set" role="group" <?= !empty($el['label']) ? ' aria-labelledby="' . $this->escapeHtmlAttr($el['name']) . '"' : ''?>>
+    <?php if (in_array($el['type'], ['checkbox', 'radio'])): ?>
+      <div class="field-set" role="group" <?= !empty($el['label']) ? ' aria-labelledby="' . $this->escapeHtmlAttr($el['name']) . '"' : ''?>>
     <?php else: ?>
-    <div class="field-set"
+      <div class="field-set"
       <?= !empty($elementHelpPre) ? ' role="contentinfo" aria-label="' . $this->escapeHtmlAttr($elementHelpPre) . '"' : ''?>>
-      <?php endif ?>
-      <?php endif ?>
+    <?php endif ?>
+  <?php endif ?>
 
-      <div class="form-group <?= $el['type'] ?> group-<?=$this->escapeHtmlAttr($el['name'])?>">
-        <?php if (!empty($elementHelpPre)): ?>
-        <p class="info pre"><?=$elementHelpPre?></p>
-        <?php endif ?>
-        <?php if ($el['type'] !== 'submit'): ?>
-        <?php if ($el['label']): ?>
+  <div class="form-group <?= $el['type'] ?> group-<?=$this->escapeHtmlAttr($el['name'])?>">
+    <?php if (!empty($elementHelpPre)): ?>
+      <p class="info pre"><?=$elementHelpPre?></p>
+    <?php endif ?>
+    <?php if ($el['type'] !== 'submit'): ?>
+      <?php if ($el['label']): ?>
         <?php
-                    $required = $el['required'] ?? false;
-            $requireOne = $el['requireOne'] ?? false;
+              $required = $el['required'] ?? false;
+              $requireOne = $el['requireOne'] ?? false;
             ?>
         <?php if (in_array($el['type'], ['checkbox', 'radio'])): ?>
-        <p id="<?=$this->escapeHtmlAttr($el['name'])?>"
+          <p id="<?=$this->escapeHtmlAttr($el['name'])?>"
           class="control-label radio-label<?=$required && !$requireOne ? ' required' : ''?><?=$requireOne ? ' require-one' : ''?>">
           <?=$this->transEsc($el['label'])?>:</p>
         <?php else: ?>
-        <label for="<?=$this->escapeHtmlAttr($el['name'])?>"
-          class="control-label<?=$required ? ' required' : ''?>"><?=$this->transEsc($el['label'])?>:</label>
+          <label for="<?=$this->escapeHtmlAttr($el['name'])?>"
+        class="control-label<?=$required ? ' required' : ''?>"><?=$this->transEsc($el['label'])?>:</label>
         <?php endif ?>
-        <?php endif ?>
-        <?php else: ?>
+      <?php endif ?>
+      <?php else: ?>
         <?php if ($helpPost): ?>
-        <div class="form-info post">
-          <?=$helpPost?>
-        </div>
+          <div class="form-info post">
+            <?=$helpPost?>
+          </div>
         <?php endif ?>
         <?=$this->captcha()->html($this->useCaptcha) ?>
-        <?php endif ?>
-        <?= $this->formRow($formElement) ?>
-        <?php if($allElementsInGroup != 0 && $elementsInGroup == $allElementsInGroup) :?>
-      </div> <?php $elementsInGroup = 0; endif; ?>
-      <?php if (!empty($elementHelpPost)): ?>
-      <p class="info post"><?=$elementHelpPost?></p>
       <?php endif ?>
+    <?= $this->formRow($formElement) ?>
+    <?php if($allElementsInGroup != 0 && $elementsInGroup == $allElementsInGroup) :?>
+        </div> 
+      <?php $elementsInGroup = 0; ?>
+    <?php endif ?>
+    <?php if (!empty($elementHelpPost)): ?>
+        <p class="info post"><?=$elementHelpPost?></p>
+    <?php endif ?>
     </div>
     <?php endforeach ?>
-    <?php if($isOpen_groupMultiFieldtext == true) {
+    <?php 
+    if($isOpen_groupMultiFieldtext == true) {
         $isOpen_groupMultiFieldtext = false;
         echo "</div>";
-    } ?>
+    } 
+    ?>
     <?= $this->form()->closeTag() ?>
     <?php if (!$this->inLightbox): ?>
-  </div><?php endif; ?>
+      </div>
+    <?php endif; ?>
