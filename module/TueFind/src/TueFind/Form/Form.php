@@ -93,6 +93,7 @@ class Form extends \VuFind\Form\Form
             'requireOne',
             'value',
             'maxMultiFieldtext',
+            'groupMultiFieldtext'
         ];
     }
 
@@ -116,6 +117,7 @@ class Form extends \VuFind\Form\Form
                     $new_field = $field;
                     $new_field['name'] .= "$i";
                     $new_field['required'] = isset($new_field['required']) ? ($i == 1 ? $new_field['required'] : 0) : 0;
+                    $new_field['groupMultiFieldtext'] = "multifieldtext_group" . $field['name'];
                     $elements[] = $new_field;
                 }
             } else {
