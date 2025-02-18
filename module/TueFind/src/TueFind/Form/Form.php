@@ -115,7 +115,7 @@ class Form extends \VuFind\Form\Form
                 for ($i = 1; $i <= $max_; $i++) {
                     $new_field = $field;
                     $new_field['name'] .= "$i";
-                    $new_field['required'] = ($i == 1 ? $new_field['required'] : 0);
+                    $new_field['required'] = isset($new_field['required']) ? ($i == 1 ? $new_field['required'] : 0) : 0;
                     $elements[] = $new_field;
                 }
             } else {
