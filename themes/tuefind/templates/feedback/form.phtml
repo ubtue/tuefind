@@ -115,6 +115,7 @@ if($el['type'] == 'multifieldtext') {
     } else {
         if($groupMultiFieldtext != $el['groupMultiFieldtext']) {
             echo "</div>\n";
+            $isOpen_groupMultiFieldtext = true;
             $groupMultiFieldtext = $el['groupMultiFieldtext'];
             echo "<div class='multifieldtext_group'>";
 
