@@ -596,6 +596,39 @@ var TueFind = {
                 blockVar.click();
             }
         }
+    },
+
+    SelfArchiving: function() {
+        let addButton = "<i class='fa fa-plus-circle addjsicon' aria-hidden='true'></i>";
+        let removeButton = "<i class='fa fa-minus-circle removejsicon' aria-hidden='true'></i>";
+        $('.multifieldtext').each(function(){
+          $(this).find('input').after(addButton);
+          $(this).find('input').after(removeButton);
+        })
+        $('.multifieldtext').hide();
+        $('.multifieldtext_group').each(function(){
+          let firstInputElement = $(this).find('.multifieldtext:first');
+          firstInputElement.find('.removejsicon').remove();
+          firstInputElement.find('.addjsicon').addClass('mainaddjsicon');
+          firstInputElement.show();
+        })
+
+        $('.addjsicon').click(function(){
+          let nextInputBlock = $(this).parents('.multifieldtext').next();
+          nextInputBlock.show();
+          $(this).parents('.multifieldtext_group').find('i').hide();
+          nextInputBlock.find('i').show();
+          if(nextInputBlock.next().length == 0) {
+            nextInputBlock.find('.addjsicon').hide();
+            nextInputBlock.find('.removejsicon').addClass('mainremovejsicon');
+          }
+        })
+
+        $('.removejsicon').click(function(){
+          let thisInputBlock =  $(this).parents('.multifieldtext');
+          thisInputBlock.hide();
+          thisInputBlock.prev().find('i').show();
+        })
     }
 };
 
@@ -653,5 +686,7 @@ $(document).ready(function () {
     new DataTable('.dataTable',{
         scrollX: true
     });
+
+    TueFind.SelfArchiving();
 
 });
