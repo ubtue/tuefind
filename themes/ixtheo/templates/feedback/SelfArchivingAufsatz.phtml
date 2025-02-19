@@ -14,17 +14,29 @@ $script = <<<JS
           $(this).find('input').after(removeButton);
         })
         $('.multifieldtext').hide();
-        $('.multifieldtext:first').show();
-        $('.addjsicon:first').addClass('mainaddjsicon');
-        $('.removejsicon:first').hide();
+        $('.multifieldtext_group').each(function(){
+          let firstInputElement = $(this).find('.multifieldtext:first');
+          firstInputElement.find('.removejsicon').remove();
+          firstInputElement.find('.addjsicon').addClass('mainaddjsicon');
+          firstInputElement.show();
+        })
       }
 
       $('.addjsicon').click(function(){
-        $(this).parents('.multifieldtext').next().show();
+        let nextInputBlock = $(this).parents('.multifieldtext').next();
+        nextInputBlock.show();
+        $(this).parents('.multifieldtext_group').find('i').hide();
+        nextInputBlock.find('i').show();
+        if(nextInputBlock.next().length == 0) {
+          nextInputBlock.find('.addjsicon').hide();
+          nextInputBlock.find('.removejsicon').addClass('mainremovejsicon');
+        }
       })
 
       $('.removejsicon').click(function(){
-        $(this).parents('.multifieldtext').hide();
+        let thisInputBlock =  $(this).parents('.multifieldtext');
+        thisInputBlock.hide();
+        thisInputBlock.prev().find('i').show();
       })
 
       function linkOnlineversion() {
@@ -82,11 +94,17 @@ print $this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $script, 'SET
   .fa-plus-circle {
     color:#089DE3; 
   }
+
   .fa-minus-circle {
     color:red; 
   }
 
   .addjsicon.mainaddjsicon {
+    top: -26px;
+    right: -22px;
+  }
+
+  .removejsicon.mainremovejsicon {
     top: -26px;
     right: -22px;
   }
