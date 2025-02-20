@@ -123,7 +123,7 @@ class KfL
         // An earlier implementation checked it in the factory, which led
         // to errors in other actions in the same controller, which should still
         // be possible if the user is not logged in.
-        $user = $this->authManager->isLoggedIn();
+        $user = $this->authManager->getUserObject();
         if (!$user)
             throw new \Exception('Could not generate KfL Frontend User Token, user is not logged in!');
 
@@ -185,10 +185,11 @@ class KfL
      *
      * @param array $licenseInfo
      * @param string $url
+     * @param title $title
      *
      * @return string
      */
-    protected function getUrl(array $licenseInfo, ?string $url=null): string
+    protected function getUrl(array $licenseInfo, ?string $url=null, ?string $title=null): string
     {
         $requestData = $this->getRequestTemplate($licenseInfo['entitlement']);
         $requestData['method'] = 'getHANID';
@@ -196,6 +197,8 @@ class KfL
         $requestData['hanid'] = $licenseInfo['hanId'];
         if (!empty($url))
             $requestData['url'] = $url;
+        if (!empty($title))
+            $requestData['title'] = $title;
 
         return $this->generateUrl($requestData);
     }
@@ -227,8 +230,9 @@ class KfL
         $licenseInfo = $this->getLicenseInfoByDriver($driver);
         if (empty($licenseInfo))
             throw new \Exception("No License found for record " . $driver->getUniqueId());
+        $title = $driver->getTitle();
 
-        return $this->getUrl($licenseInfo, $url);
+        return $this->getUrl($licenseInfo, $url, $title);
     }
 
     /**

@@ -1,32 +1,24 @@
 <!-- TueFind extension template -->
 <!-- About -->
-<li class="dropdown">
-    <a class="dropdown-toggle" data-toggle="dropdown"  href="#" role="button" aria-haspopup="true" aria-expanded="false">
+<li class="nav-item dropdown active">
+    <a class="dropdown-toggle black-icon" data-toggle="dropdown"  href="#" role="button">
        <i class='fa fa-navicon' ></i> <span class="caret"></span>
     </a>
-
-    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-        
-        <li><a class="dropdown-item" href="<?=$this->url('content-page', ['page' => 'about_us']) ?>"><?=$this->transEsc('Index Theologicus')?></a></li>
-        <li class="sub-menu"><a class="dropdown-item" href="<?=$this->url('content-page', ['page' => 'about_us']) ?>#ixtheo_inhalt"><?=$this->transEsc('Inhalt')?></a></li>
-        <li class="sub-menu"><a class="dropdown-item" href="<?=$this->url('content-page', ['page' => 'about_us']) ?>#ixtheo_geschichte"><?=$this->transEsc('Geschichte')?></a></li>
+    <ul class="dropdown-menu">
+        <li><a class="dropdown-item" href="<?=$this->url('content-page', ['page' => 'AboutUs']) ?>"><?=$this->transEsc('Index Theologicus')?></a></li>
+        <li class="sub-menu"><a class="dropdown-item" href="<?=$this->url('content-page', ['page' => 'AboutUs']) ?>#ixtheo_inhalt"><?=$this->transEsc('Inhalt')?></a></li>
+        <li class="sub-menu"><a class="dropdown-item" href="<?=$this->url('content-page', ['page' => 'AboutUs']) ?>#ixtheo_geschichte"><?=$this->transEsc('Geschichte')?></a></li>
+        <li class="sub-menu"><a class="dropdown-item" href="<?=$this->url('content-page', ['page' => 'AboutUs']) ?>#ixtheo_publications"><?=$this->transEsc('Publikationen')?></a></li>
         <li role="separator" class="divider"></li>
-        <li><a class="dropdown-item" href="<?=$this->url('content-page', ['page' => 'fid_theologie']) ?>"><?=$this->transEsc('Fachinformationsdienst Theologie')?></a></li>
-        <li class="sub-menu"><a class="dropdown-item" href="<?=$this->url('content-page', ['page' => 'fid_theologie']) ?>#ixtheo_aufgaben"><?=$this->transEsc('Aufgaben')?></a></li>
-        <li class="sub-menu"><a class="dropdown-item" href="<?=$this->url('content-page', ['page' => 'fid_theologie']) ?>#ixtheo_beirat"><?=$this->transEsc('Wissenschaftlicher Beirat')?></a></li>
+        <li><a class="dropdown-item" href="<?=$this->url('content-page', ['page' => 'FidTheologie']) ?>"><?=$this->transEsc('Fachinformationsdienst Theologie')?></a></li>
+        <li class="sub-menu"><a class="dropdown-item" href="<?=$this->url('content-page', ['page' => 'FidTheologie']) ?>#ixtheo_aufgaben"><?=$this->transEsc('Aufgaben')?></a></li>
+        <li class="sub-menu"><a class="dropdown-item" href="<?=$this->url('content-page', ['page' => 'FidTheologie']) ?>#ixtheo_beirat"><?=$this->transEsc('Wissenschaftlicher Beirat')?></a></li>
         <li role="separator" class="divider"></li>
-        <li><a class="dropdown-item" href="<?=$this->url('content-page', ['page' => 'contact_persons']) ?>"><?=$this->transEsc('Ansprechpartner*innen')?></a></li>
+        <li><a class="dropdown-item" href="<?=$this->url('content-page', ['page' => 'ContactPersons']) ?>"><?=$this->transEsc('Ansprechpartner*innen')?></a></li>
         <li role="separator" class="divider"></li>
-        <li><a class="dropdown-item" href="<?=$this->url('content-page', ['page' => 'a_z']) ?>"><?=$this->transEsc('A bis Z')?></a></li>
+        <li><a class="dropdown-item" href="<?=$this->url('content-page', ['page' => 'A_Z']) ?>"><?=$this->transEsc('A bis Z')?></a></li>
         <li role="separator" class="divider"></li>
         <li><a class="dropdown-item" href="<?=$this->url('content-page', ['page' => 'Impressum']) ?>">Impressum</a></li>
         <li><a class="dropdown-item" href="<?=$this->url('content-page', ['page' => 'privacy']) ?>"><?=$this->transEsc('Datenschutzerklärung')?></a></li>
-        
     </ul>
 </li>
-
-<style>
-    .dropdown-menu .sub-menu {
-        padding-left: 25px;
-    }
-</style>

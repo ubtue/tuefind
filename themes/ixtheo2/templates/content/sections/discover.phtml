@@ -1,54 +1,100 @@
-<section class="cw-py-5 cw-bg-gray-100">
+<section class="cw-py-5 cw-bg-gray-100 col-md-12">
     <div class="container">
         <div class="text-center cw-pb-lg-4">
             <p class="cw-subtitle cw-text-primary">Finden | Suchen | Nutzen</p>
             <h2 class="cw-h2 cw-mb-5">IxTheo entdecken</h2>
         </div>
-        <div class="row">
-            <a href="<?=$this->url('content-page', ['page' => 'discover']) ?>">
-                <div class="col-lg-3 cw-mb-3 cw-mb-lg-0 text-center">
-                    <div class="cw-px-0 cw-px-lg-3">
-                        <div class="cw-icon-rounded cw-bg-primary-light cw-mb-3">
-                            <i class="fa fa-search"></i>
+        <div class="swiper-container cw-guides-slider-discover mx-n2 cw-pt-3 swiper-container-horizontal">
+            <!-- Additional required wrapper-->
+            <div class="swiper-wrapper">
+                <!-- Slides-->
+                <div class="swiper-slide cw-h-auto cw-px-2">
+                    <a href="<?=$this->url('content-page', ['page' => 'Discover']) ?>">
+                        <div class="cw-mb-lg-0 text-center">
+                            <div class="cw-px-0 cw-px-lg-3">
+                                <div class="cw-icon-rounded cw-bg-primary-light cw-mb-3">
+                                    <i class="fa fa-search"></i>
+                                </div>
+                                <h3 class="cw-h5">Suchen und Browsen</h3>
+                                <div><small>Bibelstellen | CIC | Zeiträume | VerfasserInnen</small></div>
+                            </div>
                         </div>
-                        <h3 class="cw-h5">Suchen und Browsen</h3>
-                        <div><small>Bibelstellen | CIC | Zeiträume | VerfasserInnen</small></div>
-                    </div>
+                    </a>
                 </div>
-            </a>
-            <a href="<?=$this->url('content-page', ['page' => 'ixtheo_account']) ?>">
-                <div class="col-lg-3 cw-mb-3 cw-mb-lg-0 text-center">
-                    <div class="cw-px-0 cw-px-lg-3">
-                        <div class="cw-icon-rounded cw-bg-primary-light cw-mb-3">
-                            <i class="fa fa-user-plus"></i>
+                <div class="swiper-slide cw-h-auto cw-px-2">
+                    <a href="<?=$this->url('content-page', ['page' => 'IxtheoAccount']) ?>">
+                        <div class="cw-mb-lg-0 text-center">
+                            <div class="cw-px-0 cw-px-lg-3">
+                                <div class="cw-icon-rounded cw-bg-primary-light cw-mb-3">
+                                    <i class="fa fa-user-plus"></i>
+                                </div>
+                                <h3 class="cw-h5">IxTheo Account</h3>
+                                <div><small>Suchanfragen speichern | Favoriten speichern</small></div>
+                            </div>
                         </div>
-                        <h3 class="cw-h5">IxTheo Account</h3>
-                        <div><small>Suchanfragen speichern | Favoriten speichern</small></div>
-                    </div>
+                    </a>
                 </div>
-            </a>
-            <a href="<?=$this->url('content-page', ['page' => 'alerting']) ?>">
-                <div class="col-lg-3 cw-mb-3 cw-mb-lg-0 text-center">
-                    <div class="cw-px-0 cw-px-lg-3">
-                        <div class="cw-icon-rounded cw-bg-primary-light cw-mb-3">
-                            <i class="fa fa-bell"></i>
+                <div class="swiper-slide cw-h-auto cw-px-2">
+                   <a href="<?=$this->url('content-page', ['page' => 'Alerting']) ?>">
+                        <div class="cw-mb-lg-0 text-center">
+                            <div class="cw-px-0 cw-px-lg-3">
+                                <div class="cw-icon-rounded cw-bg-primary-light cw-mb-3">
+                                    <i class="fa fa-bell"></i>
+                                </div>
+                                <h3 class="cw-h5">Alerting</h3>
+                                <div><small>Neuerscheinungen | Blogs | Podcasts</small></div>
+                            </div>
                         </div>
-                        <h3 class="cw-h5">Alerting</h3>
-                        <div><small>Benachrichtigungen über Neuerscheinungen</small></div>
-                    </div>
+                    </a>
                 </div>
-            </a>
-            <a href="<?=$this->url('content-page', ['page' => 'alerting']) ?>">
-                <div class="col-lg-3 cw-mb-3 cw-mb-lg-0 text-center">
-                    <div class="cw-px-0 cw-px-lg-3">
-                        <div class="cw-icon-rounded cw-bg-primary-light cw-mb-3">
-                            <i class="fa fa-bell"></i>
+                <div class="swiper-slide cw-h-auto cw-px-2">
+                    <a href="<?=$this->url('content-page', ['page' => 'AuthorityPages']) ?>">
+                        <div class="cw-mb-lg-0 text-center">
+                            <div class="cw-px-0 cw-px-lg-3">
+                                <div class="cw-icon-rounded cw-bg-primary-light cw-mb-3">
+                                    <i class="fa fa-address-card"></i>
+                                </div>
+                                <h3 class="cw-h5">Personenseiten</h3>
+                                <div><small>Autor*innen | Institutionen</small></div>
+                            </div>
                         </div>
-                        <h3 class="cw-h5">test test</h3>
-                        <div><small>test test test test</small></div>
-                    </div>
+                    </a>
                 </div>
-            </a>
+            </div>
+            <div class="cw-mt-3">
+                <div class="swiper-pagination-discover"></div>
+            </div>
         </div>
     </div>
 </section>
+
+<?php
+  $jsSnippet = <<< 'EOD'
+    var guidesSlider = new Swiper('.cw-guides-slider-discover', {
+        slidesPerView: 4,
+        spaceBetween: 15,
+        /*loop: true,*/
+        roundLengths: true,
+        breakpoints: {
+            1200: {
+                slidesPerView: 4
+            },
+            991: {
+                slidesPerView: 3
+            },
+            768: {
+                slidesPerView: 2
+            },
+            400: {
+                slidesPerView: 1
+            }
+        },
+        pagination: {
+            el: '.swiper-pagination-discover',
+            clickable: true,
+            dynamicBullets: true
+        },
+    });
+EOD;
+?>
+<?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $jsSnippet, 'SET')?>

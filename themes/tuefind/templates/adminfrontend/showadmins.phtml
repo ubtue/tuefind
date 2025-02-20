@@ -10,7 +10,7 @@ $this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') 
   <h2>Admins</h2>
   <p>Additional admins must be unlocked manually in the database by the development team.</p>
   <hr />
-  <table class="table dataTable">
+  <table class="table dataTable display compact table-striped table-bordered table-condensed">
     <thead>
       <tr>
         <th><?=$this->transEsc('Username')?></th>
@@ -36,6 +36,6 @@ $this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') 
   </table>
 </div>
 
-<div class="<?=$this->layoutClass('sidebar')?>" id="myresearch-sidebar">
-  <?=$this->context($this)->renderInContext("myresearch/menu.phtml", ['active' => 'showadmins'])?>
+<div class="<?=$this->layoutClass('sidebar')?>" id="myresearch-sidebar" role="navigation" aria-label="<?=$this->transEsc('account_menu_label')?>">
+  <?=$this->accountMenu()->render('showadmins')?>
 </div>

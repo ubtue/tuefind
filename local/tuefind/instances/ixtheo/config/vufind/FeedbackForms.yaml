@@ -40,7 +40,7 @@
 #     - name: Recipient 2
 #       email: recipient2@email
 #
-#   response (string) Reponse after form submit (translation key)
+#   response (string) Response after form submit (translation key)
 #   senderInfoRequired (boolean)  Require sender to fill out name and email fields - deprecated
 #   senderEmailRequired (boolean) Require sender to fill out email field
 #   senderNameRequired (boolean)  Require sender to fill out name field
@@ -154,7 +154,6 @@
 #-----------------------------------------------------------------------------------
 
 forms:
-
   # Main Feedback form
 
   FeedbackSite:
@@ -177,8 +176,8 @@ forms:
     senderInfoRequired: true
 
     help:
-    #  pre: feedback_help_pre
-       post: Feedback_Disclaimer
+      #  pre: feedback_help_pre
+      post: Feedback_Disclaimer
 
     fields:
       - name: message
@@ -374,3 +373,493 @@ forms:
       - ppn
       - title
       - author
+
+  SelfArchivingLexikonartikel:
+    enabled: true
+    onlyForLoggedUsers: true
+    title: SA_encyclopedia_article
+
+    help:
+      pre: ""
+
+    fields:
+      - name: authors
+        label: SA_authors
+        type: text
+        required: true
+
+      - name: title
+        label: SA_lemma_title
+        type: text
+        required: true
+
+      - name: teilaspekt
+        label: SA_subaspect
+        type: text
+        required: false
+
+      - name: language
+        label: SA_language_of_article
+        type: language
+        required: true
+
+      #In Werk group open
+      - name: rezensiertes_werk_group_name
+        label: SA_source_of_work_lexicon
+        type: hidden
+        group: inwerkgroup_7
+
+      - name: zeitschrift_werk_group_title
+        label: SA_title
+        type: text
+        required: true
+        group: inwerkgroup_7
+
+      - name: zeitschrift_werk_group_band
+        label: SA_volume
+        type: text
+        required: true
+        group: inwerkgroup_7
+
+      - name: zeitschrift_werk_group_year
+        label: SA_year_of_publication
+        type: text
+        required: true
+        group: inwerkgroup_7
+
+      - name: zeitschrift_werk_group_ISBN
+        label: "ISBN"
+        type: text
+        required: false
+        group: inwerkgroup_7
+
+      - name: zeitschrift_werk_group_IxTheo_Link
+        label: "IxTheo-Link"
+        type: text
+        required: false
+        group: inwerkgroup_7
+
+      - name: zeitschrift_werk_group_seiten_oder_spalten
+        label: SA_pages_or_columns
+        type: text
+        required: false
+        group: inwerkgroup_7
+
+      #In Werk group close
+
+      - name: onlineversion
+        label: SA_is_the_online_version_avaible
+        type: radio
+        required: true
+        options:
+          - value: bereit1
+            label: yes
+          - value: bereit2
+            label: no
+
+      - name: onlineversion_werk_group_fulltext
+        label: SA_full_text_is_not_freely_available
+        type: text
+        required: true
+
+      - name: onlineversion_werk_group_openaccess
+        label: "Open Access"
+        type: text
+        required: true
+
+      - name: comment
+        label: SA_comment
+        type: text
+        required: true
+
+  SelfArchivingRezension:
+    enabled: true
+    onlyForLoggedUsers: true
+    title: SA_review
+    useCaptcha: false
+
+    help:
+      pre: ""
+
+    fields:
+      - name: authors
+        label: SA_authors
+        type: text
+        required: true
+
+      - name: title
+        label: SA_title_review
+        type: text
+        required: true
+
+      #Rezensiertes Werk group open
+      - name: rezensiertes_werk_group_name
+        label: SA_reviewer_team
+        type: hidden
+        group: werkgroup_6
+
+      - name: rezensiertes_werk_group_autor
+        label: SA_author_or_editor
+        type: text
+        required: true
+        group: werkgroup_6
+
+      - name: rezensiertes_werk_group_title
+        label: SA_title
+        type: text
+        required: true
+        group: werkgroup_6
+
+      - name: rezensiertes_werk_group_publication_year
+        label: SA_year_of_publication
+        type: text
+        required: true
+        group: werkgroup_6
+
+      - name: rezensiertes_werk_group_ISBN
+        label: "ISBN"
+        type: text
+        required: false
+        group: werkgroup_6
+
+      - name: rezensiertes_werk_group_IxTheo_Link
+        label: "IxTheo-Link"
+        type: text
+        required: false
+        group: werkgroup_6
+      #Rezensiertes Werk group close
+
+      - name: language
+        label: SA_language_of_article
+        type: language
+        required: true
+
+      #In Werk group open
+      - name: rezensiertes_werk_group_name
+        label: SA_source_of_work
+        type: hidden
+        group: inwerkgroup_12
+
+      - name: inwerkradio
+        label: ""
+        type: radio
+        required: true
+        options:
+          - value: inwerkradio1
+            label: SA_in_the_magazine
+          - value: inwerkradio2
+            label: SA_in_the_collection
+
+      - name: zeitschrift_werk_group_title
+        label: SA_title
+        type: text
+        required: true
+        group: inwerkgroup_12
+
+      - name: zeitschrift_werk_group_ISSN
+        label: "ISSN"
+        type: text
+        required: false
+        group: inwerkgroup_12
+
+      - name: sammelband_werk_group_ISBN
+        label: "ISBN"
+        type: text
+        required: false
+        group: inwerkgroup_12
+
+      - name: zeitschrift_werk_group_IxTheo_Link
+        label: "IxTheo-Link"
+        type: text
+        required: false
+        group: inwerkgroup_12
+
+      - name: sammelband_werk_group_Herausgeber
+        label: SA_editor
+        type: text
+        require: true
+        group: inwerkgroup_12
+
+      - name: sammelband_werk_group_erscheinungsjahr
+        label: SA_year_of_publication
+        type: text
+        require: true
+        group: inwerkgroup_12
+
+      - name: zeitschrift_werk_group_band
+        label: SA_volume
+        type: text
+        required: false
+        group: inwerkgroup_12
+
+      - name: zeitschrift_werk_group_jahr
+        label: Year
+        type: text
+        required: true
+        group: inwerkgroup_12
+
+      - name: zeitschrift_werk_group_heft
+        label: SA_issue
+        type: text
+        required: false
+        group: inwerkgroup_12
+
+      - name: zeitschrift_werk_group_aufsatz_ID
+        label: SA_article_id
+        type: text
+        required: false
+        group: inwerkgroup_12
+
+      - name: zeitschrift_werk_group_seiten
+        label: Pages
+        type: text
+        required: true
+        group: inwerkgroup_12
+
+      #In Werk group close
+
+      - name: onlineversion
+        label: SA_is_the_online_version_avaible
+        type: radio
+        required: true
+        options:
+          - value: bereit1
+            label: yes
+          - value: bereit2
+            label: no
+
+      - name: onlineversion_werk_group_fulltext
+        label: SA_full_text_is_not_freely_available
+        type: text
+        required: true
+
+      - name: onlineversion_werk_group_openaccess
+        label: "Open Access"
+        type: text
+        required: true
+
+      - name: comment
+        label: SA_comment
+        type: text
+        required: true
+
+  SelfArchivingAufsatz:
+    enabled: true
+    onlyForLoggedUsers: true
+    title: SA_article
+
+    help:
+      pre: ""
+
+    fields:
+      - name: authors
+        label: SA_authors
+        type: text
+        required: true
+
+      - name: title
+        label: SA_title
+        type: text
+        required: true
+
+      - name: untertitel
+        label: SA_subtitle
+        type: text
+        required: true
+
+      - name: language
+        label: SA_language_of_article
+        type: language
+        required: true
+
+      #In Werk group open
+      - name: rezensiertes_werk_group_name
+        label: SA_source_of_work
+        type: hidden
+        group: inwerkgroup_11
+
+      - name: inwerkradio
+        label: ""
+        type: radio
+        required: true
+        options:
+          - value: inwerkradio1
+            label: SA_in_the_magazine
+          - value: inwerkradio2
+            label: SA_in_the_collection
+
+      - name: zeitschrift_werk_group_title
+        label: SA_title
+        type: text
+        required: true
+        group: inwerkgroup_12
+
+      - name: zeitschrift_werk_group_erscheinungsjahr
+        label: SA_year_of_publication
+        type: text
+        required: true
+        group: inwerkgroup_12
+
+      - name: zeitschrift_werk_group_ISSN
+        label: "ISSN"
+        type: text
+        required: false
+        group: inwerkgroup_12
+
+      - name: sammelband_werk_group_ISBN
+        label: "ISBN"
+        type: text
+        required: false
+        group: inwerkgroup_12
+
+      - name: zeitschrift_werk_group_IxTheo_Link
+        label: "IxTheo-Link"
+        type: text
+        required: false
+        group: inwerkgroup_12
+
+      - name: sammelband_werk_group_Herausgeber
+        label: SA_editor
+        type: text
+        group: inwerkgroup_12
+
+      - name: zeitschrift_werk_group_band
+        label: SA_volume
+        type: text
+        required: true
+        group: inwerkgroup_12
+
+      - name: zeitschrift_werk_group_jahr
+        label: Year
+        type: text
+        required: true
+        group: inwerkgroup_12
+
+      - name: zeitschrift_werk_group_heft
+        label: SA_issue
+        type: text
+        required: true
+        group: inwerkgroup_12
+
+      - name: zeitschrift_werk_group_aufsatz_ID
+        label: SA_article_id
+        type: text
+        required: true
+        group: inwerkgroup_12
+
+      - name: zeitschrift_werk_group_seiten
+        label: Pages
+        type: text
+        required: false
+        group: inwerkgroup_12
+
+      #In Werk group close
+
+      - name: onlineversion
+        label: SA_is_the_online_version_avaible
+        type: radio
+        required: true
+        options:
+          - value: bereit1
+            label: yes
+          - value: bereit2
+            label: no
+
+      - name: onlineversion_werk_group_fulltext
+        label: SA_full_text_is_not_freely_available
+        type: text
+        required: true
+
+      - name: onlineversion_werk_group_openaccess
+        label: "Open Access"
+        type: text
+        required: true
+
+      - name: comment
+        label: SA_comment
+        type: text
+        required: true
+
+  SelfArchivingMonographie:
+    enabled: true
+    onlyForLoggedUsers: true
+    title: SA_monographic
+
+    help:
+      pre: ""
+
+    fields:
+      - name: print_online
+        label: SA_online_or_print
+        type: radio
+        required: true
+        options:
+          - value: online
+            label: "Online"
+          - value: print
+            label: "Print " # Note: The whitespace at the end is intentional so this will not be translated
+
+      - name: authors
+        label: SA_authors
+        type: text
+        required: true
+
+      - name: publication_year
+        label: SA_year_of_publication
+        type: text
+        required: true
+
+      - name: title
+        label: SA_title
+        type: text
+        required: true
+
+      - name: untertitel
+        label: SA_subtitle
+        type: text
+        required: true
+
+      - name: language
+        label: SA_language_of_article
+        type: language
+        required: true
+
+      - name: ISBN
+        label: "ISBN"
+        type: text
+        required: true
+
+      - name: link
+        label: "IxTheo-Link"
+        type: text
+        required: true
+
+      - name: reihe
+        label: SA_series
+        type: text
+        required: true
+
+      - name: reihennummer
+        label: SA_series_number
+        type: text
+        required: true
+
+      - name: onlineversion
+        label: SA_is_the_online_version_avaible
+        type: radio
+        required: true
+        options:
+          - value: bereit1
+            label: yes
+          - value: bereit2
+            label: no
+
+      - name: onlineversion_werk_group_fulltext
+        label: SA_full_text_is_not_freely_available
+        type: text
+        required: true
+
+      - name: onlineversion_werk_group_openaccess
+        label: "Open Access"
+        type: text
+        required: true

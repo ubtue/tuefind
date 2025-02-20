@@ -11,7 +11,7 @@ $this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') 
   <?php if (count($this->user_authority_history_datas) == 0): ?>
     <p>No history.</p>
   <?php else: ?>
-    <table class="table dataTable display" data-order="[[ 4, &quot;desc&quot; ]]">
+    <table class="table dataTable display compact table-striped table-bordered table-condensed" data-order="[[ 4, &quot;desc&quot; ]]">
       <thead>
         <tr>
           <th><?=$this->transEsc('Admin Name')?></th>
@@ -37,6 +37,6 @@ $this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') 
   <?php endif; ?>
 </div>
 
-<div class="<?=$this->layoutClass('sidebar')?>" id="myresearch-sidebar">
-  <?=$this->context($this)->renderInContext("myresearch/menu.phtml", ['active' => 'showuserauthorityhistory'])?>
+<div class="<?=$this->layoutClass('sidebar')?>" id="myresearch-sidebar" role="navigation" aria-label="<?=$this->transEsc('account_menu_label')?>">
+  <?=$this->accountMenu()->render('showuserauthorityhistory')?>
 </div>

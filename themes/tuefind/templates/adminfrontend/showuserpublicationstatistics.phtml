@@ -11,7 +11,7 @@ $this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') 
   <?php if (count($this->publications) == 0): ?>
     <p>No publications have been added so far.</p>
   <?php else: ?>
-    <table class="table dataTable display">
+    <table class="table dataTable display compact table-striped table-bordered table-condensed">
       <thead>
         <tr>
             <th><?=$this->transEsc('Year')?></th>
@@ -29,6 +29,7 @@ $this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') 
     </table>
   <?php  endif; ?>
 </div>
-<div class="<?=$this->layoutClass('sidebar')?>" id="myresearch-sidebar">
-  <?=$this->context($this)->renderInContext("myresearch/menu.phtml", ['active' => 'showuserpublicationstatistics'])?>
+
+<div class="<?=$this->layoutClass('sidebar')?>" id="myresearch-sidebar" role="navigation" aria-label="<?=$this->transEsc('account_menu_label')?>">
+  <?=$this->accountMenu()->render('showuserpublicationstatistics')?>
 </div>

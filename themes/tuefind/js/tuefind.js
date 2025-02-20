@@ -140,7 +140,14 @@ var TueFind = {
                         else
                             $(this).html("");
                     });
-                    $("[id^=snippets_] > p").each(function () { this.style.transform="none"; });
+                    $("[id^=snippets_] > p").each(function () {
+                                                      this.style.transform="none";
+                                                      // Try to fix erroneous snippets with huge font-sizes (c.f. tuefind/issues/3072)
+                                                      let currentFontValue = $(this).css('font-size');
+                                                      const [full, currentFontSize, unit] = currentFontValue.match(/(\d+(?:\.\d+)?)(.*)/);
+                                                      if (unit == 'px' && currentFontSize >= 50)
+                                                          $(this).css('font-size', '14px');
+                                                 });
                     if (!verbose && snippets)
                         $("#snippets_" + doc_id).after(TueFind.ItemFulltextLink(doc_id, query, synonyms));
                 });
@@ -426,7 +433,7 @@ var TueFind = {
         // intentionally use .each so we do not need to test if empty
         $(input_selector).each(function() {
             // here we use native JS instead of jQuery to avoid problems
-            this.focus();
+            //this.focus();
             this.setSelectionRange(this.value.length, this.value.length);
         });
     },
@@ -589,6 +596,39 @@ var TueFind = {
                 blockVar.click();
             }
         }
+    },
+
+    SelfArchiving: function() {
+        let addButton = "<i class='fa fa-plus-circle addjsicon' aria-hidden='true'></i>";
+        let removeButton = "<i class='fa fa-minus-circle removejsicon' aria-hidden='true'></i>";
+        $('.multifieldtext').each(function(){
+          $(this).find('input').after(addButton);
+          $(this).find('input').after(removeButton);
+        })
+        $('.multifieldtext').hide();
+        $('.multifieldtext_group').each(function(){
+          let firstInputElement = $(this).find('.multifieldtext:first');
+          firstInputElement.find('.removejsicon').remove();
+          firstInputElement.find('.addjsicon').addClass('mainaddjsicon');
+          firstInputElement.show();
+        })
+
+        $('.addjsicon').click(function(){
+          let nextInputBlock = $(this).parents('.multifieldtext').next();
+          nextInputBlock.show();
+          $(this).parents('.multifieldtext_group').find('i').hide();
+          nextInputBlock.find('i').show();
+          if(nextInputBlock.next().length == 0) {
+            nextInputBlock.find('.addjsicon').hide();
+            nextInputBlock.find('.removejsicon').addClass('mainremovejsicon');
+          }
+        })
+
+        $('.removejsicon').click(function(){
+          let thisInputBlock =  $(this).parents('.multifieldtext');
+          thisInputBlock.hide();
+          thisInputBlock.prev().find('i').show();
+        })
     }
 };
 
@@ -643,6 +683,10 @@ $(document).ready(function () {
         $("#searchForm").submit();
     });
 
-    $('.dataTable').DataTable();
+    new DataTable('.dataTable',{
+        scrollX: true
+    });
+
+    TueFind.SelfArchiving();
 
 });

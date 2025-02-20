@@ -3,6 +3,8 @@
 namespace TueFind\View\Helper\TueFind;
 
 use Interop\Container\ContainerInterface;
+use VuFind\Search\SearchTabsHelper;
+use VuFind\View\Helper\Root\SearchTabs;
 
 /**
  * General View Helper for TueFind, containing miscellaneous functions
@@ -351,7 +353,7 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
             case 'relbib':
                 return 'RelBib';
             case 'krimdok':
-               return 'Krimdok';
+               return 'KrimDok';
         }
         return false;
     }
@@ -413,7 +415,7 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
     public function getUserEmail() {
         $auth = $this->container->get('ViewHelperManager')->get('auth');
         $manager = $auth->getManager();
-        return ($user = $manager->isLoggedIn()) ? $user->email : "";
+        return ($user = $manager->getUserObject()) ? $user->email : '';
     }
 
     /**
@@ -423,7 +425,7 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
     public function getUserFirstName() {
         $auth = $this->container->get('ViewHelperManager')->get('auth');
         $manager = $auth->getManager();
-        return ($user = $manager->isLoggedIn()) ? $user->firstname : "";
+        return ($user = $manager->getUserObject()) ? $user->firstname : '';
     }
 
     /**
@@ -433,7 +435,7 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
     public function getUserFullName() {
         $auth = $this->container->get('ViewHelperManager')->get('auth');
         $manager = $auth->getManager();
-        return ($user = $manager->isLoggedIn()) ? $user->firstname . ' ' . $user->lastname : "";
+        return ($user = $manager->getUserObject()) ? $user->firstname . ' ' . $user->lastname : '';
     }
 
     /**
@@ -443,7 +445,7 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
     public function getUserLastName() {
         $auth = $this->container->get('ViewHelperManager')->get('auth');
         $manager = $auth->getManager();
-        return ($user = $manager->isLoggedIn()) ? $user->lastname : "";
+        return ($user = $manager->getUserObject()) ? $user->lastname : '';
     }
 
     public function isRssSubscriptionEnabled(): bool {
@@ -549,7 +551,7 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
         $access = false;
         $auth = $this->container->get('ViewHelperManager')->get('auth');
         $manager = $auth->getManager();
-        $user = $manager->isLoggedIn();
+        $user = $manager->getUserObject();
         if($user) {
             $table = $this->container->get(\VuFind\Db\Table\PluginManager::class)->get('user_authority');
             foreach($authorsIds as $authorityId) {
@@ -568,7 +570,7 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
         $showButton = false;
         $auth = $this->container->get('ViewHelperManager')->get('auth');
         $manager = $auth->getManager();
-        $user = $manager->isLoggedIn();
+        $user = $manager->getUserObject();
         if($user) {
             $table = $this->container->get(\VuFind\Db\Table\PluginManager::class)->get('user_authority');
             foreach($secondaryAuthorsIds as $authorId) {
@@ -631,5 +633,13 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
 
     public function getHierarchicalDisplayText($filterDisplayText): string {
         return $this->container->get(\VuFind\Search\Solr\HierarchicalFacetHelper::class)->formatDisplayText($filterDisplayText)->getDisplayString();
+    }
+
+    public function isNewItem(string $searchClassId): bool {
+        $hiddenFilters = $this->getView()->plugin('searchTabs')->getHiddenFilters($searchClassId);
+        if(isset($hiddenFilters['first_indexed'])) {
+            return true;
+        }
+        return false;
     }
 }

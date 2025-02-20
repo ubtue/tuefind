@@ -3,11 +3,11 @@
 <p>Der Fachinformationsdienst Kriminologie (FID Kriminologie) widmet sich im Kern der Aufgabe, Literatur und weitere fachrelevante Informationen zur Kriminologie möglichst umfassend zur Verfügung zu stellen. Er verfügt derzeit über rund</p>
 <ul>
     <li>150.000 Werke/Monographien,</li>
-    <li>240 aktive Zeitschriften,</li>
+    <li>234 aktive Zeitschriften,</li>
     <li>320 Digitalisate in <a target="_blank" href="http://idb.ub.uni-tuebingen.de/digitue/krimdok/">DigiKrimDok</a></li>
-    <li>2500 Digitale Dokumente im <a target="_blank" href="http://publikationen.uni-tuebingen.de/xmlui/handle/10900/56358?locale-attribute=de">Repository.</a></li>
+    <li>2850 Digitale Dokumente im <a target="_blank" href="http://publikationen.uni-tuebingen.de/xmlui/handle/10900/56358?locale-attribute=de">Repository.</a></li>
 </ul>
-<p>Wichtigstes Rechercheinstrument zu allen Arten des Literaturbestandes sowie zu weiteren bibliographischen Nachweisen ist die Datenbank KrimDok. Dort finden sich aktuell rund 300.000 Nachweise (Stand Juli 2023).</p>
+<p>Wichtigstes Rechercheinstrument zu allen Arten des Literaturbestandes sowie zu weiteren bibliographischen Nachweisen ist die Datenbank KrimDok. Dort finden sich aktuell rund 370.000 Nachweise (Stand Januar 2025).</p>
 <p>Falls Sie ein Werk vermissen, das zum <a href="/Content/acquisition#content">Erwerbungsprofil</a> des FID Kriminologie passt, können Sie gern einen <a href="/Feedback/Form/AcquisitionRequest">Anschaffungsvorschlag</a> einbringen.<br></p>
 
 <div class="tf-panel-collapse">
@@ -159,17 +159,21 @@
     <div id="contact" class="collapse tf-panel-collapse-body">
         <p>
             </p><ul>
-                <li><a href="mailto:fidkrim@ifk.uni-tuebingen.de">Allgemein <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span></a></li>
-                <li>Bibliothekarische Betreuung: <a href="mailto:janina.meister@uni-tuebingen.de">Janina Meister <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span></a></li>
-                <li>Fachliche Betreuung: <a href="mailto:katharina.stelzel@uni-tuebingen.de">Dr. Katharina Stelzel <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span></a></li>
-                <li>Technische Betreuung: <a href="mailto:olaf.brandt@uni-tuebingen.de">Olaf Brandt <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span></a></li>
+                <li><a href="mailto:fidkrim@ifk.uni-tuebingen.de">Allgemein <span class="glyphicon-envelope" aria-hidden="true"></span></a></li>
+                <li>Fachliche Betreuung: <a href="mailto:katharina.stelzel@uni-tuebingen.de">Dr. Katharina Stelzel <span class="glyphicon-envelope" aria-hidden="true"></span></a></li>
+                <li>Bibliothekarische Betreuung: <a href="mailto:janina.meister@uni-tuebingen.de">Janina Meister <span class="glyphicon-envelope" aria-hidden="true"></span></a></li>
+                <li>Technische Betreuung: <a href="mailto:olaf.brandt@uni-tuebingen.de">Olaf Brandt <span class="glyphicon-envelope" aria-hidden="true"></span></a></li>
             </ul>
         <p></p>
     </div>
-    <script type="text/javascript">
+
+    <?php
+        $script = <<<JS
         // auto-expand if anchor is given, e.g. if linked from footer
         if (window.location.href.includes("#contact")) {
             $('#contact_toggle').click();
         }
-    </script>
+        JS;
+    ?>
+    <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $script, 'SET')?>
 </div>

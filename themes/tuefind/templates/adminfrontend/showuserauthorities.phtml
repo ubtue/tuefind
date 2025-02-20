@@ -11,7 +11,7 @@ $this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') 
   <?php if (count($this->users) == 0): ?>
     <p>No user has requested access to any authority record so far.</p>
   <?php else: ?>
-    <table class="table dataTable display" data-order="[[ 7, &quot;desc&quot; ]]">
+    <table class="table dataTable display compact table-striped table-bordered table-condensed" data-order="[[ 7, &quot;desc&quot; ]]" style="width: 100%;">
       <thead>
         <tr>
           <th><?=$this->transEsc('Username')?></th>
@@ -50,6 +50,6 @@ $this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') 
   <?php endif; ?>
 </div>
 
-<div class="<?=$this->layoutClass('sidebar')?>" id="myresearch-sidebar">
-  <?=$this->context($this)->renderInContext("myresearch/menu.phtml", ['active' => 'showuserauthorities'])?>
+<div class="<?=$this->layoutClass('sidebar')?>" id="myresearch-sidebar" role="navigation" aria-label="<?=$this->transEsc('account_menu_label')?>">
+  <?=$this->accountMenu()->render('showuserauthorities')?>
 </div>

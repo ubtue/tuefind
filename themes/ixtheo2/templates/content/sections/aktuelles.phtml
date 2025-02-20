@@ -1,4 +1,4 @@
-<section class="cw-py-5">
+<section class="cw-py-5 col-md-12">
     <div class="container">
         <div class="row">
             <div class="col-md-6">
@@ -8,22 +8,62 @@
                 </div>
 
                 <div class="slick-slider-multiple-item" align="center">
-                    <a href="<?=$this->url('content-page', ['page' => 'news']) ?>#self-archiving">
-                        <div class="ix-slick-slider-item" style="background-image: url(<?=$this->imageLink('slider/pexels-anete-lusina.jpg')?>);">
+                    <a href="<?=$this->url('content-page', ['page' => 'News']) ?>#self-archiving">
+                        <div class="ix-slick-slider-item" style="background-image: url(<?=$this->imageLink('slider/mode/pexels-anete-lusina.jpg')?>);">
                             <div class="ix-slick-slider-item-title">Self-Archiving</div>
                         </div>
                     </a>
-                    <a href="<?=$this->url('content-page', ['page' => 'news']) ?>#aggregator">
-                        <div class="ix-slick-slider-item" style="background-image: url(<?=$this->imageLink('slider/pexels-george-milton.jpg')?>);">
+                    <a href="<?=$this->url('content-page', ['page' => 'News']) ?>#aggregator">
+                        <div class="ix-slick-slider-item" style="background-image: url(<?=$this->imageLink('slider/mode/pexels-george-milton.jpg')?>);">
                             <div class="ix-slick-slider-item-title">Alerting für Blogs und Podcasts</div>
                         </div>
                     </a>
-                    <a href="<?=$this->url('content-page', ['page' => 'news']) ?>#personenseiten">
-                        <div class="ix-slick-slider-item" style="background-image: url(<?=$this->imageLink('frontpage/authors.jpg')?>);">
+                    <a href="<?=$this->url('content-page', ['page' => 'News']) ?>#personenseiten">
+                        <div class="ix-slick-slider-item" style="background-image: url(<?=$this->imageLink('slider/mode/pexels-gabby.jpg')?>);">
                             <div class="ix-slick-slider-item-title">Personenseiten</div>
                         </div>
                     </a>
                 </div>
+            </div>
+            <div class="col-md-6">
+                <div class="cw-text-center">
+                    <p class="cw-subtitle cw-text-primary">Highlights</p>
+                    <h2 class="cw-h2 cw-mb-5">IxTheo Services</h2>
+                    <div class="ix-news-right">
+                        <div class="ix-news-container">
+                            <div class="ix-news-panel ix-news-panel-1">
+                                <a href="<?=$this->url('content-page', ['page' => 'OpenJournals'])?>">
+                                    <div><b>IxTheo Open Journals</b></div>
+                                    <div><small>Open Access Zeitschriften Service</small></div>
+                                </a>
+                            </div>
+                            <div class="ix-news-panel ix-news-panel-2">
+                                <a href="<?=$this->url('content-page', ['page' => 'OpenText'])?>">
+                                    <div><b>IxTheo Open Text</b></div>
+                                    <div><small>Zweitveröffentlichung von Aufsätzen</small></div>
+                                </a>
+                            </div>
+                            <div class="ix-news-panel ix-news-panel-3">
+                                <a href="<?=$this->url('content-page', ['page' => 'FullTextSearch'])?>">
+                                    <div><b>Volltextsuche</b></div>
+                                    <div><small>Inhalte multilingual durchsuchen</small></div>
+                                </a>
+                            </div>
+                            <div class="ix-news-panel ix-news-panel-4">
+                                <a href="<?=$this->url('content-page', ['page' => 'LexiconSearch'])?>">
+                                    <div><b>Lexikonrecherche</b></div>
+                                    <div><small>Theologische Lexika durchsuchen</small></div>
+                                </a>
+                            </div>
+                            <div class="ix-clear-both">&nbsp;</div>
+                            <div class="ix-news-container-footer"><a class="cw-text-white ix2-underline" href="<?=$this->url('content-page', ['page' => 'AllServices'])?>">Alle Services</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
 <?php
 $jsSnippet = <<< 'EOD'
@@ -40,44 +80,3 @@ $(document).ready(function(){
 });
 EOD;?>
 <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $jsSnippet, 'SET')?>
-
-            </div>
-            <div class="col-md-6">
-                <div class="cw-text-center">
-                    <p class="cw-subtitle cw-text-primary">Highlights</p>
-                    <h2 class="cw-h2 cw-mb-5">IxTheo Services</h2>
-                    <div class="ix-news-right">
-                        <div class="ix-news-container">
-                            <div class="ix-news-panel ix-news-panel-1">
-                                <a href="<?=$this->url('content-page', ['page' => 'open_access_journals'])?>">
-                                    <div><b>IxTheo Open Journals</b></div>
-                                    <div><small>Open Access Zeitschriften Service</small></div>
-                                </a>
-                            </div>
-                            <div class="ix-news-panel ix-news-panel-2">
-                                <a href="<?=$this->url('content-page', ['page' => 'open_text'])?>">
-                                    <div><b>IxTheo Open Text</b></div>
-                                    <div><small>Zweitveröffentlichung von Aufsätzen</small></div>
-                                </a>
-                            </div>
-                            <div class="ix-news-panel ix-news-panel-3">
-                                <a href="<?=$this->url('content-page', ['page' => 'full_text_search'])?>">
-                                    <div><b>Volltextsuche</b></div>
-                                    <div><small>Inhalte multilingual durchsuchen</small></div>
-                                </a>
-                            </div>
-                            <div class="ix-news-panel ix-news-panel-4">
-                                <a href="<?=$this->url('content-page', ['page' => 'lexicon_search'])?>">
-                                    <div><b>Lexikonrecherche</b></div>
-                                    <div><small>Theologische Lexika durchsuchen</small></div>
-                                </a>
-                            </div>
-                            <div class="ix-clear-both">&nbsp;</div>
-                            <div class="ix-news-container-footer">Alle Services</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>

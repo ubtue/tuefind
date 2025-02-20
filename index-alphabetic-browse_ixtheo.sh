@@ -118,10 +118,17 @@ function build_browse
 
     [[ ! -z $filter ]] && browse_unique=${TMP_RAMDISK_DIR}/${browse}-${filter} || browse_unique=${TMP_RAMDISK_DIR}/${browse}
 
+    # Get the browse headings from Solr
     if [ "$skip_authority" = "1" ]; then
-        $JAVA ${extra_jvm_opts} -Dfile.encoding="UTF-8" -Dfield.preferred=heading -Dfield.insteadof=use_for -cp $CLASSPATH PrintBrowseHeadings "$bib_index" "$field" "" "${browse_unique}.tmp" "$filter"
+        if ! output=$($JAVA ${extra_jvm_opts} -Dfile.encoding="UTF-8" -Dfield.preferred=heading -Dfield.insteadof=use_for -cp $CLASSPATH org.vufind.solr.indexing.PrintBrowseHeadings "$bib_index" "$field" "" "${browse_unique}.tmp" "$filter" 2>&1); then
+            echo "ERROR: Failed to create browse headings for ${browse}. ${output}."
+            exit 1
+        fi
     else
-        $JAVA ${extra_jvm_opts} -Dfile.encoding="UTF-8" -Dfield.preferred=heading -Dfield.insteadof=use_for -cp $CLASSPATH PrintBrowseHeadings "$bib_index" "$field" "$auth_index" "${browse_unique}.tmp" "$filter"
+        if ! output=$($JAVA ${extra_jvm_opts} -Dfile.encoding="UTF-8" -Dfield.preferred=heading -Dfield.insteadof=use_for -cp $CLASSPATH org.vufind.solr.indexing.PrintBrowseHeadings "$bib_index" "$field" "$auth_index" "${browse_unique}.tmp" "$filter" 2>&1); then
+            echo "ERROR: Failed to create browse headings for ${browse}. ${output}."
+            exit 1
+        fi
     fi
 
     if [[ ! -z $filter ]]; then
@@ -132,12 +139,40 @@ function build_browse
         out_dir="$index_dir"
     fi
 
-    sort -T ${TMP_RAMDISK_DIR} -u -t$'\1' -k1 "${browse_unique}.tmp" -o "${browse_unique}_sorted.tmp"
-    $JAVA -Dfile.encoding="UTF-8" -cp $CLASSPATH CreateBrowseSQLite "${browse_unique}_sorted.tmp" "${browse_unique}_browse.db"
+    # Sort the browse headings
+    if ! output=$(sort -T ${TMP_RAMDISK_DIR} -u -t$'\1' -k1 "${browse_unique}.tmp" -o "${browse_unique}_sorted.tmp" 2>&1); then
+        echo "ERROR: Failed to sort ${browse}. ${output}."
+        exit 1
+    fi
 
+    # Build the SQLite database
+    if ! output=$($JAVA -Dfile.encoding="UTF-8" -cp $CLASSPATH org.vufind.solr.indexing.CreateBrowseSQLite "${browse_unique}_sorted.tmp" "${browse_unique}_browse.db" 2>&1); then
+        echo "ERROR: Failed to build the SQLite database for ${browse}. ${output}."
+        exit 1
+    fi
 
-    mv "${browse_unique}_browse.db" "$out_dir/${browse}_browse.db-updated"
-    touch "$out_dir/${browse}_browse.db-ready"
+    # Clear up temp files
+    if ! output=$(rm -f *.tmp 2>&1); then
+        echo "ERROR: Failed to clear out temp files for ${browse}. ${output}."
+        exit 1
+    fi
+
+    # Move the new database to the index directory
+    if ! output=$(mv "${browse_unique}_browse.db" "$out_dir/${browse}_browse.db-updated" 2>&1); then
+        echo "ERROR: Failed to move ${browse}_browse.db database to ${out_dir}/${browse}_browse.db-updated. ${output}."
+        exit 1
+    fi
+
+    # Indicate that the new database is ready for use
+    if ! output=$(touch "$out_dir/${browse}_browse.db-ready" 2>&1); then
+        echo "ERROR: Failed to mark the new ${browse} database as ready for use. ${error}."
+        exit 1
+    fi
+
+    # tuefind specific:
+    # set user of out file to solr, so if script is accidentally executed as root
+    # the output files will be owned by solr user.
+    # (else solr service can't import it)
     chown -R solr:solr "$out_dir"
 }
 
@@ -146,8 +181,8 @@ function GenerateIndexForSystem {
     system_flag="$1"
     echo build_browse "hierarchy" "hierarchy_browse" 1 "" ${system_flag}
     time build_browse "hierarchy" "hierarchy_browse" 1 "" ${system_flag}
-    echo build_browse "title" "title_fullStr" 1 "-Dbibleech=StoredFieldLeech -Dsortfield=title_fullStr -Dvaluefield=title_fullStr -Dbrowse.normalizer=org.vufind.util.TitleNormalizer" ${system_flag}
-    time build_browse "title" "title_fullStr" 1 "-Dbibleech=StoredFieldLeech -Dsortfield=title_fullStr -Dvaluefield=title_fullStr -Dbrowse.normalizer=org.vufind.util.TitleNormalizer" ${system_flag}
+    echo build_browse "title" "title_fullStr" 1 "-Dbib_field_iterator=org.vufind.solr.indexing.StoredFieldIterator -Dsortfield=title_fullStr -Dvaluefield=title_fullStr -Dbrowse.normalizer=org.vufind.util.TitleNormalizer" ${system_flag}
+    time build_browse "title" "title_fullStr" 1 "-Dbib_field_iterator=org.vufind.solr.indexing.StoredFieldIterator -Dsortfield=title_fullStr -Dvaluefield=title_fullStr -Dbrowse.normalizer=org.vufind.util.TitleNormalizer" ${system_flag}
     echo build_browse "topic" "topic_browse" 1 "" ${system_flag}
     time build_browse "topic" "topic_browse" 1 "" ${system_flag}
     echo build_browse "author" "author_browse" "" 1 ${system_flag}

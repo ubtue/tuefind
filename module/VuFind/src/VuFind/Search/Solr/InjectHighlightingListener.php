@@ -99,14 +99,9 @@ class InjectHighlightingListener
     public function attach(SharedEventManagerInterface $manager)
     {
         $manager->attach(
-            'VuFind\Search',
+            Service::class,
             Service::EVENT_PRE,
             [$this, 'onSearchPre']
-        );
-        $manager->attach(
-            'VuFind\Search',
-            Service::EVENT_POST,
-            [$this, 'onSearchPost']
         );
     }
 
@@ -144,23 +139,6 @@ class InjectHighlightingListener
                 }
             }
         }
-        return $event;
-    }
-
-    /**
-     * Inject highlighting results.
-     *
-     * @param EventInterface $event Event
-     *
-     * @return EventInterface
-     *
-     * @deprecated
-     */
-    public function onSearchPost(EventInterface $event)
-    {
-        // The original functionality of this method has been moved to \VuFind\RecordDriver\PluginManager
-        // and \VuFindSearch\Backend\Solr\Response\Json\RecordCollectionFactory. It will be removed in
-        // release 10.0.
         return $event;
     }
 }

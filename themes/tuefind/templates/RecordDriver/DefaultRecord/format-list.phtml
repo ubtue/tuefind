@@ -12,9 +12,9 @@ if (isset($media_types)) {
     $formats = array_merge(["print"], $formats);
   endif;
   $i = 0;
-  foreach ($formats as $format) { ?>
+  foreach ($formats as $format): ?>
     <?php if ($translated = $this->transEsc($format)): ?>
-      <span class="format iconlabel <?=$this->record($this->driver)->getFormatClass($format)?>"><?=$translated;?></span>
+    <span class="format iconlabel <?=$this->record($this->driver)->getFormatClass($format); ?>"><?=$translated;?></span>
     <?php endif; ?>
-  <?php }
-}?>
+  <?php endforeach; ?>
+<?php }?>

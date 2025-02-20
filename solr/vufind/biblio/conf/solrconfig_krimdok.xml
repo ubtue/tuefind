@@ -33,7 +33,7 @@
        that you fully re-index after changing this setting as it can
        affect both how text is indexed and queried.
     -->
-  <luceneMatchVersion>9.1.1</luceneMatchVersion>
+  <luceneMatchVersion>9.9</luceneMatchVersion>
 
   <!-- Use the classic schema style by default for VuFind -->
   <schemaFactory class="ClassicIndexSchemaFactory"/>
@@ -284,12 +284,6 @@
     handleSelect=false will use solr1.1 style error formatting
     -->
   <requestDispatcher handleSelect="true" >
-    <!--Make sure your system has some authentication before enabling remote streaming!  -->
-    <requestParsers enableRemoteStreaming="true"
-                    enableStreamBody="true"
-                    multipartUploadLimitInKB="2048000"
-                    formdataUploadLimitInKB="2048"/>
-
     <!-- Set HTTP caching related parameters (for proxy caches and clients).
 
          To get the behaviour of Solr 1.2 (ie: no caching related headers)
@@ -479,6 +473,7 @@
     <lst name="title">
       <str name="DBpath">${solr.solr.home:./solr}/alphabetical_browse/title_browse.db</str>
       <str name="field">title_fullStr</str>
+      <str name="normalizer">org.vufind.util.TitleNormalizer</str>
     </lst>
 
     <lst name="lcc">
@@ -528,6 +523,20 @@
       <int name="maxQueryLength">40</int>
       <str name="spellcheckIndexDir">./spellchecker</str>
       <str name="queryAnalyzerFieldType">textSpell</str>
+    </lst>
+    <lst name="spellchecker">
+      <str name="name">direct</str>
+      <str name="field">allfields_unstemmed</str>
+      <str name="classname">solr.DirectSolrSpellChecker</str>
+      <str name="distanceMeasure">internal</str>
+      <float name="accuracy">0.5</float>
+      <int name="maxEdits">2</int>
+      <int name="minPrefix">1</int>
+      <int name="maxInspections">5</int>
+      <int name="minQueryLength">4</int>
+      <int name="maxQueryLength">40</int>
+      <float name="maxQueryFrequency">0.01</float>
+      <float name="thresholdTokenFrequency">.01</float>
     </lst>
   </searchComponent>
   <queryConverter name="queryConverter" class="org.apache.solr.spelling.SpellingQueryConverter"/>
