@@ -649,6 +649,7 @@ forms:
     enabled: true
     onlyForLoggedUsers: true
     title: SA_article
+    emailSubject: "%%title%%"
 
     help:
       pre: ""
@@ -758,7 +759,6 @@ forms:
         group: inwerkgroup_12
 
       #In Werk group close
-
       - name: onlineversion
         label: SA_is_the_online_version_avaible
         type: radio
@@ -769,14 +769,17 @@ forms:
           - value: bereit2
             label: no
 
+
       - name: onlineversion_werk_group_fulltext
-        label: SA_full_text_is_not_freely_available
-        type: text
+        label: SA_restricted_fulltext_links
+        type: multifieldtext
+        maxMultiFieldtext: 3
         required: true
 
       - name: onlineversion_werk_group_openaccess
-        label: "Open Access"
-        type: text
+        label: SA_open_access_links
+        type: multifieldtext
+        maxMultiFieldtext: 3
         required: true
 
       - name: comment
