@@ -385,7 +385,8 @@ forms:
     fields:
       - name: authors
         label: SA_authors
-        type: text
+        type: multifieldtext
+        maxMultiFieldtext: 8
         required: true
 
       - name: title
@@ -484,7 +485,8 @@ forms:
     fields:
       - name: authors
         label: SA_authors
-        type: text
+        type: multifieldtext
+        maxMultiFieldtext: 8
         required: true
 
       - name: title
@@ -654,7 +656,8 @@ forms:
     fields:
       - name: authors
         label: SA_authors
-        type: text
+        type: multifieldtext
+        maxMultiFieldtext: 8
         required: true
 
       - name: title
@@ -720,7 +723,8 @@ forms:
 
       - name: sammelband_werk_group_Herausgeber
         label: SA_editor
-        type: text
+        type: multifieldtext
+        maxMultiFieldtext: 8
         group: inwerkgroup_12
 
       - name: zeitschrift_werk_group_band
@@ -801,7 +805,8 @@ forms:
 
       - name: authors
         label: SA_authors
-        type: text
+        type: multifieldtext
+        maxMultiFieldtext: 8
         required: true
 
       - name: publication_year
