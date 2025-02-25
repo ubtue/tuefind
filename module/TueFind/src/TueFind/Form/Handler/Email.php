@@ -21,7 +21,7 @@ class Email extends \VuFind\Form\Handler\Email
                 if ($data['value'] == 'journal')
                    return $name_candidate . '_zs';
                 if ($data['value'] == 'anthology')
-                   return $name_candiate . '_sb';
+                   return $name_candidate . '_sb';
             }
         }
         return $name_candidate;
