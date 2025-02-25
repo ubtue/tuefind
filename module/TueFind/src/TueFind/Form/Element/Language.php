@@ -2,14 +2,19 @@
 
 namespace TueFind\Form\Element;
 
+use Laminas\Validator\Translator\Translator as TranslatorTranslator;
 use Symfony\Component\Intl\Languages;
 
-class Language extends \Laminas\Form\Element\Select {
-    public function __construct() {
+class Language extends \Laminas\Form\Element\Select
+{
+    public function __construct()
+    {
         parent::__construct(...func_get_args());
 
         $languageCodesAndNames = Languages::getAlpha3Names();
-        sort($languageCodesAndNames, SORT_LOCALE_STRING);
+        foreach ($languageCodesAndNames as $code => $name) {
+            $languageCodesAndNames[$code] = $name . ' (' . $code . ')';
+        }
 
         $this->setValueOptions($languageCodesAndNames);
     }
