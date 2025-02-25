@@ -1,3 +1,5 @@
+<?php $subsystem = $this->tuefind()->getTueFindSubsystem()?>
+<?php echo "system_type=", $subsystem == 'relbib' ? 'relbib' : 'ixtheo', "\n" ?>
 <?php foreach ($this->fields as $data): ?>
 <?php if($data['name'] != 'name' && $data['name'] != 'email' && $data['name'] != 'comment'): ?>
 <?php $name_ = ($data['name'] ?? '') ?>
