@@ -666,7 +666,7 @@ forms:
         type: text
         required: true
 
-      - name: untertitel
+      - name: subtitle
         label: SA_subtitle
         type: text
         required: true
@@ -692,13 +692,13 @@ forms:
           - value: inwerkradio2
             label: SA_in_the_collection
 
-      - name: zeitschrift_werk_group_title
+      - name: superior_title
         label: SA_title
         type: text
         required: true
         group: inwerkgroup_12
 
-      - name: zeitschrift_werk_group_erscheinungsjahr
+      - name: sammelband_werk_group_erscheinungsjahr
         label: SA_year_of_publication
         type: text
         required: true
@@ -752,32 +752,16 @@ forms:
         required: true
         group: inwerkgroup_12
 
-      - name: zeitschrift_werk_group_seiten
+      - name: superior_pages
         label: Pages
         type: text
         required: false
         group: inwerkgroup_12
 
       #In Werk group close
-      - name: onlineversion
-        label: SA_is_the_online_version_avaible
-        type: radio
-        required: true
-        options:
-          - value: bereit1
-            label: yes
-          - value: bereit2
-            label: no
 
-
-      - name: onlineversion_werk_group_fulltext
-        label: SA_restricted_fulltext_links
-        type: multifieldtext
-        maxMultiFieldtext: 3
-        required: true
-
-      - name: onlineversion_werk_group_openaccess
-        label: SA_open_access_links
+      - name: online_links
+        label: SA_online_links
         type: multifieldtext
         maxMultiFieldtext: 3
         required: true
