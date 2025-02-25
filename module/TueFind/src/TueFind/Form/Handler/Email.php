@@ -11,6 +11,21 @@ use VuFind\Exception\Mail as MailException;
 
 class Email extends \VuFind\Form\Handler\Email
 {
+    protected function getAttachmentName($formId, $fields) {
+        $name_candidate = strtolower(substr($formId, strlen("SelfArchiving"), strlen($formId) - 1));
+        // articles can be contained in a journal or an anthology, so proper template has to be chosen
+        if ($name_candidate == 'aufsatz') {
+            foreach ($fields as $data) {
+                if ($data['name'] != 'inwerkradio')
+                    continue;
+                if ($data['value'] == 'journal')
+                   return $name_candidate . '_zs';
+                if ($data['value'] == 'anthology')
+                   return $name_candiate . '_sb';
+            }
+        }
+        return $name_candidate;
+    }
 
     protected function handleSelfArchivingForms($formId, $emailMessage, $fields) {
 
@@ -46,8 +61,6 @@ class Email extends \VuFind\Form\Handler\Email
            if ($data['name'] == 'comment' && trim($data['value']) != '') {
                $body_ .= ("comment: " . trim($data['value']) . PHP_EOL);
            }
-
-
        }
 
        $emailSubject = $title_ . ($sub_title_ != '' ? " (Subtitle: $sub_title_)" : '');
@@ -57,8 +70,7 @@ class Email extends \VuFind\Form\Handler\Email
        $email_body->charset = 'utf-8';
        $email_body->encoding = Mime::ENCODING_QUOTEDPRINTABLE;
 
-
-       $attachment_name = strtolower(substr($formId, strlen("SelfArchiving"), strlen($formId) - 1));
+       $attachment_name = $this->getAttachmentName($formId, $fields);
        $attachment = new MimePart($this->viewRenderer->partial(
            'Email/form-feedback-self-archiving.phtml',
            compact('fields')
