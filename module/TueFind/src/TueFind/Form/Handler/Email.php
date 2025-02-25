@@ -29,11 +29,8 @@ class Email extends \VuFind\Form\Handler\Email
 
     protected function handleSelfArchivingForms($formId, $emailMessage, $fields) {
 
-       if ($formId != "SelfArchivingMonographie" &&
-           $formId != "SelfArchivingAufsatz" &&
-           $formId != "SelfArchivingRezension" &&
-           $formId != "SelfArchivingLexikonartikel")
-               return $emailMessage;
+        if (!preg_match('/SelfArchiving(Monographie|Aufsatz|Rezension|Lexikonartikel)/', $formId))
+            return $emailMessage;
 
        $newEmailMessage = new MimeMessage();
 
