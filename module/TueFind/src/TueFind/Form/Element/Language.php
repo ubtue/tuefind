@@ -2,7 +2,6 @@
 
 namespace TueFind\Form\Element;
 
-use Laminas\Validator\Translator\Translator as TranslatorTranslator;
 use Symfony\Component\Intl\Languages;
 
 class Language extends \Laminas\Form\Element\Select
