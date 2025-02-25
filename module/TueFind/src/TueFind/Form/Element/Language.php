@@ -11,9 +11,10 @@ class Language extends \Laminas\Form\Element\Select
         parent::__construct(...func_get_args());
 
         $languageCodesAndNames = Languages::getAlpha3Names();
-        foreach ($languageCodesAndNames as $code => $name) {
-            $languageCodesAndNames[$code] = $name . ' (' . $code . ')';
-        }
+        $languageCodesAndNames = array_map(function ($code, $name) {
+            $selected = $code === 'deu' ? true : false;
+            return ['value' => $code, 'label' => $name . ' (' . $code . ')', 'selected' => $selected];
+        }, array_keys($languageCodesAndNames), $languageCodesAndNames);
 
         $this->setValueOptions($languageCodesAndNames);
     }
