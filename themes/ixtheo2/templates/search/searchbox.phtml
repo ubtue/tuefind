@@ -122,14 +122,14 @@
                             $searchboxAttributes['class'] .= ' with-keyboard-selection';
                         }
                     ?>
-                    <div class="searchForm-query col-12 col-xs-8 col-sm-8 col-md-8 col-lg-8 ix2-nomargin">
+                    <div class="searchForm-query col-12 col-xs-12 col-sm-7 col-md-7 col-lg-8 ix2-nomargin">
                         <input<?=$this->htmlAttributes($searchboxAttributes)?>>
                         <div id="searchForm_controls">
                             <button id="searchForm-reset" class="searchForm-reset hidden" type="reset" tabindex="-1" aria-label="<?=$this->transEscAttr('searchform_reset_button')?>"><?=$this->icon('ui-reset-search');?></button>
                         </div>
                     </div>
                     <?php if ($handlerCount > 1): ?>
-                        <div class="col-12 col-xs-2 col-sm-2 col-md-2 col-lg-2 col ix2-nomargin ix2-searchForm-element-height ix2-main-searchForm-type">
+                        <div class="col-12 col-xs-12 col-sm-3 col-md-3 col-lg-2 col ix2-nomargin ix2-searchForm-element-height ix2-main-searchForm-type">
                             <select id="searchForm_type" class="searchForm_type form-control " name="type" data-native-menu="false" aria-label="<?=$this->transEscAttr('Search type')?>">
                             <?php $currentGroup = $insideGroup = false; ?>
                             <?php $optionCount=1; foreach ($handlers as $handler): ?>
@@ -158,7 +158,7 @@
                             <input type="hidden" name="type" value="<?=$this->escapeHtmlAttr($handlers[0]['value'])?>">
                             <?php endif; ?>
                         </div>
-                        <div class="col-12 col-xs-2 col-sm-2 col-md-2 col-lg-2 col ix2-nomargin ix2-searchForm-element-height">
+                        <div class="col-12 col-xs-12 col-sm-2 col-md-2 col-lg-2 col ix2-nomargin ix2-searchForm-element-height">
                             <button type="submit" class="btn btn-primary  search-button"><i class="fa fa-search" aria-hidden="true"></i></button>
                         </div>
                     <?php if ($geoUrl = $this->geocoords()->getSearchUrl($options)) : ?>
@@ -247,7 +247,7 @@
                                         <li><a class="dropdown-item" href="<?=$this->url('alphabrowse-home')?>"><?=$this->transEsc('Browse Alphabetically')?></a></li>
                                     </ul>
                                 </li>
-                                <li class=""><a href="<?=$this->url('search-results')?>?lookfor=4+esra+1-2&type=BibleRangeSearch" role="button" rel="nofollow">Bibelstellensuche</a></li>
+                                <li class=""><a href="<?=$this->url('search-results')?>?lookfor=&type=BibleRangeSearch" role="button" rel="nofollow">Bibelstellensuche</a></li>
                                 <li class=""><a href="<?=$this->url('search-newitem')?>" role="button" rel="nofollow"><?=$this->transEsc('New Items')?></a></li>
                                 <li class=""><a href="<?=$this->url('search-history')?>" role="button" rel="nofollow"><?=$this->transEsc('Search History')?></a></li>
                                 <?php if (!empty($keyboardLayouts)): ?>

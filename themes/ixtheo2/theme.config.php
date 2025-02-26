@@ -4,13 +4,13 @@ return [
     'favicon' => 'ixtheo-favicon.ico',
     // Note: leaflet is included in original bootstrap3+bootstrap5 themes, but inactive there
     'css' => [
-        'vendor/cw/swiper.css',
+        'vendor/cw/swiper11.css',
         'vendor/leaflet/leaflet.css',
     ],
     'js' => [
         'ixtheo.js',
         'ixtheo2.js',
-        'vendor/cw/swiper.js',
+        'vendor/cw/swiper11.js',
         'vendor/cw/smooth-scroll.js',
         'vendor/leaflet/leaflet.js',
     ],

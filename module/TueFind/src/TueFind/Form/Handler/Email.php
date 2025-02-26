@@ -11,6 +11,79 @@ use VuFind\Exception\Mail as MailException;
 
 class Email extends \VuFind\Form\Handler\Email
 {
+    protected function getAttachmentName($formId, $fields) {
+        $name_candidate = strtolower(substr($formId, strlen("SelfArchiving"), strlen($formId) - 1));
+        // articles can be contained in a journal or an anthology, so proper template has to be chosen
+        if ($name_candidate == 'aufsatz') {
+            foreach ($fields as $data) {
+                if ($data['name'] != 'inwerkradio')
+                    continue;
+                if ($data['value'] == 'journal')
+                   return $name_candidate . '_zs';
+                if ($data['value'] == 'anthology')
+                   return $name_candidate . '_sb';
+            }
+        }
+        return $name_candidate;
+    }
+
+    protected function handleSelfArchivingForms($formId, $emailMessage, $fields) {
+
+        if (!preg_match('/SelfArchiving(Monographie|Aufsatz|Rezension|Lexikonartikel)/', $formId))
+            return $emailMessage;
+
+       $newEmailMessage = new MimeMessage();
+
+       $body_ = '';
+       $title_ = '';
+       $sub_title_ = '';
+
+       foreach ($fields as $data) {
+           if ($data['name'] == 'title') {
+               $title_ = trim($data['value']);
+           }
+
+           if ($data['name'] == 'untertitel') {
+               $sub_title_ = trim($data['value']);
+           }
+
+           if ($data['name'] == 'name' && trim($data['value']) != '') {
+               $body_ .= ("Sender: " . trim($data['value']) . PHP_EOL);
+           }
+
+           if ($data['name'] == 'email' && trim($data['value']) != '') {
+               $body_ .= ("email: " . trim($data['value']) . PHP_EOL);
+           }
+
+           if ($data['name'] == 'comment' && trim($data['value']) != '') {
+               $body_ .= ("comment: " . trim($data['value']) . PHP_EOL);
+           }
+       }
+
+       $emailSubject = $title_ . ($sub_title_ != '' ? " (Subtitle: $sub_title_)" : '');
+
+       $email_body = new MimePart($body_);
+       $email_body->type = Mime::TYPE_TEXT;
+       $email_body->charset = 'utf-8';
+       $email_body->encoding = Mime::ENCODING_QUOTEDPRINTABLE;
+
+       $attachment_name = $this->getAttachmentName($formId, $fields);
+       $attachment = new MimePart($this->viewRenderer->partial(
+           'Email/form-feedback-self-archiving.phtml',
+           compact('fields')
+       ));
+       $attachment->type = Mime::TYPE_TEXT;
+       $attachment->charset = 'utf-8';
+       $attachment->filename = "$attachment_name.txt";
+       $attachment->description = "$attachment_name.txt";
+       $attachment->disposition = Mime::DISPOSITION_ATTACHMENT;
+       $attachment->encoding = Mime::ENCODING_QUOTEDPRINTABLE;
+
+       $newEmailMessage->setParts([$email_body, $attachment]);
+       return $newEmailMessage;
+    }
+
+
     public function handle(
         \VuFind\Form\Form $form,
         \Laminas\Mvc\Controller\Plugin\Params $params,
@@ -45,63 +118,8 @@ class Email extends \VuFind\Form\Handler\Email
         $emailSubject = $form->getEmailSubject($params->fromPost());
 
         $formId = $params->fromRoute('id', $params->fromQuery('id'));
-        if ($formId == "SelfArchivingMonographie" || $formId == "SelfArchivingAufsatz" || $formId == "SelfArchivingRezension" || $formId == "SelfArchivingLexikonartikel") {
-            $newEmailMessage = new MimeMessage();
-
-            $body_ = '';
-            $title_ = '';
-            $sub_title_ = '';
-
-            foreach ($fields as $data) {
-                if ($data['name'] == 'title') {
-                    $title_ = trim($data['value']);
-                }
-
-                if ($data['name'] == 'untertitel') {
-                    $sub_title_ = trim($data['value']);
-                }
-
-                if ($data['name'] == 'name' && trim($data['value']) != '') {
-                    $body_ .= ("Sender: " . trim($data['value']) . PHP_EOL);
-                }
-
-                if ($data['name'] == 'email' && trim($data['value']) != '') {
-                    $body_ .= ("email: " . trim($data['value']) . PHP_EOL);
-                }
-
-                if ($data['name'] == 'comment' && trim($data['value']) != '') {
-                    $body_ .= ("comment: " . trim($data['value']) . PHP_EOL);
-                }
-
-
-            }
-
-            $emailSubject = $title_ . ($sub_title_ != '' ? " (Subtitle: $sub_title_)" : '');
-
-            $email_body = new MimePart($body_);
-            $email_body->type = Mime::TYPE_TEXT;
-            $email_body->charset = 'utf-8';
-            $email_body->encoding = Mime::ENCODING_QUOTEDPRINTABLE;
-
-
-            $attachment_name = strtolower(substr($formId, strlen("SelfArchiving"), strlen($formId) - 1));
-            $attachment = new MimePart($this->viewRenderer->partial(
-                'Email/form-feedback-self-archiving.phtml',
-                compact('fields')
-            ));
-            $attachment->type = Mime::TYPE_TEXT;
-            $attachment->charset = 'utf-8';
-            $attachment->filename = "$attachment_name.txt";
-            $attachment->description = "$attachment_name.txt";
-            $attachment->disposition = Mime::DISPOSITION_ATTACHMENT;
-            $attachment->encoding = Mime::ENCODING_QUOTEDPRINTABLE;
-
-            $newEmailMessage->setParts([$email_body, $attachment]);
-            $emailMessage = $newEmailMessage;
-
-        }
-
-
+        if ($formId)
+            $emailMessage = $this->handleSelfArchivingForms($formId, $emailMessage, $fields);
 
         $result = true;
         foreach ($recipients as $recipient) {

@@ -547,9 +547,9 @@ forms:
         type: radio
         required: true
         options:
-          - value: inwerkradio1
+          - value: journal
             label: SA_in_the_magazine
-          - value: inwerkradio2
+          - value: anthology
             label: SA_in_the_collection
 
       - name: zeitschrift_werk_group_title
@@ -650,6 +650,9 @@ forms:
     onlyForLoggedUsers: true
     title: SA_article
     emailSubject: "%%title%%"
+    recipient:
+       - email: pica_template_generator@localhost
+
 
     help:
       pre: ""
@@ -687,9 +690,9 @@ forms:
         type: radio
         required: true
         options:
-          - value: inwerkradio1
+          - value: journal
             label: SA_in_the_magazine
-          - value: inwerkradio2
+          - value: anthology
             label: SA_in_the_collection
 
       - name: superior_title
