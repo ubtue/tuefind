@@ -43,8 +43,8 @@ Fixed Navigation
       <ul class="navbar-nav navbar-right text-center">
 
         <!-- s-media -->
-        <li class="social-media nav-item dropdown active">
-            <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown"><i class="fa fa-share-alt" aria-hidden="true"></i> <?=$this->transEsc("Social media")?><b class="caret"></b></a>
+        <li class="nav-item social-media tf-cursor-pointer">
+            <span class="dropdown-toggle nav-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-share-alt" aria-hidden="true"></i> <span class="cw-hide-for-xsmoll"><?=$this->transEsc("Social media")?></span><b class="caret"></b></span>
             <ul class="dropdown-menu">
               <li class="sub-menu"><a target="blank" href="//bsky.app/profile/ixtheo.bsky.social"><img src="<?=$this->imageLink('bluesky.svg')?>" height="16" alt="Bluesky"> Bluesky</a></li>
               <li class="sub-menu"><a target="blank" href="//hcommons.social/@ixtheo"><img src="<?=$this->imageLink('mastodon.svg')?>" height="16" alt="Mastodon"> Mastodon</a></li>
@@ -69,8 +69,8 @@ Fixed Navigation
         <?php endif; ?>
 
         <?php if (isset($this->layout()->allLangs) && count($this->layout()->allLangs) > 1): ?>
-          <li class="language nav-item dropdown active">
-            <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown"><i class='fa fa-globe' ></i> <?=$this->transEsc("Language")?><b class="caret"></b></a>
+          <li class="nav-item language tf-cursor-pointer">
+            <span class="dropdown-toggle nav-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class='fa fa-globe' ></i> <span class="cw-hide-for-xsmoll"><?=$this->transEsc("Language")?></span><b class="caret"></b></span>
             <ul class="dropdown-menu">
               <?php
                 //TueFind: Basic VuFind functionality changed, removed author ID from URL
@@ -122,7 +122,10 @@ Welcome Slider
   <?php endif;?>
 </div>
 
-<span class="ix-copyright logo-tooltip" title="test" >© <span class="ix-copyright-name"><img src="<?=$this->imageLink('Seezeichen.jpg');?>" width="600" />Seezeichen, © Marco Varenkamp</span></span>
+<?php if($homePage):?>
+  <span class="ix-copyright logo-tooltip" title="test" >© <span class="ix-copyright-name"><img src="<?=$this->imageLink('Seezeichen.jpg');?>" width="600" />Seezeichen, © Marco Varenkamp</span></span>
+<?php endif;?>
+
 <!-- Breadcrumbs -->
 <?php if(!empty($this->layout()->breadcrumbs)): ?>
   <div class="container breadcrumb-wrapper hidden-print <?=$advancedSearch;?>">

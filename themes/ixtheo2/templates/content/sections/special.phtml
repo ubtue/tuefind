@@ -5,7 +5,7 @@
             <h2 class="cw-h2 cw-mb-5">Spezialbibliographien</h2>
         </div>
         <div class="row">
-            <div class="swiper-container cw-guides-slider-special mx-n2 cw-pt-3 swiper-container-horizontal">
+            <div class="swiper cw-guides-slider-special mx-n2 cw-pt-3 swiper-container-horizontal">
                 <!-- Additional required wrapper-->
                 <div class="swiper-wrapper">
                     <!-- Slides-->
@@ -41,7 +41,9 @@
                     </div>
                 </div>
                 <div class="cw-mt-3 swiper-pagination-parent">
-                    <div class="swiper-pagination-special"></div>
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                    <div class="swiper-pagination"></div>
                 </div>
             </div>
         </div>
@@ -53,7 +55,7 @@
     var guidesSlider = new Swiper('.cw-guides-slider-special', {
         slidesPerView: 3,
         spaceBetween: 0,
-        /*loop: true,*/
+        loop: true,
         roundLengths: true,
         breakpoints: {
             1200: {
@@ -69,11 +71,10 @@
                 slidesPerView: 1
             }
         },
-        pagination: {
-            el: '.swiper-pagination-special',
-            clickable: true,
-            dynamicBullets: true
-        }
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
     });
 EOD;
 ?>

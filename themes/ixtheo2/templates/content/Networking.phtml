@@ -334,11 +334,11 @@ EOD;
 <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $jsSnippet, 'SET')?>
     <div class="cw-py-2 map-navigation">
         <div class="map-all high-light-marker-group" data-group="all"><button class="btn">All</button></div>
-        <div class="map-comm high-light-marker-group" data-group="comm"><button class="btn">Theologische Community</button></div>
-        <div class="map-bibliographien high-light-marker-group" data-group="bibliographien"><button class="btn">Bibliographien</button></div>
-        <div class="map-bibliotheken high-light-marker-group" data-group="bibliotheken"><button class="btn">Bibliotheken</button></div>
-        <div class="map-ver high-light-marker-group" data-group="ver"><button class="btn">Bibliothekarische Verbände</button></div>
-        <div class="map-fachin high-light-marker-group" data-group="fachin"><button class="btn">Fachinformationsdienste</button></div>
+        <div class="map-comm high-light-marker-group" data-group="comm"><button class="btn"><i class="fa fa-solid fa-people-group"></i> Theologische Community</button></div>
+        <div class="map-bibliographien high-light-marker-group" data-group="bibliographien"><button class="btn"><i class="fa fa-solid fa-bookmark"></i> Bibliographien</button></div>
+        <div class="map-bibliotheken high-light-marker-group" data-group="bibliotheken"><button class="btn"><i class="fa fa-solid fa-book-open"></i> Bibliotheken</button></div>
+        <div class="map-ver high-light-marker-group" data-group="ver"><button class="btn"><i class="fa fa-solid fa-people-roof"></i> Bibliothekarische Verbände</button></div>
+        <div class="map-fachin high-light-marker-group" data-group="fachin"><button class="btn"><i class="fa fa-solid fa-circle-nodes"></i> Fachinformationsdienste</button></div>
     </div>
 </section>
 
@@ -354,13 +354,10 @@ EOD;
                             <a href="<?=$this->url('content-page', ['page' => 'TheologicalCommunity']) ?>">
                                 <div data-toggle="collapse" data-target="#collapse-inno-1">
                                     <div class="cw-card h-100 border-0 shadow">
-                                        <div class="cw-card-img-top cw-overflow-hidden cw-dark-overlay cw-bg-cover networking-image-1">
-                                            <div class="cw-card-img-overlay-bottom cw-z-index-20">
-                                                <h4 class="cw-h4 cw-text-white cw-text-shadow">Theologische Community</h4>
-                                            </div>
-                                        </div>
+                                        <div class="cw-card-img-top cw-overflow-hidden cw-dark-overlay cw-bg-cover networking-image-1"></div>
                                     </div>
                                 </div>
+                                <div class="ix2-sub-item-title">Theologische Community</div>
                             </a>
                         </div>
                         <!-- end item-->
@@ -370,13 +367,10 @@ EOD;
                             <a href="<?=$this->url('content-page', ['page' => 'LibrarianAssociations']) ?>">
                                 <div data-toggle="collapse" data-target="#collapse-inno-1">
                                     <div class="cw-card h-100 border-0 shadow">
-                                        <div class="cw-card-img-top cw-overflow-hidden cw-dark-overlay cw-bg-cover networking-image-2">
-                                            <div class="cw-card-img-overlay-bottom cw-z-index-20">
-                                                <h4 class="cw-h4 cw-text-white cw-text-shadow">Bibliothekarische Verbände</h4>
-                                            </div>
-                                        </div>
+                                        <div class="cw-card-img-top cw-overflow-hidden cw-dark-overlay cw-bg-cover networking-image-2"></div>
                                     </div>
                                 </div>
+                                <div class="ix2-sub-item-title">Bibliothekarische Verbände</div>
                             </a>
                         </div>
                         <!-- end item-->
@@ -386,13 +380,10 @@ EOD;
                             <a href="<?=$this->url('content-page', ['page' => 'Speakers']) ?>">
                                 <div data-toggle="collapse" data-target="#collapse-inno-1">
                                     <div class="cw-card h-100 border-0 shadow">
-                                        <div class="cw-card-img-top cw-overflow-hidden cw-dark-overlay cw-bg-cover networking-image-3">
-                                            <div class="cw-card-img-overlay-bottom cw-z-index-20">
-                                                <h4 class="cw-h4 cw-text-white cw-text-shadow">Fachreferent*innen und theologische Bibliothekar*innen</h4>
-                                            </div>
-                                        </div>
+                                        <div class="cw-card-img-top cw-overflow-hidden cw-dark-overlay cw-bg-cover networking-image-3"></div>
                                     </div>
                                 </div>
+                                <div class="ix2-sub-item-title">Fachreferent*innen und theologische Bibliothekar*innen</div>
                             </a>
                         </div>
                         <!-- end item-->
@@ -402,13 +393,10 @@ EOD;
                             <a href="<?=$this->url('content-page', ['page' => 'Bibliographies']) ?>">
                                 <div data-toggle="collapse" data-target="#collapse-inno-1">
                                     <div class="cw-card h-100 border-0 shadow">
-                                        <div class="cw-card-img-top cw-overflow-hidden cw-dark-overlay cw-bg-cover networking-image-4">
-                                            <div class="cw-card-img-overlay-bottom cw-z-index-20">
-                                                <h4 class="cw-h4 cw-text-white cw-text-shadow">Bibliographien</h4>
-                                            </div>
-                                        </div>
+                                        <div class="cw-card-img-top cw-overflow-hidden cw-dark-overlay cw-bg-cover networking-image-4"></div>
                                     </div>
                                 </div>
+                                <div class="ix2-sub-item-title">Bibliographien</div>
                             </a>
                         </div>
                         <!-- end item-->
@@ -418,13 +406,10 @@ EOD;
                             <a href="<?=$this->url('content-page', ['page' => 'Libraries']) ?>">
                                 <div data-toggle="collapse" data-target="#collapse-inno-1">
                                     <div class="cw-card h-100 border-0 shadow">
-                                        <div class="cw-card-img-top cw-overflow-hidden cw-dark-overlay cw-bg-cover networking-image-5">
-                                            <div class="cw-card-img-overlay-bottom cw-z-index-20">
-                                                <h4 class="cw-h4 cw-text-white cw-text-shadow">Bibliotheken</h4>
-                                            </div>
-                                        </div>
+                                        <div class="cw-card-img-top cw-overflow-hidden cw-dark-overlay cw-bg-cover networking-image-5"></div>
                                     </div>
                                 </div>
+                                <div class="ix2-sub-item-title">Bibliotheken</div>
                             </a>
                         </div>
                         <!-- end item-->
@@ -434,13 +419,10 @@ EOD;
                             <a href="<?=$this->url('content-page', ['page' => 'SpecialistInformationServices']) ?>">
                                 <div data-toggle="collapse" data-target="#collapse-inno-1">
                                     <div class="cw-card h-100 border-0 shadow">
-                                        <div class="cw-card-img-top cw-overflow-hidden cw-dark-overlay cw-bg-cover networking-image-6">
-                                            <div class="cw-card-img-overlay-bottom cw-z-index-20">
-                                                <h4 class="cw-h4 cw-text-white cw-text-shadow" style="font-size: 15px;">Fachinformationsdienste (FID)</h4>
-                                            </div>
-                                        </div>
+                                        <div class="cw-card-img-top cw-overflow-hidden cw-dark-overlay cw-bg-cover networking-image-6"></div>
                                     </div>
                                 </div>
+                                <div class="ix2-sub-item-title">Fachinformationsdienste (FID)</div>
                             </a>
                         </div>
                         <!-- end item-->
@@ -450,13 +432,10 @@ EOD;
                             <a href="<?=$this->url('content-page', ['page' => 'Publishers']) ?>">
                                 <div data-toggle="collapse" data-target="#collapse-inno-1">
                                     <div class="cw-card h-100 border-0 shadow">
-                                        <div class="cw-card-img-top cw-overflow-hidden cw-dark-overlay cw-bg-cover networking-image-7">
-                                            <div class="cw-card-img-overlay-bottom cw-z-index-20">
-                                                <h4 class="cw-h4 cw-text-white cw-text-shadow">Verlage</h4>
-                                            </div>
-                                        </div>
+                                        <div class="cw-card-img-top cw-overflow-hidden cw-dark-overlay cw-bg-cover networking-image-7"></div>
                                     </div>
                                 </div>
+                                <div class="ix2-sub-item-title">Verlage</div>
                             </a>
                         </div>
                         <!-- end item-->
@@ -469,32 +448,62 @@ EOD;
 </div>
 
 <style>
-.cw-card-img-top {
-    min-height: 200px;
-    min-width: 250px;
-}
-.networking-image-1 {
-    background-image: url(/themes/ixtheo2/images/networking/mode/TheolCommunity.jpg);
-}
-.networking-image-2 {
-    background-image: url(/themes/ixtheo2/images/networking/mode/BibliothekarischeVerbände.jpg);
-}
-.networking-image-3 {
-    background-image: url(/themes/ixtheo2/images/networking/mode/Fachreferenten.jpg);
-}
-.networking-image-4 {
-    background-image: url(/themes/ixtheo2/images/networking/mode/Bibliographien.jpg);
-}
-.networking-image-5 {
-    background-image: url(/themes/ixtheo2/images/networking/mode/Bibliotheken.jpg);
-}
-.networking-image-6 {
-    background-image: url(/themes/ixtheo2/images/networking/mode/Fachinformationsdienste.jpg);
-}
-.networking-image-7 {
-    background-image: url(/themes/ixtheo2/images/networking/mode/Verlage.jpg);
-}
-.ol-popup-closer {
-    float: right;
-}
+    .cw-card {
+        border: none;
+    }
+    .tf-cursor-pointer a, .tf-cursor-pointer a:hover{
+        text-decoration: none;
+    }
+    .ix2-sub-item-title {
+        background-color: #707070;
+        color: #fff;
+        border-radius:0 0 .4rem .4rem;
+        padding: 10px;
+        min-height: 68px;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .ix2-sub-item-title-test {
+        background-color: #EFEFEF;
+        color: #000;
+        border-radius:0 0 .4rem .4rem;
+        padding: 10px;
+        min-height: 68px;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .cw-card-img-top {
+        min-height: 200px;
+        min-width: 250px;
+    }
+    .networking-image-1 {
+        background-image: url(/themes/ixtheo2/images/networking/mode/TheolCommunity.jpg);
+    }
+    .networking-image-2 {
+        background-image: url(/themes/ixtheo2/images/networking/mode/BibliothekarischeVerbände.jpg);
+    }
+    .networking-image-3 {
+        background-image: url(/themes/ixtheo2/images/networking/mode/Fachreferenten.jpg);
+    }
+    .networking-image-4 {
+        background-image: url(/themes/ixtheo2/images/networking/mode/Bibliographien.jpg);
+    }
+    .networking-image-5 {
+        background-image: url(/themes/ixtheo2/images/networking/mode/Bibliotheken.jpg);
+    }
+    .networking-image-6 {
+        background-image: url(/themes/ixtheo2/images/networking/mode/Fachinformationsdienste.jpg);
+    }
+    .networking-image-7 {
+        background-image: url(/themes/ixtheo2/images/networking/mode/Verlage.jpg);
+    }
+    .ol-popup-closer {
+        float: right;
+    }
 </style>
