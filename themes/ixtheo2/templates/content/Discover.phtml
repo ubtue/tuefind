@@ -15,7 +15,7 @@
             <div class="panel-collapse">
                 <div class="panel-body">
                     <input type="checkbox" class="read-more-state" id="post-1" />
-                    <div class="read-more-wrap">
+                    <div class="read-more-wrap cw-wrap-smoll">
                         <p>Ein besonderes Feature des IxTheo ist die Bibelstellen-Suche. Sie ermöglicht eine gezielte Recherche nach Literatur zu Bibelstellen (vom Vers bis zur ganzen Perikope), auch wenn diese nicht im Titel der Publikation erwähnt sind</p>
                         <div class="read-more-target">
                             <p>Um die Bibelstellensuche zu aktivieren, muss rechts neben dem Suchschlitz der Suchaspekt „Bibelstellen“ ausgewählt werden.</p>
@@ -80,7 +80,7 @@
             <div class="panel-collapse">
                 <div class="panel-body">
                     <input type="checkbox" class="read-more-state" id="post-3" />
-                    <div class="read-more-wrap">
+                    <div class="read-more-wrap cw-wrap-smoll">
                         <p>Die Suche nach Zeitbereichen ermöglicht die gezielte Recherche nach Publikationen, die einen bestimmten Zeitraum behandeln. Es kann nach Jahreszahlen und Zeiträumen gesucht werden.</p>
                         <div class="read-more-target">
                         <p>Um die Suche nach Zeiträumen zu aktivieren, muss rechts neben dem Suchschlitz die Option „Zeitbereiche“ ausgewählt werden.</p>
@@ -138,7 +138,7 @@
             <div class="panel-collapse">
                 <div class="panel-body">
                     <input type="checkbox" class="read-more-state" id="post-2" />
-                    <div class="read-more-wrap">
+                    <div class="read-more-wrap cw-wrap-smoll">
                         <p>Die Suche nach Kirchenrechtsquellen ist ebenfalls ein spezielles Feature von IxTheo. Sie ermöglicht die gezielte Recherche nach Literatur zu Stellen im CIC/CCEO. Es kann nach einem ganzen Codex, Teilen eines Codex, einzelnen Canones oder Paragraphen gesucht werden.</p>
                         <div class="read-more-target">
                             <p>Um die Suche zu aktivieren, muss rechts neben dem Suchschlitz „Codexsuche“ ausgewählt werden.</p>
@@ -235,7 +235,7 @@
             <div class="panel-collapse">
                 <div class="panel-body">
                     <input type="checkbox" class="read-more-state" id="post-5" />
-                    <div class="read-more-wrap">
+                    <div class="read-more-wrap cw-wrap-long-smoll">
                         <p>Zahlreiche Titel im IxTheo sind mit Schlagwörtern und Keywords erschlossen. Diese können ebenfalls gezielt durchsucht werden. Tippen Sie den Suchbegriff in den Suchschlitz und belassen Sie den Suchaspekt „Alle Felder“.</p>
                         <div class="read-more-target">
                             <p>Tippen Sie den Suchbegriff in den Suchschlitz und belassen Sie den Suchaspekt „Alle Felder“. Der eingegebene Begriff wird dann in allen Suchfeldern gesucht.</p>
@@ -374,6 +374,14 @@
 </div>
 
 <style type="text/css">
+.ix-panel-news .read-more-wrap.cw-wrap-smoll {
+    min-height: 180px;
+}
+
+.ix-panel-news .read-more-wrap.cw-wrap-long-smoll {
+    min-height: 132px;
+}
+
 .ix2-content-ul1 {
     margin-bottom: 10px;
 }
@@ -400,6 +408,5 @@
 .panel-collapse p {
     text-align: justify !important;
 }
-
 </style>
 
