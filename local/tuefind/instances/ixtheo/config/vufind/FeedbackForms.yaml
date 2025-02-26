@@ -385,7 +385,8 @@ forms:
     fields:
       - name: authors
         label: SA_authors
-        type: text
+        type: multifieldtext
+        maxMultiFieldtext: 8
         required: true
 
       - name: title
@@ -484,7 +485,8 @@ forms:
     fields:
       - name: authors
         label: SA_authors
-        type: text
+        type: multifieldtext
+        maxMultiFieldtext: 8
         required: true
 
       - name: title
@@ -647,6 +649,7 @@ forms:
     enabled: true
     onlyForLoggedUsers: true
     title: SA_article
+    emailSubject: "%%title%%"
 
     help:
       pre: ""
@@ -654,7 +657,8 @@ forms:
     fields:
       - name: authors
         label: SA_authors
-        type: text
+        type: multifieldtext
+        maxMultiFieldtext: 8
         required: true
 
       - name: title
@@ -662,7 +666,7 @@ forms:
         type: text
         required: true
 
-      - name: untertitel
+      - name: subtitle
         label: SA_subtitle
         type: text
         required: true
@@ -676,7 +680,7 @@ forms:
       - name: rezensiertes_werk_group_name
         label: SA_source_of_work
         type: hidden
-        group: inwerkgroup_11
+        group: inwerkgroup_12
 
       - name: inwerkradio
         label: ""
@@ -688,22 +692,22 @@ forms:
           - value: inwerkradio2
             label: SA_in_the_collection
 
-      - name: zeitschrift_werk_group_title
+      - name: superior_title
         label: SA_title
         type: text
         required: true
         group: inwerkgroup_12
 
-      - name: zeitschrift_werk_group_erscheinungsjahr
+      - name: sammelband_werk_group_Herausgeber
+        label: SA_editor
+        type: multifieldtext
+        maxMultiFieldtext: 8
+        group: inwerkgroup_12
+
+      - name: sammelband_werk_group_erscheinungsjahr
         label: SA_year_of_publication
         type: text
         required: true
-        group: inwerkgroup_12
-
-      - name: zeitschrift_werk_group_ISSN
-        label: "ISSN"
-        type: text
-        required: false
         group: inwerkgroup_12
 
       - name: sammelband_werk_group_ISBN
@@ -712,15 +716,16 @@ forms:
         required: false
         group: inwerkgroup_12
 
-      - name: zeitschrift_werk_group_IxTheo_Link
-        label: "IxTheo-Link"
+      - name: zeitschrift_werk_group_ISSN
+        label: "ISSN"
         type: text
         required: false
         group: inwerkgroup_12
 
-      - name: sammelband_werk_group_Herausgeber
-        label: SA_editor
+      - name: zeitschrift_werk_group_IxTheo_Link
+        label: "IxTheo-Link"
         type: text
+        required: false
         group: inwerkgroup_12
 
       - name: zeitschrift_werk_group_band
@@ -747,7 +752,7 @@ forms:
         required: true
         group: inwerkgroup_12
 
-      - name: zeitschrift_werk_group_seiten
+      - name: superior_pages
         label: Pages
         type: text
         required: false
@@ -755,24 +760,10 @@ forms:
 
       #In Werk group close
 
-      - name: onlineversion
-        label: SA_is_the_online_version_avaible
-        type: radio
-        required: true
-        options:
-          - value: bereit1
-            label: yes
-          - value: bereit2
-            label: no
-
-      - name: onlineversion_werk_group_fulltext
-        label: SA_full_text_is_not_freely_available
-        type: text
-        required: true
-
-      - name: onlineversion_werk_group_openaccess
-        label: "Open Access"
-        type: text
+      - name: online_links
+        label: SA_online_links
+        type: multifieldtext
+        maxMultiFieldtext: 3
         required: true
 
       - name: comment
@@ -801,7 +792,8 @@ forms:
 
       - name: authors
         label: SA_authors
-        type: text
+        type: multifieldtext
+        maxMultiFieldtext: 8
         required: true
 
       - name: publication_year

@@ -130,7 +130,6 @@ if($el['type'] == 'multifieldtext') {
       ?>
   <?php if($allElementsInGroup != 0 && $elementsInGroup == 1): ?> 
     <div class="<?php echo $groupClass; ?>">
-    <h3><?php echo $this->translate($groupName);?></h3> 
   <?php endif;?>
   <?php if (in_array($handleGroup, ['open', 'openAndClose'])): ?>
     <?php if (in_array($el['type'], ['checkbox', 'radio'])): ?>
