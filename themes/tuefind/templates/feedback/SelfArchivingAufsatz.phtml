@@ -3,6 +3,34 @@
 $script = <<<JS
     $(function() {
 
+      setInterval(selfArchivingJSValidation, 500);
+
+      function selfArchivingJSValidation() {
+        let validationErrorCount = 0;
+        $('.js-validation').each(function(){
+          let el = $(this);
+          if(el.val().length > 0) {
+            $(this).removeClass('js-not-valid');
+          }else{
+            $(this).addClass('js-not-valid');
+            validationErrorCount++;
+          }
+        })
+
+        if(validationErrorCount != 0) {
+          $('#form_SelfArchivingAufsatz_submitButton').addClass('form-not-valid');
+        }else{
+          $('#form_SelfArchivingAufsatz_submitButton').removeClass('form-not-valid');
+        }
+
+      }
+
+      $("form").on( "submit", function( event ) {
+        if($('#form_SelfArchivingAufsatz_submitButton').hasClass( "form-not-valid" )) {
+          event.preventDefault();
+        }
+      });
+
       function linkOnlineversion() {
         $('.group-onlineversion_werk_group_fulltext').toggle();
         $('.group-onlineversion_werk_group_openaccess').toggle();
@@ -19,6 +47,10 @@ $script = <<<JS
         $('.group-zeitschrift_werk_group_heft').show();
         $('.group-zeitschrift_werk_group_jahr').show();
         $('.group-zeitschrift_werk_group_aufsatz_ID').show();
+
+        //validation
+        $('#form_SelfArchivingAufsatz_sammelband_werk_group_erscheinungsjahr').removeClass('js-validation');
+
       }
 
       function sammelbandSelected() {
@@ -33,6 +65,9 @@ $script = <<<JS
         $('.group-sammelband_werk_group_Herausgeber').show();
         $('.inwerkgroup .multifieldtext_group').show();
         $('.inwerkgroup .group-sammelband_werk_group_erscheinungsjahr').show();
+
+        //validation
+        $('#form_SelfArchivingAufsatz_sammelband_werk_group_erscheinungsjahr').addClass('js-validation');
       }
       
       zeitschriftSelected();
@@ -58,3 +93,9 @@ $script = <<<JS
 
 print $this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $script, 'SET');
 ?>
+
+<style>
+  .js-not-valid {
+    box-shadow: 0 0 2px 1px rgb(255 0 0 / .9);
+  }
+</style>

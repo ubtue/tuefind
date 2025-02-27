@@ -710,7 +710,6 @@ forms:
       - name: sammelband_werk_group_erscheinungsjahr
         label: SA_year_of_publication
         type: text
-        required: true
         group: inwerkgroup_12
 
       - name: sammelband_werk_group_ISBN
@@ -767,12 +766,10 @@ forms:
         label: SA_online_links
         type: multifieldtext
         maxMultiFieldtext: 3
-        required: true
 
       - name: comment
         label: SA_comment
         type: text
-        required: true
 
   SelfArchivingMonographie:
     enabled: true
