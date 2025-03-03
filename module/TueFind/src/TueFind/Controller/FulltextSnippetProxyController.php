@@ -50,6 +50,8 @@ class FulltextSnippetProxyController extends \VuFind\Controller\AbstractBase imp
     const CONTENT_LENGTH_TARGET_LOWER_LIMIT = 20;
     const CHUNK_LENGTH_MIN_SIZE = 10;
     const DOTS = '...';
+    const MAX_AFTER_LAST_HIGHLIGHT_TEXT_LENGTH = 20;
+    const MAX_BEFORE_FIRST_HIGHLIGHT_TEXT_LENGTH = 20;
 
 
     public function __construct(\Elastic\Elasticsearch\ClientBuilder $builder, \Laminas\ServiceManager\ServiceLocatorInterface $sm, \VuFind\Log\LoggerProxy $logger) {
@@ -328,6 +330,88 @@ class FulltextSnippetProxyController extends \VuFind\Controller\AbstractBase imp
     }
 
 
+    protected function getPublisherNonPageHighlighNodesOffsets(&$parent_node) {
+        $em_offsets = [];
+        foreach ($parent_node->childNodes as $child_node)
+            array_push($em_offsets, $child_node->nodeType == XML_ELEMENT_NODE && $child_node->tagName == self::esHighlightTag ? '1' : '0');
+        return implode("", $em_offsets);
+    }
+
+
+    protected function stripPublisherNonPageToTheRight(&$parent_node) {
+        $highlightNodesOffsets = $this->getPublisherNonPageHighlighNodesOffsets($parent_node);
+        $nodeAfterLastHighlight = $parent_node->childNodes[strrpos($highlightNodesOffsets, '1')]->nextSibling;
+        if ($nodeAfterLastHighlight == null)
+            return;
+
+        $afterLastHighlightTextLength = 0;
+        $afterLastHighlightNode = false;
+        foreach ($parent_node->childNodes as $childNode) {
+            if ($childNode->isSameNode($nodeAfterLastHighlight) && $childNode->nodeType == XML_TEXT_NODE) {
+                $afterLastHighlightNode = true;
+            }
+
+            if ($afterLastHighlightNode) {
+                $nodeTextLength = mb_strlen($childNode->nodeValue);
+                if ($afterLastHighlightTextLength + $nodeTextLength >= self::MAX_AFTER_LAST_HIGHLIGHT_TEXT_LENGTH) {
+                    // Truncate to the right
+                    $childNode->nodeValue = mb_strimwidth($childNode->nodeValue,
+                                                          0,
+                                                          $afterLastHighlightTextLength == 0 ?
+                                                             self::MAX_AFTER_LAST_HIGHLIGHT_TEXT_LENGTH :
+                                                             self::MAX_AFTER_LAST_HIGHLIGHT_TEXT_LENGTH - $afterLastHighlightTextLength,
+                                                             self::DOTS);
+                    // Remove all further nodes
+                    $currentChild = $childNode->nextSibling;
+                    while ($currentChild) {
+                        $nextChild = $currentChild->nextSibling;
+                        $parent_node->removeChild($currentChild);
+                        $currentChild = $nextChild;
+                    }
+                    break;
+
+                }
+                $afterLastHighlightTextLength += $nodeTextLength;
+            }
+        }
+    }
+
+
+    protected function stripPublisherNonPageToTheLeft(&$parent_node) {
+        $highlightNodesOffsets = $this->getPublisherNonPageHighlighNodesOffsets($parent_node);
+        $nodeBeforeFirstHighlight = $parent_node->childNodes[strpos($highlightNodesOffsets, '1')]->previousSibling;
+        if ($nodeBeforeFirstHighlight == null)
+            return;
+
+        $beforeFirstHighlightTextLength = 0;
+        $beforeFirstHighlightNode = false;
+        foreach ($parent_node->childNodes as $childNode) {
+            if ($childNode->isSameNode($nodeBeforeFirstHighlight) && $childNode->nodeType == XML_TEXT_NODE) {
+                $beforeFirstHighlightNode = true;
+
+            }
+            if ($beforeFirstHighlightNode) {
+                $nodeTextLength = mb_strlen($childNode->nodeValue);
+                if ($beforeFirstHighlightTextLength + $nodeTextLength >= self::MAX_BEFORE_FIRST_HIGHLIGHT_TEXT_LENGTH) {
+                    // Truncate to the left
+                    $childNode->nodeValue = self::DOTS . mb_substr($childNode->nodeValue,
+                                                      $beforeFirstHighlightTextLength == 0 ?
+                                                          -self::MAX_BEFORE_FIRST_HIGHLIGHT_TEXT_LENGTH :
+                                                          -self::MAX_BEFORE_FIRST_HIGHLIGHT_TEXT_LENGTH - $beforeFirstHighlightTextLength);
+                    // Remove further nodes to the left
+                    $currentChild = $childNode->previousSibling;
+                    while ($currentChild) {
+                        $previousChild = $currentChild->previousSibling;
+                        $parent_node->removeChild($currentChild);
+                        $currentChild = $previousChild;
+                    }
+                    break;
+                }
+            }
+        }
+    }
+
+
     protected function extractPublisherNonPageHighlightSnippet (&$snippets, $hit, $highlight_result) {
         $dom = new \DOMDocument();
         $dom->loadHTML(mb_convert_encoding($highlight_result, 'HTML-ENTITIES', 'UTF-8'), LIBXML_NOERROR);
@@ -337,7 +421,10 @@ class FulltextSnippetProxyController extends \VuFind\Controller\AbstractBase imp
         $snippets = [];
         foreach ($highlight_nodes as $highlight_node) {
             $snippet_tree = new \DOMDocument();
-            $snippet_tree->appendChild($snippet_tree->importNode($highlight_node->parentNode, true));
+            $parent_node = $highlight_node->parentNode->cloneNode(true);
+            $this->stripPublisherNonPageToTheLeft($parent_node);
+            $this->stripPublisherNonPageToTheRight($parent_node);
+            $snippet_tree->appendChild($snippet_tree->importNode($parent_node, true));
             $snippet = $snippet_tree->saveHTML($snippet_tree);
             $text_type = $this->extractSnippetTextType($hit);
             array_push($snippets, [ 'snippet' => $snippet, 'text_type' => $text_type ]);
