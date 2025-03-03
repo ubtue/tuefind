@@ -50,8 +50,8 @@ class FulltextSnippetProxyController extends \VuFind\Controller\AbstractBase imp
     const CONTENT_LENGTH_TARGET_LOWER_LIMIT = 20;
     const CHUNK_LENGTH_MIN_SIZE = 10;
     const DOTS = '...';
-    const MAX_AFTER_LAST_HIGHLIGHT_TEXT_LENGTH = 20;
-    const MAX_BEFORE_FIRST_HIGHLIGHT_TEXT_LENGTH = 20;
+    const MAX_AFTER_LAST_HIGHLIGHT_TEXT_LENGTH = 60;
+    const MAX_BEFORE_FIRST_HIGHLIGHT_TEXT_LENGTH = 60;
 
 
     public function __construct(\Elastic\Elasticsearch\ClientBuilder $builder, \Laminas\ServiceManager\ServiceLocatorInterface $sm, \VuFind\Log\LoggerProxy $logger) {
