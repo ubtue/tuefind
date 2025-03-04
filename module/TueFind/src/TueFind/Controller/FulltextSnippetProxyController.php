@@ -379,13 +379,14 @@ class FulltextSnippetProxyController extends \VuFind\Controller\AbstractBase imp
 
     protected function stripPublisherNonPageToTheLeft(&$parent_node) {
         $highlightNodesOffsets = $this->getPublisherNonPageHighlighNodesOffsets($parent_node);
+        //
         $nodeBeforeFirstHighlight = $parent_node->childNodes[strpos($highlightNodesOffsets, '1')]->previousSibling;
         if ($nodeBeforeFirstHighlight == null)
             return;
 
         $beforeFirstHighlightTextLength = 0;
         $beforeFirstHighlightNode = false;
-        foreach ($parent_node->childNodes as $childNode) {
+        foreach (array_reverse(iterator_to_array($parent_node->childNodes)) as $childNode) {
             if ($childNode->isSameNode($nodeBeforeFirstHighlight) && $childNode->nodeType == XML_TEXT_NODE) {
                 $beforeFirstHighlightNode = true;
 
@@ -397,7 +398,7 @@ class FulltextSnippetProxyController extends \VuFind\Controller\AbstractBase imp
                     $childNode->nodeValue = self::DOTS . mb_substr($childNode->nodeValue,
                                                       $beforeFirstHighlightTextLength == 0 ?
                                                           -self::MAX_BEFORE_FIRST_HIGHLIGHT_TEXT_LENGTH :
-                                                          -self::MAX_BEFORE_FIRST_HIGHLIGHT_TEXT_LENGTH - $beforeFirstHighlightTextLength);
+                                                          -(self::MAX_BEFORE_FIRST_HIGHLIGHT_TEXT_LENGTH - $beforeFirstHighlightTextLength));
                     // Remove further nodes to the left
                     $currentChild = $childNode->previousSibling;
                     while ($currentChild) {
@@ -407,6 +408,7 @@ class FulltextSnippetProxyController extends \VuFind\Controller\AbstractBase imp
                     }
                     break;
                 }
+                $beforeFirstHighlightTextLength += $nodeTextLength;
             }
         }
     }
