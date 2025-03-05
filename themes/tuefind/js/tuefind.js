@@ -598,7 +598,7 @@ var TueFind = {
         }
     },
 
-    SelfArchiving: function() {
+    FormValidation: function() {
         let addButton = "<i class='fa fa-plus-circle addjsicon' aria-hidden='true'></i>";
         let removeButton = "<i class='fa fa-minus-circle removejsicon' aria-hidden='true'></i>";
         $('.multifieldtext').each(function(){
@@ -723,6 +723,6 @@ $(document).ready(function () {
         scrollX: true
     });
 
-    TueFind.SelfArchiving();
+    TueFind.FormValidation();
 
 });
