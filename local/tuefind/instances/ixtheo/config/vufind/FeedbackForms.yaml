@@ -701,7 +701,6 @@ forms:
         label: "ISSN"
         type: text
         required: false
-        jsrequired: true
         group: inwerkgroup1
 
       - name: zeitschrift_werk_group_IxTheo_Link
