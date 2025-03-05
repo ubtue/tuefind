@@ -1,31 +1,33 @@
 <?php
+$form = $this->form;
+$form->prepare();
 
-  $form = $this->form;
-  $form->prepare();
+$title = $form->getTitle();
+$title = !empty($title)
+  ? $this->translate($title) : null;
 
-  $title = $form->getTitle();
-  $title = !empty($title)
-    ? $this->translate($title) : null;
+$formUrl = $this->url('feedback-form', ['id' => $this->formId]);
+$form->setAttribute('action', $formUrl);
+$formClass = "dynamic-form ".$this->formId;
+$form->setAttribute('class', $formClass);
+$form->setAttribute('method', 'post');
 
-  $formUrl = $this->url('feedback-form', ['id' => $this->formId]);
-  $form->setAttribute('action', $formUrl);
-  $formClass = "dynamic-form ".$this->formId;
-  $form->setAttribute('class', $formClass);
-  $form->setAttribute('method', 'post');
+$translateParams = ['%%TueFindType%%' => $this->tuefind()->getTueFindType(),
+                    '%%FIDType%%' => $this->tuefind()->getTueFindFID()];
 
-  $help = $form->getHelp();
-  $helpPre = $helpPost = null;
-  $helpPre = isset($help['pre']) ? $form->getDisplayString($help['pre'], false) : null;
-  $helpPost = isset($help['post']) ? $form->getDisplayString($help['post'], false) : null;
+$help = $form->getHelp();
+$helpPre = $helpPost = null;
+$helpPre = isset($help['pre']) ? $form->getDisplayString($help['pre'], null, $translateParams) : null;
+$helpPost = isset($help['post']) ? $form->getDisplayString($help['post'], null, $translateParams) : null;
 
-  $formInfo = true;
-  if($this->formId == "DoD") {
+$formInfo = true;
+if($this->formId == "DoD") {
   $helpPre = $this->content()->renderTranslated('feedback/dod');
   $formInfo = false;
-  }
+}
 
-  // TueFind: load a custom PHTML template for this form if it exists
-  print $this->content()->renderTranslated($this->formId, 'feedback');
+// TueFind: load a custom PHTML template for this form if it exists
+print $this->content()->renderTranslated($this->formId, 'feedback');
 ?>
 <?php if (!$this->inLightbox): ?>
   <div class="feedback-content"><?php endif; ?>
