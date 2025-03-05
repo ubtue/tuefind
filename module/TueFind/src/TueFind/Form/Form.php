@@ -422,6 +422,11 @@ class Form extends \VuFind\Form\Form
 
     public function getInputFilter(): InputFilterInterface
     {
+        if ($this->inputFilter) {
+            return $this->inputFilter;
+        }
+
+        $inputFilter = new InputFilter();
 
         $exclusiveSelect = [];
         foreach ($this->getFormElementConfig() as $el) {
@@ -434,12 +439,6 @@ class Form extends \VuFind\Form\Form
                 }
             }
         }
-
-        if ($this->inputFilter) {
-            return $this->inputFilter;
-        }
-
-        $inputFilter = new InputFilter();
 
         $validators = [
             'email' => [
