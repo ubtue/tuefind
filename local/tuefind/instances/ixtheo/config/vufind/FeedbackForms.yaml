@@ -679,88 +679,104 @@ forms:
         type: language
         required: true
 
-      #In Werk group open
-      - name: rezensiertes_werk_group_name
-        label: SA_source_of_work
-        type: hidden
-        group: inwerkgroup_12
-
       - name: inwerkradio
         label: ""
-        type: radio
+        type: inclusiveSelect
         required: true
         options:
-          - value: journal
+          - value: "inwerkgroup1"
             label: SA_in_the_magazine
-          - value: anthology
+          - value: "inwerkgroup2"
             label: SA_in_the_collection
 
+      #In Werk group open
       - name: superior_title
         label: SA_title
-        type: text
-        required: true
-        group: inwerkgroup_12
-
-      - name: sammelband_werk_group_Herausgeber
-        label: SA_editor
         type: multifieldtext
         maxMultiFieldtext: 8
-        group: inwerkgroup_12
-
-      - name: sammelband_werk_group_erscheinungsjahr
-        label: SA_year_of_publication
-        type: text
-        group: inwerkgroup_12
-
-      - name: sammelband_werk_group_ISBN
-        label: "ISBN"
-        type: text
-        required: false
-        group: inwerkgroup_12
+        required: true
+        group: inwerkgroup1
 
       - name: zeitschrift_werk_group_ISSN
         label: "ISSN"
         type: text
         required: false
-        group: inwerkgroup_12
+        jsrequired: true
+        group: inwerkgroup1
 
       - name: zeitschrift_werk_group_IxTheo_Link
         label: "IxTheo-Link"
         type: text
         required: false
-        group: inwerkgroup_12
+        group: inwerkgroup1
 
       - name: zeitschrift_werk_group_band
         label: SA_volume
         type: text
         required: true
-        group: inwerkgroup_12
+        group: inwerkgroup1
 
       - name: zeitschrift_werk_group_jahr
         label: Year
         type: text
         required: true
-        group: inwerkgroup_12
+        group: inwerkgroup1
 
       - name: zeitschrift_werk_group_heft
         label: SA_issue
         type: text
         required: true
-        group: inwerkgroup_12
+        group: inwerkgroup1
 
       - name: zeitschrift_werk_group_aufsatz_ID
         label: SA_article_id
         type: text
         required: true
-        group: inwerkgroup_12
+        group: inwerkgroup1
 
       - name: superior_pages
         label: Pages
         type: text
         required: false
-        group: inwerkgroup_12
-
+        group: inwerkgroup1
       #In Werk group close
+
+      #In Werk group2 open
+      - name: superior_title2
+        label: SA_title
+        type: text
+        required: true
+        group: inwerkgroup2
+
+      - name: sammelband_werk_group_Herausgeber
+        label: SA_editor
+        type: multifieldtext
+        maxMultiFieldtext: 8
+        group: inwerkgroup2
+
+      - name: sammelband_werk_group_erscheinungsjahr
+        label: SA_year_of_publication
+        type: text
+        group: inwerkgroup2
+
+      - name: sammelband_werk_group_ISBN
+        label: "ISBN"
+        type: text
+        required: false
+        group: inwerkgroup2
+
+      - name: zeitschrift_werk_group_IxTheo_Link2
+        label: "IxTheo-Link"
+        type: text
+        required: false
+        group: inwerkgroup2
+
+      - name: superior_pages2
+        label: Pages
+        type: text
+        required: false
+        group: inwerkgroup2
+      #In Werk group2 close
 
       - name: online_links
         label: SA_online_links

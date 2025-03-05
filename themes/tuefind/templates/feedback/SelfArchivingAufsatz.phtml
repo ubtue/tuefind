@@ -3,99 +3,44 @@
 $script = <<<JS
     $(function() {
 
-      setInterval(selfArchivingJSValidation, 500);
+      removeValidation($(this).find('input:checked').val());
 
-      function selfArchivingJSValidation() {
-        let validationErrorCount = 0;
-        $('.js-validation').each(function(){
-          let el = $(this);
-          if(el.val().length > 0) {
-            $(this).removeClass('js-not-valid');
+      function removeValidation (blockSelected) {
+        $('.jshide').each(function(){
+          let thisBlock = $(this);
+          if(thisBlock.hasClass(blockSelected+"")) {
+            thisBlock.find('input').each(function(){
+              if($(this).prev().hasClass('required')){
+                $(this).prop('required',true);
+              }
+            })
+            thisBlock.show();
           }else{
-            $(this).addClass('js-not-valid');
-            validationErrorCount++;
+            thisBlock.find('input').each(function(){
+              $(this).prop('required',false);
+            })
+            thisBlock.hide();
           }
         })
-
-        if(validationErrorCount != 0) {
-          $('#form_SelfArchivingAufsatz_submitButton').addClass('form-not-valid');
-        }else{
-          $('#form_SelfArchivingAufsatz_submitButton').removeClass('form-not-valid');
-        }
-
       }
 
-      $("form").on( "submit", function( event ) {
-        if($('#form_SelfArchivingAufsatz_submitButton').hasClass( "form-not-valid" )) {
-          event.preventDefault();
-        }
+      $(document).on("change", ".inclusiveSelect", function() {
+        removeValidation($(this).find('input:checked').val());
+      })
+
+      $('.feedback-content form .btn.btn-primary').on( "click", function(e) {
+          $('.jshide').each(function(){
+            let thisBlock = $(this);
+            if(thisBlock.css('display') != 'none') {
+              thisBlock.find('input').each(function(){
+                $(this).prop('required',false);
+              })
+            }
+          })
       });
-
-      function linkOnlineversion() {
-        $('.group-onlineversion_werk_group_fulltext').toggle();
-        $('.group-onlineversion_werk_group_openaccess').toggle();
-      }
-
-      function zeitschriftSelected() {
-        $('.group-sammelband_werk_group_ISBN').hide();
-        $('.group-sammelband_werk_group_Herausgeber').hide();
-        $('.inwerkgroup .multifieldtext_group').hide();
-        $('.inwerkgroup .group-sammelband_werk_group_erscheinungsjahr').hide();
-
-        $('.group-zeitschrift_werk_group_ISSN').show();
-        $('.group-zeitschrift_werk_group_band').show();
-        $('.group-zeitschrift_werk_group_heft').show();
-        $('.group-zeitschrift_werk_group_jahr').show();
-        $('.group-zeitschrift_werk_group_aufsatz_ID').show();
-
-        //validation
-        $('#form_SelfArchivingAufsatz_sammelband_werk_group_erscheinungsjahr').removeClass('js-validation');
-
-      }
-
-      function sammelbandSelected() {
-        $('.group-zeitschrift_werk_group_ISSN').hide();
-        $('.group-zeitschrift_werk_group_band').hide();
-        $('.group-zeitschrift_werk_group_heft').hide();
-        $('.group-zeitschrift_werk_group_jahr').hide();
-        $('.group-zeitschrift_werk_group_aufsatz_ID').hide();
-
-        $('.group-zeitschrift_werk_group_erscheinungsjahr').show();
-        $('.group-sammelband_werk_group_ISBN').show();
-        $('.group-sammelband_werk_group_Herausgeber').show();
-        $('.inwerkgroup .multifieldtext_group').show();
-        $('.inwerkgroup .group-sammelband_werk_group_erscheinungsjahr').show();
-
-        //validation
-        $('#form_SelfArchivingAufsatz_sammelband_werk_group_erscheinungsjahr').addClass('js-validation');
-      }
-      
-      zeitschriftSelected();
-
-      $(document).on("change", "#form_SelfArchivingAufsatz_inwerkradio_o2", function() {
-        $(this).parents('.inwerkgroup').find('i').show();
-        sammelbandSelected();
-      })
-
-      $(document).on("change", "#form_SelfArchivingAufsatz_inwerkradio_o1", function() {
-        $(this).parents('.inwerkgroup').find('i').hide();
-
-        zeitschriftSelected();
-      })
-
-      $('#form_SelfArchivingAufsatz_onlineversion_o1,#form_SelfArchivingAufsatz_onlineversion_o2').change(function(){
-        linkOnlineversion();
-      })
-
     });
 
   JS;
 
 print $this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $script, 'SET');
 ?>
-
-<style>
-  .js-not-valid {
-    box-shadow: 0 0 2px 1px rgb(255 0 0 / .9);
-  }
-</style>
