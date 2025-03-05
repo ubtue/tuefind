@@ -475,10 +475,6 @@ class Form extends \VuFind\Form\Form
                 $fieldValidators[] = $validators['notEmpty'];
             }
 
-            //echo '<pre>';
-            //print_r([$el,$fieldValidators]);
-            //echo '</pre>';
-
             if ($isCheckbox) {
                 if ($requireOne) {
                     $fieldValidators[] = [
