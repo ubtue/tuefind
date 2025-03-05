@@ -76,7 +76,7 @@ class Form extends \VuFind\Form\Form
         $map = [
             'language' => '\TueFind\Form\Element\Language',
             'multifieldtext' => '\Laminas\Form\Element\Text',
-            'inclusiveSelect' => '\Laminas\Form\Element\Radio'
+            'exclusiveSelect' => '\Laminas\Form\Element\Radio'
         ];
 
         return $map[$type] ?? parent::getFormElementClass($type);
@@ -207,7 +207,7 @@ class Form extends \VuFind\Form\Form
                 }
                 $conf['options'] = ['value_options' => $optionElements];
                 break;
-            case 'inclusiveSelect':
+            case 'exclusiveSelect':
                     $options = [];
                     if (isset($el['options'])) {
                         $options = $el['options'];
@@ -324,7 +324,7 @@ class Form extends \VuFind\Form\Form
             }
 
             if (
-                in_array($element['type'], ['checkbox', 'radio', 'inclusiveSelect'])
+                in_array($element['type'], ['checkbox', 'radio', 'exclusiveSelect'])
                 && !isset($element['group'])
             ) {
                 $element['group'] = $element['name'];
@@ -333,7 +333,7 @@ class Form extends \VuFind\Form\Form
             $element['label'] = $el['label'] ?? '';
 
             $elementType = $element['type'];
-            if (in_array($elementType, ['checkbox', 'radio', 'select', 'inclusiveSelect'])) {
+            if (in_array($elementType, ['checkbox', 'radio', 'select', 'exclusiveSelect'])) {
                 if ($options = $this->getElementOptions($el)) {
                     $element['options'] = $options;
                 } elseif ($optionGroups = $this->getElementOptionGroups($el)) {
@@ -423,13 +423,13 @@ class Form extends \VuFind\Form\Form
     public function getInputFilter(): InputFilterInterface
     {
 
-        $inclusiveSelect = [];
+        $exclusiveSelect = [];
         foreach ($this->getFormElementConfig() as $el) {
-            if($el['type'] == 'inclusiveSelect' && isset($this->data[$el['name']])) {
-                $inclusiveSelect['activeGroup'] = $this->data[$el['name']];
+            if($el['type'] == 'exclusiveSelect' && isset($this->data[$el['name']])) {
+                $exclusiveSelect['activeGroup'] = $this->data[$el['name']];
                 foreach($el['options'] as $option) {
-                    if($option['value'] != $inclusiveSelect['activeGroup']) {
-                        $inclusiveSelect['disabledGroup'][] = $option['value'];
+                    if($option['value'] != $exclusiveSelect['activeGroup']) {
+                        $exclusiveSelect['disabledGroup'][] = $option['value'];
                     }
                 }
             }
@@ -464,8 +464,8 @@ class Form extends \VuFind\Form\Form
             $requireOne = $isCheckbox && ($el['requireOne'] ?? false);
             $required = $el['required'] ?? $requireOne;
 
-            if(isset($el['group']) && isset($inclusiveSelect['disabledGroup'])) {
-                if (in_array($el['group'], $inclusiveSelect['disabledGroup'])) {
+            if(isset($el['group']) && isset($exclusiveSelect['disabledGroup'])) {
+                if (in_array($el['group'], $exclusiveSelect['disabledGroup'])) {
                     $required = false;
                 }
             }

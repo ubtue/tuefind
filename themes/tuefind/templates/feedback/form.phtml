@@ -90,7 +90,7 @@ print $this->content()->renderTranslated($this->formId, 'feedback');
     <?php endif ?>
 
     <?php if (in_array($handleGroup, ['open', 'openAndClose'])): ?>
-      <?php if (in_array($el['type'], ['checkbox', 'radio', 'inclusiveSelect'])): ?>
+      <?php if (in_array($el['type'], ['checkbox', 'radio', 'exclusiveSelect'])): ?>
         <div class="field-set" role="group"<?= !empty($el['label']) ? ' aria-labelledby="' . $this->escapeHtmlAttr($formElement->getAttribute('id')) . '"' : ''?>>
       <?php else: ?>
         <div class="field-set <?=$group;?> jshide "<?= !empty($elementHelpPre) ? ' role="contentinfo" aria-label="' . $this->escapeHtmlAttr($elementHelpPre) . '"' : ''?>>
@@ -109,7 +109,7 @@ print $this->content()->renderTranslated($this->formId, 'feedback');
           echo "</div>";
         }
       } ?>
-    <?php if ($el['type'] == 'inclusiveSelect'): ?>
+    <?php if ($el['type'] == 'exclusiveSelect'): ?>
       <div class="form-group radio <?= $el['type'] ?> group-<?=$this->escapeHtmlAttr($el['name'])?>">
     <?php else: ?>
       <div class="form-group <?= $el['type'] ?> group-<?=$this->escapeHtmlAttr($el['name'])?>">

@@ -681,7 +681,7 @@ forms:
 
       - name: inwerkradio
         label: ""
-        type: inclusiveSelect
+        type: exclusiveSelect
         required: true
         options:
           - value: "inwerkgroup1"
