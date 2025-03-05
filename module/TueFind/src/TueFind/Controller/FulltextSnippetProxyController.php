@@ -347,7 +347,7 @@ class FulltextSnippetProxyController extends \VuFind\Controller\AbstractBase imp
         $afterLastHighlightTextLength = 0;
         $afterLastHighlightNode = false;
         foreach ($parent_node->childNodes as $childNode) {
-            if ($childNode->isSameNode($nodeAfterLastHighlight) && $childNode->nodeType == XML_TEXT_NODE) {
+            if ($childNode->isSameNode($nodeAfterLastHighlight)) {
                 $afterLastHighlightNode = true;
             }
 
@@ -387,7 +387,7 @@ class FulltextSnippetProxyController extends \VuFind\Controller\AbstractBase imp
         $beforeFirstHighlightTextLength = 0;
         $beforeFirstHighlightNode = false;
         foreach (array_reverse(iterator_to_array($parent_node->childNodes)) as $childNode) {
-            if ($childNode->isSameNode($nodeBeforeFirstHighlight) && $childNode->nodeType == XML_TEXT_NODE) {
+            if ($childNode->isSameNode($nodeBeforeFirstHighlight)) {
                 $beforeFirstHighlightNode = true;
 
             }
