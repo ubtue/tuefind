@@ -14,8 +14,7 @@ class Email extends \VuFind\Form\Handler\Email
     protected function getAttachmentName($formId, $fields) {
         $name_candidate = strtolower(substr($formId, strlen("SelfArchiving"), strlen($formId) - 1));
         // articles can be contained in a journal or an anthology, so proper template has to be chosen
-        //if ($name_candidate == 'aufsatz') {
-        if (preg_match/(aufsatz|rezension/, $name_candidate) {
+        if (preg_match('/(aufsatz|rezension)/', $name_candidate)) {
             foreach ($fields as $data) {
                 if ($data['name'] != 'inwerkradio')
                     continue;
