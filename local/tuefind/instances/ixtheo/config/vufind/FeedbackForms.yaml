@@ -498,6 +498,12 @@ forms:
         type: text
         required: true
 
+      - name: reviewed_work_authors
+        label: SA_reviewed_work_authors
+        type: multifieldtext
+        maxMultiFieldtext: 8
+        required: true
+
       - name: reviewed_work_ISBN
         label: SA_reviewed_work_ISBN
         type: text
