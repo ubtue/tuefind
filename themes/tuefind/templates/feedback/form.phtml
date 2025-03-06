@@ -146,3 +146,11 @@ print $this->content()->renderTranslated($this->formId, 'feedback');
   <?php endforeach ?>
   <?= $this->form()->closeTag() ?>
 <?php if (!$this->inLightbox): ?></div><?php endif; ?>
+
+<?php $jsSnippet = <<<EOD
+$(function () {
+  TueFind.FormValidation();
+});
+EOD;
+?>
+<?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $jsSnippet, 'SET')?>
