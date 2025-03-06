@@ -723,8 +723,4 @@ $(document).ready(function () {
         scrollX: true
     });
 
-    if($('.feedback-content form').length != 0) {
-        TueFind.FormValidation();
-    }
-
 });
