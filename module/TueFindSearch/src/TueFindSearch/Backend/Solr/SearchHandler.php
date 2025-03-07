@@ -47,7 +47,7 @@ class SearchHandler extends \VuFindSearch\Backend\Solr\SearchHandler {
 
     protected function getBBoxQuery($field, $from, $to): string
     {
-        return '{!field f=' . $field . ' score=overlapRatio queryTargetProportion=0.3}Intersects(ENVELOPE(' . $from . ',' . $to . ',1,0))';
+        return '_query_:"{!field f=' . $field . ' score=overlapRatio queryTargetProportion=0.3}Intersects(ENVELOPE(' . $from . ',' . $to . ',1,0))"';
     }
 
     protected function getYearRangeQuery($params) {
