@@ -598,7 +598,7 @@ var TueFind = {
         }
     },
 
-    SelfArchiving: function() {
+    FormValidation: function() {
         let addButton = "<i class='fa fa-plus-circle addjsicon' aria-hidden='true'></i>";
         let removeButton = "<i class='fa fa-minus-circle removejsicon' aria-hidden='true'></i>";
         $('.multifieldtext').each(function(){
@@ -629,6 +629,42 @@ var TueFind = {
           thisInputBlock.hide();
           thisInputBlock.prev().find('i').show();
         })
+
+        removeValidation($('.exclusiveSelect').find('input:checked').val());
+
+        function removeValidation (blockSelected) {
+            $('.feedback-content form .jshide').each(function(){
+            let thisBlock = $(this);
+            if(thisBlock.hasClass(blockSelected+"")) {
+                thisBlock.find('input').each(function(){
+                    if($(this).prev().hasClass('required')){
+                        $(this).prop('required',true);
+                    }
+                })
+                thisBlock.show();
+            }else{
+                thisBlock.find('input').each(function(){
+                    $(this).prop('required',false);
+                })
+                thisBlock.hide();
+            }
+            })
+        }
+
+        $(document).on("change", ".exclusiveSelect", function() {
+            removeValidation($(this).find('input:checked').val());
+        })
+
+        $('.feedback-content form .btn.btn-primary').on( "click", function(e) {
+            $('.jshide').each(function(){
+                let thisBlock = $(this);
+                    if(thisBlock.css('display') != 'none') {
+                        thisBlock.find('input').each(function(){
+                        $(this).prop('required',false);
+                    })
+                }
+            })
+        });
     }
 };
 
@@ -686,7 +722,5 @@ $(document).ready(function () {
     new DataTable('.dataTable',{
         scrollX: true
     });
-
-    TueFind.SelfArchiving();
 
 });

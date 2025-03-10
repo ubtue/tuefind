@@ -477,7 +477,9 @@ forms:
     enabled: true
     onlyForLoggedUsers: true
     title: SA_review
-    useCaptcha: false
+    emailSubject: "%%title%%"
+    recipient:
+       - email: pica_template_generator@localhost
 
     help:
       pre: ""
@@ -494,57 +496,39 @@ forms:
         type: text
         required: true
 
-      #Rezensiertes Werk group open
-      - name: rezensiertes_werk_group_name
-        label: SA_reviewer_team
-        type: hidden
-        group: werkgroup_6
+      - name: reviewed_work_authors
+        label: SA_reviewed_work_authors
+        type: multifieldtext
+        maxMultiFieldtext: 8
+        required: true
 
-      - name: rezensiertes_werk_group_autor
-        label: SA_author_or_editor
+      - name: reviewed_work_ISBN
+        label: SA_reviewed_work_ISBN
+        type: text
+
+      - name: reviewed_work_title
+        label: SA_reviewed_work_title
         type: text
         required: true
-        group: werkgroup_6
 
-      - name: rezensiertes_werk_group_title
-        label: SA_title
+      - name: revieved_work_erscheinungsjahr
+        label: SA_reviewed_work_publication_year
         type: text
         required: true
-        group: werkgroup_6
 
-      - name: rezensiertes_werk_group_publication_year
-        label: SA_year_of_publication
+      - name:  reviewed_work_IxTheo_Link
+        label: SA_reviewed_work_ixtheo_link
         type: text
-        required: true
-        group: werkgroup_6
 
-      - name: rezensiertes_werk_group_ISBN
-        label: "ISBN"
-        type: text
-        required: false
-        group: werkgroup_6
-
-      - name: rezensiertes_werk_group_IxTheo_Link
-        label: "IxTheo-Link"
-        type: text
-        required: false
-        group: werkgroup_6
-      #Rezensiertes Werk group close
 
       - name: language
         label: SA_language_of_article
         type: language
         required: true
 
-      #In Werk group open
-      - name: rezensiertes_werk_group_name
-        label: SA_source_of_work
-        type: hidden
-        group: inwerkgroup_12
-
       - name: inwerkradio
         label: ""
-        type: radio
+        type: exclusiveSelect
         required: true
         options:
           - value: journal
@@ -552,98 +536,110 @@ forms:
           - value: anthology
             label: SA_in_the_collection
 
+      #Rezension superior anthology group open
+      - name: rezension_superior_anthology_group_author
+        label: SA_author_or_editor
+        type: text
+        required: true
+        group: anthology
+
+      - name: rezension_superior_anthology_group_title
+        label: SA_title
+        type: text
+        required: true
+        group: anthology
+
+      - name: rezension_superior_anthology_group_erscheinungsjahr
+        label: SA_year_of_publication
+        type: text
+        require: true
+        group: anthology
+
+      - name: rezension_superior_anthology_group_ISBN
+        label: "ISBN"
+        type: text
+        required: false
+        group: anthology
+
+      - name:  rezension_superior_anthology_IxTheo_Link
+        label: "IxTheo-Link"
+        type: text
+        required: false
+        group: anthology
+      #Rezension superior anthology group close
+
+
+      #In Werk group open
       - name: zeitschrift_werk_group_title
         label: SA_title
         type: text
         required: true
-        group: inwerkgroup_12
+        group: journal
 
       - name: zeitschrift_werk_group_ISSN
         label: "ISSN"
         type: text
         required: false
-        group: inwerkgroup_12
+        group: journal
 
       - name: sammelband_werk_group_ISBN
         label: "ISBN"
         type: text
         required: false
-        group: inwerkgroup_12
+        group: journal
 
       - name: zeitschrift_werk_group_IxTheo_Link
         label: "IxTheo-Link"
         type: text
         required: false
-        group: inwerkgroup_12
+        group: journal
 
       - name: sammelband_werk_group_Herausgeber
         label: SA_editor
         type: text
         require: true
-        group: inwerkgroup_12
+        group: journal
 
-      - name: sammelband_werk_group_erscheinungsjahr
-        label: SA_year_of_publication
-        type: text
-        require: true
-        group: inwerkgroup_12
 
       - name: zeitschrift_werk_group_band
         label: SA_volume
         type: text
-        required: false
-        group: inwerkgroup_12
+        required: true
+        group: journal
 
       - name: zeitschrift_werk_group_jahr
         label: Year
         type: text
         required: true
-        group: inwerkgroup_12
+        group: journal
 
       - name: zeitschrift_werk_group_heft
         label: SA_issue
         type: text
-        required: false
-        group: inwerkgroup_12
+        required: true
+        group: journal
 
       - name: zeitschrift_werk_group_aufsatz_ID
         label: SA_article_id
         type: text
         required: false
-        group: inwerkgroup_12
+        group: journal
 
       - name: zeitschrift_werk_group_seiten
         label: Pages
         type: text
-        required: true
-        group: inwerkgroup_12
+        group: journal
 
       #In Werk group close
 
-      - name: onlineversion
-        label: SA_is_the_online_version_avaible
-        type: radio
-        required: true
-        options:
-          - value: bereit1
-            label: yes
-          - value: bereit2
-            label: no
-
-      - name: onlineversion_werk_group_fulltext
-        label: SA_full_text_is_not_freely_available
-        type: text
-        required: true
-
-      - name: onlineversion_werk_group_openaccess
-        label: "Open Access"
-        type: text
-        required: true
+      - name: online_links
+        label: SA_online_links
+        type: multifieldtext
+        maxMultiFieldtext: 3
 
       - name: comment
         label: SA_comment
         type: text
-        required: true
 
   SelfArchivingAufsatz:
     enabled: true
@@ -651,7 +647,7 @@ forms:
     title: SA_article
     emailSubject: "%%title%%"
     recipient:
-       - email: pica_template_generator@localhost
+      - email: pica_template_generator@localhost
 
 
     help:
@@ -672,107 +668,117 @@ forms:
       - name: subtitle
         label: SA_subtitle
         type: text
-        required: true
 
       - name: language
         label: SA_language_of_article
         type: language
         required: true
 
-      #In Werk group open
-      - name: rezensiertes_werk_group_name
-        label: SA_source_of_work
-        type: hidden
-        group: inwerkgroup_12
-
       - name: inwerkradio
         label: ""
-        type: radio
+        type: exclusiveSelect
         required: true
         options:
-          - value: journal
+          - value: "journal"
             label: SA_in_the_magazine
-          - value: anthology
+          - value: "anthology"
             label: SA_in_the_collection
 
+      #In Werk group open
       - name: superior_title
         label: SA_title
         type: text
         required: true
-        group: inwerkgroup_12
-
-      - name: sammelband_werk_group_Herausgeber
-        label: SA_editor
-        type: multifieldtext
-        maxMultiFieldtext: 8
-        group: inwerkgroup_12
-
-      - name: sammelband_werk_group_erscheinungsjahr
-        label: SA_year_of_publication
-        type: text
-        required: true
-        group: inwerkgroup_12
-
-      - name: sammelband_werk_group_ISBN
-        label: "ISBN"
-        type: text
-        required: false
-        group: inwerkgroup_12
+        group: journal
 
       - name: zeitschrift_werk_group_ISSN
         label: "ISSN"
         type: text
         required: false
-        group: inwerkgroup_12
+        group: journal
 
       - name: zeitschrift_werk_group_IxTheo_Link
         label: "IxTheo-Link"
         type: text
         required: false
-        group: inwerkgroup_12
+        group: journal
 
       - name: zeitschrift_werk_group_band
         label: SA_volume
         type: text
         required: true
-        group: inwerkgroup_12
+        group: journal
 
       - name: zeitschrift_werk_group_jahr
         label: Year
         type: text
         required: true
-        group: inwerkgroup_12
+        group: journal
 
       - name: zeitschrift_werk_group_heft
         label: SA_issue
         type: text
         required: true
-        group: inwerkgroup_12
+        group: journal
 
       - name: zeitschrift_werk_group_aufsatz_ID
         label: SA_article_id
         type: text
         required: true
-        group: inwerkgroup_12
+        group: journal
 
       - name: superior_pages
         label: Pages
         type: text
         required: false
-        group: inwerkgroup_12
-
+        group: journal
       #In Werk group close
+
+      #In Werk group2 open
+      - name: superior_title2
+        label: SA_title
+        type: text
+        required: true
+        group: anthology
+
+      - name: sammelband_werk_group_Herausgeber
+        label: SA_editor
+        type: multifieldtext
+        maxMultiFieldtext: 8
+        group: anthology
+
+      - name: sammelband_werk_group_erscheinungsjahr
+        label: SA_year_of_publication
+        type: text
+        group: anthology
+
+      - name: sammelband_werk_group_ISBN
+        label: "ISBN"
+        type: text
+        required: false
+        group: anthology
+
+      - name: zeitschrift_werk_group_IxTheo_Link2
+        label: "IxTheo-Link"
+        type: text
+        required: false
+        group: anthology
+
+      - name: superior_pages2
+        label: Pages
+        type: text
+        required: false
+        group: anthology
+      #In Werk group2 close
 
       - name: online_links
         label: SA_online_links
         type: multifieldtext
         maxMultiFieldtext: 3
-        required: true
 
       - name: comment
         label: SA_comment
         type: text
-        required: true
 
   SelfArchivingMonographie:
     enabled: true
