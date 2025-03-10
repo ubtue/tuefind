@@ -539,7 +539,8 @@ forms:
       #Rezension superior anthology group open
       - name: rezension_superior_anthology_group_author
         label: SA_author_or_editor
-        type: text
+        type: multifieldtext
+        maxMultiFieldtext: 8
         required: true
         group: anthology
 
@@ -582,24 +583,11 @@ forms:
         required: false
         group: journal
 
-      - name: sammelband_werk_group_ISBN
-        label: "ISBN"
-        type: text
-        required: false
-        group: journal
-
       - name: zeitschrift_werk_group_IxTheo_Link
         label: "IxTheo-Link"
         type: text
         required: false
         group: journal
-
-      - name: sammelband_werk_group_Herausgeber
-        label: SA_editor
-        type: text
-        require: true
-        group: journal
-
 
       - name: zeitschrift_werk_group_band
         label: SA_volume
