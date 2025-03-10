@@ -481,8 +481,6 @@ forms:
     recipient:
        - email: pica_template_generator@localhost
 
-    useCaptcha: false
-
     help:
       pre: ""
 
@@ -649,7 +647,7 @@ forms:
     title: SA_article
     emailSubject: "%%title%%"
     recipient:
-      - email: johannes.riedl@uni-tuebingen.de
+      - email: pica_template_generator@localhost
 
 
     help:
