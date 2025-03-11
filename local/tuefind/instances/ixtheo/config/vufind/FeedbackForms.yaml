@@ -467,7 +467,7 @@ forms:
         type: text
         required: true
 
-      - name: reviewed_work_authors
+      - name: reviewed_work_group_authors
         label: SA_reviewed_work_authors
         type: multifieldtext
         maxMultiFieldtext: 8
@@ -475,27 +475,27 @@ forms:
         settings:
           - groupClassName: reviewed-work
 
-      - name: reviewed_work_ISBN
+      - name: reviewed_work_group_ISBN
         label: SA_reviewed_work_ISBN
         type: text
         settings:
           - groupClassName: reviewed-work
 
-      - name: reviewed_work_title
+      - name: reviewed_work_group_title
         label: SA_reviewed_work_title
         type: text
         required: true
         settings:
           - groupClassName: reviewed-work
 
-      - name: reviewed_work_erscheinungsjahr
+      - name: reviewed_work_group_erscheinungsjahr
         label: SA_reviewed_work_publication_year
         type: text
         required: true
         settings:
           - groupClassName: reviewed-work
 
-      - name:  reviewed_work_IxTheo_Link
+      - name:  reviewed_work_group_IxTheo_Link
         label: SA_reviewed_work_ixtheo_link
         type: text
         settings:
@@ -507,7 +507,7 @@ forms:
         required: true
 
       - name: inwerkradio
-        label: ""
+        label: "SA_review_place_of_publication"
         type: exclusiveSelect
         required: true
         options:
@@ -649,7 +649,7 @@ forms:
         required: true
 
       - name: inwerkradio
-        label: ""
+        label: "SA_article_place_of_publication"
         type: exclusiveSelect
         required: true
         options:
