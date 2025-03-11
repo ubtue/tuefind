@@ -1,7 +1,7 @@
 <?php
 namespace TueFind\Controller;
 
-class AuthorController extends \VuFind\Controller\AuthorController {
+class AuthorController extends \VuFindResultsGrouping\Controller\AuthorController {
 
     public function searchAction()
     {

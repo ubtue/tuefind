@@ -109,7 +109,7 @@ class Grouping
     {
         $params = [
             'group' => $this->container->offsetExists('group') ? (bool)$this->container->offsetGet('group') : (bool)$this->config->get('group'),
-            'group_field' => $this->container->offsetExists('group_field') ? $this->container->offsetGet('group_field') : $this->config->get('group.field'),
+            'group_field' => $this->container->offsetExists('group_field') ? $this->container->offsetGet('group_field') : explode(':', $this->config->get('group.field')),
             'group_limit' => $this->container->offsetExists('group_limit') ? $this->container->offsetGet('group_limit') : $this->config->get('group.limit'),
         ];
         return $params;

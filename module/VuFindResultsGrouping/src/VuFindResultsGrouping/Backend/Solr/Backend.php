@@ -6,6 +6,7 @@
  * @package  Search
  * @author   <dku@outermedia.de>
  */
+
 namespace VuFindResultsGrouping\Backend\Solr;
 
 use VuFindSearch\ParamBag;
@@ -110,13 +111,17 @@ class Backend extends \VuFindSearch\Backend\Solr\Backend
             if ($params->contains('group.limit', '')) {
                 $params->set('group.limit', '10');
             }
+
             // ngroups have massive performance penalty!
             $params->set('group.ngroups', 'false');
             $params->set('stats', 'true');
-            //$params->set('stats.field', '{!cardinality=true}' . $params->get('group.field')['0']);
+            // $params->set('stats.field', '{!cardinality=true}' . $params->get('group.field')['0']);
             // Solr 9 has different methods to calculate cardinality:
             // https://solr.apache.org/guide/solr/latest/query-guide/stats-component.html
-            $params->set('stats.field', '{!cardinality=hllLog2m}' . $params->get('group.field')['0']);
+
+            // explode for multivalue fields
+            // $params->set('stats.field', '{!cardinality=hllLog2m}' . $params->get('group.field')['0']);
+            $params->set('stats.field', '{!cardinality=hllLog2m}' . explode(':', $params->get('group.field')));
         }
 
         return $this->connector->search($params);

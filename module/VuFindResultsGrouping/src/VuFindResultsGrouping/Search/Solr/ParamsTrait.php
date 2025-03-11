@@ -33,7 +33,6 @@ use VuFindSearch\ParamBag;
  */
 trait ParamsTrait
 {
-    
     /**
      * Return the current filters as an array of strings ['field:filter']
      *
@@ -81,7 +80,7 @@ trait ParamsTrait
         }
         return $filterQuery;
     }
-    
+
     /**
      * Create search backend parameters for advanced features.
      *
@@ -91,35 +90,37 @@ trait ParamsTrait
     {
         $backendParams = new ParamBag();
         $backendParams->add('year', (int)date('Y') + 1);
-        
+
         $this->restoreFromCookie();
-        
+
         // Fetch group params for grouping
         $config = $this->configLoader->get('config');
         $index = $config->get('Index');
         $group = false;
-        
+
         $groupingParams = $this->grouping->getCurrentSettings();
-        
+
         if (isset($groupingParams['group'])) {
             $group = $groupingParams['group'];
         } elseif ($index->get('group') !== null) {
             $group = $index->get('group');
         }
-        
+
         if ((bool)$group === true) {
             $backendParams->add('group', 'true');
-            
+
             $group_field = '';
             $group_limit = 0;
-            
+
             if (isset($groupingParams['group_field'])) {
                 $group_field = $groupingParams['group_field'];
             } elseif ($index->get('group.field') !== null) {
                 $group_field = $index->get('group.field');
+
             }
+            // $backendParams->add('group.field', explode(':', $group_field));
             $backendParams->add('group.field', $group_field);
-            
+
             if (isset($groupingParams['group_limit'])) {
                 $group_limit = $groupingParams['group_limit'];
             } elseif ($index->get('group.limit') !== null) {
@@ -129,27 +130,27 @@ trait ParamsTrait
         }
         // search those shards that answer, accept partial results
         $backendParams->add('shards.tolerant', 'true');
-        
+
         // maximum search time in ms
         // $backendParams->add('timeAllowed', '4000');
-        
+
         // defaultOperator=AND was removed in schema.xml
         $backendParams->add('q.op', "AND");
-        
+
         // increase performance for facet queries
         $backendParams->add('facet.threads', "4");
-        
+
         // Spellcheck
         $backendParams->set(
             'spellcheck',
             $this->getOptions()->spellcheckEnabled() ? 'true' : 'false'
         );
-        
+
         // Facets
         $facets = $this->getFacetSettings();
         if (!empty($facets)) {
             $backendParams->add('facet', 'true');
-            
+
             foreach ($facets as $key => $value) {
                 // prefix keys with "facet" unless they already have a "f." prefix:
                 $fullKey = substr($key, 0, 2) == 'f.' ? $key : "facet.$key";
@@ -157,20 +158,20 @@ trait ParamsTrait
             }
             $backendParams->add('facet.mincount', 1);
         }
-        
+
         // Filters
         $filters = $this->getFilterSettings();
         foreach ($filters as $filter) {
             $backendParams->add('fq', $filter);
         }
-        
+
         // Shards
         $allShards = $this->getOptions()->getShards();
         $shards = $this->getSelectedShards();
         if (empty($shards)) {
             $shards = array_keys($allShards);
         }
-        
+
         // If we have selected shards, we need to format them:
         if (!empty($shards)) {
             $selectedShards = [];
@@ -180,7 +181,7 @@ trait ParamsTrait
             $shards = $selectedShards;
             $backendParams->add('shards', implode(',', $selectedShards));
         }
-        
+
         // Sort
         $sort = $this->getSort();
         if ($sort) {
@@ -193,19 +194,19 @@ trait ParamsTrait
             }
             $backendParams->add('sort', $this->normalizeSort($sort));
         }
-        
+
         // Highlighting disabled
         $backendParams->add('hl', 'false');
-        
+
         // Pivot facets for visual results
-        
+
         if ($pf = $this->getPivotFacets()) {
             $backendParams->add('facet.pivot', $pf);
         }
-        
+
         return $backendParams;
     }
-    
+
     /**
      * This method reads the cookie and stores the information into the session
      * So we only need to process session bwlow.

@@ -13,14 +13,8 @@ class SolrMarc extends SolrDefault
         // c.f. the overwritten functions below
     }
 
-    use Feature\MarcAdvancedTrait {
-        \TueFind\RecordDriver\Feature\MarcAdvancedTrait::getFormats as getMarcTraitFormats;
-        \TueFind\RecordDriver\Feature\MarcAdvancedTrait::getTitle as getMarcTraitTitle;
-        \TueFind\RecordDriver\Feature\MarcAdvancedTrait::getLanguages as getMarcTraitLanguages;
-        \TueFind\RecordDriver\Feature\MarcAdvancedTrait::getISSNs as getMarcTraitISSNs;
-        \TueFind\RecordDriver\Feature\MarcAdvancedTrait::getISBNs as getMarcTraitISBNs;
-        // c.f. the overwritten functions below
-    }
+    use \VuFindResultsGrouping\RecordDriver\SubrecordTrait;
+
     public const ISIL_PREFIX_GND = '(DE-588)';
     public const ISIL_PREFIX_K10PLUS = '(DE-627)';
 
