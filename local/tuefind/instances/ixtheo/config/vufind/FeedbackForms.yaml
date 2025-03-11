@@ -542,11 +542,17 @@ forms:
         required: false
         group: anthology
 
-      - name:  rezension_superior_anthology_IxTheo_Link
+      - name:  rezension_superior_anthology_group_IxTheo_link
         label: "IxTheo-Link"
         type: text
         required: false
         group: anthology
+
+      - name: rezension_superior_anthology_group_seiten
+        label: Pages
+        type: text
+        group: anthology
+
       #Rezension superior anthology group close
 
 
