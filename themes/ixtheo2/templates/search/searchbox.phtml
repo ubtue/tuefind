@@ -247,7 +247,7 @@
                                         <li><a class="dropdown-item" href="<?=$this->url('alphabrowse-home')?>"><?=$this->transEsc('Browse Alphabetically')?></a></li>
                                     </ul>
                                 </li>
-                                <li class=""><a href="<?=$this->url('search-results')?>?lookfor=&type=BibleRangeSearch" role="button" rel="nofollow">Bibelstellensuche</a></li>
+                                <li class=""><span class="bibel-button"><?=$this->transEsc('Bibelstellensuche')?></span></li>
                                 <li class=""><a href="<?=$this->url('search-newitem')?>" role="button" rel="nofollow"><?=$this->transEsc('New Items')?></a></li>
                                 <li class=""><a href="<?=$this->url('search-history')?>" role="button" rel="nofollow"><?=$this->transEsc('Search History')?></a></li>
                                 <?php if (!empty($keyboardLayouts)): ?>
@@ -280,6 +280,5 @@
         </div>
     </div>
 </section>
-
 
 <?php endif;?>
