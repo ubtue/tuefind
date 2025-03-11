@@ -488,7 +488,7 @@ forms:
         settings:
           - groupClassName: reviewed-work
 
-      - name: revieved_work_erscheinungsjahr
+      - name: reviewed_work_erscheinungsjahr
         label: SA_reviewed_work_publication_year
         type: text
         required: true
