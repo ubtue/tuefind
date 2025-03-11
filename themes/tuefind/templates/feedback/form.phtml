@@ -50,12 +50,24 @@ print $this->content()->renderTranslated($this->formId, 'feedback');
   <?php $currentGroup = null;
   $groupMultiFieldtext = "";
   $isOpen_groupMultiFieldtext = false;
+  $groupColor = false;
   ?>
   <?php foreach ($form->getFormElementConfig() as $el): ?>
     <?php
 
     $formElement = $form->get($el['name']);
 
+    if(isset($el['settings']) && isset($el['settings']['groupClassName'])) {
+      if($groupColor === false) {
+        $groupColor = true;
+        echo "<div class='".$el['settings']['groupClassName']."'>";
+      }
+    }else{
+      if($groupColor !== false) {
+        $groupColor = false;
+        echo "</div>";
+      }
+    }
 
     // Group form elements into field sets
     $handleGroup = $group = null;

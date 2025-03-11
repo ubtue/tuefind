@@ -404,69 +404,40 @@ forms:
         type: language
         required: true
 
-      #In Werk group open
-      - name: rezensiertes_werk_group_name
-        label: SA_source_of_work_lexicon
-        type: hidden
-        group: inwerkgroup_7
-
       - name: zeitschrift_werk_group_title
         label: SA_title
         type: text
         required: true
-        group: inwerkgroup_7
 
       - name: zeitschrift_werk_group_band
         label: SA_volume
         type: text
         required: true
-        group: inwerkgroup_7
 
       - name: zeitschrift_werk_group_year
         label: SA_year_of_publication
         type: text
         required: true
-        group: inwerkgroup_7
 
       - name: zeitschrift_werk_group_ISBN
         label: "ISBN"
         type: text
         required: false
-        group: inwerkgroup_7
 
       - name: zeitschrift_werk_group_IxTheo_Link
         label: "IxTheo-Link"
         type: text
         required: false
-        group: inwerkgroup_7
 
       - name: zeitschrift_werk_group_seiten_oder_spalten
         label: SA_pages_or_columns
         type: text
         required: false
-        group: inwerkgroup_7
 
-      #In Werk group close
-
-      - name: onlineversion
-        label: SA_is_the_online_version_avaible
-        type: radio
-        required: true
-        options:
-          - value: bereit1
-            label: yes
-          - value: bereit2
-            label: no
-
-      - name: onlineversion_werk_group_fulltext
-        label: SA_full_text_is_not_freely_available
-        type: text
-        required: true
-
-      - name: onlineversion_werk_group_openaccess
-        label: "Open Access"
-        type: text
-        required: true
+      - name: online_links
+        label: SA_online_links
+        type: multifieldtext
+        maxMultiFieldtext: 3
 
       - name: comment
         label: SA_comment
@@ -501,25 +472,34 @@ forms:
         type: multifieldtext
         maxMultiFieldtext: 8
         required: true
+        settings:
+          - groupClassName: reviewed-work
 
       - name: reviewed_work_ISBN
         label: SA_reviewed_work_ISBN
         type: text
+        settings:
+          - groupClassName: reviewed-work
 
       - name: reviewed_work_title
         label: SA_reviewed_work_title
         type: text
         required: true
+        settings:
+          - groupClassName: reviewed-work
 
       - name: revieved_work_erscheinungsjahr
         label: SA_reviewed_work_publication_year
         type: text
         required: true
+        settings:
+          - groupClassName: reviewed-work
 
       - name:  reviewed_work_IxTheo_Link
         label: SA_reviewed_work_ixtheo_link
         type: text
-
+        settings:
+          - groupClassName: reviewed-work
 
       - name: language
         label: SA_language_of_article
