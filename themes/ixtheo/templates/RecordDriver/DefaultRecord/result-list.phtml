@@ -55,7 +55,7 @@
                     <a href="<?=$this->record($authorityDriver)->getLink('titles-by', $authorityDriver)?>" rel="nofollow"><i class="fa fa-book" aria-hidden="true" title="<?=$this->transEsc('author_all_titles_tooltip')?>"></i></a>
                     <a href="<?=$this->recordLinker()->getUrl($authorityDriver)?>" rel="nofollow"><i class="fa fa-user-circle" aria-hidden="true" title="<?=$this->transEsc('author_details_tooltip')?>"></i></a>
                   <?php else: ?>
-                    <a href="<?=$this->record($this->driver)->getLink('author', $author)?>"><i class="fa fa-book" aria-hidden="true" title="<?=$this->transEsc('author_all_titles_tooltip')?>"></i></a>
+                    <a href="<?=$this->record($this->driver)->getLink('author', $author)?>" rel="nofollow"><i class="fa fa-book" aria-hidden="true" title="<?=$this->transEsc('author_all_titles_tooltip')?>"></i></a>
                   <?php endif; ?>
                 <?php else: ?>
                   <?php /* Simple link to title search by author */ ?>
@@ -79,7 +79,7 @@
                   <?=$this->escapeHtml($corporation[$corporetionIndex])?>
                   <?php if ($corporationID && $authorityDriver = $this->authority()->recordExists($corporationID)): ?>
                     <a href="<?=$this->record($authorityDriver)->getLink('titles-by', $authorityDriver)?>" rel="nofollow"><i class="fa fa-book" aria-hidden="true" title="<?=$this->transEsc('author_all_titles_tooltip')?>"></i></a>
-                    <a href="<?=$this->recordLinker()->getUrl($authorityDriver)?>"><i class="fa fa-user-circle" aria-hidden="true" title="<?=$this->transEsc('author_details_tooltip')?>"></i></a>
+                    <a href="<?=$this->recordLinker()->getUrl($authorityDriver)?>" rel="nofollow"><i class="fa fa-user-circle" aria-hidden="true" title="<?=$this->transEsc('author_details_tooltip')?>"></i></a>
                   <?php else: ?>
                     <a href="<?=$this->record($this->driver)->getLink('author', $corporation[$corporetionIndex])?>" rel="nofollow"><i class="fa fa-book" aria-hidden="true" title="<?=$this->transEsc('author_all_titles_tooltip')?>"></i></a>
                   <?php endif; ?>
@@ -164,11 +164,11 @@
         <?php if ($this->driver->supportsAjaxStatus()): ?>
           <strong class="hideIfDetailed"><?=$this->transEsc('Call Number')?>:</strong>
           <span class="callnumber ajax-availability hidden">
-            <?=$this->transEsc('Loading')?>...<br/>
+            <?=$this->transEsc('loading_ellipsis')?><br>
           </span>
           <strong><?=$this->transEsc('Located')?>:</strong>
           <span class="location ajax-availability hidden">
-            <?=$this->transEsc('Loading')?>...
+            <?=$this->transEsc('loading_ellipsis')?>
           </span>
           <div class="locationDetails"></div>
         <?php else: ?>
@@ -228,7 +228,7 @@
         <span  style="opacity: 0;"><small><?=$this->escapeHtmlAttr($this->driver->getUniqueID())?></small></span>
         <?php if (!$openUrlActive && empty($urls) && $this->driver->supportsAjaxStatus()): ?>
           <span class="status ajax-availability hidden">
-            <span class="label label-default"><?=$this->transEsc('Loading')?>...</span>
+            <span class="label label-default"><?=$this->transEsc('loading_ellipsis')?></span>
           </span>
         <?php endif; ?>
         </div>
@@ -307,7 +307,7 @@
           ]);
         ?>
       <?php endif; ?>
-      <?=$this->driver->supportsCoinsOpenUrl()?'<span class="Z3988" title="' . $this->escapeHtmlAttr($this->driver->getCoinsOpenUrl()) . '"></span>':''?>
+      <?=$this->driver->supportsCoinsOpenUrl() ? '<span class="Z3988" aria-hidden="true" title="' . $this->escapeHtmlAttr($this->driver->getCoinsOpenUrl()) . '"></span>' : ''?>
     </div>
 
     <!-- BEGIN result-list-grouping-button.phtml -->
