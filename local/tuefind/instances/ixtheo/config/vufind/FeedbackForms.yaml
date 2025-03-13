@@ -378,6 +378,9 @@ forms:
     enabled: true
     onlyForLoggedUsers: true
     title: SA_encyclopedia_article
+    recipient:
+      - email: pica_template_generator@localhost
+
 
     help:
       pre: ""
