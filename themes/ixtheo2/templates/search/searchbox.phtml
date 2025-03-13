@@ -98,7 +98,7 @@
                     <div class="simple-keyboard"></div>
                 </div>
                 <?= $this->context($this)->renderInContext('search/searchTabs', ['searchTabs' => $tabConfig['tabs'], 'hiddenFilters' => $hiddenFilters, 'showCounts' => $tabConfig['showCounts']]); ?>
-                <form id="searchForm" class="searchForm ix2-searchForm tuefind-event-search Form-on-submit ix-display-flex" method="get" action="<?=$this->url($basicSearch)?>" name="searchForm" autocomplete="off">
+                <form id="searchForm" class="searchForm ix2-searchForm tuefind-event-search Form-on-submit" method="get" action="<?=$this->url($basicSearch)?>" name="searchForm" autocomplete="off">
                     <div class="searchForm-inputs">
                     <?php
                         // Note: we need type="text" for autocomplete role="combobox"

@@ -668,9 +668,7 @@ background-color: #00000085;
 .ix2-searchForm .searchForm-inputs {
   background-color: #fff;
 }
-.ix2-nomargin.ix2-main-searchForm-type {
-  padding-right: 8px !important;
-}
+
 .ix2-searchbox-adv-search {
   background-color: #fff;
   padding-top: 4px;
@@ -921,6 +919,11 @@ a.black-icon {
 /* Extra small devices (portrait phones, less than 576px) */
 
 @media (max-width: 575.98px) {
+
+  .searchForm {
+    margin: auto !important;
+  }
+
   .navigation .navbar-right > li {
     float: left;
     margin-right: 10px;
@@ -958,9 +961,6 @@ a.black-icon {
   .sub-title-networking {
     display: none;
   }
-  .ix2-search-form-bottom-nav {
-    margin-top: -20px;
-  }
   .ix2-search-form-bottom-nav .home-navbar {
     padding-left: 20px;
   }
@@ -979,6 +979,10 @@ a.black-icon {
 /* Small devices (landscape phones, 576px and up) */
 
 @media (min-width: 576px) and (max-width: 767.98px) {
+
+  .searchForm {
+    margin: auto !important;
+  }
 
   .navigation .navbar-right > li {
     float: left;
@@ -1014,9 +1018,6 @@ a.black-icon {
   .ixtheo2-networking-block {
     padding-top: 20px !important;
   }
-  .ix2-search-form-bottom-nav {
-    margin-top: -20px;
-  }
   .ix2-search-form-bottom-nav .home-navbar {
     padding-left: 20px;
   }
@@ -1035,6 +1036,7 @@ a.black-icon {
 
 /* Medium devices (tablets, 768px and up) */
 @media (min-width: 768px) and (max-width: 991.98px) {
+
   .ixtheo2-networking-link {
     font-size: 24px;
     margin-bottom: 0;
@@ -1311,4 +1313,17 @@ a.black-icon {
 .innovativ-image-12 {
   background-image: url(/themes/ixtheo2/images/images_small/innovativ/Reihen.jpg);
   min-height: 200px;
+}
+.active-filters .facet,.facet-group .active {
+  background-color: @template-primary;
+}
+.ix2-searchForm .active-filters {
+  display: block;
+  margin-block-start: 5px;
+}
+.ix2-searchForm .reset-filters-btn {
+  white-space: nowrap;
+}
+#limit.form-control {
+  width: 100%;
 }
