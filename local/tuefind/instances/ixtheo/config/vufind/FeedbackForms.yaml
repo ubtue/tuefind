@@ -378,6 +378,7 @@ forms:
     enabled: true
     onlyForLoggedUsers: true
     title: SA_encyclopedia_article
+    emailSubject: "%%title%%"
     recipient:
       - email: pica_template_generator@localhost
 
@@ -445,7 +446,6 @@ forms:
       - name: comment
         label: SA_comment
         type: text
-        required: true
 
   SelfArchivingRezension:
     enabled: true
@@ -701,7 +701,6 @@ forms:
       - name: zeitschrift_werk_group_aufsatz_ID
         label: SA_article_id
         type: text
-        required: true
         group: journal
 
       - name: superior_pages
