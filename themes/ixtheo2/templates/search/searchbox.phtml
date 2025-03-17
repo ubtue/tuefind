@@ -239,8 +239,8 @@
                                         </a>
                                     </li>
                                 <?php endif;?>
-                                <li class="dropdown ">
-                                    <a class="dropdown-toggle"><?=$this->transEsc('Browse')?>&nbsp;<span class="caret"></span></a>
+                                <li class="">
+                                    <a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ><?=$this->transEsc('Browse')?>&nbsp;<span class="caret"></span></a>
                                     <ul class="dropdown-menu">
                                         <li><a class="dropdown-item" href="<?=$this->url('keywordchainsearch-home')?>"><?=$this->transEsc('Browse Keywordchains')?></a></li>
                                         <li><a class="dropdown-item" href="<?=$this->url('browse-home')?>"><?=$this->transEsc('Browse the Catalog')?></a></li>
@@ -248,11 +248,12 @@
                                     </ul>
                                 </li>
                                 <li class=""><span class="bibel-button"><?=$this->transEsc('Bibelstellensuche')?></span></li>
-                                <li class=""><a href="<?=$this->url('search-newitem')?>" role="button" rel="nofollow"><?=$this->transEsc('New Items')?></a></li>
+                                <?php $newItemActive = ''; if($routeParams['controller'] == 'Search' && $routeParams['action'] == 'NewItem') { $newItemActive = 'active'; } ?>
+                                <li class="<?=$newItemActive;?>"><a href="<?=$this->url('search-newitem')?>" role="button" rel="nofollow"><?=$this->transEsc('New Items')?></a></li>
                                 <li class=""><a href="<?=$this->url('search-history')?>" role="button" rel="nofollow"><?=$this->transEsc('Search History')?></a></li>
                                 <?php if (!empty($keyboardLayouts)): ?>
-                                <li class="dropdown ix2-keyboard-dropdown ">
-                                    <a class="dropdown-toggle"><?=$this->transEsc('Virtual Keyboard')?>&nbsp;<span class="caret"></span></a>
+                                <li class="ix2-keyboard-dropdown">
+                                    <a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ><?=$this->transEsc('Virtual Keyboard')?>&nbsp;<span class="caret"></span></a>
                                     <ul class="dropdown-menu">
                                         <?php
                                             $this->headScript()->appendFile('vendor/js.cookie.js');
