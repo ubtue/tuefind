@@ -642,4 +642,21 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
         }
         return false;
     }
+
+    public function searchMenuNavActive(): array {
+        $currentRoute = $this->getRouteParams();
+        $navActive['historyActive'] = '';
+        $navActive['newItemActive'] = '';
+        $navActive['keyWordChainSearchActive'] = '';
+        if($currentRoute['controller'] == 'Search' && $currentRoute['action'] == 'History') {
+            $navActive['historyActive'] = 'active';
+        }
+        if($currentRoute['controller'] == 'Search' && $currentRoute['action'] == 'NewItem') {
+            $navActive['newItemActive'] = 'active';
+        }
+        if($currentRoute['controller'] == 'Keywordchainsearch' && $currentRoute['action'] == 'Home' || $currentRoute['controller'] == 'Browse' && $currentRoute['action'] == 'Home' || $currentRoute['controller'] == 'Alphabrowse' && $currentRoute['action'] == 'Home') {
+            $navActive['keyWordChainSearchActive'] = 'active';
+        }
+        return $navActive;
+    }
 }
