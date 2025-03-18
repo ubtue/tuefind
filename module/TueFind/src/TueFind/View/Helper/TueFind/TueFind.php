@@ -648,14 +648,15 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
         $navActive['historyActive'] = '';
         $navActive['newItemActive'] = '';
         $navActive['keyWordChainSearchActive'] = '';
+        $className = 'active';
         if($currentRoute['controller'] == 'Search' && $currentRoute['action'] == 'History') {
-            $navActive['historyActive'] = 'active';
+            $navActive['historyActive'] = $className;
         }
         if($currentRoute['controller'] == 'Search' && $currentRoute['action'] == 'NewItem') {
-            $navActive['newItemActive'] = 'active';
+            $navActive['newItemActive'] = $className;
         }
         if($currentRoute['controller'] == 'Keywordchainsearch' && $currentRoute['action'] == 'Home' || $currentRoute['controller'] == 'Browse' || $currentRoute['controller'] == 'Alphabrowse' && $currentRoute['action'] == 'Home') {
-            $navActive['keyWordChainSearchActive'] = 'active';
+            $navActive['keyWordChainSearchActive'] = $className;
         }
         return $navActive;
     }
