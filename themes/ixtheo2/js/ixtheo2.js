@@ -269,11 +269,17 @@ $(function () {
         }
       });
     
-      $('.bibel-button').click(function(){
+      $('.ix2-search-form-bottom-nav .bibel-button').click(function(){
         $('.searchForm_type option').each(function(){
             if($(this).val() == 'BibleRangeSearch') {
                 $(this).attr('selected',true);
             }
         })
+        $(this).parent().addClass('active');
       });
+
+      if($('.ix2-searchForm .searchForm_type').val() == 'BibleRangeSearch') {
+        $('.ix2-search-form-bottom-nav .bibel-button').parent().addClass('active');
+      }
+
 });
