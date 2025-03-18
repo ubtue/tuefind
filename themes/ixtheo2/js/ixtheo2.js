@@ -255,7 +255,6 @@ $(function () {
       /* ========================================================================= */
       /*	On scroll fade/bounce effect
       /* ========================================================================= */
-      var scroll = new SmoothScroll('a[href*="#"]');
 
       // -----------------------------
       //  On Scroll
@@ -281,5 +280,6 @@ $(function () {
       if($('.ix2-searchForm .searchForm_type').val() == 'BibleRangeSearch') {
         $('.ix2-search-form-bottom-nav .bibel-button').parent().addClass('active');
       }
+
 
 });
