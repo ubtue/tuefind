@@ -3,6 +3,9 @@
  * Copyright 2021 (C) Bibliotheksservice-Zentrum Baden-
  * Württemberg, Konstanz, Germany
  *
+ * Copyright 2025 (C) Bibliothek - Universität Tübingen
+ * Author Steven Lolong (steven.lolong@uni-tuebingen.de)
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
@@ -33,7 +36,7 @@ trait SubrecordTrait
     /**
      * @return bool
      */
-    public function isSubRecord() : bool
+    public function isSubRecord(): bool
     {
         return isset($this->fields['_isSubRecord']) ?
             $this->fields['_isSubRecord'] : false;
@@ -42,7 +45,7 @@ trait SubrecordTrait
     /**
      * @return bool
      */
-    public function hasSubRecords() : bool
+    public function hasSubRecords(): bool
     {
         if (null !== ($collection = $this->getSubRecords())) {
             return 0 < $collection->count();

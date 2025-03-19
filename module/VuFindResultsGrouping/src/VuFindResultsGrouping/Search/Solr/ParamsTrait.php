@@ -30,6 +30,11 @@ use VuFindSearch\ParamBag;
  * @package VuFindResultsGrouping\Search\Solr
  * @author Cornelius Amzar <cornelius.amzar@bsz-bw.de>
  * @author Robert Lange <lange@ub.uni-leipzig.de>
+ *
+ *
+ * Controlling Result is changed from Result Grouping to Collapse and Expand
+ * @author Steven Lolong <steven.lolong@uni-tuebingen.de>
+ *
  */
 trait ParamsTrait
 {
@@ -107,26 +112,44 @@ trait ParamsTrait
         }
 
         if ((bool)$group === true) {
-            $backendParams->add('group', 'true');
+            // $backendParams->add('group', 'true');
+            $backendParams->add('expand', 'true');
 
             $group_field = '';
             $group_limit = 0;
+            $group_expand = '';
 
             if (isset($groupingParams['group_field'])) {
                 $group_field = $groupingParams['group_field'];
             } elseif ($index->get('group.field') !== null) {
                 $group_field = $index->get('group.field');
-
             }
             // $backendParams->add('group.field', explode(':', $group_field));
-            $backendParams->add('group.field', $group_field);
+            // $backendParams->add('group.field', $group_field);
 
             if (isset($groupingParams['group_limit'])) {
                 $group_limit = $groupingParams['group_limit'];
             } elseif ($index->get('group.limit') !== null) {
                 $group_limit = $index->get('group.limit');
             }
-            $backendParams->add('group.limit', $group_limit);
+            if (isset($groupingParams['group_expand'])) {
+                $group_expand = $groupingParams['group_expand'];
+            } elseif ($index->get('group.expand') !== null) {
+
+            }
+
+            // $backendParams->add('group.limit', $group_limit);
+            // ngroups is used for pagination
+            // $backendParams->add('group.ngroups', 'true');
+
+            // collapse and expand
+            for ($i = 0; $i < count($group_field); $i++) {
+                $backendParams->add('fq', '{!collapse field=' . $group_field[$i] . '}');
+            }
+
+
+            $backendParams->add('expand.rows=', $group_limit);
+            $backendParams->add('expand.field=', $group_expand);
         }
         // search those shards that answer, accept partial results
         $backendParams->add('shards.tolerant', 'true');
@@ -223,6 +246,9 @@ trait ParamsTrait
             }
             if (isset($this->cookie->group_limit)) {
                 $this->container->offsetSet('group_limit', $this->cookie->group_limit);
+            }
+            if (isset($this->cookie->group_expand)) {
+                $this->container->offsetSet('group_expand', $this->cookie->group_expand);
             }
         }
     }

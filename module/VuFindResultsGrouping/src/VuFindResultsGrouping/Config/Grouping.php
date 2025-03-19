@@ -27,6 +27,10 @@ use Laminas\Session\Container as SessionContainer;
 /**
  * Class for storing grouping options
  * @author Cornelius Amzar <cornelius.amzar@bsz-bw.de>
+ *
+ * Controlling Result is changed from Result Grouping to Collapse and Expand
+ * @author Steven Lolong <steven.lolong@uni-tuebingen.de>
+ *
  */
 class Grouping
 {
@@ -38,9 +42,12 @@ class Grouping
     protected $response;
     protected $cookie;
 
-    public function __construct($config, SessionContainer $container,
-                                $response, $cookiedata)
-    {
+    public function __construct(
+        $config,
+        SessionContainer $container,
+        $response,
+        $cookiedata
+    ) {
         $this->config = $config;
         $this->container = $container;
         $this->response = $response;
@@ -59,6 +66,9 @@ class Grouping
         if (isset($this->cookie->group_limit)) {
             $this->container->offsetSet('group_limit', $this->cookie->group_limit);
         }
+        if (isset($this->cookie->group_expand)) {
+            $this->container->offsetSet('group_expand', $this->cookie->group_expand);
+        }
     }
 
     /**
@@ -74,7 +84,8 @@ class Grouping
                 'group',
                 (int)$post['group'],
                 time() + 14 * 24 * 60 * 60,
-                '/');
+                '/'
+            );
             $header = $this->response->getHeaders();
             $header->addHeader($cookie);
             $this->container->offsetSet('group', $post['group']);
@@ -85,7 +96,8 @@ class Grouping
                 'group_field',
                 $post['group_field'],
                 time() + 14 * 24 * 60 * 60,
-                '/');
+                '/'
+            );
             $header = $this->response->getHeaders();
             $header->addHeader($cookie);
             $this->container->offsetSet('group_field', $post['group_field']);
@@ -96,26 +108,40 @@ class Grouping
                 'group_limit',
                 $post['group_limit'],
                 time() + 14 * 24 * 60 * 60,
-                '/');
+                '/'
+            );
             $header = $this->response->getHeaders();
             $header->addHeader($cookie);
             $this->container->offsetSet('group_limit', $post['group_limit']);
             $params['limit'] = $post['group_limit'];
         }
+        if (isset($post['group_expand'])) {
+            $cookie = new SetCookie(
+                'group_expand',
+                $post['group_expand'],
+                time() + 14 * 24 * 60 * 60,
+                '/'
+            );
+            $header = $this->response->getHeaders();
+            $header->addHeader($cookie);
+            $this->container->offsetSet('group_expand', $post['group_expand']);
+            $params['limit'] = $post['group_expand'];
+        }
         return $params;
     }
 
-    public function getCurrentSettings() : array
+    public function getCurrentSettings(): array
     {
         $params = [
             'group' => $this->container->offsetExists('group') ? (bool)$this->container->offsetGet('group') : (bool)$this->config->get('group'),
             'group_field' => $this->container->offsetExists('group_field') ? $this->container->offsetGet('group_field') : explode(':', $this->config->get('group.field')),
             'group_limit' => $this->container->offsetExists('group_limit') ? $this->container->offsetGet('group_limit') : $this->config->get('group.limit'),
+            'group_expand' => $this->container->offsetExists('group_expand') ? $this->container->offsetGet('group_expand') : $this->config->get('group.expand'),
         ];
         return $params;
     }
 
-    public function isActive() : bool
+    public function isActive(): bool
     {
         $conf = $this->getCurrentSettings();
         return $conf['group'] == 1;

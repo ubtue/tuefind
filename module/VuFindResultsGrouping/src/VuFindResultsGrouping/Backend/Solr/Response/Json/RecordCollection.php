@@ -7,6 +7,7 @@
  * @package  Search
  * @author   <dku@outermedia.de>
  */
+
 namespace VuFindResultsGrouping\Backend\Solr\Response\Json;
 
 class RecordCollection extends \VuFindSearch\Backend\Solr\Response\Json\RecordCollection
@@ -19,6 +20,10 @@ class RecordCollection extends \VuFindSearch\Backend\Solr\Response\Json\RecordCo
     protected $groupFieldName;
 
     /**
+     * @var boolean
+     */
+    protected $expanded;
+    /**
      * Constructor.
      *
      * @param array $response Deserialized SOLR response
@@ -27,6 +32,13 @@ class RecordCollection extends \VuFindSearch\Backend\Solr\Response\Json\RecordCo
      */
     public function __construct(array $response)
     {
+        // echo $this->isGrouped() ? 'true' : 'false';
+        // echo '<pre>';
+        // print_r($response);
+        // echo '</pre>';
+        // die();
+        // Fetch group params for grouping
+
         $this->response = array_replace_recursive(static::$template, $response);
 
         if (true === $this->isGrouped()) {
@@ -41,6 +53,7 @@ class RecordCollection extends \VuFindSearch\Backend\Solr\Response\Json\RecordCo
             $this->offset = $this->response['response']['start'];
         }
 
+        $this->expanded = isset($this->response['expanded']) && true === is_array($response['expanded']) ? true : false;
         $this->rewind();
     }
 
@@ -52,27 +65,22 @@ class RecordCollection extends \VuFindSearch\Backend\Solr\Response\Json\RecordCo
     }
 
     /**
-     * Return total number of records found.
      *
-     * @return int
+     * @return boolean
      */
-    public function getTotal()
+    public function hasExpanded()
     {
-        /*return true === $this->isGrouped()
-            ? $this->response['stats']['stats_fields'][$this->groupFieldName]['cardinality']
-            : $this->response['response']['numFound'];
-         */
-
-        if ($this->isGrouped()) {
-            // Careful: This will output the whole number of records, not the number of groups
-            //return $this->response['grouped'][$this->groupFieldName]['matches'];
-            $total = 0;
-            foreach ($this->response['grouped'][$this->groupFieldName]['groups'] as $group) {
-                $total += $group['doclist']['numFound'];
-            }
-            return $total;
-        } else {
-            return $this->response['response']['numFound'];
-        }
+        return $this->expanded;
     }
+
+    /**
+     * Get extended results.
+     *
+     * @return array
+     */
+    public function getExpanded()
+    {
+        return $this->response['expanded'] ?? [];
+    }
+
 }
