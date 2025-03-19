@@ -49,7 +49,7 @@ class RecordDataFormatterFactory extends \VuFind\View\Helper\Root\RecordDataForm
 
     protected function addInterlibraryLoan(&$spec) {
         $spec->setTemplateLine(
-            'Fernleihe', 'showInterlibraryLoan', 'data-interlibraryLoan.phtml'
+            'Interlibrary_Loan', 'showInterlibraryLoan', 'data-interlibraryLoan.phtml', ['translate' => true]
         );
     }
 
