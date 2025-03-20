@@ -112,7 +112,6 @@ trait ParamsTrait
         }
 
         if ((bool)$group === true) {
-            // $backendParams->add('group', 'true');
             $backendParams->add('expand', 'true');
 
             $group_field = '';
@@ -124,7 +123,6 @@ trait ParamsTrait
             } elseif ($index->get('group.field') !== null) {
                 $group_field = $index->get('group.field');
             }
-            // $backendParams->add('group.field', explode(':', $group_field));
             // $backendParams->add('group.field', $group_field);
 
             if (isset($groupingParams['group_limit'])) {
@@ -135,21 +133,16 @@ trait ParamsTrait
             if (isset($groupingParams['group_expand'])) {
                 $group_expand = $groupingParams['group_expand'];
             } elseif ($index->get('group.expand') !== null) {
-
+                $group_limit = $index->get('group.expand');
             }
-
-            // $backendParams->add('group.limit', $group_limit);
-            // ngroups is used for pagination
-            // $backendParams->add('group.ngroups', 'true');
 
             // collapse and expand
             for ($i = 0; $i < count($group_field); $i++) {
                 $backendParams->add('fq', '{!collapse field=' . $group_field[$i] . '}');
             }
 
-
-            $backendParams->add('expand.rows=', $group_limit);
-            $backendParams->add('expand.field=', $group_expand);
+            $backendParams->add('expand.rows', $group_limit);
+            $backendParams->add('expand.field', $group_expand);
         }
         // search those shards that answer, accept partial results
         $backendParams->add('shards.tolerant', 'true');
