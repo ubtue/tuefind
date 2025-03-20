@@ -366,15 +366,6 @@
                             <div id="<?=$pid . $count?>" class="panel-collapse">
                                 <div class="panel-body">
                                     <div class="row">
-                                        <div class="col-xs-4 col-sm-2">
-                                            <?php
-                                            $subCoverDetails = $this->record($sub)->getCoverDetails('result-list', 'small', $recordLinker->getUrl($this->driver));
-                                            $subCover = $subCoverDetails['html'];
-
-                                            ?>
-                                            <?=$subCover?>
-
-                                        </div>
                                         <div class="col-xs-8 col-sm-10">
                                             <a class="title markjs" href="<?=$recordLinker->getUrl($sub)?>">
                                                 <?=$this->record($sub)->getTitleHtml()?>
