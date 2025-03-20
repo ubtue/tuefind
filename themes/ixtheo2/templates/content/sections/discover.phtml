@@ -4,10 +4,8 @@
             <p class="cw-subtitle cw-text-primary">Finden | Suchen | Nutzen</p>
             <h2 class="cw-h2 cw-mb-5">IxTheo entdecken</h2>
         </div>
-        <div class="swiper cw-guides-slider-discover mx-n2 cw-pt-3 swiper-container-horizontal">
-            <!-- Additional required wrapper-->
+        <div class="swiper cw-guides-slider-discover">
             <div class="swiper-wrapper">
-                <!-- Slides-->
                 <div class="swiper-slide cw-h-auto cw-px-2">
                     <a href="<?=$this->url('content-page', ['page' => 'Discover']) ?>">
                         <div class="cw-mb-lg-0 text-center">
@@ -61,11 +59,7 @@
                     </a>
                 </div>
             </div>
-            <div class="cw-mt-3">
-                <div class="swiper-button-next"></div>
-                <div class="swiper-button-prev"></div>
-                <div class="swiper-pagination"></div>
-            </div>
+            <div class="swiper-pagination"></div>
         </div>
     </div>
 </section>
@@ -75,8 +69,13 @@
     var guidesSlider = new Swiper('.cw-guides-slider-discover', {
         slidesPerView: 4,
         spaceBetween: 15,
+        direction: "horizontal",
         loop: true,
-        roundLengths: true,
+        pagination: {
+            el: ".swiper-pagination",
+            dynamicBullets: true,
+            clickable: true,
+        },
         breakpoints: {
             1200: {
                 slidesPerView: 4
@@ -90,11 +89,7 @@
             400: {
                 slidesPerView: 1
             }
-        },
-        navigation: {
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
-        },
+        }
     });
 EOD;
 ?>

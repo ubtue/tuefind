@@ -40,11 +40,7 @@
                         </a>
                     </div>
                 </div>
-                <div class="cw-mt-3 swiper-pagination-parent">
-                    <div class="swiper-button-next"></div>
-                    <div class="swiper-button-prev"></div>
-                    <div class="swiper-pagination"></div>
-                </div>
+                <div class="swiper-pagination"></div>
             </div>
         </div>
     </div>
@@ -71,10 +67,11 @@
                 slidesPerView: 1
             }
         },
-        navigation: {
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
-        },
+        pagination: {
+            el: ".swiper-pagination",
+            dynamicBullets: true,
+            clickable: true,
+        }
     });
 EOD;
 ?>
