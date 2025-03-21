@@ -4,6 +4,13 @@
 use VuFind\Search\Solr\Results;
 
 if ($this->results instanceof Results): ?>
+<?php 
+// advanced search = Search2
+// person = SolrAuth
+// general = Solr 
+$search_id = $this->params->getSearchClassId(); 
+    if($search_id == "Solr"):
+    ?>
     <form class="form-inline search-grouping" action="<?= $this->currentPath() ?>"
           method="POST" id="grouping">
         <div class="form-group">
@@ -16,8 +23,8 @@ if ($this->results instanceof Results): ?>
             <p>Please enable JavaScript</p>
         </noscript>
     </form>
+    <?php endif;?>
 <?php endif; ?>
-
 <?php
   // Set up page title:
   $lookfor = $this->results->getUrlQuery()->isQuerySuppressed() ? '' : $this->params->getDisplayQuery();

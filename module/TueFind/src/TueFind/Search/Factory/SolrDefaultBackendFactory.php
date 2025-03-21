@@ -6,7 +6,7 @@ use VuFindSearch\Backend\Solr\Backend;
 use VuFindSearch\Backend\Solr\Connector;
 use TueFindSearch\Backend\Solr\Response\Json\RecordCollectionFactory;
 
-class SolrDefaultBackendFactory extends AbstractSolrBackendFactory {
+class SolrDefaultBackendFactory extends \VuFindResultsGrouping\Search\Factory\SolrDefaultBackendFactory {
 
     /**
      * Create the SOLR backend.
