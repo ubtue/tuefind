@@ -27,9 +27,15 @@ class Email extends \VuFind\Form\Handler\Email
         return $name_candidate;
     }
 
+
+    protected function isSelfArchivingForm($formId) {
+        return preg_match('/SelfArchiving(Monographie|Aufsatz|Rezension|Lexikonartikel)/', $formId);
+    }
+
+
     protected function handleSelfArchivingForms($formId, $emailMessage, $fields) {
 
-        if (!preg_match('/SelfArchiving(Monographie|Aufsatz|Rezension|Lexikonartikel)/', $formId))
+        if (!$this->isSelfArchivingForm($formId))
             return $emailMessage;
 
        $newEmailMessage = new MimeMessage();
@@ -118,8 +124,13 @@ class Email extends \VuFind\Form\Handler\Email
         $emailSubject = $form->getEmailSubject($params->fromPost());
 
         $formId = $params->fromRoute('id', $params->fromQuery('id'));
-        if ($formId)
+        $suppressSpamfilter = false;
+        if ($formId) {
             $emailMessage = $this->handleSelfArchivingForms($formId, $emailMessage, $fields);
+            // Spamfilter tries to send to an external address first and prevents proper
+            // delivering to the handling logic in the mailserver
+            $suppressSpamfilter = $this->isSelfArchivingForm($formId);
+        }
 
         $result = true;
         foreach ($recipients as $recipient) {
@@ -133,7 +144,7 @@ class Email extends \VuFind\Form\Handler\Email
                 $emailSubject,
                 $emailMessage,
                 /*TueFind: $enableSpamfilter=*/
-                true
+                $suppressSpamfilter ? false : true
             );
 
             $result = $result && $success;

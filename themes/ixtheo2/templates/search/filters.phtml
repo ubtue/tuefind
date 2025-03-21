@@ -123,7 +123,7 @@
     }
   ?>
   <?php // Normal view ?>
-  <div class="active-filters hidden-xs">
+  <div class="active-filters">
     <span class="sr-only"><?=$this->transEscAttr('page_reload_on_deselect_hint') ?></span>
       <?php if ($resetLink && $options->getRetainFilterSetting()): ?>
         <a class="reset-filters-btn" href="<?=$resetLink?>"><?=$this->transEsc('reset_filters_button')?></a>
@@ -137,31 +137,4 @@
     <div class="clearfix"></div>
   </div>
   <?php // Narrow view ?>
-  <div class="active-filters visible-xs">
-    <span class="sr-only"><?=$this->transEscAttr('page_reload_on_deselect_hint') ?></span>
-    <div class="filters-toggle-bar">
-      <?php if ($resetLink && $options->getRetainFilterSetting()): ?>
-        <a class="reset-filters-btn" href="<?=$resetLink?>"><?=$this->transEsc('reset_filters_button')?></a>
-      <?php endif; ?>
-      <div class="filters-toggle collapsed" data-toggle="collapse" data-target="#active-filters-mobile">
-        <?=$this->transEsc('show_filters_html', ['%%count%%' => $filterCount])?>
-      </div>
-      <div class="clearfix"></div>
-    </div>
-    <div id="active-filters-mobile" class="filters filters-bar collapse">
-      <?=$filters ?>
-    </div>
-    <div class="clearfix"></div>
-  </div>
 <?php endif; ?>
-
-<style>
-  .ix2-searchForm .active-filters {
-    display: block;
-    margin-block-start: 5px;
-  }
-  .ix2-searchForm .reset-filters-btn {
-    white-space: nowrap;
-    margin-top: 0;
-  }
-</style>

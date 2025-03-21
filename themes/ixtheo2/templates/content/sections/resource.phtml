@@ -2,6 +2,7 @@
     <div class="container">
         <div class="row cw-mb-5">
             <div class="col-md-12 text-center cw-mt-5">
+                <span id="ixtheo-content"></span>
                 <p class="cw-subtitle cw-text-primary">Content</p>
                 <h2 class="cw-h2"> IxTheo Ressourcen</h2>
             </div>
@@ -56,11 +57,7 @@
                     </div>
                 </div>
             </div>
-            <div class="cw-mt-1 swiper-pagination-parent">
-                <div class="swiper-button-next"></div>
-                <div class="swiper-button-prev"></div>
-                <div class="swiper-pagination"></div>
-            </div>    
+            <div class="swiper-pagination"></div>   
         </div>
     </div>
 
@@ -69,8 +66,8 @@
     var guidesSlider = new Swiper('.cw-guides-slider', {
         slidesPerView: 5,
         spaceBetween: 15,
+        direction: "horizontal",
         loop: true,
-        roundLengths: true,
         breakpoints: {
             1200: {
                 slidesPerView: 4
@@ -85,9 +82,10 @@
                 slidesPerView: 1
             }
         },
-        navigation: {
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
+        pagination: {
+            el: ".swiper-pagination",
+            dynamicBullets: true,
+            clickable: true,
         },
     });
 EOD;
