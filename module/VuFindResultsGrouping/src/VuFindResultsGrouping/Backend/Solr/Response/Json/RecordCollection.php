@@ -6,6 +6,10 @@
  * @category Ida
  * @package  Search
  * @author   <dku@outermedia.de>
+ *
+ * Controlling Result is changed from Result Grouping to Collapse and Expand.
+ * Update the collection
+ * @author Steven Lolong <steven.lolong@uni-tuebingen.de>
  */
 
 namespace VuFindResultsGrouping\Backend\Solr\Response\Json;
@@ -32,12 +36,6 @@ class RecordCollection extends \VuFindSearch\Backend\Solr\Response\Json\RecordCo
      */
     public function __construct(array $response)
     {
-        // echo $this->isGrouped() ? 'true' : 'false';
-        // echo '<pre>';
-        // print_r($response);
-        // echo '</pre>';
-        // die();
-        // Fetch group params for grouping
 
         $this->response = array_replace_recursive(static::$template, $response);
 
@@ -48,7 +46,7 @@ class RecordCollection extends \VuFindSearch\Backend\Solr\Response\Json\RecordCo
             $reset = array_keys($keys);
             $this->groupFieldName = reset($reset);
 
-            $this->offset = 0; // TODO: No "start" info provided
+            $this->offset = 0;
         } else {
             $this->offset = $this->response['response']['start'];
         }
@@ -71,16 +69,6 @@ class RecordCollection extends \VuFindSearch\Backend\Solr\Response\Json\RecordCo
     public function hasExpanded()
     {
         return $this->expanded;
-    }
-
-    /**
-     * Get extended results.
-     *
-     * @return array
-     */
-    public function getExpanded()
-    {
-        return $this->response['expanded'] ?? [];
     }
 
 }

@@ -6,6 +6,10 @@
  * @category Ida
  * @package  Search
  * @author   <dku@outermedia.de>
+ *
+ * Controlling Result is changed from Result Grouping to Collapse and Expand.
+ * Update the collection
+ * @author Steven Lolong <steven.lolong@uni-tuebingen.de>
  */
 
 namespace VuFindResultsGrouping\Backend\Solr\Response\Json;
@@ -57,17 +61,22 @@ class RecordCollectionFactory extends \VuFindSearch\Backend\Solr\Response\Json\R
             );
         }
 
+        $pluginManager = $this->recordFactory[0];
+        $solrDef = $pluginManager->get('IxTheo\RecordDriver\SolrDefault');
+        $container = $solrDef->getContainer();
+        $config = $container->get(\VuFind\Config\PluginManager::class)->get('config');
+        $index = $config->get('Index');
+        $group_expand = $index->get('group.expand');
+
+
         $collection = new $this->collectionClass($response);
-
-
         $collectionHasGroups = $collection->hasExpanded();
 
-        // todo: get the group.expand from cookies or config file. Currently, it is hardcoded as $doc['title_sort']
         if (true === $collectionHasGroups) {
             if (isset($response['response']['docs'])) {
                 foreach ($response['response']['docs'] as $doc) {
 
-                    if (array_key_exists($doc['title_sort'], $response['expanded']) && true === is_array($response['expanded'][$doc['title_sort']]['docs'])) {
+                    if (array_key_exists($doc[$group_expand], $response['expanded']) && true === is_array($response['expanded'][$doc[$group_expand]]['docs'])) {
                         $docFirst = $doc;
                         $topics = [];
                         $collectionSub = new $this->collectionClass($doc);
