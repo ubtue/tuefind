@@ -355,7 +355,7 @@
                 <div class="panel-group grouped-items collapse" id="<?=$pgid?>">
                   <?php $i=0; ?>
                     <?php foreach ($subRecords as $count => $sub): ?>
-                        <div class="panel <?php echo ($i % 2 == 0 ? 'panel-info' : 'panel-default'); $i++; ?>">
+                        <div class="panel <?php echo ($i % 2 == 0 ? 'panel-default' : 'panel-primary'); $i++; ?>">
                             <?php
                             $dates = $sub->getPublicationDates();
                             $date = array_shift($dates);
