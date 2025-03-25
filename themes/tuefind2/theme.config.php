@@ -4,5 +4,6 @@ return [
     'js' => [
         'scripts.js',
         'tuefind2.js',
+        'vendor/resultGrouping.js',
     ],
 ];
