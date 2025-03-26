@@ -197,6 +197,28 @@
     </div>
 </div>
 
+<?php
+$jsSnippet = <<< 'EOD'
+    $(document).ready(function () {
+        IxTheo2.ScrollToAnchor(false);
+        $(function () {
+            let URL = $(location).attr("href");
+            const find_anchor = URL.split("#");
+            if(find_anchor.length == 2) {
+                let el = $('#'+find_anchor[1]);
+                el.addClass('in');
+                let search_form_element = document.getElementById(find_anchor[1]);
+                let y = search_form_element.getBoundingClientRect().top + window.scrollY;
+                window.scroll({
+                    top: y,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+EOD;
+?>
+<?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $jsSnippet, 'SET')?>
 <style>
     .one-fid-block {
         margin: 15px;
