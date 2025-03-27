@@ -22,7 +22,7 @@ namespace VuFindResultsGrouping\Search\Params;
 
 use VuFindResultsGrouping\Search\Solr\Params;
 use VuFindResultsGrouping\Search\Solr\AuthorParams;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 /**
  * Search params Factory

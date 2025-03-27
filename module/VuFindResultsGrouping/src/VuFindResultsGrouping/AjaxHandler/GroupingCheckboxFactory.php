@@ -21,7 +21,7 @@
 
 namespace VuFindResultsGrouping\AjaxHandler;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 /**
  * Class GroupingCheckboxFactory
