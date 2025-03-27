@@ -132,7 +132,7 @@
       $this->assetManager()->appendScriptString(implode("\n", $appendScripts));
 
       if ($this->config()->ajaxCoversEnabled()) {
-        $this->assetManager()->appendScriptFile('covers.js');
+        $this->assetManager()->appendScriptLink('covers.js');
       }
     ?>
     <?=$this->cookieConsent()->render()?>
