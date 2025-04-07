@@ -608,13 +608,15 @@ class UpgradeTest extends \PHPUnit\Framework\TestCase
             [
                 'epf',
                 'EPF.ini',
-            ]
+            ],
         ];
     }
 
-
     /**
      * Test EDS and EPF upgrades.
+     *
+     * @param string $backend        Name of the backend
+     * @param string $configFilename Configuration filename, EDS.ini or EPF.ini
      *
      * @return void
      *

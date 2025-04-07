@@ -1073,7 +1073,7 @@ class Upgrade
 
     /**
      * Upgrade EDS.ini or EPF.ini
-     * 
+     *
      * @param string $filename Config filename
      *
      * @throws FileAccessException
