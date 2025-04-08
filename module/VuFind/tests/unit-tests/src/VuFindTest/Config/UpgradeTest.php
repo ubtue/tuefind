@@ -594,47 +594,23 @@ class UpgradeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Data provider for testEbscoUpgrades
-     *
-     * @return array
-     */
-    public static function ebscoUpgradeProvider(): array
-    {
-        return [
-            [
-                'eds',
-                'EDS.ini',
-            ],
-            [
-                'epf',
-                'EPF.ini',
-            ],
-        ];
-    }
-
-    /**
-     * Test EDS and EPF upgrades.
-     *
-     * @param string $backend        Name of the backend
-     * @param string $configFilename Configuration filename, EDS.ini or EPF.ini
+     * Test EDS upgrade.
      *
      * @return void
-     *
-     * @dataProvider ebscoUpgradeProvider
      */
-    public function testEbscoUpgrade(string $backend, string $configFilename): void
+    public function testEDSUpgrade(): void
     {
-        $upgrader = $this->getUpgrader($backend);
+        $upgrader = $this->getUpgrader('eds');
         $upgrader->run();
         $this->assertEquals([], $upgrader->getWarnings());
         $results = $upgrader->getNewConfigs();
         $this->assertEquals(
             ['foo' => 'bar'],
-            $results[$configFilename]['Facets']
+            $results['EDS.ini']['Facets']
         );
         $this->assertEquals(
             'list_test',
-            $results[$configFilename]['General']['default_view']
+            $results['EDS.ini']['General']['default_view']
         );
     }
 
