@@ -755,6 +755,9 @@ forms:
     enabled: true
     onlyForLoggedUsers: true
     title: SA_monographic
+    emailSubject: "%%title%%"
+    recipient:
+      - email: pica_template_generator@localhost
 
     help:
       pre: ""
