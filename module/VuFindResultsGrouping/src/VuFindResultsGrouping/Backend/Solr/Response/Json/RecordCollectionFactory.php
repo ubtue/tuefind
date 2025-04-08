@@ -81,7 +81,7 @@ class RecordCollectionFactory extends \VuFindSearch\Backend\Solr\Response\Json\R
                         $topics = [];
                         $collectionSub = new $this->collectionClass($doc);
 
-                        foreach ($response['expanded'][$doc['title_sort']]['docs'] as $sub_doc) {
+                        foreach ($response['expanded'][$doc[$group_expand]]['docs'] as $sub_doc) {
                             $sub_doc['_isSubRecord'] = true;
                             $collectionSub->add(call_user_func($this->recordFactory, $sub_doc));
                             if (array_key_exists('topic', $sub_doc) && true === is_array($sub_doc['topic'])) {
