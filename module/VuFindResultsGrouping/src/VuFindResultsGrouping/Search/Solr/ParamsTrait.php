@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2021 (C) Bibliotheksservice-Zentrum Baden-
  * Württemberg, Konstanz, Germany
@@ -94,7 +95,6 @@ trait ParamsTrait
     public function getBackendParameters()
     {
         $backendParams = new ParamBag();
-        $backendParams->add('year', (int)date('Y') + 1);
 
         $this->restoreFromCookie();
 
