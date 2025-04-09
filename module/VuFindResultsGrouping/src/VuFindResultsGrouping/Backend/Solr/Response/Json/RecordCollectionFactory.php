@@ -62,7 +62,7 @@ class RecordCollectionFactory extends \VuFindSearch\Backend\Solr\Response\Json\R
         }
 
         $pluginManager = $this->recordFactory[0];
-        $solrDef = $pluginManager->get('IxTheo\RecordDriver\SolrDefault');
+        $solrDef = $pluginManager->get('TueFind\RecordDriver\SolrDefault');
         $container = $solrDef->getContainer();
         $config = $container->get(\VuFind\Config\PluginManager::class)->get('config');
         $index = $config->get('Index');
@@ -104,7 +104,7 @@ class RecordCollectionFactory extends \VuFindSearch\Backend\Solr\Response\Json\R
                 }
             }
         }
-
+        die();
         return $collection;
     }
 }
