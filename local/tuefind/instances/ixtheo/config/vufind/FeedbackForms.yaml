@@ -377,6 +377,7 @@ forms:
   SelfArchivingLexikonartikel:
     enabled: true
     onlyForLoggedUsers: true
+    useCaptcha: false
     title: SA_encyclopedia_article
     emailSubject: "%%title%%"
     recipient:
@@ -450,6 +451,7 @@ forms:
   SelfArchivingRezension:
     enabled: true
     onlyForLoggedUsers: true
+    useCaptcha: false
     title: SA_review
     emailSubject: "%%title%%"
     recipient:
@@ -616,6 +618,7 @@ forms:
   SelfArchivingAufsatz:
     enabled: true
     onlyForLoggedUsers: true
+    useCaptcha: false
     title: SA_article
     emailSubject: "%%title%%"
     recipient:
@@ -754,6 +757,7 @@ forms:
   SelfArchivingMonographie:
     enabled: true
     onlyForLoggedUsers: true
+    useCaptcha: false
     title: SA_monographic
     emailSubject: "%%title%%"
     recipient:
