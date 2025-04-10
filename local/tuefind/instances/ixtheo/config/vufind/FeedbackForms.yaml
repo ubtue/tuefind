@@ -409,6 +409,13 @@ forms:
         type: language
         required: true
 
+      - name: caption
+        label: SA_lexikonartikel_helptext
+        type: text
+        settings:
+          - formattintag: ""
+          - className: ""
+
       - name: zeitschrift_werk_group_title
         label: SA_title
         type: text
@@ -470,7 +477,6 @@ forms:
       - name: title
         label: SA_title_review
         type: text
-        required: true
 
       - name: reviewed_work_group_authors
         label: SA_reviewed_work_authors
@@ -533,6 +539,12 @@ forms:
         label: SA_author_or_editor
         type: multifieldtext
         maxMultiFieldtext: 8
+        required: true
+        group: anthology
+
+      - name: rezension_superior_anthology_group_place_of_publication
+        label: "SA_place_of_publication"
+        type: text
         required: true
         group: anthology
 
@@ -720,6 +732,12 @@ forms:
         required: true
         group: anthology
 
+      - name: sammelband_werk_group_place_of_publication
+        label: "SA_place_of_publication"
+        type: text
+        required: true
+        group: anthology
+
       - name: sammelband_werk_group_erscheinungsjahr
         label: SA_year_of_publication
         type: text
@@ -774,15 +792,6 @@ forms:
         maxMultiFieldtext: 8
         required: true
 
-      - name: publication_year
-        label: SA_year_of_publication
-        type: text
-        required: true
-
-      - name: output
-        label: SA_output
-        type: text
-
       - name: title
         label: SA_title
         type: text
@@ -808,6 +817,15 @@ forms:
 
       - name: publisher
         label: "SA_publisher"
+        type: text
+
+      - name: publication_year
+        label: SA_year_of_publication
+        type: text
+        required: true
+
+      - name: output
+        label: SA_output
         type: text
 
       - name: reihe
