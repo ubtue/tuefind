@@ -1,7 +1,10 @@
 TueFind2.ExpandDropdownsOnHover = true;
 
 var IxTheo2 = {
-    ScrollToAnchor: function() {
+    ScrollToAnchor: function(enable = true) {
+        if(enable !== true) {
+            return false;
+        }
         let is_anchor = false;
         let content_block_element = $("#content").html();
         let index_page = $(".index-page").html();

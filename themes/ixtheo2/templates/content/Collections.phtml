@@ -16,7 +16,7 @@
 									<div data-toggle="collapse" data-target="#collapse-inno-5">
 										<div class="cw-card-img-top cw-overflow-hidden cw-dark-overlay cw-bg-cover innovativ-image">
 											<div class="innovativ-image-bg innovativ-image-small">
-												<img src="<?=$this->imageLink('innovativ/collection_logo5.png')?>" alt="" class="cw-img-fluid cw-mb-5">
+												<img src="<?=$this->imageLink('innovativ/collection_logo5.png')?>" alt="<?=$this->transEscAttr('symbolic_image_table32');?>" class="cw-img-fluid cw-mb-5">
 											</div>
 										</div>
 										<div class="cw-card h-100 border-0 shadow">
@@ -75,7 +75,7 @@
 									<div data-toggle="collapse" data-target="#collapse-inno-2">
 										<div class="cw-card-img-top cw-overflow-hidden cw-dark-overlay cw-bg-cover innovativ-image">
 											<div class="innovativ-image-bg innovativ-image-small">
-												<img src="<?=$this->imageLink('innovativ/collection_logo2.svg')?>" alt="" class="cw-img-fluid cw-mb-5">
+												<img src="<?=$this->imageLink('innovativ/collection_logo2.svg')?>" alt="<?=$this->transEscAttr('symbolic_image_table33');?>" class="cw-img-fluid cw-mb-5">
 											</div>
 										</div>
 										<div class="cw-card h-100 border-0 shadow">
@@ -115,7 +115,7 @@
 									<div data-toggle="collapse" data-target="#collapse-inno-4">
 										<div class="cw-card-img-top cw-overflow-hidden cw-dark-overlay cw-bg-cover innovativ-image">
 											<div class="innovativ-image-bg innovativ-image-small">
-												<img src="<?=$this->imageLink('innovativ/collection_logo4.svg')?>" alt="" class="cw-img-fluid cw-mb-5">
+												<img src="<?=$this->imageLink('innovativ/collection_logo4.svg')?>" alt="<?=$this->transEscAttr('symbolic_image_table34');?>" class="cw-img-fluid cw-mb-5">
 											</div>
 										</div>
 										<div class="cw-card h-100 border-0 shadow">
@@ -153,7 +153,7 @@
 									<div data-toggle="collapse" data-target="#collapse-inno-3">
 										<div class="cw-card-img-top cw-overflow-hidden cw-dark-overlay cw-bg-cover innovativ-image">
 											<div class="innovativ-image-bg innovativ-image-small">
-												<img src="<?=$this->imageLink('innovativ/collection_logo3.svg')?>" alt="" class="cw-img-fluid cw-mb-5 cw-big">
+												<img src="<?=$this->imageLink('innovativ/collection_logo3.svg')?>" alt="<?=$this->transEscAttr('symbolic_image_table35');?>" class="cw-img-fluid cw-mb-5 cw-big">
 											</div>
 										</div>
 										<div class="cw-card h-100 border-0 shadow">
@@ -211,7 +211,7 @@
 									<div data-toggle="collapse" data-target="#collapse-inno-1">
 										<div class="cw-card-img-top cw-overflow-hidden cw-dark-overlay cw-bg-cover innovativ-image">
 											<div class="innovativ-image-bg innovativ-image-small">
-												<img src="<?=$this->imageLink('innovativ/collection_logo1.png')?>" alt="" class="cw-img-fluid cw-mb-5 cw-big">
+												<img src="<?=$this->imageLink('innovativ/collection_logo1.png')?>" alt="<?=$this->transEscAttr('symbolic_image_table36');?>" class="cw-img-fluid cw-mb-5 cw-big">
 											</div>
 										</div>
 										<div class="cw-card h-100 border-0 shadow">
@@ -262,6 +262,7 @@
 									<div class="collapse" id="collapse-inno-7">
 										<div class="card card-body">
 											<p>Das Archiv des Religionswissenschaftlichen Medien- und Informationsdienstes (REMID) enthält eine umfassende Sammlung von Primärquellen religiöser Gruppen im deutschsprachigen Raum, insbesondere der sogenannten Neuen Religiösen Bewegungen. <a href="https://www.uni-marburg.de/de/ub/forschen/historische-bestaende/sammlungen/remid-archiv">Nähere Informationen</a></p>
+											<p><a target="_blank" href="https://relbib.de/Content/cooperations_institutions#col4">Informationen auf der Website von RelBib</a></p>
 											<p><a href="<?=$this->url('search-results') ?>?lookfor=<?=urlencode('rs:remi') ?>">Publikationen und Archivmaterialien</a></p>
 										</div>
 									</div>
@@ -285,7 +286,8 @@
 									</div>
 									<div class="collapse" id="collapse-inno-9">
 										<div class="card card-body">
-										<p><a href="<?=$this->url('search-results') ?>?lookfor=<?=urlencode('rs:redo') ?>">Publikationen und Archivmaterialien</a></p>
+											<p><a target="_blank" href="https://relbib.de/Content/cooperations_institutions#col4">Informationen auf der Website von RelBib</a></p>
+											<p><a href="<?=$this->url('search-results') ?>?lookfor=<?=urlencode('rs:redo') ?>">Publikationen und Archivmaterialien</a></p>
 										</div>
 									</div>
 								</div>
@@ -308,6 +310,7 @@
 									</div>
 									<div class="collapse" id="collapse-inno-10">
 										<div class="card card-body">
+											<p><a target="_blank" href="https://relbib.de/Content/cooperations_institutions#col3">Informationen auf der Website von RelBib</a></p>
 											<p><a href="<?=$this->url('search-results') ?>?lookfor=<?=urlencode('rs:hdsa') ?>">Religionswissenschaftlich relevanter Bestand des FID Südasien</a></p>
 											<p><a href="<?=$this->url('search-results') ?>?lookfor=<?=urlencode('rs:fivi') ?>">Religionswissenschaftlich relevanter Bestand der Bibliotheken des Fachinformationsverbunds Internationale Beziehungen und Länderkunde</a></p>
 										</div>
@@ -323,64 +326,3 @@
         </div>
     </div>
 </div>
-
-<style>
-.ix2-collection .hover-animate {
-	padding: 5px;
-	border: 5px solid #3586b2;
-	border-radius: 15px;
-}
-
-.innovativ-image{
-	text-align: center;
-}
-
-.innovativ-image img {
-	max-height: 160px;
-	margin: auto;
-}
-
-.innovativ-image img.cw-big {
-	margin: auto;
-}
-
-.innovativ-image .innovativ-image-big {
-	max-width: 300px;
-	max-height: 250px;
-	min-width: 300px;
-	margin: auto;
-}
-
-.innovativ-image .innovativ-image-bg.innovativ-image-small {
-	min-height: 262px;
-    display: flex;
-	justify-content: center;
-	align-items: center;
-}
-
-.ix2-collection .innovativ-image-default-bg {
-    background-color: #c5c5c5;
-	min-height: 250px;
-}
-
-.ix2-collection .shadow {
-	background-color: black;
-}
-.ix2-collection .cw-card-img-overlay-bottom {
-	position: relative !important;
-	bottom: 0 !important;
-	top: 5px;
-	left: 8px;
-	right: 5px;
-}
-.ix2-collection .card-body {
-	padding-top: 10px;
-	padding-left: 10px;
-}
-
-.cw-text-small {
-	font-size: 13px !important;
-	max-width: 290px;
-}
-
-</style>
