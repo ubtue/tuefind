@@ -1,4 +1,5 @@
 <?php
+
 namespace KrimDok\Search\Factory;
 
 use VuFindSearch\Backend\Solr\LuceneSyntaxHelper;
@@ -8,8 +9,10 @@ use TueFindSearch\Backend\Solr\HandlerMap;
 use TueFindSearch\Backend\Solr\Response\Json\RecordCollectionFactory;
 use KrimDok\Search\Backend\Solr\Backend;
 use KrimDok\Search\Backend\Solr\QueryBuilder;
+use TueFind\View\Helper\TueFind\TueFind;
+use VuFind\XSLT\Import\VuFind;
 
-class SolrDefaultBackendFactory extends \TueFind\Search\Factory\SolrDefaultBackendFactory implements TranslatorAwareInterface
+class SolrDefaultBackendFactory extends \VuFindResultsGrouping\Search\Factory\SolrDefaultBackendFactory implements TranslatorAwareInterface
 {
     use \VuFind\I18n\Translator\TranslatorAwareTrait;
 
@@ -17,7 +20,6 @@ class SolrDefaultBackendFactory extends \TueFind\Search\Factory\SolrDefaultBacke
     protected function createConnector()
     {
         $timeout = $this->getIndexConfig('timeout', 30);
-        $config = $this->config->get($this->mainConfig);
         $this->setTranslator($this->serviceLocator->get(\Laminas\Mvc\I18n\Translator::class));
         $current_lang = $this->getTranslatorLocale();
 
@@ -78,13 +80,13 @@ class SolrDefaultBackendFactory extends \TueFind\Search\Factory\SolrDefaultBacke
     }
 
 
-     /**
-     * Create the SOLR backend.
-     *
-     * @param Connector $connector Connector
-     *
-     * @return Backend
-     */
+    /**
+    * Create the SOLR backend.
+    *
+    * @param Connector $connector Connector
+    *
+    * @return Backend
+    */
     protected function createBackend(Connector $connector)
     {
         $backend = new Backend($connector);
