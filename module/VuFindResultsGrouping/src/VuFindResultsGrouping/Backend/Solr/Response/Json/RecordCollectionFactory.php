@@ -61,17 +61,12 @@ class RecordCollectionFactory extends \VuFindSearch\Backend\Solr\Response\Json\R
             );
         }
 
-        // $pluginManager = $this->recordFactory[0];
-        // $solrDef = $pluginManager->get('TueFind\RecordDriver\SolrDefault');
-        // $container = $solrDef->getContainer();
-        // $config = $container->get(\VuFind\Config\PluginManager::class)->get('config');
-        // $index = $config->get('Index');
-        // $group_expand = $index->get('group.expand');
-
         $pluginManager = $this->recordFactory[0];
-        $serLoc = $pluginManager->getServiceLocator();
-        $solrDef = $serLoc->get('VuFindResultsGrouping\Config\Grouping')->getCurrentSettings();
-        $group_expand = array_key_exists('group_expand', $solrDef) ? $solrDef['group_expand'] : "";
+        $solrDef = $pluginManager->get('TueFind\RecordDriver\SolrDefault');
+        $container = $solrDef->getContainer();
+        $config = $container->get(\VuFind\Config\PluginManager::class)->get('config');
+        $index = $config->get('Index');
+        $group_expand = $index->get('group.expand');
 
         $collection = new $this->collectionClass($response);
         $collectionHasGroups = $collection->hasExpanded();
