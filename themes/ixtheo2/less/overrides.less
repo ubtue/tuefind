@@ -125,6 +125,7 @@
 #map.map {
   height: 400px;
   width: 100%;
+  z-index: 1;
 }
 
 .ol-popup {
@@ -132,11 +133,9 @@
   padding: 10px;
 }
 
-.map-navigation {
-  display: flex;
-  flex-direction: row;
-  flex-wrap:wrap;
-  justify-content: space-between;
+.map-navigation .high-light-marker-group {
+  display: inline-block;
+  padding: 10px 0 0 12px;
 }
 
 .map-cooperation {
@@ -1242,7 +1241,7 @@ a.black-icon {
 }
 .cw-card-img-top {
   min-height: 200px;
-  min-width: 250px;
+  min-width: 100%;
 }
 .networking-image-1 {
   background-image: url(/themes/ixtheo2/images/networking/mode/TheolCommunity.jpg);
