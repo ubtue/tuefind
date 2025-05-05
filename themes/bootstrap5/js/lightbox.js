@@ -229,7 +229,7 @@ VuFind.register('lightbox', function Lightbox() {
           _currentUrl = _originalUrl; // Now that we're logged in, where were we?
         }
         if (jq_xhr.status === 205) {
-          VuFind.refreshPage();
+          VuFind.refreshPage(jq_xhr.getResponseHeader('X-VuFind-Refresh-Method') === 'GET');
           return;
         }
         render(content);
@@ -368,8 +368,8 @@ VuFind.register('lightbox', function Lightbox() {
     // remove nodes on whose click, the modal closes
     var nodesWhichAreNotCloseTargets = focusableNodes.filter(function nodeFilter(node) {
       return !node.hasAttribute("data-lightbox-close") && (
-        !node.hasAttribute("data-dismiss") ||
-        node.getAttribute("data-dismiss") !== "modal"
+        !node.hasAttribute("data-bs-dismiss") ||
+        node.getAttribute("data-bs-dismiss") !== "modal"
       );
     });
 

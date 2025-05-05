@@ -54,10 +54,8 @@ $thumbnail-width-large:  160px !default;
   #datevispublishDatexWrapper,
   // Bulk action checkboxes:
   #search-cart-form .result .checkbox,
-  // Search result bulk action buttons:
-  #search-cart-form .bulkActionButtons,
-  // Favorites bulk action buttons:
-  form[name="bulkActionForm"] .bulkActionButtons { display: none; }
+  // Search result and favorites bulk action buttons:
+  .bulkActionButtons { display: none; }
 }
 
 .searchHomeContent { @include clearfix(); }
@@ -98,11 +96,22 @@ $thumbnail-width-large:  160px !default;
 
 header .container.navbar { margin-bottom: 0; }
 
-.search-sort, .search-result-limit { display: flex; }
-.search-sort label, .search-result-limit label {
-  line-height: $input-height-base;
-  padding-right: .5rem;
+.search-sort,
+.search-result-limit {
+  display: flex;
+  gap: 0.5rem;
+
+  label {
+    flex: none;
+    white-space: nowrap;
+    line-height: $input-height-base;
+  }
+
+  select.form-control {
+    flex: 1 1 0%;
+  }
 }
+
 .search-stats {
   display: block;
   padding-top: 0.5rem;
@@ -423,6 +432,8 @@ body.rtl {
 }
 
 .searchtools {
+  margin-bottom: 0.5rem;
+
   h2 {
     display: inline-block;
     margin: 0;
@@ -738,9 +749,14 @@ table.search-history-table {
   }
 }
 
+.nav.searchbox{
+  width: 100%;
+}
+
 .searchForm {
-  margin: 0;
+  margin: 0.2rem 0;
   padding: 0;
+  width: 100%;
 
   .searchForm-query {
     position: relative;
@@ -858,4 +874,14 @@ table.search-history-table {
       content: ', ';
     }
   }
+}
+
+.callnumAndLocation .statusItemsHoldingsTextFields {
+  border: none;
+  padding: 0;
+  padding-left: 15px;
+}
+
+.callnumAndLocation .itemWithAdditionalHoldingFields td {
+  border-bottom-width: 0;
 }
