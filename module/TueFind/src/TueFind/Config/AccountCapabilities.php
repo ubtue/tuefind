@@ -26,6 +26,16 @@ class AccountCapabilities extends \VuFind\Config\AccountCapabilities
     }
 
     /**
+     * Are users allowed to use SelfArchiving?
+     */
+    public function getSelfarchivingSetting(): string
+    {
+        return isset($this->tuefindConfig->General->SelfArchiving)
+            && $this->tuefindConfig->General->SelfArchiving === 'enabled'
+            ? 'enabled' : 'disabled';
+    }
+
+    /**
      * Are users allowed to upload publications for their registered authorities?
      */
     public function getPublicationSetting(): string

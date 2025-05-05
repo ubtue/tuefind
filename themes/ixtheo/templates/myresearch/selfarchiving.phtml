@@ -1,0 +1,37 @@
+<?php
+    // Set up page title:
+    $this->headTitle($this->translate('Self Archiving'));
+
+    // Set up breadcrumbs:
+    $this->layout()->breadcrumbs = '<li><a href="' . $this->url('myresearch-home') . '">' . $this->transEsc('Your Account') . '</a></li>';
+?>
+
+<?=$this->component('show-account-menu-button')?>
+
+<div class="<?=$this->layoutClass('mainbody')?>">
+  <h2><?=$this->transEsc('Neue Publikation melden')?></h2>
+  <?=$this->flashmessages();?>
+  <p>Möchten Sie eine Publikation melden, die in IxTheo noch nicht verzeichnet ist?</p>
+  <br />
+  <p>Hier finden Sie unsere Formulare:</p>
+  <ul>
+    <li><a href="/Feedback/Form/SelfArchivingAufsatz">Aufsatz in einer Zeitschrift oder einem Sammelband</a></li>
+    <li><a href="/Feedback/Form/SelfArchivingRezension">Rezension</a></li>
+    <li><a href="/Feedback/Form/SelfArchivingLexikonartikel">Lexikonartikel</a></li>
+    <li><a href="/Feedback/Form/SelfArchivingMonographie">Monographie oder herausgegebenes Werk</a></li>
+  </ul>
+  <p>Wenn Sie eine Publikation anderen Typs melden möchten, wenden Sie sich bitte per E-Mail an uns: <a href="mailto:ixtheo-self-archiving@ub.uni-tuebingen.de">ixtheo-self-archiving@ub.uni-tuebingen.de</a></p>
+
+  <hr />
+
+  <p>Nach dem Upload wird der gemeldete Titel geprüft und in den IxTheo aufgenommen.</p>
+
+  <p>Er findet sich dann nach wenigen Tagen im IxTheo. Ab diesem Zeitpunkt können Sie bei eigenen Titeln außerdem unseren Self-Archiving Service nutzen und ein Digitalisat Ihrer Publikation als PDF-Datei hochladen.</p>
+
+  <p>Falls sich im Zuge der Bearbeitung Fragen ergeben sollten, kommen wir auf Sie zu.</p>
+
+</div>
+
+<div class="<?=$this->layoutClass('sidebar')?>" id="myresearch-sidebar" role="navigation" aria-label="<?=$this->transEsc('account_menu_label')?>">
+  <?=$this->accountMenu()->render('SelfArchiving')?>
+</div>

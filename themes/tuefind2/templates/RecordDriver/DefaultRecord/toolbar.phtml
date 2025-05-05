@@ -63,6 +63,7 @@
           <?=$block?>
         <?php endif; ?>
       </li>
+
     <?php endif; ?>
     <?php if (!empty($addThis)): ?>
       <li role="none"><a class="addThis addthis_button" href="https://www.addthis.com/bookmark.php?v=250&amp;pub=<?=urlencode($addThis)?>"><i class="fa fa-bookmark" aria-hidden="true"></i> <?=$this->transEsc('Bookmark')?></a></li>
@@ -71,6 +72,14 @@
 
     <!-- TueFind: Publish button -->
     <?=$this->render('RecordDriver/DefaultRecord/toolbar-publish.phtml'); ?>
+
+     <!-- TueFind: SelfArchiving button -->
+     <li role="none">
+        <a class="toolbar-btn" href="/MyResearch/SelfArchiving">
+          <?=$this->icon('addthis-bookmark') ?>
+          <?=$this->transEsc('SelfArchiving_menu_label')?>
+        </a>
+    </li>
   </ul>
 </nav>
 
