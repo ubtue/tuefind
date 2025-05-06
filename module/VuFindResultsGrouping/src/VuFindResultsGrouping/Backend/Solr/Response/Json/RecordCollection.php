@@ -71,4 +71,8 @@ class RecordCollection extends \VuFindSearch\Backend\Solr\Response\Json\RecordCo
         return $this->expanded;
     }
 
+    public function getResponseDocs()
+    {
+        return $this->response['response']['docs'] ?? [];
+    }
 }
