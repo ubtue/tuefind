@@ -27,7 +27,7 @@
   <fieldset class="eds">
     <legend><?=$this->transEsc('Limit To')?></legend>
     <?php foreach ($this->limiterList as $field => $facet): ?>
-      <?php switch($facet['Type']) {
+      <?php switch ($facet['Type']) {
           case 'multiselectvalue': ?>
             <label for="limit_<?=$this->escapeHtmlAttr(str_replace(' ', '+', $field))?>"><?=$this->transEsc($facet['Label'])?></label><br>
             <select id="limit_<?=$this->escapeHtmlAttr($field)?>" name="filter[]" multiple="multiple" size="10" class="form-control">
@@ -109,8 +109,8 @@
       <input type="text" id="PublicationDateSlider">
     </div>
     <?php
-      $this->headScript()->appendFile('vendor/bootstrap-slider.min.js');
-      $this->headLink()->appendStylesheet('vendor/bootstrap-slider.min.css');
+      $this->assetManager()->appendScriptLink('vendor/bootstrap-slider.min.js');
+      $this->assetManager()->appendStyleLink('vendor/bootstrap-slider.min.css');
       $min = !empty($current['values'][0]) ? min($current['values'][0], 1400) : 1400;
       $future = date('Y', time() + 31536000);
       $max = !empty($current['values'][1]) ? max($future, $current['values'][1]) : $future;
@@ -142,6 +142,6 @@
           });
           JS;
     ?>
-    <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $script, 'SET'); ?>
+    <?=$this->assetManager()->outputInlineScriptString($script); ?>
   </fieldset>
 <?php endif; ?>

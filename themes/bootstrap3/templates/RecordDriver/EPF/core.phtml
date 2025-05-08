@@ -1,4 +1,4 @@
-<?php $this->headLink()->appendStylesheet('EDS.css'); ?>
+<?php $this->assetManager()->appendStyleLink('EDS.css'); ?>
 <?php
     $items = $this->driver->getItems('core');
     $accessLevel = $this->driver->getAccessLevel();
@@ -49,7 +49,7 @@
           <td>
             <ul>
               <?php
-                foreach($holdings as $holding):
+                foreach ($holdings as $holding):
                   if (!empty($holding)): ?>
                     <li>
                       <a href="<?=$this->escapeHtmlAttr($holding['URL'])?>"><?=$this->escapeHtml($holding['Name'])?></a>
