@@ -1,0 +1,106 @@
+<?php
+    $this->headLink()->appendStylesheet('vendor/fontawesome-free-6/awesome.css');
+    $this->headLink()->appendStylesheet('vendor/fontawesome-free-6/solid.css');
+
+    $partners = [
+        // comm
+        [   'lon' => '7.110015253718861',
+            'lat' => '50.72319649759073',
+            'group' => 'comm',
+            'popup' => '<div><font color="black"><p><a href="https://www.katholische-theologie.info/zusammenschl%C3%BCsse" target="_blank">Vereinigung der Arbeitsgemeinschaften für Katholische Theologie (VAKT)</a></p><p>c/o Sekretariat der Deutschen Bischofskonferenz <br /> Kaiserstr. 161 <br /> 53113 Bonn</p></font></div>',
+            'name' => 'Vereinigung der Arbeitsgemeinschaften für Katholische Theologie (VAKT)'
+        ],
+        [   'lon' => '13.310539926813998',
+            'lat' => '52.460591726851824',
+            'group' => 'comm',
+            'popup' => '<div><font color="black"><p><a href="https://wgth.de/" target="_blank">Wissenschaftliche Gesellschaft für Theologie (WGTh)</a></p><p>Haus der Diakonie<br />
+            Paulsenstrasse 55-56 <br />
+            12163 Berlin  </p></font></div>',
+            'name' => 'Wissenschaftliche Gesellschaft für Theologie (WGTh)'
+        ],
+        [   'lon' => '8.771853669066896',
+            'lat' => '50.80808118848182',
+            'group' => 'comm',
+            'popup' => '<div><font color="black"><p><a href="https://etft.de/" target="_blank">Evangelisch-Theologischer Fakultätentag</a></p><p>c/o Prof. Dr. Malte Dominik Krüger<br />
+            Theologische Fakultät<br />
+            Lahntor 3<br />
+            35032 Marburg</p></font></div>',
+            'name' => 'Evangelisch-Theologischer Fakultätentag'
+        ],
+        [   'lon' => '8.713223734379403',
+            'lat' => '50.09896744010327',
+            'group' => 'comm',
+            'popup' => '<div><font color="black"><p><a href="http://kthf.de/" target="_blank">Katholisch-Theologischer Fakultätentag</a></p><p>c/o Prof. Dr. Dirk Ansorge<br />
+            Offenbacher Landstraße 224<br />
+            60599 Frankfurt am Main</p></font></div>',
+            'name' => 'Katholisch-Theologischer Fakultätentag'
+        ],
+        [   'lon' => '12.427325055201944',
+            'lat' => '41.89718307461863',
+            'group' => 'comm',
+            'popup' => '<div><font color="black"><p><a href="https://www.chiesacattolica.it/" target="_blank">Conferenza Episcopale Italiana</a></p><p>Circonvallazione Aurelia, 50<br />
+            00165 Roma<br />
+            Italia</p></font></div>',
+            'name' => 'Conferenza Episcopale Italiana'
+        ],
+        [   'lon' => '6.102331538202423',
+            'lat' => '46.277782969097665',
+            'group' => 'comm',
+            'popup' => '<div><font color="black"><p><a href="https://globethics.net/" target="_blank">Globethics</a></p><p>Chemin du Pavillon 2<br />
+            1218 Le Grand-Saconnex Geneve<br />
+            Suisse</p></font></div>',
+            'name' => 'Globethics'
+        ],
+        [   'lon' => '9.05766754078338',
+            'lat' => '48.521684007647224',
+            'group' => 'comm',
+            'popup' => '<div><font color="black"><p><a href="https://www.ia-practicaltheology.org/" target="_blank">International Academy of Practical Theology (IAPT)</a></p><p>
+            Tübingen</p></font></div>',
+            'name' => 'International Academy of Practical Theology (IAPT)'
+        ],
+        [   'lon' => '11.3557404534526',
+            'lat' => '44.4942705145582',
+            'group' => 'comm',
+            'popup' => '<div><font color="black"><p><a href="https://www.resilience-ri.eu/" target="_blank">RESILIENCE (Religious Studies Infrastructure: Tools, Innovation, Experts, Connections and Centres in Europe)</a></p><p>Fscire
+            Via San Vitale, 114<br />
+            40125 Bologna<br />
+            Italia</p></font></div>',
+            'name' => 'RESILIENCE (Religious Studies Infrastructure: Tools, Innovation, Experts, Connections and Centres in Europe)'
+        ]
+    ];
+    $partners = json_encode($partners);
+?>
+
+<section class="cw-p-2">
+<div id="map" class="map"></div>
+<?php $jsSnippet = <<<EOD
+$(function () {
+    let partnersArray = {$partners};
+    IxTheo2.DrawMap('comm',partnersArray);
+});
+EOD;
+?>
+<?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $jsSnippet, 'SET')?>
+</section>
+
+<div class="cw-row">
+    <div class="cw-col-lg-12 cw-ml-lg-4">
+        <div class="cw-text-block"><br>
+            <h1 class="cw-h1">Theologische Community</h1>
+
+            <p>Die Zusammenarbeit mit verschiedenen Organisationen der theologischen Community ermöglicht vielfältige Synergien. Regelmäßig werden die Gremien über Neuerungen im Index Theologicus (IxTheo) informiert.</p>
+            <p>Aktuell arbeitet IxTheo mit folgenden Institutionen aus der theologischen Community zusammen:</p>
+            <ul>
+                <li>Vereinigung der Arbeitsgemeinschaften für Katholische Theologie (VAKT)</li>
+                <li>Wissenschaftliche Gesellschaft für Theologie (WGTh)</li>
+                <li>Evangelisch-Theologischer Fakultätentag</li>
+                <li>Katholisch-Theologischer Fakultätentag</li>
+                <li>Conferenza Episcopale Italiana</li>
+                <li>Globethics</li>
+                <li>International Academy of Practical Theology (IAPT)</li>
+                <li>RESILIENCE (Religious Studies Infrastructure: Tools, Innovation, Experts, Connections and Centres in Europe)</li>
+            </ul>
+            <p> IxTheo ist offen für neue Kooperationen und Partnerschaften innerhalb der theologischen Community. Wenn Sie Interesse an einer Zusammenarbeit haben, wenden Sie sich gerne an <a href="mailto:ixtheo@ub.uni-tuebingen.de">ixtheo@ub.uni-tuebingen.de</a>.</p>
+        </div>
+    </div>
+</div>
