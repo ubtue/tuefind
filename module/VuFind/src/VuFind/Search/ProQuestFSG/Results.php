@@ -57,13 +57,6 @@ class Results extends \VuFind\Search\Base\Results
     protected $responseFacets = null;
 
     /**
-     * Simplified version of result facets.
-     *
-     * @var array
-     */
-    protected $simplifiedResponseFacets = [];
-
-    /**
      * Support method for performAndProcessSearch -- perform a search based on the
      * parameters passed to the object.
      *
@@ -78,7 +71,7 @@ class Results extends \VuFind\Search\Base\Results
             return;
         }
         $limit  = $this->getParams()->getLimit();
-        $offset = $this->getStartRecord();
+        $offset = $this->getStartRecord() - 1;
         $params = $this->getParams()->getBackendParameters();
         $command = new SearchCommand(
             $this->backendId,
@@ -93,10 +86,9 @@ class Results extends \VuFind\Search\Base\Results
         $this->resultTotal = $collection->getTotal();
         $this->results = $collection->getRecords();
 
-        // ProQuest does not return facets unless the startRecord is 1
-        if ($offset === 1) {
+        // ProQuest does not return facets unless the offset is 0
+        if ($offset === 0) {
             $this->responseFacets = $collection->getFacets();
-            $this->simplifiedResponseFacets = $this->simplifyFacets($this->responseFacets);
         }
     }
 
@@ -110,7 +102,6 @@ class Results extends \VuFind\Search\Base\Results
     protected function storeErrorResponse(string|array $error): void
     {
         parent::storeErrorResponse($error);
-        $this->simplifiedResponseFacets = [];
         $this->responseFacets = [];
     }
 
@@ -125,7 +116,7 @@ class Results extends \VuFind\Search\Base\Results
     public function getFacetList($filter = null)
     {
         $activeFacets = $filter ?? $this->getParams()->getFacetConfig();
-        if (!empty($activeFacets) && empty($this->simplifiedResponseFacets)) {
+        if (!empty($activeFacets) && empty($this->responseFacets)) {
             // Save actual search data
             $resultTotal = $this->resultTotal;
             $results = $this->results;
@@ -144,30 +135,6 @@ class Results extends \VuFind\Search\Base\Results
             $this->errors = $errors;
             $this->overrideStartRecord($startRecordOverride);
         }
-        return $this->buildFacetList($this->simplifiedResponseFacets, $filter);
-    }
-
-    /**
-     * Simply raw ProQuestFSG facets to the form that VuFind templates expect.
-     *
-     * @param array $rawFacets Raw facts returned from the record collection
-     *
-     * @return array Simple format of facets
-     */
-    protected function simplifyFacets($rawFacets)
-    {
-        $simpleFacets = [];
-        foreach ($rawFacets as $label => $rawFacet) {
-            // Sort by hit count, descending
-            usort($rawFacet, fn ($a, $b) => ($a['count'] ?? 0) < ($b['count'] ?? 0));
-
-            $simpleFacet = [];
-            foreach ($rawFacet as $rawFacetValue) {
-                $facetName = "{$rawFacetValue['code']}|{$rawFacetValue['name']}";
-                $simpleFacet[$facetName] = $rawFacetValue['count'];
-            }
-            $simpleFacets[$label] = $simpleFacet;
-        }
-        return $simpleFacets;
+        return $this->buildFacetList($this->responseFacets, $filter);
     }
 }
