@@ -382,10 +382,11 @@ forms:
     emailSubject: "%%title%%"
     recipient:
       - email: pica_template_generator@localhost
-
+    response: SA_feedback_response
 
     help:
       pre: ""
+
 
     fields:
       - name: authors
@@ -463,6 +464,7 @@ forms:
     emailSubject: "%%title%%"
     recipient:
        - email: pica_template_generator@localhost
+    response: SA_feedback_response
 
     help:
       pre: ""
@@ -545,7 +547,6 @@ forms:
       - name: rezension_superior_anthology_group_place_of_publication
         label: "SA_place_of_publication"
         type: text
-        required: true
         group: anthology
 
       - name: rezension_superior_anthology_group_erscheinungsjahr
@@ -635,6 +636,7 @@ forms:
     emailSubject: "%%title%%"
     recipient:
       - email: pica_template_generator@localhost
+    response: SA_feedback_response
 
 
     help:
@@ -735,7 +737,6 @@ forms:
       - name: sammelband_werk_group_place_of_publication
         label: "SA_place_of_publication"
         type: text
-        required: true
         group: anthology
 
       - name: sammelband_werk_group_erscheinungsjahr
@@ -780,6 +781,7 @@ forms:
     emailSubject: "%%title%%"
     recipient:
       - email: pica_template_generator@localhost
+    response: SA_feedback_response
 
     help:
       pre: ""
@@ -812,7 +814,6 @@ forms:
 
       - name: place_of_publication
         label: "SA_place_of_publication"
-        required: true
         type: text
 
       - name: publisher
