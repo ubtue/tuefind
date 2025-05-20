@@ -382,10 +382,11 @@ forms:
     emailSubject: "%%title%%"
     recipient:
       - email: pica_template_generator@localhost
-
+    response: SA_feedback_response
 
     help:
       pre: ""
+
 
     fields:
       - name: authors
@@ -463,6 +464,7 @@ forms:
     emailSubject: "%%title%%"
     recipient:
        - email: pica_template_generator@localhost
+    response: SA_feedback_response
 
     help:
       pre: ""
@@ -634,6 +636,7 @@ forms:
     emailSubject: "%%title%%"
     recipient:
       - email: pica_template_generator@localhost
+    response: SA_feedback_response
 
 
     help:
@@ -778,6 +781,7 @@ forms:
     emailSubject: "%%title%%"
     recipient:
       - email: pica_template_generator@localhost
+    response: SA_feedback_response
 
     help:
       pre: ""
