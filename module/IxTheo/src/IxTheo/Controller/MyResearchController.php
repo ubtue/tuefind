@@ -95,6 +95,11 @@ class MyResearchController extends \TueFind\Controller\MyResearchController
             return $this->forceLogin();
         }
 
+        return $this->forward()->dispatch('Content', [
+            'action' => 'content',
+            'page' => 'SelfArchivingGuide'
+        ]);
+
     }
 
     public function subscriptionsAction() {
