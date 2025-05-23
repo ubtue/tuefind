@@ -1,0 +1,96 @@
+<?php
+
+$results = $this->driver->tryMethod('getOtherDocument', [$this->driver->getContainerTitleSort(), $this->driver->getRecordId()]);
+$view = 'list';
+// VuFindResultsGrouping\Config\Grouping
+$help_er = $this->getHelperPluginManager();
+
+// $this->render(
+//     'search/results-scripts.phtml',
+//     [
+//           'displayVersions' => true,
+//           'jsResults' => $this->searchOptions($this->driver->getSearchBackendIdentifier())->loadResultsWithJsEnabled(),
+//       ]
+// );
+// $recordLinker = $this->recordLinker($results);
+// $this->record($this->driver);
+// // print_r(get_class_methods($this));
+// print_r(get_class_methods($recordLinker));
+// $coverDetails = $this->record($this->driver)->getCoverDetails('result-list', 'medium', $recordLinker->getUrl($this->driver));
+echo "<pre>";
+echo $this->driver->hasSubRecords() ? 'true' : 'false';
+// print_r($results::class);
+echo "</pre>";
+?>
+<div class="row">
+  <div class="col-xs-11 col-xs-offset-1">
+    <div class="panel-group grouped-items collapse">
+      <?php $i = 0; ?>
+      <?php foreach ($results->getResponseDocs() as $rec): ?>
+      <?php
+    // print_r($this->record($current)::class);
+    // print_r($current->title);
+    // echo $results->getTotal();
+    // print_r(get_class_methods($this->record($current)));
+    // $curr = $current;
+    // $this->record($record)->getSearchResult($view, $results->getResponseDocs());
+    $sub = $this->record($rec);
+          ?>
+      <!-- Begin subrecords -->
+
+      <div class="panel <?php echo($i % 2 == 0 ? 'panel-info' : 'panel-default');
+          $i++; ?>">
+        <?php
+          $dates = $sub->getPublicationDates();
+          $date = array_shift($dates);
+          $edition = current((array)$sub->getEdition());
+          $header = [
+              $this->escapeHtml($sub->tryMethod('getTitle')),
+          ];
+          ?>
+        <div id="<?=$pid . $count?>" class="panel-collapse">
+          <div class="panel-body">
+            <div class="row">
+              <div class="col-xs-8 col-sm-10">
+                <a class="title markjs" href="<?=$recordLinker->getUrl($sub)?>">
+                  <?=$this->record($sub)->getTitleHtml()?>
+                </a>
+                <?php if ($titlesection = $sub->getTitleSection()):?>
+                / <?= $titlesection ?>
+                <?php endif; ?>
+
+                <?php if (!empty($edition)): ?>
+                <div>
+                  <strong><?=$this->transEsc('Edition')?>: </strong>
+                  <span property="bookEdition" class="markjs"><?=$this->escapeHtml($edition)?></span>
+                </div>
+                <?php endif; ?>
+                <div class="result-formats">
+                  <?=$this->record($sub)->getFormatList() ?>
+                </div>
+              </div> <!-- end of "content" column -->
+            </div> <!-- end row -->
+          </div> <!-- end panel-body -->
+        </div> <!-- end colllappsible part -->
+      </div> <!-- end panel -->
+
+
+      <?php endforeach; ?>
+    </div> <!-- end panel group -->
+  </div>
+  <!--end column -->
+</div>
+<!--end row -->
+<!-- end subrecords -->
+
+<?php
+    // Add any translations added when processing the search results:
+    // $translations = $this->jsTranslations()->getJSON();
+    // $script = <<<JS
+    //     VuFind.addTranslations($translations);
+    //     VuFind.initResultScripts('.results');
+    //     JS;
+?>
+<?php
+// $this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $script, 'SET');
+?>

@@ -17,9 +17,15 @@ namespace VuFindResultsGrouping\Backend\Solr\Response\Json;
 use VuFindSearch\Backend\Solr\Response\Json\Record;
 use VuFindSearch\Exception\InvalidArgumentException;
 use VuFindSearch\Response\RecordCollectionFactoryInterface;
+use VuFindResultsGrouping\Backend\Solr\Response\Json\RecordCollection;
 
 class RecordCollectionFactory extends \VuFindSearch\Backend\Solr\Response\Json\RecordCollectionFactory implements RecordCollectionFactoryInterface
 {
+    /**
+     * @var string
+     */
+    protected $expandFieldName;
+
     /**
      * Constructor.
      *
@@ -41,6 +47,14 @@ class RecordCollectionFactory extends \VuFindSearch\Backend\Solr\Response\Json\R
         }
 
         $this->collectionClass = $collectionClass;
+
+        $pluginManager = $this->recordFactory[0];
+        $solrDef = $pluginManager->get('TueFind\RecordDriver\SolrDefault');
+        $container = $solrDef->getContainer();
+        $config = $container->get(\VuFind\Config\PluginManager::class)->get('config');
+        $index = $config->get('Index');
+        $this->expandFieldName = $index->get('group.expand');
+
     }
 
     /**
@@ -61,12 +75,6 @@ class RecordCollectionFactory extends \VuFindSearch\Backend\Solr\Response\Json\R
             );
         }
 
-        $pluginManager = $this->recordFactory[0];
-        $solrDef = $pluginManager->get('TueFind\RecordDriver\SolrDefault');
-        $container = $solrDef->getContainer();
-        $config = $container->get(\VuFind\Config\PluginManager::class)->get('config');
-        $index = $config->get('Index');
-        $group_expand = $index->get('group.expand');
 
         $collection = new $this->collectionClass($response);
         $collectionHasGroups = $collection->hasExpanded();
@@ -75,12 +83,12 @@ class RecordCollectionFactory extends \VuFindSearch\Backend\Solr\Response\Json\R
             if (isset($response['response']['docs'])) {
                 foreach ($response['response']['docs'] as $doc) {
 
-                    if (array_key_exists($doc[$group_expand], $response['expanded']) && true === is_array($response['expanded'][$doc[$group_expand]]['docs'])) {
+                    if (array_key_exists($doc[$this->expandFieldName], $response['expanded']) && true === is_array($response['expanded'][$doc[$this->expandFieldName]]['docs'])) {
                         $docFirst = $doc;
                         $topics = [];
                         $collectionSub = new $this->collectionClass($doc);
 
-                        foreach ($response['expanded'][$doc[$group_expand]]['docs'] as $sub_doc) {
+                        foreach ($response['expanded'][$doc[$this->expandFieldName]]['docs'] as $sub_doc) {
                             $sub_doc['_isSubRecord'] = true;
                             $collectionSub->add(call_user_func($this->recordFactory, $sub_doc));
                             if (array_key_exists('topic', $sub_doc) && true === is_array($sub_doc['topic'])) {
@@ -106,4 +114,54 @@ class RecordCollectionFactory extends \VuFindSearch\Backend\Solr\Response\Json\R
 
         return $collection;
     }
+
+
+    /**
+     * Return Record Collections.
+     *
+     * @return RecordCollections
+     */
+
+    public function getExpandRecord($response)
+    {
+        if (!is_array($response)) {
+            throw new InvalidArgumentException(
+                sprintf(
+                    'Unexpected type of value: Expected array, got %s',
+                    gettype($response)
+                )
+            );
+        }
+
+        $collection = new $this->collectionClass($response);
+        $collectionHasGroups = $collection->hasExpanded();
+        $collection->clear();
+        if (true === $collectionHasGroups) {
+            if (isset($response['response']['docs'])) {
+                foreach ($response['response']['docs'] as $doc) {
+
+                    if (array_key_exists($doc[$this->expandFieldName], $response['expanded']) && true === is_array($response['expanded'][$doc[$this->expandFieldName]]['docs'])) {
+                        foreach ($response['expanded'][$doc[$this->expandFieldName]]['docs'] as $sub_doc) {
+                            $collection->insert(new Record($sub_doc));
+
+                        }
+                        $collection->insert(new Record($doc));
+                    } else {
+                        $collection->insert(new Record($doc));
+                    }
+                }
+            }
+        } else {
+            if (isset($response['response']['docs'])) {
+                foreach ($response['response']['docs'] as $doc) {
+                    $collection->insert(new Record($doc));
+                }
+            }
+        }
+
+        return $collection;
+    }
+
+
+
 }

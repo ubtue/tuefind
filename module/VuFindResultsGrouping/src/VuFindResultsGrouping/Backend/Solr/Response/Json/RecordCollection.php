@@ -14,6 +14,8 @@
 
 namespace VuFindResultsGrouping\Backend\Solr\Response\Json;
 
+use VuFindResultsGrouping\Backend\Solr\Response\Json\RecordCollectionFactory;
+
 class RecordCollection extends \VuFindSearch\Backend\Solr\Response\Json\RecordCollection
 {
     /**
@@ -74,5 +76,26 @@ class RecordCollection extends \VuFindSearch\Backend\Solr\Response\Json\RecordCo
     public function getResponseDocs()
     {
         return $this->response['response']['docs'] ?? [];
+    }
+
+    public function getResponse()
+    {
+        return $this->response;
+    }
+
+    public function clear()
+    {
+        $this->response['response']['docs'] = [];
+        $this->expanded = false;
+        $this->response['expanded'] = [];
+        $this->response['response']['numFound'] = 0;
+        $this->response['response']['start'] = 0;
+        $this->response['numFoundExact'] = 0;
+    }
+
+    public function insert($record)
+    {
+        array_push($this->response['response']['docs'], $record);
+        $this->response['response']['numFound']++;
     }
 }
