@@ -2,7 +2,7 @@
 
 namespace TueFind\AjaxHandler;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 class GetSubscriptionBundleEntriesFactory
     implements \Laminas\ServiceManager\Factory\FactoryInterface
