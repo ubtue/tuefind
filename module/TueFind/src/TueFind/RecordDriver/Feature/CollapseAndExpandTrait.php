@@ -44,7 +44,7 @@ trait CollapseAndExpandTrait
      *
      * @var \VuFindSearch\Response\RecordCollectionInterface
      */
-    public $otherDocument;
+    public $otherDocuments;
 
     /**
      * Return count of other Document available
@@ -52,9 +52,9 @@ trait CollapseAndExpandTrait
      *
      * @return int
      */
-    protected function getOtherDocumentCount()
+    public function getOtherDocumentCount()
     {
-        return 8;
+        return $this->otherDocumentCount;
     }
 
     /**
@@ -62,7 +62,7 @@ trait CollapseAndExpandTrait
      *
      * @return \VuFindSearch\Response\RecordCollectionInterface
      */
-    public function getOtherDocument($keyword, $recordId)
+    public function getOtherDocument($keyword)
     {
         if (null === $this->searchService) {
             return false;
@@ -114,16 +114,11 @@ trait CollapseAndExpandTrait
                     $this->groupLimit,
                     $params
                 );
-                $this->otherDocument =  $this->searchService->invoke($command)->getResult();
+                $this->otherDocuments =  $this->searchService->invoke($command)->getResult();
             }
 
         }
-
-        $manager = $this->getContainer()->get('VuFind\RecordDriverPluginManager');
-        $factory = new RecordCollectionFactory([$manager, $this->otherDocument]);
-
-
-        return $factory->getExpandRecord($this->otherDocument->getResponse());
+        return $this->otherDocuments;
     }
 
 
