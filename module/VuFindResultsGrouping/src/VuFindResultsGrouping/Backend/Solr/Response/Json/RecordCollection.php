@@ -83,15 +83,12 @@ class RecordCollection extends \VuFindSearch\Backend\Solr\Response\Json\RecordCo
         return $this->response;
     }
 
-    public function isNotEmptyExpanded($expandFieldName)
+
+    public function countExpandedDoc($expandFieldName)
     {
-        if (isset($this->response['response']['docs']) && is_array($this->response['response']['docs'])) {
-            foreach ($this->response['response']['docs'] as $doc) {
-                if (isset($doc[$expandFieldName]) && !empty($doc[$expandFieldName])) {
-                    return true;
-                }
-            }
+        if (isset($this->response['expanded'][$expandFieldName]) && is_array($this->response['expanded'][$expandFieldName]['docs'])) {
+            return count($this->response['expanded'][$expandFieldName]['docs']);
         }
-        return false;
+        return 0;
     }
 }

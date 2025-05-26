@@ -30,6 +30,8 @@ class ItemCollapseAndExpand extends \VuFind\RecordTab\AbstractContent implements
      */
     protected $searchOptionsManager;
 
+    protected $numOfExpandedDoc = 0;
+
     /**
      * Constructor
      *
@@ -44,17 +46,22 @@ class ItemCollapseAndExpand extends \VuFind\RecordTab\AbstractContent implements
         $this->config = $config;
         $this->searchOptionsManager = $som;
         $this->accessPermission = 'access.ItemCollapseAndExpand';
+
     }
 
     public function getDescription()
     {
+        $results = $this->driver->tryMethod('getOtherDocument', [$this->driver->getContainerTitleSort()]);
+        $this->numOfExpandedDoc = $results->countExpandedDoc($this->driver->getContainerTitleSort());
         // return $this->translate('collapse_and_expand_tab_description');
-        return 'Other Document';
+        return 'Other Documents (' . $this->numOfExpandedDoc . ')';
     }
 
     public function isActive()
     {
-        //    return $this->getRecordDriver()->tryMethod('hasFulltext');
-        return true;
+        $results = $this->driver->tryMethod('getOtherDocument', [$this->driver->getContainerTitleSort()]);
+        $this->numOfExpandedDoc = $results->countExpandedDoc($this->driver->getContainerTitleSort());
+
+        return $this->numOfExpandedDoc > 0 ? true : false;
     }
 }
