@@ -112,7 +112,7 @@ print $this->content()->renderTranslated($this->formId, 'feedback');
     <?php endif ?>
 
     <?php if (in_array($handleGroup, ['open', 'openAndClose'])): ?>
-      <?php if (in_array($el['type'], ['checkbox', 'radio', 'exclusiveSelect']) || (strcmp($el['group'], "__sender__") == 0)): ?>
+      <?php if (in_array($el['type'], ['checkbox', 'radio', 'exclusiveSelect']) || (strcmp($el['group'], "__sender__") == 0)): ?><? # This condition is required to avoid using custom js validation for a group of inputs 'sender' (useremail,captcha)  ?>
         <div class="field-set" role="group"<?= !empty($el['label']) ? ' aria-labelledby="' . $this->escapeHtmlAttr($formElement->getAttribute('id')) . '"' : ''?>>
       <?php else: ?>
         <div class="field-set <?=$group;?> jshide "<?= !empty($elementHelpPre) ? ' role="contentinfo" aria-label="' . $this->escapeHtmlAttr($elementHelpPre) . '"' : ''?>>
