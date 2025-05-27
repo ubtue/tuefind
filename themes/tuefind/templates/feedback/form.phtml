@@ -20,7 +20,6 @@ $helpPre = $helpPost = null;
 $helpPre = isset($help['pre']) ? $form->getDisplayString($help['pre'], null, $translateParams) : null;
 $helpPost = isset($help['post']) ? $form->getDisplayString($help['post'], null, $translateParams) : null;
 
-
 $formInfo = true;
 if($this->formId == "DoD") {
   $helpPre = $this->content()->renderTranslated('feedback/dod');
