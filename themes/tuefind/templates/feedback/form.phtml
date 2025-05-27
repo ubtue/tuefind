@@ -20,6 +20,7 @@ $helpPre = $helpPost = null;
 $helpPre = isset($help['pre']) ? $form->getDisplayString($help['pre'], null, $translateParams) : null;
 $helpPost = isset($help['post']) ? $form->getDisplayString($help['post'], null, $translateParams) : null;
 
+
 $formInfo = true;
 if($this->formId == "DoD") {
   $helpPre = $this->content()->renderTranslated('feedback/dod');
@@ -112,7 +113,7 @@ print $this->content()->renderTranslated($this->formId, 'feedback');
     <?php endif ?>
 
     <?php if (in_array($handleGroup, ['open', 'openAndClose'])): ?>
-      <?php if (in_array($el['type'], ['checkbox', 'radio', 'exclusiveSelect'])): ?>
+      <?php if (in_array($el['type'], ['checkbox', 'radio', 'exclusiveSelect']) || (strcmp($el['group'], "__sender__") == 0)): ?>
         <div class="field-set" role="group"<?= !empty($el['label']) ? ' aria-labelledby="' . $this->escapeHtmlAttr($formElement->getAttribute('id')) . '"' : ''?>>
       <?php else: ?>
         <div class="field-set <?=$group;?> jshide "<?= !empty($elementHelpPre) ? ' role="contentinfo" aria-label="' . $this->escapeHtmlAttr($elementHelpPre) . '"' : ''?>>
