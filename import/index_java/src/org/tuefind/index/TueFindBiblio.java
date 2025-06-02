@@ -699,6 +699,25 @@ public class TueFindBiblio extends TueFind {
         return normalizeSortableString(author);
     }
 
+    public String getSortableAuthorUnicodeCollapseAndExpan(final Record record, final String tagList, final String acceptWithoutRelator,
+                                                   final String relatorConfig)
+    {
+        String author = creatorTools.getFirstAuthorFilteredByRelator(record, tagList,
+                                                              acceptWithoutRelator,
+                                                              relatorConfig);
+
+        if( author == null || author.isEmpty()) {
+
+            List<String> authors = creatorTools.getAuthorsFilteredByRelator(record, tagList, acceptWithoutRelator, relatorConfig, "false", "false");
+            author = String.join("", authors);
+
+            if( author == null || author.isEmpty()) {
+                UUID uuid = UUID.randomUUID();
+                author = uuid.toString();
+            }
+        }
+            return normalizeSortableString(author);
+    }
 
     /**
      * @param record
@@ -2630,6 +2649,17 @@ public class TueFindBiblio extends TueFind {
             formats.add("Unknown");
 
         return formats;
+    }
+
+    public String getFormatCollapseAndExpand(final Record record) {
+        final Set<String> formats = getFormats(record);
+        String str_formats = String.join("", formats);
+        if (str_formats.equals("Unknown")) {
+            UUID uuid = UUID.randomUUID();
+                return normalizeSortableString(uuid.toString());
+        } else {
+            return str_formats;
+        }
     }
 
     protected boolean foundInSubfield(final List<VariableField> fields, final char subfieldCode, final String subfieldContents) {
