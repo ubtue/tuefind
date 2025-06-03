@@ -88,20 +88,6 @@ class MyResearchController extends \TueFind\Controller\MyResearchController
         }
     }
 
-    public function selfarchivingAction() {
-
-        $user = $this->getUser();
-        if ($user == false) {
-            return $this->forceLogin();
-        }
-
-        return $this->forward()->dispatch('Content', [
-            'action' => 'content',
-            'page' => 'SelfArchivingGuide'
-        ]);
-
-    }
-
     public function subscriptionsAction() {
 
         $user = $this->getUser();

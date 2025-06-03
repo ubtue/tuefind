@@ -119,6 +119,20 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
         return $this->createViewModel($viewParams);
     }
 
+    public function selfarchivingAction() {
+
+        $user = $this->getUser();
+        if ($user == false) {
+            return $this->forceLogin();
+        }
+
+        return $this->forward()->dispatch('Content', [
+            'action' => 'content',
+            'page' => 'SelfArchivingGuide'
+        ]);
+
+    }
+
     public function publishAction()
     {
         $user = $this->getUser();
