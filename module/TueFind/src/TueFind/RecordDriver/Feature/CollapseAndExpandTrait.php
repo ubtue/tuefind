@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Logic fo r collapse and expand functionality.
+ * Logic for collapse and expand functionality.
  *
  * PHP version 8
  *
@@ -66,14 +66,6 @@ trait CollapseAndExpandTrait
             return false;
         }
 
-        // $cookie = new Cookies();
-        // $coo = $cookie->get('grouping');
-        // if ($cookie->get('grouping') !== null) {
-        //     echo empty((string) $cookie->get('grouping'));
-        // } else {
-        //     echo "disable";
-        // }
-
         if (!isset($this->otherDocument)) {
             $container = $this->getContainer();
 
@@ -132,6 +124,8 @@ trait CollapseAndExpandTrait
                     $params->add('facet.mincount', 1);
                 }
 
+                // maximum search time in ms
+                // $params->add('timeAllowed', '4000');
 
                 // Filters
                 $filters = $default_params->getFilterSettings();
