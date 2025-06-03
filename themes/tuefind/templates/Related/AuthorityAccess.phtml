@@ -35,9 +35,9 @@
     </a>
   <?php endif;?>
 
-  <?php $subSystem = $this->tuefind()->getTueFindSubsystem(); if($subSystem != 'relbib'): ?>
+  <?php if($this->tuefind()->getConfig()->General->SelfArchiving == 'enabled'): ?>
   <!-- TueFind: SelfArchiving button -->
-  <a class="toolbar-btn" href="/MyResearch/SelfArchiving">
+  <a class="toolbar-btn" href="<?=$this->url('myresearch-selfArchiving')?>">
     <?=$this->icon('addthis-bookmark') ?>
     <?=$this->transEsc('SelfArchiving_menu_label')?>
   </a>

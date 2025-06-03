@@ -198,6 +198,16 @@ $config = [
                     ]
                 ],
             ],
+            'myresearch-selfArchiving' => [
+                'type' => 'Laminas\Router\Http\Literal',
+                'options' => [
+                    'route'    => '/MyResearch/SelfArchiving',
+                    'defaults' => [
+                        'controller' => 'MyResearch',
+                        'action'     => 'SelfArchiving',
+                    ],
+                ],
+            ],
         ],
     ],
     'controllers' => [
