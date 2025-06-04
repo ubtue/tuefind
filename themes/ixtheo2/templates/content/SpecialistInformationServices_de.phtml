@@ -1,0 +1,111 @@
+<?php
+    $this->headLink()->appendStylesheet('vendor/fontawesome-free-6/awesome.css');
+    $this->headLink()->appendStylesheet('vendor/fontawesome-free-6/solid.css');
+
+    $partners = [
+        //fachin
+        [   'lon' => '13.28832141332175',
+            'lat' => '52.452024786987835',
+            'group' => 'fachin',
+            'popup' => '<div><font color="black"><p><a href="https://www.propylaeum.de/" target="_blank">FID Altertumswissenschaften</a></p><p>Philologische Bibliothek der Freien Universität Berlin<br />
+            Habelschwerdter Allee 45<br />
+            14195 Berlin</p></font></div>',
+            'name' => 'FID Altertumswissenschaften'
+        ],
+        [   'lon' => '11.580364613130008',
+            'lat' => '48.147593189363796',
+            'group' => 'fachin',
+            'popup' => '<div><font color="black"><p><a href="https://www.historicum.net/home" target="_blank">FID Geschichtswissenschaft</a></p><p>Bayerische Staatsbibliothek<br />
+            Ludwigstr. 16<br />
+            80539 München</p></font></div><div><font color="black"><p><a href="https://www.osmikon.de/" target="_blank">FID Ost-, Ostmittel-, Südosteuropa (osmikon)</a></p><p>Bayerische Staatsbibliothek<br />
+            Ludwigstr. 16<br />
+            80539 München</p></font></div>',
+            'name' => 'FID Geschichtswissenschaft - FID Ost-, Ostmittel-, Südosteuropa (osmikon)'
+        ],
+        [   'lon' => '8.653098749724524',
+            'lat' => '50.12064052585044',
+            'group' => 'fachin',
+            'popup' => '<div><font color="black"><p><a href="https://portal.jewishstudies.de/" target="_blank">FID Jüdische Studien</a></p><p>Universitätsbibliothek Frankfurt am Main<br />
+            Freimannplatz 1<br />
+            60325 Frankfurt am Main</p></font></div>',
+            'name' => 'FID Jüdische Studien'
+        ],
+        [   'lon' => '8.70593708434894',
+            'lat' => '49.40981580401877',
+            'group' => 'fachin',
+            'popup' => '<div><font color="black"><p><a href="https://www.arthistoricum.net/" target="_blank">FID Kunst, Fotografie, Design</a></p><p>Universitätsbibliothek Heidelberg<br />
+            Plöck 107-109<br />
+            69117 Heidelberg</p></font></div>',
+            'name' => 'FID Kunst, Fotografie, Design'
+        ],
+        [   'lon' => '11.963601655605949',
+            'lat' => '51.49396906564426',
+            'group' => 'fachin',
+            'popup' => '<div><font color="black"><p><a href="https://www.menalib.de/" target="_blank">FID Nahost-, Nordafrika- und Islamstudien</a></p><p>Universitäts- und Landesbibliothek Sachsen-Anhalt<br />
+            Zweigbibliothek Vorderer Orient / Ethnologie<br />
+            Mühlweg 15<br />
+            06114 Halle (Saale)</p></font></div>',
+            'name' => 'FID Nahost-, Nordafrika- und Islamstudien'
+        ],
+        [   'lon' => '6.928387325417541',
+            'lat' => '50.92607082896188',
+            'group' => 'fachin',
+            'popup' => '<div><font color="black"><p><a href="https://philportal.de/" target="_blank">FID Philosophie</a></p><p>Universitäts- und Stadtbibliothek Köln<br />
+            Universitätsstraße 33<br />
+            50931 Köln</p></font></div>',
+            'name' => 'FID Philosophie'
+        ],
+        [   'lon' => '9.061992455474284',
+            'lat' => '48.52540627744962',
+            'group' => 'fachin',
+            'popup' => '<div><font color="black"><p><a href="https://relbib.de/" target="_blank">FID Religionswissenschaft</a></p><p>Universitätsbibliothek Tübingen<br />
+            Wilhelmstr. 32<br />
+            72074 Tübingen</p></font></div>',
+            'name' => 'FID Religionswissenschaft'
+        ],
+        [   'lon' => '13.32153185565181',
+            'lat' => '52.4982173456587',
+            'group' => 'fachin',
+            'popup' => '<div><font color="black"><p><a href="https://ireon-portal.de/" target="_blank">Fachinformationsverbund Internationale Beziehungen und Länderkunde (IREON)</a></p><p>Stiftung Wissenschaft und Politik (SWP)<br />
+            Deutsches Institut für Internationale Politik und Sicherheit<br />
+            Ludwigkirchplatz 3-4<br />
+            10719 Berlin</p></font></div>',
+            'name' => 'Fachinformationsverbund Internationale Beziehungen und Länderkunde (IREON)'
+        ]
+    ];
+    $partners = json_encode($partners);
+?>
+
+<section class="cw-p-2">
+    <div id="map" class="map"></div>
+    <?php $jsSnippet = <<<EOD
+    $(function () {
+        let partnersArray = {$partners};
+        IxTheo2.DrawMap('fachin',partnersArray);
+    });
+    EOD;
+    ?>
+    <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $jsSnippet, 'SET')?>
+</section>
+<div class="cw-row">
+    <div class="cw-col-lg-12 cw-ml-lg-4">
+        <div class="cw-text-block"><br>
+            <h1 class="cw-h1">Fachinformationsdienste (FID)</h1>
+
+            <p>Mit zahlreichen weiteren Fachinformationsdiensten bestehen Kooperationen oder Absprachen zum Nachweis von Titeln, die für beide Fachbereiche einschlägig sind. Auch im Hinblick auf Lizenzen, Erwerbung und Datenaustausch gibt es eine enge Zusammenarbeit.</p>
+            <p>Aktuell gibt es Kooperationen mit folgenden Fachinformationsdiensten:</p>
+            <ul>
+                <li><a target="_blank" href="https://www.fu-berlin.de/sites/philbib/02Service/service-fuer-die-forschung/Fachinformationsdienste/FID-Altertumswissenschaften.html">FID Altertumswissenschaften</a> (<a target="_blank" href="https://www.propylaeum.de/">Propylaeum</a>)</li>
+                <li><a target="_blank" href="https://www.bsb-muenchen.de/ueber-uns/projekte/fachinformationsdienst-geschichtswissenschaft/">FID Geschichtswissenschaft</a> (<a target="_blank" href="https://www.historicum.net/home">historicum.net</a>)</li>
+                <li><a target="_blank" href="https://www.ub.uni-frankfurt.de/judaica3/">FID Jüdische Studien</a> (<a target="_blank" href="https://portal.jewishstudies.de/">portal.jewishstudies</a>)</li>
+                <li><a target="_blank" href="https://www.ub.uni-heidelberg.de/fachinfo/kunst/Welcome.html">FID Kunst, Fotografie, Design</a> (<a target="_blank" href="https://www.arthistoricum.net/">arthistoricum.net</a>)</li>
+                <li><a target="_blank" href="https://bibliothek.uni-halle.de/nutzen-besuchen/fachspezifische-services/fachinformationsdienst-fid-nahost-nordafrika-und-islamstudien/">FID Nahost-, Nordafrika- und Islamstudien</a> (<a target="_blank" href="https://www.menalib.de/">menalib</a>)</li>
+                <li><a target="_blank" href="https://www.bsb-muenchen.de/sammlungen/osteuropa/fachinformationsdienst/">FID Ost-, Ostmittel-, Südosteuropa</a> (<a target="_blank" href="https://www.osmikon.de/">osmikon</a>)</li>
+                <li><a target="_blank" href="https://ub.uni-koeln.de/forschen-publizieren/projekte/fachinformationsdienst-philosophie">FID Philosophie</a> (<a target="_blank" href="https://philportal.de/">philportal</a>)</li>
+                <li><a target="_blank" href="https://uni-tuebingen.de/einrichtungen/universitaetsbibliothek/ueber-uns/bibliotheksbestand/fachinformationsdienste/religionswissenschaft/">FID Religionswissenschaft</a> (<a target="_blank" href="https://relbib.de/">RelBib</a>)</li>
+                <li><a target="_blank" href="https://fiviblk.de/">Fachinformationsverbund Internationale Beziehungen und Länderkunde</a> (<a target="_blank" href="https://ireon-portal.de/">IREON</a>)</li>
+            </ul>
+            <p>IxTheo ist offen für Kooperationen und Partnerschaften mit weiteren Fachinformationsdiensten. Wenn Sie Interesse an einer Zusammenarbeit haben, wenden Sie sich gerne an <a href="mailto:ixtheo@ub.uni-tuebingen.de">ixtheo@ub.uni-tuebingen.de</a>.</p>
+        </div>
+    </div>
+</div>

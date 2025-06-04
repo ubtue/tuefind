@@ -54,7 +54,9 @@ print $this->content()->renderTranslated($this->formId, 'feedback');
   ?>
   <?php foreach ($form->getFormElementConfig() as $el): ?>
     <?php
-
+    $caption = false;
+    $formattintag = "label";
+    $captionClassName = "";
     $formElement = $form->get($el['name']);
 
     if(isset($el['settings']) && isset($el['settings']['groupClassName'])) {
@@ -66,6 +68,14 @@ print $this->content()->renderTranslated($this->formId, 'feedback');
       if($groupColor !== false) {
         $groupColor = false;
         echo "</div>";
+      }
+    }
+
+    if(isset($el['settings']) && isset($el['settings']['formattintag'])) {
+      $caption = true;
+      $captionClassName = $el['settings']['className'];
+      if(!empty($el['settings']['formattintag'])) {
+        $formattintag = $el['settings']['formattintag'];
       }
     }
 
@@ -102,7 +112,7 @@ print $this->content()->renderTranslated($this->formId, 'feedback');
     <?php endif ?>
 
     <?php if (in_array($handleGroup, ['open', 'openAndClose'])): ?>
-      <?php if (in_array($el['type'], ['checkbox', 'radio', 'exclusiveSelect'])): ?>
+      <?php if (in_array($el['type'], ['checkbox', 'radio', 'exclusiveSelect']) || (strcmp($el['group'], "__sender__") == 0)): ?><?php # This condition is required to avoid using custom js validation for a group of inputs 'sender' (useremail,captcha)  ?>
         <div class="field-set" role="group"<?= !empty($el['label']) ? ' aria-labelledby="' . $this->escapeHtmlAttr($formElement->getAttribute('id')) . '"' : ''?>>
       <?php else: ?>
         <div class="field-set <?=$group;?> jshide "<?= !empty($elementHelpPre) ? ' role="contentinfo" aria-label="' . $this->escapeHtmlAttr($elementHelpPre) . '"' : ''?>>
@@ -139,7 +149,11 @@ print $this->content()->renderTranslated($this->formId, 'feedback');
         <?php if (in_array($el['type'], ['checkbox', 'radio'])): ?>
           <p id="<?=$this->escapeHtmlAttr($formElement->getAttribute('id'))?>" class="control-label radio-label<?=$required && !$requireOne ? ' required' : ''?><?=$requireOne ? ' require-one' : ''?>"><?=$this->transEsc($el['label'])?>:</p>
         <?php elseif ('hidden' !== $el['type']): ?>
-          <label for="<?=$this->escapeHtmlAttr($formElement->getAttribute('id'))?>" class="control-label<?=$required ? ' required' : ''?>"><?=$this->transEsc($el['label'])?>:</label>
+          <?php if ($caption): ?>
+            <?="<".$formattintag." class='".$captionClassName."' >";?><?=$this->transEsc($el['label'])?><?="</".$formattintag.">";?>
+          <?php else: ?>
+            <label for="<?=$this->escapeHtmlAttr($formElement->getAttribute('id'))?>" class="control-label<?=$required ? ' required' : ''?>"><?=$this->transEsc($el['label'])?>:</label>
+          <?php endif ?>
         <?php endif ?>
       <?php endif ?>
     <?php else: ?>
@@ -150,7 +164,7 @@ print $this->content()->renderTranslated($this->formId, 'feedback');
       <?php endif ?>
       <?=$this->captcha()->html($this->useCaptcha) ?>
     <?php endif ?>
-    <?= $this->formRow($formElement) ?>
+    <?php if(!$caption){ echo $this->formRow($formElement); }?>
     <?php if (!empty($elementHelpPost)): ?>
       <p class="info post"><?=$elementHelpPost?></p>
     <?php endif ?>

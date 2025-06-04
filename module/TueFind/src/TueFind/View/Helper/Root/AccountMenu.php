@@ -15,6 +15,10 @@ class AccountMenu extends \VuFind\View\Helper\Root\AccountMenu {
         return $this->getView()->plugin('accountCapabilities')()->getPdaSetting() === 'enabled';
     }
 
+    public function checkSelfarchiving(): bool {
+        return $this->getView()->plugin('accountCapabilities')()->getSelfarchivingSetting() === 'enabled';
+    }
+
     public function checkPublications(): bool {
         return $this->getView()->plugin('accountCapabilities')()->getPublicationSetting() === 'enabled';
     }

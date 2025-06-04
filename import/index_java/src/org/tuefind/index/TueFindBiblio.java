@@ -2594,6 +2594,10 @@ public class TueFindBiblio extends TueFind {
         if (foundInSubfield(_935Fields, 'c', "fe"))
             formats.add("Festschrift");
 
+        // Determine whether record is a 'Festschrift', i.e. has "fe" in 935$c
+        if (foundInSubfield(_935Fields, 'c', "lo"))
+            formats.add("LooseLeaf");
+
         // Determine whether a record is a subscription package, i.e. has "subskriptionspaket" in 935$c
         if (foundInSubfield(_935Fields, 'c', "subskriptionspaket"))
             formats.add("SubscriptionBundle");
@@ -2641,6 +2645,10 @@ public class TueFindBiblio extends TueFind {
                     formats.remove("Book");
                     formats.add("Manuscript");
                 }
+
+                if (aSubfield.getData().startsWith("Loseblattsammlung") & dataField.getIndicator1() == ' '
+                    && dataField.getIndicator2() == '7')
+                    formats.add("LooseLeaf");
             }
         }
 
