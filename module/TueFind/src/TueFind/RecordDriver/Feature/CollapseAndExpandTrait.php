@@ -76,10 +76,11 @@ trait CollapseAndExpandTrait
             $config = $container->get('VuFind\Config\PluginManager')->get('config');
             $configIndex = $config->get("Index");
             // $cookie = $container->get('Request')->getCookie();
-            $group = $configIndex->get('group');
+            $collapse_and_expand = $configIndex->get('collapse_and_expand');
 
 
-            if ((bool)$group === true) {
+
+            if ((bool)$collapse_and_expand === true) {
                 $default_field = array('title_sort');
                 $group_field =  ($configIndex->get('group.field') !== null) ? explode(":", $configIndex->get('group.field')) : $default_field;
                 $this->groupLimit = ($configIndex->get('group.limit') !== null) ? $configIndex->get('group.limit') : 10;
@@ -192,5 +193,13 @@ trait CollapseAndExpandTrait
         return $this->otherDocuments;
     }
 
+    public function isActiveCnEParams()
+    {
+        $container = $this->getContainer();
 
+        $plugin_manager_solr = $container->get('VuFind\SearchResultsPluginManager')->get('Solr');
+        $params = $plugin_manager_solr->getParams();
+
+        return $params->isGroupingActivated();
+    }
 }

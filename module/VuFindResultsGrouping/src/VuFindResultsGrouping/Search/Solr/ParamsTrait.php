@@ -102,6 +102,7 @@ trait ParamsTrait
         $config = $this->configLoader->get('config');
         $index = $config->get('Index');
         $group = false;
+        $collapse_and_expand = $index->get('collapse_and_expand') !== null ? $index->get('collapse_and_expand') : false;
 
         $groupingParams = $this->grouping->getCurrentSettings();
 
@@ -111,38 +112,40 @@ trait ParamsTrait
             $group = $index->get('group');
         }
 
-        if ((bool)$group === true) {
-            $backendParams->add('expand', 'true');
+        if ((bool) $collapse_and_expand === true) {
+            if ((bool)$group === true) {
+                $backendParams->add('expand', 'true');
 
-            $group_field = '';
-            $group_limit = 0;
-            $group_expand = '';
+                $group_field = '';
+                $group_limit = 0;
+                $group_expand = '';
 
-            if (isset($groupingParams['group_field'])) {
-                $group_field = $groupingParams['group_field'];
-            } elseif ($index->get('group.field') !== null) {
-                $group_field = $index->get('group.field');
+                if (isset($groupingParams['group_field'])) {
+                    $group_field = $groupingParams['group_field'];
+                } elseif ($index->get('group.field') !== null) {
+                    $group_field = $index->get('group.field');
+                }
+                // $backendParams->add('group.field', $group_field);
+
+                if (isset($groupingParams['group_limit'])) {
+                    $group_limit = $groupingParams['group_limit'];
+                } elseif ($index->get('group.limit') !== null) {
+                    $group_limit = $index->get('group.limit');
+                }
+                if (isset($groupingParams['group_expand'])) {
+                    $group_expand = $groupingParams['group_expand'];
+                } elseif ($index->get('group.expand') !== null) {
+                    $group_limit = $index->get('group.expand');
+                }
+
+                // collapse and expand
+                for ($i = 0; $i < count($group_field); $i++) {
+                    $backendParams->add('fq', '{!collapse field=' . $group_field[$i] . '}');
+                }
+
+                $backendParams->add('expand.rows', $group_limit);
+                $backendParams->add('expand.field', $group_expand);
             }
-            // $backendParams->add('group.field', $group_field);
-
-            if (isset($groupingParams['group_limit'])) {
-                $group_limit = $groupingParams['group_limit'];
-            } elseif ($index->get('group.limit') !== null) {
-                $group_limit = $index->get('group.limit');
-            }
-            if (isset($groupingParams['group_expand'])) {
-                $group_expand = $groupingParams['group_expand'];
-            } elseif ($index->get('group.expand') !== null) {
-                $group_limit = $index->get('group.expand');
-            }
-
-            // collapse and expand
-            for ($i = 0; $i < count($group_field); $i++) {
-                $backendParams->add('fq', '{!collapse field=' . $group_field[$i] . '}');
-            }
-
-            $backendParams->add('expand.rows', $group_limit);
-            $backendParams->add('expand.field', $group_expand);
         }
         // search those shards that answer, accept partial results
         $backendParams->add('shards.tolerant', 'true');
@@ -245,4 +248,20 @@ trait ParamsTrait
             }
         }
     }
+
+    public function isEnableCollapseAndExpand()
+    {
+        // Fetch group params for grouping
+        $config = $this->configLoader->get('config');
+        $index = $config->get('Index');
+        $collapse_and_expand = $index->get('collapse_and_expand') !== null ? $index->get('collapse_and_expand') : false;
+
+        return $collapse_and_expand;
+    }
+
+    public function isGroupingActivated()
+    {
+        return $this->grouping->isActive();
+    }
+
 }
