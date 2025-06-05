@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Factory for Dir config handler.
+ * Default factory for config handlers.
  *
  * PHP version 8
  *
@@ -34,11 +34,10 @@ use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Psr\Container\ContainerExceptionInterface as ContainerException;
 use Psr\Container\ContainerInterface;
-use VuFind\Config\ConfigManager;
 use VuFind\Config\PathResolver;
 
 /**
- * Factory for Dir config handler.
+ * Default factory for config handlers.
  *
  * @category VuFind
  * @package  Config_Handlers
@@ -46,7 +45,7 @@ use VuFind\Config\PathResolver;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development Wiki
  */
-class DirFactory implements FactoryInterface
+class DefaultHandlerFactory implements FactoryInterface
 {
     /**
      * Create an object
@@ -70,9 +69,6 @@ class DirFactory implements FactoryInterface
         if (!empty($options)) {
             throw new \Exception('Unexpected options passed to factory.');
         }
-        return new $requestedName(
-            $container->get(PathResolver::class),
-            $container->get(ConfigManager::class),
-        );
+        return new $requestedName($container->get(PathResolver::class));
     }
 }
