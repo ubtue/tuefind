@@ -99,13 +99,9 @@ class SolrMarc extends SolrDefault
         $roles = [];
         $authors = $this->getMarcReader()->getFieldsDelimiter('100|700');
         foreach ($authors as $author) {
-            $subfield_a = $this->getSubfieldArray($author, ['a']);
-            if (!empty($authorName) && isset($authorName[0]) && $authorName[0]  == $author_heading) {
-                $subfields_4 = $this->getSubfieldArray($author, ['4']);
-                foreach ($subfields_4 as $subfield_4) {
-                    $roles[] = $subfield_4[0];
-                }
-                break;
+            $authorName = trim($this->getSubfield($author, 'a'))." ".trim($this->getSubfield($author, 'd'));
+            if ($authorName == $author_heading) {
+                $roles[] = $this->getSubfield($author, '4');
             }
         }
         return $roles;
