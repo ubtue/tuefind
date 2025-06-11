@@ -2,7 +2,7 @@
 
 namespace IxTheo\View\Helper\IxTheo;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 class RelBib extends \IxTheo\View\Helper\IxTheo\IxTheo
 {

@@ -2,7 +2,7 @@
 
 namespace IxTheo\Search\Subscriptions;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 class ResultsFactory extends \VuFind\Search\Results\ResultsFactory
 {
