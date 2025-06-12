@@ -2,7 +2,7 @@
 
 namespace TueFind\View\Helper\TueFind;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use VuFind\Search\SearchTabsHelper;
 use VuFind\View\Helper\Root\SearchTabs;
 

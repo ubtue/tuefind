@@ -14,7 +14,7 @@ class Mailer extends \VuFind\Mailer\Mailer
 
     protected $config;
 
-    public function __construct(\Laminas\Mail\Transport\TransportInterface $transport, \Interop\Container\ContainerInterface $container)
+    public function __construct(\Laminas\Mail\Transport\TransportInterface $transport, \Psr\Container\ContainerInterface $container)
     {
         parent::__construct($transport);
         $this->container = $container;

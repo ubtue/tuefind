@@ -2,7 +2,7 @@
 
 namespace TueFind\ContentBlock;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 class BlockLoaderFactory extends \VuFind\ContentBlock\BlockLoaderFactory
 {

@@ -2,7 +2,7 @@
 
 namespace TueFind\Controller;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 class AbstractBaseWithDbTableFactory extends \VuFind\Controller\AbstractBaseFactory
 {

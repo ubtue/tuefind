@@ -2,7 +2,7 @@
 
 namespace TueFind\Form;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 class FormFactory extends \VuFind\Form\FormFactory
 {

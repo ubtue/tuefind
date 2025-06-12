@@ -1,7 +1,7 @@
 <?php
 namespace TueFind\Search\Factory;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use TueFindSearch\Backend\Solr\Backend;
 use TueFind\Search\Solr\InjectFulltextMatchIdsListener;
 

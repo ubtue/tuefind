@@ -1,7 +1,7 @@
 <?php
 namespace IxTheo\Controller\Plugin;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class PDASubscriptionsFactory implements FactoryInterface {

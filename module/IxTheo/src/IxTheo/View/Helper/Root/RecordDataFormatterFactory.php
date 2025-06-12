@@ -2,7 +2,7 @@
 
 namespace IxTheo\View\Helper\Root;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use VuFind\View\Helper\Root\RecordDataFormatter\SpecBuilder;
 
 class RecordDataFormatterFactory extends \TueFind\View\Helper\Root\RecordDataFormatterFactory {
