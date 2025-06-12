@@ -101,8 +101,7 @@ class SolrMarc extends SolrDefault
         foreach ($authors as $author) {
             $authorName = trim($this->getSubfield($author, 'a'))." ".trim($this->getSubfield($author, 'd'));
             if ($authorName == $author_heading) {
-                $subfields_4 = $this->getSubfields($author, '4');
-                return $subfields_4;
+                return $this->getSubfields($author, '4');
             }
         }
         return $roles;
