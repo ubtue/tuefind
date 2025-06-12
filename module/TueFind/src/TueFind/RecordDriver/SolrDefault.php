@@ -19,12 +19,15 @@
 
 namespace TueFind\RecordDriver;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use VuFind\Exception\LoginRequired as LoginRequiredException;
 use VuFind\Exception\RecordMissing as RecordMissingException;
 
 class SolrDefault extends \VuFind\RecordDriver\SolrMarc
 {
+    use Feature\CollapseAndExpandTrait;
+
+
     const SUBITO_BROKER_ID = 'TUEFIND';
     protected $authorImplode;
     protected $container;
@@ -828,5 +831,13 @@ class SolrDefault extends \VuFind\RecordDriver\SolrMarc
             return false;
 
         return true;
+    }
+
+    /**
+     * This function is used by collapse and expand to get the title sort field
+     */
+    public function getContainerTitleSort()
+    {
+        return $this->fields['title_sort'] ?? '';
     }
 }
