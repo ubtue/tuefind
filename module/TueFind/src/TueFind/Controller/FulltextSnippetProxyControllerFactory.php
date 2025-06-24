@@ -2,7 +2,7 @@
 namespace TueFind\Controller;
 
 use \Elastic\Elasticsearch\ClientBuilder;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class FulltextSnippetProxyControllerFactory implements FactoryInterface {

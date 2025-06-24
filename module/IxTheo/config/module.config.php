@@ -113,7 +113,6 @@ $staticRoutes = [
     'MyResearch/Subscriptions',
     'MyResearch/DeleteSubscription',
     'MyResearch/PDASubscriptions',
-    'MyResearch/SelfArchiving',
     'MyResearch/DeletePDASubscription',
     'Classification/Home'
 ];

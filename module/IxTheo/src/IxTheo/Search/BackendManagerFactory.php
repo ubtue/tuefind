@@ -2,7 +2,7 @@
 
 namespace IxTheo\Search;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 class BackendManagerFactory extends \VuFind\Search\BackendManagerFactory {
 

@@ -1,4 +1,8 @@
 <?php
+    $tuefind = $this->tuefind();
+    $currentSystem = $tuefind->getTueFindType();
+    $selfArchivingEmail = $tuefind->getSelfArchivingEmail();
+
     // Set up page title:
     $this->headTitle($this->translate('Self Archiving'));
 
@@ -10,7 +14,7 @@
 
 <div class="<?=$this->layoutClass('mainbody')?>">
   <h2>Neue Publikation melden</h2>
-  <p>Möchten Sie eine Publikation melden, die in IxTheo noch nicht verzeichnet ist?</p>
+  <p>Möchten Sie eine Publikation melden, die in <?=$currentSystem;?> noch nicht verzeichnet ist?</p>
   <p>Hier finden Sie unsere Formulare:</p>
   <ul>
       <li><a href="/Feedback/Form/SelfArchivingAufsatz">Aufsatz in einer Zeitschrift oder einem Sammelband</a></li>
@@ -18,9 +22,9 @@
       <li><a href="/Feedback/Form/SelfArchivingLexikonartikel">Lexikonartikel</a></li>
       <li><a href="/Feedback/Form/SelfArchivingMonographie">Monographie oder herausgegebenes Werk</a></li>
   </ul>
-  <p>Nach der erfolgreichen Übermittlung des Formulars wird der gemeldete Titel geprüft und in den IxTheo aufgenommen. Sie können den neuen Eintrag nach wenigen Tagen im IxTheo finden. Ab diesem Zeitpunkt können Sie bei eigenen Titeln außerdem unseren Self-Archiving Service nutzen und ein Digitalisat Ihrer Publikation als PDF-Datei hochladen.</p>
+  <p>Nach der erfolgreichen Übermittlung des Formulars wird der gemeldete Titel geprüft und in <?=$currentSystem;?> aufgenommen. Sie können den neuen Eintrag nach wenigen Tagen in <?=$currentSystem;?> finden. Ab diesem Zeitpunkt können Sie bei eigenen Titeln außerdem unseren Self-Archiving Service nutzen und ein Digitalisat Ihrer Publikation als PDF-Datei hochladen.</p>
   <p>Falls sich im Zuge der Bearbeitung Fragen ergeben sollten, kommen wir auf Sie zu.</p>
-  <p>Wenn Sie eine Publikation anderen Typs melden möchten, wenden Sie sich bitte per E-Mail an uns: <a href="mailto:ixtheo-self-archiving@ub.uni-tuebingen.de">ixtheo-self-archiving@ub.uni-tuebingen.de</a></p>
+  <p>Wenn Sie eine Publikation anderen Typs melden möchten, wenden Sie sich bitte per E-Mail an uns: <a href="mailto:<?=$selfArchivingEmail;?>"><?=$selfArchivingEmail;?></a></p>
 </div>
 
 <div class="<?=$this->layoutClass('sidebar')?>" id="myresearch-sidebar" role="navigation" aria-label="<?=$this->transEsc('account_menu_label')?>">

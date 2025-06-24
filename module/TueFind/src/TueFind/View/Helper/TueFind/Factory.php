@@ -2,7 +2,7 @@
 
 namespace TueFind\View\Helper\TueFind;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class Factory implements FactoryInterface
