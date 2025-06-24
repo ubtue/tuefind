@@ -270,9 +270,10 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
      *
      * @return array
      */
-    public function getRssNewsEntries(int $maxItemCount=null, bool $onlyNewestItemPerFeed=false) {
+    public function getRssNewsEntries(int $maxItemCount=null, bool $onlyNewestItemPerFeed=false, string $type='news') {
+
         $rssTable = $this->container->get(\VuFind\Db\Table\PluginManager::class)->get('rss_item');
-        $rssItems = $rssTable->getItemsSortedByPubDate($this->getTueFindInstance());
+        $rssItems = $rssTable->getItemsSortedByPubDate($this->getTueFindInstance(),$type);
 
         $rssItemsToReturn = [];
         $i = 0;
@@ -624,6 +625,11 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
     public function getPublicationEmail(): string {
         $config = $this->getConfig('tuefind');
         return $config->Publication->email ?? "";
+    }
+
+    public function getSelfArchivingEmail(): string {
+        $config = $this->getConfig('tuefind');
+        return $config->Publication->selfarchivingemail ?? "";
     }
 
     public function getSiteEmail(): string {
