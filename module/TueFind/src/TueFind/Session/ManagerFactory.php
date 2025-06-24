@@ -2,7 +2,7 @@
 
 namespace TueFind\Session;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 class ManagerFactory extends \VuFind\Session\ManagerFactory {
 

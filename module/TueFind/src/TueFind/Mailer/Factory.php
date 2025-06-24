@@ -2,7 +2,7 @@
 
 namespace TueFind\Mailer;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 class Factory extends \VuFind\Mailer\Factory {
 
