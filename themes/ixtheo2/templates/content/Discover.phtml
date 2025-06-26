@@ -391,4 +391,11 @@
     .panel-collapse p {
         text-align: justify !important;
     }
+    .read-more-state ~ .read-more-trigger:before {
+        content: 'More';
+    }
+
+    .read-more-state:checked ~ .read-more-trigger:before {
+        content: 'Less';
+    }
 </style>
