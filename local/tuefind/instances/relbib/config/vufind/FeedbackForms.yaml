@@ -315,7 +315,7 @@ forms:
         required: false
 
       - name: zeitschrift_werk_group_IxTheo_Link
-        label: "RelBib-Link"
+        label: "SA_RelBib_Link"
         type: text
         required: false
 
@@ -438,7 +438,7 @@ forms:
         group: anthology
 
       - name:  rezension_superior_anthology_group_IxTheo_link
-        label: "RelBib-Link"
+        label: "SA_RelBib_Link"
         type: text
         group: anthology
 
@@ -464,7 +464,7 @@ forms:
         group: journal
 
       - name: zeitschrift_werk_group_IxTheo_Link
-        label: "RelBib-Link"
+        label: "SA_RelBib_Link"
         type: text
         group: journal
 
@@ -564,7 +564,7 @@ forms:
         group: journal
 
       - name: zeitschrift_werk_group_IxTheo_Link
-        label: "RelBib-Link"
+        label: "SA_RelBib_Link"
         type: text
         required: false
         group: journal
@@ -629,7 +629,7 @@ forms:
         group: anthology
 
       - name: zeitschrift_werk_group_IxTheo_Link2
-        label: "RelBib-Link"
+        label: "SA_RelBib_Link"
         type: text
         required: false
         group: anthology

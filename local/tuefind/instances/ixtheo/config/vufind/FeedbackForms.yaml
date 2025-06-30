@@ -282,7 +282,7 @@ forms:
         type: text
 
       - name: superior_ixtheo_url
-        label: IxTheo-Link
+        label: SA_IxTheo_Link
         type: text
 
       - name: superior_volume
@@ -438,7 +438,7 @@ forms:
         required: false
 
       - name: zeitschrift_werk_group_IxTheo_Link
-        label: "IxTheo-Link"
+        label: "SA_IxTheo_Link"
         type: text
         required: false
 
@@ -561,7 +561,7 @@ forms:
         group: anthology
 
       - name:  rezension_superior_anthology_group_IxTheo_link
-        label: "IxTheo-Link"
+        label: "SA_IxTheo_Link"
         type: text
         group: anthology
 
@@ -587,7 +587,7 @@ forms:
         group: journal
 
       - name: zeitschrift_werk_group_IxTheo_Link
-        label: "IxTheo-Link"
+        label: "SA_IxTheo_Link"
         type: text
         group: journal
 
@@ -687,7 +687,7 @@ forms:
         group: journal
 
       - name: zeitschrift_werk_group_IxTheo_Link
-        label: "IxTheo-Link"
+        label: "SA_IxTheo_Link"
         type: text
         required: false
         group: journal
@@ -752,7 +752,7 @@ forms:
         group: anthology
 
       - name: zeitschrift_werk_group_IxTheo_Link2
-        label: "IxTheo-Link"
+        label: "SA_IxTheo_Link"
         type: text
         required: false
         group: anthology
