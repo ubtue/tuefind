@@ -2,6 +2,8 @@
 <fields>
     <!-- COMMON fields -->
     <field name="abr" type="string" indexed="true" stored="true" multiValued="true"/>
+    <field name="author_sort_collapse_and_expand" type="string" indexed="true" stored="true"/>
+    <field name="format_collapse_and_expand" type="string" indexed="true" stored="true"/>
     <field name="author_gnd" type="string" indexed="true" stored="true" multiValued="true"/>
     <field name="author_id" type="string" indexed="true" stored="true" multiValued="true"/>
     <field name="author2_gnd" type="string" indexed="true" stored="true" multiValued="true"/>
