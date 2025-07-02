@@ -386,7 +386,7 @@ forms:
           - groupClassName: reviewed-work
 
       - name:  reviewed_work_group_IxTheo_Link
-        label: SA_reviewed_work_ixtheo_link
+        label: SA_reviewed_work_relbib_link
         type: text
         settings:
           - groupClassName: reviewed-work
