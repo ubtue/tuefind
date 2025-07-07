@@ -2,7 +2,7 @@
 
 namespace TueFind\ServiceManager;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 class ServiceInitializer extends \VuFind\ServiceManager\ServiceInitializer {
     /**

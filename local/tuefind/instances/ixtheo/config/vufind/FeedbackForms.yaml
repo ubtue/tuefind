@@ -282,7 +282,7 @@ forms:
         type: text
 
       - name: superior_ixtheo_url
-        label: IxTheo-Link
+        label: SA_IxTheo_Link
         type: text
 
       - name: superior_volume
@@ -382,10 +382,11 @@ forms:
     emailSubject: "%%title%%"
     recipient:
       - email: pica_template_generator@localhost
-
+    response: SA_feedback_response
 
     help:
       pre: ""
+
 
     fields:
       - name: authors
@@ -437,7 +438,7 @@ forms:
         required: false
 
       - name: zeitschrift_werk_group_IxTheo_Link
-        label: "IxTheo-Link"
+        label: "SA_IxTheo_Link"
         type: text
         required: false
 
@@ -463,6 +464,7 @@ forms:
     emailSubject: "%%title%%"
     recipient:
        - email: pica_template_generator@localhost
+    response: SA_feedback_response
 
     help:
       pre: ""
@@ -545,7 +547,6 @@ forms:
       - name: rezension_superior_anthology_group_place_of_publication
         label: "SA_place_of_publication"
         type: text
-        required: true
         group: anthology
 
       - name: rezension_superior_anthology_group_erscheinungsjahr
@@ -560,7 +561,7 @@ forms:
         group: anthology
 
       - name:  rezension_superior_anthology_group_IxTheo_link
-        label: "IxTheo-Link"
+        label: "SA_IxTheo_Link"
         type: text
         group: anthology
 
@@ -586,7 +587,7 @@ forms:
         group: journal
 
       - name: zeitschrift_werk_group_IxTheo_Link
-        label: "IxTheo-Link"
+        label: "SA_IxTheo_Link"
         type: text
         group: journal
 
@@ -635,6 +636,7 @@ forms:
     emailSubject: "%%title%%"
     recipient:
       - email: pica_template_generator@localhost
+    response: SA_feedback_response
 
 
     help:
@@ -685,7 +687,7 @@ forms:
         group: journal
 
       - name: zeitschrift_werk_group_IxTheo_Link
-        label: "IxTheo-Link"
+        label: "SA_IxTheo_Link"
         type: text
         required: false
         group: journal
@@ -735,7 +737,6 @@ forms:
       - name: sammelband_werk_group_place_of_publication
         label: "SA_place_of_publication"
         type: text
-        required: true
         group: anthology
 
       - name: sammelband_werk_group_erscheinungsjahr
@@ -751,7 +752,7 @@ forms:
         group: anthology
 
       - name: zeitschrift_werk_group_IxTheo_Link2
-        label: "IxTheo-Link"
+        label: "SA_IxTheo_Link"
         type: text
         required: false
         group: anthology
@@ -780,6 +781,7 @@ forms:
     emailSubject: "%%title%%"
     recipient:
       - email: pica_template_generator@localhost
+    response: SA_feedback_response
 
     help:
       pre: ""
@@ -812,7 +814,6 @@ forms:
 
       - name: place_of_publication
         label: "SA_place_of_publication"
-        required: true
         type: text
 
       - name: publisher

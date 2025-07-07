@@ -372,6 +372,7 @@ $staticRoutes = [
     'MyResearch/Publications',
     'MyResearch/RssFeedSettings',
     'MyResearch/RssFeedPreview',
+    'MyResearch/SelfArchiving',
     'RssFeed/Full',
     'Search3/Home',
     'Search3/Results',

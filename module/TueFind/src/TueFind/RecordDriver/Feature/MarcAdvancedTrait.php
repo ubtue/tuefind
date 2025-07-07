@@ -98,4 +98,53 @@ trait MarcAdvancedTrait
          return $this->getFieldArray('300', ['a', 'b', 'c', 'e', 'f', 'g'], true, ', ');
     }
 
+
+    public function isLastArrayKey(&$array_, $key) {
+        $last = array_key_last($array_);
+        return $last === $key;
+    }
+
+
+    public function getCorporateAuthorsFromMarc($corporateAuthorTag, $subfieldsToExtract) {
+        $fields=$this->getMarcReader()->getFields($corporateAuthorTag);
+        $separators = ['a' => '. '];
+        $corporateAuthors = [];
+        foreach ($fields as $field) {
+            $corporateAuthor = '';
+            // Remove superfluous entries
+            $subfields = array_filter($field['subfields'],
+                             function($subfield) use ($subfieldsToExtract) {
+                                 return in_array($subfield['code'], $subfieldsToExtract);
+                              }
+            );
+
+            // Sort subfields to given order
+            usort($subfields, function ($a, $b) use ($subfieldsToExtract) {
+                  $posA = array_search($a['code'], $subfieldsToExtract);
+                  $posB = array_search($b['code'], $subfieldsToExtract);
+                  return $posA - $posB;
+            });
+
+            foreach($subfields as $subfield) {
+               $code = $subfield['code'];
+               $separator = array_key_exists($code, $separators) ? $separators[$code] : ' ';
+               $data = trim($subfield['data']);
+               if ($code == 'd')
+                   $data = '(' . $data . ')';
+               $corporateAuthor .= !$this->isLastArrayKey($subfields, key($subfields)) ? $data . $separator : $data;
+            }
+            array_push($corporateAuthors, $corporateAuthor);
+        }
+        return $corporateAuthors;
+   }
+
+
+   public function getCorporateAuthors() {
+        return array_merge(
+            $this->getCorporateAuthorsFromMarc('110', ['a', 'e', 'n', 'g', 'c', 'd']),
+            $this->getCorporateAuthorsFromMarc('111', ['a', 'e', 'n', 'g', 'c', 'd']),
+            $this->getCorporateAuthorsFromMarc('710', ['a', 'e', 'n', 'g', 'c', 'd']),
+            $this->getCorporateAuthorsFromMarc('711', ['a', 'e', 'n', 'g', 'c', 'd'])
+        );
+    }
 }

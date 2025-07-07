@@ -2,7 +2,7 @@
 
 namespace TueFind\RecordDriver;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 class SolrDefaultFactory extends \VuFind\RecordDriver\SolrDefaultFactory {
 

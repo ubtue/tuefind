@@ -1,0 +1,141 @@
+<?php
+    $this->headLink()->appendStylesheet('vendor/fontawesome-free-6/awesome.css');
+    $this->headLink()->appendStylesheet('vendor/fontawesome-free-6/solid.css');
+
+    $partners = [
+        //bibliotheken
+        [   'lon' => '4.707481255577383',
+            'lat' => '50.86064339810748',
+            'group' => 'bibliotheken',
+            'popup' => '<div><font color="black"><p><a href="https://www.augustiniana.be/" target="_blank">Augustijns Historisch Instituut</a></p><p>Pakenstraat 65<br />
+            3001 Heverlee<br />
+            Belgium</p></font></div>',
+            'name' => 'Augustijns Historisch Instituut'
+        ],
+        [   'lon' => '6.075049269064763',
+            'lat' => '50.76167534226919',
+            'group' => 'bibliotheken',
+            'popup' => '<div><font color="black"><p><a href="https://mikado-ac.info/" target="_blank">Bibliothek des Internationalen Katholischen Missionswerkes missio e.V.</a></p><p>Goethestraße 43<br />
+            52064 Aachen</p></font></div>',
+            'name' => 'Bibliothek des Internationalen Katholischen Missionswerkes missio e.V.'
+        ],
+        [   'lon' => '6.951674384417203',
+            'lat' => '50.94479261008212',
+            'group' => 'bibliotheken',
+            'popup' => '<div><font color="black"><p><a href="https://www.dombibliothek-koeln.de/" target="_blank">Erzbischöfliche Diözesan- und Dombibliothek Köln mit Bibliothek St. Albertus Magnus</a></p><p>Kardinal-Frings-Straße 1-3<br />
+            50668 Köln</p></font></div>',
+            'name' => 'Erzbischöfliche Diözesan- und Dombibliothek Köln mit Bibliothek St. Albertus Magnus'
+        ],
+        [   'lon' => '7.622197697955276',
+            'lat' => '51.964666693546256',
+            'group' => 'bibliotheken',
+            'popup' => '<div><font color="black"><p><a href="https://www.dioezesanbibliothek-muenster.de/" target="_blank">Diözesanbibliothek Münster</a></p><p>Überwasserkirchplatz 2<br />
+            48143 Münster</p></font></div>',
+            'name' => 'Diözesanbibliothek Münster'
+        ],
+        [   'lon' => '9.141429953630837',
+            'lat' => '48.729964254476116',
+            'group' => 'bibliotheken',
+            'popup' => '<div><font color="black"><p><a href="https://www.ehz-bibliothek.elk-wue.de/" target="_blank">Evangelische Hochschul- und Zentralbibliothek Württemberg</a></p><p>Balinger Str. 33/1<br />
+            70567 Stuttgart</p></font></div>',
+            'name' => 'Evangelische Hochschul- und Zentralbibliothek Württemberg'
+        ],
+        [   'lon' => '10.70555979976137',
+            'lat' => '50.94367079300774',
+            'group' => 'bibliotheken',
+            'popup' => '<div><font color="black"><p><a href="https://www.uni-erfurt.de/forschungsbibliothek-gotha" target="_blank">Forschungsbibliothek Gotha </a></p><p>Schlossplatz 1<br />
+            99867 Gotha</p></font></div>',
+            'name' => 'Forschungsbibliothek Gotha'
+        ],
+        [   'lon' => '11.970895996080776',
+            'lat' => '51.47806422090299',
+            'group' => 'bibliotheken',
+            'popup' => '<div><font color="black"><p><a href="https://www.francke-halle.de/de/studienzentrum" target="_blank">Franckesche Stiftungen zu Halle </a></p><p>Franckeplatz 1<br />
+            06110 Halle</p></font></div>',
+            'name' => 'Franckesche Stiftungen zu Halle'
+        ],
+        [   'lon' => '9.983290211520224',
+            'lat' => '53.548993713747855',
+            'group' => 'bibliotheken',
+            'popup' => '<div><font color="black"><p><a href="https://ithf.de/" target="_blank">Institut für Theologie und Frieden (ithf)</a></p><p>Herrengraben 4<br />
+            20459 Hamburg</p></font></div>',
+            'name' => 'Institut für Theologie und Frieden (ithf)'
+        ],
+        [   'lon' => '7.201928284527916',
+            'lat' => '53.36566432753402',
+            'group' => 'bibliotheken',
+            'popup' => '<div><font color="black"><p><a href="https://www.jalb.de/" target="_blank">Johannes a Lasco Bibliothek</a></p><p>Kirchstraße 22<br />
+            26721 Emden</p></font></div>',
+            'name' => 'Johannes a Lasco Bibliothek'
+        ],
+        [   'lon' => '4.702528699758339',
+            'lat' => '50.87632481841027',
+            'group' => 'bibliotheken',
+            'popup' => '<div><font color="black"><p><a href="https://bib.kuleuven.be/" target="_blank">Maurits Sabbebibliotheek</a></p><p>Charles Deberiotstraat 26<br />
+            3000 Leuven<br />
+            Belgium</p></font></div>',
+            'name' => 'Maurits Sabbebibliotheek'
+        ],
+        [   'lon' => '-74.6663950736932',
+            'lat' => '40.34602383399463',
+            'group' => 'bibliotheken',
+            'popup' => '<div><font color="black"><p><a href="https://commons.ptsem.edu/" target="_blank">Princeton Theological Seminary</a></p><p>Wright Library<br />
+            25 Library Place<br />
+            Princeton, NJ 08540<br />
+            USA</p></font></div>',
+            'name' => 'Princeton Theological Seminary'
+        ],
+        [   'lon' => '12.63775312678687',
+            'lat' => '51.86630604784259',
+            'group' => 'bibliotheken',
+            'popup' => '<div><font color="black"><p><a href="https://www.rfb-wittenberg.de/" target="_blank">Reformationsgeschichtliche Forschungsbibliothek Wittenberg</a></p><p>Schlossplatz 1<br />
+            06886 Lutherstadt Wittenberg</p></font></div>',
+            'name' => 'Reformationsgeschichtliche Forschungsbibliothek Wittenberg'
+        ],
+        [   'lon' => '9.931365982513663',
+            'lat' => '49.79650515845315',
+            'group' => 'bibliotheken',
+            'popup' => '<div><font color="black"><p><a href="https://www.augustinus.de/" target="_blank">Zentrum für Augustinus-Forschung (ZAF)</a></p><p>Dominikanerplatz 4<br />
+            97070 Würzburg</p></font></div>',
+            'name' => 'Zentrum für Augustinus-Forschung (ZAF)'
+        ]
+    ];
+    $partners = json_encode($partners);
+?>
+
+<section class="cw-p-2">
+    <div id="map" class="map"></div>
+    <?php $jsSnippet = <<<EOD
+    $(function () {
+        let partnersArray = {$partners};
+        IxTheo2.DrawMap('bibliotheken',partnersArray);
+    });
+    EOD;
+    ?>
+    <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $jsSnippet, 'SET')?>
+</section>
+<div class="cw-row">
+    <div class="cw-col-lg-12 cw-ml-lg-4">
+        <div class="cw-text-block"><br>
+            <h1 class="cw-h1">Bibliotheken</h1>
+            <p>Theologisch relevante Bestände aus verschiedenen Bibliotheken werden im Index Theologicus (IxTheo) nachgewiesen. Auch darüber hinaus gibt es vielfältige gemeinsame Projekte.</p>
+            <p>Aktuell arbeitet IxTheo mit folgenden Bibliotheken zusammen:</p>
+            <ul>
+                <li>Augustijns Historisch Instituut (AHI), Leuven (Heverlee) </li>
+                <li>Bibliothek des Internationalen Katholischen Missionswerkes missio e.V. (mikado), Aachen [vorgesehen]</li>
+                <li>Diözesanbibliothek Münster</li>
+                <li>Erzbischöfliche Diözesan- und Dombibliothek Köln</li>
+				<li>Evangelische Hochschul- und Zentralbibliothek Württemberg (EHZ-Bibliothek)</li>
+                <li>Forschungsbibliothek Gotha </li>
+                <li>Franckesche Stiftungen zu Halle </li>
+                <li>Institut für Theologie und Frieden (ithf), Hamburg</li>
+                <li>Johannes a Lasco Bibliothek, Emden</li>
+                <li>Maurits-Sabbe-Bibliothek, Leuven</li>
+                <li>Princeton Theological Seminary</li>
+                <li>Reformationsgeschichtliche Forschungsbibliothek Wittenberg</li>
+                <li>Zentrum für Augustinus-Forschung (ZAF), Würzburg</li>
+            </ul>
+            <p>IxTheo ist offen für Kooperationen und Partnerschaften mit weiteren Bibliotheken. Wenn Sie Interesse an einer Zusammenarbeit haben, wenden Sie sich gerne an <a href="mailto:ixtheo@ub.uni-tuebingen.de">ixtheo@ub.uni-tuebingen.de</a>.</p>
+        </div>
+    </div>
+</div>
