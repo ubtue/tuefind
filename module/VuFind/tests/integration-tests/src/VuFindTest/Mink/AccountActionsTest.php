@@ -554,23 +554,37 @@ final class AccountActionsTest extends \VuFindTest\Integration\MinkTestCase
         $page = $session->getPage();
         $this->resetEmailLog();
 
-        // Recover account
+        // Start recovery:
         $this->clickCss($page, '#loginOptions a');
         $this->clickCss($page, '.modal-body .recover-account-link');
+
+        // Missing username:
+        $this->findCssAndSetValue($page, '#recovery_username', '');
+        $this->clickCss($page, '.modal-body input[type="submit"]');
+        $this->assertEquals(
+            'Username cannot be blank',
+            $this->findCssAndGetText($page, '.alert-danger')
+        );
+
+        // Missing email address:
         $this->findCssAndSetValue($page, '#recovery_username', 'nonexistent');
+        $this->findCssAndSetValue($page, '#recovery_email', '');
         $this->clickCss($page, '.modal-body input[type="submit"]');
         $this->assertEquals(
             'Email address missing.',
             $this->findCssAndGetText($page, '.alert-danger')
         );
 
-        $this->findCssAndSetValue($page, '#recovery_username', 'catuser');
+        // Invalid username:
+        $this->findCssAndSetValue($page, '#recovery_username', 'nonexistent');
+        $this->findCssAndSetValue($page, '#recovery_email', 'vufind@localhost');
         $this->clickCss($page, '.modal-body input[type="submit"]');
         $this->assertEquals(
-            'Email address missing.',
+            'We could not find your account',
             $this->findCssAndGetText($page, '.alert-danger')
         );
 
+        // Correct information:
         $this->findCssAndSetValue($page, '#recovery_username', 'catuser');
         $this->findCssAndSetValue($page, '#recovery_email', 'vufind@localhost');
         $this->clickCss($page, '.modal-body input[type="submit"]');
