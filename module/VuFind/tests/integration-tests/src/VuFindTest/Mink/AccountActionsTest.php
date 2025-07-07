@@ -561,36 +561,38 @@ final class AccountActionsTest extends \VuFindTest\Integration\MinkTestCase
         // Missing username:
         $this->findCssAndSetValue($page, '#recovery_username', '');
         $this->clickCss($page, '.modal-body input[type="submit"]');
-        $this->assertEquals(
+        $this->waitForPageLoad($page);
+        $this->assertEqualsWithTimeout(
             'Username cannot be blank',
-            $this->findCssAndGetText($page, '.alert-danger')
+            fn () => $this->findCssAndGetText($page, '.alert-danger')
         );
 
         // Missing email address:
         $this->findCssAndSetValue($page, '#recovery_username', 'nonexistent');
         $this->findCssAndSetValue($page, '#recovery_email', '');
         $this->clickCss($page, '.modal-body input[type="submit"]');
-        $this->assertEquals(
+        $this->assertEqualsWithTimeout(
             'Email address missing.',
-            $this->findCssAndGetText($page, '.alert-danger')
+            fn () => $this->findCssAndGetText($page, '.alert-danger')
         );
 
         // Invalid username:
         $this->findCssAndSetValue($page, '#recovery_username', 'nonexistent');
         $this->findCssAndSetValue($page, '#recovery_email', 'vufind@localhost');
         $this->clickCss($page, '.modal-body input[type="submit"]');
-        $this->assertEquals(
+        $this->assertEqualsWithTimeout(
             'We could not find your account',
-            $this->findCssAndGetText($page, '.alert-danger')
+            fn () => $this->findCssAndGetText($page, '.alert-danger')
         );
 
         // Correct information:
         $this->findCssAndSetValue($page, '#recovery_username', 'catuser');
         $this->findCssAndSetValue($page, '#recovery_email', 'vufind@localhost');
         $this->clickCss($page, '.modal-body input[type="submit"]');
-        $this->assertEquals(
+        $this->waitForPageLoad($page);
+        $this->assertEqualsWithTimeout(
             'Password recovery instructions have been sent to the email address registered with this account.',
-            $this->findCssAndGetText($page, '.alert-success')
+            fn () => $this->findCssAndGetText($page, '.alert-success')
         );
 
         // Extract URL from email:
