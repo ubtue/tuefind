@@ -33,9 +33,7 @@
 
   <!-- Work in Progress: -->
   <!--
-    <?php if(isset($this->dublinCore['DC.identifier']) && isset($this->dublinCore['DC.title']) && isset($this->dublinCore['DC.creator'])):?>
-    <?php $url = $this->url('feedback-form', ['id' => 'SelfArchivingRegisterLink']) . '?ppn=' . urlencode($this->dublinCore['DC.identifier'][0]) . '&title=' . urlencode($this->dublinCore['DC.title'][0]) . '&author=' . urlencode($this->dublinCore['DC.creator'][0]); ?>
+    <?php $url = $this->url('feedback-form', ['id' => 'SelfArchivingRegisterLink']) . '?ppn=' . urlencode($this->recordId) . '&title=' . urlencode($this->dublinCore['DC.title'][0]) . '&author=' . urlencode($this->dublinCore['DC.creator'][0]); ?>
     <p>Liegt Ihr Beitrag bereits als Zweitveröffentlichung auf einem anderen Repositorium vor? Dann können Sie statt eines erneuten Uploads <a href="<?=$this->escapeHtmlAttr($url)?>">hier</a> den Permalink eintragen, damit die vorhandene Zweitveröffentlichung in IxTheo verknüpft wird.</p>
-    <?php endif;?>
   -->
 <?php endif;?>
