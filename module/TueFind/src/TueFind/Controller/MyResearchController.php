@@ -262,7 +262,6 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
         $view->termFile = $termFileData;
         $view->recordLanguages = $existingRecord->getLanguages();
         $view->uploadMaxFilesizeMB = $uploadMaxFileSizeMB;
-        $view->recordId = $existingRecordId;
         return $view;
     }
 
