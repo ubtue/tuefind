@@ -14,19 +14,20 @@ class ZederProxyController extends AbstractProxyController {
         //'wert_zeigen_v01' => 'https://www-ub.ub.uni-tuebingen.de/zeder_ixtheo/cgi-bin/index.cgi/wert_zeigen_v01.json',
     ];
 
-    public function loadAction()
+    /**
+     * This action is used to expose URLs from Zeder which are usually only reachable via the intranet (e.g. for JSON files).
+     * Results will be Cached via the CachingDownloader.
+     */
+    public function proxyAction()
     {
-        $query = $this->getRequest()->getUri()->getQuery();
-        $parameters = [];
-        parse_str($query, $parameters);
-
-        if (!isset($parameters['action']) || !isset($this->actions[$parameters['action']])) {
+        $targetId = $this->params()->fromRoute('targetId');
+        if (!isset($targetId) || !isset($this->actions[$targetId])) {
             $response = $this->getResponse();
             $response->setStatusCode(\Laminas\Http\Response::STATUS_CODE_400);
             $response->setContent('400 Bad Request - Missing or invalid parameters');
             return $response;
         } else {
-            $json = $this->cachingDownloader->download($this->actions[$parameters['action']]);
+            $json = $this->cachingDownloader->download($this->actions[$targetId]);
             $response = $this->getResponse();
             $response->getHeaders()->addHeaderLine('Content-Type', 'application/json');
             $response->setContent($json);
@@ -34,19 +35,19 @@ class ZederProxyController extends AbstractProxyController {
         }
     }
 
+    /**
+     * This action is used to generate Views from Zeder.
+     */
     public function viewAction()
     {
-        $query = $this->getRequest()->getUri()->getQuery();
-        $parameters = [];
-        parse_str($query, $parameters);
-
-        if (!isset($parameters['action']) || !isset($this->actions[$parameters['action']])) {
+        $viewId = $this->params()->fromRoute('viewId');
+        if (!isset($viewId) || !isset($this->actions[$viewId])) {
             $response = $this->getResponse();
             $response->setStatusCode(\Laminas\Http\Response::STATUS_CODE_400);
             $response->setContent('400 Bad Request - Missing or invalid parameters');
             return $response;
         } else {
-            return $this->createViewModel(['action' => $parameters['action']]);
+            return $this->createViewModel(['viewId' => $viewId]);
         }
     }
 }
