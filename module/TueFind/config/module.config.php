@@ -72,19 +72,25 @@ $config = [
                 ],
             ],
             'zederproxy-load' => [
-                'type'    => 'Laminas\Router\Http\Literal',
+                'type'    => 'Laminas\Router\Http\Segment',
                 'options' => [
-                    'route'    => '/ZederProxy/Load',
+                    'route'    => '/Zeder/Proxy[/:targetId]',
+                    'constraints' => [
+                        'targetId'     => '[^/]+',
+                    ],
                     'defaults' => [
                         'controller' => 'ZederProxy',
-                        'action'     => 'Load',
+                        'action'     => 'Proxy',
                     ],
                 ],
             ],
             'zederproxy-view' => [
-                'type'    => 'Laminas\Router\Http\Literal',
+                'type'    => 'Laminas\Router\Http\Segment',
                 'options' => [
-                    'route'    => '/ZederProxy/View',
+                    'route'    => '/Zeder/View[/:viewId]',
+                    'constraints' => [
+                        'viewId'     => '[^/]+',
+                    ],
                     'defaults' => [
                         'controller' => 'ZederProxy',
                         'action'     => 'View',
