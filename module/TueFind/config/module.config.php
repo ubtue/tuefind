@@ -71,6 +71,26 @@ $config = [
                     ],
                 ],
             ],
+            'zederproxy-load' => [
+                'type'    => 'Laminas\Router\Http\Literal',
+                'options' => [
+                    'route'    => '/ZederProxy/Load',
+                    'defaults' => [
+                        'controller' => 'ZederProxy',
+                        'action'     => 'Load',
+                    ],
+                ],
+            ],
+            'zederproxy-view' => [
+                'type'    => 'Laminas\Router\Http\Literal',
+                'options' => [
+                    'route'    => '/ZederProxy/View',
+                    'defaults' => [
+                        'controller' => 'ZederProxy',
+                        'action'     => 'View',
+                    ],
+                ],
+            ],
             'quicklink' => [
                 'type'    => 'Laminas\Router\Http\Segment',
                 'options' => [
@@ -221,6 +241,7 @@ $config = [
             'TueFind\Controller\Search3recordController' => 'VuFind\Controller\AbstractBaseFactory',
             'TueFind\Controller\Search3Controller' => 'VuFind\Controller\AbstractBaseFactory',
             'TueFind\Controller\WikidataProxyController' => 'TueFind\Controller\AbstractProxyControllerFactory',
+            'TueFind\Controller\ZederProxyController' => 'TueFind\Controller\AbstractProxyControllerFactory',
         ],
         'initializers' => [
             'TueFind\ServiceManager\ServiceInitializer',
@@ -259,6 +280,8 @@ $config = [
             'search3' => 'TueFind\Controller\Search3Controller',
             'WikidataProxy' => 'TueFind\Controller\WikidataProxyController',
             'wikidataproxy' => 'TueFind\Controller\WikidataProxyController',
+            'ZederProxy' => 'TueFind\Controller\ZederProxyController',
+            'zederproxy' => 'TueFind\Controller\ZederProxyController',
         ],
     ],
     'controller_plugins' => [
