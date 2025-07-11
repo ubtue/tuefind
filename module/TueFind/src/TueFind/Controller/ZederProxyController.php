@@ -21,13 +21,26 @@ class ZederProxyController extends AbstractProxyController {
         parse_str($query, $parameters);
 
         if (!isset($parameters['action']) || !isset($this->actions[$parameters['action']])) {
-            $this->getResponse()->setStatusCode(404);
+            $this->getResponse()->setStatusCode(400);
         } else {
             $json = $this->cachingDownloader->download($this->actions[$parameters['action']]);
             $response = $this->getResponse();
             $response->getHeaders()->addHeaderLine('Content-Type', 'application/json');
             $response->setContent($json);
             return $response;
+        }
+    }
+
+    public function viewAction()
+    {
+        $query = $this->getRequest()->getUri()->getQuery();
+        $parameters = [];
+        parse_str($query, $parameters);
+
+        if (!isset($parameters['action']) || !isset($this->actions[$parameters['action']])) {
+            $this->getResponse()->setStatusCode(400);
+        } else {
+            return $this->createViewModel(['action' => $parameters['action']]);
         }
     }
 }

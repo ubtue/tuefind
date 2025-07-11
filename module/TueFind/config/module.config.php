@@ -81,6 +81,16 @@ $config = [
                     ],
                 ],
             ],
+            'zederproxy-view' => [
+                'type'    => 'Laminas\Router\Http\Literal',
+                'options' => [
+                    'route'    => '/ZederProxy/View',
+                    'defaults' => [
+                        'controller' => 'ZederProxy',
+                        'action'     => 'View',
+                    ],
+                ],
+            ],
             'quicklink' => [
                 'type'    => 'Laminas\Router\Http\Segment',
                 'options' => [
