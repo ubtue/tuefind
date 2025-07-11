@@ -4,7 +4,7 @@ var Zeder = {
             let selector = '#' + htmlContainerId;
             $(selector).DataTable( {
                 ajax		: {
-                    url: VuFind.path + '/Zeder/Proxy/' + zederViewId,
+                    url: VuFind.path + '/Zeder/Proxy/' + encodeURIComponent(zederViewId),
                     // dataSrc: '' is important because Zeder delivers an array but datatables expects an object
                     dataSrc: ''
                     // Note: additional options must be put into the "initComplete" block below where the table is re-initialized - they will have no effect here.
