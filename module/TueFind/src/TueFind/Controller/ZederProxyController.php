@@ -21,7 +21,10 @@ class ZederProxyController extends AbstractProxyController {
         parse_str($query, $parameters);
 
         if (!isset($parameters['action']) || !isset($this->actions[$parameters['action']])) {
-            $this->getResponse()->setStatusCode(400);
+            $response = $this->getResponse();
+            $response->setStatusCode(\Laminas\Http\Response::STATUS_CODE_400);
+            $response->setContent('400 Bad Request - Missing or invalid parameters');
+            return $response;
         } else {
             $json = $this->cachingDownloader->download($this->actions[$parameters['action']]);
             $response = $this->getResponse();
@@ -38,7 +41,10 @@ class ZederProxyController extends AbstractProxyController {
         parse_str($query, $parameters);
 
         if (!isset($parameters['action']) || !isset($this->actions[$parameters['action']])) {
-            $this->getResponse()->setStatusCode(400);
+            $response = $this->getResponse();
+            $response->setStatusCode(\Laminas\Http\Response::STATUS_CODE_400);
+            $response->setContent('400 Bad Request - Missing or invalid parameters');
+            return $response;
         } else {
             return $this->createViewModel(['action' => $parameters['action']]);
         }
