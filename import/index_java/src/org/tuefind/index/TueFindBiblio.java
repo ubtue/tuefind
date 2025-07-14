@@ -699,7 +699,7 @@ public class TueFindBiblio extends TueFind {
         return normalizeSortableString(author);
     }
 
-    public String getSortableAuthorUnicodeCollapseAndExpan(final Record record, final String tagList, final String acceptWithoutRelator,
+    public String getSortableAuthorUnicodeCollapseAndExpand(final Record record, final String tagList, final String acceptWithoutRelator,
                                                    final String relatorConfig)
     {
         String author = creatorTools.getFirstAuthorFilteredByRelator(record, tagList,
