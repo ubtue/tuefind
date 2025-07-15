@@ -254,13 +254,16 @@ forms:
   SelfArchivingLexikonartikel:
     enabled: true
     onlyForLoggedUsers: true
+    useCaptcha: false
     title: SA_encyclopedia_article
     emailSubject: "%%title%%"
     recipient:
       - email: pica_template_generator@localhost
+    response: SA_feedback_response
 
     help:
       pre: ""
+
 
     fields:
       - name: authors
@@ -284,6 +287,13 @@ forms:
         type: language
         required: true
 
+      - name: caption
+        label: SA_lexikonartikel_helptext
+        type: text
+        settings:
+          - formattintag: ""
+          - className: ""
+
       - name: zeitschrift_werk_group_title
         label: SA_title
         type: text
@@ -305,7 +315,7 @@ forms:
         required: false
 
       - name: zeitschrift_werk_group_IxTheo_Link
-        label: "IxTheo-Link"
+        label: "SA_RelBib_Link"
         type: text
         required: false
 
@@ -326,10 +336,12 @@ forms:
   SelfArchivingRezension:
     enabled: true
     onlyForLoggedUsers: true
+    useCaptcha: false
     title: SA_review
     emailSubject: "%%title%%"
     recipient:
        - email: pica_template_generator@localhost
+    response: SA_feedback_response
 
     help:
       pre: ""
@@ -344,19 +356,12 @@ forms:
       - name: title
         label: SA_title_review
         type: text
-        required: true
 
       - name: reviewed_work_group_authors
         label: SA_reviewed_work_authors
         type: multifieldtext
         maxMultiFieldtext: 8
         required: true
-        settings:
-          - groupClassName: reviewed-work
-
-      - name: reviewed_work_group_ISBN
-        label: SA_reviewed_work_ISBN
-        type: text
         settings:
           - groupClassName: reviewed-work
 
@@ -374,8 +379,14 @@ forms:
         settings:
           - groupClassName: reviewed-work
 
+      - name: reviewed_work_group_ISBN
+        label: SA_reviewed_work_ISBN
+        type: text
+        settings:
+          - groupClassName: reviewed-work
+
       - name:  reviewed_work_group_IxTheo_Link
-        label: SA_reviewed_work_ixtheo_link
+        label: SA_reviewed_work_relbib_link
         type: text
         settings:
           - groupClassName: reviewed-work
@@ -396,12 +407,6 @@ forms:
             label: SA_in_the_collection
 
       #Rezension superior anthology group open
-      - name: rezension_superior_anthology_group_author
-        label: SA_author_or_editor
-        type: multifieldtext
-        maxMultiFieldtext: 8
-        required: true
-        group: anthology
 
       - name: rezension_superior_anthology_group_title
         label: SA_title
@@ -409,27 +414,38 @@ forms:
         required: true
         group: anthology
 
+      - name: rezension_superior_anthology_group_author
+        label: SA_author_or_editor
+        type: multifieldtext
+        maxMultiFieldtext: 8
+        required: true
+        group: anthology
+
+      - name: rezension_superior_anthology_group_place_of_publication
+        label: "SA_place_of_publication"
+        type: text
+        group: anthology
+
       - name: rezension_superior_anthology_group_erscheinungsjahr
         label: SA_year_of_publication
         type: text
-        require: true
+        required: true
         group: anthology
 
       - name: rezension_superior_anthology_group_ISBN
         label: "ISBN"
         type: text
-        required: false
         group: anthology
 
       - name:  rezension_superior_anthology_group_IxTheo_link
-        label: "IxTheo-Link"
+        label: "SA_RelBib_Link"
         type: text
-        required: false
         group: anthology
 
       - name: rezension_superior_anthology_group_seiten
         label: Pages
         type: text
+        required: true
         group: anthology
 
       #Rezension superior anthology group close
@@ -445,19 +461,16 @@ forms:
       - name: zeitschrift_werk_group_ISSN
         label: "ISSN"
         type: text
-        required: false
         group: journal
 
       - name: zeitschrift_werk_group_IxTheo_Link
-        label: "IxTheo-Link"
+        label: "SA_RelBib_Link"
         type: text
-        required: false
         group: journal
 
       - name: zeitschrift_werk_group_band
         label: SA_volume
         type: text
-        required: true
         group: journal
 
       - name: zeitschrift_werk_group_jahr
@@ -469,7 +482,6 @@ forms:
       - name: zeitschrift_werk_group_heft
         label: SA_issue
         type: text
-        required: true
         group: journal
 
       - name: zeitschrift_werk_group_aufsatz_ID
@@ -496,10 +508,12 @@ forms:
   SelfArchivingAufsatz:
     enabled: true
     onlyForLoggedUsers: true
+    useCaptcha: false
     title: SA_article
     emailSubject: "%%title%%"
     recipient:
       - email: pica_template_generator@localhost
+    response: SA_feedback_response
 
 
     help:
@@ -550,7 +564,7 @@ forms:
         group: journal
 
       - name: zeitschrift_werk_group_IxTheo_Link
-        label: "IxTheo-Link"
+        label: "SA_RelBib_Link"
         type: text
         required: false
         group: journal
@@ -558,7 +572,6 @@ forms:
       - name: zeitschrift_werk_group_band
         label: SA_volume
         type: text
-        required: true
         group: journal
 
       - name: zeitschrift_werk_group_jahr
@@ -570,13 +583,11 @@ forms:
       - name: zeitschrift_werk_group_heft
         label: SA_issue
         type: text
-        required: true
         group: journal
 
       - name: zeitschrift_werk_group_aufsatz_ID
         label: SA_article_id
         type: text
-        required: true
         group: journal
 
       - name: superior_pages
@@ -597,11 +608,18 @@ forms:
         label: SA_editor
         type: multifieldtext
         maxMultiFieldtext: 8
+        required: true
+        group: anthology
+
+      - name: sammelband_werk_group_place_of_publication
+        label: "SA_place_of_publication"
+        type: text
         group: anthology
 
       - name: sammelband_werk_group_erscheinungsjahr
         label: SA_year_of_publication
         type: text
+        required: true
         group: anthology
 
       - name: sammelband_werk_group_ISBN
@@ -611,7 +629,7 @@ forms:
         group: anthology
 
       - name: zeitschrift_werk_group_IxTheo_Link2
-        label: "IxTheo-Link"
+        label: "SA_RelBib_Link"
         type: text
         required: false
         group: anthology
@@ -635,31 +653,22 @@ forms:
   SelfArchivingMonographie:
     enabled: true
     onlyForLoggedUsers: true
+    useCaptcha: false
     title: SA_monographic
+    emailSubject: "%%title%%"
+    recipient:
+      - email: pica_template_generator@localhost
+    response: SA_feedback_response
 
     help:
       pre: ""
 
     fields:
-      - name: print_online
-        label: SA_online_or_print
-        type: radio
-        required: true
-        options:
-          - value: online
-            label: "Online"
-          - value: print
-            label: "Print " # Note: The whitespace at the end is intentional so this will not be translated
 
       - name: authors
         label: SA_authors
         type: multifieldtext
         maxMultiFieldtext: 8
-        required: true
-
-      - name: publication_year
-        label: SA_year_of_publication
-        type: text
         required: true
 
       - name: title
@@ -670,7 +679,6 @@ forms:
       - name: untertitel
         label: SA_subtitle
         type: text
-        required: true
 
       - name: language
         label: SA_language_of_article
@@ -680,40 +688,39 @@ forms:
       - name: ISBN
         label: "ISBN"
         type: text
-        required: true
 
-      - name: link
-        label: "IxTheo-Link"
+      - name: place_of_publication
+        label: "SA_place_of_publication"
+        type: text
+
+      - name: publisher
+        label: "SA_publisher"
+        type: text
+
+      - name: publication_year
+        label: SA_year_of_publication
         type: text
         required: true
+
+      - name: output
+        label: SA_output
+        type: text
 
       - name: reihe
         label: SA_series
         type: text
-        required: true
 
       - name: reihennummer
         label: SA_series_number
         type: text
-        required: true
 
-      - name: onlineversion
-        label: SA_is_the_online_version_avaible
-        type: radio
-        required: true
-        options:
-          - value: bereit1
-            label: yes
-          - value: bereit2
-            label: no
+      - name: online_links
+        label: SA_online_links
+        type: multifieldtext
+        maxMultiFieldtext: 3
 
-      - name: onlineversion_werk_group_fulltext
-        label: SA_full_text_is_not_freely_available
+      - name: comment
+        label: SA_comment
         type: text
-        required: true
 
-      - name: onlineversion_werk_group_openaccess
-        label: "Open Access"
-        type: text
-        required: true
 

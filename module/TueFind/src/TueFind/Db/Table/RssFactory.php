@@ -2,7 +2,7 @@
 
 namespace TueFind\Db\Table;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 class RssFactory extends \VuFind\Db\Table\GatewayFactory
 {

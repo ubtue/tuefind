@@ -2,7 +2,7 @@
 
 namespace TueFind\View\Helper\TueFind;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use VuFind\Search\SearchTabsHelper;
 use VuFind\View\Helper\Root\SearchTabs;
 
@@ -271,6 +271,7 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
      * @return array
      */
     public function getRssNewsEntries(int $maxItemCount=null, bool $onlyNewestItemPerFeed=false) {
+
         $rssTable = $this->container->get(\VuFind\Db\Table\PluginManager::class)->get('rss_item');
         $rssItems = $rssTable->getItemsSortedByPubDate($this->getTueFindInstance());
 
@@ -624,6 +625,11 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
     public function getPublicationEmail(): string {
         $config = $this->getConfig('tuefind');
         return $config->Publication->email ?? "";
+    }
+
+    public function getSelfArchivingEmail(): string {
+        $config = $this->getConfig('tuefind');
+        return $config->Publication->selfarchivingemail ?? "";
     }
 
     public function getSiteEmail(): string {
