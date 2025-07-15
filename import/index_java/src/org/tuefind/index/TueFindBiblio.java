@@ -36,6 +36,7 @@ import org.marc4j.marc.Record;
 import org.marc4j.marc.Subfield;
 import org.marc4j.marc.VariableField;
 import org.solrmarc.index.SolrIndexer;
+import org.solrmarc.index.SolrIndexerShim;
 import org.solrmarc.tools.DataUtil;
 import org.solrmarc.tools.PropertyUtils;
 import org.solrmarc.tools.Utils;
@@ -3411,5 +3412,31 @@ public class TueFindBiblio extends TueFind {
             }
         }
         return results;
+    }
+
+    public String getCollapseAndExpand(final Record record,
+                                       final String authorTagList, final String authorAcceptWithoutRelator, final String authorRelatorConfig)
+    {
+        // If this is just a single field as base, we could also generate this on the C++ side in the long term.
+        Set<String> dois = getDOIs(record);
+        if (!dois.isEmpty()) {
+            return "DOI:" + String.join("#", dois);
+        }
+
+        // This is just a first implementation => other fields must also be considered (e.g. 024a depending on indicators)
+        Set<String> lccns = SolrIndexer.instance().getFieldList(record, "010a");
+        if (!lccns.isEmpty()) {
+            return "LCCN:" + String.join("#", lccns);
+        } else {
+            String result = "";
+
+
+            // SolrIndexerShim is deprecated & should be replaced soon
+            result += SolrIndexerShim.instance().getSortableTitle(record);
+            result += getSortableAuthorUnicodeCollapseAndExpand(record, authorTagList, authorAcceptWithoutRelator, authorRelatorConfig);
+            result += getFormatCollapseAndExpand(record);
+
+            return result;
+        }
     }
 }
