@@ -28,14 +28,14 @@ class SolrDefault extends \VuFind\RecordDriver\SolrMarc
     use Feature\CollapseAndExpandTrait;
 
 
-    const SUBITO_BROKER_ID = 'TUEFIND';
+    public const SUBITO_BROKER_ID = 'TUEFIND';
     protected $authorImplode;
     protected $container;
     protected $selected_fulltext_types;
     protected $hasFulltextMatch;
 
 
-    function __construct(
+    public function __construct(
         $mainConfig = null,
         $recordConfig = null,
         $searchSettings = null
@@ -46,7 +46,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrMarc
             if (is_null($array)) {
                 return null;
             }
-            return implode(", ", array_filter($array, function($entry) {
+            return implode(", ", array_filter($array, function ($entry) {
                 return empty($entry) ? false : true;
             }));
         };
@@ -95,7 +95,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrMarc
     {
         $result     = array();
         $headings   = $this->getAllSubjectHeadings();
-        foreach($headings as $heading_arr) {
+        foreach ($headings as $heading_arr) {
             $result = array_merge($result, $heading_arr);
         }
         return $result;
@@ -114,13 +114,15 @@ class SolrDefault extends \VuFind\RecordDriver\SolrMarc
     }
 
 
-    public function getAuthorsAndRoleAsString() {
+    public function getAuthorsAndRoleAsString()
+    {
         $deduplicated_authors = $this->getDeduplicatedAuthors();
         $result = '';
-        foreach(['primary', 'secondary', 'corporate'] as $type) {
+        foreach (['primary', 'secondary', 'corporate'] as $type) {
             $type_contents =  $deduplicated_authors[$type];
-            if (!empty($result) && $type == 'corporate')
+            if (!empty($result) && $type == 'corporate') {
                 continue;
+            }
             foreach (array_keys($type_contents) as $author_full) {
                 $result .= empty($result) ? "" : ", ";
                 $result .= $author_full . (isset($type_contents[$author_full]['role'][0]) ?
@@ -129,7 +131,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrMarc
             }
         }
         return $result;
-   }
+    }
 
 
     /**
@@ -174,9 +176,10 @@ class SolrDefault extends \VuFind\RecordDriver\SolrMarc
     public function getContainerTitle()
     {
         $containerIdsAndTitles = $this->getContainerIDsAndTitles();
-        foreach($containerIdsAndTitles as $ppn => $containerTitleAndVolume) {
-            if (!empty($containerTitleAndVolume[0]))
+        foreach ($containerIdsAndTitles as $ppn => $containerTitleAndVolume) {
+            if (!empty($containerTitleAndVolume[0])) {
                 return $containerTitleAndVolume[0];
+            }
         }
         return '';
     }
@@ -259,7 +262,8 @@ class SolrDefault extends \VuFind\RecordDriver\SolrMarc
             $this->fields['mediatype'] : array();
     }
 
-    public function getOtherTitles() {
+    public function getOtherTitles()
+    {
         return isset($this->fields['other_titles']) ?
             $this->fields['other_titles'] : array();
     }
@@ -278,16 +282,16 @@ class SolrDefault extends \VuFind\RecordDriver\SolrMarc
     public function getPrecedingPPNsAndTitles()
     {
         return array_map(function ($ppn_and_title) {
-                return explode(':', $ppn_and_title, 2);
-            }, $this->fields['preceding_ppns_and_titles'] ?? []);
+            return explode(':', $ppn_and_title, 2);
+        }, $this->fields['preceding_ppns_and_titles'] ?? []);
     }
 
 
     public function getFollowingPPNsAndTitles()
     {
         return array_map(function ($ppn_and_title) {
-                return explode(':', $ppn_and_title, 2);
-            }, $this->fields['following_ppns_and_titles'] ?? []);
+            return explode(':', $ppn_and_title, 2);
+        }, $this->fields['following_ppns_and_titles'] ?? []);
     }
 
     public function getPrimaryAuthorsGnds(): array
@@ -310,7 +314,9 @@ class SolrDefault extends \VuFind\RecordDriver\SolrMarc
         // Create a map of de-highlighted valeus => highlighted values.
         foreach ($this->getRawAuthorHighlights() as $current) {
             $dehighlighted = str_replace(
-                ['{{{{START_HILITE}}}}', '{{{{END_HILITE}}}}'], '', $current
+                ['{{{{START_HILITE}}}}', '{{{{END_HILITE}}}}'],
+                '',
+                $current
             );
             $highlights[$dehighlighted] = $current;
         }
@@ -325,7 +331,8 @@ class SolrDefault extends \VuFind\RecordDriver\SolrMarc
         return $authors;
     }
 
-    public function getRecordDriverByPPN($ppn) {
+    public function getRecordDriverByPPN($ppn)
+    {
         $recordLoader = $this->container->get('VuFind\RecordLoader');
         return $recordLoader->load($ppn, 'Solr', false);
     }
@@ -363,7 +370,8 @@ class SolrDefault extends \VuFind\RecordDriver\SolrMarc
         return array_merge($secondaryAuthorsRoles, $nonCreativeAuthorsRoles);
     }
 
-    public function getSuperiorPPN() {
+    public function getSuperiorPPN()
+    {
         return isset($this->fields['superior_ppn']) ?
             $this->fields['superior_ppn'][0] : '';
     }
@@ -372,13 +380,14 @@ class SolrDefault extends \VuFind\RecordDriver\SolrMarc
     public function getSuperiorRecord()
     {
         $superior_ppn = $this->getSuperiorPPN();
-        if (empty($superior_ppn))
-            return NULL;
+        if (empty($superior_ppn)) {
+            return null;
+        }
 
         try {
             return $this->getRecordDriverByPPN($superior_ppn);
         } catch (RecordMissingException $e) {
-            return NULL;
+            return null;
         }
     }
 
@@ -386,7 +395,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrMarc
     public function getSuperiorFormats()
     {
         $superior_record = $this->getSuperiorRecord();
-        if ($superior_record == NULL) {
+        if ($superior_record == null) {
             return '';
         }
         return $superior_record->getFormats();
@@ -417,25 +426,30 @@ class SolrDefault extends \VuFind\RecordDriver\SolrMarc
         return isset($this->fields['page_range']) ? $this->fields['page_range'] : '';
     }
 
-    public function getSubitoURL() {
+    public function getSubitoURL()
+    {
         // Suppress Subito links for open access items:
-        if ($this->isOpenAccess())
-	    return "";
+        if ($this->isOpenAccess()) {
+            return "";
+        }
 
         $base_url = "http://www.subito-doc.de/preorder/?BI=" . static::SUBITO_BROKER_ID;
         switch ($this->getBibliographicLevel()) {
             case 'Monograph':
                 $isbn = $this->getCleanISBN();
-                if (!empty($isbn))
+                if (!empty($isbn)) {
                     return $base_url . "&SB=" . $isbn;
+                }
                 return $base_url . "&K10=SWB&ND=" . $this->getRecordId();
             case 'Serial':
                 $zdb_number = $this->getZDBNumber();
-                if (!empty($zdb_number))
+                if (!empty($zdb_number)) {
                     return $base_url . "&ND=" . $zdb_number;
+                }
                 $issn = $this->getCleanISSN();
-                if (!empty($issn))
-                   return $base_url . "&SS=" . $issn;
+                if (!empty($issn)) {
+                    return $base_url . "&SS=" . $issn;
+                }
                 break;
             case 'MonographPart':
             case 'SerialPart':
@@ -448,20 +462,21 @@ class SolrDefault extends \VuFind\RecordDriver\SolrMarc
                 $issue = $this->getIssue();
                 $year = $this->getYear();
                 if ((!empty($isbn) || !empty($issn)) && !empty($title) && !empty($authors) && !empty($page_range)
-                    && (!empty($volume) || !empty($issue)) && !empty($year))
-                {
+                    && (!empty($volume) || !empty($issue)) && !empty($year)) {
                     $title = urlencode($title);
                     $author_list = "";
                     foreach ($authors as $author) {
-                        if (!empty($author_list))
+                        if (!empty($author_list)) {
                             $author_list .= "%3B";
+                        }
                         $author_list .= urlencode($author);
                     }
                     $page_range = urlencode($page_range);
 
                     $volume_and_or_issue = urlencode($volume);
-                    if (!empty($volume_and_or_issue))
+                    if (!empty($volume_and_or_issue)) {
                         $volume_and_or_issue .= "%2F";
+                    }
                     $volume_and_or_issue .= urlencode($issue);
 
                     return $base_url . (!empty($isbn) ? "&SB=" . $isbn : "&SS=" . $issn) . "&ATI=" . $title . "&AAU="
@@ -498,21 +513,23 @@ class SolrDefault extends \VuFind\RecordDriver\SolrMarc
         return $title;
     }
 
-   /**
-     * Get the title and try to reconstruct the original title for merged records
-     *
-     * @return string
-     */
-    public function getUnmergedTitleByType(string $type) : string
+    /**
+      * Get the title and try to reconstruct the original title for merged records
+      *
+      * @return string
+      */
+    public function getUnmergedTitleByType(string $type): string
     {
         $merge_match_expression = "/^(.*) \/ (\(electronic\)|\(print\)); (.*) \/ (\(electronic\)|\(print\))$/";
         $title = $this->getShortTitle();
-        if (preg_match($merge_match_expression, $title, $matches))
+        if (preg_match($merge_match_expression, $title, $matches)) {
             $title = ($matches[2] == "($type)") ? $matches[1] : $matches[3];
+        }
 
         $subtitle = $this->getSubtitle();
-        if (preg_match($merge_match_expression, $subtitle, $matches))
+        if (preg_match($merge_match_expression, $subtitle, $matches)) {
             $subtitle = ($matches[2] == "($type)") ? $matches[1] : $matches[3];
+        }
         $titleSection = $this->getTitleSection();
         if (!empty($subtitle)) {
             if ($title != '') {
@@ -536,7 +553,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrMarc
      *
      * @return string
      */
-    public function getUnmergedElectronicTitle() : string
+    public function getUnmergedElectronicTitle(): string
     {
         return $this->getUnmergedTitleByType("electronic");
     }
@@ -547,7 +564,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrMarc
      *
      * @return string
      */
-    public function getUnmergedPrintTitle() : string
+    public function getUnmergedPrintTitle(): string
     {
         return $this->getUnmergedTitleByType("print");
     }
@@ -557,7 +574,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrMarc
      * Normalize common german media type terms to English for the integration in the translation process
      *
      */
-    public function normalizeGermanMaterialTypeTerms(string $material_type) : string
+    public function normalizeGermanMaterialTypeTerms(string $material_type): string
     {
         $translations = [
           "Kostenfrei" => "Free Access",
@@ -572,8 +589,9 @@ class SolrDefault extends \VuFind\RecordDriver\SolrMarc
           "Unbekanntes Material" => "unknown material type",
         ];
 
-        if (array_key_exists($material_type, $translations))
+        if (array_key_exists($material_type, $translations)) {
             return $translations[$material_type];
+        }
         return $material_type;
     }
 
@@ -645,10 +663,12 @@ class SolrDefault extends \VuFind\RecordDriver\SolrMarc
     public function hasInferiorWorksInCurrentSubsystem()
     {
         $subsystem = $this->container->get('ViewHelperManager')->get('tuefind')->getTueFindSubtype();
-        if (($subsystem == 'IXT' || $subsystem == 'KRI') && $this->fields['is_superior_work'])
-	    return true;
-        if (!isset($this->fields['superior_work_subsystems']))
+        if (($subsystem == 'IXT' || $subsystem == 'KRI') && $this->fields['is_superior_work']) {
+            return true;
+        }
+        if (!isset($this->fields['superior_work_subsystems'])) {
             return false;
+        }
 
         $subsystems = $this->fields['superior_work_subsystems'];
         return in_array($subsystem, $subsystems, true);
@@ -659,10 +679,12 @@ class SolrDefault extends \VuFind\RecordDriver\SolrMarc
         return (isset($this->fields['is_subscribable'])) ? $this->fields['is_subscribable'] : false;
     }
 
-    public function stripTrailingDates($text) {
+    public function stripTrailingDates($text)
+    {
         $matches = [];
-        if (!preg_match("/(\\D*)(\\d{4}).*/", $text, $matches))
+        if (!preg_match("/(\\D*)(\\d{4}).*/", $text, $matches)) {
             return $text;
+        }
         return rtrim($matches[1]);
     }
 
@@ -776,7 +798,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrMarc
     }
 
 
-    public function getFulltextTypes() : array
+    public function getFulltextTypes(): array
     {
         return (isset($this->fields['fulltext_types'])) ? $this->fields['fulltext_types'] : [];
     }
@@ -823,12 +845,14 @@ class SolrDefault extends \VuFind\RecordDriver\SolrMarc
         $formats = $this->getFormats();
 
         $formatsToHide = ['Archived Material', 'Database', 'Literary Remains', 'Weblog', 'Website'];
-        if (count(array_intersect($formats, $formatsToHide)) > 0)
+        if (count(array_intersect($formats, $formatsToHide)) > 0) {
             return false;
+        }
 
         $formatsToHideIfOpenAccess = ['Research Data'];
-        if (count(array_intersect($formats, $formatsToHideIfOpenAccess)) > 0)
+        if (count(array_intersect($formats, $formatsToHideIfOpenAccess)) > 0) {
             return false;
+        }
 
         return true;
     }
@@ -839,5 +863,13 @@ class SolrDefault extends \VuFind\RecordDriver\SolrMarc
     public function getContainerTitleSort()
     {
         return $this->fields['title_sort'] ?? '';
+    }
+
+    /**
+     * This function is used by collapse and expand to get the expand field
+     */
+    public function getContainerExpandField($expand_field)
+    {
+        return $this->fields[$expand_field] ?? '';
     }
 }
