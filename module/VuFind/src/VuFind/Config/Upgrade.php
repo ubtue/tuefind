@@ -50,6 +50,17 @@ use function is_array;
 class Upgrade
 {
     /**
+     * Default full sections.
+     *
+     * @var array
+     */
+    protected array $defaultFullSections = [
+        'Results', 'ResultsTop', 'Advanced', 'Author', 'CheckboxFacets',
+        'HomePage', 'Facets', 'FacetsTop', 'Basic_Searches', 'Advanced_Searches',
+        'Sort', 'Sorting', 'DefaultSortingByType',
+    ];
+
+    /**
      * Parsed old configurations
      *
      * @var array
@@ -92,6 +103,11 @@ class Upgrade
     protected bool $writeMode = true;
 
     /**
+     * Track which configs have already been written.
+     */
+    protected array $writtenConfig = [];
+
+    /**
      * Constructor
      *
      * @param PathResolver  $pathResolver  Path Resolver
@@ -124,7 +140,9 @@ class Upgrade
      */
     public function run(string $newVersion): void
     {
+        // Reset upgrading state
         $this->permissionsModified = false;
+        $this->writtenConfig = [];
 
         // Load all old configurations:
         $this->loadConfigs();
@@ -133,20 +151,25 @@ class Upgrade
         // important since in some cases, settings may migrate out of config.ini
         // and into other files.
         $this->upgradeConfig($newVersion);
-        $this->upgradeAuthority();
         $this->upgradeFacetsAndCollection();
-        $this->upgradeReserves();
         $this->upgradeSearches();
         $this->upgradeSms();
         $this->upgradeEDS();
         $this->upgradeEPF();
         $this->upgradeSummon();
         $this->upgradePrimo();
-        $this->upgradeRecordDataFormatter();
 
         // The previous upgrade routines may have added values to permissions.ini,
         // so we should save it last. It doesn't have its own upgrade routine.
         $this->saveModifiedConfig('permissions', $this->permissionsModified);
+
+        // Make sure to update any remaining configurations that were not explicitly updated above.
+        foreach ($this->newConfigs as $filename => $newConfig) {
+            if (!in_array($filename, $this->writtenConfig)) {
+                $this->applyOldSettings($filename);
+                $this->saveModifiedConfig($filename);
+            }
+        }
     }
 
     /**
@@ -232,24 +255,21 @@ class Upgrade
      * Apply settings from an old configuration to a new configuration.
      *
      * @param string $filename     Name of the configuration being updated.
-     * @param array  $fullSections Array of section names that need to be fully
+     * @param ?array $fullSections Array of section names that need to be fully
      * overridden (as opposed to overridden on a setting-by-setting basis).
      *
      * @return void
      */
-    protected function applyOldSettings(string $filename, array $fullSections = []): void
+    protected function applyOldSettings(string $filename, ?array $fullSections = null): void
     {
-        // First override all individual settings:
         foreach ($this->oldConfigs[$filename] as $section => $subsection) {
-            foreach ($subsection as $key => $value) {
-                $this->newConfigs[$filename][$section][$key] = $value;
+            if (in_array($section, $fullSections ?? $this->defaultFullSections)) {
+                $this->newConfigs[$filename][$section] = $this->oldConfigs[$filename][$section];
+            } else {
+                foreach ($subsection as $key => $value) {
+                    $this->newConfigs[$filename][$section][$key] = $value;
+                }
             }
-        }
-
-        // Now override on a section-by-section basis where necessary:
-        foreach ($fullSections as $section) {
-            $this->newConfigs[$filename][$section]
-                = $this->oldConfigs[$filename][$section] ?? [];
         }
     }
 
@@ -265,6 +285,8 @@ class Upgrade
      */
     protected function saveModifiedConfig(string $filename, bool $forceCreation = false): void
     {
+        $this->writtenConfig[] = $filename;
+
         // don't write to files when write mode is disabled.
         if (!$this->writeMode) {
             return;
@@ -372,7 +394,7 @@ class Upgrade
     protected function upgradeConfig(string $newVersion): void
     {
         // override new version's defaults with matching settings from old version:
-        $this->applyOldSettings('config.ini');
+        $this->applyOldSettings('config.ini', []);
 
         // Set up reference for convenience (and shorter lines):
         $newConfig = & $this->newConfigs['config.ini'];
@@ -652,12 +674,8 @@ class Upgrade
     {
         // we want to retain the old installation's various facet groups
         // exactly as-is
-        $facetGroups = [
-            'Results', 'ResultsTop', 'Advanced', 'Author', 'CheckboxFacets',
-            'HomePage',
-        ];
-        $this->applyOldSettings('facets.ini', $facetGroups);
-        $this->applyOldSettings('Collection.ini', ['Facets', 'Sort']);
+        $this->applyOldSettings('facets.ini');
+        $this->applyOldSettings('Collection.ini');
 
         // fill in home page facets with advanced facets if missing:
         if (!isset($this->oldConfigs['facets.ini']['HomePage'])) {
@@ -683,10 +701,7 @@ class Upgrade
     {
         // we want to retain the old installation's Basic/Advanced search settings
         // and sort settings exactly as-is
-        $groups = [
-            'Basic_Searches', 'Advanced_Searches', 'Sorting', 'DefaultSortingByType',
-        ];
-        $this->applyOldSettings('searches.ini', $groups);
+        $this->applyOldSettings('searches.ini');
 
         // fix call number sort settings:
         $newConfig = & $this->newConfigs['searches.ini'];
@@ -717,52 +732,6 @@ class Upgrade
     {
         $this->applyOldSettings('sms.ini', ['Carriers']);
         $this->saveModifiedConfig('sms.ini');
-    }
-
-    /**
-     * Upgrade authority.ini.
-     *
-     * @throws FileAccessException
-     * @return void
-     */
-    protected function upgradeAuthority(): void
-    {
-        // we want to retain the old installation's search and facet settings
-        // exactly as-is
-        $groups = [
-            'Facets', 'Basic_Searches', 'Advanced_Searches', 'Sorting',
-        ];
-        $this->applyOldSettings('authority.ini', $groups);
-
-        // save the file
-        $this->saveModifiedConfig('authority.ini');
-    }
-
-    /**
-     * Upgrade reserves.ini.
-     *
-     * @throws FileAccessException
-     * @return void
-     */
-    protected function upgradeReserves(): void
-    {
-        // If Reserves module is disabled, don't bother updating config:
-        if (
-            !isset($this->newConfigs['config.ini']['Reserves']['search_enabled'])
-            || !$this->newConfigs['config.ini']['Reserves']['search_enabled']
-        ) {
-            return;
-        }
-
-        // we want to retain the old installation's search and facet settings
-        // exactly as-is
-        $groups = [
-            'Facets', 'Basic_Searches', 'Advanced_Searches', 'Sorting',
-        ];
-        $this->applyOldSettings('reserves.ini', $groups);
-
-        // save the file
-        $this->saveModifiedConfig('reserves.ini');
     }
 
     /**
@@ -799,10 +768,7 @@ class Upgrade
     {
         // we want to retain the old installation's search and facet settings
         // exactly as-is
-        $groups = [
-            'Facets', 'FacetsTop', 'Basic_Searches', 'Advanced_Searches', 'Sorting',
-        ];
-        $this->applyOldSettings($filename, $groups);
+        $this->applyOldSettings($filename);
 
         // Fix default view settings in case they use the old style:
         $newConfig = & $this->newConfigs[$filename]['General'];
@@ -831,10 +797,7 @@ class Upgrade
 
         // we want to retain the old installation's search and facet settings
         // exactly as-is
-        $groups = [
-            'Facets', 'FacetsTop', 'Basic_Searches', 'Advanced_Searches', 'Sorting',
-        ];
-        $this->applyOldSettings('Summon.ini', $groups);
+        $this->applyOldSettings('Summon.ini');
 
         // update permission settings
         $this->upgradeSummonPermissions();
@@ -888,10 +851,7 @@ class Upgrade
     {
         // we want to retain the old installation's search and facet settings
         // exactly as-is
-        $groups = [
-            'Facets', 'FacetsTop', 'Basic_Searches', 'Advanced_Searches', 'Sorting',
-        ];
-        $this->applyOldSettings('Primo.ini', $groups);
+        $this->applyOldSettings('Primo.ini');
 
         // update permission settings
         $this->upgradePrimoPermissions();
@@ -901,18 +861,6 @@ class Upgrade
 
         // save the file
         $this->saveModifiedConfig('Primo.ini');
-    }
-
-    /**
-     * Upgrade RecordDataFormatter.ini.
-     *
-     * @throws FileAccessException
-     * @return void
-     */
-    protected function upgradeRecordDataFormatter(): void
-    {
-        $this->applyOldSettings('RecordDataFormatter.ini');
-        $this->saveModifiedConfig('RecordDataFormatter.ini');
     }
 
     /**
