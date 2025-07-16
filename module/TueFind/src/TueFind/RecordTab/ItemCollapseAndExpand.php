@@ -62,8 +62,12 @@ class ItemCollapseAndExpand extends \VuFind\RecordTab\AbstractContent implements
         $collapse_and_expand = $index->get('collapse_and_expand') !== null ? $index->get('collapse_and_expand') : false;
         if ((bool) $collapse_and_expand === true && $this->driver->isActiveCnEParams()) {
             if ($this->results == null) {
-                $results = $this->driver->tryMethod('getOtherDocument', [$this->driver->getContainerTitleSort()]);
-                $this->numOfExpandedDoc = $results->countExpandedDoc($this->driver->getContainerTitleSort());
+                // $results = $this->driver->tryMethod('getOtherDocument', [$this->driver->getContainerTitleSort()]);
+                // $this->numOfExpandedDoc = $results->countExpandedDoc($this->driver->getContainerTitleSort());
+                $expand_field = $index->get('group.expand');
+                $results = $this->driver->tryMethod('getOtherDocument', [$this->driver->getContainerExpandField($expand_field)]);
+                $this->numOfExpandedDoc = $results->countExpandedDoc($this->driver->getContainerExpandField($expand_field));
+
             }
             return $this->numOfExpandedDoc > 0 ? true : false;
         } else {

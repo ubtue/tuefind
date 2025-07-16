@@ -135,7 +135,7 @@ trait ParamsTrait
                 if (isset($groupingParams['group_expand'])) {
                     $group_expand = $groupingParams['group_expand'];
                 } elseif ($index->get('group.expand') !== null) {
-                    $group_limit = $index->get('group.expand');
+                    $group_expand = $index->get('group.expand');
                 }
 
                 // collapse and expand

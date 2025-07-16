@@ -84,7 +84,8 @@ trait CollapseAndExpandTrait
                 $default_field = array('title_sort');
                 $group_field =  ($configIndex->get('group.field') !== null) ? explode(":", $configIndex->get('group.field')) : $default_field;
                 $this->groupLimit = ($configIndex->get('group.limit') !== null) ? $configIndex->get('group.limit') : 10;
-                $this->expandField = ($configIndex->get('expand.field') !== null) ? $configIndex->get('expand.field') : $default_field[0];
+                $this->expandField = ($configIndex->get('group.expand') !== null) ? $configIndex->get('group.expand') : $default_field[0];
+
 
                 // $searchCommand = new SearchCommand($this->backendId,  $query, 0, 0, $params);
                 $params = new ParamBag();
@@ -174,7 +175,9 @@ trait CollapseAndExpandTrait
                 }
 
 
-                $query_string = 'title_sort:"' . $keyword . '"';
+                $query_string = "$this->expandField:" . '"'  . $keyword . '"';
+                // $query_string = 'title_sort:"' . $keyword . '"';
+
                 $query = new Query(
                     $query_string
                 );

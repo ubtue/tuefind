@@ -1,6 +1,11 @@
 <?php
+$container = $this->driver->getContainer();
+$config = $container->get('VuFind\Config\PluginManager')->get('config');
+$configIndex = $config->get("Index");
+$expand_field = $configIndex->get('group.expand');
 
-$results = $this->driver->tryMethod('getOtherDocument', [$this->driver->getContainerTitleSort()]);
+
+$results = $this->driver->tryMethod('getOtherDocument', [$this->driver->getContainerExpandField($expand_field)]);
 $view = 'collapse-and-expand-tab';
 $this->parentRecordId = $this->driver->getRecordId();
 ?>
