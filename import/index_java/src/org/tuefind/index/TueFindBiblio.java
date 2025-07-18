@@ -36,6 +36,7 @@ import org.marc4j.marc.Record;
 import org.marc4j.marc.Subfield;
 import org.marc4j.marc.VariableField;
 import org.solrmarc.index.SolrIndexer;
+import org.solrmarc.index.SolrIndexerShim;
 import org.solrmarc.tools.DataUtil;
 import org.solrmarc.tools.PropertyUtils;
 import org.solrmarc.tools.Utils;
@@ -699,6 +700,25 @@ public class TueFindBiblio extends TueFind {
         return normalizeSortableString(author);
     }
 
+    public String getSortableAuthorUnicodeCollapseAndExpand(final Record record, final String tagList, final String acceptWithoutRelator,
+                                                   final String relatorConfig)
+    {
+        String author = creatorTools.getFirstAuthorFilteredByRelator(record, tagList,
+                                                              acceptWithoutRelator,
+                                                              relatorConfig);
+
+        if( author == null || author.isEmpty()) {
+
+            List<String> authors = creatorTools.getAuthorsFilteredByRelator(record, tagList, acceptWithoutRelator, relatorConfig, "false", "false");
+            author = String.join("", authors);
+
+            if( author == null || author.isEmpty()) {
+                UUID uuid = UUID.randomUUID();
+                author = uuid.toString();
+            }
+        }
+            return normalizeSortableString(author);
+    }
 
     /**
      * @param record
@@ -2640,6 +2660,17 @@ public class TueFindBiblio extends TueFind {
         return formats;
     }
 
+    public String getFormatCollapseAndExpand(final Record record) {
+        final Set<String> formats = getFormats(record);
+        String str_formats = String.join("", formats);
+        if (str_formats.equals("Unknown")) {
+            UUID uuid = UUID.randomUUID();
+                return normalizeSortableString(uuid.toString());
+        } else {
+            return str_formats;
+        }
+    }
+
     protected boolean foundInSubfield(final List<VariableField> fields, final char subfieldCode, final String subfieldContents) {
         for (final VariableField field : fields) {
             final DataField dataField = (DataField) field;
@@ -3381,5 +3412,36 @@ public class TueFindBiblio extends TueFind {
             }
         }
         return results;
+    }
+
+    public String getCollapseAndExpand(final Record record,
+                                       final String authorTagList, final String authorAcceptWithoutRelator, final String authorRelatorConfig)
+    {
+        // If this is just a single field as base, we could also generate this on the C++ side in the long term.
+        Set<String> dois = getDOIs(record);
+        if (!dois.isEmpty()) {
+            return "DOI:" + String.join("#", dois);
+        }
+
+        // This is just a first implementation => other fields must also be considered (e.g. 024a depending on indicators)
+        Set<String> lccns = SolrIndexer.instance().getFieldList(record, "010a");
+        if (!lccns.isEmpty()) {
+            return "LCCN:" + String.join("#", lccns);
+        } else {
+            String result = "";
+            String volume, issue;
+
+            volume = getIssueInfoVolume(record);
+            issue = getIssueInfoIssue(record);
+
+            // SolrIndexerShim is deprecated & should be replaced soon
+            result += SolrIndexerShim.instance().getSortableTitle(record);
+            result += getSortableAuthorUnicodeCollapseAndExpand(record, authorTagList, authorAcceptWithoutRelator, authorRelatorConfig);
+            result += getFormatCollapseAndExpand(record);
+            result += volume.isEmpty() ? "" : "-" + volume;
+            result += issue.isEmpty() ? "" : "-" + issue;
+
+            return result;
+        }
     }
 }
