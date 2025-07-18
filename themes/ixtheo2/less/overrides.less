@@ -976,6 +976,14 @@ a.black-icon {
   .cw-hide-for-xsmoll {
     display: none;
   }
+
+  .ix-feedback-block .ix-feedback-text {
+    display: none;
+  }
+  .ix-feedback-block .ix-feedback-icon {
+    display: block !important;
+  }
+
 }
 
 /* Small devices (landscape phones, 576px and up) */
@@ -1033,6 +1041,14 @@ a.black-icon {
   .cw-hide-for-xsmoll {
     display: none;
   }
+
+  .ix-feedback-block .ix-feedback-text{
+    display: none;
+  }
+  .ix-feedback-block .ix-feedback-icon{
+    display: block !important;
+  }
+
 }
 
 /* Medium devices (tablets, 768px and up) */
@@ -1061,6 +1077,18 @@ a.black-icon {
     margin: 0;
     padding: 0;
   }
+
+  .ix-feedback-block .ix-feedback-text{
+    display: none;
+  }
+  .ix-feedback-block .ix-feedback-icon{
+    display: block !important;
+  }
+
+  .ix-footer-block .copyright {
+    text-align: right;
+  }
+
 }
 
 /* Large devices (desktops, 992px and up) */
@@ -1076,16 +1104,20 @@ a.black-icon {
     margin: 0;
     padding: 0;
   }
+
+  .ix-feedback-block .ix-feedback-text{
+    display: none;
+  }
+  .ix-feedback-block .ix-feedback-icon{
+    display: block !important;
+  }
+
+  .ix-footer-block .copyright {
+    text-align: right;
+  }
+
 }
 
-/* Extra large devices (large desktops, 1200px and up) */
-/*
-@media (min-width: 1200px) and (max-width: 1919.98px) {
-  .hero-area {
-    background-image: url(../themes/ixtheo2/images/slider/searchbar_1200.png);
-  }
-}
-*/
 @media (max-width: 1300px) {
   .searchbar_vertical {
     display: initial;
@@ -1102,7 +1134,39 @@ a.black-icon {
   .logo-wrapper .text-content {
     padding-top: 16.5vw;
   }
+
+  .ix-feedback-block .ix-feedback-text{
+    display: none;
+  }
+  .ix-feedback-block .ix-feedback-icon{
+    display: block !important;
+  }
+
+  .ix-footer-block .copyright {
+    text-align: center;
+  }
+
 }
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1301px) and (max-width: 1450px) {
+  .ix-feedback-block .ix-feedback-text{
+    display: none;
+  }
+  .ix-feedback-block .ix-feedback-icon{
+    display: block !important;
+  }
+}
+
+@media (min-width: 1451px) and (max-width: 5000px) {
+  .ix-feedback-block .ix-feedback-text{
+    display: block;
+  }
+  .ix-feedback-block .ix-feedback-icon{
+    display: none;
+  }
+}
+
 
 .ix-copyright {
   float: left;
@@ -1429,4 +1493,8 @@ table.ix-journals-table .img-td {
   border-radius: 6px;
   z-index: 99;
   background-color: #e2e5e8;
+}
+
+.ix-feedback-block .ix-feedback-icon {
+  display: none;
 }
