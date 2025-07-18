@@ -3429,12 +3429,17 @@ public class TueFindBiblio extends TueFind {
             return "LCCN:" + String.join("#", lccns);
         } else {
             String result = "";
+            String volume, issue;
 
+            volume = getIssueInfoVolume(record);
+            issue = getIssueInfoIssue(record);
 
             // SolrIndexerShim is deprecated & should be replaced soon
             result += SolrIndexerShim.instance().getSortableTitle(record);
             result += getSortableAuthorUnicodeCollapseAndExpand(record, authorTagList, authorAcceptWithoutRelator, authorRelatorConfig);
             result += getFormatCollapseAndExpand(record);
+            result += volume.isEmpty() ? "" : "-" + volume;
+            result += issue.isEmpty() ? "" : "-" + issue;
 
             return result;
         }
