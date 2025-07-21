@@ -3441,7 +3441,7 @@ public class TueFindBiblio extends TueFind {
             result += getFormatCollapseAndExpand(record);
             result += volume.isEmpty() ? "" : "v" + volume;
             result += issue.isEmpty() ? "" : "i" + issue;
-            result += pages.isEmpty() ? "" : "p" + issue;
+            result += pages.isEmpty() ? "" : "p" + pages;
 
             return result;
         }
