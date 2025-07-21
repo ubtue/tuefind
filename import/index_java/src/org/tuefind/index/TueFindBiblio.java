@@ -1433,7 +1433,7 @@ public class TueFindBiblio extends TueFind {
         // Do not prevent non 689-fields
         if (!marcField.getTag().equals("689")) {
             return true;
-}
+        }
         Subfield subfieldQ = marcField.getSubfield('q');
         Subfield subfieldD = marcField.getSubfield('d');
         return (subfieldQ != null && subfieldQ.getData().equals("g")) || (subfieldD != null && subfieldD.getData().equals("g"));
