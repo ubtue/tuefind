@@ -1489,12 +1489,27 @@ table.ix-journals-table .img-td {
   z-index: 99;
 }
 .ix-feedback-block a {
-  padding: 10px 20px;
-  border-radius: 6px;
+  padding: 11px 12px;
+  border-radius: 4px;
   z-index: 99;
   background-color: #e2e5e8;
 }
 
+.ix-feedback-block a:hover, #tf-button-footer-back-to-top:hover {
+  background-color:#c6c7c9 !important;
+}
+
 .ix-feedback-block .ix-feedback-icon {
   display: none;
+}
+
+#tf-button-footer-back-to-top{
+  position: fixed;
+  bottom: 20px;
+  z-index: 99;
+  outline: none;
+  cursor: pointer;
+  padding: 10px 15px;
+  right: 20px !important;
+  background-color: #e2e5e8;
 }
