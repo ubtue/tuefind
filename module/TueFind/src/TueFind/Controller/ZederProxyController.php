@@ -4,6 +4,7 @@ namespace TueFind\Controller;
 
 class ZederProxyController extends AbstractProxyController {
     protected $downloaderCacheId = 'zeder';
+    protected $cacheOptionsSection = 'Zeder';
 
     protected $actions = [
         // The following URLs will only be available within the UB intranet
