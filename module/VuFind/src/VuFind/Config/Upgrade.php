@@ -30,6 +30,8 @@
 
 namespace VuFind\Config;
 
+use VuFind\Config\Location\ConfigDirectory;
+use VuFind\Config\Location\ConfigLocationInterface;
 use VuFind\Exception\FileAccess as FileAccessException;
 
 use function count;
@@ -230,19 +232,51 @@ class Upgrade
         $baseConfigLocations = $this->pathResolver->getConfigLocationsInPath(
             $this->pathResolver->getBaseConfigDirPath()
         );
+        $localConfigDir = $this->pathResolver->getLocalConfigDirPath();
         foreach ($baseConfigLocations as $configLocation) {
             $configName = $configLocation->getConfigName();
-            $localConfigDir = $this->pathResolver->getLocalConfigDirPath();
-            $oldConfigLocation = $this->pathResolver->getMatchingConfigLocation($localConfigDir, $configName);
-            $this->oldConfigs[$configName] = ($oldConfigLocation !== null)
-                ? $this->configManager->loadConfigFromLocation($oldConfigLocation, handleParentConfig: false)
-                : [];
-
-            $this->newConfigs[$configName] = $this->configManager->loadConfigFromLocation(
-                $configLocation,
-                handleParentConfig: false
-            );
+            if ($configLocation instanceof ConfigDirectory) {
+                $subDirLocations = $this->pathResolver->getConfigLocationsInPath(
+                    $configLocation->getPath()
+                );
+                foreach ($subDirLocations as $subDirLocation) {
+                    $subConfigName = $configName . '/' . $subDirLocation->getConfigName();
+                    $oldConfigLocation = $this->pathResolver->getMatchingConfigLocation(
+                        $localConfigDir . '/' . $configName,
+                        $subDirLocation->getConfigName()
+                    );
+                    $this->registerConfigToUpgrade($subConfigName, $subDirLocation, $oldConfigLocation);
+                }
+            } else {
+                $oldConfigLocation = $this->pathResolver->getMatchingConfigLocation($localConfigDir, $configName);
+                $this->registerConfigToUpgrade($configName, $configLocation, $oldConfigLocation);
+            }
         }
+    }
+
+    /**
+     * Load configuration used during upgrade.
+     *
+     * @param string                   $name        Identifier for the configuration
+     * @param ConfigLocationInterface  $newLocation Location of new configuration
+     * @param ?ConfigLocationInterface $oldLocation Optional location of old configuration
+     *
+     * @return void
+     */
+    protected function registerConfigToUpgrade(
+        string $name,
+        ConfigLocationInterface $newLocation,
+        ?ConfigLocationInterface $oldLocation
+    ): void {
+        $this->oldConfigs[$name] = ($oldLocation !== null)
+            ? $this->configManager->loadConfigFromLocation(
+                $oldLocation,
+                handleParentConfig: false
+            ) : [];
+        $this->newConfigs[$name] = $this->configManager->loadConfigFromLocation(
+            $newLocation,
+            handleParentConfig: false
+        );
     }
 
     /**
@@ -294,14 +328,15 @@ class Upgrade
             return;
         }
 
+        $configNameParts = explode('/', $configName, 2);
+        $subDir = (count($configNameParts) > 1) ? '/' . $configNameParts[0] : '';
         $baseConfigLocation = $this->pathResolver->getMatchingConfigLocation(
-            $this->pathResolver->getBaseConfigDirPath(),
-            $configName
+            $this->pathResolver->getBaseConfigDirPath() . $subDir,
+            $configNameParts[1] ?? $configName
         );
 
         $destinationLocation = clone $baseConfigLocation;
-        $destinationLocation->setBasePath($this->pathResolver->getLocalConfigDirPath());
-
+        $destinationLocation->setBasePath($this->pathResolver->getLocalConfigDirPath() . $subDir);
         $this->configManager->writeConfig($destinationLocation, $this->newConfigs[$configName], $baseConfigLocation);
     }
 
