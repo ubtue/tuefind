@@ -4,6 +4,7 @@ namespace TueFind\Controller;
 
 class ZederProxyController extends AbstractProxyController {
     protected $downloaderCacheId = 'zeder';
+    protected $cacheOptionsSection = 'Zeder';
 
     protected $actions = [
         // The following URLs will only be available within the UB intranet
@@ -27,7 +28,10 @@ class ZederProxyController extends AbstractProxyController {
             $response->setContent('400 Bad Request - Missing or invalid parameters');
             return $response;
         } else {
-            $json = $this->cachingDownloader->download($this->actions[$targetId]);
+            $url = $this->actions[$targetId];
+            $locale = $this->getTranslatorLocale();
+            $url .= '?lng=' . urlencode($locale);
+            $json = $this->cachingDownloader->download($url);
             $response = $this->getResponse();
             $response->getHeaders()->addHeaderLine('Content-Type', 'application/json');
             $response->setContent($json);
