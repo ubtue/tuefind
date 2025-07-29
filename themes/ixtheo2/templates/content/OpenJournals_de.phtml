@@ -21,7 +21,7 @@
       <!--<p>Sortierung nach Veröffentlichungsdatum | alphabetische Sortierung</p>-->
 
       <table class="ix-journals-table">
-	      <tr>
+	    <tr>
           <td>
             <table border="1">
               <tr>
@@ -33,7 +33,7 @@
                   <p>
                    Seit dem Sommer 2024 gibt es an der Universität Tübingen einen „Campus der Theologien“, der aus den drei theologischen Einrichtungen der Universität, der Evangelisch-Theologischen Fakultät, der Katholisch-Theologischen Fakultät und dem Zentrum für Islamische Theologie besteht. Der „Campus der Theologien“, der zunächst nur eine räumliche Nähe bezeichnet, versammelt die bereits bestehenden Formen der Zusammenarbeit und dient der Intensivierung der wissenschaftlichen Zusammenarbeit der beteiligten Einrichtungen in Forschung und Lehre sowie der Stärkung des ökumenischen und interreligiösen Profils der Tübinger Theologien. Die wissenschaftliche Zeitschrift „Campus der Theologien – Theologische Studien und Kritik“ stellt die theologischen Erträge des Tübinger „Campus der Theologien“ einer breiten Öffentlichkeit zur Verfügung und stärkt den wechselseitigen Austausch.
                   </p>
-                  <p><a href="https://campus-der-theologien.de/ojs/index.php/cdt/">Link zur Zeitschrift</a> | <a href="/Search/Results?lookfor=superior_ppn%1921973196&type=AllFields&sort=year+desc%2C+volume_sort+desc%2C+issue_sort+desc%2C+start_page+asc%2C+first_indexed+desc&botprotect=">Alle Artikel im IxTheo</a></p>
+                  <p><a href="https://campus-der-theologien.de/ojs/index.php/cdt/" target="_blank">Link zur Zeitschrift</a> | <a href="<?=$this->url('search-results')?>?lookfor=superior_ppn%3A1921973196&type=AllFields&sort=year+desc%2C+volume_sort+desc%2C+issue_sort+desc%2C+start_page+asc%2C+first_indexed+desc&botprotect=">Alle Artikel im IxTheo</a></p>
                 </td>
               </tr>
               <tr>
@@ -44,6 +44,7 @@
             </table>
           </td>
         </tr>
+		
 		<tr>
           <td>
             <table border="1">
@@ -51,10 +52,9 @@
                 <td rowspan="2" class="text-td">
                   <h3>Africa Theological Journal</h3>
                   <p>
-                    <br>Africa Theological Journal (ATJ) is a peer-reviewed international journal established in 1968 by the then Lutheran Theological College Makumira. The goal of ATJ is to promote theological research conducted by local and foreign scholars in the context of Africa.</br>
-                    
+                   Africa Theological Journal (ATJ) is a peer-reviewed international journal established in 1968 by the then Lutheran Theological College Makumira. The goal of ATJ is to promote theological research conducted by local and foreign scholars in the context of Africa.
                   </p>
-                  <p><a href="https://atj.makumira.ac.tz/ojs/index.php/atj/index">Link zur Zeitschrift</a> | <a href="/Search/Results?lookfor=superior_ppn%1916428312&type=AllFields&botprotect=">Alle Artikel im IxTheo</a></p>
+                  <p><a href="https://atj.makumira.ac.tz/ojs/index.php/atj/index" target="_blank">Link zur Zeitschrift</a> | <a href="<?=$this->url('search-results')?>?lookfor=superior_ppn%3A1916428312&type=AllFields&sort=year+desc%2C+volume_sort+desc%2C+issue_sort+desc%2C+start_page+asc%2C+first_indexed+desc&botprotect=">Alle Artikel im IxTheo</a></p>
                 </td>
                 <td class="img-td">
                   <img src="<?=$this->imageLink('journals/ATJ.jpg')?>" alt="Logo der Zeitschrift Africa Theological Journal"/>
@@ -62,7 +62,32 @@
               </tr>
               <tr>
                 <td class="text-td">
-                  <p>Publikation: 2024-<br>ISSN: 2961-6492</p>
+                  <p>Publikation: 2024-<br>ISSN: 2961-6492</br></p>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+		
+		<tr>
+          <td>
+            <table border="1">
+              <tr>
+                <td class="img-td">
+                  <img src="<?=$this->imageLink('journals/BETH_Logo.jpg')?>" alt="Logo der Zeitschrift BETH Bulletin"/>
+                </td>
+                <td rowspan="2" class="text-td">
+                  <h3>BETH Bulletin</h3>
+                  <p>
+                    The BETH Bulletin is published by Bibliothèques Européennes de Théologie (BETH). BETH is an ecumenical association of European national theological library organizations as well as single libraries. Its members together represent nearly 1.500 libraries, spreading from north to south, east to west, of Europe. BETH builds networks and establishes contacts, supports and promotes cooperation, stimulates library development, serves the interests of European theological libraries, and works for the preservation of the rich cultural patrimony found in the theological and ecclesiastical libraries of Europe.</br>
+                   
+                  </p>
+                  <p><a href="https://bethbulletin.eu/ojs/index.php/bethyb/index" target="_blank">Link zur Zeitschrift</a> | <a href="<?=$this->url?>/Record/1861536410">Die Zeitschrift im IxTheo</a></p>
+                </td>
+              </tr>
+              <tr>
+                <td class="text-td">
+                  <p>Publikation: 2023-<br>ISSN: 2960-3463</br></p>
                 </td>
               </tr>
             </table>
@@ -72,9 +97,6 @@
           <td>
             <table border="1">
               <tr>
-                <td class="img-td">
-                <img src="<?=$this->imageLink('journals/tranformatio.png')?>" alt="Logo der Zeitschrift transformatio"/>
-                </td>
                 <td rowspan="2" class="text-td">
                   <h3>Transformatio</h3>
                   <p>
@@ -83,7 +105,10 @@
                     <br><b>transformatio;</b> begreift Bibel und Liturgie als Sinnressourcen und Orientierungshilfen für neue Formen religiösen Lebens, friedliches Zusammenwirken und globale Entwicklung</br>
                     <br><b>transformatio;</b> begleitet mit theologischen Grundsatzartikeln (im Peer Review) und mit Reportagen, Essays, Buchbesprechungen, Predigten und Praxisimpulsen die religiösen Transformationsprozesse der Gegenwart</br>
                   </p>
-                  <p><a href="https://transformatio-journal.org/ojs/index.php/trans/index">Link zur Zeitschrift</a> | <a href="<?=$this->url('search-results')?>?lookfor=superior_ppn%3A1805192892&type=AllFields&sort=year+desc%2C+volume_sort+desc%2C+issue_sort+desc%2C+start_page+asc%2C+first_indexed+desc&botprotect=">Alle Artikel im IxTheo</a></p>
+                  <p><a href="https://transformatio-journal.org/ojs/index.php/trans/index" target="_blank">Link zur Zeitschrift</a> | <a href="<?=$this->url('search-results')?>?lookfor=superior_ppn%3A1805192892&type=AllFields&sort=year+desc%2C+volume_sort+desc%2C+issue_sort+desc%2C+start_page+asc%2C+first_indexed+desc&botprotect=">Alle Artikel im IxTheo</a></p>
+                </td>
+                <td class="img-td">
+                  <img src="<?=$this->imageLink('journals/tranformatio.png')?>" alt="Logo der Zeitschrift transformatio"/>
                 </td>
               </tr>
               <tr>
@@ -94,19 +119,19 @@
             </table>
           </td>
         </tr>
-		  <tr>
+		<tr>
           <td>
             <table border="1">
               <tr>
+                <td class="img-td">
+                <img src="<?=$this->imageLink('journals/aabner.png')?>" alt="Logo der Zeitschrift Advances in Ancient Biblical and Near Eastern Research"/>
+                </td>
                 <td rowspan="2" class="text-td">
-                  <h3>Advances in Ancient Biblical and Near Eastern Research</h3>
+                  <h3>Advances in Ancient Biblical and Near Eastern Research (AABNER)</h3>
                   <p>
                     The journal is the first open-access and forum-peer-reviewed journal that covers the entire field of biblical studies and cognate fields in its diversity, and it is committed to the principles of the EABS in terms of equal opportunity, non-discrimination, and academic rigor. The journal will encompass all fields touching on and relevant for the study of both the Hebrew Bible and the New Testament, early Jewish and Christian studies, from ancient times to reception in the present. This journal innovates the way humanities scholarship is published, by utilizing an open peer-review system  known as "forum review."
                   </p>
-                  <p><a href="https://aabner.org/">Link zur Zeitschrift</a> | <a href="<?=$this->url('search-results')?>?lookfor=issn%3A2748-6419&type=AllFields&sort=year+desc%2C+volume_sort+desc%2C+issue_sort+desc%2C+start_page+asc%2C+first_indexed+desc&botprotect=">Alle Artikel im IxTheo</a></p>
-                </td>
-                <td class="img-td">
-                  <img src="<?=$this->imageLink('journals/aabner.png')?>" alt="Logo der Zeitschrift Advances in Ancient Biblical and Near Eastern Research"/>
+                  <p><a href="https://aabner.org/" target="_blank">Link zur Zeitschrift</a> | <a href="<?=$this->url('search-results')?>?lookfor=superior_ppn%3A1758930020&type=AllFields&sort=year+desc%2C+volume_sort+desc%2C+issue_sort+desc%2C+start_page+asc%2C+first_indexed+desc&botprotect=">Alle Artikel im IxTheo</a></p>
                 </td>
               </tr>
               <tr>
@@ -117,7 +142,30 @@
             </table>
           </td>
         </tr>
-        <tr>
+		<tr>
+          <td>
+            <table border="1">
+              <tr>
+                <td colspan="2" rowspan="2" class="text-td">
+                  <h3 class="journals-title">Journal of European Baptist Studies</h3>
+                  <p>
+                    The Journal of European Baptist Studies (JEBS) was founded in 2000 by the International Baptist Theological Seminary (IBTS) in Prague, Czech Republic, to provide a means for promising new Baptist researchers to publish the results of their reflections on theology. The primary focus of the journal is on the implementation and application of research and reflection. Most of the contributions are from new or established researchers from within the European Baptist Federation region.
+                  </p>
+                  <p><a href="https://jebs.eu/" target="_blank">Link zur Zeitschrift</a> | <a href="<?=$this->url('search-results')?>?lookfor=issn%3A1804-6444&type=AllFields&sort=year+desc%2C+volume_sort+desc%2C+issue_sort+desc%2C+start_page+asc%2C+first_indexed+desc&botprotect=">Alle Artikel im IxTheo</a></p>
+                </td>
+                <td class="img-td">
+                <img src="<?=$this->imageLink('journals/ibtscentre.png')?>" alt="Logo des International Baptist Theological Seminary Centre als herausgebender Institution des Journal of European Baptist Studies"/>
+                </td>
+              </tr>
+              <tr>
+                <td class="text-td">
+                  <p>Publikation: 2019-<br>ISSN: 1804-6444</p>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+		<tr>
           <td>
             <table border="1">
               <tr>
@@ -132,7 +180,7 @@
                   <p>
                     This way, the Conference Series shares the values and goals of the International Academy of Practical Theology to promote the study of and critical reflection on practical theological thought and action – bearing in mind the various historical and cultural contexts in which practical theology is done.
                   </p>
-                  <p><a href="https://iapt-cs.org/">Link zur Zeitschrift</a> | <a href="<?=$this->url('search-results')?>?lookfor=issn%3A2628-0000&type=AllFields&sort=year+desc%2C+volume_sort+desc%2C+issue_sort+desc%2C+start_page+asc%2C+first_indexed+desc&botprotect=">Alle Artikel im IxTheo</a></p>
+                  <p><a href="https://iapt-cs.org/" target="_blank">Link zur Zeitschrift</a> | <a href="<?=$this->url('search-results')?>?lookfor=issn%3A2628-0000&type=AllFields&sort=year+desc%2C+volume_sort+desc%2C+issue_sort+desc%2C+start_page+asc%2C+first_indexed+desc&botprotect=">Die Zeitschrift im IxTheo</a></p>
                 </td>
               </tr>
               <tr>
@@ -142,53 +190,8 @@
               </tr>
             </table>
           </td>
-        </tr>
-        <tr>
-          <td>
-            <table border="1">
-              <tr>
-                <td colspan="2" rowspan="2" class="text-td">
-                  <h3 class="journals-title">Journal of European Baptist Studies</h3>
-                  <p>
-                    The Journal of European Baptist Studies (JEBS) was founded in 2000 by the International Baptist Theological Seminary (IBTS) in Prague, Czech Republic, to provide a means for promising new Baptist researchers to publish the results of their reflections on theology. The primary focus of the journal is on the implementation and application of research and reflection. Most of the contributions are from new or established researchers from within the European Baptist Federation region.
-                  </p>
-                  <p><a href="https://jebs.eu/">Link zur Zeitschrift</a> | <a href="<?=$this->url('search-results')?>?lookfor=issn%3A1804-6444&type=AllFields&sort=year+desc%2C+volume_sort+desc%2C+issue_sort+desc%2C+start_page+asc%2C+first_indexed+desc&botprotect=">Alle Artikel im IxTheo</a></p>
-                </td>
-                <td class="img-td">
-                <img src="<?=$this->imageLink('journals/ibtscentre.png')?>" alt="Logo des International Baptist Theological Seminary Centre als herausgebender Institution des Journal of European Baptist Studies"/>
-                </td>
-              </tr>
-              <tr>
-                <td class="text-td">
-                  <p>Publikation: 2019-<br>ISSN: 1804-6444</p>
-                </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <table border="1">
-              <tr>
-                <td class="img-td">
-                  <img src="<?=$this->imageLink('journals/akademie.png')?>" alt="Logo der Akademie der Diözese Rottenburg-Stuttgart als herausgebender Institution der Zeitschrift Im Dialog"/>
-                </td>
-                <td rowspan="2" class="text-td">
-                  <h3>Im Dialog. Beiträge aus der Akademie der Diözese Rottenburg-Stuttgart</h3>
-                  <p>
-                    Die Zeitschrift „Im Dialog“ versammelt Beiträge aus Diskussionen und Projekten der Akademie der Diözese Rottenburg-Stuttgart. Die Akademie arbeitet als Plattform für Gegenwarts- und Zukunftsfragen. Sie organisiert und moderiert Netzwerke und fachliche Diskurse als ein interdisziplinäres Dialogforum mit Partnern aus Wissenschaft und unterschiedlichsten Praxisfeldern. Sie positioniert Themen mit nachhaltiger Relevanz, auch quer zum Mainstream.
-                  </p>
-                  <p><a href="https://imdialog.akademie-rs.de/">Link zur Zeitschrift</a> | <a href="<?=$this->url('search-results')?>?lookfor=issn%3A2698-5446&type=AllFields&sort=year+desc%2C+volume_sort+desc%2C+issue_sort+desc%2C+start_page+asc%2C+first_indexed+desc&botprotect=">Alle Artikel im IxTheo</a></p>
-                </td>
-              </tr>
-              <tr>
-                <td class="text-td">
-                  <p>Publikation: 2019-<br>ISSN: 2698-5446</p>
-                </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
+        </tr>	
+		 
         <tr>
           <td>
             <table border="1">
@@ -198,7 +201,7 @@
                   <p>
                     Die Open Access Zeitschrift „Journal of Ethics in Antiquity and Christianity (JEAC)“ etabliert einen Dialog zwischen exegetischen, judaistischen und patristischen Beiträgen mit philosophischen und systematisch-theologischen Ansätzen zu gegenwartsrelevanten ethischen Fragestellungen und bringt damit die ethischen Dimensionen antiker Texte in die gegenwärtigen Ethikdiskurse ein.
                   </p>
-                  <p><a href="https://jeac.de/">Link zur Zeitschrift</a> | <a href="<?=$this->url('search-results')?>?lookfor=issn%3A2627-6062&type=AllFields&sort=year+desc%2C+volume_sort+desc%2C+issue_sort+desc%2C+start_page+asc%2C+first_indexed+desc&botprotect=">Alle Artikel im IxTheo</a></p>
+                  <p><a href="https://jeac.de/" target="_blank">Link zur Zeitschrift</a> | <a href="<?=$this->url('search-results')?>?lookfor=issn%3A2627-6062&type=AllFields&sort=year+desc%2C+volume_sort+desc%2C+issue_sort+desc%2C+start_page+asc%2C+first_indexed+desc&botprotect=">Alle Artikel im IxTheo</a></p>
                 </td>
                 <td class="img-td">
                   <img src="<?=$this->imageLink('journals/jeac.png')?>" alt="Logo der Zeitschrift Journal of Ethics in Antiquity and Christianity"/>
@@ -217,25 +220,25 @@
             <table border="1">
               <tr>
                 <td class="img-td">
-                  <img src="<?=$this->imageLink('journals/zfbeg.png')?>" alt="Logo der Zeitschrift für christlich-jüdische Begegnung im Kontext"/>
+                  <img src="<?=$this->imageLink('journals/akademie.png')?>" alt="Logo der Akademie der Diözese Rottenburg-Stuttgart als herausgebender Institution der Zeitschrift Im Dialog"/>
                 </td>
                 <td rowspan="2" class="text-td">
-                  <h3>Zeitschrift für christlich-jüdische Begegnung im Kontext</h3>
+                  <h3>Im Dialog. Beiträge aus der Akademie der Diözese Rottenburg-Stuttgart</h3>
                   <p>
-                   In Zeiten des dringlichen Dialogs zwischen verschiedenen Religionen und Weltanschauungen ist das Anliegen der christlich-jüdischen Begegnung nach wie vor von besonderer Bedeutung. Die erneuerte Zeitschrift für christlich-jüdische Begegnung im Kontext (ZfBeg) ist die Nachfolgezeitschrift des traditionsreichen Freiburger Rundbriefs und wird vom Verein Freiburger Rundbrief -  Arbeitskreis für christlich-jüdische Begegnung e.V. herausgegeben. Vorsitzende sind Prof. Dr. Reinhold Boschki, Tübingen und Prof. Dr. Wilhelm Schwendemann, Freiburg im Breisgau. Als übergeordnete Zielsetzung will die Zeitschrift für christlich-jüdische Begegnung im Kontext die Beziehung und das Verständnis zwischen Christen und Juden fördern, Antisemitismus und Rassismus auf allen Ebenen entgegenwirken, die Erinnerung an den Holocaust wach halten, die Freundschaft zwischen Christen und Juden vertiefen, Menschenrechte fördern und den Dialog öffnen für andere Religionen und Gruppen, insbesondere mit Muslimen. Dabei will sie in Kirchen, Theologie, Religionsgemeinschaften und in die gesellschaftliche Öffentlichkeit wirken, insbesondere in den Bereich der Bildung. Die ZfBeg erscheint derzeit zweimal jährlich und wird mit einer Moving Wall von einem Jahr sukzessive im Open Access zur Verfügung gestellt.
+                    Die Zeitschrift „Im Dialog“ versammelt Beiträge aus Diskussionen und Projekten der Akademie der Diözese Rottenburg-Stuttgart. Die Akademie arbeitet als Plattform für Gegenwarts- und Zukunftsfragen. Sie organisiert und moderiert Netzwerke und fachliche Diskurse als ein interdisziplinäres Dialogforum mit Partnern aus Wissenschaft und unterschiedlichsten Praxisfeldern. Sie positioniert Themen mit nachhaltiger Relevanz, auch quer zum Mainstream.
                   </p>
-                  <p><a href="https://zfbeg.org/ojs/index.php/cjbk">Link zur Zeitschrift</a> | <a href="/Search/Results?lookfor=superior_ppn%3A1698812183&type=AllFields&sort=year+desc%2C+volume_sort+desc%2C+issue_sort+desc%2C+start_page+asc%2C+first_indexed+desc&botprotect=">Alle Artikel im IxTheo</a></p>
+                  <p><a href="https://imdialog.akademie-rs.de/" target="_blank">Link zur Zeitschrift</a> | <a href="<?=$this->url('search-results')?>?lookfor=issn%3A2698-5446&type=AllFields&sort=year+desc%2C+volume_sort+desc%2C+issue_sort+desc%2C+start_page+asc%2C+first_indexed+desc&botprotect=">Alle Artikel im IxTheo</a></p>
                 </td>
               </tr>
               <tr>
                 <td class="text-td">
-                  <p>Publikation: 2017-<br>ISSN: 2513-1389 | <br>E-ISSN: 2751-2959</br><br>(mit Embargo)</br></p>
+                  <p>Publikation: 2019-<br>ISSN: 2698-5446</p>
                 </td>
               </tr>
             </table>
           </td>
         </tr>
-        <tr>
+		<tr>
           <td>
             <table border="1">
               <tr>
@@ -244,7 +247,7 @@
                   <p>
                     Vulgata in Dialogue wurde 2016 gegründet. Der inhaltliche Schwerpunkt liegt auf der Veröffentlichung von Artikeln zur Bibelexegese oder über theologische, sprachwissenschaftliche, historische und interdisziplinäre Themen, die einen direkten oder indirekten Bezug zur Biblia Sacra Vulgata haben.
                   </p>
-                  <p><a href="https://vulgata-dialog.ch/">Link zur Zeitschrift</a> | <a href="<?=$this->url('search-results')?>?lookfor=issn%3A2504-5156&type=AllFields&sort=year+desc%2C+volume_sort+desc%2C+issue_sort+desc%2C+start_page+asc%2C+first_indexed+desc&botprotect=">Alle Artikel im IxTheo</a></p>
+                  <p><a href="https://vulgata-dialog.ch/" target="_blank">Link zur Zeitschrift</a> | <a href="<?=$this->url('search-results')?>?lookfor=issn%3A2504-5156&type=AllFields&sort=year+desc%2C+volume_sort+desc%2C+issue_sort+desc%2C+start_page+asc%2C+first_indexed+desc&botprotect=">Alle Artikel im IxTheo</a></p>
                 </td>
                 <td class="img-td">
                   <img src="<?=$this->imageLink('journals/vulgata.png')?>" alt="Logo der Zeitschrift Vulgata in Dialogue"/>
@@ -258,19 +261,43 @@
             </table>
           </td>
         </tr>
-	      <tr>
+		<tr>
           <td>
             <table border="1">
               <tr>
                 <td class="img-td">
-                  <img src="<?=$this->imageLink('journals/eug.png')?>" alt="Logo der Zeitschrift Ethik und Gesellschaft"/>
+                  <img src="<?=$this->imageLink('journals/zfbeg.png')?>" alt="Logo der Zeitschrift für christlich-jüdische Begegnung im Kontext"/>
                 </td>
+                <td rowspan="2" class="text-td">
+                  <h3>Zeitschrift für christlich-jüdische Begegnung im Kontext</h3>
+                  <p>
+                   In Zeiten des dringlichen Dialogs zwischen verschiedenen Religionen und Weltanschauungen ist das Anliegen der christlich-jüdischen Begegnung nach wie vor von besonderer Bedeutung. Die erneuerte Zeitschrift für christlich-jüdische Begegnung im Kontext (ZfBeg) ist die Nachfolgezeitschrift des traditionsreichen Freiburger Rundbriefs und wird vom Verein Freiburger Rundbrief -  Arbeitskreis für christlich-jüdische Begegnung e.V. herausgegeben. Vorsitzende sind Prof. Dr. Reinhold Boschki, Tübingen und Prof. Dr. Wilhelm Schwendemann, Freiburg im Breisgau. Als übergeordnete Zielsetzung will die Zeitschrift für christlich-jüdische Begegnung im Kontext die Beziehung und das Verständnis zwischen Christen und Juden fördern, Antisemitismus und Rassismus auf allen Ebenen entgegenwirken, die Erinnerung an den Holocaust wach halten, die Freundschaft zwischen Christen und Juden vertiefen, Menschenrechte fördern und den Dialog öffnen für andere Religionen und Gruppen, insbesondere mit Muslimen. Dabei will sie in Kirchen, Theologie, Religionsgemeinschaften und in die gesellschaftliche Öffentlichkeit wirken, insbesondere in den Bereich der Bildung. Die ZfBeg erscheint derzeit zweimal jährlich und wird mit einer Moving Wall von einem Jahr sukzessive im Open Access zur Verfügung gestellt.
+                  </p>
+                  <p><a href="https://zfbeg.org/ojs/index.php/cjbk" target="_blank">Link zur Zeitschrift</a> | <a href="<?=$this->url('search-results')?>?lookfor=superior_ppn%3A1698812183&type=AllFields&sort=year+desc%2C+volume_sort+desc%2C+issue_sort+desc%2C+start_page+asc%2C+first_indexed+desc&botprotect=">Alle Artikel im IxTheo</a></p>
+                </td>
+              </tr>
+              <tr>
+                <td class="text-td">
+                  <p>Publikation: 2017-<br>ISSN: 2513-1389 | <br>E-ISSN: 2751-2959</br><br>(mit Embargo)</br></p>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+		
+        <tr>
+          <td>
+            <table border="1">
+              <tr>
                 <td rowspan="2" class="text-td">
                   <h3>Ethik und Gesellschaft (EuG)</h3>
                   <p>
                     Ethik und Gesellschaft publiziert zweimal im Jahr zu Themen der theologischen Sozialethik. Die Beiträge erscheinen in Themenheften  und beleuchten den jeweiligen Themenschwerpunkt aus unterschiedlicher Perspektive und tragen so zu dessen umfassender und interdisziplinärer Bearbeitung bei.
                   </p>
-                  <p><a href="https://ethik-und-gesellschaft.de">Link zur Zeitschrift</a> | <a href="<?=$this->url('search-results')?>?lookfor=issn%3A2365-6565&type=AllFields&sort=year+desc%2C+volume_sort+desc%2C+issue_sort+desc%2C+start_page+asc%2C+first_indexed+desc&botprotect=">Alle Artikel im IxTheo</a></p>
+                  <p><a href="https://ethik-und-gesellschaft.de" target="_blank">Link zur Zeitschrift</a> | <a href="<?=$this->url('search-results')?>?lookfor=issn%3A2365-6565&type=AllFields&sort=year+desc%2C+volume_sort+desc%2C+issue_sort+desc%2C+start_page+asc%2C+first_indexed+desc&botprotect=">Alle Artikel im IxTheo</a></p>
+                </td>
+                <td class="img-td">
+                  <img src="<?=$this->imageLink('journals/eug.png')?>" alt="Logo der Zeitschrift Ethik und Gesellschaft"/>
                 </td>
               </tr>
               <tr>
@@ -281,19 +308,22 @@
             </table>
           </td>
         </tr>
-        <tr>
+        
+        
+        
+	      <tr>
           <td>
             <table border="1">
               <tr>
+                <td class="img-td">
+                  <img src="<?=$this->imageLink('journals/theo_geschichte.jpg')?>" alt="Logo der Zeitschrift theologie.geschichte"/>
+                </td>
                 <td rowspan="2" class="text-td">
                   <h3>theologie.geschichte</h3>
                   <p>
                    Das mehrsprachige peer-reviewte Open Access-Journal theologie.geschichte ist eine Diskussionsplattform für Forscher und Forscherinnen unterschiedlicher Disziplinen und Nationalitäten, die im Themenfeld Aufarbeitung der Vergangenheit forschen. Wenn Menschen sich mit belasteter und auch weiterhin belastender Vergangenheit auseinandersetzen, können gegenwärtige Diskurse kritisch begleitet und Zukunft gestaltet werden.
 				  </p>
-                  <p><a href="https://theologie-geschichte.de/ojs2/index.php/tg/index">Link zur Zeitschrift</a> | <a href="/Search/Results?lookfor=superior_ppn%534678750&type=AllFields&sort=year+desc%2C+volume_sort+desc%2C+issue_sort+desc%2C+start_page+asc%2C+first_indexed+desc&botprotect=">Alle Artikel im IxTheo</a></p>
-                </td>
-                <td class="img-td">
-                  <img src="<?=$this->imageLink('journals/theo_geschichte.jpg')?>" alt="Logo der Zeitschrift theologie.geschichte"/>
+                  <p><a href="https://theologie-geschichte.de/ojs2/index.php/tg/index" target="_blank">Link zur Zeitschrift</a> | <a href="<?=$this->url('search-results')?>?lookfor=superior_ppn%3A534678750&type=AllFields&sort=year+desc%2C+volume_sort+desc%2C+issue_sort+desc%2C+start_page+asc%2C+first_indexed+desc&botprotect=">Alle Artikel im IxTheo</a></p>
                 </td>
               </tr>
               <tr>
@@ -301,6 +331,9 @@
                   <p>Publikation: 2006-<br>ISSN: 1862-1678</p>
                 </td>
               </tr>
+            </table>
+          </td>
+        </tr>        
             </table>
           </td>
         </tr>
