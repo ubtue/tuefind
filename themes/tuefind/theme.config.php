@@ -1,4 +1,5 @@
 <?php
+
 return [
     'extends' => 'bootstrap3',
     'helpers' => [
@@ -40,6 +41,7 @@ return [
         'tuefind.js',
         'vendor/jquery-ui.min.js',
         'vendor/jquery.dataTable.js',
+        'vendor/resultGrouping.js',
     ],
     'icons' => [
         'upload' => 'FontAwesome:upload',
