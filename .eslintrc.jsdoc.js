@@ -18,8 +18,7 @@ module.exports = {
     "themes/bootstrap5/js/facets.js",
     "themes/bootstrap5/js/searchbox_controls.js",
     "themes/bootstrap5/js/lightbox.js",
-    "themes/bootstrap5/js/hierarchy_tree.js",
-    "themes/bootstrap5/js/checkouts.js"
+    "themes/bootstrap5/js/hierarchy_tree.js"
   ],
   extends: [],
   env: {
