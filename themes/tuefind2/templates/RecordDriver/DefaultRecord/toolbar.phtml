@@ -1,14 +1,14 @@
 <?php
   $addThis = $this->addThis();
   if (!empty($addThis)) {
-    $this->headScript()->appendFile('https://s7.addthis.com/js/250/addthis_widget.js?pub=' . urlencode($addThis));
+    $this->assetManager()->appendScriptLink('https://s7.addthis.com/js/250/addthis_widget.js?pub=' . urlencode($addThis));
   }
 ?>
-<nav class="record-nav">
-  <ul class="action-toolbar" aria-label="<?=$this->transEscAttr('ajaxview_label_tools'); ?>">
+<nav class="record-nav" aria-label="<?=$this->transEscAttr('ajaxview_label_tools'); ?>">
+  <ul class="action-toolbar">
     <?php if (count($this->driver->getCitationFormats()) > 0): ?>
       <li role="none">
-        <a class="cite-record toolbar-btn btn-type-cite" data-lightbox href="<?=$this->recordLinker()->getActionUrl($this->driver, 'Cite')?>" rel="nofollow">
+        <a class="cite-record toolbar-btn btn-type-cite" data-lightbox href="<?=$this->escapeHtmlAttr($this->recordLinker()->getActionUrl($this->driver, 'Cite'))?>" rel="nofollow">
           <span class="icon icon--font fa fa-asterisk" role="img" aria-hidden="true"></span>
           <span><?=$this->transEsc('Cite this')?></span>
         </a>
@@ -17,19 +17,21 @@
 
     <?php if ($this->accountCapabilities()->getSmsSetting() !== 'disabled'): ?>
       <li role="none">
-        <a class="sms-record toolbar-btn btn-type-phone" data-lightbox href="<?=$this->recordLinker()->getActionUrl($this->driver, 'SMS')?>" rel="nofollow">
+        <a class="sms-record toolbar-btn btn-type-phone" data-lightbox href="<?=$this->escapeHtmlAttr($this->recordLinker()->getActionUrl($this->driver, 'SMS'))?>" rel="nofollow">
           <span class="icon icon--font fa fa-phone" role="img" aria-hidden="true"></span>
           <span><?=$this->transEsc('Text this')?></span>
         </a>
       </li>
     <?php endif; ?>
 
+    <?php if ($this->accountCapabilities()->isEmailActionAvailable()): ?>
     <li role="none">
-      <a class="mail-record toolbar-btn btn-type-email" data-lightbox href="<?=$this->recordLinker()->getActionUrl($this->driver, 'Email')?>" rel="nofollow">
-        <span class="icon icon--font fa fa-envelope" role="img" aria-hidden="true"></span>
-        <span><?=$this->transEsc('Email this')?></span>
+        <a class="mail-record toolbar-btn btn-type-email" data-lightbox href="<?=$this->escapeHtmlAttr($this->recordLinker()->getActionUrl($this->driver, 'Email'))?>" rel="nofollow">
+          <span class="icon icon--font fa fa-envelope" role="img" aria-hidden="true"></span>
+          <span><?=$this->transEsc('Email this')?></span>
       </a>
     </li>
+    <?php endif; ?>
 
     <li>
       <a class="print-record toolbar-btn btn-type-print" href="<?=$this->url()->addQueryParameters(['print' => true])?>" rel="nofollow">
@@ -37,16 +39,21 @@
         <span><?=$this->transEsc('Print')?></span>
       </a>
     </li>
+
     <?php $exportFormats = $this->export()->getFormatsForRecord($this->driver); ?>
-    <?php if(count($exportFormats) > 0): ?>
+    <?php if (count($exportFormats) > 0): ?>
       <li role="none" class="dropdown">
-        <a class="export-toggle toolbar-btn btn-type-export dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" href="<?=$this->recordLinker()->getActionUrl($this->driver, 'Export')?>" rel="nofollow" aria-expanded="false" aria-controls="export-options">
+        <a class="export-toggle toolbar-btn btn-type-export dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" href="<?=$this->escapeHtmlAttr($this->recordLinker()->getActionUrl($this->driver, 'Export', [], '', ['excludeSearchId' => true]))?>" rel="nofollow" aria-expanded="false" aria-controls="export-options">
           <span class="icon icon--font fa fa-external-link" role="img" aria-hidden="true"></span>
           <span><?=$this->transEsc('Export Record') ?></span>
         </a>
         <ul class="dropdown-menu" id="export-options" role="menu">
           <?php foreach ($exportFormats as $exportFormat): ?>
-            <li role="none"><a <?php if ($this->export()->needsRedirect($exportFormat)): ?>target="<?=$this->escapeHtmlAttr($exportFormat)?>Main" <?php endif; ?>href="<?=$this->escapeHtmlAttr($this->recordLinker()->getActionUrl($this->driver, 'Export', [], '', ['excludeSearchId' => true]))?>?style=<?=$this->escapeHtmlAttr($exportFormat)?>" rel="nofollow" role="menuitem"><?=$this->transEsc('Export to')?> <?=$this->transEsc($this->export()->getLabelForFormat($exportFormat))?></a></li>
+            <li role="none">
+              <a class="dropdown-item" <?php if ($this->export()->needsRedirect($exportFormat)): ?>target="<?=$this->escapeHtmlAttr($exportFormat)?>Main" <?php endif; ?>href="<?=$this->escapeHtmlAttr($this->recordLinker()->getActionUrl($this->driver, 'Export', [], '', ['excludeSearchId' => true]))?>?style=<?=$this->escapeHtmlAttr($exportFormat)?>" rel="nofollow" role="menuitem">
+                <?=$this->transEsc('export_to', ['%%target%%' => $this->translate($this->export()->getLabelForFormat($exportFormat))])?>
+              </a>
+            </li>
           <?php endforeach; ?>
         </ul>
       </li>
@@ -55,20 +62,29 @@
     <?php if ($this->userlist()->getMode() !== 'disabled'): ?>
       <li role="none">
         <?php if ($this->permission()->allowDisplay('feature.Favorites')): ?>
-          <a class="save-record toolbar-btn btn-type-save" data-lightbox href="<?=$this->recordLinker()->getActionUrl($this->driver, 'Save')?>" rel="nofollow">
+          <a class="save-record toolbar-btn btn-type-save" data-lightbox href="<?=$this->escapeHtmlAttr($this->recordLinker()->getActionUrl($this->driver, 'Save'))?>" rel="nofollow">
             <span class="icon icon--font fa fa-star" role="img" aria-hidden="true"></span>
             <span><?=$this->transEsc('Add to favorites')?></span>
           </a>
         <?php elseif ($block = $this->permission()->getAlternateContent('feature.Favorites')): ?>
-          <?=$block?>
+          <?=$block ?>
         <?php endif; ?>
       </li>
-
     <?php endif; ?>
     <?php if (!empty($addThis)): ?>
-      <li role="none"><a class="addThis addthis_button" href="https://www.addthis.com/bookmark.php?v=250&amp;pub=<?=urlencode($addThis)?>"><i class="fa fa-bookmark" aria-hidden="true"></i> <?=$this->transEsc('Bookmark')?></a></li>
+      <li role="none">
+          <a class="addThis addthis_button" href="https://www.addthis.com/bookmark.php?v=250&amp;pub=<?=urlencode($addThis)?>">
+          <?=$this->icon('addthis-bookmark') ?>
+          <?=$this->transEsc('Bookmark')?>
+        </a>
+      </li>
     <?php endif; ?>
+
+    <?php if ($this->cart()->isActive()): ?>
+      <li>
     <?=$this->render('record/cart-buttons.phtml', ['id' => $this->driver->getUniqueId(), 'source' => $this->driver->getSourceIdentifier()]); ?>
+      </li>
+    <?php endif; ?>
 
     <!-- TueFind: Publish button -->
     <?=$this->render('RecordDriver/DefaultRecord/toolbar-publish.phtml'); ?>

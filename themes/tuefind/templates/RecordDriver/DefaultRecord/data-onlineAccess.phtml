@@ -1,3 +1,11 @@
+<?php
+  //$openUrl = $this->openUrl($this->driver, 'record');
+  //$openUrlActive = $openUrl->isActive();
+  $doi = $this->doi($this->driver, 'record');
+  $doiActive = $doi->isActive();
+  // Account for replace_other_urls setting
+  //$urls = $this->record($this->driver)->getLinkDetails($openUrlActive);
+?>
 <?php if ($this->tuefind()->getKfl()->hasTitle($this->driver)): ?>
   <a href="<?=$this->url('redirect-license', ['id' => $this->driver->getUniqueId()])?>" data-lightbox="" rel="nofollow"><i class="fa fa-external-link"></i> FID-Lizenz: Zugriff mit <?=$this->tuefind()->getTueFindType()?>-Konto</a>
 <?php else: ?>
@@ -23,5 +31,5 @@
       <?php endif; ?>
     <?php endforeach; ?>
   <?php endif; ?>
-
 <?php endif; ?>
+<?php if ($doiActive): ?><?=$doi->renderTemplate()?><?php endif; ?>

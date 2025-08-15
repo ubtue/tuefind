@@ -1,7 +1,7 @@
 <?php
   $addThis = $this->addThis();
   if (!empty($addThis)) {
-    $this->headScript()->appendFile('https://s7.addthis.com/js/250/addthis_widget.js?pub=' . urlencode($addThis));
+    $this->assetManager()->appendScriptLink('https://s7.addthis.com/js/250/addthis_widget.js?pub=' . urlencode($addThis));
   }
 ?>
 <nav class="record-nav" aria-label="<?=$this->transEscAttr('ajaxview_label_tools'); ?>">
@@ -24,12 +24,14 @@
       </li>
     <?php endif; ?>
 
+    <?php if ($this->accountCapabilities()->isEmailActionAvailable()): ?>
     <li role="none">
       <a class="mail-record toolbar-btn" data-lightbox href="<?=$this->escapeHtmlAttr($this->recordLinker()->getActionUrl($this->driver, 'Email'))?>" rel="nofollow">
         <?=$this->icon('send-email') ?>
         <?=$this->transEsc('Email this')?>
       </a>
     </li>
+    <?php endif; ?>
 
     <li>
       <a class="print-record toolbar-btn" href="<?=$this->url()->addQueryParameters(['print' => true])?>" rel="nofollow">
@@ -41,7 +43,7 @@
     <?php $exportFormats = $this->export()->getFormatsForRecord($this->driver); ?>
     <?php if (count($exportFormats) > 0): ?>
       <li role="none" class="dropdown">
-        <a class="export-toggle toolbar-btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" href="<?=$this->escapeHtmlAttr($this->recordLinker()->getActionUrl($this->driver, 'Export', [], '', ['excludeSearchId' => true]))?>" rel="nofollow" aria-expanded="false" aria-controls="export-options">
+        <a class="export-toggle toolbar-btn dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" href="<?=$this->escapeHtmlAttr($this->recordLinker()->getActionUrl($this->driver, 'Export', [], '', ['excludeSearchId' => true]))?>" rel="nofollow" aria-expanded="false" aria-controls="export-options">
           <?=$this->icon('export') ?>
           <?=$this->transEsc('Export Record') ?>
         </a>

@@ -71,6 +71,32 @@ $config = [
                     ],
                 ],
             ],
+            'zederproxy-load' => [
+                'type'    => 'Laminas\Router\Http\Segment',
+                'options' => [
+                    'route'    => '/Zeder/Proxy[/:targetId]',
+                    'constraints' => [
+                        'targetId'     => '[^/]+',
+                    ],
+                    'defaults' => [
+                        'controller' => 'ZederProxy',
+                        'action'     => 'Proxy',
+                    ],
+                ],
+            ],
+            'zederproxy-view' => [
+                'type'    => 'Laminas\Router\Http\Segment',
+                'options' => [
+                    'route'    => '/Zeder/View[/:viewId]',
+                    'constraints' => [
+                        'viewId'     => '[^/]+',
+                    ],
+                    'defaults' => [
+                        'controller' => 'ZederProxy',
+                        'action'     => 'View',
+                    ],
+                ],
+            ],
             'quicklink' => [
                 'type'    => 'Laminas\Router\Http\Segment',
                 'options' => [
@@ -221,6 +247,7 @@ $config = [
             'TueFind\Controller\Search3recordController' => 'VuFind\Controller\AbstractBaseFactory',
             'TueFind\Controller\Search3Controller' => 'VuFind\Controller\AbstractBaseFactory',
             'TueFind\Controller\WikidataProxyController' => 'TueFind\Controller\AbstractProxyControllerFactory',
+            'TueFind\Controller\ZederProxyController' => 'TueFind\Controller\AbstractProxyControllerFactory',
         ],
         'initializers' => [
             'TueFind\ServiceManager\ServiceInitializer',
@@ -259,6 +286,8 @@ $config = [
             'search3' => 'TueFind\Controller\Search3Controller',
             'WikidataProxy' => 'TueFind\Controller\WikidataProxyController',
             'wikidataproxy' => 'TueFind\Controller\WikidataProxyController',
+            'ZederProxy' => 'TueFind\Controller\ZederProxyController',
+            'zederproxy' => 'TueFind\Controller\ZederProxyController',
         ],
     ],
     'controller_plugins' => [

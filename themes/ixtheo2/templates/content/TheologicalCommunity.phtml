@@ -1,6 +1,6 @@
 <?php
-    $this->headLink()->appendStylesheet('vendor/fontawesome-free-6/awesome.css');
-    $this->headLink()->appendStylesheet('vendor/fontawesome-free-6/solid.css');
+    $this->assetManager()->appendStyleLink('vendor/fontawesome-free-6/awesome.css');
+    $this->assetManager()->appendStyleLink('vendor/fontawesome-free-6/solid.css');
 
     $partners = [
         // comm
@@ -80,7 +80,7 @@ $(function () {
 });
 EOD;
 ?>
-<?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $jsSnippet, 'SET')?>
+<?=$this->assetManager()->outputInlineScriptString($jsSnippet)?>
 </section>
 
 <div class="cw-row">

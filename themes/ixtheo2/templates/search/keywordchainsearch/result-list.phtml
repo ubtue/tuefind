@@ -67,4 +67,4 @@ $jsSnippet = <<< 'EOD'
     });
 EOD;
 ?>
-<?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $jsSnippet, 'SET')?>
+<?=$this->assetManager()->outputInlineScriptString($jsSnippet)?>

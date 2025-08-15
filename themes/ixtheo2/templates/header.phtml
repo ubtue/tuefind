@@ -126,28 +126,19 @@ Welcome Slider
   <span class="ix-copyright logo-tooltip" title="test" >© <span class="ix-copyright-name"><img src="<?=$this->imageLink('Seezeichen.jpg');?>" width="600" />Seezeichen, © Marco Varenkamp</span></span>
 <?php endif;?>
 
-<!-- Breadcrumbs -->
-<?php if(!empty($this->layout()->breadcrumbs)): ?>
-  <div class="container breadcrumb-wrapper hidden-print <?=$advancedSearch;?>">
-    <?php if(is_array($this->layout()->breadcrumbs)): ?>
-      <?php if(count($this->layout()->breadcrumbs) > 1): ?>
-        <?=$this->render('breadcrumbs/multi.phtml', [
-          'parents' => $this->layout()->breadcrumbs,
-          'title' => $this->layout()->title,
-          'from' => $this->layout()->from
-        ]) ?>
-      <?php else: ?>
-        <?=$this->render('breadcrumbs/default.phtml', [
-          'parents' => $this->layout()->breadcrumbs,
-          'title' => $this->layout()->title
-        ]) ?>
-      <?php endif; ?>
-    <?php elseif ($this->layout()->breadcrumbs !== false): ?>
-      <?=$this->render('breadcrumbs/simple.phtml'); ?>
-    <?php endif; ?>
-  </div>
+<?php if (isset($this->layout()->srmessage)): // message for benefit of screen-reader users ?>
+  <span class="sr-only" role="heading" aria-level="1"><?=$this->layout()->srmessage ?></span>
 <?php endif; ?>
+<a class="sr-only sr-only-focusable" href="#content"><?=$this->transEsc('Skip to content') ?></a>
 
+<!-- Breadcrumbs -->
+<?php if (($this->layout()->showBreadcrumbs ?? true) && $this->layout()->breadcrumbs !== false && !empty($this->layout()->breadcrumbs)): ?>
+  <nav class="breadcrumbs" aria-label="<?=$this->transEscAttr('Breadcrumbs') ?>">
+    <div class="container">
+      <ul class="breadcrumb hidden-print"><?=$this->layout()->breadcrumbs ?></ul>
+    </div>
+  </nav>
+<?php endif; ?> 
 
 <!-- IxTheo2: Display searchbox as separate section -->
 <?=$this->layout()->searchbox ?>

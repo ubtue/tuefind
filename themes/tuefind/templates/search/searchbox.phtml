@@ -15,11 +15,11 @@
         if (preg_match('"/Authority"i', $this->serverUrl(true)))
           $this->searchClassId = 'SolrAuth';
       }
-      $options = $this->searchOptions($this->searchClassId);
+      $params = null;
       $hiddenFilters = $this->searchTabs()->getHiddenFilters($this->searchClassId, true, $this->ignoreHiddenFiltersInRequest ?? false);
       $lastSort = $this->searchMemory()->getLastSort($this->searchClassId);
       $lastLimit = $this->searchMemory()->getLastLimit($this->searchClassId);
-      $params = null;
+      $options = $this->searchOptions($this->searchClassId);
     }
     // Override search class ID with searchbox-specific settings, if necessary:
     $overrideSearchClassId = $options->getSearchBoxSearchClassId();
@@ -71,12 +71,16 @@
               'checkboxFilters' => $showFilters ? $checkboxFilters : [],
               'searchClassId' => $this->searchClassId,
               'searchType' => $this->searchType,
+              'fromSearchMemory' => $fromSearchMemory,
             ]
         );
       ?>
     <?php if (!empty($tabs)): ?></div><?php endif; ?>
   </div>
 <?php else: ?>
+  <div class="keyboard-box">
+    <div class="simple-keyboard"></div>
+  </div>
   <form id="searchForm" class="searchForm navbar-form navbar-left flip" method="get" action="<?=$this->url($basicSearch)?>" name="searchForm" autocomplete="off">
     <?= $this->context($this)->renderInContext('search/searchTabs', ['searchTabs' => $tabConfig['tabs'], 'showCounts' => $tabConfig['showCounts']]); ?>
     <?php $placeholder = $this->searchbox()->getPlaceholderText($tabConfig['selected']['id'] ?? null); ?>
@@ -170,6 +174,7 @@
           'checkboxFilters' => $showFilters ? $checkboxFilters : [],
           'searchClassId' => $this->searchClassId,
           'searchType' => $this->searchType,
+            'fromSearchMemory' => $fromSearchMemory,
         ]
     );?>
   </form>

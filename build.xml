@@ -35,7 +35,7 @@
   <property name="mysqlport" value="3306" />
   <property name="mysqlprotocol" value="" />
   <property name="mysqlrootuser" value="root" />
-  <property name="mysqlrootpass" value="password" />
+  <property name="mysqlrootpass" value="" />
   <property name="pgsqlhost" value="localhost" />
   <property name="pgsqlrootuser" value="postgres" />
   <property name="disable_csp" value="false" /> <!-- set value to "true" to disable Content Security Policy -->

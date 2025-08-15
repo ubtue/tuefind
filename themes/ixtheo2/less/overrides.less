@@ -976,6 +976,14 @@ a.black-icon {
   .cw-hide-for-xsmoll {
     display: none;
   }
+
+  .ix-feedback-block .ix-feedback-text {
+    display: none;
+  }
+  .ix-feedback-block .ix-feedback-icon {
+    display: block !important;
+  }
+
 }
 
 /* Small devices (landscape phones, 576px and up) */
@@ -1033,6 +1041,13 @@ a.black-icon {
   .cw-hide-for-xsmoll {
     display: none;
   }
+
+  .ix-feedback-block .ix-feedback-text{
+    display: none;
+  }
+  .ix-feedback-block .ix-feedback-icon{
+    display: block !important;
+  }
 }
 
 /* Medium devices (tablets, 768px and up) */
@@ -1061,6 +1076,13 @@ a.black-icon {
     margin: 0;
     padding: 0;
   }
+
+  .ix-feedback-block .ix-feedback-text{
+    display: none;
+  }
+  .ix-feedback-block .ix-feedback-icon{
+    display: block !important;
+  }
 }
 
 /* Large devices (desktops, 992px and up) */
@@ -1076,16 +1098,19 @@ a.black-icon {
     margin: 0;
     padding: 0;
   }
-}
 
-/* Extra large devices (large desktops, 1200px and up) */
-/*
-@media (min-width: 1200px) and (max-width: 1919.98px) {
-  .hero-area {
-    background-image: url(../themes/ixtheo2/images/slider/searchbar_1200.png);
+  .ix-feedback-block .ix-feedback-text{
+    display: none;
+  }
+  .ix-feedback-block .ix-feedback-icon{
+    display: block !important;
+  }
+
+  .ix-footer-block .copyright {
+    text-align: right;
   }
 }
-*/
+
 @media (max-width: 1300px) {
   .searchbar_vertical {
     display: initial;
@@ -1102,6 +1127,36 @@ a.black-icon {
   .logo-wrapper .text-content {
     padding-top: 16.5vw;
   }
+
+  .ix-feedback-block .ix-feedback-text{
+    display: none;
+  }
+  .ix-feedback-block .ix-feedback-icon{
+    display: block !important;
+  }
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1301px) and (max-width: 1450px) {
+  .ix-feedback-block .ix-feedback-text{
+    display: none;
+  }
+  .ix-feedback-block .ix-feedback-icon{
+    display: block !important;
+  }
+}
+
+@media (min-width: 1451px) and (max-width: 5000px) {
+  .ix-feedback-block .ix-feedback-text{
+    display: block;
+  }
+  .ix-feedback-block .ix-feedback-icon{
+    display: none;
+  }
+}
+
+.ix2-footer-block .copyright, .ix2-footer-block .footer-menu {
+  text-align: center;
 }
 
 .ix-copyright {
@@ -1415,4 +1470,37 @@ a.black-icon {
 table.ix-journals-table .img-td {
   text-align: center;
   vertical-align: middle;
+}
+
+.ix-feedback-block {
+  position: fixed;
+  bottom: 8px;
+  left: 20px;
+  padding: 8px 0px;
+  z-index: 99;
+}
+.ix-feedback-block a {
+  padding: 11px 12px;
+  border-radius: 4px;
+  z-index: 99;
+  background-color: #e2e5e8;
+}
+
+.ix-feedback-block a:hover, #tf-button-footer-back-to-top:hover {
+  background-color:#c6c7c9 !important;
+}
+
+.ix-feedback-block .ix-feedback-icon {
+  display: none;
+}
+
+#tf-button-footer-back-to-top {
+  position: fixed;
+  bottom: 20px;
+  z-index: 99;
+  outline: none;
+  cursor: pointer;
+  padding: 10px 15px;
+  right: 20px !important;
+  background-color: #e2e5e8;
 }

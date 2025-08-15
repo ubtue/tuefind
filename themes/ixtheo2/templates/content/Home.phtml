@@ -1,12 +1,12 @@
-<?php $this->headLink()->appendStylesheet('vendor/slick/slick.css');?>
-<?php $this->headLink()->appendStylesheet('vendor/slick/slick-theme.css');?>
-<?php $this->headLink()->appendStylesheet('vendor/cw/swiper.css');?>
+<?php $this->assetManager()->appendStyleLink('vendor/slick/slick.css');?>
+<?php $this->assetManager()->appendStyleLink('vendor/slick/slick-theme.css');?>
+<?php $this->assetManager()->appendStyleLink('vendor/cw/swiper.css');?>
 
-<?php $this->headScript()->appendFile('vendor/slick/slick.min.js');?>
-<?php $this->headScript()->appendFile('vendor/cw/ofi.js');?>
-<?php $this->headScript()->appendFile('vendor/cw/smooth-scroll.js');?>
-<?php $this->headScript()->appendFile('vendor/cw/swiper.js');?>
-<?php $this->headScript()->appendFile('vendor/cw/theme.js');?>
+<?php $this->assetManager()->appendScriptLink('vendor/slick/slick.min.js');?>
+<?php $this->assetManager()->appendScriptLink('vendor/cw/ofi.js');?>
+<?php $this->assetManager()->appendScriptLink('vendor/cw/smooth-scroll.js');?>
+<?php $this->assetManager()->appendScriptLink('vendor/cw/swiper.js');?>
+<?php $this->assetManager()->appendScriptLink('vendor/cw/theme.js');?>
 
 <?=$this->render('content/sections/aktuelles'); ?>
 

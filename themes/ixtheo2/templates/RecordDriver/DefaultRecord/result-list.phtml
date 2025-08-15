@@ -1,6 +1,8 @@
 <?php
   $recordLinker = $this->recordLinker($this->results);
-  $coverDetails = $this->record($this->driver)->getCoverDetails('result-list', 'medium', $recordLinker->getUrl($this->driver));
+  $largeImage = $this->record($this->driver)->getThumbnail('large');
+  $linkAttributes = $largeImage ? ['href' => $largeImage, 'data-lightbox-image' => 'true'] : [];
+  $coverDetails = $this->record($this->driver)->getCoverDetails('result-list', 'medium', $linkAttributes);
   $cover = $coverDetails['html'];
   $thumbnail = false;
   $thumbnailAlignment = $this->record($this->driver)->getThumbnailAlignment('result');
@@ -98,7 +100,7 @@
         <?php endif; ?>
       </div>
 
-      <?php if(!$this->driver->isCollection()): ?>
+      <?php if (!$this->driver->isCollection()): ?>
         <?php if ($snippet = $this->driver->getHighlightedSnippet()): ?>
           <?php if (!empty($snippet['caption'])): ?>
             <strong><?=$this->transEsc($snippet['caption']) ?>:</strong>
@@ -118,14 +120,14 @@
           $i = 0;
           foreach ($dedupData as $source => $current) {
             if (++$i == 1) {
-              ?><span class="currentSource"><a href="<?=$this->recordLinker()->getUrl($this->driver)?>" rel="nofollow"><?=$this->transEsc("source_$source", [], $source)?></a></span><?php
+              ?><span class="currentSource"><a href="<?=$this->escapeHtmlAttr($recordLinker->getUrl($this->driver))?>" rel="nofollow"><?=$this->transEsc("source_$source", [], $source)?></a></span><?php
             } else {
               if ($i == 2) {
                 ?> <span class="otherSources">(<?=$this->transEsc('Other Sources')?>: <?php
               } else {
                 ?>, <?php
               }
-              ?><a href="<?=$this->recordLinker()->getUrl($current['id'])?>" rel="nofollow"><?=$this->transEsc("source_$source", [], $source)?></a><?php
+              ?><a href="<?=$this->escapeHtmlAttr($recordLinker->getUrl($current['id']))?>" rel="nofollow"><?=$this->transEsc("source_$source", [], $source)?></a><?php
             }
           }
           if ($i > 1) {
@@ -192,6 +194,7 @@
           <?php $label=str_replace('class="', 'class="label label-info ', $this->record($this->driver)->getFormatList())?>
           <?php /* Remove separator needed for long title view */ ?>
           <?=str_replace(' | ', '', $label)?>
+          <span  style="opacity: 0;"><small><?=$this->escapeHtmlAttr($this->driver->getUniqueID())?></small></span>
           <?php if (!$openUrlActive && empty($urls) && $this->driver->supportsAjaxStatus()): ?>
             <span class="status ajax-availability hidden">
               <span class="label label-default"><?=$this->transEsc('Loading')?>...</span>
