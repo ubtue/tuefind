@@ -44,7 +44,6 @@
         $this->searchClassId,
         $this->searchIndex ?? null
     );
-
     $handlerCount = count($handlers);
     $basicSearch = $this->searchbox()->combinedHandlersActive() ? 'combined-searchbox' : $options->getSearchAction();
     $searchHome = $options->getSearchHomeAction();
@@ -98,8 +97,8 @@
                 <div class="keyboard-box">
                     <div class="simple-keyboard"></div>
                 </div>
-                <?= $this->context($this)->renderInContext('search/searchTabs', ['searchTabs' => $tabConfig['tabs'], 'hiddenFilters' => $hiddenFilters, 'showCounts' => $tabConfig['showCounts']]); ?>
                 <form id="searchForm" class="searchForm ix2-searchForm tuefind-event-search Form-on-submit" method="get" action="<?=$this->url($basicSearch)?>" name="searchForm" autocomplete="off">
+                    <?= $this->context($this)->renderInContext('search/searchTabs', ['searchTabs' => $tabConfig['tabs'], 'hiddenFilters' => $hiddenFilters, 'showCounts' => $tabConfig['showCounts']]); ?>
                     <div class="searchForm-inputs">
                     <?php
                         // Note: we need type="text" for autocomplete role="combobox"
@@ -168,7 +167,9 @@
 
                     <?php $shards = $options->getShards(); ?>
                     <?php if ($options->showShardCheckboxes() && !empty($shards)): ?>
-                        <?php $selectedShards = $this->selectedShards ?? $options->getDefaultSelectedShards(); ?>
+                    <?php
+                    $selectedShards = $this->selectedShards ?? $options->getDefaultSelectedShards();
+                    ?>
                         <br>
                         <?php foreach ($shards as $shard => $val): ?>
                             <?php $isSelected = empty($selectedShards) || in_array($shard, $selectedShards); ?>
@@ -209,7 +210,6 @@
                     }
                     ?>
                     </div>
-
                     <?=$this->context($this)->renderInContext(
                     'search/filters.phtml',
                     [
@@ -256,10 +256,10 @@
                                     <a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ><?=$this->transEsc('Virtual Keyboard')?>&nbsp;<span class="caret"></span></a>
                                     <ul class="dropdown-menu">
                                         <?php
-                                            $this->headScript()->appendFile('vendor/js.cookie.js');
-                                            $this->headScript()->appendFile('vendor/simple-keyboard/index.js');
-                                            $this->headScript()->appendFile('vendor/simple-keyboard-layouts/index.js');
-                                            $this->headLink()->appendStylesheet('vendor/simple-keyboard/index.css');
+                                           $this->assetManager()->appendScriptLink('vendor/js.cookie.js');
+                                           $this->assetManager()->appendScriptLink('vendor/simple-keyboard/index.js');
+                                           $this->assetManager()->appendScriptLink('vendor/simple-keyboard-layouts/index.js');
+                                           $this->assetManager()->appendStyleLink('vendor/simple-keyboard/index.css');
                                         ?>
                                         <li>
                                             <a class="dropdown-item keyboard-selection-item" href="#" data-value="none"><?= $this->transEsc('None') ?></a>

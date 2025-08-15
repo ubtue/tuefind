@@ -1,4 +1,4 @@
-TueFind2.ExpandDropdownsOnHover = true;
+//TueFind2.ExpandDropdownsOnHover = true;
 
 var IxTheo2 = {
     ScrollToAnchor: function(enable = true) {

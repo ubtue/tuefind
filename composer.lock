@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c84b117acc200335ee638d2dd8476791",
+    "content-hash": "a33bfa3af5ca3637bf57322638cb61e6",
     "packages": [
         {
             "name": "ahand/mobileesp",
@@ -15043,5 +15043,5 @@
     "platform-overrides": {
         "php": "8.1"
     },
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.6.0"
 }
