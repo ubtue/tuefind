@@ -9,8 +9,7 @@ module.exports = {
     "themes/**/node_modules/**",
     "themes/bootstrap5/js/common.js",
     "themes/bootstrap5/js/record.js",
-    "themes/bootstrap5/js/facets.js",
-    "themes/bootstrap5/js/lightbox.js"
+    "themes/bootstrap5/js/facets.js"
   ],
   extends: [],
   env: {
