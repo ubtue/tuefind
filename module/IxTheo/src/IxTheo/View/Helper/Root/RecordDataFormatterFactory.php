@@ -163,6 +163,7 @@ class RecordDataFormatterFactory extends \TueFind\View\Helper\Root\RecordDataFor
         $spec->setTemplateLine('Contains', 'getContainsInformation', 'data-contains.phtml');
         // Persistent identifiers (IxTheo-specific)
         $spec->setTemplateLine('Persistent identifiers', 'getTypesAndPersistentIdentifiers', 'data-persistent_identifiers.phtml');
+        $spec->setLine('Count Remarks', 'getCountRemarks');
         return $spec->getArray();
     }
 }
