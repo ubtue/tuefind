@@ -147,4 +147,9 @@ trait MarcAdvancedTrait
             $this->getCorporateAuthorsFromMarc('711', ['a', 'e', 'n', 'g', 'c', 'd'])
         );
     }
+
+
+    public function getCountRemarks() {
+        return $this->getFieldArray('515', ['a'], true, ', ');
+    }
 }
