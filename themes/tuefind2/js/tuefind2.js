@@ -15,7 +15,7 @@ var TueFind2 = {
     *   which looks strange and also screws up with anchors
     */
     ChangeSearchboxHeight: function() {
-	    if (!document.body.classList.contains('template-name-home')) {
+	    if (TueFind2.Searchbox.HeightOptions.Enabled && !document.body.classList.contains('template-name-home')) {
                 $('.panel-home').css({
                    "min-height": TueFind2.Searchbox.HeightOptions.MinHeight,
                    "margin-bottom": "20px"
