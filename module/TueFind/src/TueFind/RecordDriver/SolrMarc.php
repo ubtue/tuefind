@@ -715,5 +715,4 @@ class SolrMarc extends SolrDefault
     public function getLanguages() { return parent::getLanguages(); }
     public function getTitle() { return parent::getTitle(); }
     public function getISSNs() { return parent::getISSNs(); }
-    public function getISBNs() { return parent::getISBNs(); }
 }
