@@ -44,6 +44,7 @@ import org.vufind.index.DatabaseManager;
 import java.sql.*;
 import static java.util.stream.Collectors.joining;
 import org.apache.commons.validator.routines.ISBNValidator;
+import org.vufind.index.FieldSpecTools;
 
 /*
 * a structure to hold some issue informations
@@ -125,7 +126,7 @@ class ISBN extends ISBNValidator{
         super(convert);
     }
 
-    private String get10CheckDigit(String isbn) {
+    private String get10CheckDigit(final String isbn) {
         int sum = 0, checkDigit;
         final String[] arrIsbn = isbn.split("");
 
@@ -137,7 +138,7 @@ class ISBN extends ISBNValidator{
         return checkDigit == 10 ? "X" : Integer.toString(checkDigit);
     }
 
-    public String to10Digit(String isbn13) {
+    public String convertToISBN10(final String isbn13) {
         final String _isbn13 = validateISBN13(isbn13);
         if (_isbn13 != null) {
             if (_isbn13.substring(0, 3).equals("978")) {
@@ -863,45 +864,47 @@ public class TueFindBiblio extends TueFind {
         return subfields;
     }
 
-    public Set<String> getISBN(final Record record) {
+    public Set<String> getISBNs(final Record record, final String subfieldList) {
         // false means no auto converstion from 10 to 13 digits isbn format 
         ISBN isbnHandler = new ISBN(false);
         final Set<String> isbns = new LinkedHashSet<>();
-        final List<VariableField> fields = record.getVariableFields("020");
+        HashMap<String, Set<String>> parsedTagList = FieldSpecTools.getParsedTagList(subfieldList);
+        List<VariableField> fields = SolrIndexer.instance().getFieldSetMatchingTagList(record, subfieldList);
 
-
-        if(fields != null){
-            DataField dataField;
-            String isbn = "";
-            String isbn_other = "";
-            for(final VariableField variableField : fields){
-                dataField = (DataField) variableField;
-                final Subfield subfield = dataField.getSubfield('a');
-
-                if(subfield == null){
-                    continue;
-                }
-
-                isbn = subfield.getData();
-                String isbn_13 = null, isbn_10 = null;
-                if(isbnHandler.isValidISBN13(isbn)){
-                    isbn_13 = isbnHandler.validateISBN13(isbn);
-                    isbn_10 = isbnHandler.to10Digit(isbn_13);
-                }
-                if(isbnHandler.isValidISBN10(isbn)){
-                    isbn_10 = isbnHandler.validateISBN10(isbn);
-                    isbn_13 = isbnHandler.convertToISBN13(isbn_10);
-
-                }
+        for(final VariableField variableField : fields){
+            DataField field = (DataField)variableField;
+            for(final String subfieldCharacters : parsedTagList.get(field.getTag())){
                 
-                if(isbn_13 != null){
-                    isbns.add(isbn_13);
-                }
-                if(isbn_10 != null){
-                    isbns.add(isbn_10);
+                final List<Subfield> subfields = field.getSubfields("[" + subfieldCharacters + "]");
+
+                for(final Subfield subfield : subfields){
+
+                    final String isbn = subfield.getData();
+                    String isbn_13 = null, isbn_10 = null;
+
+                    if(isbnHandler.isValidISBN13(isbn)){
+                        isbn_13 = isbnHandler.validateISBN13(isbn);
+                        isbn_10 = isbnHandler.convertToISBN10(isbn_13);
+                    }
+                    if(isbnHandler.isValidISBN10(isbn)){
+                        isbn_10 = isbnHandler.validateISBN10(isbn);
+                        isbn_13 = isbnHandler.convertToISBN13(isbn_10);
+
+                    }
+                    
+                    if(isbn_10 == null && isbn_13 == null){
+                        logger.severe("Invalid ISBN: " + isbn + "! (PPN: " + record.getControlNumber() + ")");
+                        continue;
+                    }
+
+                    if(isbn_13 != null){
+                        isbns.add(isbn_13);
+                    }
+                    if(isbn_10 != null){
+                        isbns.add(isbn_10);
+                    }
                 }
             }
-            
         }
 
         return isbns;
