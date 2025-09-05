@@ -273,6 +273,28 @@ public class TueFind extends SolrIndexerMixin {
         }
     }
 
+    public List<String> getSubfieldValuesByFieldSpec(final Record record, final String subfieldList){
+        final List<String> results = new ArrayList<>();
+
+        HashMap<String, Set<String>> parsedTagList = FieldSpecTools.getParsedTagList(subfieldList);
+        List<VariableField> fields = SolrIndexer.instance().getFieldSetMatchingTagList(record, subfieldList);
+
+        for(final VariableField variableField : fields){
+            DataField field = (DataField)variableField;
+            for(final String subfieldCharacters : parsedTagList.get(field.getTag())){
+                
+                final List<Subfield> subfields = field.getSubfields("[" + subfieldCharacters + "]");
+
+                for(final Subfield subfield : subfields){
+                    final String theValue = subfield.getData();
+                    results.add(theValue);
+                }
+            }
+        }
+
+        return results;
+    }
+
     protected static String getFirstSubfieldValue(final Record record, final String tag, final char indicator1, final char indicator2, final char subfieldCode) {
         if (tag == null || tag.length() != 3)
             throw new IllegalArgumentException("bad tag (null or length != 3)!");

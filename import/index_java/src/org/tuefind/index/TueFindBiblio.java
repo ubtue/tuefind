@@ -868,42 +868,31 @@ public class TueFindBiblio extends TueFind {
         // false means no auto converstion from 10 to 13 digits isbn format 
         ISBN isbnHandler = new ISBN(false);
         final Set<String> isbns = new LinkedHashSet<>();
-        HashMap<String, Set<String>> parsedTagList = FieldSpecTools.getParsedTagList(subfieldList);
-        List<VariableField> fields = SolrIndexer.instance().getFieldSetMatchingTagList(record, subfieldList);
+        final List<String> isbnsInTheRecord = getSubfieldValuesByFieldSpec(record, subfieldList);
 
-        for(final VariableField variableField : fields){
-            DataField field = (DataField)variableField;
-            for(final String subfieldCharacters : parsedTagList.get(field.getTag())){
-                
-                final List<Subfield> subfields = field.getSubfields("[" + subfieldCharacters + "]");
+        for(final String isbn : isbnsInTheRecord){
+            String isbn_13 = null, isbn_10 = null;
 
-                for(final Subfield subfield : subfields){
+            if(isbnHandler.isValidISBN13(isbn)){
+                isbn_13 = isbnHandler.validateISBN13(isbn);
+                isbn_10 = isbnHandler.convertToISBN10(isbn_13);
+            }
+            if(isbnHandler.isValidISBN10(isbn)){
+                isbn_10 = isbnHandler.validateISBN10(isbn);
+                isbn_13 = isbnHandler.convertToISBN13(isbn_10);
 
-                    final String isbn = subfield.getData();
-                    String isbn_13 = null, isbn_10 = null;
+            }
+            
+            if(isbn_10 == null && isbn_13 == null){
+                logger.severe("Invalid ISBN: " + isbn + "! (PPN: " + record.getControlNumber() + ")");
+                continue;
+            }
 
-                    if(isbnHandler.isValidISBN13(isbn)){
-                        isbn_13 = isbnHandler.validateISBN13(isbn);
-                        isbn_10 = isbnHandler.convertToISBN10(isbn_13);
-                    }
-                    if(isbnHandler.isValidISBN10(isbn)){
-                        isbn_10 = isbnHandler.validateISBN10(isbn);
-                        isbn_13 = isbnHandler.convertToISBN13(isbn_10);
-
-                    }
-                    
-                    if(isbn_10 == null && isbn_13 == null){
-                        logger.severe("Invalid ISBN: " + isbn + "! (PPN: " + record.getControlNumber() + ")");
-                        continue;
-                    }
-
-                    if(isbn_13 != null){
-                        isbns.add(isbn_13);
-                    }
-                    if(isbn_10 != null){
-                        isbns.add(isbn_10);
-                    }
-                }
+            if(isbn_13 != null){
+                isbns.add(isbn_13);
+            }
+            if(isbn_10 != null){
+                isbns.add(isbn_10);
             }
         }
 
