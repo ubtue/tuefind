@@ -44,7 +44,6 @@ import org.vufind.index.DatabaseManager;
 import java.sql.*;
 import static java.util.stream.Collectors.joining;
 import org.apache.commons.validator.routines.ISBNValidator;
-import org.vufind.index.FieldSpecTools;
 
 /*
 * a structure to hold some issue informations
