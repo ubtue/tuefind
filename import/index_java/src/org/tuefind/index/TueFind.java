@@ -273,11 +273,11 @@ public class TueFind extends SolrIndexerMixin {
         }
     }
 
-    public List<String> getSubfieldValuesByFieldSpec(final Record record, final String subfieldList){
+    public List<String> getSubfieldValuesByFieldSpec(final Record record, final String tagList){
         final List<String> results = new ArrayList<>();
 
-        HashMap<String, Set<String>> parsedTagList = FieldSpecTools.getParsedTagList(subfieldList);
-        List<VariableField> fields = SolrIndexer.instance().getFieldSetMatchingTagList(record, subfieldList);
+        HashMap<String, Set<String>> parsedTagList = FieldSpecTools.getParsedTagList(tagList);
+        List<VariableField> fields = SolrIndexer.instance().getFieldSetMatchingTagList(record, tagList);
 
         for(final VariableField variableField : fields){
             DataField field = (DataField)variableField;

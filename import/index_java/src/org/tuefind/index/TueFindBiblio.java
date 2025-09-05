@@ -863,11 +863,11 @@ public class TueFindBiblio extends TueFind {
         return subfields;
     }
 
-    public Set<String> getISBNs(final Record record, final String subfieldList) {
+    public Set<String> getISBNs(final Record record, final String tagList) {
         // false means no auto converstion from 10 to 13 digits isbn format 
         ISBN isbnHandler = new ISBN(false);
         final Set<String> isbns = new LinkedHashSet<>();
-        final List<String> isbnsInTheRecord = getSubfieldValuesByFieldSpec(record, subfieldList);
+        final List<String> isbnsInTheRecord = getSubfieldValuesByFieldSpec(record, tagList);
 
         for(final String isbn : isbnsInTheRecord){
             String isbn_13 = null, isbn_10 = null;
@@ -883,7 +883,7 @@ public class TueFindBiblio extends TueFind {
             }
             
             if(isbn_10 == null && isbn_13 == null){
-                logger.severe("Invalid ISBN: " + isbn + "! (PPN: " + record.getControlNumber() + ")");
+                logger.warning("Invalid ISBN: " + isbn + "! (PPN: " + record.getControlNumber() + ")");
                 continue;
             }
 
