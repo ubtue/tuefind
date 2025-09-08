@@ -709,31 +709,10 @@ class SolrMarc extends SolrDefault
         return $this->getMarcReader()->getRawMarcRecords();
     }
 
-    // Needed to overcome MarcBasicTrait overwriting
-    public function getFormats()
-    {
-        return parent::getFormats();
-    }
-
-    // Needed to overcome MarcBasicTrait overwriting
-    public function getLanguages()
-    {
-        return parent::getLanguages();
-    }
-
-    // Needed to overcome MarcBasicTrait overwriting
-    public function getTitle() {
-        return parent::getTitle();
-    }
-
-    // Needed to overcome MarcBasicTrait overwriting
-    public function getISSNs()
-    {
-        return parent::getISSNs();
-    }
-
-    // Needed to overcome MarcBasicTrait overwriting
-    public function getISBNs() {
-        return parent::getISBNs();
-    }
+    // Needed to overcome MarcBasicTrait overwriting for specific functions
+    public function getPrimaryAuthors() { return parent::getPrimaryAuthors(); }
+    public function getFormats() { return parent::getFormats(); }
+    public function getLanguages() { return parent::getLanguages(); }
+    public function getTitle() { return parent::getTitle(); }
+    public function getISSNs() { return parent::getISSNs(); }
 }
