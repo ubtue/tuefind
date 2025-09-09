@@ -91,7 +91,7 @@ VuFind.register('account', function Account() {
       if (accountStatus > ICON_LEVELS.NONE) {
         accountIconEl.dataset.toggle = 'tooltip';
         accountIconEl.dataset.placement = 'bottom';
-        accountIconEl.title = VuFind.translate('account_has_alerts');
+        accountIconEl.dataset.title = VuFind.translate('account_has_alerts');
         $(accountIconEl).tooltip();
       } else {
         $(accountIconEl).tooltip('destroy');
