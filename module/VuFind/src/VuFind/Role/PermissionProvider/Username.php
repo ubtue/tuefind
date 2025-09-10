@@ -29,7 +29,7 @@
 
 namespace VuFind\Role\PermissionProvider;
 
-use LmcRbacMvc\Service\AuthorizationService;
+use Lmc\Rbac\Mvc\Service\AuthorizationService;
 use VuFind\Db\Entity\UserEntityInterface;
 
 use function in_array;
