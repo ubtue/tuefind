@@ -443,7 +443,7 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
 
 
         $relatedAuthors = $titleRecords->getFacets()['author_and_id_facet'];
-        
+
         $referenceAuthorKey = $driver->getUniqueID() . ':' . $driver->getTitle();
 
         $referenceAuthorID = $driver->getUniqueID();
@@ -572,13 +572,13 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
     public function getTitlesByUrl(AuthorityRecordDriver &$driver): string
     {
         $urlHelper = $this->viewHelperManager->get('url');
-        return $urlHelper('search-results', [], ['query' => ['lookfor' => $this->getTitlesByQueryParams($driver)]]);
+        return $urlHelper('search-results') . '?lookfor=' . urlencode($this->getTitlesByQueryParams($driver));
     }
 
     public function getTitlesByUrlNameOrID($authorName, $authorId = null): string
     {
         $urlHelper = $this->viewHelperManager->get('url');
-        return $urlHelper('search-results', [], ['query' => ['lookfor' => $this->getTitlesByQueryParamsNameOrID($authorName, $authorId)]]);
+        return $urlHelper('search-results') . '?lookfor=' . urlencode($this->getTitlesByQueryParamsNameOrID($authorName, $authorId));
     }
 
     protected function getTitlesByQueryParamsNameOrID($authorName, $authorId = null): string
