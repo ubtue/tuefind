@@ -177,10 +177,14 @@ trait MarcAdvancedTrait
         // Show 0209 in the exact way of writing, without normalization
 
         // We cannot just call getFieldArray once, because it will NOT keep the subfield order
-        $isbns = array_merge(
-            $this->getFieldArray('020', ['9'], false),
-            $this->getFieldArray('020', ['a'], false),
-        );
+        $isbns = [];
+        foreach ($this->getMarcReader()->getFields('020') as $field) {
+            $subfields = $this->getMarcReader()->getSubfieldsAssoc($field);
+            if (isset($subfields['9']))
+                $isbns[] = $subfields['9'];
+            elseif (isset($subfields['a']))
+                $isbns[] = $subfields['a'];
+        }
 
         return array_unique($isbns);
     }

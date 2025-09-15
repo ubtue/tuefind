@@ -144,7 +144,7 @@ class RecordDataFormatterFactory extends \TueFind\View\Helper\Root\RecordDataFor
         $spec->setLine('Bibliography', 'getBibliographyNotes');
         // Clean ISBN with schema.org-property (IxTheo-specific)
         $spec->setLine(
-            'ISBN', 'getCleanISBN', null,
+            'ISBN', 'getISBNs', null,
             ['prefix' => '<span property="isbn">', 'suffix' => '</span>']
         );
         // ISSN with schema.org-property (IxTheo-specific)
