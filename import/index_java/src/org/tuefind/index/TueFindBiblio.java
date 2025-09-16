@@ -883,6 +883,7 @@ public class TueFindBiblio extends TueFind {
             }
             
             if(isbn_10 == null && isbn_13 == null){
+                isbns.add(isbn);
                 logger.warning("Invalid ISBN: " + isbn + "! (PPN: " + record.getControlNumber() + ")");
                 continue;
             }
