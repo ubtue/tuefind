@@ -173,18 +173,32 @@ trait MarcAdvancedTrait
     public function getISBNs() : array
     {
         // Intentionally omit 020z and 773z
-        // Prefer 0209 to 020a
+        // Prefer 0209 over 020a
         // Show 0209 in the exact way of writing, without normalization
 
         // We cannot just call getFieldArray once, because it will NOT keep the subfield order
-        $isbn = array_merge(
-            $this->getFieldArray('020', ['9'], false),
-            $this->getFieldArray('020', ['a'], false),
-        );
+        $isbns = [];
+        foreach ($this->getMarcReader()->getFields('020') as $field) {
+            $subfields = $this->getMarcReader()->getSubfieldsAssoc($field);
+            if (isset($subfields['9']))
+                $isbns[] = $subfields['9'];
+            elseif (isset($subfields['a']))
+                $isbns[] = $subfields['a'];
+        }
 
-        if (isset($isbn[0]))
-            return [$isbn[0]];
-
-        return [];
+        return array_unique($isbns);
     }
+
+    /**
+     * Override the parent behaviour, just return the first ISBN as-is,
+     * without favoring ISBN-10 over 13.
+     *
+     * @return type
+     */
+    public function getCleanISBN() {
+        $isbns = $this->getISBNs();
+        return $isbns[0] ?? false;
+    }
+
+
 }
