@@ -193,6 +193,14 @@
         </div>
         <?php endif; ?>
 
+      <?php /* Time Range section */ ?>
+      <?php if ($searchHandler !== false && $searchHandler == 'TimeRangeBBox'): ?>
+        <?php $timeRangesString = $this->driver->tryMethod('getTimeRangesString'); ?>
+        <?php if (!empty($timeRangesString)): ?>
+          <div><?=$this->transEsc($timeRangesString)?></div>
+        <?php endif; ?>
+      <?php endif; ?>
+
       <?php $urls_and_material_types = $this->driver->getURLsAndMaterialTypes(); ?>
       <?php if (!empty($urls_and_material_types)): ?>
         <?php $material_types = array_values($urls_and_material_types); ?>
