@@ -499,26 +499,8 @@ class FulltextSnippetProxyController extends \VuFind\Controller\AbstractBase imp
         return $formatted_snippets;
     }
 
-
-    public function loadAction() : JsonModel
-    {
-        $query = $this->getRequest()->getUri()->getQuery();
-        $parameters = [];
-        parse_str($query, $parameters);
-        $doc_id = $parameters['doc_id'];
-        if (empty($doc_id))
-            return new JsonModel([
-               'status' => 'EMPTY DOC_ID'
-                ]);
-        $search_query = $parameters['search_query'];
-        if (empty($search_query))
-            return new JsonModel([
-                'status' => 'EMPTY QUERY'
-                ]);
-        $verbose = isset($parameters['verbose']) && $parameters['verbose'] == '1' ? true : false;
-        $synonyms = isset($parameters['synonyms']) && preg_match('/lang|all/', $parameters['synonyms']) ? $parameters['synonyms'] : "";
-        $types_filter = isset($parameters['fulltext_types']) ? $parameters['fulltext_types'] :
-                        implode(',', array_keys(self::description_to_text_type_map)); // Iterate over all possible types
+    protected function constructFulltextSnippet($doc_id, $search_query, $verbose, $synonyms, $types_filter){
+        $snippets['status'] = "";
         $snippets['snippets'] = [];
         foreach (explode(',', $types_filter) as $type_filter) {
             try {
@@ -534,25 +516,72 @@ class FulltextSnippetProxyController extends \VuFind\Controller\AbstractBase imp
             }
             catch (\Exception $e) {
                 error_log($e);
-                return new JsonModel([
-                    'status' => 'PROXY_ERROR'
-                ]);
+                $snippets['status'] = "PROXY_ERROR";
+                return $snippets;
             }
         }
         if (empty($snippets['snippets'])) {
-            return new JsonModel([
-                'status' => 'NO RESULTS'
-            ]);
+            $snippets['status'] = "NO RESULTS";
+            return $snippets;
         }
         // Deduplicate snippets (array_values for fixing indices)
         $snippets['snippets'] = array_values(array_unique($snippets['snippets'], SORT_REGULAR));
         $snippets['snippets'] = array_slice($snippets['snippets'], 0, $this->maxSnippets);
         $snippets['snippets'] = $this->formatHighlighting($snippets['snippets']);
 
+        return $snippets;
+    }
+
+    public function loadAction() : JsonModel
+    {
+        $query = $this->getRequest()->getUri()->getQuery();
+        $parameters = [];
+        parse_str($query, $parameters);
+        $snippets = [];
+        // keep the compatibility with old version 
+        if(array_key_exists('doc_id', $parameters)){
+            $doc_id = $parameters['doc_id'];
+            if (empty($doc_id))
+                return new JsonModel([
+                'status' => 'EMPTY DOC_ID'
+                    ]);
+            $search_query = $parameters['search_query'];
+            if (empty($search_query))
+                return new JsonModel([
+                    'status' => 'EMPTY QUERY'
+                    ]);
+            $verbose = isset($parameters['verbose']) && $parameters['verbose'] == '1' ? true : false;
+            $synonyms = isset($parameters['synonyms']) && preg_match('/lang|all/', $parameters['synonyms']) ? $parameters['synonyms'] : "";
+            $types_filter = isset($parameters['fulltext_types']) ? $parameters['fulltext_types'] :
+                            implode(',', array_keys(self::description_to_text_type_map)); // Iterate over all possible types
+            $snippets[$doc_id] = $this->constructFulltextSnippet($doc_id, $search_query, $verbose, $synonyms, $types_filter);
+        }
+        // the new api
+        if(array_key_exists('docs', $parameters)){
+            $docs_get = $parameters['docs'];
+
+            $docs = json_decode(html_entity_decode($docs_get));
+            foreach($docs as $doc){ 
+                // $snippets[$item->id] = $item->id;
+                if(!empty($doc->id)){
+                    $snippets[$doc->id] = [];
+                    $types_filter = (!empty($doc->fulltext_type_filter) ? $doc->fulltext_type_filter : (!empty($doc->fulltext_types) ? $doc->fulltext_types : implode(',', array_keys(self::description_to_text_type_map))));
+                    
+                    $synonyms = preg_match('/lang|all/',$doc->synonym_type) ? $doc->synonym_type : "";
+                    $verbose = $doc->verbose;
+                    if(empty($doc->query)){
+                        $snippets[$doc->id]['status'] = 'EMPTY QUERY';
+                    }else{
+                        $snippets[$doc->id] = $this->constructFulltextSnippet($doc->id, $doc->query, $verbose, $synonyms, $types_filter);
+                    }
+                    
+                }
+            }
+        }
         try {
             $model =  new JsonModel([
-                   'status' => 'SUCCESS',
-                   'snippets' => $snippets['snippets']
+                'status' => 'SUCCESS',
+                'snippets' => $snippets
             ]);
         }
         catch (\Exception $e) {
