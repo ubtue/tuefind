@@ -43,6 +43,12 @@ MenuItems:
     icon: format-book
     checkMethod: checkPda
 
+  - name: SelfArchiving_menu_label
+    label: SelfArchiving_menu_label
+    route: myresearch-selfarchiving
+    icon: file-text-o
+    checkMethod: checkSelfarchiving
+
   - name: publications
     label: My Publications
     route: myresearch-publications

@@ -113,11 +113,14 @@
     }
     .comment-rating {
       float: left;
-      margin: 0.5rem;
+      margin: 0.5rem 1rem;
     }
     .btn {
       margin-top: 0.5rem;
     }
+  }
+  .comment-list .comment-rating {
+    margin-left: 1rem;
   }
 }
 
@@ -314,8 +317,10 @@
     margin-right: -0.6em;
     z-index: 2;
 
+    /* Display only half of the star and ensure that the remainder cannot be hovered over */
     .rating__icon--star {
       width: 0.5rem;
+      overflow: hidden;
     }
   }
 

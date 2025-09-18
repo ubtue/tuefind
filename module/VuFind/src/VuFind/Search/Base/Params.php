@@ -242,6 +242,14 @@ class Params
     protected $queryAdapterClass = QueryAdapter::class;
 
     /**
+     * Is this a specialized search (i.e. a customized scenario like new items,
+     * rather than a "normal" backend search)?
+     *
+     * @var bool
+     */
+    protected $isSpecializedSearch = false;
+
+    /**
      * Constructor
      *
      * @param \VuFind\Search\Base\Options  $options      Options to use
@@ -369,6 +377,7 @@ class Params
         $this->initSort($request);
         $this->initFilters($request);
         $this->initHiddenFilters($request);
+        $this->isSpecializedSearch = $request->get('specializedSearch', false);
     }
 
     /**
@@ -1836,11 +1845,20 @@ class Params
         $valid = $this->getOptions()->getSortOptions();
         $defaultSort = $this->getDefaultSort();
         $list = [];
+        $currentSort = $this->getSort();
         foreach ($valid as $sort => $desc) {
             $list[$sort] = [
                 'desc' => $desc,
-                'selected' => ($sort == $this->getSort()),
+                'selected' => ($sort == $currentSort),
                 'default' => $sort == $defaultSort,
+            ];
+        }
+        if (!isset($list[$currentSort])) {
+            // Add selected sort with a generic description so that we display it:
+            $list[$currentSort] = [
+                'desc' => 'unrecognized_sort_option',
+                'selected' => true,
+                'default' => false,
             ];
         }
         return $list;
@@ -2101,5 +2119,16 @@ class Params
     {
         $translatedFacets = $this->getOptions()->getTranslatedFacets();
         return method_exists($this, 'setFacetContains') && !in_array($facet, $translatedFacets);
+    }
+
+    /**
+     * Is this a specialized search (i.e. a customized scenario like new items,
+     * rather than a "normal" backend search)?
+     *
+     * @return bool
+     */
+    public function isSpecializedSearch(): bool
+    {
+        return $this->isSpecializedSearch;
     }
 }

@@ -166,7 +166,7 @@ trait TranslatorAwareTrait
             if ($str instanceof \VuFind\I18n\TranslatableStringInterface) {
                 return $this->translate($str, $tokens, $default, $useIcuFormatter);
             } else {
-                [$domain, $str] = $this->extractTextDomain($str);
+                [$domain, $str] = $this->extractTextDomain($domain ? $domain . '::' . $str : $str);
             }
         }
 
@@ -318,8 +318,8 @@ trait TranslatorAwareTrait
         // can still be provided if the input cannot be changed (e.g. if it comes
         // from a third-party system).
         return str_replace(
-            ['(', ')', '!', '?', '|'],
-            ['_28', '_29', '_21', '_3F', '_7C'],
+            ['&', '(', ')', '!', '?', '|'],
+            ['_26', '_28', '_29', '_21', '_3F', '_7C'],
             $key
         );
     }

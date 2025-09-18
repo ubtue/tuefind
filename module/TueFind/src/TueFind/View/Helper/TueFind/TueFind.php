@@ -2,7 +2,9 @@
 
 namespace TueFind\View\Helper\TueFind;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
+use VuFind\Search\SearchTabsHelper;
+use VuFind\View\Helper\Root\SearchTabs;
 
 /**
  * General View Helper for TueFind, containing miscellaneous functions
@@ -269,6 +271,7 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
      * @return array
      */
     public function getRssNewsEntries(int $maxItemCount=null, bool $onlyNewestItemPerFeed=false) {
+
         $rssTable = $this->container->get(\VuFind\Db\Table\PluginManager::class)->get('rss_item');
         $rssItems = $rssTable->getItemsSortedByPubDate($this->getTueFindInstance());
 
@@ -624,6 +627,11 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
         return $config->Publication->email ?? "";
     }
 
+    public function getSelfArchivingEmail(): string {
+        $config = $this->getConfig('tuefind');
+        return $config->Publication->selfarchivingemail ?? "";
+    }
+
     public function getSiteEmail(): string {
         $config = $this->container->get('VuFind\Config')->get('config');
         return $config->Site->email ?? "";
@@ -631,5 +639,31 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
 
     public function getHierarchicalDisplayText($filterDisplayText): string {
         return $this->container->get(\VuFind\Search\Solr\HierarchicalFacetHelper::class)->formatDisplayText($filterDisplayText)->getDisplayString();
+    }
+
+    public function isNewItem(string $searchClassId): bool {
+        $hiddenFilters = $this->getView()->plugin('searchTabs')->getHiddenFilters($searchClassId);
+        if(isset($hiddenFilters['first_indexed'])) {
+            return true;
+        }
+        return false;
+    }
+
+    public function searchMenuNavActive(): array {
+        $currentRoute = $this->getRouteParams();
+        $navActive['historyActive'] = '';
+        $navActive['newItemActive'] = '';
+        $navActive['keyWordChainSearchActive'] = '';
+        $className = 'active';
+        if($currentRoute['controller'] == 'Search' && $currentRoute['action'] == 'History') {
+            $navActive['historyActive'] = $className;
+        }
+        if($currentRoute['controller'] == 'Search' && $currentRoute['action'] == 'NewItem') {
+            $navActive['newItemActive'] = $className;
+        }
+        if($currentRoute['controller'] == 'Keywordchainsearch' && $currentRoute['action'] == 'Home' || $currentRoute['controller'] == 'Browse' || $currentRoute['controller'] == 'Alphabrowse' && $currentRoute['action'] == 'Home') {
+            $navActive['keyWordChainSearchActive'] = $className;
+        }
+        return $navActive;
     }
 }

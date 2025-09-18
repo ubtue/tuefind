@@ -33,7 +33,7 @@
        that you fully re-index after changing this setting as it can
        affect both how text is indexed and queried.
     -->
-  <luceneMatchVersion>9.9</luceneMatchVersion>
+  <luceneMatchVersion>9.11</luceneMatchVersion>
 
   <!-- Use the classic schema style by default for VuFind -->
   <schemaFactory class="ClassicIndexSchemaFactory"/>
@@ -473,6 +473,7 @@
     <lst name="title">
       <str name="DBpath">${solr.solr.home:./solr}/alphabetical_browse/title_browse.db</str>
       <str name="field">title_fullStr</str>
+      <str name="normalizer">org.vufind.util.TitleNormalizer</str>
     </lst>
 
     <lst name="lcc">

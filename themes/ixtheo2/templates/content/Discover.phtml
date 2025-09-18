@@ -1,0 +1,401 @@
+<div class="cw-row">
+    <div class="cw-py-5 cw-ml-lg-4">
+        <h1 class="cw-h1">Searching and Browsing</h1>
+        <p>IxTheo contains over 4.5 million publications in many languages. Approximately 25,000 newly published titles are added each year. To help you find what you need within this large body of material, we provide various features on our website which allow you to perform precise searches for the desired resources. In addition to special search functions for Bible passages, sections of canon law and historical periods, you can apply filters by subject field or browse through the catalog.</p>
+    </div>
+
+    <!-- one block -->
+    <div class="col-md-4 ix-panel-news">
+        <div class="panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    Search for Bible passages
+                </h4>
+            </div>
+            <div class="panel-collapse">
+                <div class="panel-body">
+                    <input type="checkbox" class="read-more-state" id="post-1" />
+                    <div class="read-more-wrap cw-wrap-smoll">
+                        <p>A special feature of the Index Theologicus (IxTheo) is the search for Bible passages. It allows you to perform a targeted search for literature on Bible passages (from single verses to entire pericopes), even if these passages are not mentioned in the title of the publication.</p>
+                        <div class="read-more-target">
+                            <p>To activate the Bible passage search, select the search category "Bible passages" on the right-hand side of the search field.</p>
+                            <p>Bible passages may be entered using the internationally recognized names or well-known abbreviations of Biblical books. Abbreviations in other languages (German, French, Italian and Spanish) are also allowed, as well as the names used in the Nestle-Aland edition of the New Testament and the Vulgate.</p>
+                            <p>Occasionally, there are ambiguities due to accidental similarities between Bible book abbreviations in different languages. For example, the abbreviation “es” is used for Isaiah in French, but for Exodus in Italian. In such cases, it is necessary to decide which abbreviations are allowed to avoid a conflict. You can access the list of abbreviations allowed <a target="_blank" href="https://ixtheo.de/docs/Bible_abbreviation.pdf">here</a>.</p>
+                            <p>Enter the passage you are looking for in the following manner:</p>
+                            <p>Abbreviation of the Bible book chapter, verse number. Individual verses within a chapter can be separated by a point.</p>
+                            <p>Examples:</p>
+
+                            <ul>
+                              <li>Jn 5,1-20 or Joh 5,1-20</li>
+                              <li>1 Cor 10 or 1 Co 10 or 1 Kor 10</li>
+                              <li>Rom 14,1-15,13 or Rm 14,1-15,13</li>
+                              <li>Gen 1,1-3.4-5.7.9</li>
+                            </ul>
+
+                            <p>Once you have executed your search query, a list of publications is displayed. This list includes not only the entries which exactly match the Bible passage you specified, but also all entries which overlap with it:</p>
+
+                            <ul class="ix2-content-ul1">
+                                <li>Exact match: the entry found is identical to the passage specified. For example, the search for Mk 5,25-34 results in a list of entries dealing with Mk 5,25-34.</li>
+
+                                <li>The entry found includes the passage specified. For example, the search for Mk 5,25-34 also finds entries dealing with Mk 5,24-34 or with the whole chapter Mk 5.</li>
+
+                                <li>The entry found is included in the passage specified. For example, the search for Lk 2,22-35 also finds entries dealing with Lk 2,29-32.</li>
+
+                                <li>The entry found overlaps with the passage specified. For example, the search for Gen 1,1-2 also finds entries dealing with Gen 1,2-5.</li>
+
+                                <li>The entry found is linked with a subject heading describing a Bible passage which matches or overlaps with the passage specified. For example, the search for Mk 9,2-10 finds all entries which are linked with the subject heading "Transfiguration of Christ". The synoptic parallels Mt 17,1-9 and Lk 9,28-36 are also assigned to this subject heading.</li>
+                            </ul>
+
+                            <p>The entries found are sorted according to their proximity to the passage specified in the search query. Exact matches are listed first; the remaining entries are sorted according to their level of agreement with the passage specified. For example, if you search for Mk 5,25-34, the entries dealing with Mk 5,21-43 will appear before entries dealing with the whole chapter Mk 5 in the list of results.</p>
+                            <p>To help you determine how relevant a given publication is for your search, the exact Bible passages discussed in each publication are displayed in the list of results.</p>
+
+                            <a class="thumbnail" href="#" data-image-id="" data-toggle="modal" data-title="" data-caption="" data-image="<?=$this->imageLink('content_img/en/Bibelstellensuche_eng.png')?>" data-target="#image-gallery">
+                                <img class="img-responsive" src="<?=$this->imageLink('content_img/en/Bibelstellensuche_eng.png')?>" alt="<?=$this->transEscAttr('symbolic_image_table37');?>">
+                            </a>
+
+                            <p>Warning: it is possible that some publications are not found when you use this feature because there is no link in their authority record to the passage indicated. Therefore, it may be worthwhile to perform an additional search for the passage using the search category "All Fields". However, the advantages of using the specific Bible passage search function are then lost.</p>
+                            <p>If you are interested in the technical implementation of this search function, it is described in German at the following link: <a target="_blank" href="https://github.com/ubtue/tuefind/wiki/Bereichssuche-Technischer-%C3%9Cberblick">https://github.com/ubtue/tuefind/wiki/Bereichssuche-Technischer-%C3%9Cberblick</a></p>
+                        </div>
+                    </div>
+                    <label for="post-1" class="read-more-trigger"></label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end one block -->
+
+    <!-- one block -->
+    <div class="col-md-4 ix-panel-news">
+        <div class="panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    Search for Time Ranges
+                </h4>
+            </div>
+            <div class="panel-collapse">
+                <div class="panel-body">
+                    <input type="checkbox" class="read-more-state" id="post-3" />
+                    <div class="read-more-wrap cw-wrap-smoll">
+                        <p>The search for time ranges allows you to perform a targeted search for publications which deal with a specific time period in history. You can search for specific years or ranges of years.</p>
+                        <div class="read-more-target">
+                        <p>To activate the search for time ranges, select the search category "Time ranges" on the right-hand side of the search field.</p>
+                        <p>To specify a year before the beginning of the Common Era, enter the letter “v” before the year number ("v" is the first letter of the German word for "before"). Any year number without this letter will be automatically interpreted to mean "CE / AD".</p>
+                        <p>Examples:</p>
+						<ul>
+                            <li>Search for a specific year in the Common Era: Year number (e.g. 1970)</li>
+                            <li>Search for a period in the Common Era: Both year numbers are specified, joined by a hyphen and without any extra space (e.g. 1526-1530)</li>
+                            <li>Search for a year before the Common Era: Year number preceded by a "v" (e.g. v70 means 70 BCE)</li>
+                            <li>Search for a period before the Common Era: Both year numbers are preceded by a “v” and joined by a hyphen without any extra space (e.g. v70-v60 means from 70 BCE to 60 BCE)</li>
+                            <li>Search for a period which starts before the Common Era and ends in the Common Era: Only the first year number is preceded by a “v” (e.g. v566-100 means from 566 BCE to 100 CE)</li>
+                            </ul>
+                        <p>Once you have executed your search query, a list of publications is displayed. This list includes not only the entries which exactly match the period you specified, but also all entries which overlap with it:</p>
+                            <ul>
+                            <li>Exact match: the entry found covers exactly the period specified. For example, the search for 1648 results in a list of entries dealing with the year 1648 CE.</li>
+
+                            <li>The entry found covers a period which includes the time range specified. For example, the search for 70 BCE (specified as v70 in the query) also finds entries dealing with the period from 76 BCE to 60 BCE.</li>
+
+                            <li>The entry found covers a period included in the time range specified. For example, the search for 1800-1850 also finds entries dealing with 1800-1848.</li>
+
+                            <li>The entry found overlaps with the time range specified. For example, the search for 1517-1522 also finds entries dealing with 1520-1525.</li>
+
+                            <li>The entry found is linked with a subject heading describing a historical period which matches or overlaps with the time range specified. For example, the search for 30-100 finds all entries which are linked with the subject heading "Early Christianity".</li>
+                        </ul>
+                        <p>The entries found are sorted according to their proximity to the time range specified in the search query. Exact matches are listed first; the remaining entries are sorted according to their level of agreement with the period specified.</p>
+                        <p>To help you determine how relevant a given publication is for your search, the exact time range discussed in each publication is displayed in the list of results.</p>
+
+                        <a class="thumbnail" href="#" data-image-id="" data-toggle="modal" data-title="" data-caption="" data-image="<?=$this->imageLink('content_img/en/zeitraeume_eng.png')?>" data-target="#image-gallery">
+                            <img class="img-responsive" src="<?=$this->imageLink('content_img/en/zeitraeume_eng.png')?>" alt="<?=$this->transEscAttr('symbolic_image_table38');?>">
+                        </a>
+
+                        <p>Technically speaking, the search for time ranges works in a similar fashion to the search for Bible passages. <br />  If you are interested in the technical implementation of this search function, it is described in German at the following link: <a target="_blank" href="https://github.com/ubtue/tuefind/wiki/Times">https://github.com/ubtue/tuefind/wiki/Times</a></p>
+                        </div>
+                    </div>
+                    <label for="post-3" class="read-more-trigger"></label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end one block -->
+
+
+    <!-- one block -->
+    <div class="col-md-4 ix-panel-news">
+        <div class="panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    Search for Canon law passages
+                </h4>
+            </div>
+            <div class="panel-collapse">
+                <div class="panel-body">
+                    <input type="checkbox" class="read-more-state" id="post-2" />
+                    <div class="read-more-wrap cw-wrap-smoll">
+                        <p>The search for Canon law passages is also a special feature of IxTheo. It allows you to perform a targeted search for publications which discuss specific passages in the CIC/CCEO. You can search for a whole codex, parts of a codex, specific canons or paragraphs.</p>
+                        <div class="read-more-target">
+                            <p>To activate the search for Canon law passages, select the search category "Canon law passages" on the right-hand side of the search field.</p>
+                            <p>The following codices can be searched:</p>
+
+                            <ul>
+                                <li>CIC17 = Codex Iuris Canonici 1917</li>
+                                <li>CIC83 = Codex Iuris Canonici 1983</li>
+                                <li>CCEO = Codex Canonum Ecclesiarum Orientalium</li>
+                            </ul> 
+
+                            <p>Enter the passage you are looking for in the following manner:</p>
+                            <p>[Abbreviation of the Codex] [canon],[paragraph or range of paragraphs]</p>
+                            <p>Examples:</p>
+
+                            <ul>
+                                <li>CIC17 (search for literature on the CIC 1917 in general)</li>
+                                <li>CIC83 951 (search for literature on canon 951 of the CIC 1983)</li>
+                                <li>CCEO 916,5 (search for literature on canon 916, paragraph 5 of the CCEO)</li>
+                                <li>CIC83 1095,2-3 (search for literature on canon 1095, paragraphs 2 and 3 of the CIC 1983)</li>
+                            </ul> 
+
+                            <p>Once you have executed your search query, a list of publications is displayed. This list includes not only the entries which exactly match the passages you specified, but also all entries which overlap with it:</p>
+
+                            <ul>
+                                <li>Exact match: the entry found is identical to the passage specified. <br />
+								For example, the search for CIC83 951 results in a list of entries dealing with canon 951 in the Codex Iuris Canonici of 1983.</li>
+
+                                <li>The entry found includes the passage specified. <br />
+                                    For example, the search for CIC83 1095,3 also finds entries dealing with CIC83 1095,2-3.</li>
+
+                                <li>The passage in the query is part of the canon found. <br />
+                                    For example, the search for CCEO 916,5 also finds entries dealing with the whole canon 916 in the CCEO.</li>
+
+                                <li>The entry found is included in the passage specified. <br />
+                                    For example, the search for CCEO 1-322 also finds entries dealing only with CCEO 177-310.</li>
+                            </ul>
+
+                            <p>The entries found are sorted according to their proximity to the passage specified in the search query. Exact matches are listed first; the remaining entries are sorted according to their level of agreement with the passage specified.</p>
+                            <p>To help you determine how relevant a given publication is for your search, the exact passages discussed in each publication are displayed in the list of results.</p>
+
+                            <a class="thumbnail" href="#" data-image-id="" data-toggle="modal" data-title="" data-caption="" data-image="<?=$this->imageLink('content_img/en/kirchenrecht_eng.png')?>" data-target="#image-gallery">
+                                <img class="img-responsive" src="<?=$this->imageLink('content_img/en/kirchenrecht_eng.png')?>" alt="<?=$this->transEscAttr('symbolic_image_table39');?>">
+                            </a>
+
+                            <p>Technically speaking, the search for Canon law passages works in a similar fashion to the search for Bible passages. If you are interested in the technical implementation of this search function, it is described in German at the following link: <a target="_blank" href="https://github.com/ubtue/tuefind/wiki/Codices">https://github.com/ubtue/tuefind/wiki/Codices</a></p>
+                        </div>
+                    </div>
+                    <label for="post-2" class="read-more-trigger"></label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end one block -->
+ 
+    <!-- one block -->
+    <div class="col-md-6 ix-panel-news" id="klassifikation">
+        <div class="panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    IxTheo Classifications
+                </h4>
+            </div>
+            <div class="panel-collapse">
+                <div class="panel-body">
+                    <input type="checkbox" class="read-more-state" id="post-4" />
+                    <div class="read-more-wrap">
+                        <p>In IxTheo, numerous publications are indexed according to theological fields or areas of interest and are assigned a corresponding classification (e.g. HC for the New Testament or NBP for sacramentology). This allows you to restrict your search to publications covering these specific theological fields.</p>
+                        <div class="read-more-target">
+                            <p>You can find an overview of IxTheo classifications here:  <a href="<?=$this->url('content-page', ['page' => 'IxTheoClassification']) ?>#content">List of classifications</a>.</p>
+                            <p>On the "Advanced Search" page, a list of IxTheo classifications is displayed. You can select a classification by clicking on it. You can mark several classifications as a block by keeping the “Shift”-button pressed while selecting the top and bottom entries of the desired block. You can also mark several classifications by keeping the "command"-button (Apple) or the "control"-button (Windows) pressed while selecting the desired entries one by one.</p>
+                            <p>You can then start the search for your selection of IxTheo classifications by clicking on "Search".</p>
+
+                            <a class="thumbnail" href="#" data-image-id="" data-toggle="modal" data-title="" data-caption="" data-image="<?=$this->imageLink('content_img/en/klassifikation_eng.png')?>" data-target="#image-gallery">
+                                <img class="img-responsive" style="width: 150px;" src="<?=$this->imageLink('content_img/en/klassifikation_eng.png')?>" alt="<?=$this->transEscAttr('symbolic_image_table40');?>">
+                            </a>
+
+                        </div>
+                    </div>
+                    <label for="post-4" class="read-more-trigger"></label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end one block -->
+    <!-- one block -->
+    <div class="col-md-6 ix-panel-news">
+        <div class="panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    Search for Subject Headings and Keywords
+                </h4>
+            </div>
+            <div class="panel-collapse">
+                <div class="panel-body">
+                    <input type="checkbox" class="read-more-state" id="post-5" />
+                    <div class="read-more-wrap cw-wrap-long-smoll">
+                        <p>Numerous publications in IxTheo are indexed with subject headings and keywords. You can search specifically for these subjects.</p>
+                        <div class="read-more-target">
+                            <p>Enter the search term in the search field and leave the search category on "All Fields". The term will then be searched in all possible categories.</p>
+
+                            <p>The search category "Subject" can also be useful to perform a targeted search. In this case, the search will only include publications which were indexed with subject headings.</p>
+
+                            <a class="thumbnail" href="#" data-image-id="" data-toggle="modal" data-title="" data-caption="" data-image="<?=$this->imageLink('content_img/en/searchbar_eng.png')?>" data-target="#image-gallery">
+                                <img class="img-responsive" src="<?=$this->imageLink('content_img/en/searchbar_eng.png')?>" alt="<?=$this->transEscAttr('symbolic_image_table41');?>">
+                            </a>
+
+                        </div>
+                    </div>
+                    <label for="post-5" class="read-more-trigger"></label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end one block -->
+    <!-- one block -->
+    <div class="col-md-4 ix-panel-news" id="browsing">
+        <div class="panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    Browsing According to Topics
+                </h4>
+            </div>
+            <div class="panel-collapse">
+                <div class="panel-body">
+                    <input type="checkbox" class="read-more-state" id="post-6" />
+                    <div class="read-more-wrap">
+                        <p>The IxTheo topical browsing function allows you to get an overview of the different contexts in which a given keyword appears. You can find this browsing mode by clicking on "Browse" under the search field and then selecting "Browse by Subject".
+                        </p>
+                        <div class="read-more-target">
+
+                        <p>&nbsp;</p>
+
+                        <a class="thumbnail" href="#" data-image-id="" data-toggle="modal" data-title="" data-caption="" data-image="<?=$this->imageLink('content_img/en/browsing_options_eng.png')?>" data-target="#image-gallery">
+                            <img class="img-responsive" src="<?=$this->imageLink('content_img/en/browsing_options_eng.png')?>" alt="<?=$this->transEscAttr('symbolic_image_table42');?>">
+                        </a>
+
+                        <p>An additional search field then appears, in which you can enter your subject. It serves as the starting point of your browsing.</p>
+                        <p>Example 1: Enter the word "God". A list of subject series which include "God" then appears. Each series is a combination of subjects which were assigned together to at least one publication (the number of publications concerned is displayed to the left of the series). You can then see with which other subjects the subject "God" appears in the publications in question.</p>
+                        <p>Example 2: Enter the words "God" and "Bible". A list of subject series which include both keywords then appears.</p>
+
+                        <a class="thumbnail" href="#" data-image-id="" data-toggle="modal" data-title="" data-caption="" data-image="<?=$this->imageLink('content_img/en/keyword_combinations_eng.png')?>" data-target="#image-gallery">
+                            <img class="img-responsive" src="<?=$this->imageLink('content_img/en/keyword_combinations_eng.png')?>" alt="<?=$this->transEscAttr('symbolic_image_table43');?>">
+                        </a>
+
+                        <p>You can see which publications discuss a given series of subjects by clicking on "View records" on the right-hand side of the entry.</p>
+                        <p>You can also insert any subject into the search field or remove it by simultaneously pressing on the "Shift"-button and clicking on the subject in one of the series listed underneath the search field.</p>
+                        <p>If you modify the display language at the top right of the website, the subjects are then shown in the language you selected, provided these subjects can be found in our language concordance.</p>
+                        </div>
+                    </div>
+                    <label for="post-6" class="read-more-trigger"></label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end one block -->
+    <!-- one block -->
+    <div class="col-md-4 ix-panel-news">
+        <div class="panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    Browse the Catalog
+                </h4>
+            </div>
+            <div class="panel-collapse">
+                <div class="panel-body">
+                    <input type="checkbox" class="read-more-state" id="post-7" />
+                    <div class="read-more-wrap">
+                        <p>This browsing function makes it possible to browse according to various fields: Topic (subject heading), Author, DDC classification, IxTheo classification and Publisher. You can find this browsing mode by clicking on "Browse" under the search field and then selecting "Browse the Catalog".
+                        </p>
+                        <div class="read-more-target">
+                            <p>&nbsp;</p>
+
+                            <a class="thumbnail" href="#" data-image-id="" data-toggle="modal" data-title="" data-caption="" data-image="<?=$this->imageLink('content_img/en/browsing_options_eng.png')?>" data-target="#image-gallery">
+                                <img class="img-responsive" src="<?=$this->imageLink('content_img/en/browsing_options_eng.png')?>" alt="<?=$this->transEscAttr('symbolic_image_table44');?>">
+                            </a>
+                            
+                            <p>In a further step, you can filter the items you wish to browse by using other fields.</p>
+                            <p>For example, select "Author", then "By IxTheo Classification", then "HB Old Testament". You will then see a list of authors who have worked in the field of Old Testament research, sorted according to the number of their works catalogued in IxTheo.</p>
+
+                            <a class="thumbnail" href="#" data-image-id="" data-toggle="modal" data-title="" data-caption="" data-image="<?=$this->imageLink('content_img/en/refining_subject_browsing_eng.png')?>" data-target="#image-gallery">
+                                <img class="img-responsive" src="<?=$this->imageLink('content_img/en/refining_subject_browsing_eng.png')?>" alt="<?=$this->transEscAttr('symbolic_image_table45');?>.">
+                            </a>
+
+                        </div>
+                    </div>
+                    <label for="post-7" class="read-more-trigger"></label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end one block -->
+    <!-- one block -->
+    <div class="col-md-4 ix-panel-news">
+        <div class="panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    Browse Alphabetically
+                </h4>
+            </div>
+            <div class="panel-collapse">
+                <div class="panel-body">
+                    <input type="checkbox" class="read-more-state" id="post-8" />
+                    <div class="read-more-wrap">
+                        <p>This browsing option allows you to flick through an alphabetical list of topics, authors, titles or classifications. You can find this browsing mode by clicking on "Browse" under the search field and then selecting "Browse alphabetically".
+                        </p>
+                        <div class="read-more-target">
+                            <p>&nbsp;</p>
+                            
+                            <a class="thumbnail" href="#" data-image-id="" data-toggle="modal" data-title="" data-caption="" data-image="<?=$this->imageLink('content_img/en/browsing_options_eng.png')?>" data-target="#image-gallery">
+                                <img class="img-responsive" src="<?=$this->imageLink('content_img/en/browsing_options_eng.png')?>" alt="<?=$this->transEscAttr('symbolic_image_table46');?>">
+                            </a>
+
+                            <p>After you’ve selected the browsing category (Topic, Author, Title or LCC call number), enter the letter at which you would like to start to browse.</p>
+                            <p>Example 1: Select "By Author" and enter "Z" next to "starting from". You will then see a list of all authors whose name starts with the letter "Z".</p>
+                            <p>Example 2: Select "By Title" and enter "Tr" next to "starting from". You will then see a list of all the titles which start with the letters "Tr".</p>
+                          
+                            <a class="thumbnail" href="#" data-image-id="" data-toggle="modal" data-title="" data-caption="" data-image="<?=$this->imageLink('content_img/en/Browse_alphabetically_eng.png')?>" data-target="#image-gallery">
+                                <img class="img-responsive" src="<?=$this->imageLink('content_img/en/Browse_alphabetically_eng.png')?>" alt="<?=$this->transEscAttr('symbolic_image_table47');?>.">
+                            </a>
+
+                        </div>
+                    </div>
+                    <label for="post-8" class="read-more-trigger"></label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end one block -->
+</div>
+
+<style type="text/css">
+    .ix-panel-news .read-more-wrap.cw-wrap-smoll {
+        min-height: 180px;
+    }
+    .ix-panel-news .read-more-wrap.cw-wrap-long-smoll {
+        min-height: 132px;
+    }
+    .ix2-content-ul1 {
+        margin-bottom: 10px;
+    }
+    .ix2-content-ul1 li {
+        margin: 10px 0;
+    }
+    .panel-default {
+        margin-bottom: 20px;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        -webkit-box-shadow: 0 1px 1px rgba(0,0,0,.05);
+        box-shadow: 0 1px 1px rgba(0,0,0,.05);
+    } 
+    .panel-heading {
+        padding: 10px 15px;
+        border-bottom: 1px solid transparent;
+        border-top-left-radius: 3px;
+        border-top-right-radius: 3px;
+    }
+    .panel-collapse p {
+        text-align: justify !important;
+    }
+    .read-more-state ~ .read-more-trigger:before {
+        content: 'More';
+    }
+
+    .read-more-state:checked ~ .read-more-trigger:before {
+        content: 'Less';
+    }
+</style>

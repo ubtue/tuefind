@@ -2,7 +2,7 @@
 
 namespace TueFind\Captcha;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 class ImageFactory extends \VuFind\Captcha\ImageFactory
 {

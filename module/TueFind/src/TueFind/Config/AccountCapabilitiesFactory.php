@@ -2,7 +2,7 @@
 
 namespace TueFind\Config;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 class AccountCapabilitiesFactory extends \VuFind\Config\AccountCapabilitiesFactory
 {

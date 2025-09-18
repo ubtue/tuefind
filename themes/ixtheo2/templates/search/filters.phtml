@@ -1,5 +1,4 @@
 <?php
-
   if (!isset($this->params)) {
     // No current search, use last search in memory
     $params = $this->searchMemory()->getLastSearchParams($this->searchClassId);
@@ -12,6 +11,7 @@
   $options = $this->searchOptions($this->searchClassId);
   $hasDefaultsApplied = $params->hasDefaultsApplied();
   $filterCount = $this->searchbox()->getFilterCount($this->checkboxFilters, $this->filterList);
+  $fromSearchMemory ??= false;
 
   // Determine whether the only filters applied are the default ones; this controls
   // when we display or hide the reset button:
@@ -31,7 +31,7 @@
     <?php if ($filter['selected']): ?>
       <span class="filter-value">
         <?php
-          $removeLink = isset($urlQuery)
+        $removeLink = isset($urlQuery) && !$fromSearchMemory
             ? $urlQuery->removeFilter($filter['filter'])
             : $this->searchMemory()->getEditLink(
               $this->searchClassId, 
@@ -56,7 +56,7 @@
         <div class="search-filter-dropdown dropdown">
           <?php $dropdown = true; ?>
           <?php $safeId = preg_replace('/[^a-zA-Z0-9]/', '', $field); ?>
-          <button id="dropdown-toggle-<?=$safeId?>" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+          <button id="dropdown-toggle-<?=$safeId?>" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown">
             <?=$this->transEsc('filter_toggle_entries', ['%%count%%' => count($data)])?>
           </button>
           <ul class="dropdown-menu" role="menu" aria-labelledby="dropdown-toggle-<?=$safeId?>">
@@ -94,7 +94,7 @@
             <?=$this->escapeHtml($value['displayText'])?>
           </span>
           <?php
-            $removeLink = isset($this->urlQuery)
+            $removeLink = isset($this->urlQuery) && !$fromSearchMemory
               ? $urlQuery->removeFacet($value['field'], $value['value'], $value['operator'])
               : $this->searchMemory()->getEditLink($this->searchClassId, 'removeFacet', $value);
           ?>
@@ -117,33 +117,33 @@
   <?php
     $resetLink = null;
     if (!$onlyDefaultsApplied) {
-      $resetLink = isset($urlQuery)
+      $resetLink = isset($urlQuery) && !$fromSearchMemory
         ? $urlQuery->removeAllFilters()->resetDefaultFilters()
         : $this->searchMemory()->getEditLink($this->searchClassId, 'removeAllFilters', 1);
     }
   ?>
   <?php // Normal view ?>
   <div class="active-filters hidden-xs">
-    <span class="sr-only"><?=$this->transEscAttr('page_reload_on_deselect_hint') ?></span>
-      <?php if ($resetLink && $options->getRetainFilterSetting()): ?>
+    <span class="sr-only"><?=$this->transEsc('page_reload_on_deselect_hint') ?></span>
+    <?php if ($resetLink && $options->shouldDisplayResetFilters()): ?>
         <a class="reset-filters-btn" href="<?=$resetLink?>"><?=$this->transEsc('reset_filters_button')?></a>
     <?php elseif ($advancedSearch): ?>
       <p class="adv_search_filters"><?=$this->transEsc('adv_search_filters')?>:</p>
       <?php endif; ?>
     <div class="filters">
-      <span class="sr-only"><?=$this->transEscAttr('applied_filters') ?></span>
+      <span class="sr-only"><?=$this->transEsc('applied_filters') ?></span>
       <?=$filters ?>
     </div>
     <div class="clearfix"></div>
   </div>
   <?php // Narrow view ?>
   <div class="active-filters visible-xs">
-    <span class="sr-only"><?=$this->transEscAttr('page_reload_on_deselect_hint') ?></span>
+    <span class="sr-only"><?=$this->transEsc('page_reload_on_deselect_hint') ?></span>
     <div class="filters-toggle-bar">
-      <?php if ($resetLink && $options->getRetainFilterSetting()): ?>
+      <?php if ($resetLink && $options->shouldDisplayResetFilters()): ?>
         <a class="reset-filters-btn" href="<?=$resetLink?>"><?=$this->transEsc('reset_filters_button')?></a>
-      <?php endif; ?>
-      <div class="filters-toggle collapsed" data-toggle="collapse" data-target="#active-filters-mobile">
+<?php endif; ?>
+      <div class="filters-toggle collapsed" data-bs-toggle="collapse" data-bs-target="#active-filters-mobile">
         <?=$this->transEsc('show_filters_html', ['%%count%%' => $filterCount])?>
       </div>
       <div class="clearfix"></div>
@@ -154,14 +154,3 @@
     <div class="clearfix"></div>
   </div>
 <?php endif; ?>
-
-<style>
-  .ix2-searchForm .active-filters {
-    display: block;
-    margin-block-start: 5px;
-  }
-  .ix2-searchForm .reset-filters-btn {
-    white-space: nowrap;
-    margin-top: 0;
-  }
-</style>

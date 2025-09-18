@@ -124,7 +124,7 @@ class KfL
         // to errors in other actions in the same controller, which should still
         // be possible if the user is not logged in.
         $user = $this->authManager->getUserObject();
-        if ($user)
+        if (!$user)
             throw new \Exception('Could not generate KfL Frontend User Token, user is not logged in!');
 
         if ($user->isLicenseAccessLocked())

@@ -28,6 +28,7 @@ CREATE TABLE tuefind_rss_feeds (
     id INT UNSIGNED NOT NULL AUTO_INCREMENT,
     feed_name VARCHAR(200) NOT NULL,
     subsystem_types SET('krimdok', 'ixtheo', 'relbib') NOT NULL,
+    type enum('news','calendar') NOT NULL DEFAULT 'news',
     feed_url VARCHAR(1000) NOT NULL,
     website_url VARCHAR(1000) NOT NULL,
     title_suppression_regex VARCHAR(200) DEFAULT NULL,
@@ -38,7 +39,8 @@ CREATE TABLE tuefind_rss_feeds (
     CONSTRAINT id_constraint UNIQUE (id),
     CONSTRAINT feed_name_constraint UNIQUE (feed_name),
     CONSTRAINT feed_url_constraint UNIQUE (feed_url(768)),
-    CONSTRAINT website_url_constraint UNIQUE (website_url(768))
+    CONSTRAINT website_url_constraint UNIQUE (website_url(768)),
+    KEY `type_index` (`type`)
 ) DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_bin;
 
 

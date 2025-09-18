@@ -49,7 +49,7 @@ class RecordDataFormatterFactory extends \VuFind\View\Helper\Root\RecordDataForm
 
     protected function addInterlibraryLoan(&$spec) {
         $spec->setTemplateLine(
-            'Fernleihe', 'showInterlibraryLoan', 'data-interlibraryLoan.phtml'
+            'Interlibrary_Loan', 'showInterlibraryLoan', 'data-interlibraryLoan.phtml', ['translate' => true]
         );
     }
 
@@ -74,7 +74,7 @@ class RecordDataFormatterFactory extends \VuFind\View\Helper\Root\RecordDataForm
         // We use the "New Title" display text here because we can re-use
         // vufind-org translations for it.
         $spec->setTemplateLine(
-            'New Title', 'getFollowingPPNAndTitle', 'data-following_title.phtml'
+            'New Title', 'getFollowingPPNsAndTitles', 'data-following_title.phtml'
         );
     }
 
@@ -91,7 +91,7 @@ class RecordDataFormatterFactory extends \VuFind\View\Helper\Root\RecordDataForm
 
     protected function addPrecedingTitle(&$spec) {
         $spec->setTemplateLine(
-            'Previous Title', 'getPrecedingPPNAndTitle', 'data-preceding_title.phtml'
+            'Previous Title', 'getPrecedingPPNsAndTitles', 'data-preceding_title.phtml'
         );
     }
 

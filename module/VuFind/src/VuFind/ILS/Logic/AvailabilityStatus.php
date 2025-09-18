@@ -50,13 +50,24 @@ class AvailabilityStatus implements AvailabilityStatusInterface
     protected int $availability;
 
     /**
+     * Item visibility in holdings tab
+     *
+     * @var bool
+     */
+    protected bool $visibilityInHoldingsTab = true;
+
+    /**
      * Constructor
      *
-     * @param int|bool $availability Availability
-     * @param string   $status       Status Description
+     * @param int|bool $availability           Availability
+     * @param string   $status                 Status Description
+     * @param array    $extraStatusInformation Extra Status Information
      */
-    public function __construct(int|bool $availability, protected string $status = '')
-    {
+    public function __construct(
+        int|bool $availability,
+        protected string $status = '',
+        protected array $extraStatusInformation = []
+    ) {
         $this->availability = (int)$availability;
     }
 
@@ -89,8 +100,20 @@ class AvailabilityStatus implements AvailabilityStatusInterface
      */
     public function isVisibleInHoldings(): bool
     {
-        // Can be overridden if the status should not be visible in the holdings tab,
-        return true;
+        return $this->visibilityInHoldingsTab;
+    }
+
+    /**
+     * Set visibility in holdings tab.
+     *
+     * @param bool $visibilityInHoldingsTab Visibility toggle
+     *
+     * @return AvailabilityStatus
+     */
+    public function setVisibilityInHoldings(bool $visibilityInHoldingsTab): AvailabilityStatus
+    {
+        $this->visibilityInHoldingsTab = $visibilityInHoldingsTab;
+        return $this;
     }
 
     /**
@@ -113,6 +136,30 @@ class AvailabilityStatus implements AvailabilityStatusInterface
             default:
                 return 'Uncertain';
         }
+    }
+
+    /**
+     * Get extra status information.
+     *
+     * @return array
+     */
+    public function getExtraStatusInformation(): array
+    {
+        return $this->extraStatusInformation;
+    }
+
+    /**
+     * Get status description tokens. Used when status description is being translated.
+     *
+     * @return array
+     */
+    public function getStatusDescriptionTokens(): array
+    {
+        $tokens = [];
+        foreach ($this->getExtraStatusInformation() as $key => $value) {
+            $tokens['%%' . $key . '%%'] = $value;
+        }
+        return $tokens;
     }
 
     /**

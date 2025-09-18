@@ -15,7 +15,7 @@
     <field name="author_and_id_facet" type="textFacet" indexed="true" stored="true" multiValued="true"/>
     <field name="container_ids_and_titles" type="string" indexed="true" stored="true" multiValued="true"/>
     <field name="end_page" type="long" indexed="true" stored="true" multiValued="false"/>
-    <field name="following_ppn_and_title" type="string" indexed="true" stored="true" multiValued="false"/>
+    <field name="following_ppns_and_titles" type="string" indexed="true" stored="true" multiValued="true"/>
     <field name="has_unpaywall_entry" type="boolean" indexed="true" stored="true" multiValued="false"/>
     <field name="ids" type="string" indexed="true" stored="true" multiValued="true"/>
     <field name="is_open_access" type="string" indexed="true" stored="true" multiValued="false"/>
@@ -28,7 +28,7 @@
     <field name="local_notes_1" type="textProper" indexed="true" stored="true" multiValued="true"/>
     <field name="mediatype" type="string" indexed="true" stored="true" multiValued="true"/>
     <field name="pages" type="string" indexed="true" stored="true" multiValued="false"/>
-    <field name="preceding_ppn_and_title" type="string" indexed="true" stored="true" multiValued="false"/>
+    <field name="preceding_ppns_and_titles" type="string" indexed="true" stored="true" multiValued="true"/>
     <field name="record_selector" type="string" indexed="true" stored="true" multiValued="true"/>
     <field name="rvk" type="textFacet" indexed="true" stored="true" multiValued="true"/>
     <field name="rs" type="string" indexed="true" stored="true" multiValued="true"/>

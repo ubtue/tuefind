@@ -12,20 +12,24 @@ AllFields:
 MainHeading:
   DismaxFields:
     - heading_search^500
+    - use_for_keywords^400
   FilterQuery: "title_count_krimdok: [1 TO *]"
 
 MainHeadingPerson:
   DismaxFields:
     - heading_search^500
+    - use_for_keywords^400
   FilterQuery: "type: person"
 
 MainHeadingCorporate:
   DismaxFields:
     - heading_search^500
+    - use_for_keywords^400
   FilterQuery: "type: corporate"
 
 MainHeadingMeeting:
   DismaxFields:
     - heading_search^500
+    - use_for_keywords^400
   FilterQuery: "type: meeting"
 

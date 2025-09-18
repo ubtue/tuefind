@@ -5,7 +5,22 @@
             <h4>KrimDok</h4>
         </div>
     </a>
-    <div class="tf-result-link-block" style="margin-top:100px; margin-right:15px;">
-        <a href="<?=$this->url('content-page', ['page' => 'news_fid']) ?>" class="btn btn-default btn-panel-more btn-panel-more-new" role="button" ><?=$this->transEsc('Neuigkeiten')?></a>
+    <div class="tf-result-link-block">
+        <a class="yt-boards" target="_blank" href="https://www.youtube.com/watch?v=FL3yDlcvO0s&list=PLs76r5p4LoGzWTyvj06MI2VLysyXuVUYn"><img src="<?=$this->imageLink('youtubeBoard.png') ?>" class="tf-youtubeBoard"/><br />Video-Tutorials</a>
+        <a href="<?=$this->url('content-page', ['page' => 'news_fid']) ?>" class="btn btn-default btn-panel-more btn-panel-more-new" role="button" ><?=$this->transEsc('News')?></a>
     </div>
 </div>
+
+<style>
+    .tf-result-link-block .yt-boards {
+        float: left;
+        margin-left: 10px;
+    }
+    .tf-result-link-block .yt-boards img {
+        height: 110px;
+    }
+    .tf-result-link-block .btn-panel-more-new {
+        margin-top: 92px;
+        margin-right: 20px;
+    }
+</style>

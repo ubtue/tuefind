@@ -1,6 +1,6 @@
 <div class="row">
-  <div class="col-xs-12 col-sm-4">
-    <h5>Ein Dienst der</h5>
+  <div class="col-xs-12 col-sm-4 col-4 cw-text-center">
+    <h5><?=$this->translate("Service of")?></h5>
     <a target="_blank" href="//www.uni-tuebingen.de">
       <img src="<?=$this->imageLink('Logo_Universitaet_Tuebingen.svg') ?>" alt="Universität T&uuml;bingen" width="260"/>
     </a>
@@ -20,27 +20,32 @@
       <img src="<?=$this->imageLink('e-theologische-fak.svg') ?>" alt="Evangelisch-Theologische Fakult&auml;t" width="320"/>
     </a>
   </div>
-  <div class="col-xs-12 col-sm-4">
-    <h5>In Zusammenarbeit mit</h5>
-    <a target="_blank" href="https://www.uibk.ac.at/theol/index.html.de">
-      <img src="<?=$this->imageLink('Universitaet-innsbruck-logo-rgb-farbe.svg.png') ?>" width="170" alt="BILDI">
-      <br />
-      <span>Katholisch-theologische Fakultät</span>
-    </a>
-    <br />
-    <a target="_blank" href="https://www.uni-muenster.de/de/">
-      <img src="<?=$this->imageLink('uni-munster.png') ?>" width="170" alt="Universität Münster">
-      <br />
-      <span>Universität Münster</span>
-    </a>
-    <br />
-    <a target="_blank" href="https://www.uni-muenster.de/FB2/ikr/">
-      <span>Institut für Kanonisches Recht</span>
-    </a>
 
+  <div class="col-xs-12 col-sm-4 col-4 cw-text-center">
+    <h5><?=$this->translate("In collaboration with")?></h5>
+    <div class="col-6">
+      <a target="_blank" href="https://www.uibk.ac.at/theol/index.html.de">
+        <img src="<?=$this->imageLink('Universitaet-innsbruck-logo-rgb-farbe.svg.png') ?>" width="170" alt="BILDI">
+          <br />
+        <span>Katholisch-theologische Fakultät</span>
+      </a>
+    </div>
+    <hr class="hr-support" />
+    <div class="col-6">
+      <a target="_blank" href="https://www.uni-muenster.de/de/">
+        <img src="<?=$this->imageLink('uni-munster.png') ?>" width="170" alt="Universität Münster">
+        <br />
+        <span>Universität Münster</span>
+      </a>
+      <br />
+      <a target="_blank" href="https://www.uni-muenster.de/FB2/ikr/">
+        <span>Institut für Kanonisches Recht</span>
+      </a>
+    </div>
   </div>
-  <div class="col-xs-12 col-sm-4">
-    <h5>Gefördert durch</h5>
+
+  <div class="col-xs-12 col-sm-4 col-4 cw-text-center">
+    <h5><?=$this->translate("Funded by")?></h5>
     <a target="_blank" href="//dfg.de">
       <img src="<?=$this->imageLink('dfg_logo_schriftzug.svg') ?>" alt="DFG" width="250" height="31" />
     </a>

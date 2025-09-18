@@ -1,6 +1,6 @@
 <?php
-$this->headScript()->appendFile('vendor/chart.js');
-$this->headScript()->appendFile('explain.js');
+$this->assetManager()->appendScriptLink('vendor/chart.js');
+$this->assetManager()->appendScriptLink('explain.js');
 
 $explanation = $this->explanation;
 $recordId = $explanation->getRecordId();
@@ -96,13 +96,28 @@ $link = $this->recordLinker()->getUrl($this->driver);
       <br>
     </div>
   <?php endif; ?>
+  <button
+    class="btn btn-default raw-explanation-btn"
+    type="button"
+    data-toggle="collapse"
+    data-target="#raw-explanation"
+    aria-expanded="false"
+    aria-controls="raw-explanation"
+  >
+    <?=$this->transEsc('explain_show_raw')?> <?=$this->icon('dropdown-caret')?>
+  </button>
+  <div id="raw-explanation" class="collapse">
+    <pre class="card card-body">
+      <?=$explanation->getRawExplanation()?>
+    </pre>
+  </div>
   <?php if ($totalScore > 0): ?>
     <?php
       $values = implode(';', $shortExplain);
       $labels = implode(';', $shortExplainLabels);
     ?>
     <div class="charts" >
-      <?php if(!empty($values) && !empty($labels)): ?>
+      <?php if (!empty($values) && !empty($labels)): ?>
         <div class="pie-chart-container">
           <canvas id="js-explain-pie-chart"
              class="explain-chart"
@@ -112,7 +127,7 @@ $link = $this->recordLinker()->getUrl($this->driver);
           ></canvas>
         </div>
       <?php endif; ?>
-      <?php if($maxScore > 0): ?>
+      <?php if ($maxScore > 0): ?>
         <?php
           $data = [
             ['item'],

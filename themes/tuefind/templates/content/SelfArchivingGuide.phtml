@@ -1,0 +1,32 @@
+<?php
+    $tuefind = $this->tuefind();
+    $currentSystem = $tuefind->getTueFindType();
+    $selfArchivingEmail = $tuefind->getSelfArchivingEmail();
+
+    // Set up page title:
+    $this->headTitle($this->translate('Self Archiving'));
+
+    // Set up breadcrumbs:
+    $this->layout()->breadcrumbs = '<li><a href="' . $this->url('myresearch-home') . '">' . $this->transEsc('Your Account') . '</a></li>';
+?>
+
+<?=$this->component('show-account-menu-button')?>
+
+<div class="<?=$this->layoutClass('mainbody')?>">
+  <h2>Report New Publication</h2>
+  <p>Would you like to report a publication which is not listed in <?=$currentSystem;?>?</p>
+  <p>Here are the appropriate forms to report your publication:</p>
+  <ul>
+      <li><a href="/Feedback/Form/SelfArchivingAufsatz">Article in a journal or in a collection of essays</a></li>
+      <li><a href="/Feedback/Form/SelfArchivingRezension">Review</a></li>
+      <li><a href="/Feedback/Form/SelfArchivingLexikonartikel">Article in a lexicon</a></li>
+      <li><a href="/Feedback/Form/SelfArchivingMonographie">Monograph or essay collection</a></li>
+  </ul>
+  <p>You should be able to find the new entry in <?=$currentSystem;?> in a few days. Afterwards, you can also use our Self-Archiving Service and upload a digital copy (PDF file) of any of your own publications.</p>
+  <p>We will contact you if we have any questions during the processing of your request.</p>
+  <p>If you would like to report a publication of another type, please send us an e-mail to: <a href="mailto:<?=$selfArchivingEmail;?>"><?=$selfArchivingEmail;?></a></p>
+</div>
+
+<div class="<?=$this->layoutClass('sidebar')?>" id="myresearch-sidebar" role="navigation" aria-label="<?=$this->transEsc('account_menu_label')?>">
+  <?=$this->accountMenu()->render('SelfArchiving')?>
+</div>

@@ -1,0 +1,93 @@
+<?php
+    $this->assetManager()->appendStyleLink('vendor/fontawesome-free-6/awesome.css');
+    $this->assetManager()->appendStyleLink('vendor/fontawesome-free-6/solid.css');
+
+    $partners = [
+        //Bibliographien
+        [   'lon' => '9.931387440185757',
+            'lat' => '49.796449754346156',
+            'group' => 'bibliographien',
+            'popup' => '<div><font color="black"><p><a href="https://www.uibk.ac.at/bildi/" target="_blank">Biblische Literaturdokumentation Innsbruck (BILDI)</a></p><p>Karl-Rahner-Platz 1<br />
+            6020 Innsbruck<br />
+            Österreich
+            </p></font></div>',
+            'name' => 'Biblische Literaturdokumentation Innsbruck (BILDI)'
+        ],
+        [   'lon' => '9.931387440185757',
+            'lat' => '49.796449754346156',
+            'group' => 'bibliographien',
+            'popup' => '<div><font color="black"><p><a href="https://www.augustinus.de/" target="_blank">Augustinus-Bibliographie</a></p><p>Dominikanerplatz 4<br />
+            97070 Würzburg</p></font></div>',
+            'name' => 'Augustinus-Bibliographie'
+        ],
+        [   'lon' => '6.584317040044625',
+            'lat' => '46.52381424741675',
+            'group' => 'bibliographien',
+            'popup' => '<div><font color="black"><p><a href="https://www.unil.ch/irsb/fr/home/menuguid/bibil.html" target="_blank">Bibliographie biblique informatisée de Lausanne (BiBIL)</a></p><p>Institut romand des sciences bibliques<br />
+            Anthropole<br />
+            1015 Lausanne<br />
+            Suisse</p></font></div>',
+            'name' => 'Bibliographie biblique informatisée de Lausanne (BiBIL)'
+        ],
+        [   'lon' => '11.398208440076123',
+            'lat' => '47.269034873840944',
+            'group' => 'bibliographien',
+            'popup' => '<div><font color="black"><p><a href="https://www.uibk.ac.at/bildi/" target="_blank">Biblische Literaturdokumentation Innsbruck (BILDI)</a></p><p>Karl-Rahner-Platz 1<br />
+            6020 Innsbruck<br />
+            Österreich</p></font></div><div><font color="black"><p><a href="https://www.uibk.ac.at/praktheol/kaldi/" target="_blank">Kanonistische Literaturdokumentation Innsbruck (KALDI)</a></p><p>Institut für Praktische Theologie<br />
+            Karl-Rahner-Platz 1<br />
+            6020 Innsbruck<br />
+            Österreich</p></font></div>',
+            'name' => 'Biblische Literaturdokumentation Innsbruck (BILDI) - Kanonistische Literaturdokumentation Innsbruck (KALDI)'
+        ],
+        [   'lon' => '7.6236567979551655',
+            'lat' => '51.9626552214986',
+            'group' => 'bibliographien',
+            'popup' => '<div><font color="black"><p><a href="https://www.uni-muenster.de/FB2/ikr/datenbank/index.shtml" target="_blank">Datenbank Kanonisches Recht (DaKaR)</a></p><p>Institut für Kanonisches Recht<br />
+            Domplatz 23<br />
+            48143 Münster</p></font></div>',
+            'name' => 'Datenbank Kanonisches Recht (DaKaR)'
+        ]
+    ];
+    $partners = json_encode($partners);
+?>
+
+<section class="cw-p-2">
+    <div id="map" class="map"></div>
+    <?php $jsSnippet = <<<EOD
+    $(function () {
+        let partnersArray = {$partners};
+        IxTheo2.DrawMap('bibliographien',partnersArray);
+    });
+    EOD;
+    ?>
+<?=$this->assetManager()->outputInlineScriptString($jsSnippet)?>
+</section>
+<div class="cw-row">
+    <div class="cw-col-lg-12 cw-ml-lg-4">
+        <div class="cw-text-block"><br>
+            <h1 class="cw-h1">Bibliographies</h1>
+
+            <p>The Index Theologicus (IxTheo) is produced in cooperation with other bibliographies. Our cooperation partners contribute to the cataloguing and indexing of new theological literature. All the literature which was exclusively available in these individual bibliographies is now also searchable in IxTheo.</p>
+            <p>IxTheo currently cooperates with the following bibliographies:</p>
+            <ul>
+                <li>Augustinus-Bibliographie (Würzburg)</li>
+                <li>BiBIL (Lausanne) [in development]</li>
+                <li>BILDI (Innsbruck)</li>
+                <li>DaKaR (Münster)
+                    <ul>
+                        <li>Chair of Church Law and of the history of Church Law at Katholische Universität Eichstätt-Ingolstadt</li>
+                        <li>Chair of Church Law and of the history of Church Law at the University  of Freiburg</li>
+                        <li>Generalvikariat of the Archbishopric of Hamburg</li>
+                        <li>Seminar for Church Law, the History of Church Law and constitutional law on state-church relations at the Johannes Gutenberg University Mainz</li>
+                        <li>Institute of Canonical Law at the University of Münster</li>
+                        <li>Generalvikariat of the Bishopric of Osnabrück</li>
+                        <li>Department of Church Law at the Catholic Theological Faculty of the University  of Tübingen</li>
+                    </ul>
+                </li>
+                <li>KALDI (Innsbruck)</li>
+            </ul>
+            <p>IxTheo is always interested in new cooperations with other theological bibliographies. If you are interested in working with us, please contact us at: <a href="mailto:ixtheo@ub.uni-tuebingen.de">ixtheo@ub.uni-tuebingen.de</a>.</p>
+        </div>
+    </div>
+</div>

@@ -10,7 +10,14 @@ class SolrMarc extends SolrDefault
     // ISIL to e.g. determine the correct default local data block. Should be overridden in child classes.
     const ISIL_DEFAULT = 'DE-21'; // Universitätsbibliothek der Eberhard Karls Universität
 
-    use Feature\MarcAdvancedTrait;
+    use Feature\MarcAdvancedTrait {
+            \TueFind\RecordDriver\Feature\MarcAdvancedTrait::getFormats as getMarcTraitFormats;
+            \TueFind\RecordDriver\Feature\MarcAdvancedTrait::getTitle as getMarcTraitTitle;
+            \TueFind\RecordDriver\Feature\MarcAdvancedTrait::getLanguages as getMarcTraitLanguages;
+            \TueFind\RecordDriver\Feature\MarcAdvancedTrait::getISSNs as getMarcTraitISSNs;
+            \TueFind\RecordDriver\Feature\MarcAdvancedTrait::getISBNs as getMarcTraitISBNs;
+            // c.f. the overwritten functions below
+    }
 
     protected $marcReaderClass = \TueFind\Marc\MarcReader::class;
 
@@ -92,13 +99,9 @@ class SolrMarc extends SolrDefault
         $roles = [];
         $authors = $this->getMarcReader()->getFieldsDelimiter('100|700');
         foreach ($authors as $author) {
-            $subfield_a = $this->getSubfieldArray($author, ['a']);
-            if (!empty($authorName) && isset($authorName[0]) && $authorName[0]  == $author_heading) {
-                $subfields_4 = $this->getSubfieldArray($author, ['4']);
-                foreach ($subfields_4 as $subfield_4) {
-                    $roles[] = $subfield_4[0];
-                }
-                break;
+            $authorName = trim($this->getSubfield($author, 'a'))." ".trim($this->getSubfield($author, 'd'));
+            if ($authorName == $author_heading) {
+                return $this->getSubfields($author, '4');
             }
         }
         return $roles;
@@ -706,4 +709,10 @@ class SolrMarc extends SolrDefault
         return $this->getMarcReader()->getRawMarcRecords();
     }
 
+    // Needed to overcome MarcBasicTrait overwriting for specific functions
+    public function getPrimaryAuthors() { return parent::getPrimaryAuthors(); }
+    public function getFormats() { return parent::getFormats(); }
+    public function getLanguages() { return parent::getLanguages(); }
+    public function getTitle() { return parent::getTitle(); }
+    public function getISSNs() { return parent::getISSNs(); }
 }

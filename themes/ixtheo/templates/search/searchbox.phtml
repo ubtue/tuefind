@@ -30,6 +30,8 @@
 
     $routeParams = $tuefind->getRouteParams();
 
+    $isNewItemActiveClass = $tuefind->isNewItem($this->searchClassId) ? 'isNewItemActiveClass': '';
+
     // Load search actions and settings (if any):
     $keyboardLayouts = $this->searchbox()->getKeyboardLayouts();
     $handlers = $this->searchbox()->getHandlers(
@@ -53,6 +55,7 @@
     $showFilters = $filterDetails && ($results || $options->getRetainFilterSetting());
 ?>
 <?php $tabConfig = $this->searchTabs()->getTabConfig($this->searchClassId, $this->lookfor, $this->searchIndex, $this->searchType, $hiddenFilters); ?>
+<?php $resetNewItemsURL = (isset($tabConfig['tabs'][0])) ? $tabConfig['tabs'][0]['url'] : ''; ?>
 <?php if ($this->searchType == 'advanced'): ?>
   <div class="navbar-form navbar-left flip">
     <?php $tabs = $this->context($this)->renderInContext('search/searchTabs', ['searchTabs' => $tabConfig['tabs'], 'showCounts' => false]); ?>
@@ -82,7 +85,7 @@
   <div class="keyboard-box">
     <div class="simple-keyboard"></div>
   </div>
-  <form id="searchForm" class="searchForm navbar-form navbar-left flip tuefind-event-searchForm-on-submit" method="get" action="<?=$this->url($basicSearch)?>" name="searchForm" autocomplete="off">
+  <form id="searchForm" class="searchForm navbar-form navbar-left flip tuefind-event-searchForm-on-submit <?=$tuefind->getTueFindSubsystem()."-searchForm";?> <?=$isNewItemActiveClass?>" method="get" action="<?=$this->url($basicSearch)?>" name="searchForm" autocomplete="off">
     <?= $this->context($this)->renderInContext('search/searchTabs', ['searchTabs' => $tabConfig['tabs'], 'hiddenFilters' => $hiddenFilters, 'showCounts' => $tabConfig['showCounts']]); ?>
     <div class="searchForm-inputs">
       <?php
@@ -96,6 +99,7 @@
           'aria-label' => $this->translate('search_terms'),
         ];
         if ($placeholder = $this->searchbox()->getPlaceholderText($tabConfig['selected']['id'] ?? $this->searchClassId)) {
+          if(!empty($isNewItemActiveClass)) { $placeholder = 'Search in New items'; }
           $searchboxAttributes['placeholder'] = $this->translate($placeholder);
         }
         if ($this->searchbox()->autocompleteEnabled($this->searchClassId)) {
@@ -243,7 +247,9 @@
         </ul>
       </div>
 
-      <button class="ix-under-button"><a href="<?=$this->url('search-newitem')?>" class="advanced-search-link btn btn-link" rel="nofollow"><?=$this->transEsc('New Items')?></a></button>
+      <button class="ix-under-button <?=$isNewItemActiveClass?>"><a href="<?=$this->url('search-newitem')?>" class="advanced-search-link btn btn-link" rel="nofollow"><?=$this->transEsc('New Items')?></a></button>
+      <?php if (!empty($isNewItemActiveClass)): ?><a href="<?=$resetNewItemsURL;?>"><span class="fa fa-times"></span></a><?php endif; ?>
+
     </div>
     <?=$this->context($this)->renderInContext(
       'search/filters.phtml',

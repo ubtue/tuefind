@@ -1,35 +1,36 @@
 <?php
-  $form = $this->form;
-  $form->prepare();
+$form = $this->form;
+$form->prepare();
 
-  $title = $form->getTitle();
-  $title = !empty($title)
-    ? $this->translate($title) : null;
+$title = $form->getTitle();
+$title = !empty($title)
+  ? $this->translate($title) : null;
 
-  $formUrl = $this->url('feedback-form', ['id' => $this->formId]);
-  $form->setAttribute('action', $formUrl);
-  $form->setAttribute('class', 'dynamic-form');
-  $form->setAttribute('method', 'post');
+$formUrl = $this->url('feedback-form', ['id' => $this->formId]);
+$form->setAttribute('action', $formUrl);
+$formClass = "dynamic-form ".$this->formId;
+$form->setAttribute('class', $formClass);
+$form->setAttribute('method', 'post');
 
-  $translateParams = ['%%TueFindType%%' => $this->tuefind()->getTueFindType(),
-                      '%%FIDType%%' => $this->tuefind()->getTueFindFID()];
+$translateParams = ['%%TueFindType%%' => $this->tuefind()->getTueFindType(),
+                    '%%FIDType%%' => $this->tuefind()->getTueFindFID()];
 
-  $help = $form->getHelp();
-  $helpPre = $helpPost = null;
-  $helpPre = isset($help['pre']) ? $form->getDisplayString($help['pre'], null, $translateParams) : null;
-  $helpPost = isset($help['post']) ? $form->getDisplayString($help['post'], null, $translateParams) : null;
+$help = $form->getHelp();
+$helpPre = $helpPost = null;
+$helpPre = isset($help['pre']) ? $form->getDisplayString($help['pre'], null, $translateParams) : null;
+$helpPost = isset($help['post']) ? $form->getDisplayString($help['post'], null, $translateParams) : null;
 
-  $formInfo = true;
-  if($this->formId == "DoD") {
-    $helpPre = $this->content()->renderTranslated('feedback/dod');
-    $formInfo = false;
-  }
+$formInfo = true;
+if($this->formId == "DoD") {
+  $helpPre = $this->content()->renderTranslated('feedback/dod');
+  $formInfo = false;
+}
 
-  // TueFind: load a custom PHTML template for this form if it exists
-  print $this->content()->renderTranslated($this->formId, 'feedback');
-
+// TueFind: load a custom PHTML template for this form if it exists
+print $this->content()->renderTranslated($this->formId, 'feedback');
 ?>
-<?php if (!$this->inLightbox): ?><div class="feedback-content"><?php endif; ?>
+<?php if (!$this->inLightbox): ?>
+  <div class="feedback-content"><?php endif; ?>
   <?php if ($title): ?>
     <?php $this->headTitle($title); ?>
     <?php $headTag = $this->inLightbox ? 'h2' : 'h1'; ?>
@@ -40,31 +41,58 @@
   <?= $this->form()->openTag($form); ?>
   <?php if ($helpPre): ?>
   <div class="form-group">
-    <?php $formInfo ? '<div class="form-info pre">' : '' ?>
+    <div class="form-info pre">
       <?=$helpPre?>
-    <?php $formInfo ? '</div>' : '' ?>
+    </div>
   </div>
   <?php endif ?>
 
-  <?php $currentGroup = null; ?>
+  <?php $currentGroup = null;
+  $groupMultiFieldtext = "";
+  $isOpen_groupMultiFieldtext = false;
+  $groupColor = false;
+  ?>
   <?php foreach ($form->getFormElementConfig() as $el): ?>
     <?php
+    $caption = false;
+    $formattintag = "label";
+    $captionClassName = "";
     $formElement = $form->get($el['name']);
+
+    if(isset($el['settings']) && isset($el['settings']['groupClassName'])) {
+      if($groupColor === false) {
+        $groupColor = true;
+        echo "<div class='".$el['settings']['groupClassName']."'>";
+      }
+    }else{
+      if($groupColor !== false) {
+        $groupColor = false;
+        echo "</div>";
+      }
+    }
+
+    if(isset($el['settings']) && isset($el['settings']['formattintag'])) {
+      $caption = true;
+      $captionClassName = $el['settings']['className'];
+      if(!empty($el['settings']['formattintag'])) {
+        $formattintag = $el['settings']['formattintag'];
+      }
+    }
 
     // Group form elements into field sets
     $handleGroup = $group = null;
     if (isset($el['group']) && !empty($el['group'])) {
-      $group = $el['group'];
+        $group = $el['group'];
     }
     if ($group && $currentGroup === null) {
-      $handleGroup = 'open';
-      $currentGroup = $group;
+        $handleGroup = 'open';
+        $currentGroup = $group;
     } elseif ($currentGroup && !$group) {
-      $handleGroup = 'close';
-      $currentGroup = null;
+        $handleGroup = 'close';
+        $currentGroup = null;
     } elseif ($currentGroup !== $group) {
-      $handleGroup = 'openAndClose';
-      $currentGroup = $group;
+        $handleGroup = 'openAndClose';
+        $currentGroup = $group;
     }
     $elementHelpPre = $elementHelpPost = '';
     if ($elementHelp = $el['help'] ?? null) {
@@ -83,14 +111,31 @@
       </div>
     <?php endif ?>
     <?php if (in_array($handleGroup, ['open', 'openAndClose'])): ?>
-      <?php if (in_array($el['type'], ['checkbox', 'radio'])): ?>
-        <div class="field-set" role="group"<?= !empty($el['label']) ? ' aria-labelledby="' . $this->escapeHtmlAttr($el['name']) . '"' : ''?>>
+      <?php if (in_array($el['type'], ['checkbox', 'radio', 'exclusiveSelect']) || (strcmp($el['group'], "__sender__") == 0)): ?><?php # This condition is required to avoid using custom js validation for a group of inputs 'sender' (useremail,captcha)  ?>
+        <div class="field-set" role="group"<?= !empty($el['label']) ? ' aria-labelledby="' . $this->escapeHtmlAttr($formElement->getAttribute('id')) . '"' : ''?>>
       <?php else: ?>
-        <div class="field-set"<?= !empty($elementHelpPre) ? ' role="contentinfo" aria-label="' . $this->escapeHtmlAttr($elementHelpPre) . '"' : ''?>>
+        <div class="field-set <?=$group;?> jshide "<?= !empty($elementHelpPre) ? ' role="contentinfo" aria-label="' . $this->escapeHtmlAttr($elementHelpPre) . '"' : ''?>>
       <?php endif ?>
     <?php endif ?>
+    <?php
+      if($el['type'] == 'multifieldtext') {
+          $isOpen_groupMultiFieldtext = true;
+          if($groupMultiFieldtext != $el['groupMultiFieldtext']) {
+            $groupMultiFieldtext = $el['groupMultiFieldtext'];
+            echo "<div class='multifieldtext_group'>";
+          }
+      }else{
+        if($isOpen_groupMultiFieldtext == true) {
+          $isOpen_groupMultiFieldtext = false;
+          echo "</div>";
+        }
+      } ?>
+    <?php if ($el['type'] == 'exclusiveSelect'): ?>
+      <div class="form-group radio <?= $el['type'] ?> group-<?=$this->escapeHtmlAttr($el['name'])?>">
+    <?php else: ?>
+      <div class="form-group <?= $el['type'] ?> group-<?=$this->escapeHtmlAttr($el['name'])?>">
+    <?php endif ?>
 
-    <div class="form-group <?= $el['type'] ?> group-<?=$this->escapeHtmlAttr($el['name'])?>">
     <?php if (!empty($elementHelpPre)): ?>
       <p class="info pre"><?=$elementHelpPre?></p>
     <?php endif ?>
@@ -101,9 +146,13 @@
           $requireOne = $el['requireOne'] ?? false;
         ?>
         <?php if (in_array($el['type'], ['checkbox', 'radio'])): ?>
-          <p id="<?=$this->escapeHtmlAttr($el['name'])?>" class="control-label radio-label<?=$required && !$requireOne ? ' required' : ''?><?=$requireOne ? ' require-one' : ''?>"><?=$this->transEsc($el['label'])?>:</p>
-        <?php else: ?>
-          <label for="<?=$this->escapeHtmlAttr($el['name'])?>" class="control-label<?=$required ? ' required' : ''?>"><?=$this->transEsc($el['label'])?>:</label>
+          <p id="<?=$this->escapeHtmlAttr($formElement->getAttribute('id'))?>" class="control-label radio-label<?=$required && !$requireOne ? ' required' : ''?><?=$requireOne ? ' require-one' : ''?>"><?=$this->transEsc($el['label'])?>:</p>
+        <?php elseif ('hidden' !== $el['type']): ?>
+          <?php if ($caption): ?>
+            <?="<".$formattintag." class='".$captionClassName."' >";?><?=$this->transEsc($el['label'])?><?="</".$formattintag.">";?>
+          <?php else: ?>
+            <label for="<?=$this->escapeHtmlAttr($formElement->getAttribute('id'))?>" class="control-label<?=$required ? ' required' : ''?>"><?=$this->transEsc($el['label'])?>:</label>
+          <?php endif ?>
         <?php endif ?>
       <?php endif ?>
     <?php else: ?>
@@ -114,7 +163,7 @@
       <?php endif ?>
       <?=$this->captcha()->html($this->useCaptcha) ?>
     <?php endif ?>
-    <?= $this->formRow($formElement) ?>
+    <?php if(!$caption){ echo $this->formRow($formElement); }?>
     <?php if (!empty($elementHelpPost)): ?>
       <p class="info post"><?=$elementHelpPost?></p>
     <?php endif ?>
@@ -122,3 +171,11 @@
   <?php endforeach ?>
   <?= $this->form()->closeTag() ?>
 <?php if (!$this->inLightbox): ?></div><?php endif; ?>
+
+<?php $jsSnippet = <<<EOD
+$(function () {
+  TueFind.FormValidation();
+});
+EOD;
+?>
+<?=$this->assetManager()->outputInlineScriptString($jsSnippet) ?>

@@ -71,6 +71,32 @@ $config = [
                     ],
                 ],
             ],
+            'zederproxy-load' => [
+                'type'    => 'Laminas\Router\Http\Segment',
+                'options' => [
+                    'route'    => '/Zeder/Proxy[/:targetId]',
+                    'constraints' => [
+                        'targetId'     => '[^/]+',
+                    ],
+                    'defaults' => [
+                        'controller' => 'ZederProxy',
+                        'action'     => 'Proxy',
+                    ],
+                ],
+            ],
+            'zederproxy-view' => [
+                'type'    => 'Laminas\Router\Http\Segment',
+                'options' => [
+                    'route'    => '/Zeder/View[/:viewId]',
+                    'constraints' => [
+                        'viewId'     => '[^/]+',
+                    ],
+                    'defaults' => [
+                        'controller' => 'ZederProxy',
+                        'action'     => 'View',
+                    ],
+                ],
+            ],
             'quicklink' => [
                 'type'    => 'Laminas\Router\Http\Segment',
                 'options' => [
@@ -207,6 +233,7 @@ $config = [
             'TueFind\Controller\AuthorController' => '\VuFind\Controller\AbstractBaseFactory',
             'TueFind\Controller\AuthorityController' => 'VuFind\Controller\AbstractBaseFactory',
             'TueFind\Controller\CartController' => 'VuFind\Controller\CartControllerFactory',
+            'TueFind\Controller\FeedbackController' => 'VuFind\Controller\AbstractBaseFactory',
             'TueFind\Controller\FindbuchProxyController' => 'TueFind\Controller\AbstractProxyControllerFactory',
             'TueFind\Controller\FulltextSnippetProxyController' => '\TueFind\Controller\FulltextSnippetProxyControllerFactory',
             'TueFind\Controller\MyResearchController' => 'VuFind\Controller\MyResearchControllerFactory',
@@ -220,6 +247,7 @@ $config = [
             'TueFind\Controller\Search3recordController' => 'VuFind\Controller\AbstractBaseFactory',
             'TueFind\Controller\Search3Controller' => 'VuFind\Controller\AbstractBaseFactory',
             'TueFind\Controller\WikidataProxyController' => 'TueFind\Controller\AbstractProxyControllerFactory',
+            'TueFind\Controller\ZederProxyController' => 'TueFind\Controller\AbstractProxyControllerFactory',
         ],
         'initializers' => [
             'TueFind\ServiceManager\ServiceInitializer',
@@ -234,6 +262,8 @@ $config = [
             'authority' => 'TueFind\Controller\AuthorityController',
             'Cart' => 'TueFind\Controller\CartController',
             'cart' => 'TueFind\Controller\CartController',
+            'Feedback' => 'TueFind\Controller\FeedbackController',
+            'feedback' => 'TueFind\Controller\FeedbackController',
             'FindbuchProxy' => 'TueFind\Controller\FindbuchProxyController',
             'findbuchproxy' => 'TueFind\Controller\FindbuchProxyController',
             'fulltextsnippetproxy' => 'TueFind\Controller\FulltextSnippetProxyController',
@@ -256,6 +286,8 @@ $config = [
             'search3' => 'TueFind\Controller\Search3Controller',
             'WikidataProxy' => 'TueFind\Controller\WikidataProxyController',
             'wikidataproxy' => 'TueFind\Controller\WikidataProxyController',
+            'ZederProxy' => 'TueFind\Controller\ZederProxyController',
+            'zederproxy' => 'TueFind\Controller\ZederProxyController',
         ],
     ],
     'controller_plugins' => [
@@ -369,6 +401,7 @@ $staticRoutes = [
     'MyResearch/Publications',
     'MyResearch/RssFeedSettings',
     'MyResearch/RssFeedPreview',
+    'MyResearch/SelfArchiving',
     'RssFeed/Full',
     'Search3/Home',
     'Search3/Results',

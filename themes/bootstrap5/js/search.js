@@ -327,33 +327,43 @@ VuFind.register('search', function search() {
     });
 
     fetch(VuFind.path + '/AJAX/JSON?' + queryParams.toString())
-      .then((response) => response.json())
-      .then((result) => {
-        if (result.error) {
-          throw result.error;
-        }
-        // We expect to get the results list in elements, but reset it to hide spinner just in case:
-        recordList.innerHTML = '';
-        Object.entries(result.data.elements).forEach(([elementSelector, contents]) => {
-          document.querySelectorAll(elementSelector).forEach((element) => {
-            VuFind.setElementContents(
-              element,
-              contents.content,
-              contents.attrs,
-              contents.target ? (contents.target + 'HTML') : ''
-            );
+      .then((response) => {
+        response.json()
+          .then((result) => {
+            if (result.error) {
+              throw result.error;
+            }
+            if (!response.ok) {
+              throw result.data;
+            }
+            // We expect to get the results list in elements, but reset it to hide spinner just in case:
+            recordList.innerHTML = '';
+            Object.entries(result.data.elements).forEach(([elementSelector, contents]) => {
+              document.querySelectorAll(elementSelector).forEach((element) => {
+                VuFind.setElementContents(
+                  element,
+                  contents.content,
+                  contents.attrs,
+                  contents.target ? (contents.target + 'HTML') : ''
+                );
+              });
+            });
+            VuFind.initResultScripts(jsRecordListSelector);
+            initPagination();
+
+            VuFind.emit('results-loaded', {
+              url: pageUrl,
+              addToHistory: addToHistory,
+              data: result
+            });
+
+            recordList.classList.remove('loading');
+          })
+          .catch((error) => {
+            // This error message is from the server, so no need to prefix it
+            showError(error);
+            recordList.classList.remove('loading');
           });
-        });
-        VuFind.initResultScripts(jsRecordListSelector);
-        initPagination();
-
-        VuFind.emit('results-loaded', {
-          url: pageUrl,
-          addToHistory: addToHistory,
-          data: result
-        });
-
-        recordList.classList.remove('loading');
       })
       .catch((error) => {
         showError(VuFind.translate('error_occurred') + ' - ' + error);

@@ -27,8 +27,10 @@ $authTabEnabled = $this->tuefind()->isSearchTabEnabled('SolrAuth');
       </span>
       <?php
         // TueFind: Show all author roles
-        if (!isset($dataFields['role']))
-            $dataFields['role'] = $this->driver->getAuthorRoles($author);
+        $authorRoles = $this->driver->getAuthorRoles($author);
+        if(!empty($authorRoles)) {
+          $dataFields['role'] = $authorRoles;
+        }
 
         // Display additional data using the appropriate translation prefix
         // (for example, to render author roles correctly):

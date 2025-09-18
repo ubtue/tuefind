@@ -2,7 +2,7 @@
 
 namespace IxTheo\View\Helper\Root;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use VuFind\View\Helper\Root\RecordDataFormatter\SpecBuilder;
 
 class RecordDataFormatterFactory extends \TueFind\View\Helper\Root\RecordDataFormatterFactory {
@@ -144,7 +144,7 @@ class RecordDataFormatterFactory extends \TueFind\View\Helper\Root\RecordDataFor
         $spec->setLine('Bibliography', 'getBibliographyNotes');
         // Clean ISBN with schema.org-property (IxTheo-specific)
         $spec->setLine(
-            'ISBN', 'getCleanISBN', null,
+            'ISBN', 'getISBNs', null,
             ['prefix' => '<span property="isbn">', 'suffix' => '</span>']
         );
         // ISSN with schema.org-property (IxTheo-specific)
@@ -163,6 +163,7 @@ class RecordDataFormatterFactory extends \TueFind\View\Helper\Root\RecordDataFor
         $spec->setTemplateLine('Contains', 'getContainsInformation', 'data-contains.phtml');
         // Persistent identifiers (IxTheo-specific)
         $spec->setTemplateLine('Persistent identifiers', 'getTypesAndPersistentIdentifiers', 'data-persistent_identifiers.phtml');
+        $spec->setLine('Count Remarks', 'getCountRemarks');
         return $spec->getArray();
     }
 }

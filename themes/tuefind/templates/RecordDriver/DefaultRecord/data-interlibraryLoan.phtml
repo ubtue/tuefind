@@ -8,5 +8,5 @@
     $serviceId = $this->tuefind()->getTueFindType();
     $url = 'https://fid.fernleihe.de/?&rft_id=info:gvi/(DE-627)' . urlencode($ppn) . '&svc.ill=yes&req_dat=&rfr_id=info:sid/' . urlencode($serviceId);
   ?>
-  <a href="<?=$this->escapeHtmlAttr($url)?>" target="_blank">Fernleihe für die Fachinformationsdienste</a>
+      <a href="<?=$this->escapeHtmlAttr($url)?>" target="_blank"><?=$this->transEsc('FID_interlibrary_loan')?></a>
 <?php endif; ?>
