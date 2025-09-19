@@ -38,7 +38,6 @@ public class TueFind extends SolrIndexerMixin {
     protected static Set<String> getAllSubfieldsBut(final Record record, final String fieldSpecList, final String excludeSubfields) {
         final Set<String> extractedValues = new LinkedHashSet<>();
         final String[] fieldSpecs = fieldSpecList.split(":");
-        List<Subfield> subfieldsToSearch = new ArrayList<>();
         for (final String fieldSpec : fieldSpecs) {
             extractedValues.addAll(getAllSubfieldsBut(record, fieldSpec, excludeSubfields, (List<String>)null));
         }
@@ -308,15 +307,15 @@ public class TueFind extends SolrIndexerMixin {
     /*
      * translation map cache
      */
-    protected static Map<String, String> translation_map_en = new HashMap<String, String>();
-    protected static Map<String, String> translation_map_fr = new HashMap<String, String>();
-    protected static Map<String, String> translation_map_it = new HashMap<String, String>();
-    protected static Map<String, String> translation_map_es = new HashMap<String, String>();
-    protected static Map<String, String> translation_map_hant = new HashMap<String, String>();
-    protected static Map<String, String> translation_map_hans = new HashMap<String, String>();
-    protected static Map<String, String> translation_map_pt = new HashMap<String, String>();
-    protected static Map<String, String> translation_map_ru = new HashMap<String, String>();
-    protected static Map<String, String> translation_map_el = new HashMap<String, String>();
+    protected static Map<String, String> translation_map_en = new HashMap<>();
+    protected static Map<String, String> translation_map_fr = new HashMap<>();
+    protected static Map<String, String> translation_map_it = new HashMap<>();
+    protected static Map<String, String> translation_map_es = new HashMap<>();
+    protected static Map<String, String> translation_map_hant = new HashMap<>();
+    protected static Map<String, String> translation_map_hans = new HashMap<>();
+    protected static Map<String, String> translation_map_pt = new HashMap<>();
+    protected static Map<String, String> translation_map_ru = new HashMap<>();
+    protected static Map<String, String> translation_map_el = new HashMap<>();
 
     /**
      * get translation map for normdata translations

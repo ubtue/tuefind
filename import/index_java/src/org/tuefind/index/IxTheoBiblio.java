@@ -2,7 +2,6 @@ package org.tuefind.index;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
@@ -147,7 +146,7 @@ public class IxTheoBiblio extends TueFindBiblio {
     public Set<String> translateTopics(Set<String> topics, String langShortcut) {
         if (langShortcut.equals("de"))
             return topics;
-        Set<String> translated_topics = new HashSet<String>();
+        Set<String> translated_topics = new HashSet<>();
         Map<String, String> translation_map = TueFindBiblio.getTranslationMap(langShortcut);
 
         for (String topic : topics) {
@@ -179,7 +178,7 @@ public class IxTheoBiblio extends TueFindBiblio {
     // For subfields specified by "fieldSpecs" matches found in "bce_replacement_map" will be substituted w/ their replacements.
     // Non-matching subfields contents will be returned unaltered.
     public Set<String> getBCENormalizedContents(final Record record, final String fieldSpecs) {
-        Set<String> normalizedValues = new HashSet<String>();
+        Set<String> normalizedValues = new HashSet<>();
 
         final Set<String> values = SolrIndexer.instance().getFieldList(record, fieldSpecs);
         for (final String value : values)

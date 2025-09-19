@@ -12,7 +12,7 @@ import org.marc4j.marc.VariableField;
 
 public class FidSystematik extends TueFind {
     private final static Pattern FID_SYSTEMATIK_PATTERN = Pattern.compile("k\\d+(\\.\\d+)+");
-    private final static Set<String> roman_numerals = new HashSet<String>() {
+    private final static Set<String> roman_numerals = new HashSet<>() {
         {
             this.add("I");
             this.add("II");

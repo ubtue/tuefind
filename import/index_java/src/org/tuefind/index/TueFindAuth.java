@@ -64,7 +64,7 @@ public class TueFindAuth extends TueFind {
         if (mainFields.isEmpty()) {
             return null;
         } else {
-            Set<String> normalizedValues = new HashSet<String>();
+            Set<String> normalizedValues = new HashSet<>();
             for (DataField mainField : mainFields) {
                 final String numberA = mainField.getSubfield('a').getData();
                 String normalizedValue = normalizeByCategory(numberA, number2Category);
@@ -84,7 +84,7 @@ public class TueFindAuth extends TueFind {
     }
 
     public Collection<String> normalizeSortableString(Collection<String> extractedValues) {
-        Collection<String> results = new ArrayList<String>();
+        Collection<String> results = new ArrayList<>();
         for (final String value : extractedValues) {
             final String newValue = normalizeSortableString(value);
             if (newValue != null && !newValue.isEmpty())
