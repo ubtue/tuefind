@@ -3,6 +3,7 @@ package org.tuefind.index;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.*;
+import org.marc4j.marc.Record;
 import org.marc4j.marc.*;
 
 
