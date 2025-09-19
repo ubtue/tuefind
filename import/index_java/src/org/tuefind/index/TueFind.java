@@ -8,19 +8,12 @@ import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeSet;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
-
-
-
 import org.marc4j.marc.ControlField;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Record;
@@ -151,7 +144,7 @@ public class TueFind extends SolrIndexerMixin {
      */
     protected List<Subfield> getSubfieldsMatchingList(final Record record, final String subfieldList, final SubfieldMatcher matcher) {
         List<Subfield> returnSubfields = new ArrayList<>();
-        HashMap<String, Set<String>> parsedTagList = FieldSpecTools.getParsedTagList(subfieldList);
+        Map<String, Set<String>> parsedTagList = FieldSpecTools.getParsedTagList(subfieldList);
         List<VariableField> fields = SolrIndexer.instance().getFieldSetMatchingTagList(record, subfieldList);
 
         for (final VariableField variableField : fields) {
@@ -276,13 +269,13 @@ public class TueFind extends SolrIndexerMixin {
     public List<String> getSubfieldValuesByFieldSpec(final Record record, final String tagList){
         final List<String> results = new ArrayList<>();
 
-        HashMap<String, Set<String>> parsedTagList = FieldSpecTools.getParsedTagList(tagList);
+        Map<String, Set<String>> parsedTagList = FieldSpecTools.getParsedTagList(tagList);
         List<VariableField> fields = SolrIndexer.instance().getFieldSetMatchingTagList(record, tagList);
 
         for(final VariableField variableField : fields){
             DataField field = (DataField)variableField;
             for(final String subfieldCharacters : parsedTagList.get(field.getTag())){
-                
+
                 final List<Subfield> subfields = field.getSubfields("[" + subfieldCharacters + "]");
 
                 for(final Subfield subfield : subfields){
@@ -378,8 +371,7 @@ public class TueFind extends SolrIndexerMixin {
 
         // Only read the data from file if necessary
         if (translation_map.isEmpty() && (new File(translationsFilename).length() != 0)) {
-            try {
-                BufferedReader in = new BufferedReader(new FileReader(translationsFilename));
+            try (BufferedReader in = new BufferedReader(new FileReader(translationsFilename))) {
                 String line;
 
                 while ((line = in.readLine()) != null) {

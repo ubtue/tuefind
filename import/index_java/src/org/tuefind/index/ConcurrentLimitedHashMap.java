@@ -3,6 +3,7 @@ package org.tuefind.index;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.function.Function;
+import java.util.Deque;
 
 /**
  * Thread-safe cache for storing finished lookups to be re-used later.
@@ -15,7 +16,7 @@ import java.util.function.Function;
  */
 public class ConcurrentLimitedHashMap<K extends Object, V extends Object> extends ConcurrentHashMap<K, V> {
 
-    ConcurrentLinkedDeque<K> keyHistory = new ConcurrentLinkedDeque();
+    Deque<K> keyHistory = new ConcurrentLinkedDeque();
 
     protected int maxSize;
 

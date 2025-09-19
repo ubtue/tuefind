@@ -7,9 +7,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.sql.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.time.YearMonth;
 import java.util.*;
 import java.util.Map.Entry;
@@ -17,6 +17,7 @@ import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
+import static java.util.stream.Collectors.joining;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -41,8 +42,6 @@ import org.solrmarc.tools.PropertyUtils;
 import org.solrmarc.tools.Utils;
 import org.solrmarc.driver.Boot;
 import org.vufind.index.DatabaseManager;
-import java.sql.*;
-import static java.util.stream.Collectors.joining;
 import org.apache.commons.validator.routines.ISBNValidator;
 
 /*
@@ -183,7 +182,7 @@ public class TueFindBiblio extends TueFind {
     protected static CreatorTools creatorTools = new CreatorTools();
 
     // TODO: This should be in a translation mapping file
-    protected final static HashMap<String, String> isil_to_department_map = new HashMap<String, String>() {
+    protected final static Map<String, String> isil_to_department_map = new HashMap<String, String>() {
         {
             this.put("Unknown", "Unknown");
             this.put("DE-21", "Universit\u00E4tsbibliothek T\u00FCbingen");
@@ -738,8 +737,8 @@ public class TueFindBiblio extends TueFind {
      */
     public Set<String> getSuperMP(final Record record, final String fieldnums) {
         final Set<String> retval = new LinkedHashSet<>();
-        final HashMap<String, String> resvalues = new HashMap<>();
-        final HashMap<String, Integer> resscores = new HashMap<>();
+        final Map<String, String> resvalues = new HashMap<>();
+        final Map<String, Integer> resscores = new HashMap<>();
 
         String value;
         String id;
@@ -864,7 +863,7 @@ public class TueFindBiblio extends TueFind {
     }
 
     public Set<String> getISBNs(final Record record, final String tagList) {
-        // false means no auto converstion from 10 to 13 digits isbn format 
+        // false means no auto converstion from 10 to 13 digits isbn format
         ISBN isbnHandler = new ISBN(false);
         final Set<String> isbns = new LinkedHashSet<>();
         final List<String> isbnsInTheRecord = getSubfieldValuesByFieldSpec(record, tagList);
@@ -881,7 +880,7 @@ public class TueFindBiblio extends TueFind {
                 isbn_13 = isbnHandler.convertToISBN13(isbn_10);
 
             }
-            
+
             if(isbn_10 == null && isbn_13 == null){
                 logger.warning("Invalid ISBN: " + isbn + "! (PPN: " + record.getControlNumber() + ")");
                 continue;
@@ -1672,7 +1671,6 @@ public class TueFindBiblio extends TueFind {
                 }
             }
         }
-        return;
     }
 
     protected class Topic {
@@ -1823,7 +1821,7 @@ public class TueFindBiblio extends TueFind {
 							                         : extractNormalizedSubfieldPatternHelper(subfieldTags));
         fieldloop:
         for (final VariableField vf : marcFieldList) {
-            final ArrayList<Topic> topicParts = new ArrayList<>();
+            final List<Topic> topicParts = new ArrayList<>();
             final DataField marcField = (DataField) vf;
             // Skip fields that do not match our criteria
             if (includeFieldPredicate != null && (!includeFieldPredicate.test(marcField)))
@@ -1866,7 +1864,7 @@ public class TueFindBiblio extends TueFind {
                     if ((term.length() < 2) && !term.matches("\\d"))
                         continue; //Skip on character terms to address uppercase subfield problems in standardized keywords
 
-                    if (topicParts.size() > 0) {
+                    if (!topicParts.isEmpty()) {
                         final String separator = getSubfieldBasedSeparator(separators, subfield.getCode(), term);
                         // Make sure we strip the subSubfield code from our term
                         if (Character.isDigit(subfieldCode))
@@ -1884,7 +1882,7 @@ public class TueFindBiblio extends TueFind {
                 }
             }
 
-            if (topicParts.size() > 0)
+            if (!topicParts.isEmpty())
                 collector.add(topicParts);
         }
     } // end extractTopicsHelper
@@ -1940,7 +1938,7 @@ public class TueFindBiblio extends TueFind {
         valuesTranslated.removeAll(toRemove);
         valuesTranslated.addAll(toAdd);
         addHonourees(record, valuesTranslated, lang);
-        if (valuesTranslated.size() == 0)
+        if (valuesTranslated.isEmpty())
             valuesTranslated.add(UNASSIGNED_STRING);
         return valuesTranslated;
     }
@@ -2264,9 +2262,7 @@ public class TueFindBiblio extends TueFind {
             return true;
 
         final List<VariableField> _935Fields = record.getVariableFields("935");
-        if (foundInSubfield(_935Fields, 'c', "vide"))
-            return true;
-        return false;
+        return foundInSubfield(_935Fields, 'c', "vide");
     }
 
     protected final static String electronicRessource = "Electronic";
@@ -2950,12 +2946,8 @@ public class TueFindBiblio extends TueFind {
         if (fullTextField == null)
             return "";
 
-        Connection dbConnection = DatabaseManager.instance().getConnection();
-
-        try {
-            final Statement statement = dbConnection.createStatement();
-            final ResultSet resultSet = statement.executeQuery("SELECT full_text FROM full_text_cache WHERE id=\""
-                                                               + record.getControlNumber() + "\"");
+        String sql = "SELECT full_text FROM full_text_cache WHERE id=\"" + record.getControlNumber() + "\"";
+        try (Connection dbConnection = DatabaseManager.instance().getConnection(); Statement statement = dbConnection.createStatement(); ResultSet resultSet = statement.executeQuery(sql)) {
             if (!resultSet.isBeforeFirst())
                 return "";
 
@@ -3068,8 +3060,9 @@ public class TueFindBiblio extends TueFind {
 
 
     public static Properties getESFulltextProperties() {
-        if (esFulltextProperties != null)
+        if (esFulltextProperties != null) {
             return esFulltextProperties;
+        }
         esFulltextProperties = getPropertiesFromFile(ES_FULLTEXT_PROPERTIES_FILE);
         return esFulltextProperties;
     }
@@ -3298,7 +3291,7 @@ public class TueFindBiblio extends TueFind {
                 if (subfield_d != null && subfield_d.getData().isEmpty() == false)
                     authorName += " " + subfield_d.getData();
 
-                if (subfields_0 == null || subfields_0.size() < 1) {
+                if (subfields_0 == null || subfields_0.isEmpty()) {
                     if (authorToId.containsKey(authorName) == false)
                         authorToId.put(authorName, "");
                 } else {
