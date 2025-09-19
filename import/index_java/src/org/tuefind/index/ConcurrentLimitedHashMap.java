@@ -16,7 +16,7 @@ import java.util.Deque;
  */
 public class ConcurrentLimitedHashMap<K extends Object, V extends Object> extends ConcurrentHashMap<K, V> {
 
-    Deque<K> keyHistory = new ConcurrentLinkedDeque();
+    Deque<K> keyHistory = new ConcurrentLinkedDeque<>();
 
     protected int maxSize;
 

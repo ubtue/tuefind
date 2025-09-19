@@ -34,7 +34,7 @@ public class RelBibBiblio extends IxTheoBiblio {
         // facet query and display results based on the whole collection) we have to make sure
         // that only "real" RelBib-entries get a notation
         if (record.getVariableFields("REL").isEmpty())
-            return new HashSet<String>();
+            return new HashSet<>();
 
         Set<String> relBibNotations = getIxTheoNotationFacets(record);
         Iterator<String> relBibNotationsIter = relBibNotations.iterator();

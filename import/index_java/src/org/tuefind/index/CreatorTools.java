@@ -6,7 +6,6 @@ import org.marc4j.marc.Subfield;
 import org.marc4j.marc.DataField;
 import org.solrmarc.index.SolrIndexer;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
@@ -105,7 +104,7 @@ public class CreatorTools extends org.vufind.index.CreatorTools
         subfieldE.removeIf(u -> u.getData().length() != 3);
         subfield4.removeIf(u -> u.getData().length() != 3);
 
-        Set<String> relators = new LinkedHashSet<String>();
+        Set<String> relators = new LinkedHashSet<>();
 
         // if no relator is found, check to see if the current tag is in the "no
         // relator allowed" list.
@@ -169,7 +168,7 @@ public class CreatorTools extends org.vufind.index.CreatorTools
             );
         });
 
-        List<String> result = new LinkedList<String>();
+        List<String> result = new LinkedList<>();
         for (final String idsString : idsStrings) {
             boolean idFound = false;
             for (final String id : idsString.split(" ")) {
