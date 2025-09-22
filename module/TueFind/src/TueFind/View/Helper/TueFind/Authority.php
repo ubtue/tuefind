@@ -721,7 +721,7 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
             $settings['filter'] = 'key_word_chain_bag';
         }
 
-        $topicLink = $urlHelper('search-results').'?lookfor='.$lookfor.'&type='.$searchType.'&filter[]='.$settings['filter'].':';
+        $topicLink = $urlHelper('search-results').'?lookfor='.urlencode($lookfor).'&type='.urlencode($searchType).'&filter[]='.urlencode($settings['filter']).':';
 
         $topicsArray = [];
         foreach($countedTopics as $topic => $topicCount) {
@@ -731,9 +731,7 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
                 $topic = preg_replace( '/"([^"]*)"/', "«$1»", $topic);
             }
 
-            $topic = htmlspecialchars($topic, ENT_COMPAT,'UTF-8', true);
-
-            $topicsArray[] = ['topicTitle'=>$topic, 'topicCount'=>$topicCount, 'topicLink'=>$topicLink.$originalTopicName];
+            $topicsArray[] = ['topicTitle'=>$topic, 'topicCount'=>$topicCount, 'topicLink'=>$topicLink.urlencode($originalTopicName)];
         }
 
         $mainTopicsArray = [];
@@ -747,13 +745,13 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
                     }
                 }
                 $one = $topicsArray[$i];
-                    if($topWeight > $settings['minNumber']) {
-                        $topWeight--;
-                    }else{
-                        if(count($topicsArray) < 30) {
-                            $topWeight = $settings['maxNumber']-1;
-                        }
+                if($topWeight > $settings['minNumber']) {
+                    $topWeight--;
+                }else{
+                    if(count($topicsArray) < 30) {
+                        $topWeight = $settings['maxNumber']-1;
                     }
+                }
                 $one['topicNumber'] = $topWeight;
                 $mainTopicsArray[] = $one;
             }
