@@ -8,10 +8,23 @@
     $responseTopicsData = $responseTopicsDataAndSettings[0];
     $responseTopicsSettings = $responseTopicsDataAndSettings[1];
 
-    $jsData = '';
+    $jsData = '[';
     foreach($responseTopicsData as $topic) {
-        $jsData .= '{text: "'.$topic['topicTitle'].'", weight: '.$topic['topicNumber'].', html: {title: "'.$topic['topicTitle'].'", "class": "custom-class"}, link: {href: '. json_encode($topic['topicLink']).', target: "_blank", rel: "nofollow"}},';
+        $jsArr = ['text' => $topic['topicTitle'],
+                  'weight' => $topic['topicNumber'],
+                  'html' => [
+                    'title' => $topic['topicTitle'],
+                    'class' => 'custom-class',
+                  ],
+                  'link' => [
+                    'href' => $topic['topicLink'],
+                    'target' => '_blank',
+                    'rel' => 'nofollow',
+                  ]
+        ];
+        $jsData .= json_encode($jsArr) . ',';
     }
+    $jsData .= ']';
 
     $ascSortingTopicsData = $responseTopicsData;
 
@@ -26,11 +39,10 @@
 
     $jsSnippetTags = <<<EOD
     $(function () {
-      let word_list = [
-          $jsData
-      ];
+      let word_list = $jsData;
       $("#topic_cloud").jQCloud(word_list,{
-        autoResize: true
+        autoResize: true,
+        encodeURI: false
       });
     });
 EOD;
