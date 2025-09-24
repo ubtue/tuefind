@@ -29,6 +29,7 @@
 
 namespace VuFindConsole\Command\Upgrade;
 
+use Closure;
 use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 use Laminas\ServiceManager\Factory\FactoryInterface;
@@ -68,7 +69,8 @@ class DatabaseCommandFactory implements FactoryInterface
         ?array $options = null
     ) {
         return new $requestedName(
-            $container->get(MigrationManager::class),
+            // Defer MigrationManager build so database errors don't break other console utils:
+            Closure::fromCallable(fn () => $container->get(MigrationManager::class)),
             $container->get(ConnectionFactory::class),
             ...($options ?? [])
         );
