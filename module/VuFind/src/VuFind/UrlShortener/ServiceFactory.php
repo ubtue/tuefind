@@ -50,6 +50,8 @@ class ServiceFactory
      * @param null|array         $options       Extra options (optional)
      *
      * @return object
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __invoke(
         ContainerInterface $container,
