@@ -1,11 +1,11 @@
 <?php
 
 /**
- * ExpireAuditEventsCommand test.
+ * ExpireSearchesCommand test.
  *
  * PHP version 8
  *
- * Copyright (C) The National Library of Finland 2025.
+ * Copyright (C) Villanova University 2020.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -17,71 +17,70 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, see
- * <https://www.gnu.org/licenses/>.
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
  * @category VuFind
  * @package  Tests
- * @author   Ere Maijala <ere.maijala@helsinki.fi>
+ * @author   Demian Katz <demian.katz@villanova.edu>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development:testing:unit_tests Wiki
  */
 
 namespace VuFindTest\Command\Util;
 
-use VuFind\Db\Service\AuditEventService;
-use VuFindConsole\Command\Util\ExpireAuditEventsCommand;
+use VuFindConsole\Command\Util\ExpireOaiResumptionCommand;
 
 /**
- * ExpireAuditEventsCommand test.
+ * ExpireOaiResumptionCommand test.
  *
  * @category VuFind
  * @package  Tests
- * @author   Ere Maijala <ere.maijala@helsinki.fi>
+ * @author   Demian Katz <demian.katz@villanova.edu>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development:testing:unit_tests Wiki
  */
-class ExpireAuditEventsCommandTest extends AbstractExpireCommandTest
+class ExpireOaiResumptionCommandTest extends AbstractExpireCommandTest
 {
     /**
      * Name of class being tested
      *
      * @var string
      */
-    protected $targetClass = ExpireAuditEventsCommand::class;
+    protected $targetClass = ExpireOaiResumptionCommand::class;
 
     /**
      * Name of a valid service class to test with
      *
      * @var string
      */
-    protected $validServiceClass = AuditEventService::class;
+    protected $validServiceClass = \VuFind\Db\Service\OaiResumptionService::class;
 
     /**
      * Label to use for rows in help messages.
      *
      * @var string
      */
-    protected $rowLabel = 'audit events';
+    protected $rowLabel = 'resumption tokens';
 
     /**
      * Age parameter to use when testing illegal age input.
      *
      * @var float
      */
-    protected $illegalAge = 0.9;
-
-    /**
-     * Expected minimum age in error message or null if not applicable.
-     *
-     * @var ?float
-     */
-    protected $expectedMinAge = 1.0;
+    protected $illegalAge = -1.0;
 
     /**
      * Expected threshold.
      *
      * @var float
      */
-    protected $expectedThreshold = 365.0;
+    protected $expectedThreshold = 0.0;
+
+    /**
+     * Expected minimum age in error message or null if not applicable.
+     *
+     * @var ?float
+     */
+    protected $expectedMinAge = null;
 }
