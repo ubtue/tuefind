@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Logger;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Record;
 import org.marc4j.marc.Subfield;
@@ -55,7 +54,7 @@ public class KrimDokBiblio extends TueFindBiblio {
     }
 
     public Collection<String> getKrimSpecialCollection(final Record record) {
-        Collection<String> results = new ArrayList<String>();
+        Collection<String> results = new ArrayList<>();
         if (HasLocalSelector(record, "kreb"))
             results.add("0/Albert Krebs Bibliothek/");
         if (HasFormalKeywordSelector(record, "Statistik"))

@@ -152,4 +152,53 @@ trait MarcAdvancedTrait
     public function getCountRemarks() {
         return $this->getFieldArray('515', ['a'], true, ', ');
     }
+
+    /**
+     * Take the information from MARC instead of SOLR, but with a different
+     * mechanism than VuFind\Feature\MarcBasicTrait.
+     *
+     * For Solr, we want to search ISBN-10 as well as ISBN-13,
+     * but in the frontend we only want to show the form as written in
+     * MARC.
+     *
+     * Also, 9 is not always there, so we will show a if it is missing.
+     *
+     * If there are any changes here, also consider changing the Solr import
+     * depending on the circumstances.
+     *
+     * See issue #3389
+     *
+     * @return array
+     */
+    public function getISBNs() : array
+    {
+        // Intentionally omit 020z and 773z
+        // Prefer 0209 over 020a
+        // Show 0209 in the exact way of writing, without normalization
+
+        // We cannot just call getFieldArray once, because it will NOT keep the subfield order
+        $isbns = [];
+        foreach ($this->getMarcReader()->getFields('020') as $field) {
+            $subfields = $this->getMarcReader()->getSubfieldsAssoc($field);
+            if (isset($subfields['9']))
+                $isbns[] = $subfields['9'];
+            elseif (isset($subfields['a']))
+                $isbns[] = $subfields['a'];
+        }
+
+        return array_unique($isbns);
+    }
+
+    /**
+     * Override the parent behaviour, just return the first ISBN as-is,
+     * without favoring ISBN-10 over 13.
+     *
+     * @return type
+     */
+    public function getCleanISBN() {
+        $isbns = $this->getISBNs();
+        return $isbns[0] ?? false;
+    }
+
+
 }

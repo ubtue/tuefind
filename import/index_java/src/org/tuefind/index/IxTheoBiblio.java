@@ -2,10 +2,8 @@ package org.tuefind.index;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.logging.Logger;
 import java.util.*;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Record;
@@ -33,18 +31,10 @@ public class IxTheoBiblio extends TueFindBiblio {
         return true;
     }
 
-    static void processLanguageIniFile(final File iniFile, final HashMap<String, TreeSet<String>> ixtheoNotationsToDescriptionsMap,
+    static void processLanguageIniFile(final File iniFile, final Map<String, Set<String>> ixtheoNotationsToDescriptionsMap,
                                        final String entryPrefix)
     {
-        BufferedReader reader = null;
-        try {
-            reader = new BufferedReader(new FileReader(iniFile));
-        } catch (final FileNotFoundException ex) {
-            logger.severe("can't create a BufferedReader for \"" + iniFile.getName() + "\"!");
-            System.exit(1);
-        }
-
-        try {
+        try (BufferedReader reader = new BufferedReader(new FileReader(iniFile))) {
             final int ENTRY_PREFIX_LENGTH = entryPrefix.length();
             String line;
             while ((line = reader.readLine()) != null) {
@@ -60,11 +50,11 @@ public class IxTheoBiblio extends TueFindBiblio {
                 final String notationDescription = value.toString().substring(key.length() - ENTRY_PREFIX_LENGTH).trim();
 
                 if (!ixtheoNotationsToDescriptionsMap.containsKey(notationCode)) {
-                    final TreeSet<String> newSet = new TreeSet<String>();
+                    final Set<String> newSet = new TreeSet<>();
                     newSet.add(notationDescription);
                     ixtheoNotationsToDescriptionsMap.put(notationCode, newSet);
                 } else {
-                    final TreeSet<String> set = ixtheoNotationsToDescriptionsMap.get(notationCode);
+                    final Set<String> set = ixtheoNotationsToDescriptionsMap.get(notationCode);
                     set.add(notationDescription);
                 }
             }
@@ -76,9 +66,9 @@ public class IxTheoBiblio extends TueFindBiblio {
 
     final static String LANGUAGES_DIRECTORY = "/usr/local/vufind/local/tuefind/languages";
 
-    static HashMap<String, TreeSet<String>> processLanguageIniFiles()
+    static Map<String, Set<String>> processLanguageIniFiles()
     {
-        final HashMap<String, TreeSet<String>> ixtheoNotationsToDescriptionsMap = new HashMap<>();
+        final Map<String, Set<String>> ixtheoNotationsToDescriptionsMap = new HashMap<>();
 
         final File[] dir_entries = new File(LANGUAGES_DIRECTORY).listFiles();
         boolean foundAtLeastOne = false;
@@ -101,7 +91,7 @@ public class IxTheoBiblio extends TueFindBiblio {
         return ixtheoNotationsToDescriptionsMap;
     }
 
-    static protected HashMap<String, TreeSet<String>> ixtheoNotationsToDescriptionsMap = processLanguageIniFiles();
+    static protected Map<String, Set<String>> ixtheoNotationsToDescriptionsMap = processLanguageIniFiles();
 
     /**
      * Split the colon-separated ixTheo notation codes into individual codes and
@@ -130,7 +120,7 @@ public class IxTheoBiblio extends TueFindBiblio {
     public Set<String> getExpandedIxTheoNotations(final Record record) {
         final Set<String> notationCodes = getIxTheoNotations(record);
 
-        final HashSet<String> expandedIxTheoNotations = new HashSet<>();
+        final Set<String> expandedIxTheoNotations = new HashSet<>();
         for (final String notationCode : notationCodes) {
             final Set<String> notationDescriptions = ixtheoNotationsToDescriptionsMap.get(notationCode);
             if (notationDescriptions != null) {
@@ -156,7 +146,7 @@ public class IxTheoBiblio extends TueFindBiblio {
     public Set<String> translateTopics(Set<String> topics, String langShortcut) {
         if (langShortcut.equals("de"))
             return topics;
-        Set<String> translated_topics = new HashSet<String>();
+        Set<String> translated_topics = new HashSet<>();
         Map<String, String> translation_map = TueFindBiblio.getTranslationMap(langShortcut);
 
         for (String topic : topics) {
@@ -188,7 +178,7 @@ public class IxTheoBiblio extends TueFindBiblio {
     // For subfields specified by "fieldSpecs" matches found in "bce_replacement_map" will be substituted w/ their replacements.
     // Non-matching subfields contents will be returned unaltered.
     public Set<String> getBCENormalizedContents(final Record record, final String fieldSpecs) {
-        Set<String> normalizedValues = new HashSet<String>();
+        Set<String> normalizedValues = new HashSet<>();
 
         final Set<String> values = SolrIndexer.instance().getFieldList(record, fieldSpecs);
         for (final String value : values)
