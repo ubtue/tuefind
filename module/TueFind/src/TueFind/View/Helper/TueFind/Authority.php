@@ -181,6 +181,7 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
         usort($references, function($a, $b) { return strcmp($a['title'], $b['title']); });
 
         $display = '';
+        $displayNoLink = '';
         foreach ($references as $reference) {
             $image = $tuefindHelper->getDetailsIcon($reference['title']);
             if(!empty($reference['url'])) {
@@ -191,12 +192,11 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
                     $display .= '<a href="' . $reference['url'] . '" target="_blank" property="sameAs"> <img class="detailsIcon" src="'.$image.'"/>' . htmlspecialchars($reference['title']) . '</a><br>';
                 }
             }else{
-                $display .= htmlspecialchars($reference['title']) . '<br>';
+                $displayNoLink .= htmlspecialchars($reference['title']) . '<br>';
             }
-
         }
 
-        return $display;
+        return $display.$displayNoLink;
     }
 
     public function getArchivedMaterial(AuthorityRecordDriver &$driver): string
