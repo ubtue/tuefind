@@ -1,11 +1,11 @@
 <?php
 
 /**
- * SafeMoneyFormat view helper Test Class
+ * Mink test class for the Search2 backend.
  *
  * PHP version 8
  *
- * Copyright (C) Villanova University 2010.
+ * Copyright (C) Villanova University 2025.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -24,45 +24,35 @@
  * @package  Tests
  * @author   Demian Katz <demian.katz@villanova.edu>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
- * @link     https://vufind.org/wiki/development:testing:unit_tests Wiki
+ * @link     https://vufind.org Main Page
  */
 
-namespace VuFindTest\View\Helper\Root;
-
-use VuFind\View\Helper\Root\SafeMoneyFormat;
+namespace VuFindTest\Mink;
 
 /**
- * SafeMoneyFormat view helper Test Class
+ * Mink test class for the Search2 backend.
  *
  * @category VuFind
  * @package  Tests
  * @author   Demian Katz <demian.katz@villanova.edu>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
- * @link     https://vufind.org/wiki/development:testing:unit_tests Wiki
+ * @link     https://vufind.org Main Page
  */
-class SafeMoneyFormatTest extends \PHPUnit\Framework\TestCase
+class Search2Test extends \VuFindTest\Integration\MinkTestCase
 {
     /**
-     * Test the helper
+     * Test that out of range search results page detection redirects to the right place.
      *
      * @return void
      */
-    public function testFormatting()
+    public function testOutOfRangePageDetection(): void
     {
-        // test default currency in en_US locale
-        $smf = new SafeMoneyFormat(
-            new \VuFind\Service\CurrencyFormatter(null, 'en_US'),
-            new \Laminas\View\Helper\EscapeHtml()
-        );
-        $this->assertEquals('$3.00', $smf(3));
-        $this->assertEquals('€3.00', $smf(3, 'EUR'));
-
-        // test override default currency
-        $smf = new SafeMoneyFormat(
-            new \VuFind\Service\CurrencyFormatter('EUR', 'en_US'),
-            new \Laminas\View\Helper\EscapeHtml()
-        );
-        $this->assertEquals('€3.00', $smf(3));
-        $this->assertEquals('$3.00', $smf(3, 'USD'));
+        // Perform a search guaranteed to return just one record, and try to go to page 2:
+        $session = $this->getMinkSession();
+        $session->visit($this->getVuFindUrl() . '/Search2/Results?lookfor=id:testbug2&page=2');
+        $page = $session->getPage();
+        $this->waitForPageLoad($page);
+        // We should have ended up on page 1!
+        $this->assertStringEndsWith('/Search2/Results?lookfor=id:testbug2&page=1', $session->getCurrentUrl());
     }
 }

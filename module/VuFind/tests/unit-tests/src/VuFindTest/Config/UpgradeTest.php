@@ -106,12 +106,12 @@ class UpgradeTest extends \PHPUnit\Framework\TestCase
         if ((float)$version < 1.3) {
             $expectedWarnings[] = 'WARNING: This version of VuFind does not support '
                 . 'the default theme. Your config.ini [Site] theme setting '
-                . 'has been reset to the default: bootprint3. You may need to '
+                . 'has been reset to the default: sandal5. You may need to '
                 . 'reimplement your custom theme.';
         } elseif ((float)$version < 2.4) {
             $expectedWarnings[] = 'WARNING: This version of VuFind does not support '
                 . 'the blueprint theme. Your config.ini [Site] theme setting '
-                . 'has been reset to the default: bootprint3. You may need to '
+                . 'has been reset to the default: sandal5. You may need to '
                 . 'reimplement your custom theme.';
         }
         $this->assertEquals($expectedWarnings, $warnings);
