@@ -3423,14 +3423,13 @@ public class TueFindBiblio extends TueFind {
         String ITAt = getFirstSubfieldValue(record, "ITA", 't');
         if ("1".equals(ITAt)) {
             // Check mediatype
-            if (!getMediatype(record).contains(nonElectronicRessource))
-                return "false";
-
-            // Check formats
-            Set<String> formats = getFormats(record);
-            formats.retainAll(TAD_FORMATS_ALLOWED);
-            if (!formats.isEmpty())
-                return "true";
+            if (getMediatype(record).contains(nonElectronicRessource)) {
+                // Check formats
+                Set<String> formats = getFormats(record);
+                formats.retainAll(TAD_FORMATS_ALLOWED);
+                if (!formats.isEmpty())
+                    return "true";
+            }
         }
 
         return "false";
