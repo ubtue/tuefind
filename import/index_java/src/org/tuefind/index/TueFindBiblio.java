@@ -3415,6 +3415,26 @@ public class TueFindBiblio extends TueFind {
         return KflIDs;
     }
 
+    public final Set<String> TAD_FORMATS_ALLOWED = new HashSet<>(Arrays.asList("Article"));
+
+    // Note: So far, this field is just for debugging purposes.
+    // The real logic is still in the Record Driver, which might be moved here in the long term.
+    public String isTADCandidate(final Record record) {
+        String ITAt = getFirstSubfieldValue(record, "ITA", 't');
+        if ("1".equals(ITAt)) {
+            // Check mediatype
+            if (!getMediatype(record).contains(nonElectronicRessource))
+                return "false";
+
+            // Check formats
+            Set<String> formats = getFormats(record);
+            formats.retainAll(TAD_FORMATS_ALLOWED);
+            if (!formats.isEmpty())
+                return "true";
+        }
+
+        return "false";
+    }
 
     public Collection<String> getHierarchicalSpecialCollection(final Record record) {
          Collection<String> results = new ArrayList<>();
