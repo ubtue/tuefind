@@ -6,7 +6,6 @@ import org.marc4j.marc.Subfield;
 import org.marc4j.marc.DataField;
 import org.solrmarc.index.SolrIndexer;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
@@ -47,10 +46,10 @@ public class CreatorTools extends org.vufind.index.CreatorTools
         String acceptWithoutRelator, String relatorConfig,
         String acceptUnknownRelators, String indexRawRelators, Boolean firstOnly
     ) {
-        List<String> result = new LinkedList<String>();
+        List<String> result = new LinkedList<>();
         String[] noRelatorAllowed = acceptWithoutRelator.split(":");
         String[] unknownRelatorAllowed = acceptUnknownRelators.split(":");
-        HashMap<String, Set<String>> parsedTagList = FieldSpecTools.getParsedTagList(tagList);
+        Map<String, Set<String>> parsedTagList = FieldSpecTools.getParsedTagList(tagList);
         List fields = SolrIndexer.instance().getFieldSetMatchingTagList(record, tagList);
         Iterator fieldsIter = fields.iterator();
         if (fields != null){
@@ -105,11 +104,11 @@ public class CreatorTools extends org.vufind.index.CreatorTools
         subfieldE.removeIf(u -> u.getData().length() != 3);
         subfield4.removeIf(u -> u.getData().length() != 3);
 
-        Set<String> relators = new LinkedHashSet<String>();
+        Set<String> relators = new LinkedHashSet<>();
 
         // if no relator is found, check to see if the current tag is in the "no
         // relator allowed" list.
-        if (subfieldE.size() == 0 && subfield4.size() == 0) {
+        if (subfieldE.isEmpty() && subfield4.isEmpty()) {
             if (Arrays.asList(noRelatorAllowed).contains(tag)) {
                 // TueFind: 100 contains the first author even if the relator is not given explicitly
                 if (tag.equals("100"))
@@ -124,7 +123,7 @@ public class CreatorTools extends org.vufind.index.CreatorTools
             relators.addAll(getValidRelatorsFromSubfields(subfield4, permittedRoles, indexRawRelators.toLowerCase().equals("true")));
             if (Arrays.asList(unknownRelatorAllowed).contains(tag)) {
                 Set<String> unknown = getUnknownRelatorsFromSubfields(subfieldE);
-                if (unknown.size() == 0) {
+                if (unknown.isEmpty()) {
                     unknown = getUnknownRelatorsFromSubfields(subfield4);
                 }
                 relators.addAll(unknown);
@@ -142,7 +141,7 @@ public class CreatorTools extends org.vufind.index.CreatorTools
      * maxSize should not be too small (to avoid concurrency between the threads),
      * but not be too high either so lookups stay efficient.
      */
-    static protected ConcurrentLimitedHashMap<String, ConcurrentHashMap<String, List<String>>> authorIdsCache = new ConcurrentLimitedHashMap<>(/* maxSize */100);
+    static protected Map<String, Map<String, List<String>>> authorIdsCache = new ConcurrentLimitedHashMap<>(/* maxSize */100);
 
     /**
      * This function is similar to VuFind's own ...byRelator functions.
@@ -157,7 +156,7 @@ public class CreatorTools extends org.vufind.index.CreatorTools
                                                               final String relatorConfig, final String prefix)
     {
         final String cacheKey = tagList + acceptWithoutRelator + relatorConfig;
-        ConcurrentHashMap<String, List<String>> cacheEntry = authorIdsCache.computeIfAbsent(record.getControlNumber(), e -> new ConcurrentHashMap<String, List<String>>());
+        Map<String, List<String>> cacheEntry = authorIdsCache.computeIfAbsent(record.getControlNumber(), e -> new ConcurrentHashMap<String, List<String>>());
         List<String> idsStrings = cacheEntry.computeIfAbsent(cacheKey, innerCacheEntry -> {
             // An author normally has multiple $0 subfields which will be
             // concatenated by the tools function, so it will generate strings like this
@@ -169,7 +168,7 @@ public class CreatorTools extends org.vufind.index.CreatorTools
             );
         });
 
-        List<String> result = new LinkedList<String>();
+        List<String> result = new LinkedList<>();
         for (final String idsString : idsStrings) {
             boolean idFound = false;
             for (final String id : idsString.split(" ")) {

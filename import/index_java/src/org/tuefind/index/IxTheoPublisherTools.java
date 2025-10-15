@@ -169,7 +169,7 @@ public class IxTheoPublisherTools extends org.vufind.index.PublisherTools {
      * @return
      */
     public Set<String> getPublishers(final Record record) {
-        Set<String> publishers = new LinkedHashSet<String>();
+        Set<String> publishers = new LinkedHashSet<>();
         boolean raisePublisherNotIdentifiedFlag = false;
 
         // First check 773d especially for articles of journals:
@@ -197,8 +197,8 @@ public class IxTheoPublisherTools extends org.vufind.index.PublisherTools {
         // Now track down relevant RDA-style 264b names; we only care about
         // copyright and publication names (and ignore copyright names if
         // publication names are present).
-        Set<String> pubNames = new LinkedHashSet<String>();
-        Set<String> copyNames = new LinkedHashSet<String>();
+        Set<String> pubNames = new LinkedHashSet<>();
+        Set<String> copyNames = new LinkedHashSet<>();
         List<VariableField> list264 = record.getVariableFields("264");
         for (VariableField vf : list264)
         {

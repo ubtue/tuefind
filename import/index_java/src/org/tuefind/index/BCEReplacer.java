@@ -38,7 +38,7 @@ public class BCEReplacer {
        // Non-standard BCE year references and their standardized replacements. Backreferences for matched groups look like $N
        // where N is a single-digit ASCII character referencing the N-th matched group.
        for (String lang : lang_to_bc_expressions.keySet()) {
-           final ArrayList<BCEReplacer> tempList = new ArrayList<BCEReplacer>();
+           final List<BCEReplacer> tempList = new ArrayList<>();
            final String bc_expression = lang_to_bc_expressions.get(lang);
            tempList.add(new BCEReplacer("v(\\d+) ?- ?v(\\d+)", "$1 " + bc_expression + "-$2 " + bc_expression));
            tempList.add(new BCEReplacer("v(\\d+) ?- ?(\\d+)", "$1 " + bc_expression + "-$2"));
