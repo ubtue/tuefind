@@ -210,4 +210,10 @@ public class IxTheoBiblio extends TueFindBiblio {
 
         return collections;
     }
+
+    // This is mainly for finding / debugging records that are available in the UB itself.
+    // Right now this can be used to find datasets related to TAD, but since this can change soon, we didn't name it more concisely.
+    public String hasITAtSubfield(final Record record) {
+        return Boolean.toString("1".equals(getFirstSubfieldValue(record, "ITA", 't')));
+    }
 }

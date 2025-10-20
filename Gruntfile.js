@@ -1,5 +1,6 @@
 module.exports = function(grunt) {
   const fs = require("fs");
+  const os = require("node:os");
 
   // Load dart-sass
   grunt.loadNpmTasks('grunt-dart-sass');
@@ -37,7 +38,7 @@ module.exports = function(grunt) {
       }
 
       // Now move up to parent theme:
-      var matches = config.match(/["']extends["']\s*=>\s*['"](\w+)['"]/);
+      var matches = config.match(/["']extends["']\s*=>\s*['"]([\w\-]+)['"]/);
 
       // "extends" set to "false" or missing entirely? We've hit the end of the line:
       if (matches === null || matches[1] === 'false') {
@@ -127,6 +128,7 @@ module.exports = function(grunt) {
           }
         ],
         options: {
+          excludes: ['important'],
           replacements: [
             // Activate SCSS
             {
@@ -275,7 +277,7 @@ module.exports = function(grunt) {
             expand: true,
             cwd: path.join('themes', themeList[i], 'scss'),
             src: ['compiled.scss'],
-            dest: checkOnly ? null : path.join('themes', themeList[i], 'css'),
+            dest: path.join(checkOnly ? os.tmpdir() : 'themes', themeList[i], 'css'),
             ext: '.css'
           }]
         };

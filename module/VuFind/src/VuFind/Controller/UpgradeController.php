@@ -236,7 +236,7 @@ class UpgradeController extends AbstractBase
     public function fixconfigAction()
     {
         $localConfig = dirname($this->getForcedLocalConfigPath('config.ini'));
-        $confDir = $this->cookie->oldVersion < 2
+        $confDir = Comparator::lessThan($this->cookie->oldVersion, '2.0')
             ? $this->getSourceDir() . '/web/conf'
             : $localConfig;
         $upgrader = new Upgrade(
@@ -273,7 +273,7 @@ class UpgradeController extends AbstractBase
         // subsequent calls.
         static $adapter = false;
         if (!$adapter) {
-            $factory = $this->serviceLocator->get(AdapterFactory::class);
+            $factory = $this->getService(AdapterFactory::class);
             $adapter = $factory->getAdapter(
                 $this->session->dbRootUser,
                 $this->session->dbRootPass
@@ -346,7 +346,7 @@ class UpgradeController extends AbstractBase
      */
     protected function fixSearchChecksumsInDatabase()
     {
-        $manager = $this->serviceLocator->get(ResultsManager::class);
+        $manager = $this->getService(ResultsManager::class);
         $searchService = $this->getDbService(SearchServiceInterface::class);
         $searchRows = $searchService->getSavedSearchesWithMissingChecksums();
         if (count($searchRows) > 0) {
@@ -561,8 +561,7 @@ class UpgradeController extends AbstractBase
                 // If this is a MySQL connection, we can do an automatic upgrade;
                 // if VuFind is using a different database, we have to prompt the
                 // user to check the migrations directory and upgrade manually.
-                $adapter = $this->serviceLocator
-                    ->get(Adapter::class);
+                $adapter = $this->getService(Adapter::class);
                 $platform = $adapter->getDriver()->getDatabasePlatformName();
                 if (strtolower($platform) == 'mysql') {
                     $upgradeResult = $this->upgradeMySQL($adapter);
@@ -580,6 +579,12 @@ class UpgradeController extends AbstractBase
                 }
             }
 
+            // If we have SQL to show, stop at this point to allow the changes to be made before progressing any
+            // further:
+            if (!empty($this->session->sql)) {
+                return $this->forwardTo('Upgrade', 'ShowSql');
+            }
+
             // Now that database structure is addressed, we can fix database
             // content -- the checks below should be platform-independent.
 
@@ -589,7 +594,7 @@ class UpgradeController extends AbstractBase
                 $this->getRequest()->getQuery()->set('anonymousCnt', $anonymousTags);
                 return $this->redirect()->toRoute('upgrade-fixanonymoustags');
             }
-            $dupeTags = $this->serviceLocator->get(TagsService::class)->getDuplicateTags();
+            $dupeTags = $this->getService(TagsService::class)->getDuplicateTags();
             if (count($dupeTags) > 0 && !isset($this->cookie->skipDupeTags)) {
                 return $this->redirect()->toRoute('upgrade-fixduplicatetags');
             }
@@ -623,9 +628,6 @@ class UpgradeController extends AbstractBase
         }
 
         $this->cookie->databaseOkay = true;
-        if (!empty($this->session->sql)) {
-            return $this->forwardTo('Upgrade', 'ShowSql');
-        }
         return $this->redirect()->toRoute('upgrade-home');
     }
 
@@ -636,6 +638,11 @@ class UpgradeController extends AbstractBase
      */
     public function showsqlAction()
     {
+        $recheck = $this->params()->fromPost('recheck');
+        if ($recheck) {
+            unset($this->session->sql);
+            return $this->redirect()->toRoute('upgrade-fixdatabase');
+        }
         $continue = $this->params()->fromPost('continue', 'nope');
         if ($continue == 'Next') {
             unset($this->session->sql);
@@ -683,8 +690,7 @@ class UpgradeController extends AbstractBase
                 // Test the connection:
                 try {
                     // Query a table known to exist
-                    $factory = $this->serviceLocator
-                        ->get(AdapterFactory::class);
+                    $factory = $this->getService(AdapterFactory::class);
                     $db = $factory->getAdapter($dbrootuser, $pass);
                     $db->query('SELECT * FROM user;');
                     $this->session->dbRootUser = $dbrootuser;
@@ -757,7 +763,7 @@ class UpgradeController extends AbstractBase
 
         // Handle submit action:
         if ($this->formWasSubmitted()) {
-            $this->serviceLocator->get(TagsService::class)->fixDuplicateTags();
+            $this->getService(TagsService::class)->fixDuplicateTags();
             return $this->forwardTo('Upgrade', 'FixDatabase');
         }
 
@@ -793,7 +799,7 @@ class UpgradeController extends AbstractBase
 
         // Process submit button:
         if ($this->formWasSubmitted()) {
-            $resourcePopulator = $this->serviceLocator->get(ResourcePopulator::class);
+            $resourcePopulator = $this->getService(ResourcePopulator::class);
             foreach ($problems as $problem) {
                 $recordId = $problem->getRecordId();
                 $source = $problem->getSource();
@@ -960,7 +966,7 @@ class UpgradeController extends AbstractBase
     {
         // If the cache is messed up, nothing is going to work right -- check that
         // first:
-        $cache = $this->serviceLocator->get(CacheManager::class);
+        $cache = $this->getService(CacheManager::class);
         if ($cache->hasDirectoryCreationError()) {
             return $this->redirect()->toRoute('install-fixcache');
         }

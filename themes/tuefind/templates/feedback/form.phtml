@@ -110,7 +110,6 @@ print $this->content()->renderTranslated($this->formId, 'feedback');
     <?php if (in_array($handleGroup, ['close', 'openAndClose'])): ?>
       </div>
     <?php endif ?>
-
     <?php if (in_array($handleGroup, ['open', 'openAndClose'])): ?>
       <?php if (in_array($el['type'], ['checkbox', 'radio', 'exclusiveSelect']) || (strcmp($el['group'], "__sender__") == 0)): ?><?php # This condition is required to avoid using custom js validation for a group of inputs 'sender' (useremail,captcha)  ?>
         <div class="field-set" role="group"<?= !empty($el['label']) ? ' aria-labelledby="' . $this->escapeHtmlAttr($formElement->getAttribute('id')) . '"' : ''?>>
@@ -179,4 +178,4 @@ $(function () {
 });
 EOD;
 ?>
-<?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $jsSnippet, 'SET')?>
+<?=$this->assetManager()->outputInlineScriptString($jsSnippet) ?>

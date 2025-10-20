@@ -1481,7 +1481,7 @@ class Alma extends AbstractBase implements
      * Place a hold request via Alma API. This could be a title level request or
      * an item level request.
      *
-     * @param array $holdDetails An associative array w/ atleast patron and item_id
+     * @param array $holdDetails An associative array w/ at least patron and item_id
      *
      * @return array success: bool, sysMessage: string
      *
@@ -1636,7 +1636,7 @@ class Alma extends AbstractBase implements
         $xml = $this->makeRequest('/courses');
         $courses = [];
         foreach ($xml as $course) {
-            $courses[$course->id] = $course->name;
+            $courses[(string)$course->id] = (string)$course->name;
         }
         return $courses;
     }

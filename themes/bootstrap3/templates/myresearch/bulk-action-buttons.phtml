@@ -10,16 +10,18 @@
   $checkboxSelectAllType = $socialConfig['checkbox_select_all_favorites_type'] ?? 'both';
   ?>
   <ul class="action-toolbar">
-    <?=
-      $this->bulkAction()->button(
-          'email',
-          'send-email',
-          'Email',
-          [
-            'title' => $this->translate('bulk_email_myresearch'),
-          ]
-      )
-    ?>
+    <?php if ($this->accountCapabilities()->isEmailActionAvailable()): ?>
+      <?=
+        $this->bulkAction()->button(
+            'email',
+            'send-email',
+            'Email',
+            [
+              'title' => $this->translate('bulk_email_myresearch'),
+            ]
+        )
+      ?>
+    <?php endif; ?>
     <?php if ((null !== $this->list && $this->userlist()->userCanEditList($user, $list)) || null === $this->list && $user): ?>
       <?=
         $this->bulkAction()->button(
@@ -71,13 +73,13 @@
     <?php endif; ?>
   </ul>
   <ul class="selection-controls-bar">
-    <?php if(in_array($checkboxSelectAllType, ['on_page', 'both'])): ?>
+    <?php if (in_array($checkboxSelectAllType, ['on_page', 'both'])): ?>
       <li class="bulk-checkbox">
         <input type="checkbox" name="selectAll" class="checkbox-select-all" id="myresearchCheckAll">
         <label for="myresearchCheckAll"><?=$this->transEsc('select_all_on_page')?></label>
       </li>
     <?php endif; ?>
-    <?php if($multiPageSelection && in_array($checkboxSelectAllType, ['global', 'both'])): ?>
+    <?php if ($multiPageSelection && in_array($checkboxSelectAllType, ['global', 'both'])): ?>
       <li class="bulk-checkbox">
         <div class="select-all-global hidden">
           <input type="checkbox" name="selectAllGlobal" class="checkbox-select-all-global" id="myresearchCheckAllGlobal">
@@ -85,7 +87,7 @@
         </div>
       </li>
     <?php endif; ?>
-    <?php if($multiPageSelection): ?>
+    <?php if ($multiPageSelection): ?>
       <li>
         <button type="button" class="clear-selection hidden"></button>
       </li>

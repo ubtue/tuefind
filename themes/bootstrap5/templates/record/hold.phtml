@@ -56,7 +56,11 @@
           </option>
         <?php endif; ?>
         <?php foreach ($this->requestGroups as $group): ?>
-          <option value="<?=$this->escapeHtmlAttr($group['id'])?>"<?=($selected == $group['id']) ? ' selected="selected"' : ''?>>
+          <option
+            value="<?=$this->escapeHtmlAttr($group['id'])?>"
+            data-locations-label="<?=$this->transEsc($group['locationsLabel'] ?? 'pick_up_location')?>"
+            <?=($selected == $group['id']) ? ' selected="selected"' : ''?>
+          >
             <?=$this->transEsc('request_group_' . $group['name'], null, $group['name'])?>
           </option>
         <?php endforeach; ?>
@@ -139,7 +143,7 @@
 
 <?php
     // Set up hold script; we do this inline instead of in the header for lightbox compatibility:
-    $this->inlineScript()->appendFile('hold.js');
+    echo $this->assetManager()->outputInlineScriptLink('hold.js');
 
     $js = <<<JS
         if ($.isReady) {
@@ -151,5 +155,5 @@
         }
         JS;
 
-    echo $this->inlineScript()->appendScript($js);
+    echo $this->assetManager()->outputInlineScriptString($js);
 ?>

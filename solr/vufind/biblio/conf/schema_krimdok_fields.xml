@@ -6,7 +6,6 @@
     <!-- CUSTOM fields - only KrimDok -->
     <field name="article_page_range" type="string" indexed="true" stored="true"/>
     <field name="available_for_pda" type="boolean" indexed="true" stored="true" multiValued="false"/>
-    <field name="available_in_tubingen" type="boolean" indexed="true" stored="true" multiValued="false"/>
     <field name="content" type="string" indexed="true" stored="true" multiValued="true"/>
     <field name="gkdnum" type="string" indexed="true" stored="true" multiValued="true"/>
     <field name="instituts_systematik1" type="textFacetRaw" indexed="true" stored="true" multiValued="true"/>

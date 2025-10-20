@@ -2,9 +2,6 @@
 return [
     'extends' => 'ixtheo2',
     'favicon' => 'relbib-favicon.ico',
-    'js' => [
-        'relbib2.js',
-    ],
     'helpers' => [
         'factories' => [
             'IxTheo\View\Helper\IxTheo\RelBib' => 'IxTheo\View\Helper\IxTheo\Factory'

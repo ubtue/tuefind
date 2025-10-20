@@ -902,15 +902,6 @@ public class TueFindBiblio extends TueFind {
     }
 
     /**
-     * @param record
-     *            the record
-     * @return
-     */
-    public String isAvailableInTuebingen(final Record record) {
-        return Boolean.toString(!record.getVariableFields("SIG").isEmpty());
-    }
-
-    /**
      * get the collections from LOK-tagged fields
      * <p/>
      * Typical LOK-Section below a Marc21 - Title-Set of a record: LOK |0 000
@@ -3417,7 +3408,6 @@ public class TueFindBiblio extends TueFind {
 
         return KflIDs;
     }
-
 
     public Collection<String> getHierarchicalSpecialCollection(final Record record) {
          Collection<String> results = new ArrayList<>();

@@ -72,7 +72,7 @@ class QueryAdapter implements QueryAdapterInterface
             // Basic search
             $handler = $search['i'] ?? $search['f'];
             return new Query(
-                $search['l'],
+                $search['l'] ?? '',
                 $handler,
                 $search['o'] ?? null
             );
@@ -92,7 +92,7 @@ class QueryAdapter implements QueryAdapterInterface
                 );
             } else {
                 // Simple query
-                return new Query($search[0]['l'], $search[0]['i']);
+                return new Query($search[0]['l'] ?? '', $search[0]['i']);
             }
         }
     }
@@ -242,7 +242,7 @@ class QueryAdapter implements QueryAdapterInterface
 
         return (count($groups) > 0)
             ? new QueryGroup($request->get('join', 'AND'), $groups)
-            : new Query();
+            : new Query(handler: $request->get('type'));
     }
 
     /**
