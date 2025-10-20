@@ -196,13 +196,11 @@ a:hover .login-dropdown-caret {
 
 /* --- Sidebar --- */
 .sidebar {
-  padding-top: 1rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
+  padding: 1rem;
   font-size: $reduced-font-size;
   background-color: $light-gray;
 
-  h1,h2,h3,h4 { margin-top: 0; }
+  h1,h2,h3:not(#acc-menu-lists-header):not(#acc-menu-favs-header),h4 { margin-top: 0; }
 
   .facet-group {
     background-color: $sidebar-item-bg;
@@ -236,15 +234,14 @@ a:hover .login-dropdown-caret {
     }
   }
 
-  .facet .badge {
-    max-height: 15px;
-    margin-top: 5px;
-  }
-
   .more-btn, .less-btn {
     border: 0;
     border-bottom: 1px solid $list-group-border;
     border-radius: 0;
+  }
+
+  .btn {
+    font-size: $reduced-font-size;
   }
 }
 
@@ -265,5 +262,11 @@ a:hover .login-dropdown-caret {
       order: 1;
     }
     .exclude { order: 2; }
+  }
+}
+
+@media (max-width: 1399px) {
+  .sidebar {
+    padding: 1rem 0.5rem 0.5rem 0.5rem;
   }
 }

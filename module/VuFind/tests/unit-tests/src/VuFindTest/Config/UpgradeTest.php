@@ -62,7 +62,7 @@ class UpgradeTest extends \PHPUnit\Framework\TestCase
      *
      * @return Upgrade
      */
-    protected function getUpgrader($version)
+    protected function getUpgrader(string $version): Upgrade
     {
         $oldDir = realpath($this->getFixtureDir() . 'configs/' . $version);
         $rawDir = realpath(__DIR__ . '/../../../../../../../config/vufind');
@@ -78,7 +78,7 @@ class UpgradeTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    protected function checkVersion($version)
+    protected function checkVersion(string $version): array
     {
         $upgrader = $this->getUpgrader($version);
         $upgrader->run();
@@ -106,12 +106,12 @@ class UpgradeTest extends \PHPUnit\Framework\TestCase
         if ((float)$version < 1.3) {
             $expectedWarnings[] = 'WARNING: This version of VuFind does not support '
                 . 'the default theme. Your config.ini [Site] theme setting '
-                . 'has been reset to the default: bootprint3. You may need to '
+                . 'has been reset to the default: sandal5. You may need to '
                 . 'reimplement your custom theme.';
         } elseif ((float)$version < 2.4) {
             $expectedWarnings[] = 'WARNING: This version of VuFind does not support '
                 . 'the blueprint theme. Your config.ini [Site] theme setting '
-                . 'has been reset to the default: bootprint3. You may need to '
+                . 'has been reset to the default: sandal5. You may need to '
                 . 'reimplement your custom theme.';
         }
         $this->assertEquals($expectedWarnings, $warnings);
@@ -204,7 +204,7 @@ class UpgradeTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    public function testUpgrade11()
+    public function testUpgrade11(): void
     {
         $this->checkVersion('1.1');
     }
@@ -214,7 +214,7 @@ class UpgradeTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    public function testUpgrade12()
+    public function testUpgrade12(): void
     {
         $this->checkVersion('1.2');
     }
@@ -224,7 +224,7 @@ class UpgradeTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    public function testUpgrade13()
+    public function testUpgrade13(): void
     {
         $this->checkVersion('1.3');
     }
@@ -234,9 +234,86 @@ class UpgradeTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    public function testUpgrade14()
+    public function testUpgrade14(): void
     {
         $this->checkVersion('1.4');
+    }
+
+    /**
+     * Data provider for testDatabaseUpgrade().
+     *
+     * @return array[]
+     */
+    public static function databaseUpgradeProvider(): array
+    {
+        return [
+            'legacy and new formats' => [
+                'database-both-formats',
+                // New format should take precedence:
+                [
+                    'use_ssl' => '',
+                    'verify_server_certificate' => '',
+                    'database_driver' => 'mysql',
+                    'database_username' => 'notroot',
+                    'database_password' => 'password',
+                    'database_host' => 'localhost',
+                    'database_port' => '3306',
+                    'database_name' => 'vufind',
+                ],
+            ],
+            'legacy format only' => [
+                'database-legacy-format',
+                [
+                    'use_ssl' => '',
+                    'verify_server_certificate' => '',
+                    'database' => 'mysql://user:pass@localhost/vufind_custom',
+                ],
+            ],
+            'new format only' => [
+                'database-new-format',
+                [
+                    'use_ssl' => '',
+                    'verify_server_certificate' => '',
+                    'database_driver' => 'mysql',
+                    'database_username' => 'notroot',
+                    'database_password' => 'password',
+                    'database_host' => 'localhost',
+                    'database_port' => '3306',
+                    'database_name' => 'vufind',
+                ],
+            ],
+            'new format only, with file-based password' => [
+                'database-new-format-password-file',
+                [
+                    'use_ssl' => '',
+                    'verify_server_certificate' => '',
+                    'database_driver' => 'mysql',
+                    'database_username' => 'notroot',
+                    'database_password_file' => '/path/to/secret',
+                    'database_host' => 'localhost',
+                    'database_port' => '3306',
+                    'database_name' => 'vufind',
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Test database upgrade in config.ini
+     *
+     * @param string $fixture  Fixture file
+     * @param array  $expected Expected result
+     *
+     * @return void
+     *
+     * @dataProvider databaseUpgradeProvider
+     */
+    public function testDatabaseUpgrade(string $fixture, array $expected): void
+    {
+        $upgrader = $this->getUpgrader($fixture);
+        $upgrader->run();
+        $results = $upgrader->getNewConfigs();
+        $this->assertEquals($expected, $results['config.ini']['Database']);
     }
 
     /**
@@ -244,7 +321,7 @@ class UpgradeTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    public function testDefaultGenerator()
+    public function testDefaultGenerator(): void
     {
         // We expect the upgrader to switch default values:
         $upgrader = $this->getUpgrader('defaultgenerator');
@@ -270,7 +347,7 @@ class UpgradeTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    public function testSpelling()
+    public function testSpelling(): void
     {
         $upgrader = $this->getUpgrader('spelling');
         $upgrader->run();
@@ -286,7 +363,7 @@ class UpgradeTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    public function testSyndetics()
+    public function testSyndetics(): void
     {
         // Test upgrading an SSL URL
         $upgrader = $this->getUpgrader('syndeticsurlssl');
@@ -312,7 +389,7 @@ class UpgradeTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    public function testGooglePreviewUpgrade()
+    public function testGooglePreviewUpgrade(): void
     {
         $upgrader = $this->getUpgrader('googlepreview');
         $upgrader->run();
@@ -324,44 +401,11 @@ class UpgradeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test removal of xID settings
-     *
-     * @return void
-     */
-    public function testXidDeprecation()
-    {
-        $upgrader = $this->getUpgrader('xid');
-        $upgrader->run();
-        $results = $upgrader->getNewConfigs();
-        $this->assertEquals(
-            ['Similar'],
-            $results['config.ini']['Record']['related']
-        );
-        $this->assertEquals(
-            ['WorldCatSimilar'],
-            $results['WorldCat.ini']['Record']['related']
-        );
-        $this->assertEquals(['apiKey' => 'foo'], $results['config.ini']['WorldCat']);
-        $expectedWarnings = [
-            'The [WorldCat] id setting is no longer used and has been removed.',
-            'The [WorldCat] xISBN_token setting is no longer used and has been removed.',
-            'The [WorldCat] xISBN_secret setting is no longer used and has been removed.',
-            'The [WorldCat] xISSN_token setting is no longer used and has been removed.',
-            'The [WorldCat] xISSN_secret setting is no longer used and has been removed.',
-            'The Editions related record module is no longer supported due to OCLC\'s xID '
-            . 'API shutdown. It has been removed from your settings.',
-            'The WorldCatEditions related record module is no longer supported due to OCLC\'s '
-            . 'xID API shutdown. It has been removed from your settings.',
-        ];
-        $this->assertEquals($expectedWarnings, $upgrader->getWarnings());
-    }
-
-    /**
      * Test permission upgrade
      *
      * @return void
      */
-    public function testPermissionUpgrade()
+    public function testPermissionUpgrade(): void
     {
         $upgrader = $this->getUpgrader('permissions');
         $upgrader->run();
@@ -429,7 +473,7 @@ class UpgradeTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    public function testGoogleWarnings()
+    public function testGoogleWarnings(): void
     {
         $upgrader = $this->getUpgrader('googlewarnings');
         $upgrader->run();
@@ -467,37 +511,17 @@ class UpgradeTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    public function testWorldCatWarnings()
+    public function testWorldCatWarnings(): void
     {
         $upgrader = $this->getUpgrader('worldcatwarnings');
         $upgrader->run();
         $warnings = $upgrader->getWarnings();
         $this->assertTrue(
             in_array(
-                'The [WorldCat] LimitCodes setting never had any effect and has been'
-                . ' removed.',
+                'The [WorldCat] section of config.ini has been removed following'
+                . ' the shutdown of the v1 WorldCat search API; use WorldCat2.ini instead.',
                 $warnings
             )
-        );
-    }
-
-    /**
-     * Test WorldCat-specific upgrades.
-     *
-     * @return void
-     */
-    public function testWorldCatUpgrades()
-    {
-        $upgrader = $this->getUpgrader('worldcatupgrades');
-        $upgrader->run();
-        $results = $upgrader->getNewConfigs();
-        $this->assertEquals(
-            'Author',
-            $results['WorldCat.ini']['Basic_Searches']['srw.au']
-        );
-        $this->assertEquals(
-            'adv_search_author',
-            $results['WorldCat.ini']['Advanced_Searches']['srw.au']
         );
     }
 
@@ -506,7 +530,7 @@ class UpgradeTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    public function testMeaningfulLineDetection()
+    public function testMeaningfulLineDetection(): void
     {
         $upgrader = $this->getUpgrader('1.4');
         $meaningless = realpath(
@@ -536,7 +560,7 @@ class UpgradeTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    public function testCommentExtraction()
+    public function testCommentExtraction(): void
     {
         $upgrader = $this->getUpgrader('comments');
         $config = $this->getFixtureDir() . 'configs/comments/config.ini';
@@ -574,7 +598,7 @@ class UpgradeTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    public function testPrimoUpgrade()
+    public function testPrimoUpgrade(): void
     {
         $upgrader = $this->getUpgrader('primo');
         $upgrader->run();
@@ -591,7 +615,7 @@ class UpgradeTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    public function testAmazonCoverWarning()
+    public function testAmazonCoverWarning(): void
     {
         $upgrader = $this->getUpgrader('amazoncover');
         $upgrader->run();
@@ -610,7 +634,7 @@ class UpgradeTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    public function testAmazonReviewWarning()
+    public function testAmazonReviewWarning(): void
     {
         $upgrader = $this->getUpgrader('amazonreview');
         $upgrader->run();
@@ -629,7 +653,7 @@ class UpgradeTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    public function testReCaptcha()
+    public function testReCaptcha(): void
     {
         $upgrader = $this->getUpgrader('recaptcha');
         $upgrader->run();
@@ -639,5 +663,37 @@ class UpgradeTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('private', $captcha['recaptcha_secretKey']);
         $this->assertEquals('theme', $captcha['recaptcha_theme']);
         $this->assertEquals(['recaptcha'], $captcha['types']);
+    }
+
+    /**
+     * Data provider for testMailRequireLoginMigration().
+     *
+     * @return array[]
+     */
+    public static function mailRequireLoginProvider(): array
+    {
+        return [
+            'false' => ['email-require-login-false', 'enabled'],
+            'true' => ['email-require-login-true', 'require_login'],
+        ];
+    }
+
+    /**
+     * Test migration of [Mail] require_login setting.
+     *
+     * @param string $fixture  Fixture to load
+     * @param string $expected Expected migrated setting
+     *
+     * @return void
+     *
+     * @dataProvider mailRequireLoginProvider
+     */
+    public function testMailRequireLoginMigration(string $fixture, string $expected): void
+    {
+        $upgrader = $this->getUpgrader($fixture);
+        $upgrader->run();
+        $results = $upgrader->getNewConfigs();
+        $this->assertFalse(isset($results['config.ini']['Mail']['require_login']));
+        $this->assertEquals($expected, $results['config.ini']['Mail']['email_action']);
     }
 }

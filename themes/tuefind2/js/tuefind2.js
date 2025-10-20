@@ -7,8 +7,6 @@ var TueFind2 = {
             MinHeight: 300
         }
     },
-    ExpandDropdownsOnHover: false,
-
     /**
     * - resize the box if we are not on the default page
     * - function needs to be called directly in searchbox, else (e.g. document.onload) it first pops out and then pops back again,
@@ -30,14 +28,3 @@ var TueFind2 = {
         }
     }
 }
-
-$(function(){
-    if (TueFind2.ExpandDropdownsOnHover === true) {
-        $('.dropdown').hover(function() {
-            $(this).addClass('open');
-        },
-        function() {
-            $(this).removeClass('open');
-        });
-    }
-});
