@@ -723,4 +723,8 @@ $(document).ready(function () {
         scrollX: true
     });
 
+    $('#modal>.modal-dialog>.modal-content>button.close').click(function(){
+        $('#modal').modal('toggle');
+    })
+
 });
