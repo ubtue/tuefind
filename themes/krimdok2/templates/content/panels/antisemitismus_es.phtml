@@ -1,0 +1,39 @@
+<div class="panel panel-top panel-default tf-panel-home-4">
+    <a class="panel-default-link" href="<?=$this->url('content-page', ['page' => 'antisemitismus']) ?>">
+        <div class="panel-image" style="background-image: url(<?=$this->imageLink('newfrontpage/antisemitismus.jpg') ?>);"></div>
+        <div class="panel-content">
+            <h4>Colección el extremismo de derecha y el antisemitismo</h4>
+        </div>
+    </a>
+    <div class="col-lg-12 mini-search-block b-big">
+        <div class="input-group">
+            <form class="form_anti" action="<?=$this->url("search-results", [], [])?>" method="get">
+                <input type="hidden" name="filter" value="">
+                <div class="input-group">
+                    <input type="text" class="form-control lookfor_anti" name="lookfor" value="" placeholder="Buscar para…">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button>
+                    </span>
+                </div> 
+            </form>   
+        </div>  
+    </div>  
+</div>
+
+<style>
+.mini-search-block.b-big {
+    margin-top: 76px;
+}    
+.mini-search-block .form-control {
+    border-radius: 4px;
+}
+</style>
+<?php
+$script = <<<JS
+    $('.form_anti').submit(function(){
+        let lookfor = $('.lookfor_anti');
+        lookfor.val("rs:rexa "+lookfor.val());
+    });
+JS;
+?>
+<?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $script, 'SET');
