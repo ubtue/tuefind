@@ -216,7 +216,7 @@
       <?php endif; ?>
 
       <?php if ($this->tuefind()->getKfl()->hasTitle($this->driver)): ?>
-        <a href="<?=$this->url('redirect-license', ['id' => $this->driver->getUniqueId()])?>" data-lightbox="" rel="nofollow"><i class="fa fa-external-link"></i> FID-Lizenz: Zugriff mit <?=$this->tuefind()->getTueFindType()?>-Konto</a><br>
+        <a class="fulltext" href="<?=$this->url('redirect-license', ['id' => $this->driver->getUniqueId()])?>" data-lightbox="" rel="nofollow"><i class="fa fa-external-link"></i> FID-Lizenz: Zugriff mit <?=$this->tuefind()->getTueFindType()?>-Konto</a><br>
       <?php endif; ?>
 
       <?php if (strtolower($this->tuefind()->getControllerName()) != 'search2' ): ?>
