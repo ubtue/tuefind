@@ -202,6 +202,10 @@
         </span>
       <?php endif; ?>
 
+      <?php if ($this->tuefind()->getKfl()->hasTitle($this->driver)): ?>
+        <a href="<?=$this->url('redirect-license', ['id' => $this->driver->getUniqueId()])?>" data-lightbox="" rel="nofollow"><i class="fa fa-external-link"></i> FID-Lizenz: Zugriff mit <?=$this->tuefind()->getTueFindType()?>-Konto</a><br>
+      <?php endif; ?>
+
       <?php $bibleRangesString = $this->driver->tryMethod('getBibleRangesString');
         if (!empty($bibleRangesString)) {
           echo '<div>' . $this->transEsc($bibleRangesString) . '</div>';
@@ -288,7 +292,7 @@
       <?php endif; ?>
 
       <?php /* Hierarchy tree link */ ?>
-      <?php $trees = $this->driver->tryMethod('getHierarchyTrees'); ?> 
+      <?php $trees = $this->driver->tryMethod('getHierarchyTrees'); ?>
         <?php if (!empty($trees)): ?>
         <?php foreach ($trees as $hierarchyID => $hierarchyTitle): ?>
           <div class="hierarchyTreeLink">
