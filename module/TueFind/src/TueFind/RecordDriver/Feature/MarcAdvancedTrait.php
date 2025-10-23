@@ -200,5 +200,15 @@ trait MarcAdvancedTrait
         return $isbns[0] ?? false;
     }
 
+    /**
+     * Strip brackets, since this can affect other functions
+     * like e.g. MetadataVocabulary.
+     */
+    public function getPublicationDates()
+    {
+        $dates = parent::getPublicationDates();
+        $datesCleaned = array_map(fn($date) => preg_replace('[\[\]]', '', $date), $dates);
+        return $dates;
+    }
 
 }
