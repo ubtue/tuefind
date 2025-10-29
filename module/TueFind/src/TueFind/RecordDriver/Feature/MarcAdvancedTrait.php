@@ -197,7 +197,7 @@ trait MarcAdvancedTrait
      */
     public function getCleanISBN() {
         $isbns = $this->getISBNs();
-        return $isbns[0] ?? false;
+        return !isset($isbns) ? false : str_replace(['-'], '', $isbns[0]);
     }
 
 
