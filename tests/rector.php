@@ -19,5 +19,5 @@ return RectorConfig::configure()
         PHPUnitSetList::ANNOTATIONS_TO_ATTRIBUTES,
     ])
     ->withTypeCoverageLevel(0)
-    ->withDeadCodeLevel(0)
+    ->withDeadCodeLevel(6)
     ->withCodeQualityLevel(0);
