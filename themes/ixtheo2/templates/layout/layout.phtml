@@ -159,6 +159,9 @@
                     if($routeParams['controller'] == 'index') {
                       $showContainerBlock = false;
                     }
+                    if(isset($routeParams['page']) && $routeParams['page'] == 'digi2026') {
+                      $showContainerBlock = false;
+                    }
                   ?>
                   <?php if($showContainerBlock === true): ?>
                     <div id="content" class="container">
