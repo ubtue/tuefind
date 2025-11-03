@@ -33,15 +33,15 @@ return [
         ],
     ],
     'css' => [
-        'vendor/jquery-ui.min.css',
-        'vendor/jquery.dataTable.css',
-        'botprotect.css',
+        ['file' => 'vendor/jquery-ui.min.css'],
+        ['file' => 'vendor/jquery.dataTable.css'],
+        ['file' => 'botprotect.css'],
     ],
     'js' => [
-        'tuefind.js',
-        'vendor/jquery-ui.min.js',
-        'vendor/jquery.dataTable.js',
-        'vendor/resultGrouping.js',
+        ['file' => 'tuefind.js', 'priority' => 1500],
+        ['file' => 'vendor/jquery-ui.min.js', 'priority' => 1400],
+        ['file' => 'vendor/jquery.dataTable.js', 'priority' => 1300],
+        ['file' => 'vendor/resultGrouping.js', 'priority' => 1200],
     ],
     'icons' => [
         'upload' => 'FontAwesome:upload',

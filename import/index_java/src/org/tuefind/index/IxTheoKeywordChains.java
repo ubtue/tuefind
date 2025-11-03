@@ -89,7 +89,7 @@ public class IxTheoKeywordChains extends TueFind {
         final List<String> keyWordChain = getKeyWordChain(keyWordChains, chainID);
         StringBuilder keyword = new StringBuilder();
         // Collect elements within one chain in case there is a translation for a whole string
-        List<String> complexElements = new ArrayList<String>();
+        List<String> complexElements = new ArrayList<>();
         if (dataField.getSubfield('2') == null || !dataField.getSubfield('2').getData().equals("gnd"))
             return;
 

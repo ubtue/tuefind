@@ -44,7 +44,6 @@ if ($this->results instanceof Results):
         'hasDefaultsApplied' => $this->params->hasDefaultsApplied(),
         'selectedShards' => $this->params->getSelectedShards(),
         'ignoreHiddenFiltersInRequest' => $this->ignoreHiddenFiltersInRequest ?? false,
-        'ignoreHiddenFilterMemory' => $this->ignoreHiddenFilterMemory ?? false,
       ]
   );
 
@@ -73,6 +72,8 @@ if ($this->results instanceof Results):
       ]
   );
   $recommendations = $this->results->getRecommendations('side');
+  $multiFacetsSelection = $this->multiFacetsSelection ? 'true' : 'false';
+  $this->assetManager()->appendScriptString('var multiFacetsSelectionEnabled = ' . $multiFacetsSelection . ';');
 ?>
 
 <h1 class="sr-only"><?=$this->escapeHtml($headTitle)?></h1>

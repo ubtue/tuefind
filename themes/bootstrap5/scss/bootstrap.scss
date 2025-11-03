@@ -214,11 +214,22 @@ h3 { font-size: 16px; }
 }
 
 /* ------ Layout ------ */
+.sticky {
+  position: fixed;
+  left: 0;
+}
+
 footer {
   @extend .container;
   padding: 1rem;
 }
 @media (min-width: 768px) {
+  @media (max-width: 991px) {
+    .container {
+      max-width: initial;
+      width: 100%;
+    }
+  }
   .footer-container {
     display: flex;
     width: 100%;
@@ -231,11 +242,15 @@ footer {
   .mainbody.left,
   .sidebar.left {
     float: left;
+  }
+  .mainbody.left {
     padding-right: 1rem;
   }
   .mainbody.right,
   .sidebar.right {
     float: right;
+  }
+  .mainbody.right {
     padding-left: 1rem;
   }
   .mainbody.solo {
@@ -248,22 +263,6 @@ footer {
 .rtl .flex { flex-direction: row-reverse; }
 .flex-col { flex: 0 1 100%; }
 .flex-none { flex: none; }
-
-/* ------ Form Errors ------ */
-.has-error {margin-bottom: 0;}
-.sms-error { @extend .has-error; }
-.help-block.with-errors {
-  margin: 0;
-  &:first-child {
-    padding-top: $padding-base-vertical;
-  }
-  padding-bottom: $padding-base-vertical;
-  &:empty {padding: 0;}
-
-  ul.list-unstyled {
-    margin: 0;
-  }
-}
 
 /* ------ Admin ------ */
 .form-admin-maintenance .form-control {
@@ -472,6 +471,17 @@ ul.list-group {
   min-width: 200px;
 }
 
+.preferred-library-selection th {
+  vertical-align: middle;
+}
+
+.form-select-card {
+  margin-bottom: $paragraph-margin-bottom;
+  display: flex;
+  gap: 0.5rem;
+  align-items: baseline;
+}
+
 .logoutOptions.with-dropdown a { padding-right: .5rem; }
 #login-dropdown {
   a {
@@ -498,6 +508,9 @@ ul.list-group {
   tbody > tr > td {
     vertical-align: middle;
   }
+}
+.fines-total {
+  font-weight: bold;
 }
 
 /* --- PubDateVis --- */

@@ -8,6 +8,11 @@
                 </div>
 
                 <div class="slick-slider-multiple-item" align="center">
+                    <a href="/Content/digi2026">
+                        <div class="ix-slick-slider-item" title="<?=$this->transEscAttr('symbolic_image_table63');?>" style="background-image: url(<?=$this->imageLink('slider/News_Tagung.png')?>);">
+                            <div class="ix-slick-slider-item-title">Wissenschaftliche Tagung und Festakt IxTheo</div>
+                        </div>
+                    </a>
                     <a href="<?=$this->url('content-page', ['page' => 'News']) ?>#new_homepage">
                         <div class="ix-slick-slider-item" title="<?=$this->transEscAttr('symbolic_image_table63');?>" style="background-image: url(<?=$this->imageLink('slider/hands-2178566.jpg')?>);">
                             <div class="ix-slick-slider-item-title"><?=$this->translate("section_aktuelles_title17")?></div>
@@ -77,11 +82,11 @@ $(document).ready(function(){
         dots: true,
         autoplay:true,
         infinite: true,
-        speed: 100,
+        speed: 500,
         fade: true,
         cssEase: 'linear',
         arrows: true
     });
 });
 EOD;?>
-<?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $jsSnippet, 'SET')?>
+<?=$this->assetManager()->outputInlineScriptString($jsSnippet)?>

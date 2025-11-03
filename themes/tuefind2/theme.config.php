@@ -3,8 +3,8 @@
 return [
     'extends' => 'tuefind',
     'js' => [
-        'scripts.js',
-        'tuefind2.js',
-        'vendor/resultGrouping.js',
+        ['file' => 'scripts.js', 'priority' => 1100],
+        ['file' => 'tuefind2.js', 'priority' => 1200],
+
     ],
 ];

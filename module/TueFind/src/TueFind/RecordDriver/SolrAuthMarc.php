@@ -75,36 +75,39 @@ class SolrAuthMarc extends SolrAuthDefault {
         $references = [];
 
         $gndNumber = $this->getGNDNumber();
-        if ($gndNumber != null)
-            $references[] = ['title' => 'GND' .  ' (' . $gndNumber . ')',
+        if ($gndNumber != null) {
+            $references[] = ['title' => 'GND (' . $gndNumber . ')',
                              'url' => 'http://d-nb.info/gnd/' . urlencode($gndNumber)];
+            $references[] = ['title' => 'Prometheus (' . $gndNumber . ')',
+                             'url' => 'http://prometheus.lmu.de/gnd/' . urlencode($gndNumber)];
+        }
 
         $isnis = $this->getISNIs();
         foreach ($isnis as $isni) {
-            $references[] = ['title' => 'ISNI' .  ' (' . $isni . ')',
+            $references[] = ['title' => 'ISNI (' . $isni . ')',
                              'url' => 'https://isni.org/isni/' . urlencode(str_replace(' ', '', $isni))];
         }
 
         $lccn = $this->getLCCN();
         if ($lccn != null)
-            $references[] = ['title' => 'LOC' .  ' (' . $lccn . ')',
+            $references[] = ['title' => 'LOC (' . $lccn . ')',
                              'url' => 'https://lccn.loc.gov/' . urlencode($lccn)];
 
         $orcids = $this->getORCIDs();
         foreach ($orcids as $orcid) {
-            $references[] = ['title' => 'ORCID' .  ' (' . $orcid . ')',
+            $references[] = ['title' => 'ORCID (' . $orcid . ')',
                              'url' => 'https://orcid.org/' . urlencode($orcid)];
         }
 
         $viafs = $this->getVIAFs();
         foreach ($viafs as $viaf) {
-            $references[] = ['title' => 'VIAF' .  ' (' . $viaf . ')',
+            $references[] = ['title' => 'VIAF (' . $viaf . ')',
                              'url' => 'https://viaf.org/viaf/' . urlencode($viaf)];
         }
 
         $wikidataIds = $this->getWikidataIds();
         foreach ($wikidataIds as $wikidataId) {
-            $references[] = ['title' => 'Wikidata' .  ' (' . $wikidataId . ')',
+            $references[] = ['title' => 'Wikidata (' . $wikidataId . ')',
                              'url' => 'https://www.wikidata.org/wiki/' . urlencode($wikidataId)];
         }
 

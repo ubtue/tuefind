@@ -7,9 +7,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.sql.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.time.YearMonth;
 import java.util.*;
 import java.util.Map.Entry;
@@ -17,6 +17,7 @@ import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
+import static java.util.stream.Collectors.joining;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -42,8 +43,7 @@ import org.solrmarc.tools.PropertyUtils;
 import org.solrmarc.tools.Utils;
 import org.solrmarc.driver.Boot;
 import org.vufind.index.DatabaseManager;
-import java.sql.*;
-import static java.util.stream.Collectors.joining;
+import org.apache.commons.validator.routines.ISBNValidator;
 
 /*
 * a structure to hold some issue informations
@@ -120,6 +120,35 @@ class IssueInfo {
     }
 }
 
+class ISBN extends ISBNValidator{
+    public ISBN(final boolean convert) {
+        super(convert);
+    }
+
+    private String get10CheckDigit(final String isbn) {
+        int sum = 0, checkDigit;
+        final String[] arrIsbn = isbn.split("");
+
+        for (int i = 0; i < isbn.length(); i++) {
+            sum += Integer.parseInt(arrIsbn[i]) * (1 + i);
+        }
+        checkDigit = sum % 11;
+
+        return checkDigit == 10 ? "X" : Integer.toString(checkDigit);
+    }
+
+    public String convertToISBN10(final String isbn13) {
+        final String _isbn13 = validateISBN13(isbn13);
+        if (_isbn13 != null) {
+            if (_isbn13.substring(0, 3).equals("978")) {
+                final String start = _isbn13.substring(3, 12);
+                return start + get10CheckDigit(start);
+            }
+        }
+        return null;
+    }
+}
+
 public class TueFindBiblio extends TueFind {
     public final static String UNASSIGNED_STRING = "[Unassigned]";
     public final static Set<String> UNASSIGNED_SET = Collections.singleton(UNASSIGNED_STRING);
@@ -154,7 +183,7 @@ public class TueFindBiblio extends TueFind {
     protected static CreatorTools creatorTools = new CreatorTools();
 
     // TODO: This should be in a translation mapping file
-    protected final static HashMap<String, String> isil_to_department_map = new HashMap<String, String>() {
+    protected final static Map<String, String> isil_to_department_map = new HashMap<>() {
         {
             this.put("Unknown", "Unknown");
             this.put("DE-21", "Universit\u00E4tsbibliothek T\u00FCbingen");
@@ -268,7 +297,7 @@ public class TueFindBiblio extends TueFind {
     }
 
     // Must match constants in FullTextCache.h
-    protected final static Map<String, String> text_type_to_description_map = new TreeMap<String, String>() {
+    protected final static Map<String, String> text_type_to_description_map = new TreeMap<>() {
         {
             this.put("1", "Fulltext");
             this.put("2", "Table of Contents");
@@ -521,8 +550,8 @@ public class TueFindBiblio extends TueFind {
      *         pairs.
      */
     public Set<String> getUrlsAndMaterialTypes(final Record record) {
-        final Set<String> nonUnknownMaterialTypeURLs = new HashSet<String>();
-        final Map<String, Set<String>> materialTypeToURLsMap = new TreeMap<String, Set<String>>();
+        final Set<String> nonUnknownMaterialTypeURLs = new HashSet<>();
+        final Map<String, Set<String>> materialTypeToURLsMap = new TreeMap<>();
         final Set<String> urls_and_material_types = new LinkedHashSet<>();
         boolean is_fid = false;
 
@@ -585,7 +614,7 @@ public class TueFindBiblio extends TueFind {
             for (final Subfield subfield_u : field.getSubfields('u')) {
                 Set<String> URLs = materialTypeToURLsMap.get(materialType);
                 if (URLs == null) {
-                    URLs = new HashSet<String>();
+                    URLs = new HashSet<>();
                     materialTypeToURLsMap.put(materialType, URLs);
                 }
 
@@ -728,8 +757,8 @@ public class TueFindBiblio extends TueFind {
      */
     public Set<String> getSuperMP(final Record record, final String fieldnums) {
         final Set<String> retval = new LinkedHashSet<>();
-        final HashMap<String, String> resvalues = new HashMap<>();
-        final HashMap<String, Integer> resscores = new HashMap<>();
+        final Map<String, String> resvalues = new HashMap<>();
+        final Map<String, Integer> resscores = new HashMap<>();
 
         String value;
         String id;
@@ -836,7 +865,7 @@ public class TueFindBiblio extends TueFind {
         if (titleSubfield == null)
             return null;
 
-        final Set<String> subfields = new LinkedHashSet<String>();
+        final Set<String> subfields = new LinkedHashSet<>();
         subfields.add(titleSubfield.getData());
 
         final Subfield gSubfield = _773Field.getSubfield('g');
@@ -853,13 +882,43 @@ public class TueFindBiblio extends TueFind {
         return subfields;
     }
 
-    /**
-     * @param record
-     *            the record
-     * @return
-     */
-    public String isAvailableInTuebingen(final Record record) {
-        return Boolean.toString(!record.getVariableFields("SIG").isEmpty());
+    public Set<String> getISBNs(final Record record) {
+        // false means no auto converstion from 10 to 13 digits isbn format
+        ISBN isbnHandler = new ISBN(false);
+        final Set<String> isbns = new LinkedHashSet<>();
+        final List<String> isbnsInTheRecord = getSubfieldValuesByFieldSpec(record, "020a");
+
+        for(final String isbn : isbnsInTheRecord){
+            String isbn_13 = null, isbn_10 = null;
+
+            if(isbnHandler.isValidISBN13(isbn)){
+                isbn_13 = isbnHandler.validateISBN13(isbn);
+                isbn_10 = isbnHandler.convertToISBN10(isbn_13);
+            }
+            if(isbnHandler.isValidISBN10(isbn)){
+                isbn_10 = isbnHandler.validateISBN10(isbn);
+                isbn_13 = isbnHandler.convertToISBN13(isbn_10);
+
+            }
+
+            if(isbn_10 == null && isbn_13 == null){
+                logger.warning("Invalid ISBN in 020$a: \"" + isbn + "\"! (PPN: " + record.getControlNumber() +
+                               ") - Adding anyway...");
+                isbns.add(isbn);
+                continue;
+            }
+
+            if(isbn_13 != null){
+                isbns.add(isbn_13);
+            }
+            if(isbn_10 != null){
+                isbns.add(isbn_10);
+            }
+        }
+
+        // 020$z contains invalid/canceled ISBNs but these are required to be searchable anyway
+        isbns.addAll(getSubfieldValuesByFieldSpec(record, "020z"));
+        return isbns;
     }
 
     /**
@@ -1236,7 +1295,7 @@ public class TueFindBiblio extends TueFind {
      * Parse the field specifications
      */
     protected Map<String, String> parseTopicSeparators(String separatorSpec) {
-        final Map<String, String> separators = new HashMap<String, String>();
+        final Map<String, String> separators = new HashMap<>();
 
         // Split the string at unescaped ":"
         // See
@@ -1325,7 +1384,7 @@ public class TueFindBiblio extends TueFind {
                 subtopics[i] = (translation_map.get(subtopic) != null) ? translation_map.get(subtopic) : subtopic;
                 ++i;
             }
-            topic = Utils.join(new HashSet<String>(Arrays.asList(subtopics)), " / ");
+            topic = Utils.join(new HashSet<>(Arrays.asList(subtopics)), " / ");
         }
         // If we have a topic and a following number, try to separate the word and join it afterwards
         // This is especially important for time informations where we provide special treatment
@@ -1503,7 +1562,7 @@ public class TueFindBiblio extends TueFind {
         final Pattern subfieldPattern = Pattern.compile(subfldTags.length() == 0 ? "[a-z]" : extractNormalizedSubfieldPatternHelper(subfldTags));
         for (final VariableField vf : marcFieldList) {
             final StringBuilder buffer = new StringBuilder("");
-            final List<String> complexElements = new ArrayList<String>();
+            final List<String> complexElements = new ArrayList<>();
             final DataField marcField = (DataField) vf;
             // Skip fields that do not match our criteria
             if (includeFieldPredicate != null && (!includeFieldPredicate.test(marcField)))
@@ -1627,7 +1686,6 @@ public class TueFindBiblio extends TueFind {
                 }
             }
         }
-        return;
     }
 
     protected class Topic {
@@ -1778,7 +1836,7 @@ public class TueFindBiblio extends TueFind {
 							                         : extractNormalizedSubfieldPatternHelper(subfieldTags));
         fieldloop:
         for (final VariableField vf : marcFieldList) {
-            final ArrayList<Topic> topicParts = new ArrayList<>();
+            final List<Topic> topicParts = new ArrayList<>();
             final DataField marcField = (DataField) vf;
             // Skip fields that do not match our criteria
             if (includeFieldPredicate != null && (!includeFieldPredicate.test(marcField)))
@@ -1821,7 +1879,7 @@ public class TueFindBiblio extends TueFind {
                     if ((term.length() < 2) && !term.matches("\\d"))
                         continue; //Skip on character terms to address uppercase subfield problems in standardized keywords
 
-                    if (topicParts.size() > 0) {
+                    if (!topicParts.isEmpty()) {
                         final String separator = getSubfieldBasedSeparator(separators, subfield.getCode(), term);
                         // Make sure we strip the subSubfield code from our term
                         if (Character.isDigit(subfieldCode))
@@ -1839,7 +1897,7 @@ public class TueFindBiblio extends TueFind {
                 }
             }
 
-            if (topicParts.size() > 0)
+            if (!topicParts.isEmpty())
                 collector.add(topicParts);
         }
     } // end extractTopicsHelper
@@ -1847,7 +1905,7 @@ public class TueFindBiblio extends TueFind {
     public Set<String> getTopics(final Record record, String fieldSpec, String separatorSpec, String langAbbrev)
         throws FileNotFoundException
     {
-        final Set<String> topics = new HashSet<String>();
+        final Set<String> topics = new HashSet<>();
         // It seems to be a general rule that in the fields that the $p fields
         // are converted to a '.'
         // $n is converted to a space if there is additional information
@@ -1864,7 +1922,7 @@ public class TueFindBiblio extends TueFind {
     public Set<String> getValuesOrUnassignedTranslated(final Record record, final String fieldSpecs,
                                                        final String langAbbrev)
     {
-        Set<String> valuesTranslated = new TreeSet<String>();
+        Set<String> valuesTranslated = new TreeSet<>();
         Set<String> values = getValuesOrUnassigned(record, fieldSpecs);
         for (final String value : values) {
             final String translatedValue = getTranslation(value, langAbbrev);
@@ -1876,15 +1934,15 @@ public class TueFindBiblio extends TueFind {
 
     public Set<String> getTopicFacetTranslated(final Record record, final String fieldSpecs, String separatorSpec, final String lang) {
         final Map<String, String> separators = parseTopicSeparators(separatorSpec);
-        final Set<String> valuesTranslated = new HashSet<String>();
+        final Set<String> valuesTranslated = new HashSet<>();
         getCachedTopicsCollector(record, fieldSpecs, separators, valuesTranslated, lang, _689IsOrdinarySubject);
         // The topic collector generates a chain of all specified subfields for a field
         // In some cases this is unintended behaviour since different topics are are independent
         // To ensure that those chains are broken up again, make sure to specify a triple pipe (="|||") separator for these
         // subfields
         // Rewrite slashes
-        final Set<String> toRemove = new HashSet<String>();
-        final Set<String> toAdd = new HashSet<String>();
+        final Set<String> toRemove = new HashSet<>();
+        final Set<String> toAdd = new HashSet<>();
         valuesTranslated.forEach((entry) -> { final String[] triplePipeSeparatedStringChain = entry.split(Pattern.quote("|||"));
                                               if (triplePipeSeparatedStringChain.length > 1 || entry.contains("\\/")) {
                                                   toRemove.add(entry);
@@ -1895,7 +1953,7 @@ public class TueFindBiblio extends TueFind {
         valuesTranslated.removeAll(toRemove);
         valuesTranslated.addAll(toAdd);
         addHonourees(record, valuesTranslated, lang);
-        if (valuesTranslated.size() == 0)
+        if (valuesTranslated.isEmpty())
             valuesTranslated.add(UNASSIGNED_STRING);
         return valuesTranslated;
     }
@@ -2099,7 +2157,7 @@ public class TueFindBiblio extends TueFind {
 
     public Set<String> getGenreTranslated(final Record record, final String fieldSpecs, final String separatorSpec, final String lang) {
         Map<String, String> separators = parseTopicSeparators(separatorSpec);
-        Set<String> genres = new HashSet<String>();
+        Set<String> genres = new HashSet<>();
         getCachedTopicsCollector(record, fieldSpecs, separators, genres, lang, _689IsGenreSubject);
 
         return genres;
@@ -2108,7 +2166,7 @@ public class TueFindBiblio extends TueFind {
 
     public Set<String> getRegionTranslated(final Record record, final String fieldSpecs, final String separatorSpec, final String lang) {
         Map<String, String> separators = parseTopicSeparators(separatorSpec);
-        Set<String> region = new HashSet<String>();
+        Set<String> region = new HashSet<>();
         getCachedTopicsCollector(record, fieldSpecs, separators, region, lang, _689IsRegionSubject);
 
         return region;
@@ -2117,7 +2175,7 @@ public class TueFindBiblio extends TueFind {
 
     public Set<String> getTimeTranslated(final Record record, final String fieldSpecs, final String separatorSpec, final String lang) {
         Map<String, String> separators = parseTopicSeparators(separatorSpec);
-        Set<String> time = new HashSet<String>();
+        Set<String> time = new HashSet<>();
         getCachedTopicsCollector(record, fieldSpecs, separators, time, lang, _689IsTimeSubject);
 
         return time;
@@ -2219,9 +2277,7 @@ public class TueFindBiblio extends TueFind {
             return true;
 
         final List<VariableField> _935Fields = record.getVariableFields("935");
-        if (foundInSubfield(_935Fields, 'c', "vide"))
-            return true;
-        return false;
+        return foundInSubfield(_935Fields, 'c', "vide");
     }
 
     protected final static String electronicRessource = "Electronic";
@@ -2721,7 +2777,7 @@ public class TueFindBiblio extends TueFind {
      * @return all merged ids (not including the own record id)
      */
     public Set<String> getMergedIds(final Record record) {
-        Set<String> merged_ids = new HashSet<String>();
+        Set<String> merged_ids = new HashSet<>();
 
         for (final VariableField _ZWIField : record.getVariableFields("ZWI")) {
             final DataField field = (DataField)_ZWIField;
@@ -2809,7 +2865,7 @@ public class TueFindBiblio extends TueFind {
     }
 
     public Set<String> getRecordSelectors(final Record record) {
-        final Set<String> result = new TreeSet<String>();
+        final Set<String> result = new TreeSet<>();
 
         // 935a
         for (final VariableField _935Field : record.getVariableFields("935")) {
@@ -2916,12 +2972,8 @@ public class TueFindBiblio extends TueFind {
         if (fullTextField == null)
             return "";
 
-        Connection dbConnection = DatabaseManager.instance().getConnection();
-
-        try {
-            final Statement statement = dbConnection.createStatement();
-            final ResultSet resultSet = statement.executeQuery("SELECT full_text FROM full_text_cache WHERE id=\""
-                                                               + record.getControlNumber() + "\"");
+        String sql = "SELECT full_text FROM full_text_cache WHERE id=\"" + record.getControlNumber() + "\"";
+        try (Connection dbConnection = DatabaseManager.instance().getConnection(); Statement statement = dbConnection.createStatement(); ResultSet resultSet = statement.executeQuery(sql)) {
             if (!resultSet.isBeforeFirst())
                 return "";
 
@@ -2976,7 +3028,7 @@ public class TueFindBiblio extends TueFind {
 
 
     protected Set<String> extractTextTypeFromJSON(final JSONArray hits) {
-        final Set<String> text_types = new TreeSet<String>();
+        final Set<String> text_types = new TreeSet<>();
         if (hits.isEmpty())
             return text_types;
         for (final Object obj : hits) {
@@ -3034,8 +3086,9 @@ public class TueFindBiblio extends TueFind {
 
 
     public static Properties getESFulltextProperties() {
-        if (esFulltextProperties != null)
+        if (esFulltextProperties != null) {
             return esFulltextProperties;
+        }
         esFulltextProperties = getPropertiesFromFile(ES_FULLTEXT_PROPERTIES_FILE);
         return esFulltextProperties;
     }
@@ -3205,7 +3258,7 @@ public class TueFindBiblio extends TueFind {
 
 
     public Collection<String> extractReferringPPNsAndTitles(final Record record, final String fieldAndSubfieldCode) throws IllegalArgumentException {
-        List<String> results = new ArrayList<String>();
+        List<String> results = new ArrayList<>();
         if (fieldAndSubfieldCode.length() != 3 + 1)
             throw new IllegalArgumentException("expected a field tag plus a subfield code, got \"" + fieldAndSubfieldCode + "\"!");
 
@@ -3264,7 +3317,7 @@ public class TueFindBiblio extends TueFind {
                 if (subfield_d != null && subfield_d.getData().isEmpty() == false)
                     authorName += " " + subfield_d.getData();
 
-                if (subfields_0 == null || subfields_0.size() < 1) {
+                if (subfields_0 == null || subfields_0.isEmpty()) {
                     if (authorToId.containsKey(authorName) == false)
                         authorToId.put(authorName, "");
                 } else {
@@ -3299,7 +3352,7 @@ public class TueFindBiblio extends TueFind {
 
         final String[] parts = subfieldA.getData().split(",");
 
-        final List<String> ranges = new ArrayList<String>(parts.length);
+        final List<String> ranges = new ArrayList<>(parts.length);
         for (final String part : parts) {
             final String[] range = part.split("_");
             if (range.length != 2) {
@@ -3327,7 +3380,7 @@ public class TueFindBiblio extends TueFind {
 
 
     public List<String> createNonUniqueSearchField(final Record record, final String tagList, final String processingSteps) {
-        List<String> results = new ArrayList<String>();
+        List<String> results = new ArrayList<>();
         Set<String> fieldsByTagList = org.vufind.index.FieldSpecTools.getFieldsByTagList(record,tagList);
         //clean(trim), toLower, stripPunct, stripAccent, normalizeSortableString
         String cmpProcessingSteps = processingSteps.toLowerCase();
@@ -3355,7 +3408,7 @@ public class TueFindBiblio extends TueFind {
      * Custom normalisation map function
      */
     public Collection<String> normalizeSortableString(Collection<String> extractedValues) {
-        Collection<String> results = new ArrayList<String>();
+        Collection<String> results = new ArrayList<>();
         for (final String value : extractedValues) {
             final String newValue = normalizeSortableString(value);
             if (newValue != null && !newValue.isEmpty())
@@ -3365,7 +3418,7 @@ public class TueFindBiblio extends TueFind {
     }
 
     public List<String> getKflIDs(final Record record) {
-        List<String> KflIDs = new ArrayList<String>();
+        List<String> KflIDs = new ArrayList<>();
 
         for (final VariableField variableField : record.getVariableFields("LOK")) {
             final DataField lokfield = (DataField)variableField;
@@ -3387,9 +3440,8 @@ public class TueFindBiblio extends TueFind {
         return KflIDs;
     }
 
-
     public Collection<String> getHierarchicalSpecialCollection(final Record record) {
-         Collection<String> results = new ArrayList<String>();
+         Collection<String> results = new ArrayList<>();
           for (final VariableField variableField : record.getVariableFields("LOK")) {
             final DataField lokfield = (DataField) variableField;
             final Subfield subfield_0 = lokfield.getSubfield('0');
@@ -3402,10 +3454,10 @@ public class TueFindBiblio extends TueFind {
                 final String hierarchyDescription = subfield_x.getData();
                 if (!hierarchyDescription.startsWith("SPQUE"))
                     continue;
-                List<String> hierarchy = new ArrayList<String>(Arrays.asList(hierarchyDescription.split("#")));
+                List<String> hierarchy = new ArrayList<>(Arrays.asList(hierarchyDescription.split("#")));
                 hierarchy.removeIf(s -> Arrays.asList("SPQUE", "SPSAM", "SPUSM", "SPSYS").contains(s));
                 for (int i = 0; i < hierarchy.size(); ++i) {
-                    List<String> hierarchyPart = new ArrayList<String>(Arrays.asList(Integer.toString(i)));
+                    List<String> hierarchyPart = new ArrayList<>(Arrays.asList(Integer.toString(i)));
                     hierarchyPart.addAll(hierarchy.subList(0, i+1));
                     results.add(String.join("/", hierarchyPart) + '/');
                 }

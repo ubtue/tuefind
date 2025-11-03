@@ -3,10 +3,7 @@ package org.tuefind.index;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.*;
-import java.util.logging.Logger;
-import org.marc4j.marc.DataField;
 import org.marc4j.marc.Record;
-import org.marc4j.marc.VariableField;
 import org.marc4j.marc.*;
 
 
@@ -38,7 +35,7 @@ public class RelBibBiblio extends IxTheoBiblio {
         // facet query and display results based on the whole collection) we have to make sure
         // that only "real" RelBib-entries get a notation
         if (record.getVariableFields("REL").isEmpty())
-            return new HashSet<String>();
+            return new HashSet<>();
 
         Set<String> relBibNotations = getIxTheoNotationFacets(record);
         Iterator<String> relBibNotationsIter = relBibNotations.iterator();

@@ -48,7 +48,6 @@ $search_id = $this->params->getSearchClassId();
         'hasDefaultsApplied' => $this->params->hasDefaultsApplied(),
         'selectedShards' => $this->params->getSelectedShards(),
         'ignoreHiddenFiltersInRequest' => $this->ignoreHiddenFiltersInRequest ?? false,
-        'ignoreHiddenFilterMemory' => $this->ignoreHiddenFilterMemory ?? false,
       ]
   );
 
@@ -77,6 +76,8 @@ $search_id = $this->params->getSearchClassId();
       ]
   );
   $recommendations = $this->results->getRecommendations('side');
+  $multiFacetsSelection = $this->multiFacetsSelection ? 'true' : 'false';
+  $this->assetManager()->appendScriptString('var multiFacetsSelectionEnabled = ' . $multiFacetsSelection . ';');
 ?>
 
 <h1 class="sr-only"><?=$this->escapeHtml($headTitle)?></h1>

@@ -730,8 +730,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrMarc
         if ($table->findExisting($userId, $recordId)) {
             return "Exists";
         }
-
-        $data = [$userId, $recordId, $this->getTitle(), $this->getAuthorsAsString(), $this->getPublicationDates()[0], $this->getISBNs()[0]];
+        $data = [$userId, $recordId, $this->getTitle(), $this->getAuthorsAsString(), $this->getPublicationDates()[0], $this->getCleanISBN()];
         return call_user_func_array([$table, "subscribe"], $data);
     }
 

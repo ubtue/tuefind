@@ -181,6 +181,7 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
         usort($references, function($a, $b) { return strcmp($a['title'], $b['title']); });
 
         $display = '';
+        $displayNoLink = '';
         foreach ($references as $reference) {
             $image = $tuefindHelper->getDetailsIcon($reference['title']);
             if(!empty($reference['url'])) {
@@ -191,12 +192,11 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
                     $display .= '<a href="' . $reference['url'] . '" target="_blank" property="sameAs"> <img class="detailsIcon" src="'.$image.'"/>' . htmlspecialchars($reference['title']) . '</a><br>';
                 }
             }else{
-                $display .= htmlspecialchars($reference['title']) . '<br>';
+                $displayNoLink .= htmlspecialchars($reference['title']) . '<br>';
             }
-
         }
 
-        return $display;
+        return $display.$displayNoLink;
     }
 
     public function getArchivedMaterial(AuthorityRecordDriver &$driver): string
@@ -443,7 +443,7 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
 
 
         $relatedAuthors = $titleRecords->getFacets()['author_and_id_facet'];
-        
+
         $referenceAuthorKey = $driver->getUniqueID() . ':' . $driver->getTitle();
 
         $referenceAuthorID = $driver->getUniqueID();
@@ -572,13 +572,13 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
     public function getTitlesByUrl(AuthorityRecordDriver &$driver): string
     {
         $urlHelper = $this->viewHelperManager->get('url');
-        return $urlHelper('search-results', [], ['query' => ['lookfor' => $this->getTitlesByQueryParams($driver)]]);
+        return $urlHelper('search-results') . '?lookfor=' . urlencode($this->getTitlesByQueryParams($driver));
     }
 
     public function getTitlesByUrlNameOrID($authorName, $authorId = null): string
     {
         $urlHelper = $this->viewHelperManager->get('url');
-        return $urlHelper('search-results', [], ['query' => ['lookfor' => $this->getTitlesByQueryParamsNameOrID($authorName, $authorId)]]);
+        return $urlHelper('search-results') . '?lookfor=' . urlencode($this->getTitlesByQueryParamsNameOrID($authorName, $authorId));
     }
 
     protected function getTitlesByQueryParamsNameOrID($authorName, $authorId = null): string
@@ -721,7 +721,7 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
             $settings['filter'] = 'key_word_chain_bag';
         }
 
-        $topicLink = $urlHelper('search-results').'?lookfor='.$lookfor.'&type='.$searchType.'&filter[]='.$settings['filter'].':';
+        $topicLink = $urlHelper('search-results').'?lookfor='.urlencode($lookfor).'&type='.urlencode($searchType).'&filter[]='.urlencode($settings['filter']).':';
 
         $topicsArray = [];
         foreach($countedTopics as $topic => $topicCount) {
@@ -731,9 +731,7 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
                 $topic = preg_replace( '/"([^"]*)"/', "«$1»", $topic);
             }
 
-            $topic = htmlspecialchars($topic, ENT_COMPAT,'UTF-8', true);
-
-            $topicsArray[] = ['topicTitle'=>$topic, 'topicCount'=>$topicCount, 'topicLink'=>$topicLink.$originalTopicName];
+            $topicsArray[] = ['topicTitle'=>$topic, 'topicCount'=>$topicCount, 'topicLink'=>$topicLink.urlencode($originalTopicName)];
         }
 
         $mainTopicsArray = [];
@@ -747,13 +745,13 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
                     }
                 }
                 $one = $topicsArray[$i];
-                    if($topWeight > $settings['minNumber']) {
-                        $topWeight--;
-                    }else{
-                        if(count($topicsArray) < 30) {
-                            $topWeight = $settings['maxNumber']-1;
-                        }
+                if($topWeight > $settings['minNumber']) {
+                    $topWeight--;
+                }else{
+                    if(count($topicsArray) < 30) {
+                        $topWeight = $settings['maxNumber']-1;
                     }
+                }
                 $one['topicNumber'] = $topWeight;
                 $mainTopicsArray[] = $one;
             }

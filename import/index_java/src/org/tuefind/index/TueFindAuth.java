@@ -1,8 +1,5 @@
 package org.tuefind.index;
 
-import java.io.FileNotFoundException;
-import java.sql.Timestamp;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -14,8 +11,6 @@ import java.util.regex.Pattern;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import java.util.logging.Logger;
-
 import org.apache.commons.lang3.StringUtils;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Record;
@@ -66,10 +61,10 @@ public class TueFindAuth extends TueFind {
         mainFields.removeIf(m -> m.getSubfield('a') == null);
         mainFields.removeIf(m -> m.getSubfield('2').getData().equalsIgnoreCase(number2Category) == false);
 
-        if (mainFields.size() == 0) {
+        if (mainFields.isEmpty()) {
             return null;
         } else {
-            Set<String> normalizedValues = new HashSet<String>();
+            Set<String> normalizedValues = new HashSet<>();
             for (DataField mainField : mainFields) {
                 final String numberA = mainField.getSubfield('a').getData();
                 String normalizedValue = normalizeByCategory(numberA, number2Category);
@@ -89,7 +84,7 @@ public class TueFindAuth extends TueFind {
     }
 
     public Collection<String> normalizeSortableString(Collection<String> extractedValues) {
-        Collection<String> results = new ArrayList<String>();
+        Collection<String> results = new ArrayList<>();
         for (final String value : extractedValues) {
             final String newValue = normalizeSortableString(value);
             if (newValue != null && !newValue.isEmpty())
@@ -258,7 +253,7 @@ public class TueFindAuth extends TueFind {
 
     public String getAuthorityType(final Record record) {
         final List<VariableField> fields100 = record.getVariableFields("100");
-        if (fields100.size() > 0) {
+        if (!fields100.isEmpty()) {
             for (VariableField field100 : fields100) {
                 if (((DataField)field100).getSubfield('t') != null) {
                     return "work";
@@ -267,7 +262,7 @@ public class TueFindAuth extends TueFind {
             return "person";
         }
         final List<VariableField> fields110 = record.getVariableFields("110");
-        if (fields110.size() > 0) {
+        if (!fields110.isEmpty()) {
             for (VariableField field110 : fields110) {
                 if (((DataField)field110).getSubfield('t') != null) {
                     return "work";
@@ -276,7 +271,7 @@ public class TueFindAuth extends TueFind {
             return "corporate";
         }
         final List<VariableField> fields111 = record.getVariableFields("111");
-        if (fields111.size() > 0) {
+        if (!fields111.isEmpty()) {
             for (VariableField field111 : fields111) {
                 if (((DataField)field111).getSubfield('t') != null) {
                     return "work";

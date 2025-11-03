@@ -2,8 +2,17 @@ var Zeder = {
     RenderView: function (zederViewId, htmlContainerId) {
         $(document).ready(function() {
             let selector = '#' + htmlContainerId;
+
+            // Reference for translations:
+            // https://datatables.net/reference/option/language
+            // Note: VuFind display texts need to be manually registered in view.phtml to make them available for the JS side
+            let languageSettings = {
+                search: VuFind.translate('Search'),
+                info: VuFind.translate('showing_items_of_html', {'%%start%%': '_START_', '%%end%%': '_END_', '%%total%%': '_TOTAL_'}),
+                lengthMenu: ' _MENU_ ' + VuFind.translate('Results per page')
+            };
             $(selector).DataTable( {
-                ajax		: {
+                ajax: {
                     url: VuFind.path + '/Zeder/Proxy/' + encodeURIComponent(zederViewId),
                     // dataSrc: '' is important because Zeder delivers an array but datatables expects an object
                     dataSrc: ''
@@ -24,9 +33,11 @@ var Zeder = {
 
                         // put additional options here
                         lengthMenu	: [ 10,20,50,100,200,500,1000 ],
-                        pageLength 	: 20
+                        pageLength 	: 20,
+                        language        : languageSettings // adjust language when data is available + page is re-rendered
                     });
-                }
+                },
+                language: languageSettings // adjust language here as well, in case ajax operation fails & defaults are shown
             });
         });
     }

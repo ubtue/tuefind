@@ -1,7 +1,7 @@
 <?php
 
-    $this->headLink()->appendStylesheet('vendor/fontawesome-free-6/awesome.css');
-    $this->headLink()->appendStylesheet('vendor/fontawesome-free-6/solid.css');
+$this->assetManager()->appendStyleLink('vendor/fontawesome-free-6/awesome.css');
+$this->assetManager()->appendStyleLink('vendor/fontawesome-free-6/solid.css');
 
     $partners = [
         // comm
@@ -331,7 +331,7 @@ $(function () {
 });
 EOD;
 ?>
-<?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $jsSnippet, 'SET')?>
+<?=$this->assetManager()->outputInlineScriptString($jsSnippet)?>
     <div class="cw-py-1 cw-row map-navigation">
         <div class="map-all high-light-marker-group" data-group="all"><button class="btn">All</button></div>
         <div class="map-comm high-light-marker-group" data-group="comm"><button class="btn"><i class="fa fa-solid fa-people-group"></i> Theologische Community</button></div>

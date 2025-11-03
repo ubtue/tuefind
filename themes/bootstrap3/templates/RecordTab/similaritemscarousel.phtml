@@ -1,12 +1,12 @@
 <h2><?=$this->transEsc('Similar Items')?></h2>
 <?php $similarRecords = $this->tab->getResults(); ?>
-<?php if (!empty($similarRecords)): ?>
+<?php if (count($similarRecords)): ?>
   <?php $perPage = 4 ?>
   <div id="similar-items-carousel" class="carousel slide" data-ride="carousel">
     <!-- Indicators -->
     <ol class="carousel-indicators">
       <li data-target="#similar-items-carousel" data-slide-to="0" class="active"></li>
-      <?php for($i = 1;$i < count($similarRecords) / $perPage;$i++): ?>
+      <?php for ($i = 1;$i < count($similarRecords) / $perPage;$i++): ?>
         <li data-target="#similar-items-carousel" data-slide-to="<?=$i ?>"></li>
       <?php endfor; ?>
     </ol>
@@ -78,4 +78,4 @@
       $('#similar-items-carousel img').on('load', normalizeHeights);
       JS;
 ?>
-<?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $script, 'SET') ?>
+<?=$this->assetManager()->outputInlineScriptString($script); ?>

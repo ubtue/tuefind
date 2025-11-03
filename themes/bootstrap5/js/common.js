@@ -254,15 +254,19 @@ var VuFind = (function VuFind() {
   /**
    * Reload the page without causing trouble with POST parameters while keeping hash
    */
-  var refreshPage = function refreshPage() {
+  var refreshPage = function refreshPage(forceGet) {
     var parts = window.location.href.split('#');
-    if (typeof parts[1] === 'undefined') {
+    const hasHash = typeof parts[1] !== 'undefined';
+    if (!hasHash && !forceGet) {
       window.location.reload();
     } else {
       var href = parts[0];
       // Force reload with a timestamp
       href += href.indexOf('?') === -1 ? '?_=' : '&_=';
-      href += new Date().getTime() + '#' + parts[1];
+      href += new Date().getTime();
+      if (hasHash) {
+        href += '#' + parts[1];
+      }
       window.location.href = href;
     }
   };
@@ -483,6 +487,70 @@ var VuFind = (function VuFind() {
     elem.style.transitionDuration = state;
   }
 
+  /**
+   * Check if URLSearchParams contains the given key+value
+   *
+   * URLSearchParams.has(key, value) support is not yet widespread enough to be used
+   * (see https://caniuse.com/mdn-api_urlsearchparams_has_value_parameter)
+   *
+   * @param {URLSearchParams} params URLSearchParams to check
+   * @param {string} key Key
+   * @param {string} value Value
+   *
+   * @returns boolean
+   */
+  function inURLSearchParams(params, key, value) {
+    for (const [paramsKey, paramsValue] of params) {
+      if (paramsKey === key && paramsValue === value) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
+   * Delete a key+value from URLSearchParams
+   *
+   * URLSearchParams.delete(key, value) support is not yet widespread enough to be used
+   * (see https://caniuse.com/mdn-api_urlsearchparams_delete_value_parameter)
+   *
+   * @param {URLSearchParams} params URLSearchParams to delete from
+   * @param {string} deleteKey Key to delete
+   * @param {string} deleteValue Value to delete
+   *
+   * @returns URLSearchParams
+   */
+  function deleteKeyValueFromURLSearchParams(params, deleteKey, deleteValue) {
+    const newParams = new URLSearchParams();
+    for (const [key, value] of params) {
+      if (key !== deleteKey || value !== deleteValue) {
+        newParams.append(key, value);
+      }
+    }
+    return newParams;
+  }
+
+  /**
+   * Delete a set of parameters from URLSearchParams
+   *
+   * URLSearchParams.delete(key, value) support is not yet widespread enough to be used
+   * (see https://caniuse.com/mdn-api_urlsearchparams_delete_value_parameter)
+   *
+   * @param {URLSearchParams} params URLSearchParams to delete from
+   * @param {URLSearchParams} deleteParams URLSearchParams containing all params to delete
+   *
+   * @returns URLSearchParams
+   */
+  function deleteParamsFromURLSearchParams(params, deleteParams) {
+    const newParams = new URLSearchParams();
+    for (const [key, value] of params) {
+      if (!inURLSearchParams(deleteParams, key, value)) {
+        newParams.append(key, value);
+      }
+    }
+    return newParams;
+  }
+
   //Reveal
   return {
     defaultSearchBackend: defaultSearchBackend,
@@ -515,7 +583,10 @@ var VuFind = (function VuFind() {
     setElementContents: setElementContents,
     getBootstrapMajorVersion: getBootstrapMajorVersion,
     disableTransitions: disableTransitions,
-    restoreTransitions: restoreTransitions
+    restoreTransitions: restoreTransitions,
+    inURLSearchParams: inURLSearchParams,
+    deleteKeyValueFromURLSearchParams: deleteKeyValueFromURLSearchParams,
+    deleteParamsFromURLSearchParams: deleteParamsFromURLSearchParams
   };
 })();
 
@@ -655,7 +726,12 @@ function getUrlRoot(url) {
   return urlroot;
 }
 
-// Phone number validation
+/**
+ * Phone number validation
+ * @param {String} numID Phone number field ID
+ * @param {String} regionCode Region code
+ * @deprecated See validation.js for replacement
+ */
 function phoneNumberFormHandler(numID, regionCode) {
   var phoneInput = document.getElementById(numID);
   var number = phoneInput.value;
@@ -666,12 +742,10 @@ function phoneNumberFormHandler(numID, regionCode) {
     } else {
       valid = VuFind.translate('libphonenumber_invalid');
     }
-    $(phoneInput).siblings('.help-block.with-errors').html(valid);
-    $(phoneInput).closest('.form-group').addClass('sms-error');
+    phoneInput.setCustomValidity(valid);
     return false;
   } else {
-    $(phoneInput).closest('.form-group').removeClass('sms-error');
-    $(phoneInput).siblings('.help-block.with-errors').html('');
+    phoneInput.setCustomValidity('');
   }
 }
 
@@ -798,8 +872,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setupJumpMenus();
 
   // Print
-  var url = window.location.href;
-  if (url.indexOf('?print=') !== -1 || url.indexOf('&print=') !== -1) {
+  if (VuFind.isPrinting()) {
     var printStylesheets = document.querySelectorAll('link[media="print"]');
     printStylesheets.forEach((stylesheet) => {
       stylesheet.media = 'all';
