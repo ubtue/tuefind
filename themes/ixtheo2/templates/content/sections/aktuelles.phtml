@@ -9,7 +9,7 @@
 
                 <div class="slick-slider-multiple-item" align="center">
                     <a href="/Content/digi2026">
-                        <div class="ix-slick-slider-item" title="Wissenschaftliche Tagung und Festakt IxTheo" style="background-image: url(<?=$this->imageLink('slider/News_Tagung.png')?>);">
+                        <div class="ix-slick-slider-item" title="Wissenschaftliche Tagung und Festakt IxTheo" style="background-image: url(<?=$this->imageLink('slider/mode/News_Tagung.jpg')?>);">
                             <div class="ix-slick-slider-item-title">Wissenschaftliche Tagung und Festakt IxTheo</div>
                         </div>
                     </a>
@@ -74,15 +74,14 @@
         </div>
     </div>
 </section>
-
 <?php
 $jsSnippet = <<< 'EOD'
 $(document).ready(function(){
     $('.slick-slider-multiple-item').slick({
         dots: true,
-        autoplay:true,
+        autoplay: true,
         infinite: true,
-        speed: 500,
+        speed: 1000,
         fade: true,
         cssEase: 'linear',
         arrows: true
