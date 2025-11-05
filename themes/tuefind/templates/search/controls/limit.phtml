@@ -13,6 +13,7 @@
 ?>
 <?php if (count($limitList) > 1): ?>
   <form class="form-inline search-result-limit" action="<?=$currentPath . $this->results->getUrlQuery()->setLimit(null)?>" method="get">
+    <?=$this->results->getUrlQuery()->asHiddenFields(['sort' => '/.*/']);?>
     <?php foreach ($hiddenFilters as $key => $filter): ?>
       <?php foreach ($filter as $value): ?>
         <?php if(!str_contains($currentPath, $key)): ?>
