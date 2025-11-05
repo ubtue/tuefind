@@ -18,7 +18,11 @@ class Browse extends \VuFind\View\Helper\Root\Browse
         switch($action) {
         case 'ixtheo-classification':
             return 'ixtheo_notation_facet';
+        case 'relbib-classification':
+            return 'relbib_notation_facet';
         }
+
+
         return parent::getSolrField($action, $backup);
     }
 }
