@@ -137,24 +137,14 @@ if(isset($routeParams['page']) && $routeParams['page'] == 'digi2026'): ?>
   <!-- On the 50th Ixtheo page we don't display a search form. -->
 <?php else: ?>
   <!-- Breadcrumbs -->
-  <?php if(!empty($this->layout()->breadcrumbs)): ?>
-    <div class="container breadcrumb-wrapper hidden-print <?=$advancedSearch;?>">
-      <?php if(is_array($this->layout()->breadcrumbs)): ?>
-        <?php if(count($this->layout()->breadcrumbs) > 1): ?>
-          <?=$this->render('breadcrumbs/multi.phtml', [
-            'parents' => $this->layout()->breadcrumbs,
-            'title' => $this->layout()->title,
-            'from' => $this->layout()->from
-          ]) ?>
-        <?php else: ?>
-          <?=$this->render('breadcrumbs/default.phtml', [
-            'parents' => $this->layout()->breadcrumbs,
-            'title' => $this->layout()->title
-          ]) ?>
-        <?php endif; ?>
-      <?php elseif ($this->layout()->breadcrumbs !== false): ?>
-        <?=$this->render('breadcrumbs/simple.phtml'); ?>
-      <?php endif; ?>
+  <?php if (($this->layout()->showBreadcrumbs ?? true) && $this->layout()->breadcrumbs !== false): ?>
+    <div class="container breadcrumb-wrapper hidden-print">
+      <nav aria-label="breadcrumb" aria-label="<?=$this->transEscAttr('Breadcrumbs') ?>">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><i class="fa fa-home" aria-hidden="true"></i> <a href="/">Home</a></li>
+          <?=$this->layout()->breadcrumbs ?>
+        </ol>
+      </nav>
     </div>
   <?php endif; ?>
   <?=$this->layout()->searchbox; ?>
