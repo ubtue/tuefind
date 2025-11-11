@@ -2,6 +2,7 @@ package org.tuefind.index;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.io.FileNotFoundException;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -21,6 +22,7 @@ public class TueFindAuth extends TueFind {
 
     protected final static Pattern SORTABLE_STRING_REMOVE_PATTERN = Pattern.compile("[^\\p{Lu}\\p{Ll}\\p{Lt}\\p{Lo}\\p{N}]+");
     protected final static Pattern YEAR_RANGE_PATTERN = Pattern.compile("^([v]?)(\\d+)-([v]?)(\\d*)$");
+    protected final static TueFindBiblio TUEFIND_BIBLIO = new TueFindBiblio();
 
     /**
      * normalize string due to specification for isni or orcid
@@ -361,4 +363,16 @@ public class TueFindAuth extends TueFind {
 
         return retOccupations;
     }
+
+
+     public Set<String> getOtherNames(final Record record, String fieldSpec, String separatorSpec)
+        throws FileNotFoundException
+    {
+        final Set<String> otherNames = new HashSet<>();
+        Map<String, String> separators = TUEFIND_BIBLIO.parseTopicSeparators(separatorSpec);
+        TUEFIND_BIBLIO.getCachedTopicsCollector(record, fieldSpec, separators, otherNames, "de");
+        return otherNames;
+    }
+
+
 }
