@@ -68,4 +68,8 @@ class SolrAuthDefault extends \VuFind\RecordDriver\SolrAuthMarc {
     public function getType() {
         return $this->fields['type'] ?? null;
     }
+
+    public function getNameVariants() {
+        return $this->fields['use_for'] ?? null;
+    }
 }

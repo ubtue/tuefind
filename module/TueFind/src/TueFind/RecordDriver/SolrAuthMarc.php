@@ -354,32 +354,6 @@ class SolrAuthMarc extends SolrAuthDefault {
         return $names;
     }
 
-    /**
-     * Get name variants as listed in MARC21 400a
-     */
-    public function getNameVariants(): array
-    {
-        $nameVariants = [];
-        $fields = $this->getMarcReader()->getFieldsDelimiter('400|410|411');
-        foreach ($fields as $field) {
-            $nameSubfield = $this->getMarcReader()->getSubfield($field, 'a');
-            if (!empty($nameSubfield)) {
-                $name = $nameSubfield;
-                $numberSubfield = $this->getMarcReader()->getSubfield($field, 'b');
-                if (!empty($numberSubfield)) {
-                    $name .= ' ' . $numberSubfield;
-                }
-                $titleSubfield = $this->getMarcReader()->getSubfield($field, 'c');
-                if (!empty($titleSubfield)) {
-                    $name .= ' ' . $titleSubfield;
-                }
-                $nameVariants[] = $name;
-            }
-        }
-
-        sort($nameVariants);
-        return $nameVariants;
-    }
 
     public function getOccupationsAndTimespans(): array
     {
