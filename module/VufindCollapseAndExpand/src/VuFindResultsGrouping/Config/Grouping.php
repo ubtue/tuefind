@@ -20,7 +20,7 @@
  *
  */
 
-namespace VuFindResultsGrouping\Config;
+namespace VufindCollapseAndExpand\Config;
 
 use Laminas\Http\Header\SetCookie;
 use Laminas\Session\Container as SessionContainer;

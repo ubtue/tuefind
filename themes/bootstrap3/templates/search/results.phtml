@@ -1,6 +1,6 @@
 <?php
 
-// Specific to VuFindResultsGrouping
+// Specific to VufindCollapseAndExpand
 use VuFind\Search\Solr\Results;
 
 if ($this->results instanceof Results): ?>
@@ -12,20 +12,17 @@ $search_id = $this->params->getSearchClassId();
     if($search_id == "Solr"):
       if ($this->params->isEnableCollapseAndExpand()):
 ?>
-        <form class="form-inline search-grouping" action="<?= $this->currentPath() ?>"
-              method="POST" id="grouping">
-            <div class="form-group">
-                <label for="grouping-checkbox"><?= $this->transEsc('group hits') ?></label>
-                <input type="checkbox" name="grouping-enabled" value=""
-                      id="grouping-checkbox"
-                      <?php if ($this->grouping): ?>checked<?php endif; ?>/>
-            </div>
-            <noscript>
-                <p>Please enable JavaScript</p>
-            </noscript>
-        </form>
-      <?php endif;?>
-    <?php endif;?>
+<form class="form-inline search-grouping" action="<?= $this->currentPath() ?>" method="POST" id="grouping">
+  <div class="form-group">
+    <label for="grouping-checkbox"><?= $this->transEsc('group hits') ?></label>
+    <input type="checkbox" name="grouping-enabled" value="" id="grouping-checkbox" <?php if ($this->grouping): ?>checked<?php endif; ?> />
+  </div>
+  <noscript>
+    <p>Please enable JavaScript</p>
+  </noscript>
+</form>
+<?php endif;?>
+<?php endif;?>
 <?php endif; ?>
 <?php
   // Set up page title:
@@ -84,77 +81,78 @@ $search_id = $this->params->getSearchClassId();
 
 <div class="<?=$this->layoutClass('mainbody', (bool)$recommendations)?>">
   <?php if (($recordTotal = $this->results->getResultTotal()) > 0): // only display these at very top if we have results ?>
-    <?php foreach ($this->results->getRecommendations('top') as $index => $current): ?>
-      <?=$this->recommend($current, 'top', $index)?>
-    <?php endforeach; ?>
+  <?php foreach ($this->results->getRecommendations('top') as $index => $current): ?>
+  <?=$this->recommend($current, 'top', $index)?>
+  <?php endforeach; ?>
   <?php endif; ?>
   <?=$this->flashmessages()?>
   <div class="search-header hidden-print">
     <?php // Data-record-total attribute is for analytics use.  Do not remove. ?>
     <div class="search-stats" data-record-total="<?=$this->escapeHtmlAttr($recordTotal)?>">
       <?php if ($recordTotal > 0): ?>
-        <?php if ($this->results->getOptions()->getTopPaginatorStyle() === 'simple'): ?>
-          <?=$this->paginationControl($this->results->getPaginator(), 'Sliding', 'search/pagination_simple.phtml', ['results' => $this->results])?>
-        <?php else: ?>
-          <?=$this->context()->renderInContext('search/controls/showing.phtml', ['lookfor' => $lookfor, 'recordTotal' => $recordTotal]) ?>
-        <?php endif; ?>
-        <?php if ($recommendations): ?>
-          <?=$this->component('show-search-sidebar-button')?>
-        <?php endif; ?>
+      <?php if ($this->results->getOptions()->getTopPaginatorStyle() === 'simple'): ?>
+      <?=$this->paginationControl($this->results->getPaginator(), 'Sliding', 'search/pagination_simple.phtml', ['results' => $this->results])?>
       <?php else: ?>
-        <h2><?=$this->transEsc('nohit_heading')?></h2>
+      <?=$this->context()->renderInContext('search/controls/showing.phtml', ['lookfor' => $lookfor, 'recordTotal' => $recordTotal]) ?>
+      <?php endif; ?>
+      <?php if ($recommendations): ?>
+      <?=$this->component('show-search-sidebar-button')?>
+      <?php endif; ?>
+      <?php else: ?>
+      <h2><?=$this->transEsc('nohit_heading')?></h2>
       <?php endif; ?>
     </div>
 
     <?php if ($recordTotal > 0): ?>
-      <div class="search-controls">
-        <?=$this->slot('search-controls')?>
-      </div>
+    <div class="search-controls">
+      <?=$this->slot('search-controls')?>
+    </div>
     <?php endif; ?>
   </div>
   <?php /* End Listing Options */ ?>
 
   <?php if ($recordTotal < 1): ?>
-    <p>
-      <?php
+  <p>
+    <?php
         $default = $this->translate('nohit_lookfor_html', ['%%lookfor%%' => $this->escapeHtml($lookfor)]);
         $emptyMessage = $this->slot('empty-message')->get($default);
         $this->layout()->srmessage = $emptyMessage;
         echo $emptyMessage;
       ?>
-    </p>
-    <?php if (isset($this->parseError)): ?>
-      <p class="alert alert-danger"><?=$this->transEsc('nohit_parse_error')?></p>
-    <?php endif; ?>
-    <?php foreach (($top = $this->results->getRecommendations('top')) as $index => $current): ?>
-      <?=$this->recommend($current, 'top', $index)?>
-    <?php endforeach; ?>
-    <?php foreach ($this->results->getRecommendations('noresults') as $index => $current): ?>
-      <?php if (!in_array($current, $top)): ?>
-        <?=$this->recommend($current, 'noresults', $index)?>
-      <?php endif; ?>
-    <?php endforeach; ?>
+  </p>
+  <?php if (isset($this->parseError)): ?>
+  <p class="alert alert-danger"><?=$this->transEsc('nohit_parse_error')?></p>
+  <?php endif; ?>
+  <?php foreach (($top = $this->results->getRecommendations('top')) as $index => $current): ?>
+  <?=$this->recommend($current, 'top', $index)?>
+  <?php endforeach; ?>
+  <?php foreach ($this->results->getRecommendations('noresults') as $index => $current): ?>
+  <?php if (!in_array($current, $top)): ?>
+  <?=$this->recommend($current, 'noresults', $index)?>
+  <?php endif; ?>
+  <?php endforeach; ?>
   <?php else: ?>
-    <?php if ($this->results->getOptions()->getTopPaginatorStyle() === 'full'): ?>
-      <?=$this->paginationControl($this->results->getPaginator(), 'Sliding', 'search/pagination-top.phtml', ['results' => $this->results, 'options' => $this->paginationOptions ?? []])?>
-    <?php endif; ?>
-    <form id="search-cart-form" method="post" name="bulkActionForm" action="<?=$this->url('cart-searchresultsbulk')?>" data-lightbox data-lightbox-onsubmit="bulkFormHandler">
-      <?=$this->context($this)->renderInContext('search/bulk-action-buttons.phtml', ['idPrefix' => ''])?>
-    </form>
-    <?=$this->render('search/results-list.phtml')?>
-    <?=$this->context($this)->renderInContext('search/bulk-action-buttons.phtml', ['idPrefix' => 'bottom_', 'formAttr' => 'search-cart-form'])?>
-    <?=$this->paginationControl($this->results->getPaginator(), 'Sliding', 'search/pagination.phtml', ['results' => $this->results, 'options' => $this->paginationOptions ?? []])?>
-    <?=$this->context($this)->renderInContext('search/controls/results-tools.phtml', ['results' => $this->results])?>
+  <?php if ($this->results->getOptions()->getTopPaginatorStyle() === 'full'): ?>
+  <?=$this->paginationControl($this->results->getPaginator(), 'Sliding', 'search/pagination-top.phtml', ['results' => $this->results, 'options' => $this->paginationOptions ?? []])?>
+  <?php endif; ?>
+  <form id="search-cart-form" method="post" name="bulkActionForm" action="<?=$this->url('cart-searchresultsbulk')?>" data-lightbox
+    data-lightbox-onsubmit="bulkFormHandler">
+    <?=$this->context($this)->renderInContext('search/bulk-action-buttons.phtml', ['idPrefix' => ''])?>
+  </form>
+  <?=$this->render('search/results-list.phtml')?>
+  <?=$this->context($this)->renderInContext('search/bulk-action-buttons.phtml', ['idPrefix' => 'bottom_', 'formAttr' => 'search-cart-form'])?>
+  <?=$this->paginationControl($this->results->getPaginator(), 'Sliding', 'search/pagination.phtml', ['results' => $this->results, 'options' => $this->paginationOptions ?? []])?>
+  <?=$this->context($this)->renderInContext('search/controls/results-tools.phtml', ['results' => $this->results])?>
   <?php endif; ?>
 </div>
 <?php /* End Main Listing */ ?>
 
 <?php /* Refine Search Options */ ?>
 <?php if ($recommendations): ?>
-  <div class="<?=$this->layoutClass('sidebar')?>" id="search-sidebar" role="region" aria-label="<?=$this->transEscAttr('Search sidebar') ?>">
-    <?php foreach ($recommendations as $index => $current): ?>
-      <?=$this->recommend($current, 'side', $index)?>
-    <?php endforeach; ?>
-  </div>
+<div class="<?=$this->layoutClass('sidebar')?>" id="search-sidebar" role="region" aria-label="<?=$this->transEscAttr('Search sidebar') ?>">
+  <?php foreach ($recommendations as $index => $current): ?>
+  <?=$this->recommend($current, 'side', $index)?>
+  <?php endforeach; ?>
+</div>
 <?php endif; ?>
 <?php /* End Refine Search Options */ ?>

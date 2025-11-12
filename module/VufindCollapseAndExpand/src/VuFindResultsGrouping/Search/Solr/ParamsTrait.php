@@ -20,7 +20,7 @@
  *
  */
 
-namespace VuFindResultsGrouping\Search\Solr;
+namespace VufindCollapseAndExpand\Search\Solr;
 
 use VuFindSearch\ParamBag;
 
@@ -28,7 +28,7 @@ use VuFindSearch\ParamBag;
  * This trait adds some accessor methods to VuFind params
  *
  * Trait ParamTrait
- * @package VuFindResultsGrouping\Search\Solr
+ * @package VufindCollapseAndExpand\Search\Solr
  * @author Cornelius Amzar <cornelius.amzar@bsz-bw.de>
  * @author Robert Lange <lange@ub.uni-leipzig.de>
  *

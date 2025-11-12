@@ -12,7 +12,7 @@ use KrimDok\Search\Backend\Solr\QueryBuilder;
 use TueFind\View\Helper\TueFind\TueFind;
 use VuFind\XSLT\Import\VuFind;
 
-class SolrDefaultBackendFactory extends \VuFindResultsGrouping\Search\Factory\SolrDefaultBackendFactory implements TranslatorAwareInterface
+class SolrDefaultBackendFactory extends \VufindCollapseAndExpand\Search\Factory\SolrDefaultBackendFactory implements TranslatorAwareInterface
 {
     use \VuFind\I18n\Translator\TranslatorAwareTrait;
 

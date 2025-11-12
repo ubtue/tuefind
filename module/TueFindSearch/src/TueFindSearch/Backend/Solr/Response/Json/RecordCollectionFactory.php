@@ -4,7 +4,7 @@ namespace TueFindSearch\Backend\Solr\Response\Json;
 use VuFindSearch\Exception\InvalidArgumentException;
 use VuFindSearch\Response\RecordCollectionFactoryInterface;
 
-class RecordCollectionFactory extends \VuFindResultsGrouping\Backend\Solr\Response\Json\RecordCollectionFactory {
+class RecordCollectionFactory extends \VufindCollapseAndExpand\Backend\Solr\Response\Json\RecordCollectionFactory {
     public function __construct($recordFactory = null,
         $collectionClass = 'TueFindSearch\Backend\Solr\Response\Json\RecordCollection'
     ) {

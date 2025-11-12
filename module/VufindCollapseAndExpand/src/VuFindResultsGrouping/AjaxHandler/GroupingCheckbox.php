@@ -19,15 +19,15 @@
  *
  */
 
-namespace VuFindResultsGrouping\AjaxHandler;
+namespace VufindCollapseAndExpand\AjaxHandler;
 
-use VuFindResultsGrouping\Config\Grouping;
+use VufindCollapseAndExpand\Config\Grouping;
 use VuFind\I18n\Translator\TranslatorAwareInterface;
 use Laminas\Mvc\Controller\Plugin\Params;
 
 /**
  * Class GroupingCheckbox
- * @package  VuFindResultsGrouping\AjaxHandler
+ * @package  VufindCollapseAndExpand\AjaxHandler
  * @author   Cornelius Amzar <cornelius.amzar@bsz-bw.de>
  */
 class GroupingCheckbox extends \VuFind\AjaxHandler\AbstractBase implements TranslatorAwareInterface

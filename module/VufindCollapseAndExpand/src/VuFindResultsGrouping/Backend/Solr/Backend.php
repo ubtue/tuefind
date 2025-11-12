@@ -7,7 +7,7 @@
  * @author   <dku@outermedia.de>
  */
 
-namespace VuFindResultsGrouping\Backend\Solr;
+namespace VufindCollapseAndExpand\Backend\Solr;
 
 use VuFindSearch\ParamBag;
 use VuFindSearch\Query\AbstractQuery;

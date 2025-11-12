@@ -7,6 +7,6 @@ class PluginManager extends \TueFind\Search\Params\PluginManager {
     {
         parent::_addAliasesAndFactories();
         $this->aliases['solr'] = \KrimDok\Search\Solr\Params::class;
-        $this->factories[\KrimDok\Search\Solr\Params::class] = '\VuFindResultsGrouping\Search\Params\Factory::getSolr';
+        $this->factories[\KrimDok\Search\Solr\Params::class] = '\VufindCollapseAndExpand\Search\Params\Factory::getSolr';
     }
 }

@@ -19,13 +19,13 @@
  *
  */
 
-namespace VuFindResultsGrouping\Controller;
+namespace VufindCollapseAndExpand\Controller;
 
 /**
  * This adds grouping handling to VuFinds search controller
  *
  * Class SearchController
- * @package  VuFindResultsGrouping\Controller
+ * @package  VufindCollapseAndExpand\Controller
  * @author   Cornelius Amzar <cornelius.amzar@bsz-bw.de>
  */
 class SearchController extends \VuFind\Controller\SearchController
@@ -35,7 +35,7 @@ class SearchController extends \VuFind\Controller\SearchController
      */
     public function resultsAction()
     {
-        $grouping = $this->serviceLocator->get('VuFindResultsGrouping\Config\Grouping');
+        $grouping = $this->serviceLocator->get('VufindCollapseAndExpand\Config\Grouping');
 
         $view = Parent::resultsAction();
         $view->grouping = $grouping->isActive();

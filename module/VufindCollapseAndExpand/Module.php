@@ -24,7 +24,7 @@
  * @author   Dorian Merz <merz@ub.uni-leipzig.de>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  */
-namespace VuFindResultsGrouping;
+namespace VufindCollapseAndExpand;
 
 use Laminas\ModuleManager\ModuleManager;
 

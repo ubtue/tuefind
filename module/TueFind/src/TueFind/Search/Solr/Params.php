@@ -2,4 +2,4 @@
 
 namespace TueFind\Search\Solr;
 
-class Params extends \VuFindResultsGrouping\Search\Solr\Params {}
+class Params extends \VufindCollapseAndExpand\Search\Solr\Params {}
