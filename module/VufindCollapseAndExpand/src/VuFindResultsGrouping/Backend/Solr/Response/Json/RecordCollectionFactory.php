@@ -12,12 +12,12 @@
  * @author Steven Lolong <steven.lolong@uni-tuebingen.de>
  */
 
-namespace VuFindResultsGrouping\Backend\Solr\Response\Json;
+namespace VufindCollapseAndExpand\Backend\Solr\Response\Json;
 
 use VuFindSearch\Backend\Solr\Response\Json\Record;
 use VuFindSearch\Exception\InvalidArgumentException;
 use VuFindSearch\Response\RecordCollectionFactoryInterface;
-use VuFindResultsGrouping\Backend\Solr\Response\Json\RecordCollection;
+use VufindCollapseAndExpand\Backend\Solr\Response\Json\RecordCollection;
 
 class RecordCollectionFactory extends \VuFindSearch\Backend\Solr\Response\Json\RecordCollectionFactory implements RecordCollectionFactoryInterface
 {
@@ -36,7 +36,7 @@ class RecordCollectionFactory extends \VuFindSearch\Backend\Solr\Response\Json\R
      */
     public function __construct(
         $recordFactory = null,
-        $collectionClass = 'VuFindResultsGrouping\Backend\Solr\Response\Json\RecordCollection'
+        $collectionClass = 'VufindCollapseAndExpand\Backend\Solr\Response\Json\RecordCollection'
     ) {
         if (null === $recordFactory) {
             $this->recordFactory = function ($data) {

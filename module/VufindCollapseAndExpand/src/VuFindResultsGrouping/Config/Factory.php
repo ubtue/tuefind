@@ -20,7 +20,7 @@
  *
  */
 
-namespace VuFindResultsGrouping\Config;
+namespace VufindCollapseAndExpand\Config;
 
 use Psr\Container\ContainerInterface;
 use Laminas\Db\ResultSet\ResultSet;

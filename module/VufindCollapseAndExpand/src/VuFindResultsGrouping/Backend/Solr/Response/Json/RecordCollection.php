@@ -12,9 +12,9 @@
  * @author Steven Lolong <steven.lolong@uni-tuebingen.de>
  */
 
-namespace VuFindResultsGrouping\Backend\Solr\Response\Json;
+namespace VufindCollapseAndExpand\Backend\Solr\Response\Json;
 
-use VuFindResultsGrouping\Backend\Solr\Response\Json\RecordCollectionFactory;
+use VufindCollapseAndExpand\Backend\Solr\Response\Json\RecordCollectionFactory;
 
 class RecordCollection extends \VuFindSearch\Backend\Solr\Response\Json\RecordCollection
 {

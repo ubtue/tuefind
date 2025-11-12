@@ -23,13 +23,13 @@
  *
  */
 
-namespace VuFindResultsGrouping\RecordDriver;
+namespace VufindCollapseAndExpand\RecordDriver;
 
 /**
  * This trait adds some accessor methods to your RecordDriver
  *
  * Trait SubrecordTrait
- * @package VuFindResultsGrouping\RecordDriver
+ * @package VufindCollapseAndExpand\RecordDriver
  * @author Cornelius Amzar <cornelius.amzar@bsz-bw.de>
  */
 trait SubrecordTrait

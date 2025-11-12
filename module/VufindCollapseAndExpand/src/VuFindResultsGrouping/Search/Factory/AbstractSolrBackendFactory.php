@@ -8,9 +8,9 @@
  * @author   <dku@outermedia.de>
  */
 
-namespace VuFindResultsGrouping\Search\Factory;
+namespace VufindCollapseAndExpand\Search\Factory;
 
-use VuFindResultsGrouping\Backend\Solr\Backend;
+use VufindCollapseAndExpand\Backend\Solr\Backend;
 use VuFindSearch\Backend\Solr\Connector;
 use Psr\Container\ContainerInterface;
 use TueFind\Search\Solr\InjectFulltextMatchIdsListener;

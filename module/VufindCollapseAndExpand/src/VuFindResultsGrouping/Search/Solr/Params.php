@@ -19,10 +19,10 @@
  *
  */
 
-namespace VuFindResultsGrouping\Search\Solr;
+namespace VufindCollapseAndExpand\Search\Solr;
 
 use VuFind\Config\PluginManager;
-use VuFindResultsGrouping\Config\Grouping;
+use VufindCollapseAndExpand\Config\Grouping;
 
 /**
  * Description of Params

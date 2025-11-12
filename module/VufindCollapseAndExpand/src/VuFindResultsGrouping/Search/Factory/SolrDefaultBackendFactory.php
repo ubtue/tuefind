@@ -7,9 +7,9 @@
  * @package  Search
  * @author   <dku@outermedia.de>
  */
-namespace VuFindResultsGrouping\Search\Factory;
+namespace VufindCollapseAndExpand\Search\Factory;
 
-use VuFindResultsGrouping\Backend\Solr\Response\Json\RecordCollectionFactory;
+use VufindCollapseAndExpand\Backend\Solr\Response\Json\RecordCollectionFactory;
 use VuFindSearch\Backend\Solr\Backend;
 use VuFindSearch\Backend\Solr\Connector;
 

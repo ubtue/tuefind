@@ -18,10 +18,10 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-namespace VuFindResultsGrouping\Search\Params;
+namespace VufindCollapseAndExpand\Search\Params;
 
-use VuFindResultsGrouping\Search\Solr\Params;
-use VuFindResultsGrouping\Search\Solr\AuthorParams;
+use VufindCollapseAndExpand\Search\Solr\Params;
+use VufindCollapseAndExpand\Search\Solr\AuthorParams;
 use Psr\Container\ContainerInterface;
 
 /**
@@ -43,7 +43,7 @@ class Factory
     {
         $config = $container->get('VuFind\Config');
         $options = $container->get('VuFind\SearchOptionsPluginManager')->get('solr');
-        $grouping = $container->get('VuFindResultsGrouping\Config\Grouping');
+        $grouping = $container->get('VufindCollapseAndExpand\Config\Grouping');
         $params = new Params($options, $config, null, $grouping);
 
         return $params;
@@ -60,7 +60,7 @@ class Factory
     {
         $config = $container->get('VuFind\Config');
         $options = $container->get('VuFind\SearchOptionsPluginManager')->get('solrauthor');
-        $grouping = $container->get('VuFindResultsGrouping\Config\Grouping');
+        $grouping = $container->get('VufindCollapseAndExpand\Config\Grouping');
         $params = new AuthorParams($options, $config, null, $grouping);
 
         return $params;

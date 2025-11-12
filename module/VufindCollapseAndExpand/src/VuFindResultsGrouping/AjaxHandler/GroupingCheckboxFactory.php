@@ -19,13 +19,13 @@
  *
  */
 
-namespace VuFindResultsGrouping\AjaxHandler;
+namespace VufindCollapseAndExpand\AjaxHandler;
 
 use Psr\Container\ContainerInterface;
 
 /**
  * Class GroupingCheckboxFactory
- * @package  VuFindResultsGrouping\AjaxHandler
+ * @package  VufindCollapseAndExpand\AjaxHandler
  * @author   Cornelius Amzar <cornelius.amzar@bsz-bw.de>
  */
 class GroupingCheckboxFactory
@@ -33,12 +33,12 @@ class GroupingCheckboxFactory
     /**
      *
      * @param ContainerInterface $container
-     * @return \VuFindResultsGrouping\AjaxHandler\GroupingCheckbox
+     * @return \VufindCollapseAndExpand\AjaxHandler\GroupingCheckbox
      */
     public function __invoke(ContainerInterface $container)
     {
         return new GroupingCheckbox(
-            $container->get('VuFindResultsGrouping\Config\Grouping')
+            $container->get('VufindCollapseAndExpand\Config\Grouping')
         );
     }
 }
