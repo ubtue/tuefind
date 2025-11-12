@@ -1,10 +1,19 @@
 <?php 
   $list = $this->params->getSortList(); 
   $listCount = count($list);
+  $hiddenFilters = $params->getHiddenFilters();
+  $currentPath = $this->currentPath();
 ?> 
 <?php if ($listCount > 0): ?>
-  <form class="search-sort" action="<?=$this->currentPath()?>" method="get" name="sort">
+  <form class="search-sort" action="<?=$currentPath;?>" method="get" name="sort">
     <?=$this->results->getUrlQuery()->asHiddenFields(['sort' => '/.*/', 'page' => '/.*/']);?>
+    <?php foreach ($hiddenFilters as $key => $filter): ?>
+      <?php foreach ($filter as $value): ?>
+        <?php if(!str_contains($currentPath, $key)): ?>
+          <input type="hidden" name="hiddenFilters[]" value="<?=$this->escapeHtmlAttr($key) . ':' . $this->escapeHtmlAttr('"' . $value . '"')?>">
+        <?php endif;?>
+      <?php endforeach; ?>
+    <?php endforeach; ?>
     <label for="sort_options_1"><?=$this->transEsc('Sort')?></label>
     <select id="sort_options_1" name="sort" class="jumpMenu form-control"
       <?php $default_sort = $this->params->getOptions()->getDefaultSortByHandler();?>

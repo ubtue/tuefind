@@ -3,6 +3,8 @@
   //we check the parameters from the sort form here.
   $sortList = $this->params->getSortList();
   $sortParam = '';
+  $currentPath = $this->currentPath();
+  $hiddenFilters = $params->getHiddenFilters();
   foreach($sortList as $sortName=>$sortValue) {
     if($sortValue['selected'] == 1) {
       $sortParam = $sortName;
@@ -10,8 +12,15 @@
   }
 ?>
 <?php if (count($limitList) > 1): ?>
-  <form class="form-inline search-result-limit" action="<?=$this->currentPath() . $this->results->getUrlQuery()->setLimit(null)?>" method="get">
+  <form class="form-inline search-result-limit" action="<?=$currentPath . $this->results->getUrlQuery()->setLimit(null)?>" method="get">
     <?=$this->results->getUrlQuery()->asHiddenFields(['sort' => '/.*/']);?>
+    <?php foreach ($hiddenFilters as $key => $filter): ?>
+      <?php foreach ($filter as $value): ?>
+        <?php if(!str_contains($currentPath, $key)): ?>
+          <input type="hidden" name="hiddenFilters[]" value="<?=$this->escapeHtmlAttr($key) . ':' . $this->escapeHtmlAttr('"' . $value . '"')?>">
+        <?php endif;?>
+      <?php endforeach; ?>
+    <?php endforeach; ?>
     <label for="limit"><?=$this->transEsc('Results per page')?></label>
     <select id="limit" name="limit" class="jumpMenu form-control">
       <?php foreach ($limitList as $limitVal => $limitData): ?>
