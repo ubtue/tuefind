@@ -1,1 +1,0 @@
-../../../module/VuFindResultsGrouping/res/theme/js/resultGrouping.js

@@ -119,7 +119,7 @@ group.limit = 10
 
 ### JavaScript
 
-Add `js/resultGrouping.js` to your theme configuration.
+Add `js/collapseAndExpand.js` to your theme configuration.
 
 ### HTML / Templates
 

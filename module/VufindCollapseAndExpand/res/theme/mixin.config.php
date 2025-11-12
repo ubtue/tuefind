@@ -1,4 +1,4 @@
 <?php
 return [
-    'js' => ['resultGrouping.js'],
+    'js' => ['collapseAndExpand.js'],
 ];
