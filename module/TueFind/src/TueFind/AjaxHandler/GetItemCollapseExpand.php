@@ -80,7 +80,7 @@ class GetItemCollapseExpand extends \VuFind\AjaxHandler\AbstractBase
         // $this->tabManager->setRecordDriver($recordDriver);
 
         // // Get the tab content
-        // $tabContent = $this->tabManager->getTabContent('ItemCollapseAndExpand');
+        // $tabContent = $this->tabManager->getTabContent('ItemCollapseExpand');
         // return [
         //     'content' => $tabContent,
         //     'title' => 'Other Document',

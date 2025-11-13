@@ -1,7 +1,7 @@
 <?php
 
 /**
- * ItemCollapseAndExpand tab
+ * ItemCollapseExpand tab
  *
  * @category TueFind
  * @package  RecordTabs
@@ -17,7 +17,7 @@ use Psr\Container\ContainerExceptionInterface as ContainerException;
 use Psr\Container\ContainerInterface;
 
 /**
- * Factory for building the ItemCollapseAndExpand tab.
+ * Factory for building the ItemCollapseExpand tab.
  *
  * @category TueFind
  * @package  RecordTabs

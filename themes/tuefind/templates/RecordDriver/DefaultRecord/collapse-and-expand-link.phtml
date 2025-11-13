@@ -3,7 +3,7 @@ $versions = $this->driver->tryMethod('getOtherVersionCount');
 if (!$versions) {
     return;
 }
-if (isset($this->tabs['CollapseAndExpand'])) {
+if (isset($this->tabs['CollapseExpand'])) {
     $url = !empty($this->full)
       ? ($this->recordLinker()->getTabUrl($this->driver, 'Versions', [], ['query' => ['sid' => $this->searchId]]) . '#tabnav')
       : '#versions';

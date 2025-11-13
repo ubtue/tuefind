@@ -11,11 +11,11 @@ class PluginManager extends \VuFind\RecordTab\PluginManager
         array $v3config = []
     ) {
         $this->aliases['AuthorityNameVariants'] = AuthorityNameVariants::class;
-        $this->aliases['itemcollapseandexpand'] = ItemCollapseAndExpand::class;
+        $this->aliases['itemCollapseExpand'] = ItemCollapseExpand::class;
 
 
         $this->factories[AuthorityNameVariants::class] = InvokableFactory::class;
-        $this->factories[ItemCollapseAndExpand::class] = ItemCollapseExpandFactory::class;
+        $this->factories[ItemCollapseExpand::class] = ItemCollapseExpandFactory::class;
 
         $this->addAbstractFactory(PluginFactory::class);
         parent::__construct($configOrContainerInstance, $v3config);

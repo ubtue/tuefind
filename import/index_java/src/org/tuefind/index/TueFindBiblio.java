@@ -729,7 +729,7 @@ public class TueFindBiblio extends TueFind {
         return normalizeSortableString(author);
     }
 
-    public String getSortableAuthorUnicodeCollapseAndExpand(final Record record, final String tagList, final String acceptWithoutRelator,
+    public String getSortableAuthorUnicodeCollapseExpand(final Record record, final String tagList, final String acceptWithoutRelator,
                                                    final String relatorConfig)
     {
         String author = creatorTools.getFirstAuthorFilteredByRelator(record, tagList,
@@ -2716,7 +2716,7 @@ public class TueFindBiblio extends TueFind {
         return formats;
     }
 
-    public String getFormatCollapseAndExpand(final Record record) {
+    public String getFormatCollapseExpand(final Record record) {
         final Set<String> formats = getFormats(record);
         String str_formats = String.join("", formats);
         if (str_formats.equals("Unknown")) {
@@ -3466,7 +3466,7 @@ public class TueFindBiblio extends TueFind {
         return results;
     }
 
-    public String getCollapseAndExpand(final Record record,
+    public String getCollapseExpand(final Record record,
                                        final String authorTagList, final String authorAcceptWithoutRelator, final String authorRelatorConfig)
     {
         // If this is just a single field as base, we could also generate this on the C++ side in the long term.
@@ -3489,8 +3489,8 @@ public class TueFindBiblio extends TueFind {
 
             // SolrIndexerShim is deprecated & should be replaced soon
             result += SolrIndexerShim.instance().getSortableTitle(record);
-            result += getSortableAuthorUnicodeCollapseAndExpand(record, authorTagList, authorAcceptWithoutRelator, authorRelatorConfig);
-            result += getFormatCollapseAndExpand(record);
+            result += getSortableAuthorUnicodeCollapseExpand(record, authorTagList, authorAcceptWithoutRelator, authorRelatorConfig);
+            result += getFormatCollapseExpand(record);
             result += volume.isEmpty() ? "" : "v" + volume;
             result += issue.isEmpty() ? "" : "i" + issue;
             result += pages.isEmpty() ? "" : "p" + pages;

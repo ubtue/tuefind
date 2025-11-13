@@ -1,7 +1,7 @@
 <?php
 
 /**
- * ItemCollapseAndExpand tab
+ * ItemCollapseExpand tab
  *
  * @category TueFind
  * @package  RecordTabs
@@ -14,7 +14,7 @@ namespace TueFind\RecordTab;
 use VuFind\I18n\Translator\TranslatorAwareInterface;
 use VuFind\I18n\Translator\TranslatorAwareTrait;
 
-class ItemCollapseAndExpand extends \VuFind\RecordTab\AbstractContent implements TranslatorAwareInterface
+class ItemCollapseExpand extends \VuFind\RecordTab\AbstractContent implements TranslatorAwareInterface
 {
     use TranslatorAwareTrait;
 
@@ -47,7 +47,7 @@ class ItemCollapseAndExpand extends \VuFind\RecordTab\AbstractContent implements
     ) {
         $this->config = $config;
         $this->searchOptionsManager = $som;
-        $this->accessPermission = 'access.ItemCollapseAndExpand';
+        $this->accessPermission = 'access.ItemCollapseExpand';
 
     }
 
