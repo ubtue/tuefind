@@ -59,6 +59,7 @@
     <field name="time_range_start" type="string" indexed="true" stored="true" />
     <field name="time_range_end" type="string" indexed="true" stored="true" />
     <field name="collections_hierarchy" type="textFacet" indexed="true" stored="true" multiValued="true" />
+    <field name="tue_remarks" type="text" indexed="true" stored="true" multiValued="true" />
 
     <!-- COMMON copyFields -->
     <copyField source="id" dest="ids"/>
