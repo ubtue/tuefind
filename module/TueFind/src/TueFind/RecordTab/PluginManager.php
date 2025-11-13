@@ -15,7 +15,7 @@ class PluginManager extends \VuFind\RecordTab\PluginManager
 
 
         $this->factories[AuthorityNameVariants::class] = InvokableFactory::class;
-        $this->factories[ItemCollapseAndExpand::class] = ItemCollapseAndExpandFactory::class;
+        $this->factories[ItemCollapseAndExpand::class] = ItemCollapseExpandFactory::class;
 
         $this->addAbstractFactory(PluginFactory::class);
         parent::__construct($configOrContainerInstance, $v3config);

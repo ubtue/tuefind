@@ -23,7 +23,7 @@ use Psr\Container\ContainerInterface;
  * @package  RecordTabs
  * @author   Steven Lolong <steven.lolong@uni-tuebingen.de>
  */
-class ItemCollapseAndExpandFactory implements \Laminas\ServiceManager\Factory\FactoryInterface
+class ItemCollapseExpandFactory implements \Laminas\ServiceManager\Factory\FactoryInterface
 {
     /**
      * Create an object
