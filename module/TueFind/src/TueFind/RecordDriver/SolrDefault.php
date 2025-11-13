@@ -25,7 +25,7 @@ use VuFind\Exception\RecordMissing as RecordMissingException;
 
 class SolrDefault extends \VuFind\RecordDriver\SolrMarc
 {
-    use Feature\CollapseAndExpandTrait;
+    use Feature\CollapseExpandTrait;
 
 
     public const SUBITO_BROKER_ID = 'TUEFIND';

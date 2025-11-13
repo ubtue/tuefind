@@ -5,7 +5,7 @@ namespace TueFindSearch\Backend\Solr;
 use VuFindSearch\ParamBag;
 use VuFindSearch\Query\AbstractQuery;
 
-class Backend extends \VufindCollapseAndExpand\Backend\Solr\Backend implements \TueFindSearch\Feature\GetSitemapFieldsInterface
+class Backend extends \VuFindCollapseExpand\Backend\Solr\Backend implements \TueFindSearch\Feature\GetSitemapFieldsInterface
 {
     public function __construct(\VuFindSearch\Backend\Solr\Connector $connector)
     {

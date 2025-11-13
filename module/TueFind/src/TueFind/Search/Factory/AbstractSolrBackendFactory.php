@@ -7,7 +7,7 @@ use TueFindSearch\Backend\Solr\Backend;
 use TueFind\Search\Solr\InjectFulltextMatchIdsListener;
 use Laminas\Config\Config;
 
-class AbstractSolrBackendFactory extends \VufindCollapseAndExpand\Search\Factory\AbstractSolrBackendFactory
+class AbstractSolrBackendFactory extends \VuFindCollapseExpand\Search\Factory\AbstractSolrBackendFactory
 {
     /**
       * Create service

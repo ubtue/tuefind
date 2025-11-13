@@ -1,11 +1,11 @@
 <?php
 
-// Specific to VufindCollapseAndExpand
+// Specific to VuFindCollapseExpand
 use VuFind\Search\Solr\Results;
 
 if ($this->results instanceof Results): 
-  if ($this->params->isEnableCollapseAndExpand()):
-    if ($this->params->isEnableCollapseAndExpand()):
+  if ($this->params->isEnableCollapseExpand()):
+    if ($this->params->isEnableCollapseExpand()):
 ?>
 <form class="form-inline search-grouping" action="<?= $this->currentPath() ?>" method="POST" id="grouping">
   <div class="form-group">
