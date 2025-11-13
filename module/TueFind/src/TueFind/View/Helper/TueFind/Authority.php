@@ -147,7 +147,7 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
         $i=0;
         $display .= '<ul class="tf-other-names-list">';
         foreach ($otherNames as $name) {
-            $display .= '<li>' . $name .'</li>';
+            $display .= '<li>' . htmlspecialchars($name) .'</li>';
             if (++$i >= $limit) {
                $display .= '<li><a href="#other-names">'.$this->translate('more').'</a></li>';
                break;
