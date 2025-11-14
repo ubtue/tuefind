@@ -871,4 +871,9 @@ class SolrDefault extends \VuFind\RecordDriver\SolrMarc
     {
         return $this->fields[$expand_field] ?? '';
     }
+    
+    public function getTueRemarks() : array
+    {
+        return $this->fields['tue_remarks'] ?? [];
+    }
 }

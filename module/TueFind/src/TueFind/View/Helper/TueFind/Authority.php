@@ -140,33 +140,20 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
     public function getOtherNames(AuthorityRecordDriver &$driver): string
     {
         $otherNames = $driver->getUseFor();
-        $headingTimespan = $driver->getHeadingTimespan();
-        $limit = 5;
-        $i = 0;
+        if (empty($otherNames))
+            return '';
         $display = '';
-        $clearName = '';
-        if(!empty($otherNames)) {
-            $display .= '<ul class="tf-other-names-list">';
-            foreach ($otherNames as $name) {
-                if($i < $limit) {
-                    if(!empty($headingTimespan)) {
-                        $clearNameArray = explode($headingTimespan, $name);
-                        if(isset($clearNameArray[0])) {
-                            $clearName = $clearNameArray[0];
-                        }
-                    }else{
-                        $clearName = $name;
-                    }
-                    $display .= '<li>'.trim($clearName).'</li>';
-                }
-                $i++;
+        $limit = 5;
+        $i=0;
+        $display .= '<ul class="tf-other-names-list">';
+        foreach ($otherNames as $name) {
+            $display .= '<li>' . htmlspecialchars($name) .'</li>';
+            if (++$i >= $limit) {
+               $display .= '<li><a href="#other-names">'.$this->translate('more').'</a></li>';
+               break;
             }
-            if($i > $limit) {
-                $display .= '<li><a href="#other-names">'.$this->translate('more').'</a></li>';
-            }
-            $display .= '</ul>';
         }
-
+        $display .= '</ul>';
         return $display;
     }
 

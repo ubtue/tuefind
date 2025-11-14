@@ -138,4 +138,10 @@ class RecordDataFormatterFactory extends \VuFind\View\Helper\Root\RecordDataForm
             'Volumes / Articles', 'hasInferiorWorksInCurrentSubsystem', 'data-volumes_articles.phtml'
         );
     }
+
+    protected function addTueRemarks(&$spec) {
+        $spec->setTemplateLine(
+            'Tue Remarks', 'getTueRemarks', 'data-tueRemarks.phtml'
+        );
+    }
 }

@@ -3498,4 +3498,23 @@ public class TueFindBiblio extends TueFind {
             return result;
         }
     }
+
+    public List<String> getTueRemarks(final Record record) {
+        List<String> results = new ArrayList<>();
+        for (final VariableField variableField : record.getVariableFields("LOK")) {
+            final DataField lokfield = (DataField) variableField;
+            final Subfield subfield_0 = lokfield.getSubfield('0');
+            if (subfield_0 == null || !subfield_0.getData().equals("866  "))
+                continue;
+
+            for (final Subfield subfield_x : lokfield.getSubfields('x')) {
+                 final String tueDescription = subfield_x.getData();
+                 final String TUEKOM_PREFIX = "TUEKOM#";
+                 if (!tueDescription.startsWith(TUEKOM_PREFIX))
+                     continue;
+                 results.add(tueDescription.substring(TUEKOM_PREFIX.length()));
+            }
+        }
+        return results;
+   }
 }
