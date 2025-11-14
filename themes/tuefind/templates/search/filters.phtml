@@ -62,7 +62,7 @@
         <div class="search-filter-dropdown dropdown">
           <?php $dropdown = true; ?>
           <?php $safeId = preg_replace('/[^a-zA-Z0-9]/', '', $field); ?>
-          <button id="dropdown-toggle-<?=$safeId?>" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown">
+          <button id="dropdown-toggle-<?=$safeId?>" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
             <?=$this->transEsc('filter_toggle_entries', ['%%count%%' => count($data)])?>
           </button>
           <ul class="dropdown-menu" role="menu" aria-labelledby="dropdown-toggle-<?=$safeId?>">
@@ -157,7 +157,7 @@
       <?php if ($resetLink && $options->shouldDisplayResetFilters()): ?>
         <a class="reset-filters-btn" href="<?=$resetLink?>"><?=$this->transEsc('reset_filters_button')?></a>
       <?php endif; ?>
-      <div class="filters-toggle collapsed" data-bs-toggle="collapse" data-bs-target="#active-filters-mobile">
+      <div class="filters-toggle collapsed" data-toggle="collapse" data-target="#active-filters-mobile">
         <?=$this->transEsc('show_filters_html', ['%%count%%' => $filterCount])?>
       </div>
       <div class="clearfix"></div>
