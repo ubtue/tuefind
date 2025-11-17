@@ -112,7 +112,7 @@ if (!empty($edition)) {
 }
 
 if ($marcPhdField && $subfield = $marc->getSubfield($marcPhdField, 'a')) {
-    echo "school = {" . $subfield->getData() . "},\n";
+    echo "school = {" . $subfield . "},\n";
 }
 
 // Try to find a page count in the physical description:
