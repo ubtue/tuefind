@@ -665,6 +665,16 @@ var TueFind = {
                 }
             })
         });
+    },
+
+    MoveCursorToEnd: function(elementID="searchForm_lookfor") {
+        const input = document.getElementById(elementID);
+        // if element exist
+        if (input) {
+            const length = input.value.length;
+            input.focus();
+            input.setSelectionRange(length, length);
+        }
     }
 };
 
