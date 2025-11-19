@@ -232,6 +232,8 @@
     );?>
   </form>
 
+  <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, 'TueFind.MoveCursorToEnd();', 'SET')?>
+
   <?php
   // Bibstudies / Churchlaw: The small search box MUST be moved here at the end because we need a separate <form>.
   // Else the 2nd form will always override inputs of the 1st form.
