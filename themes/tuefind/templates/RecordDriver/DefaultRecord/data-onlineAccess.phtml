@@ -3,7 +3,7 @@
   $doiActive = $doi->isActive();
 ?>
 <?php if ($this->tuefind()->getKfl()->hasTitle($this->driver)): ?>
-<a href="<?=$this->url('redirect-license', ['id' => $this->driver->getUniqueId()])?>" data-lightbox="" rel="nofollow"><i class="fa fa-external-link"></i> FID-Lizenz: Zugriff mit <?=$this->tuefind()->getTueFindType()?>-Konto</a><br>
+<a href="<?=$this->url('redirect-license', ['id' => $this->driver->getUniqueId()])?>" class="fulltext" data-lightbox="" rel="nofollow"><i class="fa fa-external-link"></i> FID-Lizenz: Zugriff mit <?=$this->tuefind()->getTueFindType()?>-Konto</a><br>
 <?php endif; ?>
 
 <?php $urls_and_material_types = $this->driver->getURLsAndMaterialTypes();?>
