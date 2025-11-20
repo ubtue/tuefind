@@ -8,10 +8,14 @@ class ZederProxyController extends AbstractProxyController {
 
     protected $actions = [
         // The following URLs will only be available within the UB intranet
-        'wert_zeigen_v01' => 'https://www-ub.ub.uni-tuebingen.de/zeder_ixtheo/cgi-bin/index.cgi/wert_zeigen_v01.json',
-        'wert_zeigen_v02' => 'https://www-ub.ub.uni-tuebingen.de/zeder_ixtheo/cgi-bin/index.cgi/wert_zeigen_v02.json',
-        //'wert_zeigen_v01' => 'https://www-ub.ub.uni-tuebingen.de/zeder_ixtheo/cgi-bin/index.cgi/wert_zeigen_view?View=1',
-        //'wert_zeigen_v02' => 'https://www-ub.ub.uni-tuebingen.de/zeder_ixtheo/cgi-bin/index.cgi/wert_zeigen_view?View=2',
+
+        // First draft:
+        //'wert_zeigen_v01' => 'https://www-ub.ub.uni-tuebingen.de/zeder_ixtheo/cgi-bin/index.cgi/wert_zeigen_v01.json',
+        //'wert_zeigen_v02' => 'https://www-ub.ub.uni-tuebingen.de/zeder_ixtheo/cgi-bin/index.cgi/wert_zeigen_v02.json',
+
+        // Changed to:
+        'wert_zeigen_v01' => 'https://www-ub.ub.uni-tuebingen.de/zeder_ixtheo/cgi-bin/index.cgi/wert_zeigen_view?View=1',
+        'wert_zeigen_v02' => 'https://www-ub.ub.uni-tuebingen.de/zeder_ixtheo/cgi-bin/index.cgi/wert_zeigen_view?View=2',
     ];
 
     /**
@@ -28,10 +32,12 @@ class ZederProxyController extends AbstractProxyController {
             return $response;
         } else {
             $url = $this->actions[$targetId];
-            $locale = $this->getTranslatorLocale();
 
-            $addParams = ['lng' => $locale];
+            $addParams = [  's_ausgabeformat' => 'json',
+                            's_datenexport' => '1',
+                            'lng' => $this->getTranslatorLocale()];
             foreach ($addParams as $addKey => $addValue) {
+                // Note that some examples in the mail communication also use ; instead of &, but both will work
                 $url .= (str_contains($url, '?') ? '&' : '?');
                 $url .= $addKey . '=' . urlencode($addValue);
             }
