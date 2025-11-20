@@ -9,6 +9,7 @@ class ZederProxyController extends AbstractProxyController {
     protected $actions = [
         // The following URLs will only be available within the UB intranet
         'wert_zeigen_v01' => 'https://www-ub.ub.uni-tuebingen.de/zeder_ixtheo/cgi-bin/index.cgi/wert_zeigen_v01.json',
+        'wert_zeigen_v02' => 'https://www-ub.ub.uni-tuebingen.de/zeder_ixtheo/cgi-bin/index.cgi/wert_zeigen_v02.json',
     ];
 
     /**
