@@ -228,25 +228,25 @@
           <?php endforeach; ?>
         <?php endif; ?>
 
-      <?php endif; ?>
+        <?php if (strtolower($this->tuefind()->getControllerName()) != 'search2' ): ?>
+          <div class="result-formats">
+            <?=$this->record($this->driver)->getFormatList() ?>
+            <?=$this->record($this->driver)->getLabelList() ?>
 
-      <?php if (strtolower($this->tuefind()->getControllerName()) != 'search2' ): ?>
-        <div class="result-formats">
-        <?=$this->record($this->driver)->getFormatList() ?>
-        <?=$this->record($this->driver)->getLabelList() ?>
-
-        <?php if (!$openUrlActive && empty($urls) && $this->driver->supportsAjaxStatus()): ?>
-          <span class="status ajax-availability hidden">
-            <span class="label label-default"><?=$this->transEsc('loading_ellipsis')?>...</span>
-          </span>
+            <?php if (!$openUrlActive && empty($urls) && $this->driver->supportsAjaxStatus()): ?>
+              <span class="status ajax-availability hidden">
+                <span class="label label-default"><?=$this->transEsc('loading_ellipsis')?>...</span>
+              </span>
+            <?php endif; ?>
+          </div>
         <?php endif; ?>
+
+        <div class="result-previews">
+          <?=$this->record($this->driver)->getPreviews()?>
         </div>
       <?php endif; ?>
-
-      <div class="result-previews">
-        <?=$this->record($this->driver)->getPreviews()?>
-      </div>
     </div>
+
     <div class="result-links hidden-print">
       <?=$this->record($this->driver)->renderTemplate('controls/qrcode.phtml', ['driver' => $this->driver, 'context' => 'results'])?>
 
