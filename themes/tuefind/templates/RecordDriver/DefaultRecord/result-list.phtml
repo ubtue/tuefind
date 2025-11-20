@@ -159,38 +159,6 @@
         <?php endif; ?>
       </div>
 
-      <?php
-        // Display an OpenURL link if configured to do so:
-        $openUrl = $this->openUrl($this->driver, 'results');
-        $openUrlActive = $openUrl->isActive();
-        $doi = $this->doi($this->driver, 'results');
-        $doiActive = $doi->isActive();
-        // Account for replace_other_urls setting
-        $urls = $this->record($this->driver)->getLinkDetails($openUrlActive);
-      ?>
-      <?php if ($openUrlActive || $doiActive || !empty($urls)): ?>
-        <?php if ($openUrlActive): ?>
-          <br />
-          <?=$openUrl->renderTemplate()?>
-        <?php endif; ?>
-        <?php if ($doiActive): ?>
-          <br />
-          <?=$doi->renderTemplate()?>
-        <?php endif; ?>
-        <?php $urls = is_array($urls) ? $urls : []; ?>
-        <?php if (!$this->driver->isCollection()): ?>
-          <?php foreach ($urls as $current): ?>
-            <?php if (array_filter($hiddenLinks, fn($hiddenLink) => stristr($current['url'], $hiddenLink))): ?>
-              <?php continue; ?>
-            <?php endif; ?>
-              <a class="fulltext icon-link" href="<?=$this->escapeHtmlAttr($this->proxyUrl($current['url']))?>" target="new">
-                <?=$this->icon('external-link', 'icon-link__icon') ?>
-                <span class="icon-link__label"><?=($current['url'] == $current['desc']) ? $this->transEsc('Get full text') : $this->escapeHtml($current['desc'])?></span>
-              </a><br>
-          <?php endforeach; ?>
-        <?php endif; ?>
-      <?php endif; ?>
-
       <?php if (
         $this->searchOptions($this->driver->getSourceIdentifier())->displayCitationLinksInResults()
         && $links = $driver->tryMethod('getCitations')
@@ -211,6 +179,38 @@
       <?php if ($this->tuefind()->getKfl()->hasTitle($this->driver)): ?>
         <a class="fulltext" href="<?=$this->url('redirect-license', ['id' => $this->driver->getUniqueId()])?>" data-lightbox="" rel="nofollow"><i class="fa fa-external-link"></i> FID-Lizenz: Zugriff mit <?=$this->tuefind()->getTueFindType()?>-Konto</a><br>
       <?php else: ?>
+
+        <?php
+          // Display an OpenURL link if configured to do so:
+          $openUrl = $this->openUrl($this->driver, 'results');
+          $openUrlActive = $openUrl->isActive();
+          $doi = $this->doi($this->driver, 'results');
+          $doiActive = $doi->isActive();
+          // Account for replace_other_urls setting
+          $urls = $this->record($this->driver)->getLinkDetails($openUrlActive);
+        ?>
+        <?php if ($openUrlActive || $doiActive || !empty($urls)): ?>
+          <?php if ($openUrlActive): ?>
+            <br />
+            <?=$openUrl->renderTemplate()?>
+          <?php endif; ?>
+          <?php if ($doiActive): ?>
+            <br />
+            <?=$doi->renderTemplate()?>
+          <?php endif; ?>
+          <?php $urls = is_array($urls) ? $urls : []; ?>
+          <?php if (!$this->driver->isCollection()): ?>
+            <?php foreach ($urls as $current): ?>
+              <?php if (array_filter($hiddenLinks, fn($hiddenLink) => stristr($current['url'], $hiddenLink))): ?>
+                <?php continue; ?>
+              <?php endif; ?>
+              <a class="fulltext icon-link" href="<?=$this->escapeHtmlAttr($this->proxyUrl($current['url']))?>" target="new">
+                <?=$this->icon('external-link', 'icon-link__icon') ?>
+                <span class="icon-link__label"><?=($current['url'] == $current['desc']) ? $this->transEsc('Get full text') : $this->escapeHtml($current['desc'])?></span>
+              </a><br>
+            <?php endforeach; ?>
+          <?php endif; ?>
+        <?php endif; ?>
 
         <?php $urls_and_material_types = $this->driver->getURLsAndMaterialTypes(); ?>
         <?php if (!empty($urls_and_material_types)): ?>
