@@ -10,6 +10,8 @@ class ZederProxyController extends AbstractProxyController {
         // The following URLs will only be available within the UB intranet
         'wert_zeigen_v01' => 'https://www-ub.ub.uni-tuebingen.de/zeder_ixtheo/cgi-bin/index.cgi/wert_zeigen_v01.json',
         'wert_zeigen_v02' => 'https://www-ub.ub.uni-tuebingen.de/zeder_ixtheo/cgi-bin/index.cgi/wert_zeigen_v02.json',
+        //'wert_zeigen_v01' => 'https://www-ub.ub.uni-tuebingen.de/zeder_ixtheo/cgi-bin/index.cgi/wert_zeigen_view?View=1',
+        //'wert_zeigen_v02' => 'https://www-ub.ub.uni-tuebingen.de/zeder_ixtheo/cgi-bin/index.cgi/wert_zeigen_view?View=2',
     ];
 
     /**
@@ -27,7 +29,13 @@ class ZederProxyController extends AbstractProxyController {
         } else {
             $url = $this->actions[$targetId];
             $locale = $this->getTranslatorLocale();
-            $url .= '?lng=' . urlencode($locale);
+
+            $addParams = ['lng' => $locale];
+            foreach ($addParams as $addKey => $addValue) {
+                $url .= (str_contains($url, '?') ? '&' : '?');
+                $url .= $addKey . '=' . urlencode($addValue);
+            }
+
             $json = $this->cachingDownloader->download($url);
             $response = $this->getResponse();
             $response->getHeaders()->addHeaderLine('Content-Type', 'application/json');
