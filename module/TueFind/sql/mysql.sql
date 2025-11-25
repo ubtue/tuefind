@@ -81,7 +81,7 @@ CREATE TABLE tuefind_user_authorities (
     requested_datetime TIMESTAMP DEFAULT NOW() NOT NULL,
     granted_datetime TIMESTAMP DEFAULT NULL,
     PRIMARY KEY (id),
-    UNIQUE KEY user_authority (authority_id),
+    UNIQUE KEY user_authority (user_id, authority_id),
     FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;
 
