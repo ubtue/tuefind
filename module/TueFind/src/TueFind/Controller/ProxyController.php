@@ -22,7 +22,13 @@ class ProxyController extends \VuFind\Controller\AbstractBase
 {
     const DNB_REGEX = '#^http(s)?://services\.dnb\.de/fize-service/gvr/#';
     const OPEN_STREETMAP_REGEX = '#^http(s)?://[a-z]+\.tile\.openstreetmap\.org#';
-    const WHITE_LIST_REGEXES = [self::DNB_REGEX, self::OPEN_STREETMAP_REGEX];
+
+    /*
+     * Note: DNB is no longer handled via proxy,
+     *       because our IP will get blocked due to too many requests.
+     *       See Issue #3491 for details.
+     */
+    const WHITE_LIST_REGEXES = [self::OPEN_STREETMAP_REGEX];
 
     public function loadAction()
     {

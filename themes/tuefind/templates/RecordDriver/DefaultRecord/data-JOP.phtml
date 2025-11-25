@@ -52,28 +52,35 @@
             $url_suffix_params .= urlencode($key) . '=' . urlencode($param);
         }
 
-        // special handling for client ip
-        $client_ip = $_SERVER['REMOTE_ADDR'];
-        $url_suffix_client = '&pid=' . urlencode('client_ip=' . $client_ip);
-
-        $url_suffix_full = $url_suffix_params . $url_suffix_client;
-
         // base URLs
-        $url_html_base = 'http://services.dnb.de/fize-service/gvr/html-service.htm';
-        $url_img_base = 'http://services.dnb.de/fize-service/gvr/icon';
-        $url_ajax_base = 'http://services.dnb.de/fize-service/gvr/full.xml';
+        $url_html_base = 'https://services.dnb.de/fize-service/gvr/html-service.htm';
+        $url_img_base = 'https://services.dnb.de/fize-service/gvr/icon';
+        $url_ajax_base = 'https://services.dnb.de/fize-service/gvr/full.xml';
 
         // full URLs with suffix
-        $url_html = $url_html_base . $url_suffix_full;
-        $url_img = $url_img_base . $url_suffix_full;
-        $url_ajax = $url_ajax_base . $url_suffix_full;
+        $url_html = $url_html_base . $url_suffix_params;
+        $url_img = $url_img_base . $url_suffix_params;
+        $url_ajax = $url_ajax_base . $url_suffix_params;
 
-        // proxy URLs
-        $url_img_proxy = $this->url('home') . 'proxy/load?url=' . urlencode($url_img);
-        $url_ajax_proxy = $this->url('home') . 'proxy/load?url=' . urlencode($url_ajax);
+        /*
+         * Note: DNB is no longer handled via proxy,
+         *       because our IP will get blocked due to too many requests.
+         *       See Issue #3491 for details.
+         *
+         *       Also, if you want to re-enable this, you also need to re-add the target url to the whitelist in the proxy controller.
+         */
+        /*
+        $client_ip = $_SERVER['REMOTE_ADDR'];
+        $url_suffix_client = '&pid=' . urlencode('client_ip=' . $client_ip);
+        $url_img_proxy = $this->url('home') . 'proxy/load?url=' . urlencode($url_img . $url_suffix_client);
+        $url_ajax_proxy = $this->url('home') . 'proxy/load?url=' . urlencode($url_ajax . $url_suffix_client);
+        $url_img_final = $url_img_proxy;
+        $url_ajax_final = $url_ajax_proxy;
+         */
+        $url_img_final = $url_img;
+        $url_ajax_final = $url_ajax;
 
-        $part_img = '<img style="width:10%; min-width:50" src="' . $url_img_proxy . '" alt="JOP Icons should be here"/>';
-
+        $part_img = '<img style="width:10%; min-width:50" src="' . $url_img_final . '" alt="JOP Icons should be here"/>';
         $check_availability_text = $this->transEsc('Check Availability');
         if (count($issns_and_additional_information) > 1)
             $check_availability_text .= ' (' . $issn . ')';
@@ -89,7 +96,7 @@
               <?php endif; ?>
           </div>
           <div id="<?= $jop_place_holder_id ?>"><?= $this->transEsc("Loading") ?>...</div>
-          <?php $jsParams = [$jop_place_holder_id, $jop_icons_id, $url_ajax_proxy, $url_html, $part_img, $this->transEsc('Available online'), $check_availability_text]; ?>
+          <?php $jsParams = [$jop_place_holder_id, $jop_icons_id, $url_ajax_final, $url_html, $part_img, $this->transEsc('Available online'), $check_availability_text]; ?>
           <?php $jsSnippet = 'TueFind.GetJOPInformation(\'' . implode("', '", $jsParams) . '\');'; ?>
           <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $jsSnippet, 'SET')?>
         </div>
