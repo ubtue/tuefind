@@ -1,4 +1,4 @@
-<?php if (!$this->tuefind()->isUserAgentBot()): ?>
+<?php if ($this->tuefind()->isUserAgentPositive()): ?>
 
 <?php $formats = $this->driver->getFormats(); ?>
 <?php $i = 0 ?>

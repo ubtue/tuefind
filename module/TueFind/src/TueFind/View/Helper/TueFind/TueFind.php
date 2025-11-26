@@ -477,13 +477,19 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
     const USER_AGENT_BOT_PATTERNS = [
         '/Bot/i',
         '/ChatGPT-User/i',
+        '/Crawler/i',
+        '/Spider/i',
     ];
 
     const USER_AGENT_BROWSER_PATTERNS = [
         '/AppleWebKit/i',
         '/Chrome/i',
         '/Edge/i',
+        '/Epiphany/i',
+        '/Gecko/i',
+        '/Konqueror/i',
         '/Mozilla/i',
+        '/Opera/i',
         '/Safari/i',
     ];
 
@@ -493,22 +499,30 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
             return false;
         }
 
-        $isBrowser = false;
-        foreach (static::USER_AGENT_BROWSER_PATTERNS as $pattern) {
-            if (preg_match($pattern, $userAgent)) {
-                $isBrowser = true;
-                break;
-            }
-        }
-
-        $isBot = false;
         foreach (static::USER_AGENT_BOT_PATTERNS as $pattern) {
             if (preg_match($pattern, $userAgent)) {
-                $isBot = true;
-                break;
+                return true;
             }
         }
-        return ($isBot || !$isBrowser);
+        return false;
+    }
+
+    public function isUserAgentBrowser(): bool {
+        $userAgent = $_SERVER['HTTP_USER_AGENT'];
+        if (empty($userAgent)) {
+            return false;
+        }
+
+        foreach (static::USER_AGENT_BROWSER_PATTERNS as $pattern) {
+            if (preg_match($pattern, $userAgent)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function isUserAgentPositive(): bool {
+        return ($this->isUserAgentBrowser() && !$this->isUserAgentBot());
     }
 
     public function printSuperiorSeries($superior_record) {
