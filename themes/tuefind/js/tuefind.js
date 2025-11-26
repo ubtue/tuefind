@@ -394,14 +394,14 @@ var TueFind = {
                     } else {
                         $("#" + jop_place_holder_id).each(function () {
                             $(this).replaceWith('<?=$this->transEsc("Not available")?>.');
-                        })
+                        });
                     }
                 });
             }, // end success
             error: function (xhr, ajaxOptions, thrownError) {
                 $("#" + jop_place_holder_id).each(function () {
                     $(this).replaceWith('Invalid server response. (JOP server down?)');
-                })
+                });
                 if (window.console && window.console.log) {
                     console.log("Status: " + xhr.status + ", Error: " + thrownError);
                 }

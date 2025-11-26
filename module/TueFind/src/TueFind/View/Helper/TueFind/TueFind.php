@@ -474,6 +474,42 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
         return !empty($config->Authentication->account_deletion);
     }
 
+    const USER_AGENT_BOT_PATTERNS = [
+        '/Bot/i',
+    ];
+
+    const USER_AGENT_BROWSER_PATTERNS = [
+        '/AppleWebKit/i',
+        '/Chrome/i',
+        '/Edge/i',
+        '/Mozilla/i',
+        '/Safari/i',
+    ];
+
+    public function isUserAgentBot(): bool {
+        $userAgent = $_SERVER['HTTP_USER_AGENT'];
+        if (empty($userAgent)) {
+            return false;
+        }
+
+        $isBrowser = false;
+        foreach (static::USER_AGENT_BROWSER_PATTERNS as $pattern) {
+            if (preg_match($pattern, $userAgent)) {
+                $isBrowser = true;
+                break;
+            }
+        }
+
+        $isBot = false;
+        foreach (static::USER_AGENT_BOT_PATTERNS as $pattern) {
+            if (preg_match($pattern, $userAgent)) {
+                $isBot = true;
+                break;
+            }
+        }
+        return ($isBot || !$isBrowser);
+    }
+
     public function printSuperiorSeries($superior_record) {
         $superior_series = $superior_record->tryMethod('getSeries');
         if (is_array($superior_series)) {
