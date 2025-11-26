@@ -677,7 +677,6 @@ var TueFind = {
                 input.focus();
                 input.setSelectionRange(length, length);
             }
-
         }
     }
 };
