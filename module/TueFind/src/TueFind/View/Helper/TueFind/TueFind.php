@@ -476,6 +476,7 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
 
     const USER_AGENT_BOT_PATTERNS = [
         '/Bot/i',
+        '/ChatGPT-User/i',
     ];
 
     const USER_AGENT_BROWSER_PATTERNS = [
