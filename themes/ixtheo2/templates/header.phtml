@@ -31,16 +31,16 @@ Fixed Navigation
   <div class="container">
     <!-- main nav -->
 
-    <nav class="navbar container-fluid navbar-expand-lg navbar-light px-0">
+    <nav style="padding-top:20px;" class="navbar container-fluid navbar-expand-lg navbar-light px-0">
       <!-- logo -->
-      <a class="navbar-brand logo" href="/">
+      <a class="navbar-brand logo"  href="/">
         <?php /* ?><img loading="lazy" class="logo-default" src="<?=$this->imageLink('logo.png');?>" alt="logo" />
         <img loading="lazy" class="logo-white" src="<?=$this->imageLink('logo.png');?>" alt="logo" /> <?php */?>
-        IxTheo
+        <img class="" style="width: 85px; margin-top: -15px;" src="<?=$this->imageLink('/logos/Logo-IxTheo-ai-rgb_black.png');?>" alt="logo" />
       </a>
       <!-- /logo -->
 
-      <ul class="navbar-nav navbar-right text-center">
+      <ul class="navbar-nav navbar-right text-center" style="margin-top: 8px;">
 
         <!-- s-media -->
         <li class="nav-item social-media tf-cursor-pointer">
@@ -116,7 +116,7 @@ Welcome Slider
   </div>
   <?php else: ?>
   <div class="contentLogoBlock">
-    <h1><a href="<?=$this->url('home')?>" title="Index Theologicus">Index Theologicus</a></h1>
+    <h1 style="padding-top: 84px;"><a href="<?=$this->url('home')?>" title="Index Theologicus">Index Theologicus</a></h1>
     <small><?=$this->transEsc("ixtheo_subtitle")?></small>
   </div>
   <?php endif;?>
