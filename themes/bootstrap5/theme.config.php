@@ -17,13 +17,12 @@ return [
          *          - 2xx => VuFind library (general-purpose code)
          *          - 3xx => VuFind scripts (highly VuFind-specific code)
          * - media: e.g. 'print'
-         * - conditional: e.g. '!IE'
          * - extras: array of additional attributes
          *
-         * Strings are supported for backwards compatibility reasons. examples:
+         * Strings are supported for legacy backwards compatibility reasons. examples:
          * - 'example.css' => same as ['file' => 'example.css']
-         * - 'example.css:print:!IE' => same as
-         *   ['file' => 'example.css', 'media' => 'print', 'conditional' => '!IE']
+         * - 'example.css:print' => same as
+         *   ['file' => 'example.css', 'media' => 'print']
          */
         ['file' => 'compiled.css'],
         ['file' => 'print.css', 'media' => 'print'],
@@ -43,18 +42,16 @@ return [
          *          - 2xx => VuFind library (general-purpose code)
          *          - 3xx => VuFind scripts (highly VuFind-specific code)
          * - position: 'header' (default) or 'footer'
-         * - conditional: e.g. 'lt IE 10'
          * - disabled: if set to true in a child theme, the matching file will be
          *   removed if it was included by a parent theme.
          *
          * Entries with neither priority nor load_after will be loaded after all
          * other entries.
          *
-         * Strings are supported for backwards compatibility reasons. examples:
+         * Strings are supported for legacy backwards compatibility reasons. example:
          * - 'example.js' => same as ['file' => 'example.js']
-         * - 'example.js:lt IE 10' => same as
-         *   ['file' => 'example.js', 'conditional' => 'lt IE 10']
          */
+        ['file' => 'polyfills.js', 'priority' => 100],
         ['file' => 'vendor/jquery.min.js', 'priority' => 110],
         ['file' => 'vendor/popper.min.js', 'priority' => 120],
         ['file' => 'vendor/bootstrap.min.js', 'priority' => 130],
@@ -63,14 +60,16 @@ return [
         ['file' => 'common.js', 'priority' => 310],
         ['file' => 'config.js', 'priority' => 320],
         ['file' => 'lightbox.js', 'priority' => 330],
-        ['file' => 'searchbox_controls.js', 'priority' => 340],
-        ['file' => 'truncate.js', 'priority' => 350],
-        ['file' => 'trigger_print.js', 'priority' => 360],
-        ['file' => 'observer_manager.js', 'priority' => 370],
-        ['file' => 'openurl.js', 'priority' => 380],
-        ['file' => 'list_item_selection.js', 'priority' => 390],
-        ['file' => 'validation.js', 'priority' => 400],
-        ['file' => 'bs3-compat.js', 'priority' => 1000],
+        ['file' => 'cookie.js', 'priority' => 340],
+        ['file' => 'searchbox_controls.js', 'priority' => 350],
+        ['file' => 'truncate.js', 'priority' => 360],
+        ['file' => 'trigger_print.js', 'priority' => 370],
+        ['file' => 'observer_manager.js', 'priority' => 380],
+        ['file' => 'openurl.js', 'priority' => 390],
+        ['file' => 'list_item_selection.js', 'priority' => 400],
+        ['file' => 'covers.js', 'priority' => 410],
+        ['file' => 'validation.js', 'priority' => 420],
+        ['file' => 'copy_to_clipboard.js', 'priority' => 430],
     ],
     /**
      * Configuration for a single or multiple favicons.
@@ -157,11 +156,15 @@ return [
              * All of the items below have been specified with FontAwesome to allow
              * for a strong inheritance safety net but this is not required.
              */
-            'addthis-bookmark' => 'FontAwesome:bookmark-o',
             'barcode' => 'FontAwesome:barcode',
+            'browzine-best' => 'FontAwesome:file-lines',
+            'browzine-concern' => 'FontAwesome:exclamation',
+            'browzine-delivery' => 'FontAwesome:paper-plane',
             'browzine-issue' => 'Alias:format-serial',
+            'browzine-link-resolver' => 'FontAwesome:file',
             'browzine-pdf' => 'FontAwesome:file-pdf-o',
             'browzine-retraction' => 'FontAwesome:exclamation',
+            'browzine-view' => 'FontAwesome:file',
             'cart' => 'FontAwesome:suitcase',
             'cart-add' => 'FontAwesome:plus',
             'cart-empty' => 'FontAwesome:times',
@@ -169,9 +172,11 @@ return [
             'cite' => 'FontAwesome:asterisk',
             'cites' => 'Unicode:275D',
             'cited-by' => 'Unicode:275E',
+            'clone' => 'FontAwesome:clone',
             'collapse' => 'Collapse:_', // uses the icons below
             'collapse-close' => 'FontAwesome:chevron-up',
             'collapse-open' => 'FontAwesome:chevron-down',
+            'user-content' => 'FontAwesome:comment',
             'cover-replacement' => 'FontAwesome:question',
             'currency-eur' => 'FontAwesome:eur',
             'currency-gbp' => 'FontAwesome:gbp',
@@ -185,6 +190,7 @@ return [
             'currency-won' => 'FontAwesome:won',
             'currency-yen' => 'FontAwesome:yen',
             'dropdown-caret' => 'FontAwesome:caret-down',
+            'explain' => 'FontAwesome:question-circle',
             'export' => 'FontAwesome:external-link',
             'external-link' => 'FontAwesome:link',
             'facet-applied' => 'FontAwesome:check',
@@ -224,6 +230,7 @@ return [
             'format-newspaper' => 'FontAwesome:file-text-o',
             'format-online' => 'FontAwesome:laptop',
             'format-painting' => 'FontAwesome:picture-o',
+            'format-pdf' => 'FontAwesome:file-pdf',
             'format-photo' => 'FontAwesome:picture-o',
             'format-photonegative' => 'FontAwesome:picture-o',
             'format-physicalobject' => 'FontAwesome:archive',
@@ -251,7 +258,9 @@ return [
             'hierarchy-noncollapsible' => 'Alias:facet-noncollapsible',
             'hierarchy-record' => 'FontAwesome:file-o',
             'hierarchy-tree' => 'FontAwesome:sitemap',
+            'keyboard' => 'FontAwesome:keyboard-o',
             'lightbox-close' => 'FontAwesome:times',
+            'link' => 'FontAwesome:link',
             'more' => 'FontAwesome:chevron-circle-right',
             'more-rtl' => 'FontAwesome:chevron-circle-left',
             'my-account' => 'FontAwesome:user-circle-o',
@@ -273,7 +282,6 @@ return [
             'overdrive-help' => 'FontAwesome:question-circle',
             'overdrive-place-hold' => 'Alias:place-hold',
             'overdrive-return' => 'FontAwesome:undo',
-            'overdrive-return-rtl' => 'FontAwesome:undo',
             'overdrive-sign-in' => 'FontAwesome:sign-in',
             'overdrive-success' => 'FontAwesome:check',
             'overdrive-suspend-hold' => 'Alias:place-hold',
@@ -317,6 +325,7 @@ return [
             'status-pending' => 'FontAwesome:clock-o',
             'status-ready' => 'FontAwesome:bell',
             'status-unavailable' => 'FontAwesome:times',
+            'status-uncertain' => 'FontAwesome:circle',
             'status-unknown' => 'FontAwesome:circle',
             'tag-add' => 'Alias:ui-add',
             'tag-remove' => 'Alias:ui-remove',

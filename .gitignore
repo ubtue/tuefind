@@ -6,7 +6,9 @@
 .*.sw[po]
 
 .php_cs_cache
+.phpmd.result-cache.php
 .phpstan_cache
+.rector
 .vagrant
 .vscode/*
 /downloads
@@ -23,7 +25,6 @@ import/solrmarc.log*
 lessphp_*.list
 module/VuFind/tests/.phpunit*
 node_modules
-package-lock.json
 public/swagger-ui
 tests/phpcs.cache.json
 themes/bootstrap5/scss/vendor/bootstrap
@@ -32,6 +33,9 @@ local/config/vufind/*.ini
 local/config/vufind/*.json
 local/config/vufind/*.key
 local/config/vufind/*.yaml
+local/config/vufind.bak
+local/config/vufind/*
+!local/config/vufind/README.txt
 
 # CUSTOM TUEFIND IGNORES START HERE
 /import/marc_local.properties

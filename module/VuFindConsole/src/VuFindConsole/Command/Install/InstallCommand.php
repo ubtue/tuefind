@@ -17,8 +17,8 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * along with this program; if not, see
+ * <https://www.gnu.org/licenses/>.
  *
  * @category VuFind
  * @package  Console
@@ -38,6 +38,7 @@ use Symfony\Component\Console\Question\Question;
 
 use function in_array;
 use function intval;
+use function is_array;
 
 /**
  * Console command: VuFind installer.
@@ -169,7 +170,7 @@ class InstallCommand extends Command
                 null,
                 InputOption::VALUE_REQUIRED,
                 'What base path should be used in VuFind®\'s URL?'
-                . " (defaults to {$this->baseDir} when --non-interactive is set)"
+                . " (defaults to {$this->basePath} when --non-interactive is set)"
             )->addOption(
                 'multisite',
                 null,
@@ -809,16 +810,18 @@ class InstallCommand extends Command
      * Make sure all modules exist (and create them if they do not). Returns true
      * on success, error message otherwise.
      *
+     * @param OutputInterface $output Output object
+     *
      * @return bool|string
      */
-    protected function buildModules()
+    protected function buildModules(OutputInterface $output)
     {
         if (!empty($this->module)) {
             foreach (explode(',', $this->module) as $module) {
                 $moduleDir = $this->baseDir . '/module/' . $module;
                 // Is module missing? If so, create it from the template:
                 if (!file_exists($moduleDir . '/Module.php')) {
-                    if (($result = $this->buildModule($module)) !== true) {
+                    if (($result = $this->buildModule($module, $output)) !== true) {
                         return $result;
                     }
                 }
@@ -831,11 +834,12 @@ class InstallCommand extends Command
      * Build the module for storing local code changes. Returns true on success,
      * error message otherwise.
      *
-     * @param string $module The name of the new module (assumed valid!)
+     * @param string          $module The name of the new module (assumed valid!)
+     * @param OutputInterface $output Output object
      *
      * @return bool|string
      */
-    protected function buildModule($module)
+    protected function buildModule(string $module, OutputInterface $output): bool|string
     {
         // Create directories:
         $moduleDir = $this->baseDir . '/module/' . $module;
@@ -876,7 +880,31 @@ class InstallCommand extends Command
             $moduleDir . '/Module.php',
             str_replace('VuFindLocalTemplate', $module, $contents)
         );
-        return $success ? true : "Problem writing {$moduleDir}/Module.php.";
+        if (!$success) {
+            return "Problem writing {$moduleDir}/Module.php.";
+        }
+
+        // Set up Composer settings:
+        $localComposer = $this->baseDir . '/composer.local.json';
+        $this->backUpFile($output, $localComposer, 'local Composer configuration');
+        $json = json_decode(file_exists($localComposer) ? file_get_contents($localComposer) : '{}', true);
+        if (!is_array($json)) {
+            return "Unable to parse $localComposer.";
+        }
+        $json['autoload']['psr-4'][$module . '\\'] = ["module/$module/src/$module", "module/$module"];
+        if (!file_put_contents($localComposer, json_encode($json, JSON_PRETTY_PRINT))) {
+            return "Cannot write to $localComposer.";
+        }
+
+        // Try to automatically run Composer to update autoloader; output warning if it fails:
+        chdir($this->baseDir);
+        if (false === exec('composer install', result_code: $composerResult) || $composerResult !== 0) {
+            $output->writeLn(
+                "<error>WARNING: Could not run composer to update autoload rules for module $module.\n"
+                . 'Please run "composer install" to ensure correct custom module loading.</error>'
+            );
+        }
+        return true;
     }
 
     /**
@@ -1005,7 +1033,7 @@ class InstallCommand extends Command
                 $this->multisiteMode = self::MULTISITE_DIR_BASED;
             } elseif ($mode === 'host') {
                 $this->multisiteMode = self::MULTISITE_HOST_BASED;
-            } elseif ($mode !== true && $mode !== null && $mode !== false) {
+            } elseif (!in_array($mode, [true, null, false], true)) {
                 return $this->failWithError(
                     $output,
                     'Unexpected multisite mode: ' . $mode
@@ -1050,7 +1078,7 @@ class InstallCommand extends Command
 
         // Should we display Apache help messages?
         $this->showApacheHelp = !$input->getOption('no-apache-help');
-        return 0;
+        return self::SUCCESS;
     }
 
     /**
@@ -1090,7 +1118,7 @@ class InstallCommand extends Command
         }
 
         // Build the custom module(s), if necessary:
-        if (($result = $this->buildModules()) !== true) {
+        if (($result = $this->buildModules($output)) !== true) {
             return $this->failWithError($output, $result);
         }
 
@@ -1098,7 +1126,7 @@ class InstallCommand extends Command
         if (($result = $this->buildApacheConfig($output)) !== true) {
             return $this->failWithError($output, $result);
         }
-        return 0;
+        return self::SUCCESS;
     }
 
     /**
@@ -1109,7 +1137,7 @@ class InstallCommand extends Command
      *
      * @return int 0 for success
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $output->writeln("VuFind® has been found in {$this->baseDir}.");
 
@@ -1119,11 +1147,11 @@ class InstallCommand extends Command
             $this->collectParameters($input, $output) !== 0
             || $this->processParameters($output) !== 0
         ) {
-            return 1;
+            return self::FAILURE;
         }
 
         // Report success:
         $this->displaySuccessMessage($output);
-        return 0;
+        return self::SUCCESS;
     }
 }
