@@ -2,5 +2,15 @@
     "require": {
         "elasticsearch/elasticsearch": "8.14.0",
         "symfony/intl": "^5.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "TueFind\\": ["module/TueFind/src/TueFind", "module/TueFind"],
+            "TueFindApi\\": ["module/TueFindApi/src/TueFindApi", "module/TueFindApi"],
+            "TueFindSearch\\": ["module/TueFindSearch/src/TueFindSearch", "module/TueFindSearch"],
+            "IxTheo\\": ["module/IxTheo/src/IxTheo", "module/IxTheo"],
+            "IxTheoTheme\\": ["module/IxTheoTheme/src/IxTheoTheme", "module/IxTheoTheme"],
+            "KrimDok\\": ["module/KrimDok/src/KrimDok", "module/KrimDok"]
+        }
     }
 }
