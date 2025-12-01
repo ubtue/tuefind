@@ -2,6 +2,8 @@
 
 namespace IxTheo\Search\Solr;
 
+use VuFind\Config\ConfigManagerInterface;
+
 class Options extends \TueFind\Search\Solr\Options
 {
     /**
@@ -13,13 +15,11 @@ class Options extends \TueFind\Search\Solr\Options
 
     /**
      * Constructor, used to parse IxTheo-specific options from searches.ini
-     *
-     * @param \VuFind\Config\PluginManager $configLoader Config loader
      */
-    public function __construct(\VuFind\Config\PluginManager $configLoader)
+    public function __construct(ConfigManagerInterface $configManager)
     {
-        parent::__construct($configLoader);
-        $searchSettings = $configLoader->get($this->searchIni);
+        parent::__construct($configManager);
+        $searchSettings = $configManager->getConfigObject($this->searchIni);
 
         if (isset($searchSettings->IxTheo->forceDefaultSortSearches)) {
             $this->forceDefaultSortSearches = $searchSettings->IxTheo->forceDefaultSortSearches->toArray();

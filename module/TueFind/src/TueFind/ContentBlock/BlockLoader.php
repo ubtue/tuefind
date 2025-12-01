@@ -2,8 +2,8 @@
 
 namespace TueFind\ContentBlock;
 
-use Laminas\Config\Config;
 use Laminas\Http\Request as Request;
+use VuFind\Config\Config;
 use VuFind\Config\PluginManager as ConfigManager;
 use VuFind\ContentBlock\PluginManager as BlockManager;
 use VuFind\Search\Options\PluginManager as OptionsManager;

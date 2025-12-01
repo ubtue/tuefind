@@ -2,11 +2,13 @@
 
 namespace TueFind\Search\Search2;
 
+use VuFind\Config\ConfigManagerInterface;
+
 class Options extends \VuFind\Search\Search2\Options
 {
-    public function __construct(\VuFind\Config\PluginManager $configLoader)
+    public function __construct(ConfigManagerInterface $configManager)
     {
-        parent::__construct($configLoader);
+        parent::__construct($configManager);
     }
 
 

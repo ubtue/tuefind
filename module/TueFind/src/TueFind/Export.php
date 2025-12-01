@@ -14,7 +14,7 @@ class Export extends \VuFind\Export
      *
      * @return string
      */
-    public function getRedirectUrl($format, $callback)
+    public function getRedirectUrl(string $format, string $callback): string
     {
         // Fill in special tokens in template:
         $template = $this->exportConfig->$format->redirectUrl;

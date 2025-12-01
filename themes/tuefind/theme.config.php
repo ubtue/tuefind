@@ -1,6 +1,6 @@
 <?php
 return [
-    'extends' => 'bootstrap3',
+    'extends' => 'bootstrap5',
     'helpers' => [
         'factories' => [
             'TueFind\View\Helper\Root\AccountMenu' => 'VuFind\View\Helper\Root\AccountMenuFactory',
