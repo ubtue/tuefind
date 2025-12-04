@@ -672,8 +672,11 @@ var TueFind = {
         // if element exist
         if (input) {
             const length = input.value.length;
-            input.focus();
-            input.setSelectionRange(length, length);
+            // if search input not empty
+            if(length > 0) {
+                input.focus();
+                input.setSelectionRange(length, length);
+            }
         }
     }
 };
