@@ -30,12 +30,13 @@ CREATE TABLE ixtheo_pda_subscriptions (
     PRIMARY KEY (id, book_ppn)
 ) DEFAULT CHARSET=utf8;
 
-ALTER TABLE vufind.user ADD COLUMN ixtheo_user_type ENUM('ixtheo', 'relbib', 'bibstudies', 'churchlaw') NOT NULL DEFAULT 'ixtheo';
-ALTER TABLE vufind.user ADD COLUMN ixtheo_appellation VARCHAR(64) DEFAULT NULL;
-ALTER TABLE vufind.user ADD COLUMN ixtheo_title VARCHAR(64) DEFAULT NULL;
-ALTER TABLE vufind.user ADD COLUMN ixtheo_can_use_tad BOOLEAN DEFAULT FALSE;
-ALTER TABLE vufind.user ADD COLUMN ixtheo_journal_subscription_format ENUM ('meistertask') DEFAULT NULL;
+ALTER TABLE user ADD COLUMN ixtheo_user_type ENUM('ixtheo', 'relbib', 'bibstudies', 'churchlaw') NOT NULL DEFAULT 'ixtheo';
+ALTER TABLE user ADD COLUMN ixtheo_appellation VARCHAR(64) DEFAULT NULL;
+ALTER TABLE user ADD COLUMN ixtheo_title VARCHAR(64) DEFAULT NULL;
+ALTER TABLE user ADD COLUMN ixtheo_can_use_tad BOOLEAN DEFAULT FALSE;
+ALTER TABLE user ADD COLUMN ixtheo_journal_subscription_format ENUM ('meistertask') DEFAULT NULL;
 
-ALTER TABLE vufind.user DROP INDEX `username`;
-CREATE UNIQUE INDEX `subsystem_username` ON vufind.user (`ixtheo_user_type`, `username`);
-CREATE UNIQUE INDEX `subsystem_email` ON vufind.user (`ixtheo_user_type`, `email`);
+ALTER TABLE user DROP INDEX `user_username_idx`;
+ALTER TABLE user DROP INDEX `user_email_idx`;
+CREATE UNIQUE INDEX `subsystem_username` ON user (`ixtheo_user_type`, `username`);
+CREATE UNIQUE INDEX `subsystem_email` ON user (`ixtheo_user_type`, `email`);
