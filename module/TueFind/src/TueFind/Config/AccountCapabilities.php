@@ -2,8 +2,8 @@
 
 namespace TueFind\Config;
 
-use Laminas\Config\Config;
 use VuFind\Auth\Manager as AuthManager;
+use VuFind\Config\Config;
 
 class AccountCapabilities extends \VuFind\Config\AccountCapabilities
 {
