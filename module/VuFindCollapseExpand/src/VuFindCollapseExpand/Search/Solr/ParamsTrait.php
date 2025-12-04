@@ -102,7 +102,7 @@ trait ParamsTrait
         $config = $this->configLoader->get('config');
         $index = $config->get('Index');
         $group = false;
-        $collapse_and_expand = $index->get('collapse_and_expand') !== null ? $index->get('collapse_and_expand') : false;
+        $collapse_expand = $index->get('collapse_expand') !== null ? $index->get('collapse_expand') : false;
 
         $groupingParams = $this->grouping->getCurrentSettings();
 
@@ -112,7 +112,7 @@ trait ParamsTrait
             $group = $index->get('group');
         }
 
-        if ((bool) $collapse_and_expand === true) {
+        if ((bool) $collapse_expand === true) {
             if ((bool)$group === true) {
                 $backendParams->add('expand', 'true');
 
@@ -254,9 +254,9 @@ trait ParamsTrait
         // Fetch group params for grouping
         $config = $this->configLoader->get('config');
         $index = $config->get('Index');
-        $collapse_and_expand = $index->get('collapse_and_expand') !== null ? $index->get('collapse_and_expand') : false;
+        $collapse_expand = $index->get('collapse_expand') !== null ? $index->get('collapse_expand') : false;
 
-        return $collapse_and_expand;
+        return $collapse_expand;
     }
 
     public function isGroupingActivated()

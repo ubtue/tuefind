@@ -50,7 +50,7 @@ $config = [
     ],
     'view_manager' => [
         'template_path_stack' => [
-            '/usr/local/vufind/vendor/finc/vufind-collapse-expand/theme/templates',
+            '/usr/local/vufind/vendor/finc/vufind-collapse-expand/res/theme/templates',
         ],
     ],
 ];

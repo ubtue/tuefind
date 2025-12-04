@@ -59,8 +59,8 @@ class ItemCollapseExpand extends \VuFind\RecordTab\AbstractContent implements Tr
     public function isActive()
     {
         $index = $this->config->get('Index');
-        $collapse_and_expand = $index->get('collapse_and_expand') !== null ? $index->get('collapse_and_expand') : false;
-        if ((bool) $collapse_and_expand === true && $this->driver->isActiveCnEParams()) {
+        $collapse_expand = $index->get('collapse_expand') !== null ? $index->get('collapse_expand') : false;
+        if ((bool) $collapse_expand === true && $this->driver->isActiveCnEParams()) {
             if ($this->results == null) {
                 // $results = $this->driver->tryMethod('getOtherDocument', [$this->driver->getContainerTitleSort()]);
                 // $this->numOfExpandedDoc = $results->countExpandedDoc($this->driver->getContainerTitleSort());

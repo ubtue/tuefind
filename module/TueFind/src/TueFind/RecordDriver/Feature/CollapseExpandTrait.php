@@ -76,11 +76,11 @@ trait CollapseExpandTrait
             $config = $container->get('VuFind\Config\PluginManager')->get('config');
             $configIndex = $config->get("Index");
             // $cookie = $container->get('Request')->getCookie();
-            $collapse_and_expand = $configIndex->get('collapse_and_expand');
+            $collapse_expand = $configIndex->get('collapse_expand');
 
 
 
-            if ((bool)$collapse_and_expand === true) {
+            if ((bool)$collapse_expand === true) {
                 $default_field = array('title_sort');
                 $group_field =  ($configIndex->get('group.field') !== null) ? explode(":", $configIndex->get('group.field')) : $default_field;
                 $this->groupLimit = ($configIndex->get('group.limit') !== null) ? $configIndex->get('group.limit') : 10;
