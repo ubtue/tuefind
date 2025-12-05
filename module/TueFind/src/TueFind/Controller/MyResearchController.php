@@ -272,9 +272,9 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
             return $this->forceLogin();
         }
 
-        $dbTablePluginManager = $this->serviceLocator->get(\VuFind\Db\Table\PluginManager::class);
-        $rssSubscriptionsTable = $dbTablePluginManager->get('rss_subscription');
-        $rssFeedsTable = $dbTablePluginManager->get('rss_feed');
+        $dbTablePluginManager = $this->serviceLocator->get(\VuFind\Db\Service\PluginManager::class);
+        $rssSubscriptionsTable = $dbTablePluginManager->get(\TueFind\Db\Service\RssSubscriptionServiceInterface::class);
+        $rssFeedsTable = $dbTablePluginManager->get(\TueFind\Db\Service\RssFeedServiceInterface::class);
         $action = $this->getRequest()->getPost('action', '');
         $feedId = $this->getRequest()->getPost('id', '');
         if ($action == 'add') {

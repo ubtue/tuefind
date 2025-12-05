@@ -4,7 +4,7 @@ namespace TueFind\Db\Service;
 
 class RssBaseService implements RssBaseServiceInterface
 {
-    use \VuFind\Db\Table\DbTableAwareTrait;
+    use \VuFind\Db\Service\DbServiceAwareTrait;
 
     protected $instance;
 

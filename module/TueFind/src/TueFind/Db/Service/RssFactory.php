@@ -4,14 +4,16 @@ namespace TueFind\Db\Service;
 
 use Psr\Container\ContainerInterface;
 
-class RssFactory extends \VuFind\Db\Table\GatewayFactory
+class RssFactory extends \VuFind\Db\Service\AbstractDbServiceFactory
 {
-    public function __invoke(ContainerInterface $container, $requestedName,
-        array $options = null
+    public function __invoke(
+        ContainerInterface $container,
+        $requestedName,
+        ?array $options = null
     ) {
-        $table = parent::__invoke($container, $requestedName, $options);
+        $service = parent::__invoke($container, $requestedName, $options);
         $instance = $container->get('ViewHelperManager')->get('tuefind')->getTueFindInstance();
-        $table->setInstance($instance);
-        return $table;
+        $service->setInstance($instance);
+        return $service;
     }
 }
