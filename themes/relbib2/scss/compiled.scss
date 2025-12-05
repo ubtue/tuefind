@@ -1,0 +1,6 @@
+// include ixtheo2 theme as base
+@use "../../ixtheo2/scss/compiled";
+
+@forward "variables";
+@forward "overrides";
+@forward "overrides-media";

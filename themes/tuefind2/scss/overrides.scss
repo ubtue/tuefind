@@ -1,0 +1,835 @@
+$screen-sm-min: 500;
+$screen-xs-min: 500;
+$screen-md-min: 500;
+$table-border-color: #000;
+@use "../../ixtheo/scss/variables" as ixtheo;
+@use "variables" as *;
+.background {
+  background-color: $body-bg;
+  position: absolute;
+  z-index: -1000;
+  display: block;
+  width: 100%;
+  height: 270px;
+
+  .background-stripe {
+    width: 100%;
+    background-color: $body-bg;
+    height: 52px;
+  }
+}
+
+.searchForm_type {
+  padding-left: 6px !important;
+}
+
+.background-small {
+  height: 200px;
+}
+
+.background-footer {
+  @extend .background;
+  background-color: $brand-primary;
+  height: 1000px;
+  left: 0;
+  margin-top: -20px;
+  overflow: hidden;
+
+  .background-stripe {
+    width: 100%;
+    background-color: $brand-secondary;
+    height: 52px;
+  }
+}
+
+/* header image */
+.header-image {
+  width: 100%;
+  max-height: 620px;
+  overflow: auto;
+  height: auto;
+  object-fit: cover;
+}
+
+
+a.navbar-brand, nav > .nav > li > a {
+  color: $gray-700;
+}
+
+.navbar-brand {
+  font-size: 2rem;
+  font-family: "Lato";
+}
+
+.savedLists {
+  float: right;
+}
+
+.section-home {
+  background: transparent;
+  /*max-height: 500px;*/
+}
+
+
+.panel-home {
+  width: 60%;
+  margin-left: auto;
+  margin-right: auto;
+  min-height: 600px;
+
+  h1 {
+    text-align: center;
+    padding: 0 $paragraph-margin-bottom;
+    margin: 0 auto;
+    font-size: 400%;
+
+    a {
+      text-decoration: none;
+      color: #fff;
+      text-shadow: 4px 4px 10px rgba(50, 50, 50, 1);
+    }
+  }
+
+  h4 {
+    text-align: center;
+    color: #fff;
+    text-shadow: 2px 2px 5px rgba(50, 50, 50, 1);
+  }
+
+  /* searchbox image */
+  .searchbox-image {
+    position:  absolute;
+    display:  block;
+    width: 100%;
+    max-height: 600px;
+    overflow: auto;
+    height: auto;
+    object-fit: cover;
+  }
+
+  small {
+    display: block;
+    text-align: center;
+    margin: 5px 0 auto;
+    padding-bottom: 12px;
+    color: #fff;
+    text-shadow: 2px 2px 5px rgba(50, 50, 50, 1);
+  }
+
+  .checkbox {
+    display: inline;
+    float: right;
+    margin: 7px;
+  }
+
+  .btn-primary {
+    border-color: #CCCCCC;
+  }
+}
+
+.searchbox_home {
+  margin: auto auto 0;
+}
+
+.input-group .searchForm_lookfor:not(:first-child):not(:last-child) {
+  border-radius: $input-border-radius 0 0 $input-border-radius;
+}
+
+.searchForm_select {
+
+    select {
+        display: block;
+        width: 100%;
+        border: none;
+        padding: 2px 38px 2px 2px;
+        background: url("/themes/tuefind2/images/select.png") right center no-repeat;
+        background-color: white;
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+    }
+
+    /* for IE and Edge */
+    select::-ms-expand {
+        display: none;
+    }
+}
+
+.search-button {
+  border: 1px solid $table-border-color;
+}
+
+.twitter-typeahead .tt-dropdown-menu {
+  max-width: 400px;
+}
+
+.btn-default {
+  text-align: left;
+}
+
+.blog {
+  text-align: justify;
+}
+
+.result {
+  margin: 20px 0px;
+}
+
+.read-more-target {
+  opacity: 0;
+  max-height: 0;
+  font-size: 0;
+  transition: .25s ease;
+  overflow: hidden;
+}
+
+.read-more-state {
+  display: none;
+}
+
+.read-more-state:checked ~ .read-more-wrap .read-more-target {
+  opacity: 1;
+  font-size: inherit;
+  max-height: 999em;
+}
+
+.read-more-state ~ .read-more-trigger:before {
+  content: 'Mehr';
+}
+
+.read-more-state:checked ~ .read-more-trigger:before {
+  content: 'Weniger';
+}
+
+.read-more-trigger {
+  cursor: pointer;
+  display: inline-block;
+  padding: 0 .5em;
+  color: #666;
+  font-size: .9em;
+  line-height: 2;
+  border: 1px solid #ddd;
+  border-radius: .25em;
+}
+
+/* for the searchbox */
+.vertical-center {
+  transform: translateY(50%);
+}
+
+.nav-pills li {
+  margin: 10px 10px 0 0;
+  /*box-shadow: 2px 2px 5px rgba(50, 50, 50, 1); */
+
+  a {
+    padding: 6px 12px;
+    font-size: 16px;
+    border: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+}
+
+.searchbar {
+  box-shadow: 2px 2px 10px rgba(50, 50, 50, 1);
+}
+
+.search-button {
+  box-shadow: 2px 2px 10px rgba(50, 50, 50, 1);
+}
+
+#searchForm_type {
+  box-shadow: 2px 2px 5px rgba(50, 50, 50, 1);
+}
+
+ul .dropdown-menu {
+  padding: 0;
+}
+
+.dropdown-menu li {
+  box-shadow: none;
+  margin: 0;
+}
+
+.bottom-menu li {
+  list-style-type: none;
+  font-weight: bold;
+  line-height: 28px;
+  font-size: 14px;
+
+  a, a:hover{
+    text-decoration: none;
+    font-weight: bold;
+  }
+}
+
+/* footer */
+.footer {
+  padding: 2.25rem 0;
+}
+
+/* Footer Menu */
+.footer-menu {
+    padding-left: 10px;
+
+    li {
+        list-style-type: none;
+        margin: 0 10px;
+        display: inline;
+
+        a {
+          color: $gray-600;
+          text-decoration: none;
+        }
+
+        a:hover {
+          color: $gray-500;
+          text-decoration: underline !important;
+        }
+    }
+}
+.footer-menu {
+
+}
+
+/* Footer Bottom */
+#footer-bottom {
+  border-top: 2px solid $white;
+  padding: 10px 0;
+  font-size: $font-size-sm;
+  color:  $gray-600;
+}
+
+/* Home Information */
+.tf-background-body {
+  background: $tf-background-body-color;
+}
+
+#tf-rss-short {
+  list-style-type: none; /* will be rendered as html img with hyperlink */
+  padding-left: 10px;
+
+  li {
+    /* Use css to cut off text and end with..., for good view on high and low resolution */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.tf-rss-short-link-title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.tf-rss-full-item {
+    display: table-row;
+}
+
+/* Panels */
+.panel-gray {
+  &:extend(.panel-body){
+  border-radius: $border-radius;
+}}
+
+.panel-inverse {
+  border: 0;
+}
+
+.panel {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* Don't use object-fit because it's not supported in IE11+Edge15' */
+/*
+.panel-image-wrapper {
+  max-height: 205px;
+  height: auto;
+  width: 100%;
+  overflow: hidden;
+}
+
+.panel-image {
+  width: 100%;
+  height: auto;
+  max-height: 166px;
+  overflow: hidden;
+  object-fit: cover;
+}
+*/
+
+.panel-image {
+    background-size: cover;
+    background-position: center;
+    height: 166px;
+}
+
+.panel-content {
+  padding: 10px;
+}
+
+.panel-inverse .panel-content h4 {
+  text-transform: uppercase;
+}
+
+.panel-content .btn-inverse {
+  background-color: #32414B;
+  color: #fff;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  margin-bottom: 10px;
+  margin-right: 10px;
+  &::after {
+    font-family: fontAwesome;
+    content: "\00a0\00a0\f061";
+  }
+  &:hover {
+    color: #fff;
+  }
+}
+
+.btn-inverse-left {
+  margin-right: initial !important;
+  right: initial !important;
+  margin-left: 10px;
+  left: 0;
+
+  &::after {
+    content: "" !important;
+  }
+}
+
+.btn-default {
+  border-color: theme-color("primary");
+  color: theme-color("primary");
+}
+
+.panel-content .btn-default {
+  border-color: theme-color("primary");
+  color: theme-color("primary");
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  margin-bottom: 10px;
+  margin-right: 10px;
+  &::after {
+    font-family: fontAwesome;
+    content: "\00a0\00a0\f061";
+  }
+  &:hover {
+    color: theme-color("primary");
+  }
+}
+
+.panel-buttons {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0;
+  height: 400px;
+}
+
+.panel-button {
+  height: 23%;
+  width: 100%;
+  margin: 0 0 10px;
+  padding: 0;
+  a {
+    font-size: 1.4em;
+    font-weight: bold;
+    width: 100%;
+    align-content: center;
+    height: 100%;
+    display: flex;
+    vertical-align: middle;
+    line-height: normal;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+  }
+}
+
+.panel-top {
+  height: 400px;
+}
+
+.panel-bottom {
+  height: 380px;
+}
+
+/* Read more button */
+.read-more-state {
+  display: none;
+}
+
+.read-more-target {
+  opacity: 0;
+  max-height: 0;
+  font-size: 0;
+  transition: .25s ease;
+}
+
+.read-more-state:checked ~ .read-more-wrap .read-more-target {
+  opacity: 1;
+  font-size: inherit;
+  max-height: 999em;
+}
+
+.read-more-state ~ .read-more-trigger:before {
+  content: 'Mehr';
+}
+
+.read-more-state:checked ~ .read-more-trigger:before {
+  content: 'Weniger';
+}
+
+.read-more-trigger {
+  cursor: pointer;
+  display: inline-block;
+  padding: 0 .5em;
+  color: #666;
+  font-size: .9em;
+  line-height: 2;
+  border: 1px solid #ddd;
+  border-radius: .25em;
+}
+
+.title {
+  padding-top: 40px;
+}
+
+/* adjust height of the Logo Image */
+#tf-img-logo {
+  top: 4px;
+  position: absolute;
+}
+
+.custom-select {
+  background: $white;
+}
+
+/* breadcrumbs */
+.breadcrumb-wrapper{
+  border-bottom: 1px solid #ddd;
+  color: $gray-600;
+}
+
+.breadcrumb-item a {
+  color: $gray-600;
+}
+
+/* template for footer buttons */
+.tf-button-footer {
+    position: fixed;
+    bottom: 20px;
+    z-index: 99;
+    outline: none;
+    cursor: pointer;
+    padding: 15px;
+}
+
+.tf-button-footer:hover {
+    background-color: white;
+}
+
+/* feedback button */
+#tf-button-footer-feedback {
+    &:extend(.tf-button-footer){
+    left: 5px;
+
+    /* disabled at the moment */
+    display: none;
+}}
+
+#tf-button-footer-feedback:hover {
+    &:extend(.tf-button-footer:hover){
+}}
+
+/* Back to top button */
+#tf-button-footer-back-to-top {
+    &:extend(.tf-button-footer){
+    right: 30px;
+
+    /* will be displayed via JS dependent on scrolling */
+    display: none;
+}}
+
+#tf-button-footer-back-to-top:hover {
+    &:extend(.tf-button-footer:hover){
+}}
+
+/* scroll down button */
+.scroll-down a {
+  padding-top: 60px;
+  transition: opacity .3s;
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+}
+
+.scroll-down a span {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  width: 46px;
+  height: 46px;
+  margin-left: -23px;
+  border: 1px solid #fff;
+  border-radius: 100%;
+  box-sizing: border-box;
+}
+
+.scroll-down a span::after {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  content: '';
+  width: 16px;
+  height: 16px;
+  margin: -12px 0 0 -8px;
+  border-left: 1px solid #fff;
+  border-bottom: 1px solid #fff;
+  -webkit-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+  box-sizing: border-box;
+  opacity: 1;
+  -webkit-transition: all .5s ease-in 3s;
+  transition: all .5s ease-in 3s;
+}
+
+/* pager */
+.pager {
+  list-style: none;
+}
+
+mark {
+  background-color: lighten(#ffff66, 20%);
+  border-radius: $border-radius-sm;
+}
+
+.btn-default:hover,
+.btn-default:focus,
+.btn-default:active,
+.btn-default.active {
+  background: white;
+  color: black;
+}
+
+.badge {
+  color: $white;
+  background-color: $brand-secondary;
+}
+
+.badge-light {
+  color: $black;
+}
+
+.label {
+    background-color: $brand-secondary;
+}
+
+.nav-pills li {
+  background: $gray-600;
+  /*box-shadow: 2px 2px 5px rgba(50, 50, 50, 1); */
+
+  a {
+    color: $white;
+  }
+}
+
+.dropdown-menu > .active a, .dropdown-menu > .active > a:hover,
+.dropdown-menu > .active > a:focus {
+  background: $gray-800;
+}
+
+hr {
+  border-top: 1px solid $white;
+}
+
+.bottom-menu li {
+  a, a:hover{
+    color: $gray-600;
+  }
+}
+
+/* Panels */
+.panel-gray {
+  background: #F5F5F5;
+}
+
+.panel-inverse {
+  background-color: $gray-700;
+  color: #fff;
+}
+
+.panel-content .btn-inverse {
+  background-color: #32414B;
+  color: #fff;
+  &:hover {
+    color: #fff;
+  }
+}
+
+#advSearchForm .sidebar {
+    padding-top: 26px;
+}
+
+.tf-row-home {
+    background: transparent url(/themes/tuefind2/images/searchbar.jpg) no-repeat;
+    background-position: center center;
+}
+
+input[type="checkbox"] {
+    margin-left: auto !important;
+    position: initial !important;
+}
+
+.browse-item.active:hover {
+    background-color: $brand-primary;
+}
+
+/*
+    To save a lot of HTML copy/paste, we define some more classes with bootstrap-like widths.
+    (inheriting directly from bootstrap doesn't work)
+    (using LESS &:extend inside media queries doesn't work either...)
+*/
+.tf-col { float: left; }
+.tf-col-12 { width: 100%; &:extend(.tf-col){} }
+.tf-col-11 { width: 91.66666667%; &:extend(.tf-col){}  }
+.tf-col-10 { width: 83.33333333%; &:extend(.tf-col){}  }
+.tf-col-9 { width: 75%; &:extend(.tf-col){}  }
+.tf-col-8 { width: 66.66666667%; &:extend(.tf-col){}  }
+.tf-col-7 { width: 58.33333333%; &:extend(.tf-col){}  }
+.tf-col-6 { width: 50%; &:extend(.tf-col){}  }
+.tf-col-5 { width: 41.66666667%; &:extend(.tf-col){}  }
+.tf-col-4 { width: 33.33333333%; &:extend(.tf-col){}  }
+.tf-col-3 { width: 25%; &:extend(.tf-col){}  }
+.tf-col-2 { width: 16.66666667%; &:extend(.tf-col){}  }
+.tf-col-1 { width: 8.33333333%; &:extend(.tf-col){}  }
+.tf-col-responsive { position: relative; min-height: 1px; padding-right: 15px; padding-left: 15px; }
+@media (min-width: $screen-md-min) {
+    .tf-col-md-6 { float: left; width: 50%; };
+}
+@media (min-width: $screen-xs-min) {
+    .tf-col-xs-6 { float: left; width: 50%; };
+}
+
+/* .tf-panel-home-2 => 2 panels in a row */
+.tf-panel-home-2 {
+    float: left;
+    position: relative;
+    width: 100%; /* col-12 */
+
+    @media (min-width: $screen-sm-min) {
+        width: 50%; /* col-6 */
+    }
+}
+
+/* .tf-panel-home-3 => 3 panels in a row */
+.tf-panel-home-3 {
+    float: left;
+    position: relative;
+    width: 100%; /* col-12 */
+
+    @media (min-width: $screen-sm-min) {
+        width: 50%; /* col-6 */
+    }
+
+    @media (min-width: $screen-md-min) {
+        width: 33.33333333%; /* col-4 */
+    }
+}
+
+.bold {
+    font-weight:bold;
+}
+
+.workshop-list {
+    list-style: decimal inside;
+    list-style-position: outside;
+    padding-left: 1.5em;
+}
+
+/* .tf-panel-home-4 => 4 panels in a row */
+.tf-panel-home-4 {
+    float: left;
+    position: relative;
+    width: 100%; /* col-12 */
+
+    @media (min-width: $screen-sm-min) {
+        width: 50%; /* col-6 */
+    }
+
+    @media (min-width: $screen-md-min) {
+        width: 25%; /* col-3 */
+    }
+}
+
+/* vufind 9 result block fix */
+.result .title {
+  display: inline !important;
+}
+
+.nav> li > a {
+  display: block;
+}
+
+.nav > li > a:focus,
+.nav > li > a:hover {
+  color: $brand-primary;
+  background-color: $dropdown-link-hover-bg;
+}
+
+.action-toolbar button.toolbar-btn {
+  background-color: rgba(0,0,0,.05);
+  padding: 9px 12px;
+  color: #555;
+  border-radius: 4px;
+  text-decoration: none;
+  font-family: sans-serif !important;
+  line-height: 1;
+  vertical-align: inherit;
+  font-size: 14px;
+}
+
+.action-toolbar button.toolbar-btn:hover {
+  background-color: rgba(0,0,0,.1)
+}
+
+.action-toolbar .icon--font {
+  vertical-align: inherit;
+  line-height: 1;
+}
+
+.resp-sharing-button--mastodon {
+  background-color: #6263FF;
+}
+
+.resp-sharing-button--mastodon:hover {
+  background-color: #383af5;
+}
+
+.tf-thumbnail-center {
+//    @extend .thumbnail;
+//    margin-bottom: 0px;
+}
+
+.tf-media-left-center {
+    &:extend(.media-left){
+    vertical-align: middle;
+}}
+
+.tf-media-body-center {
+    &:extend(.media-body){
+    vertical-align: middle;
+}}

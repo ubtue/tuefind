@@ -1,0 +1,19 @@
+@use "sass:color";
+@use "../../ixtheo/scss/compiled";
+@use "overrides";
+@use "variables" as *;
+
+/* jqcloud */
+div.jqcloud { color: #09f; }
+div.jqcloud a { color: inherit; }
+div.jqcloud a:hover { color: $brand-primary }
+div.jqcloud span.w10 { color: $brand-primary }
+div.jqcloud span.w9 { color: color.scale($brand-primary, $lightness: 5%) }
+div.jqcloud span.w8 { color: color.scale($brand-primary, $lightness: 10%) }
+div.jqcloud span.w7 { color: color.scale($brand-primary, $lightness: 15%) }
+div.jqcloud span.w6 { color: color.scale($brand-primary, $lightness: 20%) }
+div.jqcloud span.w5 { color: color.scale($brand-secondary, $lightness: 20%) }
+div.jqcloud span.w4 { color: color.scale($brand-secondary, $lightness: 15%) }
+div.jqcloud span.w3 { color: color.scale($brand-secondary, $lightness: 10%) }
+div.jqcloud span.w2 { color: color.scale($brand-secondary, $lightness: 5%) }
+div.jqcloud span.w1 { color: $brand-secondary }
