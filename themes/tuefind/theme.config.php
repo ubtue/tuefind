@@ -3,7 +3,6 @@ return [
     'extends' => 'bootstrap5',
     'helpers' => [
         'factories' => [
-            'TueFind\View\Helper\Root\AccountMenu' => 'VuFind\View\Helper\Root\AccountMenuFactory',
             'TueFind\View\Helper\Root\Matomo' => 'TueFind\View\Helper\Root\MatomoFactory',
             'TueFind\View\Helper\Root\Record' => 'VuFind\View\Helper\Root\RecordFactory',
             'TueFind\View\Helper\Root\RecordDataFormatter' => 'TueFind\View\Helper\Root\RecordDataFormatterFactory',
@@ -16,7 +15,6 @@ return [
             'TueFind\View\Helper\SetupThemeResources' => 'VuFindTheme\View\Helper\SetupThemeResourcesFactory',
         ],
         'aliases' => [
-            'accountMenu' => 'TueFind\View\Helper\Root\AccountMenu',
             'authority' => 'TueFind\View\Helper\TueFind\Authority',
             'matomo' => 'TueFind\View\Helper\Root\Matomo',
             'record' => 'TueFind\View\Helper\Root\Record',
