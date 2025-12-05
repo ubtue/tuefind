@@ -80,15 +80,15 @@
                     </p>
                     <?=
                         $this->context($this)->renderInContext(
-                        'search/filters.phtml',
-                        [
-                        'params' => $params ?? null,
-                        'urlQuery' => isset($results) ? $results->getUrlQuery() : null,
-                        'filterList' => $showFilters ? $filterList : [],
-                        'checkboxFilters' => $showFilters ? $checkboxFilters : [],
-                        'searchClassId' => $this->searchClassId,
-                        'searchType' => $this->searchType,
-                        ]
+                            'search/filters.phtml',
+                            [
+                                'params' => $params ?? null,
+                                'urlQuery' => isset($results) ? $results->getUrlQuery() : null,
+                                'filterList' => $showFilters ? $filterList : [],
+                                'checkboxFilters' => $showFilters ? $checkboxFilters : [],
+                                'searchClassId' => $this->searchClassId,
+                                'searchType' => $this->searchType,
+                            ]
                         );
                     ?>
                     <?php if (!empty($tabs)): ?></div><?php endif; ?>
@@ -99,7 +99,7 @@
                 </div>
                 <form id="searchForm" class="searchForm ix2-searchForm tuefind-event-search Form-on-submit" method="get" action="<?=$this->url($basicSearch)?>" name="searchForm" autocomplete="off">
                     <?= $this->context($this)->renderInContext('search/searchTabs', ['searchTabs' => $tabConfig['tabs'], 'hiddenFilters' => $hiddenFilters, 'showCounts' => $tabConfig['showCounts']]); ?>
-                    <div class="searchForm-inputs">
+                    <div class="searchForm-inputs row">
                     <?php
                         // Note: we need type="text" for autocomplete role="combobox"
                         $searchboxAttributes = [
@@ -230,47 +230,47 @@
             <div class="col-1 col-md-12">
                 <div class="navbar navbar-default home-navbar">
                     <div class="container-navbar">
-                        <div class="ix-paddind-left-0">
-                            <ul class="nav navbar-nav row search-nav-list col-sm-12 col-md-12 col-lg-12 ix2-nopadding">
+                        <div class="navbar navbar-expand-lg">
+                            <ul class="nav navbar-nav search-nav-list col-sm-12 col-md-12 col-lg-12 ix2-nopadding">
                                 <!-- IxTheo 2: Advanced search -->
                                 <?php if ($advSearch != ''):?>
-                                    <li class="">
+                                    <li class="nav-item">
                                         <a href="<?=$this->url($advSearch) .  ((isset($this->searchId) && $this->searchId) ? '?edit=' . $this->escapeHtmlAttr($this->searchId) : $this->hiddenFilterParams)?>" class="" role="button" rel="nofollow">
                                             <?= $this->transEsc("Advanced Search") ?>
                                         </a>
                                     </li>
                                 <?php endif;?>
-                                <li class="<?=$navActive['keyWordChainSearchActive'];?>">
-                                    <a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ><?=$this->transEsc('Browse')?>&nbsp;<span class="caret"></span></a>
+                                <li class="nav-item dropdown <?=$navActive['keyWordChainSearchActive'];?>">
+                                    <a class="dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ><?=$this->transEsc('Browse')?>&nbsp;<span class="caret"></span></a>
                                     <ul class="dropdown-menu">
                                         <li><a class="dropdown-item" href="<?=$this->url('keywordchainsearch-home')?>"><?=$this->transEsc('Browse Keywordchains')?></a></li>
                                         <li><a class="dropdown-item" href="<?=$this->url('browse-home')?>"><?=$this->transEsc('Browse the Catalog')?></a></li>
                                         <li><a class="dropdown-item" href="<?=$this->url('alphabrowse-home')?>"><?=$this->transEsc('Browse Alphabetically')?></a></li>
                                     </ul>
                                 </li>
-                                <li class=""><span class="bibel-button"><?=$this->transEsc('Bible passages')?></span></li>
-                                <li class="<?=$navActive['newItemActive'];?>"><a href="<?=$this->url('search-newitem')?>" role="button" rel="nofollow"><?=$this->transEsc('New Items')?></a></li>
-                                <li class="<?=$navActive['historyActive'];?>"><a href="<?=$this->url('search-history')?>" role="button" rel="nofollow"><?=$this->transEsc('Search History')?></a></li>
+                                <li class="nav-item"><span class="bibel-button"><?=$this->transEsc('Bible passages')?></span></li>
+                                <li class="nav-item <?=$navActive['newItemActive'];?>"><a href="<?=$this->url('search-newitem')?>" role="button" rel="nofollow"><?=$this->transEsc('New Items')?></a></li>
+                                <li class="nav-item <?=$navActive['historyActive'];?>"><a href="<?=$this->url('search-history')?>" role="button" rel="nofollow"><?=$this->transEsc('Search History')?></a></li>
                                 <?php if (!empty($keyboardLayouts)): ?>
-                                <li class="ix2-keyboard-dropdown">
-                                    <a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ><?=$this->transEsc('Virtual Keyboard')?>&nbsp;<span class="caret"></span></a>
-                                    <ul class="dropdown-menu">
-                                        <?php
-                                           $this->assetManager()->appendScriptLink('vendor/js.cookie.js');
-                                           $this->assetManager()->appendScriptLink('vendor/simple-keyboard/index.js');
-                                           $this->assetManager()->appendScriptLink('vendor/simple-keyboard-layouts/index.js');
-                                           $this->assetManager()->appendStyleLink('vendor/simple-keyboard/index.css');
-                                        ?>
-                                        <li>
-                                            <a class="dropdown-item keyboard-selection-item" href="#" data-value="none"><?= $this->transEsc('None') ?></a>
-                                        </li>
-                                        <?php foreach ($keyboardLayouts as $keyboardLayout): ?>
+                                    <li class="nav-item dropdown ix2-keyboard-dropdown">
+                                        <a class="dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ><?=$this->transEsc('Virtual Keyboard')?>&nbsp;<span class="caret"></span></a>
+                                        <ul class="dropdown-menu">
+                                            <?php
+                                            $this->assetManager()->appendScriptLink('vendor/js.cookie.js');
+                                            $this->assetManager()->appendScriptLink('vendor/simple-keyboard/index.js');
+                                            $this->assetManager()->appendScriptLink('vendor/simple-keyboard-layouts/index.js');
+                                            $this->assetManager()->appendStyleLink('vendor/simple-keyboard/index.css');
+                                            ?>
                                             <li>
-                                                <a class="keyboard-selection-item" href="#" data-value="<?= $this->escapeHtmlAttr($keyboardLayout) ?>"><?= $this->transEsc("KeyboardLayout::$keyboardLayout") ?></a>
+                                                <a class="dropdown-item keyboard-selection-item" href="#" data-value="none"><?= $this->transEsc('None') ?></a>
                                             </li>
-                                        <?php endforeach; ?>
-                                    </ul>
-                                </li>
+                                            <?php foreach ($keyboardLayouts as $keyboardLayout): ?>
+                                                <li>
+                                                    <a class="keyboard-selection-item" href="#" data-value="<?= $this->escapeHtmlAttr($keyboardLayout) ?>"><?= $this->transEsc("KeyboardLayout::$keyboardLayout") ?></a>
+                                                </li>
+                                            <?php endforeach; ?>
+                                        </ul>
+                                    </li>
                                 <?php endif; ?>
                             </ul>
                         </div>

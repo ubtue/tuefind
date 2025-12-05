@@ -1,0 +1,403 @@
+a {
+  text-decoration: initial;
+}
+
+.active-filters {
+  justify-content: flex-end;
+
+  .filters {
+    display: none;
+  }
+}
+
+.facet .text {
+  hyphens: auto;
+}
+
+.myresearch-menu a {
+  border: #eee solid 1px;
+  margin-bottom: -1px;
+}
+
+.myresearch-menu a:hover {
+  text-decoration: none;
+  outline: #eee solid 1px;
+}
+
+.search-result-limit {
+  white-space: nowrap;
+}
+
+#tf-imprint .changed {
+  /*
+  * color should be set to "inherit" for the end user.
+  * use e.g. "blue" to see what has changed, and compare against the original.
+  */
+  color: inherit;
+}
+
+.tf-schema-org-only {
+  display: none;
+}
+
+@media (min-width: 800) {
+  table.alphabrowse .title {
+      width: 40%;
+  }
+}
+
+/* not possible to set "tf-"-prefix, else bootstrap3's "btn-type-*" directive won't work */
+.btn-type-subscribe::before { content: "\f0f3"; } // .fa-bell
+.btn-type-unsubscribe::before { content: "\f1f6"; } // .fa-bell-slash
+.btn-type-publish::before { content: "\f093"; } // .fa-upload
+
+.snippet-separator {
+  border-top: 1px solid darkgrey;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+}
+
+p + br { display : none; }
+
+.savedLists ul {
+  list-style: none;
+  padding: 0;
+  padding-left: 10px;
+  text-align: left;
+}
+
+.savedLists .tf-favoritesListMoreButton {
+  cursor: pointer;
+  float: right;
+  text-decoration: underline;
+}
+
+.tf-result-link-block {
+  text-align: right;
+}
+
+.modal-body .tf-modal-favorite-sidebar h3:first-of-type {
+  display: none;
+}
+
+.modal-body .tf-modal-favorite-sidebar .account-menu {
+  display: none;
+}
+
+.snippet-div {
+  border-top: 1px;
+  border-bottom: 1px;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  overflow: scroll;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.snippet-div::-webkit-scrollbar {
+  display: none;
+}
+
+.snippet-text-type {
+  z-index : 1;
+  position: relative;
+}
+
+.tf-cursor-pointer {
+  cursor: pointer;
+}
+
+.tf-p-0 {
+  padding: 0 !important;
+}
+
+.tf-cloud-block {
+  padding:20px;
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tf-cloud-block-background {
+  width: 100%;
+  height: 350px;
+  border: 1px solid #ccc;
+  background-color:#fafafa;
+  font-family:'Roboto';
+}
+
+.tf-list-topics-block {
+  overflow: auto;
+}
+
+div#topic_cloud span {
+  padding: 2px;
+}
+
+#searchForm .nav-tabs {
+  border-bottom: none;
+}
+
+.tf-d-none {
+  display: none !important;
+}
+
+
+.tf-favorite-list .dropdown {
+  background-color: #d9edf7;
+  border-color: #bce8f1;
+  padding: 15px;
+  margin-bottom: 20px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  list-style: none;
+}
+
+.tf-favorite-list  .dropdown .dropdown-toggle {
+  color: #214c62;
+  font-weight: bold;
+}
+
+.tf-nopadding {
+  padding: 0px;
+}
+
+.tf-one-JOP-block {
+  padding-bottom: 10px;
+}
+
+.tf-one-JOP-block:last-child {
+   padding: 0;
+}
+
+.tf-one-JOP-block div span {
+  font-weight: bold;
+}
+
+.tf-rss-block li {
+  list-style:none;
+}
+
+.tf-rss-block ul {
+  padding-left:0;
+  padding-bottom:10px;
+}
+
+.tf-rss-block .read-more-trigger:last-child {
+  float:right;
+}
+
+.tf-rss-feeds-switcher {
+  padding-right: 8px;
+  padding-left: 8px;
+  width:100px;
+}
+
+.detailsIcon {
+  width: 16px;
+  height: 16px;
+  margin-right: 3px;
+}
+
+.tf-m-0 {
+  margin:0 !important;
+}
+
+.tf-clear-search-input-span {
+  color: #70757a;
+  vertical-align: middle;
+  cursor: pointer;
+  border: 0;
+  background: transparent;
+  position:absolute;
+  width: 27px;
+  margin-top:4px;
+  display:none;
+  z-index:999;
+}
+
+.tf-panel-collapse {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid transparent;
+  border-color: #ddd;
+  border-radius: 4px;
+
+  .tf-panel-collapse-heading {
+      background-color: #f5f5f5;
+      padding: 10px 15px;
+      font-size: 16px;
+  }
+
+  .tf-panel-collapse-body {
+      padding: 15px;
+  }
+}
+
+.tf-other-names-list {
+  padding-left: 0;
+}
+
+.tf-other-names-list li{
+  list-style: none;
+}
+
+.action-toolbar a.toolbar-btn {
+  background-color: rgba(0,0,0,.05);
+  padding: 9px 12px;
+  color: #555;
+  border-radius: 4px;
+  text-decoration: none;
+  font-family: sans-serif !important;
+  line-height: 1;
+  vertical-align: middle !important;
+  font-size: 14px;
+}
+
+.action-toolbar a.toolbar-btn:hover {
+  background-color: rgba(0,0,0,.1)
+}
+
+.action-toolbar .icon--font {
+  vertical-align: inherit;
+  line-height: 1;
+}
+
+.jop-icons {
+  width:10%;
+  min-width:50;
+}
+
+.icon-link__label {
+  text-decoration: none;
+}
+
+.icon-link-checkbox {
+  gap: .25rem;
+  vertical-align: middle;
+}
+
+#mlt li:nth-child(1n+6) {
+    display:none;
+    list-style-type: none;
+}
+
+.mainbody form.multi-page-selection ul.record-list li.result {
+  padding-bottom: 12px;
+  padding-left: 10px;
+}
+.mainbody form.multi-page-selection ul.record-list li.result:nth-child(odd) {
+  background-color: #f5f5f5;
+}
+
+/* New items styles for Ixtheo  */
+#searchForm.ixtheo-searchForm.isNewItemActiveClass #searchForm_lookfor{
+  background-color: #265680;
+  color: #fff;
+}
+#searchForm.ixtheo-searchForm.isNewItemActiveClass #searchForm_lookfor::placeholder {
+  color: #fff;
+  opacity: 0.7; /* Firefox */
+}
+.nav-pills>.ix-under-button.isNewItemActiveClass {
+  background-color: #265680;
+}
+.nav-pills>.ix-under-button.isNewItemActiveClass a {
+  color: #fff;
+}
+/* end New items styles for Ixtheo  */
+/* New items styles for RelBib  */
+#searchForm.relbib-searchForm.isNewItemActiveClass #searchForm_lookfor{
+  background-color: #951e37;
+  color: #fff;
+}
+.btn-primary.isNewItemActiveClass {
+  display: inline-block;
+}
+.btn-primary.isNewItemActiveClass:first-child {
+  float: left;
+}
+.btn-primary.isNewItemActiveClass:last-child {
+  float: right;
+  margin-left: 3px;
+}
+.panel-home ul.nav-pills>li.isNewItemActiveClass {
+  background: none;
+}
+/* end New items styles for RelBib  */
+
+#content ol.record-list>li.result:nth-child(odd) {
+  padding: 15px;
+  background: #F5F5F5;
+}
+#content ol.record-list>li.result:nth-child(even) {
+  padding:0 15px;
+}
+.facet-value {
+    white-space: normal !important;
+}
+
+// SelfArchiving Forms
+.fa-plus-circle {
+  color:#089DE3;
+}
+
+.fa-minus-circle {
+  color:red;
+}
+
+.addjsicon.mainaddjsicon {
+  top: -26px;
+  right: -22px;
+}
+
+.removejsicon.mainremovejsicon {
+  top: -26px;
+  right: -22px;
+}
+
+.addjsicon {
+  font-size: 18px;
+  float: right;
+  cursor: pointer;
+  position: relative;
+  top: -18px;
+  right: -35px;
+}
+
+.removejsicon {
+  font-size: 18px;
+  float: right;
+  cursor: pointer;
+  position: relative;
+  top: -36px;
+  right: -20px;
+}
+
+.__sender__.jshide {
+  background: none;
+  padding: 0;
+  border-radius: 0;
+}
+
+.jshide {
+  background-color: #f5f5f5;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.publication-FAQ-block .tf-panel-collapse > p{
+  margin: 0;
+  cursor: pointer;
+}
+
+.feedback-content .reviewed-work {
+  background-color: #f5f5f5;
+  padding: 10px;
+  border-radius: 5px;
+}

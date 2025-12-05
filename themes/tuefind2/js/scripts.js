@@ -7,8 +7,6 @@ $(document).scroll(function(){
     }
 });
 
-$('#tf-back-to-top').tooltip();
-
 // onclick-events
 $(function() {
     // scroll down button
@@ -35,4 +33,6 @@ $(function() {
                 element.click();
         }
     }
+
+    $('#tf-back-to-top').tooltip();
 });

@@ -1,0 +1,207 @@
+@use "variables" as *;
+#rb-navbar-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.rb-navbar-part {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.tf-row-home {
+    /* stoneroad */
+    background: transparent url(/themes/relbib2/images/background_1280.jpg) no-repeat;
+    background-position: center center;
+    background-size: cover;
+}
+
+.nav-link {
+    font-size: 16px;
+}
+
+.panel-home {
+
+    display: block;
+    min-height: 600px;
+
+    h1 {
+        a {
+            color: black;
+        }
+    }
+
+    .control-label {
+        color: white;
+    }
+
+    ul.nav-pills > li {
+        background-color: #495057;
+    }
+
+    #searchbox_news {
+        padding: 10px; padding-top: 1px;
+        color: $brand-primary;
+        font-size: 130%;
+
+        a {
+            color: $brand-primary;
+            text-decoration: underline;
+        }
+    }
+
+    .searchbox {
+        background-color: rgba(255, 255, 255, 0.8);
+        margin-top: 40px;
+        padding: 0px 20px 15px 20px;
+
+        .title {
+            display: block;
+            padding-bottom: 20px;
+        }
+    }
+}
+
+
+#rb-title-table {
+    display: flex;
+
+    div {
+        padding: 5px 20px 5px 20px;
+    }
+
+    a:hover {
+        text-decoration: none;
+    }
+}
+
+#rb-title-table-left {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-right: 2px solid black;
+    font-size: 400%;
+}
+
+#rb-title-table-right {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-size: 3vw;
+    line-height: 1.2;
+}
+
+#rb-logo-left {
+    color: #a51e37; /* intentionally brighter than $brand-primary */
+}
+
+#rb-logo-right {
+    color: black;
+}
+
+.panel-default, .panel-inverse, .panel-buttons {
+   border: 5px solid $brand-primary;
+   -webkit-box-shadow: none;
+}
+
+.panel-inverse {
+
+    .panel-content {
+        h4 {
+            text-transform: initial;
+        }
+    }
+
+    ul {
+        a {
+            color: white;
+            text-decoration: underline;
+        }
+    }
+}
+
+.panel-button a {
+    font-size: 1.3em;
+}
+
+.rb-news-date {
+    font-weight: bold;
+}
+
+.rb-footer-supporter {
+    padding-bottom: 15px;
+}
+
+.rb-survey-results-col1 {
+    &:extend(.tf-col-md-6){}
+}
+
+.rb-survey-results-col2 {
+    &:extend(.tf-col-md-6){
+    padding-left: 14px;
+    padding-right: 14px;
+    padding-top: 14px;
+}}
+
+.rb-news-list {
+    list-style: none;
+    list-style-image: url('/themes/relbib2/images/relbib-newsicon.ico');
+}
+
+.rb-news-list ul, .rb-news-list ol {
+    list-style: circle;
+    list-style-image: initial;
+}
+
+/* jqcloud */
+div.jqcloud { color: #09f; }
+div.jqcloud a { color: inherit; }
+div.jqcloud a:hover { color: #a51e37; }
+div.jqcloud span.w10 { color: #FF9DB6; }
+div.jqcloud span.w9 { color: #F26B84; }
+div.jqcloud span.w8 { color: #BF3851; }
+div.jqcloud span.w7 { color: #FF9DB6; }
+div.jqcloud span.w6 { color: #F26B84; }
+div.jqcloud span.w5 { color: #BF3851; }
+div.jqcloud span.w4 { color: #FF9DB6; }
+div.jqcloud span.w3 { color: #F26B84; }
+div.jqcloud span.w2 { color: #BF3851; }
+div.jqcloud span.w1 { color: #720004; }
+
+.rb-plr-15 {
+    padding: 0 15px;
+}
+
+.rb-logo-left{
+    color:#a51e37;
+}
+
+.rb-news-list-style-none {
+    list-style: none;
+    padding-left: 20px;
+}
+
+.rb-footer-partners-logos > div {
+    min-height: 150px;
+    text-align: center;
+    display: table;
+}
+.rb-footer-partners-logos > div > a {
+    display: table-cell;
+    vertical-align: middle;
+}
+.rb-footer-partners-logos img {
+    max-width: 190px;
+    max-height: 80px;
+}
+
+.rb-panel-home.panel-home {
+    min-height: auto;
+}
+
+.autocomplete-results {
+    max-width: 80% !important;
+}
