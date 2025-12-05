@@ -5,11 +5,13 @@ CREATE TABLE ixtheo_id_result_sets (
 );
 
 CREATE TABLE ixtheo_journal_subscriptions (
-    user_id INT(11) NOT NULL,
-    journal_control_number_or_bundle_name VARCHAR(255) NOT NULL,
+    id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+    user_id int NOT NULL,
+    journal_control_number_or_bundle_name VARCHAR(256) NOT NULL,
     max_last_modification_time DATETIME NOT NULL,
-    CONSTRAINT `ixtheo_journal_subscriptions_ibfk_1` FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE,
-    PRIMARY KEY (user_id,journal_control_number_or_bundle_name)
+    PRIMARY KEY (id),
+    UNIQUE KEY user_subscription (user_id,journal_control_number_or_bundle_name),
+    CONSTRAINT user_id_subscription FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE
 ) DEFAULT CHARSET=utf8;
 
 CREATE TABLE ixtheo_journal_bundles (
