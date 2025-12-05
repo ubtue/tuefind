@@ -2,7 +2,7 @@
 // Set up some convenience variables:
 $id = $this->driver->getUniqueId();
 $source = $this->driver->getSourceIdentifier();
-$user_id = $this->user ? $this->user->id : null;
+$user_id = $this->user ? $this->user->getId() : null;
 $is_missing_record = get_class($this->driver) == "VuFind\RecordDriver\Missing";
 ?>
 <div class="row result<?php if ($this->driver->supportsAjaxStatus()): ?> ajaxItem<?php endif ?>">

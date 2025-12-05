@@ -1,16 +1,13 @@
 <?php
 namespace IxTheo\Search\Subscriptions;
 
+use VuFind\Config\ConfigManagerInterface;
+
 class Options extends \VuFind\Search\Base\Options
 {
-    /**
-     * Constructor
-     *
-     * @param \VuFind\Config\PluginManager $configLoader Config loader
-     */
-    public function __construct(\VuFind\Config\PluginManager $configLoader)
+    public function __construct(protected ConfigManagerInterface $configManager)
     {
-        parent::__construct($configLoader);
+        parent::__construct($configManager);
 
         // set high default limit, because sorting is done on PHP side
         // (prevent having more than 1 page)

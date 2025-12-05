@@ -10,10 +10,7 @@ class ResultsFactory extends \VuFind\Search\Results\ResultsFactory
         array $options = null
     ) {
         $results = parent::__invoke($container, $requestedName, $options);
-        $results->setSubscriptionTable($container->get('VuFind\Db\Table\PluginManager')->get('subscription'));
-
-        $init = new \LmcRbacMvc\Initializer\AuthorizationServiceInitializer();
-        $init($container, $results);
+        $results->setSubscriptionTable($container->get('VuFind\Db\Service\PluginManager')->get(\IxTheo\Db\Service\SubscriptionServiceInterface::class));
 
         return $results;
     }

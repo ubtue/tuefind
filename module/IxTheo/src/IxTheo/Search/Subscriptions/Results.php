@@ -2,11 +2,11 @@
 namespace IxTheo\Search\Subscriptions;
 
 
-use LmcRbacMvc\Service\AuthorizationServiceAwareInterface;
-use LmcRbacMvc\Service\AuthorizationServiceAwareTrait;
+use Lmc\Rbac\Mvc\Service\AuthorizationServiceAwareInterface;
+use Lmc\Rbac\Mvc\Service\AuthorizationServiceAwareTrait;
 use VuFind\Exception\ListPermission as ListPermissionException;
 use VuFind\Search\Base\Results as BaseResults;
-use IxTheo\Db\Table\Subscription as SubscriptionTable;
+use IxTheo\Db\Service\SubscriptionService as SubscriptionTable;
 
 
 class Results extends BaseResults
@@ -65,7 +65,7 @@ class Results extends BaseResults
             throw new ListPermissionException('Cannot retrieve subscriptions without logged in user.');
         }
 
-        $this->resultTotal = count($list->toArray());
+        $this->resultTotal = count($list);
 
         // Apply offset and limit if necessary!
         $limit = $this->getParams()->getLimit();
@@ -77,7 +77,7 @@ class Results extends BaseResults
         $recordsToRequest = [];
         foreach ($list as $row) {
             $recordsToRequest[] = [
-                'id' => $row->journal_control_number_or_bundle_name,
+                'id' => $row->getJournalControlNumberOrBundleName(),
                 'source' => 'Solr'
             ];
         }
@@ -96,7 +96,7 @@ class Results extends BaseResults
     {
         // If we haven't previously tried to load a list, do it now:
         if ($this->list === false) {
-            $this->list = $this->subscriptionTable->getAll($this->user->id, $this->getParams()->getSort());
+            $this->list = $this->subscriptionTable->getAll($this->user->getId(), $this->getParams()->getSort());
         }
         return $this->list;
     }
