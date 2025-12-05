@@ -7,7 +7,7 @@ use VuFind\Db\Table\PluginManager;
 use Laminas\Db\Adapter\Adapter;
 use Laminas\Db\Sql\Predicate\PredicateSet;
 
-class RssFeedService extends RssBaseService
+class RssFeedService extends RssBaseService implements RssFeedServiceInterface
 {
     public function __construct(Adapter $adapter, PluginManager $tm, $cfg,
         RowGateway $rowObj = null, $table = 'tuefind_rss_feeds'

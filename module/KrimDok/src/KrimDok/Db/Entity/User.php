@@ -2,14 +2,22 @@
 
 namespace KrimDok\Db\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
+
+#[ORM\Entity]
 class User extends \TueFind\Db\Entity\User implements UserEntityInterface
 {
-    public function isSubscribedToNewsletter(): bool {
-        return boolval($this->data['krimdok_subscribed_to_newsletter']);
+    #[ORM\Column(name: 'krimdok_subscribed_to_newsletter', type: 'boolean', nullable: false, options: ['default' => false])]
+    protected $krimdokSubscribedToNewsletter = false;
+
+    public function getSubscribedToNewsletter(): bool
+    {
+        return $this->krimdokSubscribedToNewsletter;
     }
 
-    public function setSubscribedToNewsletter(bool $value) {
-        $this->krimdok_subscribed_to_newsletter = intval($value);
-        $this->save();
+    public function setSubscribedToNewsletter(bool $subscribed): static
+    {
+        $this->krimdokSubscribedToNewsletter = $subscribed;
+        return $this;
     }
 }

@@ -2,10 +2,8 @@
 
 namespace KrimDok\Db\Service;
 
-class PluginManager extends \TueFind\Db\Service\PluginManager {
-
-    use \TueFind\PluginManagerExtensionTrait;
-
+class PluginManager extends \TueFind\Db\Service\PluginManager
+{
     /**
      * Constructor
      *
@@ -18,6 +16,7 @@ class PluginManager extends \TueFind\Db\Service\PluginManager {
     public function __construct($configOrContainerInstance = null,
         array $v3config = []
     ) {
+        $this->addOverride('aliases', \TueFind\Db\Service\UserServiceInterface::class, UserServiceInterface::class);
         $this->addOverride('aliases', UserServiceInterface::class, UserService::class);
         $this->addOverride('factories', UserService::class, \VuFind\Db\Service\UserServiceFactory::class);
         $this->applyOverrides();

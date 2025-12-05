@@ -89,6 +89,15 @@ $config = [
             'VuFind\RecordTab\PluginManager' => 'IxTheo\RecordTab\PluginManager',
         ],
     ],
+    'doctrine' => [
+        'driver' => [
+            'orm_default' => [
+                'drivers' => [
+                    'IxTheo\Db\Entity' => 'vufind_attribute_driver',
+                ],
+            ],
+        ],
+    ],
 ];
 
 $nonTabRecordActions = ['PDASubscribe', 'Subscribe'];

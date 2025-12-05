@@ -54,13 +54,13 @@ class Database extends \TueFind\Auth\Database
     public function authenticate($request)
     {
         $user = parent::authenticate($request);
-        $userSystem = $user->ixtheo_user_type;
+        $userSystem = $user->getUserType();
         $currentSystem = \IxTheo\Utility::getUserTypeFromUsedEnvironment();
 
         // Write an additional log file to detect which ixtheo-users are actually used to log into bibstudies+churchlaw.
         // This is technically allowed right now and might lead to problems, so we would like to keep track of the users
         // to see if we can easily prevent them from switching instances at a later point.
-        $logEntry = '[' . date('Y-m-d H:i:s') . '] User "' . $user->username . '" with type "' . $userSystem . '" logging into instance "' . basename(getenv('VUFIND_LOCAL_DIR')) . '"' . PHP_EOL;
+        $logEntry = '[' . date('Y-m-d H:i:s') . '] User "' . $user->getUsername() . '" with type "' . $userSystem . '" logging into instance "' . basename(getenv('VUFIND_LOCAL_DIR')) . '"' . PHP_EOL;
         file_put_contents('/usr/local/var/log/tuefind/vufind_auth.log', $logEntry, FILE_APPEND);
 
         if ($userSystem != $currentSystem)

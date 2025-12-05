@@ -4,8 +4,8 @@ namespace TueFind\Db\Service;
 
 use VuFind\Db\Service\AbstractDbServiceFactory;
 
-class PluginManager extends \VuFind\Db\Service\PluginManager {
-
+class PluginManager extends \VuFind\Db\Service\PluginManager
+{
     use \TueFind\PluginManagerExtensionTrait;
 
     /**
@@ -20,15 +20,16 @@ class PluginManager extends \VuFind\Db\Service\PluginManager {
     public function __construct($configOrContainerInstance = null,
         array $v3config = []
     ) {
+        $this->addOverride('aliases', \VuFind\Db\Service\UserServiceInterface::class, UserServiceInterface::class);
 
         $this->addOverride('aliases', PublicationServiceInterface::class, PublicationService::class);
         $this->addOverride('aliases', RedirectServiceInterface::class, RedirectService::class);
         $this->addOverride('aliases', RssFeedServiceInterface::class, RssFeedService::class);
         $this->addOverride('aliases', RssItemServiceInterface::class, RssItemService::class);
         $this->addOverride('aliases', RssSubscriptionServiceInterface::class, RssSubscriptionService::class);
-        $this->addOverride('aliases', UserServiceFactory::class, UserService::class);
-        $this->addOverride('aliases', UserAuthorityServiceFactory::class, UserAuthorityService::class);
-        $this->addOverride('aliases', UserAuthorityHistoryServiceFactory::class, UserAuthorityHistoryService::class);
+        $this->addOverride('aliases', UserServiceInterface::class, UserService::class);
+        $this->addOverride('aliases', UserAuthorityServiceInterface::class, UserAuthorityService::class);
+        $this->addOverride('aliases', UserAuthorityHistoryServiceInterface::class, UserAuthorityHistoryService::class);
 
         $this->addOverride('factories', PublicationService::class, AbstractDbServiceFactory::class);
         $this->addOverride('factories', RedirectService::class, AbstractDbServiceFactory::class);
@@ -38,6 +39,7 @@ class PluginManager extends \VuFind\Db\Service\PluginManager {
         $this->addOverride('factories', UserService::class, \VuFind\Db\Service\UserServiceFactory::class);
         $this->addOverride('factories', UserAuthorityService::class, AbstractDbServiceFactory::class);
         $this->addOverride('factories', UserAuthorityHistoryService::class, AbstractDbServiceFactory::class);
+
         $this->applyOverrides();
 
         parent::__construct($configOrContainerInstance, $v3config);

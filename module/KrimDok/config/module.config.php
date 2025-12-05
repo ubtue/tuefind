@@ -44,6 +44,15 @@ $config = [
             'VuFind\Search\Results\PluginManager' => 'KrimDok\Search\Results\PluginManager'
         ],
     ],
+    'doctrine' => [
+        'driver' => [
+            'orm_default' => [
+                'drivers' => [
+                    'KrimDok\Db\Entity' => 'vufind_attribute_driver',
+                ],
+            ],
+        ],
+    ],
     'vufind' => [
         'recorddriver_tabs' => [
             'VuFind\RecordDriver\SolrMarc' => [

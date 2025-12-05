@@ -2,6 +2,9 @@
 
 namespace TueFind\Db\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
+
+#[ORM\Entity]
 class UserAuthorityHistory implements UserAuthorityHistoryEntityInterface
 {
     public function __construct($adapter)

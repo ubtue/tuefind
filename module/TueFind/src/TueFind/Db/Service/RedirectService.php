@@ -6,7 +6,7 @@ use VuFind\Db\Row\RowGateway;
 use VuFind\Db\Table\PluginManager;
 use Laminas\Db\Adapter\Adapter;
 
-class RedirectService extends \TueFind\Db\Table\Gateway
+class RedirectService implements RedirectServiceInterface
 {
     /**
      * Constructor

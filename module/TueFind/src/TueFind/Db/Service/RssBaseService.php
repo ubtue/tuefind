@@ -2,7 +2,7 @@
 
 namespace TueFind\Db\Service;
 
-class RssBaseService extends \VuFind\Db\Table\Gateway implements \VuFind\Db\Table\DbTableAwareInterface
+class RssBaseService implements RssBaseServiceInterface
 {
     use \VuFind\Db\Table\DbTableAwareTrait;
 

@@ -371,6 +371,15 @@ $config = [
             'VuFindSearch\Service' => 'TueFindSearch\Service',
         ],
     ],
+    'doctrine' => [
+        'driver' => [
+            'orm_default' => [
+                'drivers' => [
+                    'TueFind\Db\Entity' => 'vufind_attribute_driver',
+                ],
+            ],
+        ],
+    ],
     'view_helpers' => [
         'initializers' => [
             'TueFind\ServiceManager\ServiceInitializer',

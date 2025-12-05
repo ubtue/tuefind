@@ -2,7 +2,7 @@
 
 namespace TueFind\Db\Service;
 
-class UserService extends \VuFind\Db\Service\UserService {
+class UserService extends \VuFind\Db\Service\UserService implements UserServiceInterface {
     public function getByRight($right)
     {
         $select = $this->getSql()->select();

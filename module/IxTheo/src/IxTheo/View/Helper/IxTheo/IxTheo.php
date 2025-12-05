@@ -108,14 +108,14 @@ class IxTheo extends \Laminas\View\Helper\AbstractHelper
             return false;
 
         if ($this->cachedSubscriptions === null) {
-            $table = $this->container->get(\VuFind\Db\Table\PluginManager::class)
-                ->get('subscription');
+            $table = $this->container->get(\VuFind\Db\Service\PluginManager::class)
+                ->get(\IxTheo\Db\Service\SubscriptionServiceInterface::class);
 
-            $this->cachedSubscriptions = $table->getAll($user->id, 'asc');
+            $this->cachedSubscriptions = $table->getAll($user->getId(), 'asc');
         }
 
         foreach ($this->cachedSubscriptions as $subscription) {
-            if ($subscription->journal_control_number_or_bundle_name == $recordId)
+            if ($subscription->getJournalControlNumberOrBundleName() == $recordId)
                 return true;
         }
 

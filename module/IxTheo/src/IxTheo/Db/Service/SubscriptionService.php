@@ -1,34 +1,10 @@
 <?php
 namespace IxTheo\Db\Service;
-use VuFind\Db\Row\RowGateway;
-use VuFind\Db\Table\PluginManager;
-use Laminas\Db\Adapter\Adapter;
 
-class SubscriptionService extends \VuFind\Db\Table\Gateway implements SubscriptionServiceInterface
+use IxTheo\Db\Entity\SubscriptionEntityInterface;
+
+class SubscriptionService extends \VuFind\Db\Service\AbstractDbService implements SubscriptionServiceInterface
 {
-    use \VuFind\Db\Table\DbTableAwareTrait;
-
-    /**
-     * Session container for last list information.
-     *
-     * @var \Laminas\Session\Container
-     */
-    protected $session;
-
-    /**
-     * Constructor
-     *
-     * @param Adapter       $adapter Database adapter
-     * @param PluginManager $tm      Table manager
-     * @param array         $cfg     Laminas Framework configuration
-     * @param RowGateway    $rowObj  Row prototype object (null for default)
-     * @param string        $table   Name of database table to interface with
-     */
-    public function __construct(Adapter $adapter, PluginManager $tm, $cfg,
-        RowGateway $rowObj = null, $table = 'ixtheo_journal_subscriptions'
-    ) {
-        parent::__construct($adapter, $tm, $cfg, $rowObj, $table);
-    }
 
     public function getNew($userId, $recordId) {
         $row = $this->createRow();
@@ -53,9 +29,16 @@ class SubscriptionService extends \VuFind\Db\Table\Gateway implements Subscripti
     }
 
     public function getAll($userId, $sort) {
-        $select = $this->getSql()->select()->where(['user_id' => $userId]);
-        $this->applySort($select, $sort);
-        return $this->selectWith($select);
+        $dql = 'SELECT S FROM ' . SubscriptionEntityInterface::class . ' S ';
+        $dql .= 'WHERE S.user = :userId ';
+
+        //deprecated, see "applySort":
+        //$dql .= 'ORDER BY journal_control_number_or_bundle_name ' . $sort;
+
+        $query = $this->entityManager->createQuery($dql);
+        $query->setParameters(['userId' => $userId]);
+
+        return $query->getResult();
     }
 
     public function get($userId, $sort, $start, $limit) {

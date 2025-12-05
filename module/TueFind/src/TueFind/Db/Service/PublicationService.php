@@ -5,10 +5,9 @@ namespace TueFind\Db\Service;
 use Laminas\Db\Adapter\Adapter;
 use Laminas\Db\ResultSet\ResultSetInterface as ResultSet;
 use Laminas\Db\Sql\Select;
-use VuFind\Db\Row\RowGateway;
 use VuFind\Db\Table\PluginManager;
 
-class PublicationService extends \VuFind\Db\Table\Gateway {
+class PublicationService implements PublicationServiceInterface{
 
     public function __construct(Adapter $adapter, PluginManager $tm, $cfg,
         RowGateway $rowObj = null, $table = 'tuefind_publications'

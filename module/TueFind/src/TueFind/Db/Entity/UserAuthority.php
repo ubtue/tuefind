@@ -2,6 +2,9 @@
 
 namespace TueFind\Db\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
+
+#[ORM\Entity]
 class UserAuthority implements UserAuthorityEntityInterface
 {
     public function __construct($adapter)

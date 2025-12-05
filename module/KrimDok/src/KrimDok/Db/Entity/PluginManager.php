@@ -4,7 +4,8 @@ namespace KrimDok\Db\Entity;
 
 use Laminas\ServiceManager\Factory\InvokableFactory;
 
-class PluginManager extends \TueFind\Db\Entity\PluginManager {
+class PluginManager extends \TueFind\Db\Entity\PluginManager
+{
     /**
      * Constructor
      *
@@ -17,8 +18,11 @@ class PluginManager extends \TueFind\Db\Entity\PluginManager {
     public function __construct($configOrContainerInstance = null,
         array $v3config = []
     ) {
-        $this->aliases[UserEntityInterface::class]          = User::class;
-        $this->factories[User::class]                       = InvokableFactory::class;
+        $this->addOverride('aliases', \TueFind\Db\Entity\UserEntityInterface::class, UserEntityInterface::class);
+        $this->addOverride('aliases', UserEntityInterface::class, User::class);
+        $this->addOverride('factories', User::class, InvokableFactory::class);
+        $this->applyOverrides();
+
         parent::__construct($configOrContainerInstance, $v3config);
     }
 }
