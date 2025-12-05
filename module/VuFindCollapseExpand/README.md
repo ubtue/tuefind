@@ -119,7 +119,14 @@ group.limit = 10
 
 ### JavaScript
 
-Add `js/collapseExpand.js` to your theme configuration.
+Add `js/collapseExpand.js` and `collapse_expand` to your theme configuration.
+
+ex.:
+copy `js/collapseExpand.js` to `js` folder and
+`js/vendor/collapseExpand.js` to `js/vendor`, and add these lines
+`['file' => 'vendor/collapseExpand', 'priority' => 1200]` and
+`['file' => 'collapse_expand.js', 'priority' => 1400]`
+to file `theme.config.php`
 
 ### HTML / Templates
 

@@ -39,6 +39,7 @@ return [
     ],
     'js' => [
         ['file' => 'tuefind.js', 'priority' => 1500],
+        ['file' => 'collapse_expand.js', 'priority' => 1450],
         ['file' => 'vendor/jquery-ui.min.js', 'priority' => 1400],
         ['file' => 'vendor/jquery.dataTable.js', 'priority' => 1300],
         ['file' => 'vendor/collapseExpand.js', 'priority' => 1200],
