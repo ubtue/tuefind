@@ -98,13 +98,16 @@ class Results extends \VuFind\Search\Solr\Results
                 $isApplied = $this->getParams()->hasFilter("$field:" . $value)
                     || $this->getParams()->hasFilter("~$field:" . $value);
 
+                $isExcluded = false;
+
                 // Store the collected values:
                 $resultList[] = compact(
                     'value',
                     'displayText',
                     'count',
                     'operator',
-                    'isApplied'
+                    'isApplied',
+                    'isExcluded'
                 );
             }
 

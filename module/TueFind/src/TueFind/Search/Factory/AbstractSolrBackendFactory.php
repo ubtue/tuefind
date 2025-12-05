@@ -2,10 +2,10 @@
 namespace TueFind\Search\Factory;
 
 use Psr\Container\ContainerInterface;
+use VuFind\Config\ConfigManagerInterface;
+use VuFind\Config\Config;
 use TueFindSearch\Backend\Solr\Backend;
 use TueFind\Search\Solr\InjectFulltextMatchIdsListener;
-
-use Laminas\Config\Config;
 
 
 class AbstractSolrBackendFactory extends \VuFind\Search\Factory\SolrDefaultBackendFactory {
@@ -23,7 +23,8 @@ class AbstractSolrBackendFactory extends \VuFind\Search\Factory\SolrDefaultBacke
     public function __invoke(ContainerInterface $sm, $name, array $options = null)
     {
         $this->serviceLocator = $sm;
-        $this->config = $this->serviceLocator->get(\VuFind\Config\PluginManager::class);
+        $this->setup($sm);
+        $this->configManager = $this->getService(ConfigManagerInterface::class);
         if ($this->serviceLocator->has(\VuFind\Log\Logger::class)) {
             $this->logger = $this->serviceLocator->get(\VuFind\Log\Logger::class);
         }
@@ -38,7 +39,7 @@ class AbstractSolrBackendFactory extends \VuFind\Search\Factory\SolrDefaultBacke
     protected function createListeners(\VuFindSearch\Backend\Solr\Backend $backend) {
         parent::createListeners($backend);
         $events = $this->serviceLocator->get('SharedEventManager');
-        $search = $this->config->get($this->searchConfig);
+        $search = $this->configManager->get($this->searchConfig);
 //        if (isset($search->FulltextMatchIds)) {
             $this->getInjectFulltextMatchIdsListener($backend, $search)->attach($events);
 //        }

@@ -44,7 +44,7 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
     public function __construct(\VuFindSearch\Service $searchService,
                                 \Laminas\View\HelperPluginManager $viewHelperManager,
                                 \VuFind\Record\Loader $recordLoader,
-                                \VuFind\Db\Table\PluginManager $dbTableManager)
+                                \VuFind\Db\Service\PluginManager $dbTableManager)
     {
         $this->dbTableManager = $dbTableManager;
         $this->recordLoader = $recordLoader;
