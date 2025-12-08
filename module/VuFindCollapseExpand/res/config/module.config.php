@@ -4,7 +4,7 @@ namespace VuFindCollapseExpand\Module\Configuration;
 $config = [
     'service_manager' => [
         'factories' => [
-            'VuFindCollapseExpand\Config\Grouping'  => 'VuFindCollapseExpand\Config\Factory::getGrouping',
+            'VuFindCollapseExpand\Config\CollapseExpandGrouping'  => 'VuFindCollapseExpand\Config\Factory::getCollapseExpandGrouping',
         ],
     ],
     'controllers' => [

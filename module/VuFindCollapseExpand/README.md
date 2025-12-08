@@ -108,11 +108,30 @@ custom code.
 In your local `config.ini` add the following to `[Index]` section`
 
 ```ini
-[Index]
-...
-group = true
-group.field = "enter the name of your matchkey here"
-group.limit = 10
+[CollapseExpand]
+; If collapse.field is set, the feature is active. Same with expand.field (but you can only use expand if collapse is active). By default, we use the same field for both.
+; If you want to override defaults / use specific features, please have a look at the Solr Documentation:
+; https://solr.apache.org/guide/solr/latest/query-guide/collapse-and-expand-results.html
+
+; collapse
+; mandatory field is collapse.field and recommended to set the same value with expand.field
+collapse.field = collapse_expand
+;collapse.min =
+;collapse.max =
+;collapse.sort =
+;collapse.nullPolicy = ignore
+;collapse.hint =
+;collapse.size = 100000
+;collapse.collectElevatedDocsWhenCollapsing = true
+
+; expand
+; mandatory field is expand.field and expand.rows
+expand.field = collapse_expand
+;expand.sort = score desc
+expand.rows = 500
+;expand.q =
+;expand.fq =
+;expand.nullGroup = false
 ```
 
 ## User interface

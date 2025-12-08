@@ -25,20 +25,7 @@ abstract class AbstractSolrBackendFactory extends \VuFind\Search\Factory\Abstrac
      *
      * @return Backend
      */
-    /*
-    protected function createBackend(Connector $connector)
-    {
-        $backend = new Backend($connector);
-        $backend->setQueryBuilder($this->createQueryBuilder());
 
-        if ($this->logger) {
-            $backend->setLogger($this->logger);
-        }
-
-        return $backend;
-    }
-     *
-     */
     protected function createBackend(Connector $connector)
     {
         $backend = new $this->backendClass($connector);

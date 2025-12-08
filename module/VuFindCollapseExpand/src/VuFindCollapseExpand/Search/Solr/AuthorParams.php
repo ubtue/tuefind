@@ -22,19 +22,23 @@
 namespace VuFindCollapseExpand\Search\Solr;
 
 use VuFind\Config\PluginManager;
-use VuFindCollapseExpand\Config\Grouping;
+// use VuFindCollapseExpand\Config\Grouping;
+use VuFindCollapseExpand\Config\CollapseExpandGrouping;
 
 /**
  * Description of Params
  *
  * @author Cornelius Amzar <cornelius.amzar@bsz-bw.de>
  * @author Robert Lange <lange@ub.uni-leipzig.de>
+ * 
+ * Controlling Result is changed from Result Grouping to Collapse and Expand
+ * @author Steven Lolong <steven.lolong@uni-tuebingen.de>
  */
 class AuthorParams extends \VuFind\Search\SolrAuthor\Params
 {
     use ParamsTrait;
 
-    protected $grouping;
+    protected $collapse_expand_grouping;
     protected $limit = 10;
 
     /**
@@ -43,15 +47,15 @@ class AuthorParams extends \VuFind\Search\SolrAuthor\Params
      * @param $options
      * @param PluginManager $configLoader
      * @param HierarchicalFacetHelper|null $facetHelper
-     * @param Grouping|null $grouping
+     * @param CollapseExpandGrouping|null $grouping
      */
     public function __construct(
         $options,
         PluginManager $configLoader,
         HierarchicalFacetHelper $facetHelper = null,
-        Grouping $grouping = null
+        CollapseExpandGrouping $collapse_expand_grouping = null
     ) {
         parent::__construct($options, $configLoader);
-        $this->grouping = $grouping;
+        $this->collapse_expand_grouping = $collapse_expand_grouping;
     }
 }

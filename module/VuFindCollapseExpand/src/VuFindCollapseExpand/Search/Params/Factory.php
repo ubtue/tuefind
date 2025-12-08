@@ -43,8 +43,8 @@ class Factory
     {
         $config = $container->get('VuFind\Config');
         $options = $container->get('VuFind\SearchOptionsPluginManager')->get('solr');
-        $grouping = $container->get('VuFindCollapseExpand\Config\Grouping');
-        $params = new Params($options, $config, null, $grouping);
+        $collapse_expand_grouping = $container->get('VuFindCollapseExpand\Config\CollapseExpandGrouping');
+        $params = new Params($options, $config, null, $collapse_expand_grouping);
 
         return $params;
     }
@@ -60,8 +60,8 @@ class Factory
     {
         $config = $container->get('VuFind\Config');
         $options = $container->get('VuFind\SearchOptionsPluginManager')->get('solrauthor');
-        $grouping = $container->get('VuFindCollapseExpand\Config\Grouping');
-        $params = new AuthorParams($options, $config, null, $grouping);
+        $collapse_expand_grouping = $container->get('VuFindCollapseExpand\Config\CollapseExpandGrouping');
+        $params = new AuthorParams($options, $config, null, $collapse_expand_grouping);
 
         return $params;
     }

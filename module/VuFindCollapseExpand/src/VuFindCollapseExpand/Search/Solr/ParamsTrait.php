@@ -87,6 +87,36 @@ trait ParamsTrait
         return $filterQuery;
     }
 
+    // Construct collapse parameters
+    public function constructingCollapseParams(){
+        $collapseConfig =$this->collapse_expand_grouping->getCollapseConfig();
+        $currentSettings = $this->collapse_expand_grouping->getCurrentSettings();
+
+        $str_params = '{!collapse ';
+        foreach (array_keys($collapseConfig) as $key) {
+            if(isset($currentSettings[$key]) && $currentSettings[$key] != null){
+
+                $str_params .= explode('.', $key)[1] . '=' . $currentSettings[$key] . ' ';
+            }
+        }
+        $str_params .= '}';
+        return $str_params;
+    }
+
+    // Construct expand parameters
+    public function constructingExpandParams(){
+        $expandConfig =$this->collapse_expand_grouping->getExpandConfig();
+        $currentSettings = $this->collapse_expand_grouping->getCurrentSettings();
+        $params = [];
+
+        foreach (array_keys($expandConfig) as $key) {
+            if(isset($currentSettings[$key]) && $currentSettings[$key] != null){
+                $params[$key] = $currentSettings[$key];
+            }
+        }
+        return $params;
+    }
+
     /**
      * Create search backend parameters for advanced features.
      *
@@ -95,56 +125,23 @@ trait ParamsTrait
     public function getBackendParameters()
     {
         $backendParams = new ParamBag();
+        // restore grouping settings from cookie
+        $this->collapse_expand_grouping->restoreFromCookie();
 
-        $this->restoreFromCookie();
-
-        // Fetch group params for grouping
-        $config = $this->configLoader->get('config');
-        $index = $config->get('Index');
-        $group = false;
-        $collapse_expand = $index->get('collapse_expand') !== null ? $index->get('collapse_expand') : false;
-
-        $groupingParams = $this->grouping->getCurrentSettings();
-
-        if (isset($groupingParams['group'])) {
-            $group = $groupingParams['group'];
-        } elseif ($index->get('group') !== null) {
-            $group = $index->get('group');
-        }
-
-        if ((bool) $collapse_expand === true) {
-            if ((bool)$group === true) {
+        // check if grouping is enabled in the configuration
+        if ($this->collapse_expand_grouping->isEnabled()) {
+            // check if grouping is activated by the user in the session (frontend)
+            if ($this->collapse_expand_grouping->isActive()) {
                 $backendParams->add('expand', 'true');
 
-                $group_field = '';
-                $group_limit = 0;
-                $group_expand = '';
-
-                if (isset($groupingParams['group_field'])) {
-                    $group_field = $groupingParams['group_field'];
-                } elseif ($index->get('group.field') !== null) {
-                    $group_field = $index->get('group.field');
+                // construct collapse parameters
+                $backendParams->add('fq', $this->constructingCollapseParams());
+                
+                // enabling expand
+                // construct expand parameters
+                foreach($this->constructingExpandParams() as $key => $value){
+                    $backendParams->add($key, $value);
                 }
-                // $backendParams->add('group.field', $group_field);
-
-                if (isset($groupingParams['group_limit'])) {
-                    $group_limit = $groupingParams['group_limit'];
-                } elseif ($index->get('group.limit') !== null) {
-                    $group_limit = $index->get('group.limit');
-                }
-                if (isset($groupingParams['group_expand'])) {
-                    $group_expand = $groupingParams['group_expand'];
-                } elseif ($index->get('group.expand') !== null) {
-                    $group_expand = $index->get('group.expand');
-                }
-
-                // collapse and expand
-                for ($i = 0; $i < count($group_field); $i++) {
-                    $backendParams->add('fq', '{!collapse field=' . $group_field[$i] . '}');
-                }
-
-                $backendParams->add('expand.rows', $group_limit);
-                $backendParams->add('expand.field', $group_expand);
             }
         }
         // search those shards that answer, accept partial results
@@ -226,42 +223,23 @@ trait ParamsTrait
         return $backendParams;
     }
 
-    /**
-     * This method reads the cookie and stores the information into the session
-     * So we only need to process session bwlow.
-     *
+    /** 
+     * Check if Collapse and Expand is enabled in the configuration
+     * @return bool
      */
-    protected function restoreFromCookie()
-    {
-        if (isset($this->cookie)) {
-            if (isset($this->cookie->group)) {
-                $this->container->offsetSet('group', $this->cookie->group);
-            }
-            if (isset($this->cookie->group_field)) {
-                $this->container->offsetSet('group_field', $this->cookie->group_field);
-            }
-            if (isset($this->cookie->group_limit)) {
-                $this->container->offsetSet('group_limit', $this->cookie->group_limit);
-            }
-            if (isset($this->cookie->group_expand)) {
-                $this->container->offsetSet('group_expand', $this->cookie->group_expand);
-            }
-        }
-    }
-
     public function isEnableCollapseExpand()
     {
-        // Fetch group params for grouping
-        $config = $this->configLoader->get('config');
-        $index = $config->get('Index');
-        $collapse_expand = $index->get('collapse_expand') !== null ? $index->get('collapse_expand') : false;
-
-        return $collapse_expand;
+        return $this->collapse_expand_grouping->isEnabled();
     }
 
-    public function isGroupingActivated()
+
+    /** 
+     * Check if Collapse and Expand is activated by the user
+     * @return bool
+     */
+    public function isActivatedCollapseExpand()
     {
-        return $this->grouping->isActive();
+        return $this->collapse_expand_grouping->isActive();
     }
 
 }

@@ -27,6 +27,9 @@ namespace VuFindCollapseExpand\Controller;
  * Class SearchController
  * @package  VuFindCollapseExpand\Controller
  * @author   Cornelius Amzar <cornelius.amzar@bsz-bw.de>
+ * 
+ * Controlling Result is changed from Result Grouping to Collapse and Expand
+ * @author Steven Lolong <steven.lolong@uni-tuebingen.de>
  */
 class SearchController extends \VuFind\Controller\SearchController
 {
@@ -35,10 +38,11 @@ class SearchController extends \VuFind\Controller\SearchController
      */
     public function resultsAction()
     {
-        $grouping = $this->serviceLocator->get('VuFindCollapseExpand\Config\Grouping');
+        // $grouping = $this->serviceLocator->get('VuFindCollapseExpand\Config\Grouping');
+        $collapse_expand_grouping = $this->serviceLocator->get('VuFindCollapseExpand\Config\CollapseExpandGrouping');
 
         $view = Parent::resultsAction();
-        $view->grouping = $grouping->isActive();
+        $view->collapse_expand_grouping = $collapse_expand_grouping->isActive();
         return $view;
     }
 

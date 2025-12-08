@@ -21,7 +21,8 @@
 
 namespace VuFindCollapseExpand\AjaxHandler;
 
-use VuFindCollapseExpand\Config\Grouping;
+// use VuFindCollapseExpand\Config\Grouping;
+use VuFindCollapseExpand\Config\CollapseExpandGrouping;
 use VuFind\I18n\Translator\TranslatorAwareInterface;
 use Laminas\Mvc\Controller\Plugin\Params;
 
@@ -29,6 +30,9 @@ use Laminas\Mvc\Controller\Plugin\Params;
  * Class GroupingCheckbox
  * @package  VuFindCollapseExpand\AjaxHandler
  * @author   Cornelius Amzar <cornelius.amzar@bsz-bw.de>
+ * 
+ * Controlling Result is changed from Result Grouping to Collapse and Expand
+ * @author Steven Lolong <steven.lolong@uni-tuebingen.de>
  */
 class GroupingCheckbox extends \VuFind\AjaxHandler\AbstractBase implements TranslatorAwareInterface
 {
@@ -36,18 +40,18 @@ class GroupingCheckbox extends \VuFind\AjaxHandler\AbstractBase implements Trans
 
     /**
      *
-     * @var Grouping
+     * @var CollapseExpandGrouping
      */
-    protected $grouping;
+    protected $collapse_expand_grouping;
 
     /**
      * Constructor
      *
-     * @param Grouping $grouping
+     * @param CollapseExpandGrouping $collapse_expand_grouping
      */
-    public function __construct(Grouping $grouping)
+    public function __construct(CollapseExpandGrouping $collapse_expand_grouping)
     {
-        $this->grouping = $grouping;
+        $this->collapse_expand_grouping = $collapse_expand_grouping;
     }
 
     /**
@@ -61,7 +65,7 @@ class GroupingCheckbox extends \VuFind\AjaxHandler\AbstractBase implements Trans
     {
         $status = $params->fromPost('status');
         $status = $status == 'true' ? true : false;
-        $this->grouping->store(['group' => $status]);
+        $this->collapse_expand_grouping->store(['collapse.enabled' => $status]);
         return $this->formatResponse([], 200);
     }
 }

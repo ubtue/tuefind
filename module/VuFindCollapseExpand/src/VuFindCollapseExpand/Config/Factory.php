@@ -29,18 +29,28 @@ use Laminas\Session\Container;
 /**
  * Description of Factory
  * @author Cornelius Amzar <cornelius.amzar@bsz-bw.de>
+ * 
+ * 
+ * Factory for Grouping config
+ * @package VuFindCollapseExpand\Config
+ * @author Steven Lolong <steven.lolong@uni-tuebingen.de>
+ * Controlling Result is changed from Result Grouping to Collapse and Expand
+ * Change section config from the 'Index' to 'CollapseExpand'
+ * 
  */
 class Factory
 {
-    public static function getGrouping(ContainerInterface $container)
+    public static function getCollapseExpandGrouping(ContainerInterface $container)
     {
-        $config = $container->get('VuFind\Config')->get('config')->get('Index');
+        // collapse_expand has a special Config section 'CollapseExpand'
+        $config = $container->get('VuFind\Config')->get('config')->get('CollapseExpand');
         $sesscontainer = new Container(
-            'grouping',
+            'collapse_expand_grouping',
             $container->get('VuFind\SessionManager')
         );
         $response = $container->get('Response');
         $cookie = $container->get('Request')->getCookie();
-        return new Grouping($config, $sesscontainer, $response, $cookie);
+        // return new Grouping($config, $sesscontainer, $response, $cookie);
+        return new CollapseExpandGrouping($config, $sesscontainer, $response, $cookie);
     }
 }

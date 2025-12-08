@@ -27,6 +27,9 @@ use Psr\Container\ContainerInterface;
  * Class GroupingCheckboxFactory
  * @package  VuFindCollapseExpand\AjaxHandler
  * @author   Cornelius Amzar <cornelius.amzar@bsz-bw.de>
+ * 
+ * Controlling Result is changed from Result Grouping to Collapse and Expand
+ * @author Steven Lolong <steven.lolong@uni-tuebingen.de>
  */
 class GroupingCheckboxFactory
 {
@@ -38,7 +41,7 @@ class GroupingCheckboxFactory
     public function __invoke(ContainerInterface $container)
     {
         return new GroupingCheckbox(
-            $container->get('VuFindCollapseExpand\Config\Grouping')
+            $container->get('VuFindCollapseExpand\Config\CollapseExpandGrouping')
         );
     }
 }

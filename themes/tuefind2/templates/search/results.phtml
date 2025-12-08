@@ -13,12 +13,12 @@ $search_id = $this->params->getSearchClassId();
       if ($this->params->isEnableCollapseExpand()):
 ?>
         <form class="form-inline search-grouping" action="<?= $this->currentPath() ?>"
-              method="POST" id="grouping">
+              method="POST" id="collapse_expand_grouping">
             <div class="form-group">
                 <label for="grouping-checkbox"><?= $this->transEsc('group hits') ?></label>
                 <input type="checkbox" name="grouping-enabled" value=""
                       id="grouping-checkbox"
-                      <?php if ($this->grouping): ?>checked<?php endif; ?>/>
+                      <?php if ($this->collapse_expand_grouping): ?>checked<?php endif; ?>/>
             </div>
             <noscript>
                 <p>Please enable JavaScript</p>

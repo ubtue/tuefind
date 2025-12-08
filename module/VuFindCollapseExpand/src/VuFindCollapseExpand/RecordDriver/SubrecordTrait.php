@@ -31,6 +31,9 @@ namespace VuFindCollapseExpand\RecordDriver;
  * Trait SubrecordTrait
  * @package VuFindCollapseExpand\RecordDriver
  * @author Cornelius Amzar <cornelius.amzar@bsz-bw.de>
+ * 
+ * Controlling Result is changed from Result Grouping to Collapse and Expand
+ * @author Steven Lolong <steven.lolong@uni-tuebingen.de>
  */
 trait SubrecordTrait
 {

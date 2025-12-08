@@ -24,8 +24,8 @@ trait CollapseExpandTrait
     /**
      * Collapse and expand variable from config
      */
-    protected $groupLimit = 0;
-    protected $expandField = '';
+    protected $expand_row = 0;
+    protected $expand_field = '';
 
 
 
@@ -74,24 +74,24 @@ trait CollapseExpandTrait
 
 
             $config = $container->get('VuFind\Config\PluginManager')->get('config');
-            $configIndex = $config->get("Index");
+            $configIndex = $config->get("CollapseExpand");
             // $cookie = $container->get('Request')->getCookie();
-            $collapse_expand = $configIndex->get('collapse_expand');
+            $collapse_expand = $configIndex->get('collapse.field') !== null ? true : false;
 
 
 
             if ((bool)$collapse_expand === true) {
                 $default_field = array('title_sort');
-                $group_field =  ($configIndex->get('group.field') !== null) ? explode(":", $configIndex->get('group.field')) : $default_field;
-                $this->groupLimit = ($configIndex->get('group.limit') !== null) ? $configIndex->get('group.limit') : 10;
-                $this->expandField = ($configIndex->get('group.expand') !== null) ? $configIndex->get('group.expand') : $default_field[0];
+                $group_field =  ($configIndex->get('collapse.field') !== null) ? explode(":", $configIndex->get('collapse.field')) : $default_field;
+                $this->expand_row = ($configIndex->get('expand.rows') !== null) ? $configIndex->get('expand.rows') : 10;
+                $this->expand_field = ($configIndex->get('expand.field') !== null) ? $configIndex->get('expand.field') : $default_field[0];
 
 
                 // $searchCommand = new SearchCommand($this->backendId,  $query, 0, 0, $params);
                 $params = new ParamBag();
                 $params->add('expand', 'true');
-                $params->add('expand.rows', $this->groupLimit);
-                $params->add('expand.field', $this->expandField);
+                $params->add('expand.rows', $this->expand_row);
+                $params->add('expand.field', $this->expand_field);
                 $params->add('fl', '*');
 
                 for ($i = 0; $i < count($group_field); $i++) {
@@ -203,6 +203,6 @@ trait CollapseExpandTrait
         $plugin_manager_solr = $container->get('VuFind\SearchResultsPluginManager')->get('Solr');
         $params = $plugin_manager_solr->getParams();
 
-        return $params->isGroupingActivated();
+        return $params->isActivatedCollapseExpand();
     }
 }

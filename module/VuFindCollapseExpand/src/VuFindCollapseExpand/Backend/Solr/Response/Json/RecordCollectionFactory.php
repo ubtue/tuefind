@@ -52,8 +52,8 @@ class RecordCollectionFactory extends \VuFindSearch\Backend\Solr\Response\Json\R
         $solrDef = $pluginManager->get('TueFind\RecordDriver\SolrDefault');
         $container = $solrDef->getContainer();
         $config = $container->get(\VuFind\Config\PluginManager::class)->get('config');
-        $index = $config->get('Index');
-        $this->expandFieldName = $index->get('group.expand');
+        $collapse_expand_section = $config->get('CollapseExpand');
+        $this->expandFieldName = $collapse_expand_section->get('expand.field');
 
     }
 
