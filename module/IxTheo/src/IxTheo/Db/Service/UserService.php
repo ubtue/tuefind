@@ -8,7 +8,7 @@ class UserService extends \TueFind\Db\Service\UserService implements UserService
 {
 
     // Similar to parent function, but we need to add the instance name when selecting
-    public function getUserByField(string $fieldName, int|string|null $fieldValue): ?UserEntityInterface
+    public function getUserByField(string $fieldName, int|string|null $fieldValue): ?\VuFind\Db\Entity\UserEntityInterface
     {
         // Null ID lookups cannot possibly retrieve a value:
         if ($fieldName === 'id' && $fieldValue === null) {

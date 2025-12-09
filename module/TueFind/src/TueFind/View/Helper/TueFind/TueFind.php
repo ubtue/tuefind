@@ -272,7 +272,7 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
      */
     public function getRssNewsEntries(int $maxItemCount=null, bool $onlyNewestItemPerFeed=false) {
 
-        $rssTable = $this->container->get(\VuFind\Db\Table\PluginManager::class)->get('rss_item');
+        $rssTable = $this->container->get(\VuFind\Db\Service\PluginManager::class)->get('rss_item');
         $rssItems = $rssTable->getItemsSortedByPubDate($this->getTueFindInstance());
 
         $rssItemsToReturn = [];
@@ -573,13 +573,13 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
     }
 
     public function getPublicationByControlNumber(string $controlNumber) {
-        $publicationTable = $this->container->get(\VuFind\Db\Table\PluginManager::class)->get('publication');
+        $publicationTable = $this->container->get(\VuFind\Db\Service\PluginManager::class)->get('publication');
         return $publicationTable->getByControlNumber($controlNumber);
     }
 
     public function getUserAccessState($authorityId, $userId = null): array
     {
-        $table = $this->container->get(\VuFind\Db\Table\PluginManager::class)->get('user_authority');
+        $table = $this->container->get(\VuFind\Db\Service\PluginManager::class)->get(\TueFind\Db\Service\UserAuthorityServiceInterface::class);
         $row = $table->getByAuthorityId($authorityId);
 
         $result = ['availability' => '', 'access_state' => ''];
@@ -605,7 +605,7 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
         $manager = $auth->getManager();
         $user = $manager->getUserObject();
         if($user) {
-            $table = $this->container->get(\VuFind\Db\Table\PluginManager::class)->get('user_authority');
+            $table = $this->container->get(\VuFind\Db\Service\PluginManager::class)->get(\TueFind\Db\Service\UserAuthorityServiceInterface::class);
             foreach($authorsIds as $authorityId) {
                 $row = $table->getByUserIdAndAuthorityId($user->id,$authorityId);
                 if(!empty($row) && $row->access_state == "granted") {
@@ -624,7 +624,7 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
         $manager = $auth->getManager();
         $user = $manager->getUserObject();
         if($user) {
-            $table = $this->container->get(\VuFind\Db\Table\PluginManager::class)->get('user_authority');
+            $table = $this->container->get(\VuFind\Db\Service\PluginManager::class)->get(\TueFind\Db\Service\UserAuthorityServiceInterface::class);
             foreach($secondaryAuthorsIds as $authorId) {
                 $row = $table->getByUserIdAndAuthorityId($user->id,$authorId);
                 if(!empty($row) && $row->access_state == "granted") {
@@ -639,7 +639,7 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
 
     public function userAlreadyMadeAuthorityRequest($userId): bool
     {
-        $table = $this->container->get(\VuFind\Db\Table\PluginManager::class)->get('user_authority');
+        $table = $this->container->get(\VuFind\Db\Service\PluginManager::class)->get(\TueFind\Db\Service\UserAuthorityServiceInterface::class);
         $row = $table->getByUserIdCurrent($userId);
         return (empty($row))? false: true;
     }
@@ -658,7 +658,7 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
             }
         }
 
-        $table = $this->container->get(\VuFind\Db\Table\PluginManager::class)->get('user_authority');
+        $table = $this->container->get(\VuFind\Db\Service\PluginManager::class)->get(\TueFind\Db\Service\UserAuthorityServiceInterface::class);
         return $table->hasGrantedAuthorityRight($userId, $authorsIds);
     }
 

@@ -1,12 +1,11 @@
 <?php
 namespace IxTheo\Db\Service;
-use VuFind\Db\Row\RowGateway;
-use VuFind\Db\Table\PluginManager;
-use Laminas\Db\Adapter\Adapter;
 
-class PDASubscriptionService extends \VuFind\Db\Table\Gateway implements PDASubscriptionServiceInterface
+use VuFind\Db\Service\AbstractDbService;
+
+class PDASubscriptionService extends AbstractDbService implements PDASubscriptionServiceInterface
 {
-    use \VuFind\Db\Table\DbTableAwareTrait;
+    use \VuFind\Db\Service\DbServiceAwareTrait;
 
     /**
      * Session container for last list information.
@@ -14,21 +13,6 @@ class PDASubscriptionService extends \VuFind\Db\Table\Gateway implements PDASubs
      * @var \Laminas\Session\Container
      */
     protected $session;
-
-    /**
-     * Constructor
-     *
-     * @param Adapter       $adapter Database adapter
-     * @param PluginManager $tm      Table manager
-     * @param array         $cfg     Laminas Framework configuration
-     * @param RowGateway    $rowObj  Row prototype object (null for default)
-     * @param string        $table   Name of database table to interface with
-     */
-    public function __construct(Adapter $adapter, PluginManager $tm, $cfg,
-        RowGateway $rowObj = null, $table = 'ixtheo_pda_subscriptions'
-    ) {
-        parent::__construct($adapter, $tm, $cfg, $rowObj, $table);
-    }
 
     public function getNew($userId, $ppn, $title, $author, $year, $isbn) {
         $row = $this->createRow();

@@ -2,18 +2,12 @@
 
 namespace TueFind\Db\Service;
 
-use Laminas\Db\Adapter\Adapter;
-use Laminas\Db\ResultSet\ResultSetInterface as ResultSet;
 use Laminas\Db\Sql\Select;
-use VuFind\Db\Table\PluginManager;
+use VuFind\Db\Service\AbstractDbService;
+use TueFind\Db\Entity\PublicationEntityInterface;
 
-class PublicationService implements PublicationServiceInterface{
-
-    public function __construct(Adapter $adapter, PluginManager $tm, $cfg,
-        RowGateway $rowObj = null, $table = 'tuefind_publications'
-    ) {
-        parent::__construct($adapter, $tm, $cfg, $rowObj, $table);
-    }
+class PublicationService extends AbstractDbService implements PublicationServiceInterface
+{
 
     public function getAll()
     {
@@ -23,12 +17,17 @@ class PublicationService implements PublicationServiceInterface{
         return $this->selectWith($select);
     }
 
-    public function getByUserId($userId): ResultSet
+    public function getByUserId($userId): array
     {
-        return $this->select(['user_id' => $userId]);
+        $dql = 'SELECT P '
+            . 'FROM ' . PublicationEntityInterface::class . ' P '
+            . 'WHERE P.user = :userId';
+        $query = $this->entityManager->createQuery($dql);
+        $query->setParameters(['userId' => $userId]);
+        return $query->getResult();
     }
 
-    public function getByControlNumber($controlNumber)
+    public function getByControlNumber($controlNumber): PublicationEntityInterface
     {
         return $this->select(['control_number' => $controlNumber])->current();
     }

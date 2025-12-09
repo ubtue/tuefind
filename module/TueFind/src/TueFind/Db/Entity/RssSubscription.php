@@ -5,10 +5,34 @@ namespace TueFind\Db\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
+#[ORM\Table(name: 'tuefind_rss_subscriptions')]
 class RssSubscription implements RssSubscriptionEntityInterface
 {
-    public function __construct(\Laminas\Db\Adapter\Adapter $adapter)
+    #[ORM\Column(name: 'id', type: 'integer', nullable: false)]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
+    protected int $id;
+
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: UserEntityInterface::class)]
+    protected UserEntityInterface $user;
+
+    #[ORM\JoinColumn(name: 'rss_feeds_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: RssFeedEntityInterface::class)]
+    protected RssFeedEntityInterface $rssFeed;
+
+    public function getId(): ?int
     {
-        parent::__construct('id', 'tuefind_rss_subscriptions', $adapter);
+        return $this->id ?? null;
+    }
+
+    public function getUser(): UserEntityInterface
+    {
+        return $this->user;
+    }
+
+    public function getRssFeed(): RssFeedEntityInterface
+    {
+        return $this->rssFeed();
     }
 }

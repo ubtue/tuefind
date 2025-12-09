@@ -2,7 +2,7 @@
 
 namespace TueFind\Db\Entity;
 
-use VuFind\Db\EntityInterface;
+use VuFind\Db\Entity\EntityInterface;
 
 interface UserAuthorityHistoryEntityInterface extends EntityInterface {
 

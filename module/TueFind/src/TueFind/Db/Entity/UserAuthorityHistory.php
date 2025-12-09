@@ -5,12 +5,9 @@ namespace TueFind\Db\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
+#[ORM\Table(name: 'tuefind_user_authorities_history')]
 class UserAuthorityHistory implements UserAuthorityHistoryEntityInterface
 {
-    public function __construct($adapter)
-    {
-        parent::__construct('id', 'tuefind_user_authorities_history', $adapter);
-    }
 
     public function updateUserAuthorityHistory($adminId, $access)
     {

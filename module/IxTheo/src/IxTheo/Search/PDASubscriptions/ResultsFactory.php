@@ -10,10 +10,10 @@ class ResultsFactory extends \VuFind\Search\Results\ResultsFactory
         array $options = null
     ) {
         $results = parent::__invoke($container, $requestedName, $options);
-        $results->setPDASubscriptionTable($container->get('VuFind\Db\Table\PluginManager')->get('pdasubscription'));
+        $results->setPDASubscriptionService($container->get('VuFind\Db\Service\PluginManager')->get(\IxTheo\Db\Service\PDASubscriptionServiceInterface::class));
 
-        $init = new \LmcRbacMvc\Initializer\AuthorizationServiceInitializer();
-        $init($container, $results);
+        //$init = new \Lmc\Rbac\Mvc\Initializer\AuthorizationServiceInitializer();
+        //$init($container, $results);
 
         return $results;
     }

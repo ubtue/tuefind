@@ -2,20 +2,12 @@
 
 namespace TueFind\Db\Service;
 
-use Laminas\Db\Adapter\Adapter;
-use Laminas\Db\ResultSet\ResultSetInterface as ResultSet;
 use Laminas\Db\Sql\Select;
-use VuFind\Db\Row\RowGateway;
-use VuFind\Db\Table\PluginManager;
 use TueFind\Db\Row\UserAuthorityHistory as UserAuthorityHistoryRow;
+use VuFind\Db\Service\AbstractDbService;
 
-class UserAuthorityHistoryService extends \VuFind\Db\Table\Gateway {
-
-    public function __construct(Adapter $adapter, PluginManager $tm, $cfg,
-        RowGateway $rowObj = null, $table = 'tuefind_user_authorities_history'
-    ) {
-        parent::__construct($adapter, $tm, $cfg, $rowObj, $table);
-    }
+class UserAuthorityHistoryService extends AbstractDbService implements UserAuthorityHistoryServiceInterface
+{
 
     public function getLatestRequestByUserId($requestUserId): ?UserAuthorityHistoryRow
     {

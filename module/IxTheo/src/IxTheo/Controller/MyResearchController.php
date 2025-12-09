@@ -13,7 +13,7 @@ class MyResearchController extends \TueFind\Controller\MyResearchController
         $user = $this->getUser();
 
         // Update the TAD access flag:
-        exec("/usr/local/bin/set_tad_access_flag.sh " . $user->id);
+        exec("/usr/local/bin/set_tad_access_flag.sh " . $user->getId());
 
         return $view;
     }
@@ -170,7 +170,7 @@ class MyResearchController extends \TueFind\Controller\MyResearchController
         }
 
         $table = $this->getTable('Subscription');
-        $table->unsubscribe($user->id, $id);
+        $table->unsubscribe($user->getId(), $id);
         return true;
     }
 
@@ -187,7 +187,7 @@ class MyResearchController extends \TueFind\Controller\MyResearchController
         }
 
         $table = $this->getTable('PDASubscription');
-        $table->unsubscribe($user->id, $id);
+        $table->unsubscribe($user->getId(), $id);
         $notifier = $this->PDASubscriptions();
         $notifier->sendPDAUnsubscribeEmail($user, $id);
         $notifier->sendPDAUserUnsubscribeEmail($user, $id);

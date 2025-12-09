@@ -3,8 +3,9 @@
 namespace TueFind\Db\Entity;
 
 use DateTime;
+use VuFind\Db\Entity\EntityInterface;
 
-interface UserEntityInterface extends \VuFind\Db\Entity\UserEntityInterface {
+interface UserEntityInterface extends EntityInterface {
     public function isLicenseAccessLocked(): bool;
 
     public function getInstitution(): ?string;

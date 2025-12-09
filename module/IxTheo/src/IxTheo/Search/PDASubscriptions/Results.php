@@ -2,11 +2,11 @@
 namespace IxTheo\Search\PDASubscriptions;
 
 
-use LmcRbacMvc\Service\AuthorizationServiceAwareInterface;
-use LmcRbacMvc\Service\AuthorizationServiceAwareTrait;
+use Lmc\Rbac\Mvc\Service\AuthorizationServiceAwareInterface;
+use Lmc\Rbac\Mvc\Service\AuthorizationServiceAwareTrait;
 use VuFind\Exception\ListPermission as ListPermissionException;
 use VuFind\Search\Base\Results as BaseResults;
-use IxTheo\Db\Table\PDASubscription as PDASubscriptionTable;
+use IxTheo\Db\Service\PDASubscriptionServiceInterface as PDASubscriptionService;
 
 
 class Results extends BaseResults
@@ -67,7 +67,7 @@ class Results extends BaseResults
         // Apply offset and limit if necessary!
         $limit = $this->getParams()->getLimit();
         if ($this->resultTotal > $limit) {
-            $list = $this->pdasubscriptionTable->get($this->user->id, $this->getParams()->getSort(), $this->getStartRecord() - 1, $limit);
+            $list = $this->pdasubscriptionTable->get($this->user->getId(), $this->getParams()->getSort(), $this->getStartRecord() - 1, $limit);
         }
 
         // Retrieve record drivers for the selected items.
@@ -93,12 +93,12 @@ class Results extends BaseResults
     {
         // If we haven't previously tried to load a list, do it now:
         if ($this->list === false) {
-            $this->list = $this->pdasubscriptionTable->getAll($this->user->id, $this->getParams()->getSort());
+            $this->list = $this->pdasubscriptionTable->getAll($this->user->getId(), $this->getParams()->getSort());
         }
         return $this->list;
     }
 
-    public function setPDAsubscriptionTable(PDASubscriptionTable $pdasubscriptionTable) {
+    public function setPDAsubscriptionService(PDASubscriptionService $pdasubscriptionTable) {
         $this->pdasubscriptionTable = $pdasubscriptionTable;
     }
 }

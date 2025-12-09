@@ -2,18 +2,10 @@
 
 namespace TueFind\Db\Service;
 
-use VuFind\Db\Row\RowGateway;
-use VuFind\Db\Table\PluginManager;
-use Laminas\Db\Adapter\Adapter;
 use Laminas\Db\Sql\Select;
 
 class RssItemService extends RssBaseService implements RssItemServiceInterface
 {
-    public function __construct(Adapter $adapter, PluginManager $tm, $cfg,
-        RowGateway $rowObj = null, $table = 'tuefind_rss_items'
-    ) {
-        parent::__construct($adapter, $tm, $cfg, $rowObj, $table);
-    }
 
     public function getItemsSortedByPubDate()
     {

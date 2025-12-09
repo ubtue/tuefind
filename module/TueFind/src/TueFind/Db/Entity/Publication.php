@@ -2,7 +2,6 @@
 
 namespace TueFind\Db\Entity;
 
-use Date;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use VuFind\Db\Feature\DateTimeTrait;
@@ -25,7 +24,7 @@ class Publication implements PublicationEntityInterface
 
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
     #[ORM\ManyToOne(targetEntity: UserEntityInterface::class)]
-    protected ?UserEntityInterface $user = null;
+    protected UserEntityInterface $user = null;
 
     #[ORM\Column(name: 'control_number', type: 'string', length: 255, nullable: false)]
     protected string $controlNumber;
@@ -42,8 +41,9 @@ class Publication implements PublicationEntityInterface
     #[ORM\Column(name: 'doi_notification_datetime', type: 'datetime', nullable: true)]
     protected DateTime $doiNotificationDatetime;
 
+    // Unfortunately Doctrine does not support Date, it forces DateTime and sets time to 00:00:00
     #[ORM\Column(name: 'terms_date', type: 'date', nullable: true)]
-    protected Date $termsDate;
+    protected DateTime $termsDate;
 
     #[ORM\Column(name: 'publication_datetime', type: 'datetime', nullable: false, options: ['default' => 'CURRENT_TIMESTAMP'])]
     protected DateTime $publicationDatetime;
@@ -58,7 +58,7 @@ class Publication implements PublicationEntityInterface
         return $this->id ?? null;
     }
 
-    public function getUser(): ?UserEntityInterface
+    public function getUser(): UserEntityInterface
     {
         return $this->user;
     }
@@ -124,12 +124,12 @@ class Publication implements PublicationEntityInterface
         return $this;
     }
 
-    public function getTermsDate(): ?Date
+    public function getTermsDate(): ?DateTime
     {
         return $this->termsDate;
     }
 
-    public function setTermsDate(Date $termsDate): static
+    public function setTermsDate(DateTime $termsDate): static
     {
         $this->termsDate = $termsDate;
         return $this;

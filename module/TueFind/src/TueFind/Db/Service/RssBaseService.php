@@ -2,7 +2,9 @@
 
 namespace TueFind\Db\Service;
 
-class RssBaseService implements RssBaseServiceInterface
+use VuFind\Db\Service\AbstractDbService;
+
+class RssBaseService extends AbstractDbService implements RssBaseServiceInterface
 {
     use \VuFind\Db\Service\DbServiceAwareTrait;
 

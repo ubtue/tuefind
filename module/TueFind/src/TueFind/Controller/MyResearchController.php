@@ -6,10 +6,10 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
 {
     protected function getUserAuthoritiesAndRecords($user, $onlyGranted=false, $exceptionIfEmpty=false): array
     {
-        $table = $this->getTable('user_authority');
+        $table = $this->getDbService(\TueFind\Db\Service\UserAuthorityServiceInterface::class);
 
         $accessState = $onlyGranted ? 'granted' : null;
-        $userAuthorities = $table->getByUserId($user->id, $accessState);
+        $userAuthorities = $table->getByUserId($user->getId(), $accessState);
 
         if ($exceptionIfEmpty && count($userAuthorities) == 0) {
             throw new \Exception('No authority linked to this user!');
@@ -93,10 +93,10 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
         $dspaceServer = $config->Publication->dspace_url_base;
         $dspaceVersion = $config->Publication->dspace_version;
 
-        $authorityUsers = $this->getTable('user_authority')->getByUserId($user->id);
+        $authorityUsers = $this->getDbService(\TueFind\Db\Service\UserAuthorityServiceInterface::class)->getByUserId($user);
         $authorityUsersArray = [];
         foreach($authorityUsers as $authorityUser) {
-            $authorityUserLoader = $this->serviceLocator->get(\VuFind\Record\Loader::class)->load($authorityUser->authority_id, 'SolrAuth');
+            $authorityUserLoader = $this->serviceLocator->get(\VuFind\Record\Loader::class)->load($authorityUser->getAuthorityControlNumber(), 'SolrAuth');
             $authorityUsersArray[] = [
                 'id'=>$authorityUser->authority_id,
                 'access_state'=>$authorityUser->access_state,
@@ -104,7 +104,7 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
             ];
         }
         $publications = [];
-        $dbPublications = $this->getTable('publication')->getByUserId($user->id);
+        $dbPublications = $this->getDbService(\TueFind\Db\Service\PublicationServiceInterface::class)->getByUserId($user->getId());
         foreach ($dbPublications as $dbPublication) {
             $existingRecord = $this->getRecordLoader()->load($dbPublication->control_number, 'Solr', /*tolerate_missing=*/true);
             $dbPublication['title'] = $existingRecord->getTitle();
@@ -157,7 +157,7 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
         }
         $existingRecord = $this->getRecordLoader()->load($existingRecordId);
 
-        $dbPublications = $this->getTable('publication')->getByControlNumber($existingRecordId);
+        $dbPublications = $this->getDbService(\TueFind\Db\Service\PublicationServiceInterface::class)->getByControlNumber($existingRecordId);
         if (!empty($dbPublications->external_document_id)) {
 
             $publicationURL = ($dspaceVersion == 6) ? $dspaceServer."/xmlui/handle/".$dbPublications->external_document_id : $dspaceServer."/handle/".$item->handle;
@@ -211,7 +211,7 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
                     $item = $dspace->addItem($collection->uuid, $dspaceMetadata);
                     $bitstream = $dspace->addBitstream($item->uuid, basename($tmpfile), $tmpfile);
                     // Store information in database
-                    $dbPublications = $this->getTable('publication')->addPublication($user->id, $existingRecordId, $item->handle, $item->uuid, $termFileData['termDate']);
+                    $dbPublications = $this->getDbService(\TueFind\Db\Service\PublicationServiceInterface::class)->addPublication($user->getId(), $existingRecordId, $item->handle, $item->uuid, $termFileData['termDate']);
                     $publicationURL = $dspaceServer."/xmlui/handle/".$item->handle;
                 }else{
                     $dspace = $this->serviceLocator->get(\TueFind\Service\DSpace7::class);
@@ -224,7 +224,7 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
                     //$workflowItem = $dspace->addWorkflowItem($item->id); // not work
                     $updateData = $dspace->updateWorkspaceItem($item->id,$dspaceMetadata);
                     // Store information in database
-                    $dbPublications = $this->getTable('publication')->addPublication($user->id, $existingRecordId, $item->id, $item->sections->upload->files[0]->uuid, $termFileData['termDate']);
+                    $dbPublications = $this->getDbService(\TueFind\Db\Service\PublicationServiceInterface::class)->addPublication($user->getId(), $existingRecordId, $item->id, $item->sections->upload->files[0]->uuid, $termFileData['termDate']);
                     $publicationURL = $dspaceServer."/workspaceitems/".$item->id."/view";
                 }
                 $this->flashMessenger()->addMessage(['msg' => $this->translate('publication_successfully_created').": <a href='".$publicationURL."' target='_blank'>".$this->translate('click_here_to_go_to_file')."</a>", 'html' => true], 'success');
@@ -278,9 +278,9 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
         $action = $this->getRequest()->getPost('action', '');
         $feedId = $this->getRequest()->getPost('id', '');
         if ($action == 'add') {
-            $rssSubscriptionsTable->addSubscription($user->id, $feedId);
+            $rssSubscriptionsTable->addSubscription($user->getId(), $feedId);
         } elseif ($action == 'remove') {
-            $rssSubscriptionsTable->removeSubscription($user->id, $feedId);
+            $rssSubscriptionsTable->removeSubscription($user->getId(), $feedId);
         } elseif ($action == 'subscribe_email') {
             $user->setRssFeedSendEmails(true);
         } elseif ($action == 'unsubscribe_email') {
@@ -288,7 +288,7 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
         }
 
         return $this->createViewModel(['rssFeeds' => $rssFeedsTable->getFeedsSortedByName(),
-                                       'rssSubscriptions' => $rssSubscriptionsTable->getSubscriptionsForUserSortedByName($user->id),
+                                       'rssSubscriptions' => $rssSubscriptionsTable->getSubscriptionsForUserSortedByName($user->getId()),
                                        'user' => $user]);
     }
 
@@ -300,7 +300,7 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
         }
 
         $rssTable = $this->serviceLocator->get(\VuFind\Db\Table\PluginManager::class)->get('rss_item');
-        $rssItems = $rssTable->getItemsForUserSortedByPubDate($user->id);
+        $rssItems = $rssTable->getItemsForUserSortedByPubDate($user->getId());
         return $this->createViewModel(['user' => $user,
                                        'rssItems' => $rssItems,
                                        'page' => $this->params()->fromQuery('page') ?? 1]);
@@ -318,7 +318,7 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
         $userUuid = $this->params()->fromRoute('user_uuid');
         $user = $this->serviceLocator->get(\VuFind\Db\Table\PluginManager::class)->get('user')->getByUuid($userUuid);
         $instance = $this->serviceLocator->get('ViewHelperManager')->get('tuefind')->getTueFindInstance();
-        $cmd = '/usr/local/bin/rss_subset_aggregator --mode=rss_xml ' . escapeshellarg($user->id) . ' ' . escapeshellarg($instance);
+        $cmd = '/usr/local/bin/rss_subset_aggregator --mode=rss_xml ' . escapeshellarg($user->getId()) . ' ' . escapeshellarg($instance);
 
         // We need to explicitly pass through VUFIND_HOME, or database.conf cannot be found
         putenv('VUFIND_HOME=' . getenv('VUFIND_HOME'));

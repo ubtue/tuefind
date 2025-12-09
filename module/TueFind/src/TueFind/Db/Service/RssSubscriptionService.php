@@ -2,26 +2,22 @@
 
 namespace TueFind\Db\Service;
 
-use VuFind\Db\Row\RowGateway;
-use VuFind\Db\Table\PluginManager;
-use Laminas\Db\Adapter\Adapter;
-use Laminas\Db\Sql\Select;
+use TueFind\Db\Entity\RssSubscriptionEntityInterface;
 
 class RssSubscriptionService extends RssBaseService
 {
-    public function __construct(Adapter $adapter, PluginManager $tm, $cfg,
-        RowGateway $rowObj = null, $table = 'tuefind_rss_subscriptions'
-    ) {
-        parent::__construct($adapter, $tm, $cfg, $rowObj, $table);
-    }
 
-    public function getSubscriptionsForUserSortedByName($userId)
+    public function getSubscriptionsForUserSortedByName($userId): array
     {
-        $select = $this->getSql()->select();
-        $select->join('tuefind_rss_feeds', 'tuefind_rss_subscriptions.rss_feeds_id = tuefind_rss_feeds.id', Select::SQL_STAR, SELECT::JOIN_LEFT);
-        $select->where(['user_id' => $userId]);
-        $select->order('feed_name ASC');
-        return $this->selectWith($select);
+        $dql = 'SELECT S FROM ' . RssSubscriptionEntityInterface::class . ' S ';
+        $dql .= 'LEFT JOIN S.rssFeed R ';
+        $dql .= 'WHERE S.user = :userId ';
+        $dql .= 'ORDER BY R.feedName ASC ';
+
+        $query = $this->entityManager->createQuery($dql);
+        $query->setParameters(['userId' => $userId]);
+
+        return $query->getResult();
     }
 
     public function addSubscription($userId, $feedId)

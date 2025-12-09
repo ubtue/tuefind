@@ -18,20 +18,14 @@ class PluginManager extends \TueFind\Db\Entity\PluginManager {
         array $v3config = []
     ) {
         $this->addOverride('aliases', \TueFind\Db\Entity\UserEntityInterface::class, UserEntityInterface::class);
-        $this->addOverride('aliases', \TueFind\Db\Entity\UserAuthorityEntityInterface::class, UserAuthorityEntityInterface::class);
-        $this->addOverride('aliases', \TueFind\Db\Entity\UserAuthorityHistoryEntityInterface::class, UserAuthorityHistoryEntityInterface::class);
 
         $this->addOverride('aliases', PDASubscriptionEntityInterface::class, PDASubscription::class);
         $this->addOverride('aliases', SubscriptionEntityInterface::class, Subscription::class);
         $this->addOverride('aliases', UserEntityInterface::class, User::class);
-        $this->addOverride('aliases', UserAuthorityEntityInterface::class, UserAuthority::class);
-        $this->addOverride('aliases', UserAuthorityHistoryEntityInterface::class, UserAuthorityHistory::class);
 
         $this->addOverride('factories', PDASubscription::class, InvokableFactory::class);
         $this->addOverride('factories', Subscription::class, InvokableFactory::class);
         $this->addOverride('factories', User::class, InvokableFactory::class);
-        $this->addOverride('factories', UserAuthority::class, InvokableFactory::class);
-        $this->addOverride('factories', UserAuthorityHistory::class, InvokableFactory::class);
 
         $this->applyOverrides();
 

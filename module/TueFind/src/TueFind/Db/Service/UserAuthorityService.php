@@ -2,20 +2,15 @@
 
 namespace TueFind\Db\Service;
 
-use Laminas\Db\Adapter\Adapter;
 use Laminas\Db\ResultSet\ResultSetInterface as ResultSet;
 use Laminas\Db\Sql\Select;
-use VuFind\Db\Row\RowGateway;
-use VuFind\Db\Table\PluginManager;
 use TueFind\Db\Row\UserAuthority as UserAuthorityRow;
+use TueFind\Db\Entity\UserAuthorityEntityInterface;
+use TueFind\Db\Entity\UserEntityInterface;
+use VuFind\Db\Service\AbstractDbService;
 
-class UserAuthorityService extends \VuFind\Db\Table\Gateway {
-
-    public function __construct(Adapter $adapter, PluginManager $tm, $cfg,
-        RowGateway $rowObj = null, $table = 'tuefind_user_authorities'
-    ) {
-        parent::__construct($adapter, $tm, $cfg, $rowObj, $table);
-    }
+class UserAuthorityService extends AbstractDbService implements UserAuthorityHistoryServiceInterface
+{
 
     public function getAll()
     {
@@ -38,13 +33,24 @@ class UserAuthorityService extends \VuFind\Db\Table\Gateway {
         return count($rows) > 0;
     }
 
-    public function getByUserId($userId, $accessState=null): ResultSet
+    public function getByUser(UserEntityInterface $user, $accessState=null): ResultSet
     {
-        $whereParams = ['user_id' => $userId];
-        if (isset($accessState))
-            $whereParams['access_state'] = $accessState;
+        $dql = 'SELECT UA '
+            . 'FROM ' . UserAuthorityEntityInterface::class . ' UA '
+            . 'WHERE UA.user_id = :userId ';
 
-        return $this->select($whereParams);
+        $parameters = ['userId' => $user->getId()];
+        if (isset($accessState)) {
+            $dql .= 'AND UA.access_state = :accessState';
+            $parameters['accessState'] = $accessState;
+        }
+
+        $query = $this->entityManager->createQuery($dql);
+        $query->setParameters($parameters);
+        return $query->getResult();
+
+
+
     }
 
     public function getByUserIdCurrent($userId): ?UserAuthorityRow

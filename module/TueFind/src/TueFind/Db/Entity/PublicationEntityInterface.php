@@ -2,8 +2,8 @@
 
 namespace TueFind\Db\Entity;
 
-use VuFind\Db\EntityInterface;
-use VuFind\Db\UserEntityInterface;
+use DateTime;
+use VuFind\Db\Entity\EntityInterface;
 
 interface PublicationEntityInterface extends EntityInterface {
 
@@ -27,8 +27,8 @@ interface PublicationEntityInterface extends EntityInterface {
     public function getDoiNotificationDatetime(): ?DateTime;
     public function setDoiNotificationDatetime(DateTime $doiNotificationDatetime): static;
 
-    public function getTermsDate(): ?Date;
-    public function setTermsDate(Date $date): static;
+    public function getTermsDate(): ?DateTime;
+    public function setTermsDate(DateTime $date): static;
 
     public function getPublicationDatetime(): ?DateTime;
     public function setPublicationDatetime(DateTime $publicationDatetime): static;
