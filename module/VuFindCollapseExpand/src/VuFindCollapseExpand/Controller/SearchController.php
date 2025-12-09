@@ -38,7 +38,6 @@ class SearchController extends \VuFind\Controller\SearchController
      */
     public function resultsAction()
     {
-        // $grouping = $this->serviceLocator->get('VuFindCollapseExpand\Config\Grouping');
         $collapse_expand_grouping = $this->serviceLocator->get('VuFindCollapseExpand\Config\CollapseExpandGrouping');
 
         $view = Parent::resultsAction();

@@ -22,7 +22,6 @@
 namespace VuFindCollapseExpand\Search\Solr;
 
 use VuFind\Config\PluginManager;
-// use VuFindCollapseExpand\Config\Grouping;
 use VuFindCollapseExpand\Config\CollapseExpandGrouping;
 
 /**

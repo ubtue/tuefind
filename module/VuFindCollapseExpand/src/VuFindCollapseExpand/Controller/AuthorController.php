@@ -38,7 +38,6 @@ class AuthorController extends \VuFind\Controller\AuthorController
      */
     public function resultsAction()
     {
-        // $grouping = $this->serviceLocator->get('VuFindCollapseExpand\Config\Grouping');
         $collapse_and_expand_grouping = $this->serviceLocator->get('VuFindCollapseExpand\Config\CollapseExpandGrouping');
 
         $view = \VuFind\Controller\AuthorController::resultsAction();

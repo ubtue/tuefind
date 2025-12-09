@@ -21,7 +21,6 @@
 
 namespace VuFindCollapseExpand\AjaxHandler;
 
-// use VuFindCollapseExpand\Config\Grouping;
 use VuFindCollapseExpand\Config\CollapseExpandGrouping;
 use VuFind\I18n\Translator\TranslatorAwareInterface;
 use Laminas\Mvc\Controller\Plugin\Params;
