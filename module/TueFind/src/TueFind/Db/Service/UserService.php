@@ -2,7 +2,10 @@
 
 namespace TueFind\Db\Service;
 
-class UserService extends \VuFind\Db\Service\UserService implements UserServiceInterface {
+use TueFind\Db\Entity\UserEntityInterface;
+
+class UserService extends \VuFind\Db\Service\UserService implements UserServiceInterface
+{
     public function getByRight($right)
     {
         $select = $this->getSql()->select();
@@ -30,9 +33,12 @@ class UserService extends \VuFind\Db\Service\UserService implements UserServiceI
 
     public function getAdmins()
     {
-        $select = $this->getSql()->select();
-        $select->where('tuefind_rights IS NOT NULL');
-        $select->order('username ASC');
-        return $this->selectWith($select);
+        $dql = 'SELECT U '
+            . 'FROM ' . UserEntityInterface::class . ' U '
+            . 'WHERE U.tuefindRights IS NOT NULL '
+            . 'ORDER BY U.username ASC';
+
+        $query = $this->entityManager->createQuery($dql);
+        return $query->getResult();
     }
 }

@@ -5,7 +5,8 @@ namespace IxTheo\Db\Entity;
 use DateTime;
 use VuFind\Db\Entity\EntityInterface;
 
-interface SubscriptionEntityInterface extends EntityInterface {
+interface SubscriptionEntityInterface extends EntityInterface
+{
     public function getId(): ?int;
 
     public function getUser(): UserEntityInterface;

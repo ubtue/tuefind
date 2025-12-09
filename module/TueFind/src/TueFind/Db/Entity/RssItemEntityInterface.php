@@ -5,7 +5,8 @@ namespace TueFind\Db\Entity;
 use DateTime;
 use VuFind\Db\Entity\EntityInterface;
 
-interface RssItemEntityInterface extends EntityInterface {
+interface RssItemEntityInterface extends EntityInterface
+{
     public function getId(): ?int;
 
     public function getRssFeed(): RssFeedEntityInterface;

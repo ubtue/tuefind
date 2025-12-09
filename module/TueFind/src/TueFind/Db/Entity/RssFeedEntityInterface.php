@@ -4,7 +4,8 @@ namespace TueFind\Db\Entity;
 
 use VuFind\Db\Entity\EntityInterface;
 
-interface RssFeedEntityInterface extends EntityInterface {
+interface RssFeedEntityInterface extends EntityInterface
+{
     public function getId(): ?int;
 
     public function getFeedName(): string;

@@ -5,7 +5,8 @@ namespace TueFind\Db\Entity;
 use DateTime;
 use VuFind\Db\Entity\EntityInterface;
 
-interface UserEntityInterface extends EntityInterface {
+interface UserEntityInterface extends EntityInterface
+{
     public function isLicenseAccessLocked(): bool;
 
     public function getInstitution(): ?string;
@@ -20,5 +21,5 @@ interface UserEntityInterface extends EntityInterface {
     public function getRssFeedLastNotification(): ?DateTime;
     public function setRssFeedLastNotification(DateTime $dateTime): static;
 
-    //public function getRights(): array;
+    public function getTueFindRights(): array;
 }

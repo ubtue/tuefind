@@ -16,7 +16,7 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
             throw new \Exception("You must be logged in first");
         }
 
-        if ($user->tuefind_rights == null)
+        if ($user->getTueFindRights() == [])
             throw new \Exception("This user has no admin rights!");
     }
 
@@ -30,11 +30,11 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
 
         $userId = $this->params()->fromRoute('user_id');
         $authorityId = $this->params()->fromRoute('authority_id');
-        $entry = $this->getService(\TueFind\Db\Service\UserAuthorityServiceInterface::class)->getByUserIdAndAuthorityId($userId, $authorityId);
-        $requestUser = $this->getService(\TueFind\Db\UserServiceInterface::class)->getByID($userId);
+        $entry = $this->getDbService(\TueFind\Db\Service\UserAuthorityServiceInterface::class)->getByUserIdAndAuthorityId($userId, $authorityId);
+        $requestUser = $this->getDbService(\TueFind\Db\Service\UserServiceInterface::class)->getByID($userId);
         $requestUserLanguage = $requestUser->last_language;
         $adminUser = $this->getUser();
-        $userAuthorityHistoryTable = $this->getService(\TueFind\Db\Service\UserAuthorityHistoryServiceInterface::class)->getLatestRequestByUserId($userId);
+        $userAuthorityHistoryTable = $this->getDbService(\TueFind\Db\Service\UserAuthorityHistoryServiceInterface::class)->getLatestRequestByUserId($userId);
         $action = $this->params()->fromPost('action');
         $accessInfo = "grant";
         if ($action != '') {
@@ -82,7 +82,7 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
             return $this->forceLogin($e->getMessage());
         }
 
-        return $this->createViewModel(['admins' => $this->getService(\TueFind\Db\Service\UserServiceInterface::class)->getAdmins()]);
+        return $this->createViewModel(['admins' => $this->getDbService(\TueFind\Db\Service\UserServiceInterface::class)->getAdmins()]);
     }
 
     public function showUserAuthoritiesAction()
@@ -93,7 +93,7 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
             return $this->forceLogin($e->getMessage());
         }
 
-        return $this->createViewModel(['users' => $this->getService(\TueFind\Db\Service\UserAuthorityServiceInterface::class)->getAll()]);
+        return $this->createViewModel(['users' => $this->getDbService(\TueFind\Db\Service\UserAuthorityServiceInterface::class)->getAll()]);
     }
 
     public function showUserPublicationsAction()
@@ -103,7 +103,7 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
         } catch (\Exception $e) {
             return $this->forceLogin($e->getMessage());
         }
-        return $this->createViewModel(['publications' => $this->getService(\TueFind\Db\Service\PublicationServiceInterface::class)->getAll()]);
+        return $this->createViewModel(['publications' => $this->getDbService(\TueFind\Db\Service\PublicationServiceInterface::class)->getAll()]);
     }
 
     //generate a path for email templates which is not related to the current user, since VuFind does not yet have such functionality
@@ -125,13 +125,13 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
     {
         $this->forceAdminLogin();
 
-        return $this->createViewModel(['user_authority_history_datas' => $this->getService(\TueFind\Db\Service\UserAuthorityHistoryServiceInterface::class)->getAll()]);
+        return $this->createViewModel(['user_authority_history_datas' => $this->getDbService(\TueFind\Db\Service\UserAuthorityHistoryServiceInterface::class)->getAll()]);
     }
 
     public function showUserPublicationStatisticsAction() {
         $this->forceAdminLogin();
 
-        return $this->createViewModel(['publications' => $this->getService(\TueFind\Db\Service\PublicationServiceInterface::class)->getStatistics()]);
+        return $this->createViewModel(['publications' => $this->getDbService(\TueFind\Db\Service\PublicationServiceInterface::class)->getStatistics()]);
     }
 
 }

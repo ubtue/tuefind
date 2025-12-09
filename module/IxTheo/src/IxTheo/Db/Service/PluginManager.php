@@ -4,7 +4,8 @@ namespace IxTheo\Db\Service;
 
 use VuFind\Db\Service\AbstractDbServiceFactory;
 
-class PluginManager extends \TueFind\Db\Service\PluginManager {
+class PluginManager extends \TueFind\Db\Service\PluginManager
+{
 
     use \TueFind\PluginManagerExtensionTrait;
 
@@ -37,6 +38,6 @@ class PluginManager extends \TueFind\Db\Service\PluginManager {
 
         $this->applyOverrides();
 
-        return parent::__construct($configOrContainerInstance, $v3config);
+        parent::__construct($configOrContainerInstance, $v3config);
     }
 }

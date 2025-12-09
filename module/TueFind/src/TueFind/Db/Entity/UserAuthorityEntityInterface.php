@@ -5,7 +5,8 @@ namespace TueFind\Db\Entity;
 use DateTime;
 use VuFind\Db\Entity\EntityInterface;
 
-interface UserAuthorityEntityInterface extends EntityInterface {
+interface UserAuthorityEntityInterface extends EntityInterface
+{
     public function getId(): ?int;
 
     public function getAuthorityControlNumber(): string;

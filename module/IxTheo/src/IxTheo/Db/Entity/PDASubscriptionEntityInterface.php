@@ -4,7 +4,8 @@ namespace IxTheo\Db\Entity;
 
 use VuFind\Db\Entity\EntityInterface;
 
-interface PDASubscriptionEntityInterface extends EntityInterface {
+interface PDASubscriptionEntityInterface extends EntityInterface
+{
     public function getId(): ?int;
 
     public function getBookTitle(): string;

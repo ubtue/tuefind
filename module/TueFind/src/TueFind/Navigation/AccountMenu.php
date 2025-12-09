@@ -22,7 +22,7 @@ class AccountMenu extends \VuFind\Navigation\AccountMenu
     public function checkAdmins(): bool
     {
         $user = $this->getUser();
-        if ($user && in_array('admin', $user->getRights())) {
+        if ($user && in_array('admin', $user->getTueFindRights())) {
             return true;
         }
         return false;

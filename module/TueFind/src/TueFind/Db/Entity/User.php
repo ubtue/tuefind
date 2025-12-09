@@ -28,9 +28,9 @@ class User extends \VuFind\Db\Entity\User implements UserEntityInterface
     #[ORM\Column(name: 'tuefind_rss_feed_last_notification', type: 'datetime', nullable: true)]
     protected ?DateTime $tuefindRssFeedLastNotification = null;
 
-    // We need to find a solution for this, since the Type SET is not available in Doctrine
-    //#[ORM\Column(name: 'tuefind_rss_feed_last_notification', type: 'set', nullable: true)]
-    protected array $tuefindRights = [];
+    // Careful, this is type SET in the database
+    #[ORM\Column(name: 'tuefind_rights', type: 'string', nullable: true)]
+    protected ?string $tuefindRights = null;
 
     public function getUuid(): string
     {
@@ -90,8 +90,11 @@ class User extends \VuFind\Db\Entity\User implements UserEntityInterface
         return $this;
     }
 
-    public function getRights(): array
+    public function getTueFindRights(): array
     {
-        return $this->tuefindRights;
+        if ($this->tuefindRights == null) {
+            return [];
+        }
+        return explode(',', $this->tuefindRights);
     }
 }

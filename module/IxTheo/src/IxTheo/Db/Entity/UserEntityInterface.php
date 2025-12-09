@@ -2,7 +2,8 @@
 
 namespace IxTheo\Db\Entity;
 
-interface UserEntityInterface extends \TueFind\Db\Entity\UserEntityInterface {
+interface UserEntityInterface extends \TueFind\Db\Entity\UserEntityInterface
+{
     public function getUserType(): string;
     public function setUserType(string $type): static;
 

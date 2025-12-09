@@ -24,7 +24,7 @@ class Publication implements PublicationEntityInterface
 
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
     #[ORM\ManyToOne(targetEntity: UserEntityInterface::class)]
-    protected UserEntityInterface $user = null;
+    protected UserEntityInterface $user;
 
     #[ORM\Column(name: 'control_number', type: 'string', length: 255, nullable: false)]
     protected string $controlNumber;

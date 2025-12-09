@@ -5,12 +5,13 @@ namespace TueFind\Db\Entity;
 use DateTime;
 use VuFind\Db\Entity\EntityInterface;
 
-interface PublicationEntityInterface extends EntityInterface {
+interface PublicationEntityInterface extends EntityInterface
+{
 
     public function getId(): ?int;
 
-    public function getUser(): ?UserEntityInterface;
-    public function setUser(?UserEntityInterface $user): static;
+    public function getUser(): UserEntityInterface;
+    public function setUser(UserEntityInterface $user): static;
 
     public function getControlNumber(): ?string;
     public function setControlNumber(string $controlNumber): static;

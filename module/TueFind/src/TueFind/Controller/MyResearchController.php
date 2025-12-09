@@ -17,8 +17,8 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
 
         $authorityRecords = [];
         foreach ($userAuthorities as $userAuthority) {
-            $authorityRecords[$userAuthority['authority_id']] = $this->getRecordLoader()
-                ->load($userAuthority['authority_id'], 'SolrAuth');
+            $authorityRecords[$userAuthority->getAuthorityControlNumber()] = $this->getRecordLoader()
+                ->load($userAuthority->getAuthorityControlNumber(), 'SolrAuth');
         }
 
         return ['userAuthorities' => $userAuthorities, 'authorityRecords' => $authorityRecords];
@@ -98,17 +98,17 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
         foreach($authorityUsers as $authorityUser) {
             $authorityUserLoader = $this->serviceLocator->get(\VuFind\Record\Loader::class)->load($authorityUser->getAuthorityControlNumber(), 'SolrAuth');
             $authorityUsersArray[] = [
-                'id'=>$authorityUser->authority_id,
-                'access_state'=>$authorityUser->access_state,
+                'id'=>$authorityUser->getAuthorityControlNumber(),
+                'access_state'=>$authorityUser->getAccessState(),
                 'title'=>$authorityUserLoader->getTitle()
             ];
         }
         $publications = [];
         $dbPublications = $this->getDbService(\TueFind\Db\Service\PublicationServiceInterface::class)->getByUserId($user->getId());
         foreach ($dbPublications as $dbPublication) {
-            $existingRecord = $this->getRecordLoader()->load($dbPublication->control_number, 'Solr', /*tolerate_missing=*/true);
-            $dbPublication['title'] = $existingRecord->getTitle();
-            $publications[] = $dbPublication;
+            $existingRecord = $this->getRecordLoader()->load($dbPublication->getControlNumber(), 'Solr', /*tolerate_missing=*/true);
+            $publication = ['db' => $dbPublication, 'record' => $existingRecord];
+            $publications[] = $publication;
         }
 
         $viewParams = $this->getUserAuthoritiesAndRecords($user, /* $onlyGranted = */ true);

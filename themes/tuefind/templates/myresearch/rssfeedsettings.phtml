@@ -16,15 +16,15 @@
       <td><?=$this->transEsc('rss_subscribe_email')?></td>
       <td class="tf-rss-feeds-switcher">
         <label class="switch">
-          <input type="checkbox" <?=($this->user->tuefind_rss_feed_send_emails)?"checked":"";?>  class="rssLabel" name="action" value="<?=(!$this->user->tuefind_rss_feed_send_emails)?"unsubscribe_email":"subscribe_email";?>">
+          <input type="checkbox" <?=($this->user->getRssFeedSendEmails())?"checked":"";?>  class="rssLabel" name="action" value="<?=(!$this->user->getRssFeedSendEmails())?"unsubscribe_email":"subscribe_email";?>">
           <span class="slider round"></span>
         </label>
       </td>
     </tr>
   </table>
   <p>
-    <div class="rssEmailTimestampBlock <?=(!$this->user->tuefind_rss_feed_send_emails)?"tf-d-none":"";?>">
-      <?=$this->transEsc('rss_email_min_timestamp')?> <span><?=$this->user->tuefind_rss_feed_last_notification?></span>.
+    <div class="rssEmailTimestampBlock <?=(!$this->user->getRssFeedSendEmails())?"tf-d-none":"";?>">
+      <?=$this->transEsc('rss_email_min_timestamp')?> <span><?=$this->user->getRssFeedLastNotification()->format($this->config()->dateTimeFormat())?></span>.
     </div>
   </p>
 
@@ -35,13 +35,13 @@
     </tr>
     <?php foreach($rssFeeds as $rssFeed): ?>
       <tr>
-        <td><a href="<?=$rssFeed['website_url']?>" target="_blank"><?=$rssFeed['feed_name']?></a></td>
+        <td><a href="<?=$rssFeed->getWebsiteUrl()?>" target="_blank"><?=$this->escapeHtml($rssFeed->getFeedName())?></a></td>
         <td class="tf-rss-feeds-switcher">
           <label class="switch">
-            <?php if (in_array($rssFeed['id'], $subscribedFeedIds)): ?>
-              <input type="checkbox" checked class="rssLabel" data-id="<?=$rssFeed['id']?>">
+            <?php if (in_array($rssFeed->getId(), $subscribedFeedIds)): ?>
+              <input type="checkbox" checked class="rssLabel" data-id="<?=$rssFeed->getId()?>">
             <?php else: ?>
-              <input type="checkbox" class="rssLabel" data-id="<?=$rssFeed['id']?>">
+              <input type="checkbox" class="rssLabel" data-id="<?=$rssFeed->getId()?>">
             <?php endif; ?>
             <span class="slider round"></span>
           </label>

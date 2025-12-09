@@ -2,18 +2,23 @@
 
 namespace TueFind\Db\Service;
 
+use TueFind\Db\Entity\RssFeedEntityInterface;
 use Laminas\Db\Sql\Predicate\PredicateSet;
 
 class RssFeedService extends RssBaseService implements RssFeedServiceInterface
 {
 
-    public function getFeedsSortedByName()
+    public function getFeedsSortedByName(): array
     {
-        $select = $this->getSql()->select();
-        $select->where->like('subsystem_types', '%' . $this->instance . '%');
-        $select->where(['active'=>'1']);
-        $select->order('feed_name ASC');
-        return $this->selectWith($select);
+        $dql = 'SELECT R '
+            . 'FROM ' . RssFeedEntityInterface::class . ' R '
+            . 'WHERE R.active = 1 '
+            . 'AND R.subsystemTypes LIKE :subsystem_type '
+            . 'ORDER BY R.feedName ASC ';
+
+        $query = $this->entityManager->createQuery($dql);
+        $query->setParameter('subsystem_type', '%' . $this->instance . '%');
+        return $query->getResult();
     }
 
     public function hasUrl($url)

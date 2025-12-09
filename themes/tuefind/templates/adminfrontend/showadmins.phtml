@@ -24,12 +24,12 @@ $this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') 
     <tbody>
       <?php foreach ($this->admins as $user): ?>
         <tr>
-          <td><?=htmlspecialchars($user->username)?></td>
-          <td><?=htmlspecialchars($user->firstname)?></td>
-          <td><?=htmlspecialchars($user->lastname)?></td>
-          <td><?=htmlspecialchars($user->email)?></td>
-          <td><?=htmlspecialchars($user->tuefind_institution)?></td>
-          <td><?=str_replace(',', '<br>', htmlspecialchars($user->tuefind_rights))?></td>
+          <td><?=$this->escapeHtml($user->getUsername())?></td>
+          <td><?=$this->escapeHtml($user->getFirstname())?></td>
+          <td><?=$this->escapeHtml($user->getLastname())?></td>
+          <td><?=$this->escapeHtml($user->getEmail())?></td>
+          <td><?=$this->escapeHtml($user->getInstitution())?></td>
+          <td><?=implode('<br>', $user->getTueFindRights())?></td>
         </tr>
       <?php endforeach; ?>
     </tbody>

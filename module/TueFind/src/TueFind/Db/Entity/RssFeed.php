@@ -20,11 +20,13 @@ class RssFeed implements RssFeedEntityInterface
     #[ORM\Column(name: 'feed_name', type: 'string', length: 200, nullable: false)]
     protected string $feedName;
 
-    //#[ORM\Column(name: 'subsystem_types', type: 'set', length: 255, nullable: false)]
-    protected array $subsystemTypes;
+    // careful! This is type SET in the database
+    #[ORM\Column(name: 'subsystem_types', type: 'string', length: 255, nullable: false)]
+    protected string $subsystemTypes;
 
-    #[ORM\Column(name: 'type', type: 'string', length: 255, nullable: false)]
-    protected string $type;
+    // careful! This is type ENUM in the database
+    #[ORM\Column(name: 'type', type: 'string', length: 255, nullable: false, options: ['default' => 'news'])]
+    protected string $type = 'news';
 
     #[ORM\Column(name: 'feed_url', type: 'string', length: 1000, nullable: false)]
     protected string $feedUrl;
@@ -74,7 +76,7 @@ class RssFeed implements RssFeedEntityInterface
 
     public function getSubsystemTypes(): array
     {
-        return $this->subsystemTypes;
+        return explode(',', $this->subsystemTypes);
     }
 
     public function getDownloaderTimeLimit(): int

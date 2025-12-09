@@ -2,6 +2,7 @@
 
 namespace TueFind\Db\Service;
 
-interface RssFeedServiceInterface extends RssBaseServiceInterface {
+interface RssFeedServiceInterface extends RssBaseServiceInterface
+{
 
 }

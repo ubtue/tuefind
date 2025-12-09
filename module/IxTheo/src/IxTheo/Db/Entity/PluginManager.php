@@ -4,7 +4,8 @@ namespace IxTheo\Db\Entity;
 
 use Laminas\ServiceManager\Factory\InvokableFactory;
 
-class PluginManager extends \TueFind\Db\Entity\PluginManager {
+class PluginManager extends \TueFind\Db\Entity\PluginManager
+{
     /**
      * Constructor
      *
