@@ -93,7 +93,7 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
             return $this->forceLogin($e->getMessage());
         }
 
-        return $this->createViewModel(['users' => $this->getDbService(\TueFind\Db\Service\UserAuthorityServiceInterface::class)->getAll()]);
+        return $this->createViewModel(['userAuthorities' => $this->getDbService(\TueFind\Db\Service\UserAuthorityServiceInterface::class)->getAll()]);
     }
 
     public function showUserPublicationsAction()

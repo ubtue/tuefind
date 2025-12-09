@@ -2,9 +2,6 @@
 
 namespace TueFind\Db\Service;
 
-use Laminas\Db\ResultSet\ResultSetInterface as ResultSet;
-use Laminas\Db\Sql\Select;
-use TueFind\Db\Row\UserAuthority as UserAuthorityRow;
 use TueFind\Db\Entity\UserAuthorityEntityInterface;
 use TueFind\Db\Entity\UserEntityInterface;
 use VuFind\Db\Service\AbstractDbService;
@@ -14,10 +11,13 @@ class UserAuthorityService extends AbstractDbService implements UserAuthorityHis
 
     public function getAll()
     {
-        $select = $this->getSql()->select();
-        $select->join('user', 'tuefind_user_authorities.user_id = user.id', Select::SQL_STAR, Select::JOIN_LEFT);
-        $select->order('username ASC, authority_id ASC');
-        return $this->selectWith($select);
+        $dql = 'SELECT ua '
+            . 'FROM ' . UserAuthorityEntityInterface::class . ' ua '
+            . 'JOIN ua.user u '
+            . 'ORDER BY u.username ASC, ua.authorityControlNumber ASC ';
+
+        $query = $this->entityManager->createQuery($dql);
+        return $query->getResult();
     }
 
     public function hasGrantedAuthorityRight($userId, $authorityIds): bool
@@ -33,37 +33,44 @@ class UserAuthorityService extends AbstractDbService implements UserAuthorityHis
         return count($rows) > 0;
     }
 
-    public function getByUser(UserEntityInterface $user, $accessState=null): ResultSet
+    public function getByUserId(UserEntityInterface|int $userOrId, $accessState=null): array
     {
-        $dql = 'SELECT UA '
-            . 'FROM ' . UserAuthorityEntityInterface::class . ' UA '
-            . 'WHERE UA.user_id = :userId ';
+        $dql = 'SELECT ua '
+            . 'FROM ' . UserAuthorityEntityInterface::class . ' ua '
+            . 'WHERE ua.user = :user ';
 
-        $parameters = ['userId' => $user->getId()];
+        $parameters = [
+            'user' => $this->getDoctrineReference(UserEntityInterface::class, $userOrId),
+        ];
+
         if (isset($accessState)) {
-            $dql .= 'AND UA.access_state = :accessState';
+            $dql .= 'AND ua.accessState = :accessState ';
             $parameters['accessState'] = $accessState;
         }
 
         $query = $this->entityManager->createQuery($dql);
         $query->setParameters($parameters);
-        return $query->getResult();
-
-
-
+        $results = $query->getResult();
+        return $results;
     }
 
-    public function getByUserIdCurrent($userId): ?UserAuthorityRow
+    public function getByUserIdCurrent($userId): ?UserAuthorityEntityInterface
     {
         return $this->select(['user_id' => $userId])->current();
     }
 
-    public function getByAuthorityId($authorityId): ?UserAuthorityRow
+    public function getByAuthorityControlNumber($authorityControlNumber): ?UserAuthorityEntityInterface
     {
-        return $this->select(['authority_id' => $authorityId])->current();
+        $dql = 'SELECT UA '
+            . 'FROM ' . UserAuthorityEntityInterface::class . ' UA '
+            . 'WHERE UA.authorityControlNumber = :authorityControlNumber ';
+
+        $query = $this->entityManager->createQuery($dql);
+        $query->setParameters(['authorityControlNumber' => $authorityControlNumber]);
+        return $query->getOneOrNullResult();
     }
 
-    public function getByUserIdAndAuthorityId($userId, $authorityId): ?UserAuthorityRow
+    public function getByUserIdAndAuthorityId($userId, $authorityId): ?UserAuthorityEntityInterface
     {
         return $this->select(['user_id' => $userId, 'authority_id' => $authorityId])->current();
     }

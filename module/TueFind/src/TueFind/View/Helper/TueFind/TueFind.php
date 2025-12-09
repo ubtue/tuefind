@@ -580,7 +580,7 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
     public function getUserAccessState($authorityId, $userId = null): array
     {
         $table = $this->container->get(\VuFind\Db\Service\PluginManager::class)->get(\TueFind\Db\Service\UserAuthorityServiceInterface::class);
-        $row = $table->getByAuthorityId($authorityId);
+        $row = $table->getByAuthorityControlNumber($authorityId);
 
         $result = ['availability' => '', 'access_state' => ''];
         if ($row == null) {
