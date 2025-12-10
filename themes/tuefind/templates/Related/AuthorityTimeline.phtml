@@ -159,5 +159,5 @@ $(function () {
 });
 EOD;
 ?>
-<?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $jsSnippet2, 'SET')?>
+<?=$this->assetManager()->outputInlineScriptString($jsSnippet2)?>
 <?php endif;?>
