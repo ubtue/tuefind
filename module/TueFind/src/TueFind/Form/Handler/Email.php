@@ -2,7 +2,7 @@
 
 namespace TueFind\Form\Handler;
 
-use Laminas\Mail\Address;
+use Symfony\Component\Mime\Address;
 use Laminas\Mime\Message as MimeMessage;
 use Laminas\Mime\Part as MimePart;
 use Laminas\Mime\Mime;
@@ -105,11 +105,11 @@ class Email extends \VuFind\Form\Handler\Email
 
         $replyToName = $params->fromPost(
             'name',
-            $user ? trim($user->firstname . ' ' . $user->lastname) : null
+            $user ? trim($user->getFirstname() . ' ' . $user->getLastname()) : null
         );
         $replyToEmail = $params->fromPost(
             'email',
-            $user ? $user->email : null
+            $user ? $user->getEmail() : null
         );
 
         // TueFind: Deny Spam from @ixtheo.de and other addresses
@@ -163,7 +163,7 @@ class Email extends \VuFind\Form\Handler\Email
      * @param string $replyToEmail      Reply-to email
      * @param string $emailSubject      Email subject
      * @param string $emailMessage      Email message
-     * @param bool   $enableSpamfilter  TueFind: Enable Spamfilter
+     * @param bool   $tuefindSpamfilter TueFind: Enable Spamfilter
      *
      * @return bool
      */
@@ -176,18 +176,20 @@ class Email extends \VuFind\Form\Handler\Email
         $replyToEmail,
         $emailSubject,
         $emailMessage,
-        $enableSpamfilter = false
+        $tuefindSpamfilter = false
     ): bool {
         try {
             $this->mailer->send(
-                new Address($recipientEmail, $recipientName),
+                new Address($recipientEmail, $recipientName ?? ''),
                 new Address($senderEmail, $senderName),
                 $emailSubject,
                 $emailMessage,
                 null,
                 !empty($replyToEmail)
                     ? new Address($replyToEmail, $replyToName) : null,
-                $enableSpamfilter
+                false,
+                [],
+                $tuefindSpamfilter
             );
             return true;
         } catch (MailException $e) {

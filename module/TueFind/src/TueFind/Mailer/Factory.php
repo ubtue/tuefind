@@ -6,21 +6,26 @@ use Psr\Container\ContainerInterface;
 
 class Factory extends \VuFind\Mailer\Factory {
 
-    public function __invoke(ContainerInterface $container, $requestedName,
-        array $options = null
+    public function __invoke(
+        ContainerInterface $container,
+        $requestedName,
+        ?array $options = null
     ) {
-        if (!empty($options)) {
-            throw new \Exception('Unexpected options passed to factory.');
+        $class = parent::__invoke($container, $requestedName, $options);
+
+        // Load additional configurations:
+        $config = $container->get(\VuFind\Config\ConfigManagerInterface::class)->getConfigArray('config');
+
+        // Fallback to old config structure if new one is not set (local_overrides)
+        $fromOverride = $config['Mail']['override_from'] ?? null;
+        if ($fromOverride == null) {
+            $class->setFromAddressOverride($config['Site']['email_from'] ?? null);
         }
 
-        // Load configurations:
-        $config = $container->get('VuFind\Config\PluginManager')->get('config');
+        // Additional settings
+        $class->setSiteAddress($config['Site']['email']);
+        $class->setSiteTitle($config['Site']['title']);
 
-        // Create service:
-        $class = new $requestedName($this->getTransport($config), $container);
-        if (!empty($config->Mail->override_from)) {
-            $class->setFromAddressOverride($config->Mail->override_from);
-        }
         return $class;
     }
 }

@@ -2,160 +2,167 @@
 
 namespace TueFind\Mailer;
 
-use Laminas\Mail\Address;
-use Laminas\Mail\AddressList;
-use Laminas\Mime\Message as MimeMessage;
-use Laminas\Mime\Part as MimePart;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Email;
+use Symfony\Component\Mime\Exception\RfcComplianceException;
 use VuFind\Exception\Mail as MailException;
 
 class Mailer extends \VuFind\Mailer\Mailer
 {
-    protected $container;
-
-    protected $config;
-
-    public function __construct(\Laminas\Mail\Transport\TransportInterface $transport, \Psr\Container\ContainerInterface $container)
-    {
-        parent::__construct($transport);
-        $this->container = $container;
-        $this->config = $container->get('VuFind\Config')->get('config');
-    }
+    protected string $siteAddress;
+    protected string $siteTitle;
 
     /**
-     * Send an email message, append custom footer to body
-     *
-     * @param string|Address|AddressList $to      Recipient email address (or
-     * delimited list)
-     * @param string|Address             $from    Sender name and email address
-     * @param string                     $subject Subject line for message
-     * @param string|MimeMessage         $body    Message body
-     * @param string                     $cc      CC recipient (null for none)
-     * @param string|Address|AddressList $replyTo Reply-To address (or delimited
-     * list, null for none)
-     * @param bool                       $enableSpamfilter  TueFind: Add header
-     * to use anti spam. Postfix must be configured accordingly.
-     *
-     * @throws MailException
-     * @return void
+     * TueFind:
+     * (- Override from via config: This was replaced by a standard feature in 11.0)
+     * - Enable Spamfilter
+     * - Add Footer
      */
-    public function send($to, $from, $subject, $body, $cc = null, $replyTo = null, $enableSpamfilter = false)
-    {
-        // TueFind-specific modifications
-        $email = $this->config->Site->email;
-        $email_from = $this->config->Site->email_from;
-
-        if ($email != null) {
-            $footer = $this->translate('mail_footer_please_contact') . PHP_EOL . $email;
-            if ($body instanceof MimeMessage) {
-                $part = new MimePart();
-                $part->setType(\Laminas\Mime\Mime::TYPE_TEXT);
-                $part->setContent($footer);
-                $body->addPart($part);
-            } else {
-                $body .= PHP_EOL . '--' . PHP_EOL . $footer;
-            }
-        }
-
-        if ($email_from != null) {
-            // We need to use an Address object here to be able to
-            // include naming information if necessary.
-            $from = Address::fromString($email_from);
-        }
-
-        // Original VuFind-Code starts here
-        $recipients = $this->convertToAddressList($to);
-        $replyTo = $this->convertToAddressList($replyTo);
-
-        // Validate email addresses:
-        if ($this->maxRecipients > 0) {
-            if ($this->maxRecipients < count($recipients)) {
-                throw new MailException('Too Many Email Recipients');
-            }
-        }
-        $validator = new \Laminas\Validator\EmailAddress();
-        if (count($recipients) == 0) {
-            throw new MailException('Invalid Recipient Email Address');
-        }
-        foreach ($recipients as $current) {
-            $validator_ = new \Laminas\Validator\EmailAddress();
-            if ($current->getEmail() == "pica_template_generator@localhost") {
-                $validator_->setOptions([
-                    'allow' => \Laminas\Validator\Hostname::ALLOW_LOCAL
-                ]);
-            }
-            if (!$validator_->isValid($current->getEmail())) {
-                throw new MailException('Invalid Recipient Email Address');
-            }
-        }
-
-
-        foreach ($replyTo as $current) {
-            if (!$validator->isValid($current->getEmail())) {
-                throw new MailException('Invalid Reply-To Email Address');
-            }
-        }
-        $fromEmail = ($from instanceof Address)
-            ? $from->getEmail() : $from;
-        if (!$validator->isValid($fromEmail)) {
-            throw new MailException('Invalid Sender Email Address');
-        }
-
-        if (!empty($this->fromAddressOverride)
-            && $this->fromAddressOverride != $fromEmail
-        ) {
-            // Add the original from address as the reply-to address unless
-            // a reply-to address has been specified
-            if (count($replyTo) === 0) {
-                $replyTo->add($fromEmail);
-            }
+    public function send(
+        string|Address|array $to,
+        string|Address $from,
+        string $subject,
+        string|Email $body,
+        string|Address|array|null $cc = null,
+        string|Address|array|null $replyTo = null,
+        bool $subjectInBody = true,
+        array $parts = [],
+        bool $tuefindSpamfilter=false
+    ) {
+        try {
             if (!($from instanceof Address)) {
                 $from = new Address($from);
             }
+        } catch (RfcComplianceException $e) {
+            throw new MailException('Invalid Sender Email Address', MailException::ERROR_INVALID_SENDER, $e);
+        }
+        try {
+            $recipients = $this->convertToAddressList($to);
+        } catch (RfcComplianceException $e) {
+            throw new MailException('Invalid Recipient Email Address', MailException::ERROR_INVALID_RECIPIENT, $e);
+        }
+        try {
+            $replyTo = $this->convertToAddressList($replyTo);
+        } catch (RfcComplianceException $e) {
+            throw new MailException('Invalid Reply-To Email Address', MailException::ERROR_INVALID_REPLY_TO, $e);
+        }
+        try {
+            $cc = $this->convertToAddressList($cc);
+        } catch (RfcComplianceException $e) {
+            throw new MailException('Invalid CC Email Address', MailException::ERROR_INVALID_RECIPIENT, $e);
+        }
+
+        // Validate recipient email address count:
+        if (count($recipients) == 0) {
+            throw new MailException('Invalid Recipient Email Address', MailException::ERROR_INVALID_RECIPIENT);
+        }
+        if ($this->maxRecipients > 0) {
+            if ($this->maxRecipients < count($recipients)) {
+                throw new MailException(
+                    'Too Many Email Recipients',
+                    MailException::ERROR_TOO_MANY_RECIPIENTS
+                );
+            }
+        }
+
+        if (
+            !empty($this->fromAddressOverride)
+            && $this->fromAddressOverride != $from->getAddress()
+        ) {
+            // Add the original from address as the reply-to address unless
+            // a reply-to address has been specified
+            if (!$replyTo) {
+                $replyTo[] = $from->getAddress();
+            }
             $name = $from->getName();
             if (!$name) {
-                [$fromPre] = explode('@', $from->getEmail());
+                [$fromPre] = explode('@', $from->getAddress());
                 $name = $fromPre ? $fromPre : null;
             }
             $from = new Address($this->fromAddressOverride, $name);
         }
 
-        // Convert all exceptions thrown by mailer into MailException objects:
         try {
             // Send message
-            $message = $body instanceof MimeMessage
-                ? $this->getNewBlankMessage()
-                : $this->getNewMessage();
-            $message->addFrom($from)
-                ->addTo($recipients)
-                ->setBody($body)
-                ->setSubject($subject);
-            if ($cc !== null) {
-                $message->addCc($cc);
+            if ($body instanceof Email) {
+                $email = $body;
+                if (null === $email->getSubject()) {
+                    $email->subject($subject);
+                }
+            } else {
+                if ($subjectInBody) {
+                    // Extract any subject line at the beginning of the message body:
+                    $body = preg_replace_callback(
+                        '/^Subject: (.+)\n+/',
+                        function ($matches) use (&$subject) {
+                            $subject = $matches[1];
+                            return '';
+                        },
+                        $body
+                    );
+                }
+                $email = $this->getNewMessage();
+                $email->text($body);
+                $email->subject($subject);
             }
-            if ($replyTo) {
-                $message->addReplyTo($replyTo);
-            }
+
+            // TueFind: Append footer
+            $tmpBody = $email->getBody()->bodyToString();
+            $footer = $this->translate('mail_footer_please_contact') . PHP_EOL . $this->siteAddress;
+            $tmpBody .= PHP_EOL . '--' . PHP_EOL . $footer;
+            $email->text($tmpBody);
 
             // TueFind: Add header for spamfilter
-            if ($enableSpamfilter) {
-                $headers = $message->getHeaders();
-                $headers->addHeaderLine('X-TueFind-Spamfilter', 'enabled');
+            if ($tuefindSpamfilter) {
+                $headers = $email->getHeaders()->addTextHeader('X-TueFind-Spamfilter', 'enabled');
             }
 
-            $this->getTransport()->send($message);
+            $email->addFrom($from);
+            foreach ($recipients as $current) {
+                $email->addTo($current);
+            }
+            foreach ($cc as $current) {
+                $email->addCc($current);
+            }
+            foreach ($replyTo as $current) {
+                $email->addReplyTo($current);
+            }
+            foreach ($parts as $part) {
+                $email->addPart($part);
+            }
+            $this->getTransport()->send($email);
+            if ($logFile = $this->options['message_log'] ?? null) {
+                $format = $this->options['message_log_format'] ?? 'plain';
+                $data = 'serialized' === $format
+                    ? base64_encode(serialize($email)) . "\x1E" // Record Separator
+                    : $email->toString() . "\n\n";
+                file_put_contents($logFile, $data, FILE_APPEND);
+            }
         } catch (\Exception $e) {
-            throw new MailException($e->getMessage());
+            $this->logError((string)$e);
+            // Convert all exceptions thrown by mailer into MailException objects:
+            throw new MailException($e->getMessage(), MailException::ERROR_UNKNOWN, $e);
         }
+    }
+
+    public function setSiteAddress(string $siteAddress)
+    {
+        $this->siteAddress = $siteAddress;
+    }
+
+    public function setSiteTitle(string $siteTitle)
+    {
+        $this->siteTitle = $siteTitle;
     }
 
     public function getDefaultLinkSubject()
     {
-        return $this->translate('bulk_email_title', ['%%siteTitle%%' => $this->config->Site->title]);
+        return $this->translate('bulk_email_title', ['%%siteTitle%%' => $this->siteTitle]);
     }
 
     public function getDefaultRecordSubject($record)
     {
-        return $this->translate('Library Catalog Record', [ '%%siteTitle%%' => $this->config->Site->title ]) . ': '
+        return $this->translate('Library Catalog Record', [ '%%siteTitle%%' => $this->siteTitle ]) . ': '
             . $record->getBreadcrumb();
     }
 }
