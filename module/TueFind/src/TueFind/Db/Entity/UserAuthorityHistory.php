@@ -46,14 +46,32 @@ class UserAuthorityHistory implements UserAuthorityHistoryEntityInterface
         return $this->authorityControlNumber;
     }
 
+    public function setAuthorityControlNumber(string $authorityControlNumber): static
+    {
+        $this->authorityControlNumber = $authorityControlNumber;
+        return $this;
+    }
+
     public function getUser(): UserEntityInterface
     {
         return $this->user;
     }
 
+    public function setUser(UserEntityInterface $user): static
+    {
+        $this->user = $user;
+        return $this;
+    }
+
     public function getAdmin(): ?UserEntityInterface
     {
         return $this->admin;
+    }
+
+    public function setAdmin(UserEntityInterface $admin): static
+    {
+        $this->admin = $admin;
+        return $this;
     }
 
     public function getRequestUserDate(): DateTime
@@ -66,9 +84,21 @@ class UserAuthorityHistory implements UserAuthorityHistoryEntityInterface
         return $this->processAdminDate;
     }
 
+    public function setProcessAdminDate(DateTime $dateTime): static
+    {
+        $this->processAdminDate = $dateTime;
+        return $this;
+    }
+
     public function getAccessState(): string
     {
         return $this->accessState;
+    }
+
+    public function setAccessState(string $accessState): static
+    {
+        $this->accessState = $accessState;
+        return $this;
     }
 
     public function updateUserAuthorityHistory($adminId, $access)

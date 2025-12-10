@@ -273,22 +273,23 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
         }
 
         $dbTablePluginManager = $this->serviceLocator->get(\VuFind\Db\Service\PluginManager::class);
-        $rssSubscriptionsTable = $dbTablePluginManager->get(\TueFind\Db\Service\RssSubscriptionServiceInterface::class);
-        $rssFeedsTable = $dbTablePluginManager->get(\TueFind\Db\Service\RssFeedServiceInterface::class);
+        $rssSubscriptionsService = $dbTablePluginManager->get(\TueFind\Db\Service\RssSubscriptionServiceInterface::class);
+        $rssFeedsService = $dbTablePluginManager->get(\TueFind\Db\Service\RssFeedServiceInterface::class);
         $action = $this->getRequest()->getPost('action', '');
         $feedId = $this->getRequest()->getPost('id', '');
+        $feed = $rssFeedsService->getEntityById(\TueFind\Db\Entity\RssFeedEntityInterface::class, $feedId);
         if ($action == 'add') {
-            $rssSubscriptionsTable->addSubscription($user->getId(), $feedId);
+            $rssSubscriptionsService->addSubscription($user, $feed);
         } elseif ($action == 'remove') {
-            $rssSubscriptionsTable->removeSubscription($user->getId(), $feedId);
+            $rssSubscriptionsService->removeSubscription($user, $feed);
         } elseif ($action == 'subscribe_email') {
             $user->setRssFeedSendEmails(true);
         } elseif ($action == 'unsubscribe_email') {
             $user->setRssFeedSendEmails(false);
         }
 
-        return $this->createViewModel(['rssFeeds' => $rssFeedsTable->getFeedsSortedByName(),
-                                       'rssSubscriptions' => $rssSubscriptionsTable->getSubscriptionsForUserSortedByName($user->getId()),
+        return $this->createViewModel(['rssFeeds' => $rssFeedsService->getFeedsSortedByName(),
+                                       'rssSubscriptions' => $rssSubscriptionsService->getSubscriptionsForUserSortedByName($user->getId()),
                                        'user' => $user]);
     }
 

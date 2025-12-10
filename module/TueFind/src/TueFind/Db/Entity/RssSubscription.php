@@ -31,8 +31,20 @@ class RssSubscription implements RssSubscriptionEntityInterface
         return $this->user;
     }
 
+    public function setUser(UserEntityInterface $user): static
+    {
+        $this->user = $user;
+        return $this;
+    }
+
     public function getRssFeed(): RssFeedEntityInterface
     {
-        return $this->rssFeed();
+        return $this->rssFeed;
+    }
+
+    public function setRssFeed(RssFeedEntityInterface $rssFeed): static
+    {
+        $this->rssFeed = $rssFeed;
+        return $this;
     }
 }

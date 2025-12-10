@@ -3,10 +3,11 @@
 namespace TueFind\Db\Service;
 
 use TueFind\Db\Entity\RssSubscriptionEntityInterface;
+use TueFind\Db\Entity\RssFeedEntityInterface;
+use TueFind\Db\Entity\UserEntityInterface;
 
 class RssSubscriptionService extends RssBaseService
 {
-
     public function getSubscriptionsForUserSortedByName($userId): array
     {
         $dql = 'SELECT S FROM ' . RssSubscriptionEntityInterface::class . ' S ';
@@ -20,16 +21,29 @@ class RssSubscriptionService extends RssBaseService
         return $query->getResult();
     }
 
-    public function addSubscription($userId, $feedId)
+    public function addSubscription(UserEntityInterface $user, RssFeedEntityInterface $feed): RssSubscriptionEntityInterface
     {
-        $this->insert(['user_id' => $userId, 'rss_feeds_id' => $feedId]);
+        $subscription = $this->entityPluginManager->get(RssSubscriptionEntityInterface::class);
+        $subscription->setUser($user);
+        $subscription->setRssFeed($feed);
+        $this->persistEntity($subscription);
+        return $subscription;
     }
 
-    public function removeSubscription($userId, $feedId)
+    public function getSubscription(UserEntityInterface $user, RssFeedEntityInterface $feed)
     {
-        $delete = $this->getSql()->delete();
-        $delete->where(['user_id' => $userId, 'rss_feeds_id' => $feedId]);
-        $this->deleteWith($delete);
+        $dql = 'SELECT r '
+            . 'FROM ' . RssSubscriptionEntityInterface::class . ' r '
+            . 'WHERE r.user = :user '
+            . 'AND r.rssFeed = :feed ';
+        $query = $this->entityManager->createQuery($dql);
+        $query->setParameters(['user' => $user, 'feed' => $feed]);
+        return $query->getSingleResult();
     }
 
+    public function removeSubscription(UserEntityInterface $user, RssFeedEntityInterface $feed)
+    {
+        $subscription = $this->getSubscription($user, $feed);
+        $this->deleteEntity($subscription);
+    }
 }
