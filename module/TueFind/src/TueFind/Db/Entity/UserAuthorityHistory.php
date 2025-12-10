@@ -68,7 +68,7 @@ class UserAuthorityHistory implements UserAuthorityHistoryEntityInterface
         return $this->admin;
     }
 
-    public function setAdmin(UserEntityInterface $admin): static
+    public function setAdmin(?UserEntityInterface $admin): static
     {
         $this->admin = $admin;
         return $this;

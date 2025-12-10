@@ -31,7 +31,7 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
         $userId = $this->params()->fromRoute('user_id');
         $authorityId = $this->params()->fromRoute('authority_id');
         $entry = $this->getDbService(\TueFind\Db\Service\UserAuthorityServiceInterface::class)->getByUserIdAndAuthorityId($userId, $authorityId);
-        $requestUser = $this->getDbService(\TueFind\Db\Service\UserServiceInterface::class)->getByID($userId);
+        $requestUser = $this->getDbService(\TueFind\Db\Service\UserServiceInterface::class)->getEntityByID(\TueFind\Db\Entity\UserEntityInterface::class, $userId);
         $requestUserLanguage = $requestUser->last_language;
         $adminUser = $this->getUser();
         $userAuthorityHistoryTable = $this->getDbService(\TueFind\Db\Service\UserAuthorityHistoryServiceInterface::class)->getLatestRequestByUserId($userId);

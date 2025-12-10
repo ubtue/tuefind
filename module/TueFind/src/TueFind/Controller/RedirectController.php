@@ -9,9 +9,9 @@ use VuFindSearch\Query\Query;
  * This controller is used to redirect to a given URL and save it with a timestamp.
  * (e.g. to Track how many times an external service is used, without storing person-related data.)
  */
-class RedirectController extends \VuFind\Controller\AbstractBase implements \VuFind\Db\Table\DbTableAwareInterface
+class RedirectController extends \VuFind\Controller\AbstractBase implements \VuFind\Db\Service\DbServiceAwareInterface
 {
-    use \VuFind\Db\Table\DbTableAwareTrait;
+    use \VuFind\Db\Table\DbServiceAwareTrait;
 
     /**
      * Allowed Group IDs in Redirects
@@ -64,7 +64,7 @@ class RedirectController extends \VuFind\Controller\AbstractBase implements \VuF
         }
 
         // Deny unknown URLs
-        if (!$this->getDbTable('rss_feed')->hasUrl($url) && !$this->getDbTable('rss_item')->hasUrl($url)) {
+        if (!$this->getDbService(\TueFind\Db\Service\RssFeedServiceInterface::class)->hasUrl($url) && !$this->getDbService(\TueFind\Db\Service\RssItemServiceInterface::class)->hasUrl($url)) {
             $this->getResponse()->setStatusCode(404);
             $this->getResponse()->setReasonPhrase('Not Found (Unknown Redirect Target URL: ' . $url . ')');
             return;
@@ -77,7 +77,7 @@ class RedirectController extends \VuFind\Controller\AbstractBase implements \VuF
             return;
         }
 
-        $this->getDbTable('redirect')->insertUrl($url, $group);
+        $this->getDbService('redirect')->insertUrl($url, $group);
         $view = $this->createViewModel();
         $view->redirectTarget = $url;
         $view->redirectDelay = 0;

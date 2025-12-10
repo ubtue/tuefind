@@ -56,7 +56,17 @@ class UserAuthorityService extends AbstractDbService implements UserAuthorityHis
 
     public function getByUserIdCurrent($userId): ?UserAuthorityEntityInterface
     {
-        return $this->select(['user_id' => $userId])->current();
+        $dql = 'SELECT ua '
+            . 'FROM ' . UserAuthorityEntityInterface::class . ' ua '
+            . 'WHERE ua.user = :user ';
+
+        $parameters = [
+            'user' => $this->getDoctrineReference(UserEntityInterface::class, $userId),
+        ];
+
+        $query = $this->entityManager->createQuery($dql);
+        $query->setParameters($parameters);
+        return $query->getOneOrNullResult();
     }
 
     public function getByAuthorityControlNumber($authorityControlNumber): ?UserAuthorityEntityInterface

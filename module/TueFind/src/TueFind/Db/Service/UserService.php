@@ -26,11 +26,6 @@ class UserService extends \VuFind\Db\Service\UserService implements UserServiceI
         return $this->select(['tuefind_uuid' => $uuid])->current();
     }
 
-    public function getByID($userID)
-    {
-        return $this->select(['id' => $userID])->current();
-    }
-
     public function getAdmins()
     {
         $dql = 'SELECT U '

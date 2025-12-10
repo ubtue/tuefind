@@ -10,8 +10,10 @@ use VuFind\View\Helper\Root\SearchTabs;
  * General View Helper for TueFind, containing miscellaneous functions
  */
 class TueFind extends \Laminas\View\Helper\AbstractHelper
-              implements \VuFind\I18n\Translator\TranslatorAwareInterface
+              implements \VuFind\I18n\Translator\TranslatorAwareInterface,
+                         \VuFind\Db\Service\DbServiceAwareInterface
 {
+    use \VuFind\Db\Service\DbServiceAwareTrait;
     use \VuFind\I18n\Translator\TranslatorAwareTrait;
 
     protected $container;
@@ -272,7 +274,7 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
      */
     public function getRssNewsEntries(int $maxItemCount=null, bool $onlyNewestItemPerFeed=false) {
 
-        $rssTable = $this->container->get(\VuFind\Db\Service\PluginManager::class)->get('rss_item');
+        $rssTable = $this->getDbService(\TueFind\Db\Service\RssItemServiceInterface::class);
         $rssItems = $rssTable->getItemsSortedByPubDate($this->getTueFindInstance());
 
         $rssItemsToReturn = [];
@@ -573,13 +575,13 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
     }
 
     public function getPublicationByControlNumber(string $controlNumber) {
-        $publicationTable = $this->container->get(\VuFind\Db\Service\PluginManager::class)->get('publication');
+        $publicationTable = $this->getDbService(\TueFind\Db\Service\PublicationServiceInterface::class);
         return $publicationTable->getByControlNumber($controlNumber);
     }
 
     public function getUserAccessState($authorityId, $userId = null): array
     {
-        $table = $this->container->get(\VuFind\Db\Service\PluginManager::class)->get(\TueFind\Db\Service\UserAuthorityServiceInterface::class);
+        $table = $this->getDbService(\TueFind\Db\Service\UserAuthorityServiceInterface::class);
         $row = $table->getByAuthorityControlNumber($authorityId);
 
         $result = ['availability' => '', 'access_state' => ''];
@@ -605,7 +607,7 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
         $manager = $auth->getManager();
         $user = $manager->getUserObject();
         if($user) {
-            $table = $this->container->get(\VuFind\Db\Service\PluginManager::class)->get(\TueFind\Db\Service\UserAuthorityServiceInterface::class);
+            $table = $this->getDbService(\TueFind\Db\Service\UserAuthorityServiceInterface::class);
             foreach($authorsIds as $authorityId) {
                 $row = $table->getByUserIdAndAuthorityId($user->id,$authorityId);
                 if(!empty($row) && $row->access_state == "granted") {
@@ -624,7 +626,7 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
         $manager = $auth->getManager();
         $user = $manager->getUserObject();
         if($user) {
-            $table = $this->container->get(\VuFind\Db\Service\PluginManager::class)->get(\TueFind\Db\Service\UserAuthorityServiceInterface::class);
+            $table = $this->getDbService(\TueFind\Db\Service\UserAuthorityServiceInterface::class);
             foreach($secondaryAuthorsIds as $authorId) {
                 $row = $table->getByUserIdAndAuthorityId($user->id,$authorId);
                 if(!empty($row) && $row->access_state == "granted") {
@@ -639,7 +641,7 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
 
     public function userAlreadyMadeAuthorityRequest($userId): bool
     {
-        $table = $this->container->get(\VuFind\Db\Service\PluginManager::class)->get(\TueFind\Db\Service\UserAuthorityServiceInterface::class);
+        $table = $this->getDbService(\TueFind\Db\Service\UserAuthorityServiceInterface::class);
         $row = $table->getByUserIdCurrent($userId);
         return (empty($row))? false: true;
     }
@@ -658,7 +660,7 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
             }
         }
 
-        $table = $this->container->get(\VuFind\Db\Service\PluginManager::class)->get(\TueFind\Db\Service\UserAuthorityServiceInterface::class);
+        $table = $this->getDbService(\TueFind\Db\Service\UserAuthorityServiceInterface::class);
         return $table->hasGrantedAuthorityRight($userId, $authorsIds);
     }
 

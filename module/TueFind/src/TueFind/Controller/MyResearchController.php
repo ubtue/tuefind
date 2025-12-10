@@ -272,11 +272,12 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
             return $this->forceLogin();
         }
 
-        $dbTablePluginManager = $this->serviceLocator->get(\VuFind\Db\Service\PluginManager::class);
-        $rssSubscriptionsService = $dbTablePluginManager->get(\TueFind\Db\Service\RssSubscriptionServiceInterface::class);
-        $rssFeedsService = $dbTablePluginManager->get(\TueFind\Db\Service\RssFeedServiceInterface::class);
         $action = $this->getRequest()->getPost('action', '');
         $feedId = $this->getRequest()->getPost('id', '');
+
+        $userService = $this->getDbService(\TueFind\Db\Service\UserServiceInterface::class);
+        $rssSubscriptionsService = $this->getDbService(\TueFind\Db\Service\RssSubscriptionServiceInterface::class);
+        $rssFeedsService = $this->getDbService(\TueFind\Db\Service\RssFeedServiceInterface::class);
         $feed = $rssFeedsService->getEntityById(\TueFind\Db\Entity\RssFeedEntityInterface::class, $feedId);
         if ($action == 'add') {
             $rssSubscriptionsService->addSubscription($user, $feed);
@@ -284,8 +285,10 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
             $rssSubscriptionsService->removeSubscription($user, $feed);
         } elseif ($action == 'subscribe_email') {
             $user->setRssFeedSendEmails(true);
+            $userService->persistEntity($user);
         } elseif ($action == 'unsubscribe_email') {
             $user->setRssFeedSendEmails(false);
+            $userService->persistEntity($user);
         }
 
         return $this->createViewModel(['rssFeeds' => $rssFeedsService->getFeedsSortedByName(),

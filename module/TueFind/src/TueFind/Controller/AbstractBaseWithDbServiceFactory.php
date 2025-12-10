@@ -4,7 +4,7 @@ namespace TueFind\Controller;
 
 use Psr\Container\ContainerInterface;
 
-class AbstractBaseWithDbTableFactory extends \VuFind\Controller\AbstractBaseFactory
+class AbstractBaseWithDbServiceFactory extends \VuFind\Controller\AbstractBaseFactory
 {
     /**
      * Create an object
@@ -26,12 +26,12 @@ class AbstractBaseWithDbTableFactory extends \VuFind\Controller\AbstractBaseFact
         $instance = parent::__invoke($container, $requestedName, $options);
 
         // this should be similar to VuFind\ServiceManager\ServiceInitializer
-        if ($instance instanceof \VuFind\Db\Table\DbTableAwareInterface) {
-            $instance->setDbTableManager(
-                $container->get(\TueFind\Db\Table\PluginManager::class)
+        if ($instance instanceof \VuFind\Db\Service\DbServiceAwareInterface) {
+            $instance->setDbServiceManager(
+                $container->get(\TueFind\Db\Service\PluginManager::class)
             );
         }
-        
+
         return $instance;
     }
 }
