@@ -32,10 +32,10 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
     protected function getProfileParams()
     {
         return [
-            'firstname' => '',
-            'lastname' => '',
-            'tuefind_institution' => '',
-            'tuefind_country' => ''
+            'firstname' => ['default' => '', 'getter' => 'getFirstname', 'setter' => 'setFirstname'],
+            'lastname' => ['default' => '', 'getter' => 'getLastname', 'setter' => 'setLastname'],
+            'tuefind_institution' => ['default' => '', 'getter' => 'getInstitution', 'setter' => 'setInstitution'],
+            'tuefind_country' => ['default' => '', 'getter' => 'getCountry', 'setter' => 'setCountry'],
         ];
     }
 
@@ -60,8 +60,8 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
             // so that the verify_email functionality actually has an effect.
             $request = $this->getRequest();
 
-            foreach ($profileParams as $param => $default) {
-                $user->$param = $request->getPost()->get($param, $default);
+            foreach ($profileParams as $param => $paramSettings) {
+                $user->{$paramSettings['setter']}($request->getPost()->get($param, $paramSettings['default']));
             }
             $user->save();
             $this->getAuthManager()->updateSession($user);
@@ -69,9 +69,9 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
 
         $view = parent::profileAction();
         $post = $this->getRequest()->getPost();
-        foreach ($profileParams as $param => $default) {
+        foreach ($profileParams as $param => $paramSettings) {
             if (!$post->$param) {
-                $post->$param = $user->$param;
+                $post->$param = $user->{$paramSettings['getter']}();
             }
         }
         $view->request = $post;

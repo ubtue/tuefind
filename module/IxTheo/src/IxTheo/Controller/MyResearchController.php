@@ -197,8 +197,8 @@ class MyResearchController extends \TueFind\Controller\MyResearchController
     protected function getProfileParams()
     {
         $params = [
-            'ixtheo_title' => '',
-            'ixtheo_appellation' => ''
+            'ixtheo_title' => ['default' => '', 'getter' => 'getTitle', 'setter' => 'setTitle'],
+            'ixtheo_appellation' => ['default' => '', 'getter' => 'getAppellation', 'setter' => 'setAppellation'],
         ];
         return array_merge(parent::getProfileParams(), $params);
     }

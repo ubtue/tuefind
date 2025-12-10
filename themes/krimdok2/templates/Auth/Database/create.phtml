@@ -20,7 +20,7 @@
 ?>
 <div class="form-group">
   <label class="control-label" for="account_username"><?=$this->transEsc('Username')?>:</label>
-  <input id="account_username" type="text" name="username" required aria-required="true" value="<?=$this->profile ? $this->escapeHtmlAttr($this->user->username) : $this->escapeHtmlAttr($this->request->get('username'))?>" class="form-control" <?=$this->profile ? 'disabled' : ''?>/>
+  <input id="account_username" type="text" name="username" required aria-required="true" value="<?=$this->profile ? $this->escapeHtmlAttr($this->user->getUsername()) : $this->escapeHtmlAttr($this->request->get('username'))?>" class="form-control" <?=$this->profile ? 'disabled' : ''?>/>
   <?php if (!$this->profile && $this->usernamePolicy['hint']): ?>
     <div class="help-block"><?=$this->transEsc($this->usernamePolicy['hint']) ?></div>
   <?php endif; ?>
@@ -28,7 +28,7 @@
 </div>
 <div class="form-group">
   <label class="control-label" for="account_email"><?=$this->transEsc('Email Address')?>:</label>
-  <input id="account_email" type="email" name="email" required aria-required="true" value="<?=$this->profile ? $this->escapeHtmlAttr($this->user->email) : $this->escapeHtmlAttr($this->request->get('email'))?>" class="form-control" <?=$this->profile ? 'disabled' : ''?>/>
+  <input id="account_email" type="email" name="email" required aria-required="true" value="<?=$this->profile ? $this->escapeHtmlAttr($this->user->getEmail()) : $this->escapeHtmlAttr($this->request->get('email'))?>" class="form-control" <?=$this->profile ? 'disabled' : ''?>/>
   <div class="help-block with-errors"></div>
 </div>
 <?php if (!$this->profile): ?>
@@ -67,9 +67,9 @@
 <div class="form-group">
   <label class="control-label" for="account_newsletter"><?=$this->transEsc('Newsletter')?>:</label>
   <!-- intentionally do not use class="form-control" on checkbox, looks horrible  -->
-  <br><input id="account_newsletter" type="checkbox" name="krimdok_subscribed_to_newsletter" <?=$this->profile ? ($this->user->krimdok_subscribed_to_newsletter ? 'checked value="1"' : '') : ''?> <?=$this->profile ? 'disabled="disabled"' : ''?>> <?=$this->transEsc('newsletter_info3')?>
+  <br><input id="account_newsletter" type="checkbox" name="krimdok_subscribed_to_newsletter" <?=$this->profile ? ($this->user->getSubscribedToNewsletter() ? 'checked value="1"' : '') : ''?> <?=$this->profile ? 'disabled="disabled"' : ''?>> <?=$this->transEsc('newsletter_info3')?>
   <?php if ($this->profile): ?>
     <!-- If the checkbox is disabled, we need a hidden input field to prevent loss of information -->
-    <input type="hidden" name="krimdok_subscribed_to_newsletter" value="<?=intval($this->user->krimdok_subscribed_to_newsletter)?>">
+    <input type="hidden" name="krimdok_subscribed_to_newsletter" value="<?=intval($this->user->getSubscribedToNewsletter())?>">
   <?php endif; ?>
 </div>

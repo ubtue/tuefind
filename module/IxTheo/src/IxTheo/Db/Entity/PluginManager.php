@@ -19,6 +19,7 @@ class PluginManager extends \TueFind\Db\Entity\PluginManager
         array $v3config = []
     ) {
         $this->addOverride('aliases', \TueFind\Db\Entity\UserEntityInterface::class, UserEntityInterface::class);
+        $this->addOverride('aliases', \TueFind\Db\Entity\User::class, User::class);
 
         $this->addOverride('aliases', PDASubscriptionEntityInterface::class, PDASubscription::class);
         $this->addOverride('aliases', SubscriptionEntityInterface::class, Subscription::class);
