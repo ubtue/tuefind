@@ -34,6 +34,6 @@
      */
     ?>
     <button id="licenseButton" class="btn btn-primary" data-dismiss="modal">Zum Volltext</button>
-    <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, '$(\'#licenseButton\').click(function() { window.open(\'' . $this->licenseUrl . '\', \'_blank\')});', 'SET')?>
+    <?=$this->assetManager()->outputInlineScriptString('$(\'#licenseButton\').click(function() { window.open(\'' . $this->licenseUrl . '\', \'_blank\')});')?>
   <?php endif; ?>
 <?php endif; ?>

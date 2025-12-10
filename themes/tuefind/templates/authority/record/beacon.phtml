@@ -17,4 +17,4 @@ $sortBottomPattern = 'B3Kat|Bayerische Staatsbibliothek|HBZ-Verbundkatalog|HeBIS
 ?>
 
 <div class="tf-findbuch-references" data-url="<?=$this->url('findbuchproxy-load')?>?gnd=<?=$this->driver->getGNDNumber()?>" data-filter-unique-pattern="<?=$this->driver->getGNDNumber()?>" data-headline="<?=$this->transEsc('External Resources')?>" data-sort-bottom-pattern="<?=htmlspecialchars($sortBottomPattern)?>" data-filter-label-pattern="<?=htmlspecialchars($filterLabelPattern)?>"></div>
-<?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, 'TueFind.GetBeaconReferencesFromFindbuch();', 'SET')?>
+<?=$this->assetManager()->outputInlineScriptString('TueFind.GetBeaconReferencesFromFindbuch();')?>

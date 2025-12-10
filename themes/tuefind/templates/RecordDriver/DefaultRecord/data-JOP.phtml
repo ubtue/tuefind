@@ -100,7 +100,7 @@
           <div id="<?= $jop_place_holder_id ?>"><?= $this->transEsc("Loading") ?>...</div>
           <?php $jsParams = [$jop_place_holder_id, $jop_icons_id, $url_ajax_final, $url_html, $part_img, $this->transEsc('Available online'), $check_availability_text]; ?>
           <?php $jsSnippet = 'TueFind.GetJOPInformation(\'' . implode("', '", $jsParams) . '\');'; ?>
-          <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $jsSnippet, 'SET')?>
+          <?=$this->assetManager()->outputInlineScriptString($jsSnippet)?>
         </div>
     <?php endif; ?>
 <?php endforeach; ?>

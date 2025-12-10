@@ -9,7 +9,7 @@
     // - record.js is needed for AJAX tab logic
     // - disabled, because we use the non-ajax-version.
     // - see also "recordDocReady" at the bottom of this file.
-    //$this->headScript()->appendFile("record.js");
+    //$this->assetManager()->appendScriptLink("record.js");
 
     /*
      * TueFind: Add canonical URL (for SEO), Backport from 10.0 => 9.1,
@@ -79,5 +79,5 @@
   // - recordDocReady is needed for AJAX tab logic
   // - disabled, because we use the non-ajax-version.
   // - see also "record.js" at the top of this file.
-  // print $this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, '$(document).ready(recordDocReady);', 'SET');
+  // print $this->assetManager()->outputInlineScriptString('$(document).ready(recordDocReady);');
 ?>
