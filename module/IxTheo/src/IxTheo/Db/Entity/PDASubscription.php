@@ -14,6 +14,10 @@ class PDASubscription implements PDASubscriptionEntityInterface
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected int $id;
 
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: UserEntityInterface::class)]
+    protected UserEntityInterface $user;
+
     #[ORM\Column(name: 'book_title', type: 'string', nullable: false, options: ['lengths' => [256]])]
     protected string $bookTitle;
 
@@ -32,6 +36,17 @@ class PDASubscription implements PDASubscriptionEntityInterface
     public function getId(): ?int
     {
         return $this->id ?? null;
+    }
+
+    public function getUser(): UserEntityInterface
+    {
+        return $this->user;
+    }
+
+    public function setUser(UserEntityInterface $user): static
+    {
+        $this->user = $user;
+        return $this;
     }
 
     public function getBookTitle(): string

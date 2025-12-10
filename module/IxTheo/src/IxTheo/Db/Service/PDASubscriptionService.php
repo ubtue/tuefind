@@ -2,6 +2,7 @@
 namespace IxTheo\Db\Service;
 
 use VuFind\Db\Service\AbstractDbService;
+use IxTheo\Db\Entity\PDASubscriptionEntityInterface;
 
 class PDASubscriptionService extends AbstractDbService implements PDASubscriptionServiceInterface
 {
@@ -14,7 +15,8 @@ class PDASubscriptionService extends AbstractDbService implements PDASubscriptio
      */
     protected $session;
 
-    public function getNew($userId, $ppn, $title, $author, $year, $isbn) {
+    public function getNew($userId, $ppn, $title, $author, $year, $isbn)
+    {
         $row = $this->createRow();
         $row->id = $userId;
         $row->book_title = $title ?: "";
@@ -25,49 +27,67 @@ class PDASubscriptionService extends AbstractDbService implements PDASubscriptio
         return $row;
     }
 
-    public function findExisting($userId, $ppn) {
+    public function findExisting($userId, $ppn)
+    {
         return $this->select(['id' => $userId, 'book_ppn' => $ppn])->current();
     }
 
-    public function subscribe($userId, $ppn, $title, $author, $year, $isbn) {
+    public function subscribe($userId, $ppn, $title, $author, $year, $isbn)
+    {
         $row = $this->getNew($userId, $ppn, $title, $author, $year, $isbn);
         $row->save();
         return $row->id;
     }
 
-    public function unsubscribe($userId, $recordId) {
+    public function unsubscribe($userId, $recordId)
+    {
         return $this->delete(['id' => $userId, 'book_ppn' => $recordId]);
     }
 
-    public function getAll($userId, $sort) {
-        $select = $this->getSql()->select()->where(['id' => $userId]);
-        $this->applySort($select, $sort);
-        return $this->selectWith($select);
+    public function getAll($userId, $sort)
+    {
+        $dql = 'SELECT P '
+            . 'FROM ' . PDASubscriptionEntityInterface::class . ' P '
+            . 'WHERE P.user = :userId';
+
+        $this->applySort($dql, $sort);
+        $query = $this->entityManager->createQuery($dql);
+        $query->setParameters(['userId' => $userId]);
+        return $query->getResult();
     }
 
-    public function get($userId, $sort, $start, $limit) {
-        $select = $this->getSql()->select()->where(['id' => $userId])->offset($start)->limit($limit);
-        $this->applySort($select, $sort);
-        return $this->selectWith($select);
+    public function get($userId, $sort, $start, $limit)
+    {
+        $dql = 'SELECT P '
+            . 'FROM ' . PDASubscriptionEntityInterface::class . ' P '
+            . 'WHERE P.user = :userId '
+            . 'LIMIT ' . $limit
+            . 'OFFSET ' . $start;
+
+        $this->applySort($dql, $sort);
+        $query = $this->entityManager->createQuery($dql);
+        $query->setParameters(['userId' => $userId]);
+        return $query->getResult();
     }
 
     /**
      * Apply a sort parameter to a query on the resource table.
      *
-     * @param \Laminas\Db\Sql\Select $query Query to modify
-     * @param string                 $sort  Field to use for sorting (may include 'desc'
-     * qualifier)
-     *
      * @return void
      */
-    public static function applySort($query, $sort)
+    public static function applySort(string &$dql, string $sort)
     {
         // Apply sorting, if necessary:
         $legalSorts = [
-            'book_title', 'book_title desc', 'book_author', 'book_author desc', 'book_year', 'book_year desc'
+            'book_title' => 'bookTitle',
+            'book_title desc' => 'bookTitle desc',
+            'book_author' => 'bookAuthor',
+            'book_author desc' => 'bookAuthor desc',
+            'book_year' => 'bookYear',
+            'book_year desc' => 'bookYear desc',
         ];
-        if (!empty($sort) && in_array(strtolower($sort), $legalSorts)) {
-            $query->order([$sort]);
+        if (!empty($sort) && array_key_exists(strtolower($sort), $legalSorts)) {
+            $dql .= ' ORDER BY P.' . $legalSorts[strtolower($sort)];
         }
     }
 }

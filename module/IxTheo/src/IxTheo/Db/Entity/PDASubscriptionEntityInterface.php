@@ -8,6 +8,9 @@ interface PDASubscriptionEntityInterface extends EntityInterface
 {
     public function getId(): ?int;
 
+    public function getUser(): UserEntityInterface;
+    public function setUser(UserEntityInterface $user): static;
+
     public function getBookTitle(): string;
     public function setBookTitle(string $title): static;
 

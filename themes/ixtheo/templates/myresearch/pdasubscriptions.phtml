@@ -11,7 +11,7 @@ $recordTotal = isset($this->results) ? $this->results->getResultTotal() : 0;
 
 // Convenience variable:
 $account = $this->auth()->getManager();
-$user = $this->auth()->isLoggedIn();
+$user = $this->auth()->getUserObject();
 ?>
 
 <div class="<?=$this->layoutClass('mainbody')?>">

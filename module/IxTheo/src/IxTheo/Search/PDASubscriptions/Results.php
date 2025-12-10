@@ -62,7 +62,8 @@ class Results extends BaseResults
         if (is_null($list) && !$this->user) {
             throw new ListPermissionException('Cannot retrieve subscriptions without logged in user.');
         }
-        $this->resultTotal = count($list->toArray());
+
+        $this->resultTotal = count($list);
 
         // Apply offset and limit if necessary!
         $limit = $this->getParams()->getLimit();

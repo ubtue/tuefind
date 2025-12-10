@@ -6,7 +6,7 @@ CREATE TABLE ixtheo_id_result_sets (
 
 CREATE TABLE ixtheo_journal_subscriptions (
     id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-    user_id int NOT NULL,
+    user_id INT NOT NULL,
     journal_control_number_or_bundle_name VARCHAR(256) NOT NULL,
     max_last_modification_time DATETIME NOT NULL,
     PRIMARY KEY (id),
@@ -22,14 +22,16 @@ CREATE TABLE ixtheo_journal_bundles (
 ) DEFAULT CHARSET=utf8;
 
 CREATE TABLE ixtheo_pda_subscriptions (
-    id INT(11) NOT NULL,
+    id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+    user_id INT NOT NULL,
     book_title VARCHAR(255) NOT NULL,
     book_author VARCHAR(255) NOT NULL,
     book_year VARCHAR(32) NOT NULL,
     book_ppn VARCHAR(10) NOT NULL,
     book_isbn VARCHAR(13) NOT NULL,
-    CONSTRAINT `ixtheo_pda_subscriptions_ibfk_1` FOREIGN KEY (id) REFERENCES user(id) ON DELETE CASCADE,
-    PRIMARY KEY (id, book_ppn)
+    PRIMARY KEY (id),
+    UNIQUE KEY `user_pda_subscription` (`user_id`,`book_ppn`),
+    CONSTRAINT `user_id_pda_subscription` FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
 ) DEFAULT CHARSET=utf8;
 
 ALTER TABLE user ADD COLUMN ixtheo_user_type ENUM('ixtheo', 'relbib', 'bibstudies', 'churchlaw') NOT NULL DEFAULT 'ixtheo';
