@@ -2,8 +2,8 @@
 <?php if(!empty($responseTopicsDataAndSettings[0])): ?>
   <?php
 
-    $this->headLink()->appendStylesheet('vendor/jqcloud.css');
-    $this->headScript()->appendFile("vendor/jqcloud-2.0.3.min.js");
+    $this->assetManager()->appendStyleLink("vendor/jqcloud.css");
+    $this->assetManager()->appendScriptLink("vendor/jqcloud-2.0.3.min.js");
 
     $responseTopicsData = $responseTopicsDataAndSettings[0];
     $responseTopicsSettings = $responseTopicsDataAndSettings[1];
