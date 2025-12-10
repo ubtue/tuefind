@@ -18,19 +18,21 @@ $this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') 
           <th><?=$this->transEsc('Request User')?></th>
           <th><?=$this->transEsc('Authority')?></th>
           <th><?=$this->transEsc('Access')?></th>
-          <th><?=$this->transEsc('Request User Date')?></th>
-          <th><?=$this->transEsc('Admin request Date')?></th>
+          <th><?=$this->transEsc('User Request Date')?></th>
+          <th><?=$this->transEsc('Admin process Date')?></th>
         </tr>
       </thead>
       <tbody>
         <?php foreach ($this->user_authority_history_datas as $data): ?>
+          <?php $user = $data->getUser(); ?>
+          <?php $admin = $data->getAdmin(); ?>
           <tr>
-            <td><?=$data->admin_username." (".$data->admin_firstname." ".$data->admin_lastname.")"?></td>
-            <td><?=$data->request_user_firstname." ".$data->request_user_lastname?></td>
-            <td><a href="/AuthorityRecord/<?=$data->authority_id?>"><?=$data->authority_id?></a></td>
-            <td><?=$data->access_state?></td>
-            <td data-sort="<?=date("Y-m-d H:i:s",strtotime($data->request_user_date));?>"><?=date("d.m.Y H:i:s", strtotime($data->request_user_date));?></td>
-            <td data-sort="<?=date("Y-m-d H:i:s",strtotime($data->process_admin_date));?>"><?=date("d.m.Y H:i:s", strtotime($data->process_admin_date));?></td>
+            <td><?=$this->escapeHtml($admin->getUsername() . ' (' . $admin->getFirstname() . ' ' . $admin->getLastname() . ')')?></td>
+            <td><?=$this->escapeHtml($user->getFirstname() . ' ' . $user->getLastname())?></td>
+            <td><a href="/AuthorityRecord/<?=$data->getAuthorityControlNumber()?>"><?=$data->getAuthorityControlNumber()?></a></td>
+            <td><?=$data->getAccessState()?></td>
+            <td data-sort="<?=$data->getRequestUserDate()->format('Y-m-d H:i:s')?>"><?=$data->getRequestUserDate()->format($this->config()->dateTimeFormat())?></td>
+            <td data-sort="<?=$data->getProcessAdminDate()->format('Y-m-d H:i:s')?>"><?=$data->getProcessAdminDate()->format($this->config()->dateTimeFormat())?></td>
         <?php endforeach; ?>
       </tbody>
     </table>

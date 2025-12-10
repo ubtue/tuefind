@@ -25,12 +25,12 @@ interface PublicationEntityInterface extends EntityInterface
     public function getDoi(): ?string;
     public function setDoi(string $doi): static;
 
-    public function getDoiNotificationDatetime(): ?DateTime;
-    public function setDoiNotificationDatetime(DateTime $doiNotificationDatetime): static;
+    public function getDoiNotificationDateTime(): ?DateTime;
+    public function setDoiNotificationDateTime(DateTime $doiNotificationDatetime): static;
 
     public function getTermsDate(): ?DateTime;
     public function setTermsDate(DateTime $date): static;
 
-    public function getPublicationDatetime(): ?DateTime;
-    public function setPublicationDatetime(DateTime $publicationDatetime): static;
+    public function getPublicationDateTime(): ?DateTime;
+    public function setPublicationDateTime(DateTime $publicationDatetime): static;
 }

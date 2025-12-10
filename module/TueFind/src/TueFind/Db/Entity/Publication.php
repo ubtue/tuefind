@@ -39,14 +39,14 @@ class Publication implements PublicationEntityInterface
     protected string $doi;
 
     #[ORM\Column(name: 'doi_notification_datetime', type: 'datetime', nullable: true)]
-    protected DateTime $doiNotificationDatetime;
+    protected DateTime $doiNotificationDateTime;
 
     // Unfortunately Doctrine does not support Date, it forces DateTime and sets time to 00:00:00
     #[ORM\Column(name: 'terms_date', type: 'date', nullable: true)]
     protected DateTime $termsDate;
 
     #[ORM\Column(name: 'publication_datetime', type: 'datetime', nullable: false, options: ['default' => 'CURRENT_TIMESTAMP'])]
-    protected DateTime $publicationDatetime;
+    protected DateTime $publicationDateTime;
 
     /**
      * Get identifier (returns null for an uninitialized or non-persisted object).
@@ -113,14 +113,14 @@ class Publication implements PublicationEntityInterface
         return $this;
     }
 
-    public function getDoiNotificationDatetime(): ?DateTime
+    public function getDoiNotificationDateTime(): ?DateTime
     {
-        return $this->doiNotificationDatetime;
+        return $this->doiNotificationDateTime;
     }
 
-    public function setDoiNotificationDatetime(DateTime $doiNotificationDatetime): static
+    public function setDoiNotificationDateTime(DateTime $doiNotificationDatetime): static
     {
-        $this->doiNotificationDatetime = $doiNotificationDatetime;
+        $this->doiNotificationDateTime = $doiNotificationDatetime;
         return $this;
     }
 
@@ -135,14 +135,14 @@ class Publication implements PublicationEntityInterface
         return $this;
     }
 
-    public function getPublicationDatetime(): ?DateTime
+    public function getPublicationDateTime(): ?DateTime
     {
-        return $this->publicationDatetime;
+        return $this->publicationDateTime;
     }
 
-    public function setPublicationDatetime(DateTime $publicationDatetime): static
+    public function setPublicationDateTime(DateTime $publicationDatetime): static
     {
-        $this->publicationDatetime = $publicationDatetime;
+        $this->publicationDateTime = $publicationDatetime;
         return $this;
     }
 }

@@ -2,8 +2,8 @@
 
 namespace TueFind\Db\Service;
 
-use Laminas\Db\Sql\Select;
 use TueFind\Db\Row\UserAuthorityHistory as UserAuthorityHistoryRow;
+use TueFind\Db\Entity\UserAuthorityHistoryEntityInterface;
 use VuFind\Db\Service\AbstractDbService;
 
 class UserAuthorityHistoryService extends AbstractDbService implements UserAuthorityHistoryServiceInterface
@@ -21,21 +21,15 @@ class UserAuthorityHistoryService extends AbstractDbService implements UserAutho
         return null;
     }
 
-    public function getAll()
+    public function getAll(): array
     {
-        $select = $this->getSql()->select();
-        $select->join(['admin'=>'user'], 'tuefind_user_authorities_history.admin_id = admin.id', [
-            'admin_username'=>'username',
-            'admin_firstname'=>'firstname',
-            'admin_lastname'=>'lastname'
-        ], Select::JOIN_LEFT);
-        $select->join(['request_user'=>'user'], 'tuefind_user_authorities_history.user_id = request_user.id', [
-            'request_user_firstname'=>'firstname',
-            'request_user_lastname'=>'lastname'
-        ], Select::JOIN_LEFT);
-        $select->where->isNotNull('process_admin_date');
-        $select->order('request_user_date DESC');
-        return $this->selectWith($select);
+        $dql = 'SELECT uah '
+            . 'FROM ' . UserAuthorityHistoryEntityInterface::class . ' uah '
+            . 'WHERE uah.processAdminDate IS NOT NULL '
+            . 'ORDER BY uah.requestUserDate DESC ';
+
+        $query = $this->entityManager->createQuery($dql);
+        return $query->getResult();
     }
 
     public function addUserRequest($userId, $authorityId)

@@ -15,7 +15,7 @@ interface UserAuthorityHistoryEntityInterface extends EntityInterface
 
     public function getAdmin(): ?UserEntityInterface;
 
-    public function getAccessState(): UserEntityInterface;
+    public function getAccessState(): string;
 
     public function getRequestUserDate(): DateTime;
 

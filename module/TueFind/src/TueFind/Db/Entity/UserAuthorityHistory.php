@@ -56,12 +56,19 @@ class UserAuthorityHistory implements UserAuthorityHistoryEntityInterface
         return $this->admin;
     }
 
-    public function getRequestUserDate(): DateTime {
+    public function getRequestUserDate(): DateTime
+    {
         return $this->requestUserDate;
     }
 
-    public function getProcessAdminDate(): ?DateTime {
+    public function getProcessAdminDate(): ?DateTime
+    {
         return $this->processAdminDate;
+    }
+
+    public function getAccessState(): string
+    {
+        return $this->accessState;
     }
 
     public function updateUserAuthorityHistory($adminId, $access)

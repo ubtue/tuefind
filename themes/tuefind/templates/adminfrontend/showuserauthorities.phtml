@@ -37,8 +37,8 @@ $this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') 
             <td><?=$this->escapeHtml($user->getInstitution())?></td>
             <td><a href="/AuthorityRecord/<?=urlencode($userAuthority->getAuthorityControlNumber())?>"><?=$this->escapeHtml($userAuthority->getAuthorityControlNumber())?></a></td>
             <td><?=$this->transEsc(ucfirst($userAuthority->getAccessState()))?></td>
-            <td data-sort="<?=$userAuthority->getRequestedDateTime()->format($this->config()->dateTimeFormat())?>"><?=$userAuthority->getRequestedDateTime()->format($this->config()->dateTimeFormat())?></td>
-            <td data-sort="<?=$userAuthority->getGrantedDateTime() ? $userAuthority->getGrantedDateTime()->format($this->config()->dateTimeFormat()) : ''?>"><?=$userAuthority->getGrantedDateTime() ? $userAuthority->getGrantedDateTime()->format($this->config()->dateTimeFormat()) : ''?></td>
+            <td data-sort="<?=$userAuthority->getRequestedDateTime()->format('Y-m-d H:i:s')?>"><?=$userAuthority->getRequestedDateTime()->format($this->config()->dateTimeFormat())?></td>
+            <td data-sort="<?=$userAuthority->getGrantedDateTime() ? $userAuthority->getGrantedDateTime()->format('Y-m-d H:i:s') : ''?>"><?=$userAuthority->getGrantedDateTime() ? $userAuthority->getGrantedDateTime()->format($this->config()->dateTimeFormat()) : ''?></td>
             <td>
               <?php if ($userAuthority->getAccessState() == 'requested'): ?>
                 <a href="<?=$this->url('authority-process-request', ['user_id' => $user->getUserId(), 'authority_id' => $userAuthority->getAuthorityControlNumber()])?>" data-lightbox="">process request</a>

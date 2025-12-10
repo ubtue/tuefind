@@ -2,19 +2,22 @@
 
 namespace TueFind\Db\Service;
 
-use Laminas\Db\Sql\Select;
+use Doctrine\ORM\Query\ResultSetMapping;
 use VuFind\Db\Service\AbstractDbService;
 use TueFind\Db\Entity\PublicationEntityInterface;
+
 
 class PublicationService extends AbstractDbService implements PublicationServiceInterface
 {
 
     public function getAll()
     {
-        $select = $this->getSql()->select();
-        $select->join('user', 'tuefind_publications.user_id = user.id', Select::SQL_STAR, Select::JOIN_LEFT);
-        $select->order('publication_datetime DESC');
-        return $this->selectWith($select);
+        $dql = 'SELECT p '
+            . 'FROM ' . PublicationEntityInterface::class . ' p '
+            . 'ORDER BY p.publicationDateTime DESC ';
+
+        $query = $this->entityManager->createQuery($dql);
+        return $query->getResult();
     }
 
     public function getByUserId($userId): array
@@ -40,16 +43,16 @@ class PublicationService extends AbstractDbService implements PublicationService
 
     public function getStatistics()
     {
-        $select = $this->getSql()->select();
-        $select->columns([
-            'publication_count' => new \Laminas\Db\Sql\Expression("COUNT(*)"),
-            'year' => new \Laminas\Db\Sql\Expression("YEAR(publication_datetime)"),
-        ]);
-        $select->join('user', 'tuefind_publications.user_id = user.id', null, Select::JOIN_LEFT);
-        $select->where('user.ixtheo_user_type = "' . \IxTheo\Utility::getUserTypeFromUsedEnvironment() . '"');
-        $select->group(new \Laminas\Db\Sql\Expression("year"));
-        $select->order('year DESC');
-        return $this->selectWith($select);
+        $dql = 'SELECT COUNT(*) AS count, YEAR(publication_datetime) AS year '
+             . 'FROM tuefind_publications '
+             . 'GROUP BY year '
+             . 'ORDER BY year DESC ';
 
+        $rsm = new ResultSetMapping();
+        $rsm->addScalarResult('count', 'count');
+        $rsm->addScalarResult('year', 'year');
+
+        $query = $this->entityManager->createNativeQuery($dql, $rsm);
+        return $query->getResult();
     }
 }
