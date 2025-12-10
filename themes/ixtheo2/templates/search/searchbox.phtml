@@ -63,9 +63,9 @@
 ?>
 <?php $tabConfig = $this->searchTabs()->getTabConfig($this->searchClassId, $this->lookfor, $this->searchIndex, $this->searchType, $hiddenFilters); ?>
 
-<section class="cw-py-5 cw-bg-gray-100">
-    <div class="container">
-        <div class="row">
+<section class="cw-py-5 cw-bg-gray-100 main_search_form">
+    <div class="container g-0">
+        <div class="row g-0">
             <div class="col-md-12">
                 <div class="clearfix searchbox_home">
                 <?php if ($this->searchType == 'advanced'): ?>
@@ -99,12 +99,12 @@
                 </div>
                 <form id="searchForm" class="searchForm ix2-searchForm tuefind-event-search Form-on-submit" method="get" action="<?=$this->url($basicSearch)?>" name="searchForm" autocomplete="off">
                     <?= $this->context($this)->renderInContext('search/searchTabs', ['searchTabs' => $tabConfig['tabs'], 'hiddenFilters' => $hiddenFilters, 'showCounts' => $tabConfig['showCounts']]); ?>
-                    <div class="searchForm-inputs row">
+                    <div class="searchForm-inputs row g-0">
                     <?php
                         // Note: we need type="text" for autocomplete role="combobox"
                         $searchboxAttributes = [
                         'id' => 'searchForm_lookfor',
-                        'class' => 'searchForm_lookfor form-control search-query',
+                        'class' => 'searchForm_lookfor form-control search-query mw-100 min-w-100-force min-h-100-force',
                         'type' => 'text',
                         'name' => 'lookfor',
                         'value' => $this->lookfor,
@@ -130,7 +130,7 @@
                     </div>
                     <?php if ($handlerCount > 1): ?>
                         <div class="col-12 col-xs-12 col-sm-3 col-md-3 col-lg-2 col ix2-nomargin ix2-searchForm-element-height ix2-main-searchForm-type">
-                            <select id="searchForm_type" class="searchForm_type form-control " name="type" data-native-menu="false" aria-label="<?=$this->transEscAttr('Search type')?>">
+                        <select id="searchForm_type" class="searchForm_type form-control form-select" name="type" data-native-menu="false" aria-label="<?=$this->transEscAttr('Search type')?>">
                             <?php $currentGroup = $insideGroup = false; ?>
                             <?php $optionCount=1; foreach ($handlers as $handler): ?>
                                 <?php
@@ -226,7 +226,7 @@
                 </div>
             </div>
         </div>
-        <div class="row ix2-search-form-bottom-nav">
+        <div class="row g-0 ix2-search-form-bottom-nav">
             <div class="col-1 col-md-12">
                 <div class="navbar navbar-default home-navbar">
                     <div class="container-navbar">
@@ -241,7 +241,7 @@
                                     </li>
                                 <?php endif;?>
                                 <li class="nav-item dropdown <?=$navActive['keyWordChainSearchActive'];?>">
-                                    <a class="dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ><?=$this->transEsc('Browse')?>&nbsp;<span class="caret"></span></a>
+                                    <a class="dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ><?=$this->transEsc('Browse')?>&nbsp;<?=$this->icon('dropdown-caret') ?></a>
                                     <ul class="dropdown-menu">
                                         <li><a class="dropdown-item" href="<?=$this->url('keywordchainsearch-home')?>"><?=$this->transEsc('Browse Keywordchains')?></a></li>
                                         <li><a class="dropdown-item" href="<?=$this->url('browse-home')?>"><?=$this->transEsc('Browse the Catalog')?></a></li>
@@ -253,7 +253,7 @@
                                 <li class="nav-item <?=$navActive['historyActive'];?>"><a href="<?=$this->url('search-history')?>" role="button" rel="nofollow"><?=$this->transEsc('Search History')?></a></li>
                                 <?php if (!empty($keyboardLayouts)): ?>
                                     <li class="nav-item dropdown ix2-keyboard-dropdown">
-                                        <a class="dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ><?=$this->transEsc('Virtual Keyboard')?>&nbsp;<span class="caret"></span></a>
+                                        <a class="dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ><?=$this->transEsc('Virtual Keyboard')?>&nbsp;<?=$this->icon('dropdown-caret') ?></a>
                                         <ul class="dropdown-menu">
                                             <?php
                                             $this->assetManager()->appendScriptLink('vendor/js.cookie.js');

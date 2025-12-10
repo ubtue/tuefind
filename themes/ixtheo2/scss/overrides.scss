@@ -43,7 +43,7 @@
     box-shadow: none;
     -webkit-box-shadow: none;
     height: 48px;
-    border-radius: 0 0 0 7px;
+    border-radius: 0 !important;
   }
 
   .form-control:focus {
@@ -466,9 +466,6 @@
   height: 700px;
   width: 1200px;
 }
-.justify-content-center {
-  z-index: 9999;
-}
 .template-ix2 .panel-home {
   min-height: 380px;
 }
@@ -770,7 +767,7 @@ a.black-icon {
 }
 
 .navbar-nav li.nav-item i.fa {
-  font-size: 17px;
+  font-size: 14px;
   vertical-align: 0 !important;
 }
 .sticky-header {
@@ -917,243 +914,8 @@ a.black-icon {
 
 /* Extra small devices (portrait phones, less than 576px) */
 
-@media (max-width: 575.98px) {
-
-  .searchForm {
-    margin: auto !important;
-  }
-
-  .navigation .navbar-right > li {
-    float: left;
-    margin-right: 10px;
-  }
-/*
-  .navigation .navbar-nav .open .dropdown-menu {
-    position: absolute;
-    right: 0px;
-    left: auto;
-    background-color: #fff;
-    background-clip: padding-box;
-    border-radius: 4px;
-    box-shadow: 0 6px 12px #00000040;
-  }
-*/
-  .navigation .navbar-nav {
-    margin: 0;
-    padding: 0;
-    margin-right: -10px;
-    float: right;
-  }
-  .navigation .navbar-light .navbar-nav .nav-item .nav-link{
-    padding:0;
-  }
-  .ixtheo2-networking-link {
-    font-size: 24px;
-    margin-bottom: 0;
-  }
-  .col-mob-none {
-    display: none;
-  }
-  .ixtheo2-networking-block {
-    padding-top: 20px !important;
-  }
-  .sub-title-networking {
-    display: none;
-  }
-  .ix2-search-form-bottom-nav .home-navbar {
-    padding-left: 20px;
-  }
-  .ix2-search-form-bottom-nav .search-nav-list > li {
-    max-width: 96%;
-  }
-  .ix2-search-form-bottom-nav .search-nav-list > li .dropdown-menu {
-    background-color: #fff;
-  }
-  .ix2-search-form-bottom-nav .search-nav-list > li .dropdown-menu .active a{
-    background-color: #343a40 !important;
-  }
-  .cw-hide-for-xsmoll {
-    display: none;
-  }
-
-  .ix-feedback-block .ix-feedback-text {
-    display: none;
-  }
-  .ix-feedback-block .ix-feedback-icon {
-    display: block !important;
-  }
-
-}
 
 /* Small devices (landscape phones, 576px and up) */
-
-@media (min-width: 576px) and (max-width: 767.98px) {
-  .searchForm {
-    margin: auto !important;
-  }
-  .navigation .navbar-right > li {
-    float: left;
-    margin-right: 10px;
-  }
-  /*
-  .navigation .navbar-nav .open .dropdown-menu {
-    position: absolute;
-    right: 0px;
-    left: auto;
-    background-color: #fff;
-    background-clip: padding-box;
-    border-radius: 4px;
-    box-shadow: 0 6px 12px #00000040;
-  }
-    */
-  .navigation .navbar-nav {
-    padding: 0;
-    margin: 0;
-    margin-right: -10px;
-    float: right;
-  }
-  .navigation .navbar-light .navbar-nav .nav-item .nav-link{
-    padding:0;
-  }
-  .ixtheo2-networking-link {
-    font-size: 24px;
-    margin-bottom: 0;
-  }
-  .col-mob-none {
-    display: none;
-  }
-  .ixtheo2-networking-block {
-    padding-top: 20px !important;
-  }
-  .ix2-search-form-bottom-nav .home-navbar {
-    padding-left: 20px;
-  }
-  .ix2-search-form-bottom-nav .search-nav-list > li {
-    width: 33.3%;
-    float: left;
-  }
-  .ix2-search-form-bottom-nav .search-nav-list > li .dropdown-menu {
-    background-color: #fff;
-  }
-  .ix2-search-form-bottom-nav .search-nav-list > li .dropdown-menu .active a{
-    background-color: #343a40 !important;
-  }
-  .cw-hide-for-xsmoll {
-    display: none;
-  }
-
-  .ix-feedback-block .ix-feedback-text{
-    display: none;
-  }
-  .ix-feedback-block .ix-feedback-icon{
-    display: block !important;
-  }
-}
-
-/* Medium devices (tablets, 768px and up) */
-@media (min-width: 768px) and (max-width: 991.98px) {
-
-  .ixtheo2-networking-link {
-    font-size: 24px;
-    margin-bottom: 0;
-  }
-  .ixtheo2-networking-block {
-    padding-top: 20px !important;
-  }
-  .col-mob-none {
-    display: none;
-  }
-  .search-nav-list > li {
-    height: 50px;
-  }
-  .ix2-search-form-bottom-nav .search-nav-list > li {
-    width: 33.3%;
-  }
-  .navigation .navbar-light .navbar-nav .nav-item .nav-link{
-    padding: 10px;
-  }
-  .navbar-nav.navbar-right.text-center {
-    margin: 0;
-    padding: 0;
-  }
-
-  .ix-feedback-block .ix-feedback-text{
-    display: none;
-  }
-  .ix-feedback-block .ix-feedback-icon{
-    display: block !important;
-  }
-}
-
-/* Large devices (desktops, 992px and up) */
-@media (min-width: 992px) and (max-width: 1199.98px) {
-  .ixtheo2-networking-link {
-    font-size: 30px;
-    margin-bottom: 0;
-  }
-  .col-mob-none {
-    display: none;
-  }
-  .navbar-nav.navbar-right.text-center {
-    margin: 0;
-    padding: 0;
-  }
-
-  .ix-feedback-block .ix-feedback-text{
-    display: none;
-  }
-  .ix-feedback-block .ix-feedback-icon{
-    display: block !important;
-  }
-
-  .ix-footer-block .copyright {
-    text-align: right;
-  }
-}
-
-@media (max-width: 1300px) {
-  .searchbar_vertical {
-    display: initial;
-  }
-  .searchbar_horizontal {
-    display: none;
-  }
-  .logo-wrapper .text-content h1 a{
-    font-size:3.5vw;
-  }
-  .logo-wrapper .text-content small {
-    font-size: 1.8vw;
-  }
-  .logo-wrapper .text-content {
-    padding-top: 16.5vw;
-  }
-
-  .ix-feedback-block .ix-feedback-text{
-    display: none;
-  }
-  .ix-feedback-block .ix-feedback-icon{
-    display: block !important;
-  }
-}
-
-/* Extra large devices (large desktops, 1200px and up) */
-@media (min-width: 1301px) and (max-width: 1450px) {
-  .ix-feedback-block .ix-feedback-text{
-    display: none;
-  }
-  .ix-feedback-block .ix-feedback-icon{
-    display: block !important;
-  }
-}
-
-@media (min-width: 1451px) and (max-width: 5000px) {
-  .ix-feedback-block .ix-feedback-text{
-    display: block;
-  }
-  .ix-feedback-block .ix-feedback-icon{
-    display: none;
-  }
-}
 
 .ix2-footer-block .copyright, .ix2-footer-block .footer-menu {
   text-align: center;
@@ -1529,4 +1291,26 @@ ul.navbar-nav.navbar-right {
     justify-content:center;
     float: left;
     width: 50%;
+}
+
+.min-w-100-force {
+  min-width: 100% !important;
+}
+.min-h-100-force {
+  min-height: 100% !important;
+}
+
+#searchForm {
+  margin: 0 !important;
+}
+
+#searchForm > .nav {
+  margin-bottom: 0;
+}
+
+header.navigation .nav-item .nav-link .fa-caret-down{
+  height: 18px;
+  margin: auto;
+  line-height: normal;
+  vertical-align: middle;
 }

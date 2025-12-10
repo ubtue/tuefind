@@ -45,7 +45,7 @@ Fixed Navigation
 
         <!-- s-media -->
         <li class="nav-item social-media tf-cursor-pointer dropdown">
-            <span class="dropdown-toggle nav-link" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-share-alt" aria-hidden="true"></i> <span class="cw-hide-for-xsmoll"><?=$this->transEsc("Social media")?></span><b class="caret"></b></span>
+            <span class="dropdown-toggle nav-link" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-share-alt" aria-hidden="true"></i> <span class="cw-hide-for-xsmoll"><?=$this->transEsc("Social media")?></span> <?=$this->icon('dropdown-caret') ?></span>
             <ul class="dropdown-menu">
               <li class="sub-menu"><a target="blank" href="//bsky.app/profile/ixtheo.bsky.social"><img src="<?=$this->imageLink('bluesky.svg')?>" height="16" alt="Bluesky"> Bluesky</a></li>
               <li class="sub-menu"><a target="blank" href="//hcommons.social/@ixtheo"><img src="<?=$this->imageLink('mastodon.svg')?>" height="16" alt="Mastodon"> Mastodon</a></li>
@@ -56,7 +56,7 @@ Fixed Navigation
       
         <?php if (isset($this->layout()->themeOptions) && count($this->layout()->themeOptions) > 1): ?>
           <li class="theme dropdown">
-            <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown"><?=$this->transEsc("Theme")?> <b class="caret"></b></a>
+            <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown"><?=$this->transEsc("Theme")?> <?=$this->icon('dropdown-caret') ?></a>
             <ul class="dropdown-menu">
               <?php foreach ($this->layout()->themeOptions as $current): ?>
                 <li<?=$current['selected'] ? ' class="active"' : ''?>>
@@ -71,7 +71,7 @@ Fixed Navigation
 
         <?php if (isset($this->layout()->allLangs) && count($this->layout()->allLangs) > 1): ?>
           <li class="nav-item language tf-cursor-pointer dropdown">
-            <span class="dropdown-toggle nav-link" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class='fa fa-globe' ></i> <span class="cw-hide-for-xsmoll"><?=$this->transEsc("Language")?></span><b class="caret"></b></span>
+            <span class="dropdown-toggle nav-link" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class='fa fa-globe' ></i> <span class="cw-hide-for-xsmoll"><?=$this->transEsc("Language")?></span> <?=$this->icon('dropdown-caret') ?></span>
             <ul class="dropdown-menu">
               <?php
                 //TueFind: Basic VuFind functionality changed, removed author ID from URL
@@ -95,7 +95,7 @@ Fixed Navigation
         <!-- About -->
         <li class="nav-item tf-cursor-pointer dropdown">
             <span class="dropdown-toggle black-icon nav-link" data-bs-toggle="dropdown"  aria-haspopup="true" aria-expanded="false">
-              <i class='fa fa-navicon' ></i> <span class="caret"></span>
+              <i class='fa fa-navicon' ></i> <?=$this->icon('dropdown-caret') ?>
             </span>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <li><a class="dropdown-item" href="<?=$this->url('content-page', ['page' => 'AboutUs']) ?>"><?=$this->transEsc('Index Theologicus')?></a></li>
@@ -119,7 +119,7 @@ Fixed Navigation
         <!-- End section Main Menu -->
       </ul>
     </nav>
-    
+
     <!-- /main nav -->
   </div>
 </header>
