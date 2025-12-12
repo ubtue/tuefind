@@ -15,8 +15,8 @@
               $activ = ' active ';
             }
           ?>
-          <li role="presentation" class="<?=$activ;?>">
-            <a href="#<?=$tabName?>" role="tab" data-toggle="tab"><?=$this->transEsc($desc)?></a>
+          <li role="presentation" class="nav-item">
+            <a href="#<?=$tabName?>" class="nav-link <?=$activ;?>" role="tab" data-bs-toggle="tab"><?=$this->transEsc($desc)?></a>
           </li>
         <?php $activTab++; endforeach; ?>
         </ul>
