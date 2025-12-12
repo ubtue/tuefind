@@ -1,0 +1,1 @@
+../../../../module/VufindCollapseAndExpand/res/theme/js/collapseAndExpand.js
