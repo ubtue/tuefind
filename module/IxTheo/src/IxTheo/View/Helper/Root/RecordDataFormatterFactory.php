@@ -65,7 +65,7 @@ class RecordDataFormatterFactory extends \TueFind\View\Helper\Root\RecordDataFor
             );
         }
         // TAD (IxTheo-specific)
-        if ($this->user != null && $this->dbServicePluginManager->get('user')->canUseTAD($this->user->id)) {
+        if ($this->user != null && $this->user->getCanUseTAD()) {
             $spec->setTemplateLine(
                 'TAD', 'workIsTADCandidate', 'data-TAD.phtml'
             );

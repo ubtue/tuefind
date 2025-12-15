@@ -51,7 +51,6 @@ class User extends \TueFind\Db\Entity\User implements UserEntityInterface
         return $this->ixtheoTitle;
     }
 
-
     public function setTitle(?string $title): static
     {
         $this->ixtheoTitle = $title;
@@ -60,7 +59,7 @@ class User extends \TueFind\Db\Entity\User implements UserEntityInterface
 
     public function getCanUseTAD(): bool
     {
-        return $this->getCanUseTad;
+        return $this->ixtheoCanUseTad;
     }
 
     public function getJournalSubscriptionFormat(): ?string

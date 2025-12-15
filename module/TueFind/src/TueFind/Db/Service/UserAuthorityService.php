@@ -71,18 +71,27 @@ class UserAuthorityService extends AbstractDbService implements UserAuthorityHis
 
     public function getByAuthorityControlNumber($authorityControlNumber): ?UserAuthorityEntityInterface
     {
-        $dql = 'SELECT UA '
-            . 'FROM ' . UserAuthorityEntityInterface::class . ' UA '
-            . 'WHERE UA.authorityControlNumber = :authorityControlNumber ';
+        $dql = 'SELECT ua '
+            . 'FROM ' . UserAuthorityEntityInterface::class . ' ua '
+            . 'WHERE ua.authorityControlNumber = :authorityControlNumber ';
 
         $query = $this->entityManager->createQuery($dql);
         $query->setParameters(['authorityControlNumber' => $authorityControlNumber]);
         return $query->getOneOrNullResult();
     }
 
-    public function getByUserIdAndAuthorityId($userId, $authorityId): ?UserAuthorityEntityInterface
+    public function getByUserIdAndAuthorityId($userId, $authorityControlNumber): ?UserAuthorityEntityInterface
     {
-        return $this->select(['user_id' => $userId, 'authority_id' => $authorityId])->current();
+        $dql = 'SELECT ua '
+            . 'FROM ' . UserAuthorityEntityInterface::class . ' ua '
+            . 'WHERE ua.authorityControlNumber = :authorityControlNumber '
+            . 'AND ua.user = :user ';
+
+        $query = $this->entityManager->createQuery($dql);
+        $query->setParameters(['authorityControlNumber' => $authorityControlNumber,
+                               'user' => $this->getDoctrineReference(UserEntityInterface::class, $userId)]
+        );
+        return $query->getOneOrNullResult();
     }
 
     public function addRequest($userId, $authorityId)

@@ -21,11 +21,13 @@ class PluginManager extends \TueFind\Db\Service\PluginManager
     public function __construct($configOrContainerInstance = null,
         array $v3config = []
     ) {
+        $this->addOverride('aliases', \VuFind\Db\Service\UserServiceInterface::class, UserServiceInterface::class);
+        $this->addOverride('aliases', \TueFind\Db\Service\UserServiceInterface::class, UserServiceInterface::class);
 
         $this->addOverride('aliases', PDASubscriptionServiceInterface::class, PDASubscriptionService::class);
         $this->addOverride('aliases', PublicationServiceInterface::class, PublicationService::class);
         $this->addOverride('aliases', SubscriptionServiceInterface::class, SubscriptionService::class);
-        $this->addOverride('aliases', \VuFind\Db\Service\UserServiceInterface::class, UserService::class);
+        $this->addOverride('aliases', UserServiceInterface::class, UserService::class);
         $this->addOverride('aliases', UserAuthorityServiceInterface::class, UserAuthorityService::class);
         $this->addOverride('aliases', UserAuthorityHistoryServiceInterface::class, UserAuthorityHistoryService::class);
 

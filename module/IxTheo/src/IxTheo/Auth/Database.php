@@ -40,13 +40,22 @@ class Database extends \TueFind\Auth\Database
     protected function createUserFromParams($params, $table)
     {
         $user = parent::createUserFromParams($params, $table);
-        $user->ixtheo_appellation = in_array($params['ixtheo_appellation'], Database::$appellations) ? $params['ixtheo_appellation'] : $user->ixtheo_appellation;
-        $user->ixtheo_title = in_array($params['ixtheo_title'], Database::$titles) ? $params['ixtheo_title'] : $user->ixtheo_title;
-        $user->ixtheo_user_type = \IxTheo\Utility::getUserTypeFromUsedEnvironment();
-        $user->save();
+        $user->setAppellation(in_array($params['ixtheo_appellation'], Database::$appellations) ? $params['ixtheo_appellation'] : $user->getAppellation());
+        $user->setTitle(in_array($params['ixtheo_title'], Database::$titles) ? $params['ixtheo_title'] : $user->getTitle());
+        $user->setUserType(\IxTheo\Utility::getUserTypeFromUsedEnvironment());
 
-        // Update the TAD access flag:
-        exec("/usr/local/bin/set_tad_access_flag.sh " . $user->id);
+        return $user;
+    }
+
+    public function create($request)
+    {
+        $user = parent::create($request);
+
+        // Update the TAD access flag
+        // This cannot be executed in "createUserFromParams"
+        // since the ID will be generated afterwards in the parent
+        // after persist() is called on the entity manager.
+        exec("/usr/local/bin/set_tad_access_flag.sh " . $user->getId());
 
         return $user;
     }

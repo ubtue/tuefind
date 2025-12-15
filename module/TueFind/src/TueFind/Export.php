@@ -17,15 +17,15 @@ class Export extends \VuFind\Export
     public function getRedirectUrl(string $format, string $callback): string
     {
         // Fill in special tokens in template:
-        $template = $this->exportConfig->$format->redirectUrl;
+        $template = $this->exportConfig[$format]['redirectUrl'] ?? '';
         preg_match_all('/\{([^}]+)\}/', $template, $matches);
         foreach ($matches[1] as $current) {
             $parts = explode('|', $current);
             switch ($parts[0]) {
             case 'config':
             case 'encodedConfig':
-                if (isset($this->mainConfig->{$parts[1]}->{$parts[2]})) {
-                    $value = $this->mainConfig->{$parts[1]}->{$parts[2]};
+                if (isset($this->mainConfig[$parts[1]][$parts[2]])) {
+                    $value = $this->mainConfig[$parts[1]][$parts[2]];
                 } else {
                     $value = $parts[3];
                 }
@@ -59,7 +59,7 @@ class Export extends \VuFind\Export
      */
     public function useExportOutputAsParameter($format)
     {
-        return isset($this->exportConfig->$format->useExportOutputAsParameter);
+        return isset($this->exportConfig[$format]['useExportOutputAsParameter']);
     }
 
 

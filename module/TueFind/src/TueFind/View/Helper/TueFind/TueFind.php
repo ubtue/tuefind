@@ -609,7 +609,7 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
         if($user) {
             $table = $this->getDbService(\TueFind\Db\Service\UserAuthorityServiceInterface::class);
             foreach($authorsIds as $authorityId) {
-                $row = $table->getByUserIdAndAuthorityId($user->id,$authorityId);
+                $row = $table->getByUserIdAndAuthorityId($user->getId(), $authorityId);
                 if(!empty($row) && $row->access_state == "granted") {
                     $access = true;
                 }
@@ -628,7 +628,7 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
         if($user) {
             $table = $this->getDbService(\TueFind\Db\Service\UserAuthorityServiceInterface::class);
             foreach($secondaryAuthorsIds as $authorId) {
-                $row = $table->getByUserIdAndAuthorityId($user->id,$authorId);
+                $row = $table->getByUserIdAndAuthorityId($user->getId(), $authorId);
                 if(!empty($row) && $row->access_state == "granted") {
                     $showButton = true;
                 }
