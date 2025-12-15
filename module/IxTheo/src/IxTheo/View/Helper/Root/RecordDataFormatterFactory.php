@@ -15,9 +15,9 @@ class RecordDataFormatterFactory extends \TueFind\View\Helper\Root\RecordDataFor
 
     /**
      * Db Table Plugin Manager (e.g. to check user-specific rights)
-     * @var \VuFind\Db\Table\PluginManager
+     * @var \VuFind\Db\Service\PluginManager
      */
-    protected $dbTablePluginManager;
+    protected $dbServicePluginManager;
 
     /**
      * The logged in user, or null if not logged in
@@ -32,7 +32,7 @@ class RecordDataFormatterFactory extends \TueFind\View\Helper\Root\RecordDataFor
     ) {
         $this->user = $container->get('ViewHelperManager')->get('auth')->getUserObject();
         $this->tuefind = $container->get('ViewHelperManager')->get('tuefind');
-        $this->dbTablePluginManager = $container->get('VuFind\Db\Table\PluginManager');
+        $this->dbServicePluginManager = $container->get(\VuFind\Db\Service\PluginManager::class);
         $this->accountCapabilities = $container->get(\VuFind\Config\AccountCapabilities::class);
         return parent::__invoke($container, $requestedName, $options);
     }
@@ -42,7 +42,7 @@ class RecordDataFormatterFactory extends \TueFind\View\Helper\Root\RecordDataFor
      *
      * @return array
      */
-    public function getDefaultCoreSpecs()
+    public function getDefaultCoreSpecs(): array
     {
         $spec = new SpecBuilder();
         $this->addFollowingTitle($spec); // TueFind specific
@@ -65,7 +65,7 @@ class RecordDataFormatterFactory extends \TueFind\View\Helper\Root\RecordDataFor
             );
         }
         // TAD (IxTheo-specific)
-        if ($this->user != null && $this->dbTablePluginManager->get('user')->canUseTAD($this->user->id)) {
+        if ($this->user != null && $this->dbServicePluginManager->get('user')->canUseTAD($this->user->id)) {
             $spec->setTemplateLine(
                 'TAD', 'workIsTADCandidate', 'data-TAD.phtml'
             );
@@ -125,7 +125,7 @@ class RecordDataFormatterFactory extends \TueFind\View\Helper\Root\RecordDataFor
         return $spec->getArray();
     }
 
-    public function getDefaultDescriptionSpecs()
+    public function getDefaultDescriptionSpecs(): array
     {
         $spec = new SpecBuilder();
         $spec->setTemplateLine('Summary', true, 'data-summary.phtml');

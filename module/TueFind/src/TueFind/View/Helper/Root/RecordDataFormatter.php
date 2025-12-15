@@ -8,7 +8,7 @@ class RecordDataFormatter extends \VuFind\View\Helper\Root\RecordDataFormatter {
      * Extend parent. Also return options in sub-array, so we are able
      * to pass additional information from Factory to core e.g. core template.
      */
-    protected function render($field, $data, $options)
+    protected function render(string $field, mixed $data, array $options): ?array
     {
         $result = parent::render($field, $data, $options);
         if (!is_array($result)) {

@@ -11,7 +11,7 @@ class RecordDataFormatterFactory extends \TueFind\View\Helper\Root\RecordDataFor
      *
      * @return array
      */
-    public function getDefaultCoreSpecs()
+    public function getDefaultCoreSpecs(): array
     {
         $spec = new SpecBuilder();
 

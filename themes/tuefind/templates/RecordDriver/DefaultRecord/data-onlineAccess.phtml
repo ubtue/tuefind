@@ -1,7 +1,3 @@
-<?php
-  $doi = $this->doi($this->driver, 'record');
-  $doiActive = $doi->isActive();
-?>
 <?php if ($this->tuefind()->getKfl()->hasTitle($this->driver)): ?>
 <a href="<?=$this->url('redirect-license', ['id' => $this->driver->getUniqueId()])?>" class="fulltext" data-lightbox="" rel="nofollow"><i class="fa fa-external-link"></i> FID-Lizenz: Zugriff mit <?=$this->tuefind()->getTueFindType()?>-Konto</a><br>
 <?php endif; ?>
@@ -28,4 +24,4 @@
   <?php endforeach; ?>
 <?php endif; ?>
 
-<?php if ($doiActive): ?><?=$doi->renderTemplate()?><?php endif; ?>
+<?=$this->identifierLinker($this->driver, 'record')?>

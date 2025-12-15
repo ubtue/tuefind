@@ -30,9 +30,14 @@ class PublicationService extends AbstractDbService implements PublicationService
         return $query->getResult();
     }
 
-    public function getByControlNumber($controlNumber): PublicationEntityInterface
+    public function getByControlNumber($controlNumber): ?PublicationEntityInterface
     {
-        return $this->select(['control_number' => $controlNumber])->current();
+        $dql = 'SELECT P '
+            . 'FROM ' . PublicationEntityInterface::class . ' P '
+            . 'WHERE P.controlNumber = :controlNumber';
+        $query = $this->entityManager->createQuery($dql);
+        $query->setParameters(['controlNumber' => $controlNumber]);
+        return $query->getOneOrNullResult();
     }
 
     public function addPublication(int $userId, string $controlNumber, string $externalDocumentId, string $externalDocumentGuid, string $termsDate): bool
