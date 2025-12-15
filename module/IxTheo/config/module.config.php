@@ -1,5 +1,5 @@
 <?php
-namespace Ixtheo\Module\Config;
+namespace IxTheo\Module\Config;
 
 $config = [
     'router' => [

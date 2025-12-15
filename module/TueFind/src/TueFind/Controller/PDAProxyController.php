@@ -10,7 +10,6 @@ namespace TueFind\Controller;
 
 use \Exception as Exception;
 use SimpleXMLElement;
-use Laminas\Log\Logger as Logger;
 
 /**
  * This controller is a proxy for requests to BSZ based GVI
@@ -19,8 +18,9 @@ use Laminas\Log\Logger as Logger;
  * @package  Controller
  */
 
-class PDAProxyController extends \VuFind\Controller\AbstractBase
+class PDAProxyController extends \VuFind\Controller\AbstractBase implements \Psr\Log\LoggerAwareInterface
 {
+    use \VuFind\Log\LoggerAwareTrait;
 
     protected $base_url = 'http://gvi.bsz-bw.de/solr/GVI/select';
     protected $base_query = 'rows=10&wt=json&facet=true&facet.field=ill_region&facet.field=ill_flag&fl=id,fullrecord&q=isbn:';
@@ -103,7 +103,7 @@ class PDAProxyController extends \VuFind\Controller\AbstractBase
         $json = json_encode(['isbn' => $isbn,
                              'pda_status' => $pda_status]);
 
-        $this->serviceLocator->get('VuFind\Logger')->log(Logger::NOTICE, 'PDALOG for ' . $isbn . ': ' . $pda_status);
+        $this->log('notice', 'PDALOG for ' . $isbn . ': ' . $pda_status);
 
         $response = $this->getResponse();
         $response->getHeaders()->addHeaderLine('Content-Type', 'application/json');
