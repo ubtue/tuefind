@@ -1,9 +1,3 @@
-<?php
-  $addThis = $this->addThis();
-  if (!empty($addThis)) {
-    $this->assetManager()->appendScriptLink('https://s7.addthis.com/js/250/addthis_widget.js?pub=' . urlencode($addThis));
-  }
-?>
 <nav class="record-nav" aria-label="<?=$this->transEscAttr('ajaxview_label_tools'); ?>">
   <ul class="action-toolbar">
     <?php if (count($this->driver->getCitationFormats()) > 0): ?>
@@ -79,7 +73,7 @@
         </a>
       </li>
     <?php endif; ?>
-      
+
         <?php if ($this->cart()->isActive()): ?>
       <li>
         <?=$this->render('record/cart-buttons.phtml', ['id' => $this->driver->getUniqueId(), 'source' => $this->driver->getSourceIdentifier()]); ?>
@@ -93,7 +87,7 @@
           <?=$this->transEsc('permanent_link')?>
         </a>
       </li>
-    <?php endif ?>  
+    <?php endif ?>
 
     <!-- IxTheo: Subscribe button -->
     <?php if ($this->accountCapabilities()->getSubscriptionSetting() === 'enabled'):?>

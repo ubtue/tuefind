@@ -1,9 +1,3 @@
-<?php
-  $addThis = $this->addThis();
-  if (!empty($addThis)) {
-    $this->headScript()->appendFile('https://s7.addthis.com/js/250/addthis_widget.js?pub=' . urlencode($addThis));
-  }
-?>
 <nav class="record-nav">
   <ul class="action-toolbar" aria-label="<?=$this->transEscAttr('ajaxview_label_tools'); ?>">
     <?php if (count($this->driver->getCitationFormats()) > 0): ?>
