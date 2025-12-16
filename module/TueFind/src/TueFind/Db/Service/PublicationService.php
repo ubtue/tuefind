@@ -5,10 +5,27 @@ namespace TueFind\Db\Service;
 use Doctrine\ORM\Query\ResultSetMapping;
 use VuFind\Db\Service\AbstractDbService;
 use TueFind\Db\Entity\PublicationEntityInterface;
+use TueFind\Db\Entity\UserEntityInterface;
 
 
 class PublicationService extends AbstractDbService implements PublicationServiceInterface
 {
+    protected function createEntity(): PublicationEntityInterface
+    {
+        return $this->entityPluginManager->get(PublicationEntityInterface::class);
+    }
+
+    public function createPublication(UserEntityInterface $user, string $controlNumber, string $externalDocumentId, string $externalDocumentGuid, string $termsDate): PublicationServiceInterface
+    {
+        $publication = $this->createEntity();
+        $publication->setUser($user);
+        $publication->setControlNumber($controlNumber);
+        $publication->setExternalDocumentId($externalDocumentId);
+        $publication->setExternalDocumentGuid($externalDocumentGuid);
+        $publication->setTermsDate($termsDate);
+        $this->entityManager->persist($publication);
+        return $publication;
+    }
 
     public function getAll()
     {
@@ -38,12 +55,6 @@ class PublicationService extends AbstractDbService implements PublicationService
         $query = $this->entityManager->createQuery($dql);
         $query->setParameters(['controlNumber' => $controlNumber]);
         return $query->getOneOrNullResult();
-    }
-
-    public function addPublication(int $userId, string $controlNumber, string $externalDocumentId, string $externalDocumentGuid, string $termsDate): bool
-    {
-        $this->insert(['user_id' => $userId, 'control_number' => $controlNumber, 'external_document_id' => $externalDocumentId, 'external_document_guid' => $externalDocumentGuid, 'terms_date' => $termsDate]);
-        return true;
     }
 
     public function getStatistics()

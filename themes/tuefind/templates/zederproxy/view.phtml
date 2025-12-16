@@ -1,7 +1,7 @@
 <?php $viewId = $this->viewId; ?>
 <h1 class="cw-h1">Zeder Proof of Concept (&quot;<?=$viewId?>&quot;)</h1>
 <table id="ZederView" class="table table-striped table-bordered table-condensed"></table>
-<?php $this->assetManager()->appendScriptString('zeder.js'); ?>
+<?php $this->assetManager()->appendScriptLink('zeder.js'); ?>
 <?php
 $translationKeys = ['Results per page', 'Search', 'showing_items_of_html'];
 $translations = [];
