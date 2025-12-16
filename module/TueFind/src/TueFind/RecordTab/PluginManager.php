@@ -3,21 +3,27 @@
 namespace TueFind\RecordTab;
 
 use Laminas\ServiceManager\Factory\InvokableFactory;
+use VuFindCollapseExpand\RecordTab\ItemOtherDocument;
+use VuFindCollapseExpand\RecordTab\ItemOtherDocumentFactory;
 
 class PluginManager extends \VuFind\RecordTab\PluginManager
 {
+    use \TueFind\PluginManagerExtensionTrait;
+
     public function __construct(
         $configOrContainerInstance = null,
         array $v3config = []
     ) {
-        $this->aliases['AuthorityNameVariants'] = AuthorityNameVariants::class;
-        $this->aliases['itemCollapseExpand'] = ItemCollapseExpand::class;
+        $this->addOverride('aliases', 'AuthorityNameVariants', AuthorityNameVariants::class);
+        $this->addOverride('aliases', 'ItemOtherDocument', ItemOtherDocument::class);
 
-
-        $this->factories[AuthorityNameVariants::class] = InvokableFactory::class;
-        $this->factories[ItemCollapseExpand::class] = ItemCollapseExpandFactory::class;
-
+        $this->addOverride('factories', AuthorityNameVariants::class, InvokableFactory::class);
+        $this->addOverride('factories', ItemOtherDocument::class, ItemOtherDocumentFactory::class);
+        
+        $this->applyOverrides();
+        
         $this->addAbstractFactory(PluginFactory::class);
+
         parent::__construct($configOrContainerInstance, $v3config);
     }
 
