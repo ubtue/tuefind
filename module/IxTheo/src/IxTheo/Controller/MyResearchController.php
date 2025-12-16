@@ -7,7 +7,8 @@ use VuFind\Search\RecommendListener,
 
 class MyResearchController extends \TueFind\Controller\MyResearchController
 {
-    public function changeEmailAction() {
+    public function changeEmailAction()
+    {
         $view = parent::changeEmailAction();
 
         $user = $this->getUser();
@@ -19,7 +20,8 @@ class MyResearchController extends \TueFind\Controller\MyResearchController
     }
 
 
-    public function pdasubscriptionsAction() {
+    public function pdasubscriptionsAction()
+    {
 
         $user = $this->getUser();
         if ($user == false) {
@@ -88,7 +90,8 @@ class MyResearchController extends \TueFind\Controller\MyResearchController
         }
     }
 
-    public function subscriptionsAction() {
+    public function subscriptionsAction()
+    {
 
         $user = $this->getUser();
         if ($user == false) {
@@ -157,7 +160,8 @@ class MyResearchController extends \TueFind\Controller\MyResearchController
         }
     }
 
-    public function performDeleteSubscription($id, $deleteSource) {
+    public function performDeleteSubscription($id, $deleteSource)
+    {
         // Force login:
         $user = $this->getUser();
         if (!$user) {
@@ -174,7 +178,8 @@ class MyResearchController extends \TueFind\Controller\MyResearchController
         return true;
     }
 
-    public function performDeletePDASubscription($id, $deleteSource) {
+    public function performDeletePDASubscription($id, $deleteSource)
+    {
         // Force login:
         $user = $this->getUser();
         if (!$user) {
@@ -220,7 +225,8 @@ class MyResearchController extends \TueFind\Controller\MyResearchController
      * @return mixed
      */
 
-    protected function isMyResearchTarget($target) {
+    protected function isMyResearchTarget($target)
+    {
         $targetBase = substr($target, 0, strrpos( $target, '/'));
         $myResearchHome = $this->getServerUrl('myresearch-home');
         $myResearchBase = substr($myResearchHome, 0, strrpos($myResearchHome, '/'));
@@ -232,7 +238,8 @@ class MyResearchController extends \TueFind\Controller\MyResearchController
      *
      * @return mixed
      */
-    public function logoutAction() {
+    public function logoutAction()
+    {
         $config = $this->getConfig();
         if (isset($config->Site->logOutRoute)) {
             $logoutTarget = $this->getServerUrl($config->Site->logOutRoute);

@@ -28,6 +28,8 @@ class PluginManager extends \TueFind\RecordDriver\PluginManager {
         $this->addOverride('factories', SolrDefault::class, \TueFind\RecordDriver\SolrDefaultFactory::class);
         $this->addOverride('factories', SolrMarc::class, \TueFind\RecordDriver\SolrMarcFactory::class);
 
+        $this->applyOverrides();
+
         parent::__construct($configOrContainerInstance, $v3config);
     }
 }

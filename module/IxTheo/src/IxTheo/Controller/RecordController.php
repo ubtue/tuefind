@@ -15,7 +15,7 @@ class RecordController extends \TueFind\Controller\RecordController
         if ($results == null)
             return $this->createViewModel();
 
-        $this->flashMessenger()->addMessage("Success", 'success');
+        $this->flashMessenger()->addMessage('Success', 'success');
         return $this->redirectToRecord();
     }
 
@@ -27,7 +27,7 @@ class RecordController extends \TueFind\Controller\RecordController
         $post = $this->getRequest()->getPost()->toArray();
         $this->loadRecord()->unsubscribe($post, $user);
 
-        $this->flashMessenger()->addMessage("Success", 'success');
+        $this->flashMessenger()->addMessage('Success', 'success');
         return $this->redirectToRecord();
     }
 
@@ -45,26 +45,25 @@ class RecordController extends \TueFind\Controller\RecordController
             return $this->forceLogin();
         }
         $driver = $this->loadRecord();
-        $table = $driver->getDbTable('Subscription');
+        $service = $driver->getDbService(\IxTheo\Db\Service\SubscriptionServiceInterface::class);
         $recordId = $driver->getUniqueId();
-        $userId = $user->id;
 
         $infoText = $this->forward()->dispatch('Content', [
             'action' => 'content',
             'page' => 'SubscriptionInfoText'
         ]);
 
-        $subscribed = boolval($table->findExisting($userId, $recordId));
+        $subscribed = boolval($service->findExisting($user, $recordId));
         $bundles = [];
         foreach($driver->getBundleIds() as $bundle) {
-            if (boolval($table->findExisting($userId, $bundle))) {
+            if (boolval($service->findExisting($user, $bundle))) {
                 $bundles[] = $bundle;
             }
         }
 
-        return $this->createViewModel(["subscribed" => $subscribed,
-                                       "bundles" => $bundles,
-                                       "infoText" => $infoText]);
+        return $this->createViewModel(['subscribed' => $subscribed,
+                                       'bundles' => $bundles,
+                                       'infoText' => $infoText]);
     }
 
     function processPDASubscribe()
@@ -115,7 +114,7 @@ class RecordController extends \TueFind\Controller\RecordController
             return $this->forceLogin();
         }
         $driver = $this->loadRecord();
-        $table = $driver->getDbTable('PDASubscription');
+        $table = $driver->getDbService(\IxTheo\Db\Service\PDASubscriptionServiceInterface::class);
         $recordId = $driver->getUniqueId();
         $userId = $user->id;
 

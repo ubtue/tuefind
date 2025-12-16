@@ -2,33 +2,45 @@
 namespace IxTheo\Db\Service;
 
 use IxTheo\Db\Entity\SubscriptionEntityInterface;
+use IxTheo\Db\Entity\UserEntityInterface;
 
 class SubscriptionService extends \VuFind\Db\Service\AbstractDbService implements SubscriptionServiceInterface
 {
 
-    public function getNew($userId, $recordId) {
-        $row = $this->createRow();
-        $row->user_id = $userId;
-        $row->journal_control_number_or_bundle_name = $recordId;
-        $row->max_last_modification_time = date('Y-m-d 00:00:00');
-        return $row;
+    public function createEntity(): SubscriptionEntityInterface
+    {
+        return $this->entityPluginManager->get(SubscriptionEntityInterface::class);
     }
 
-    public function findExisting($userId, $recordId) {
-        return $this->select(['user_id' => $userId, 'journal_control_number_or_bundle_name' => $recordId])->current();
+    public function findExisting(UserEntityInterface $user, string $journalControlNumberOrBundleName): ?SubscriptionEntityInterface
+    {
+        $dql = 'SELECT S FROM ' . SubscriptionEntityInterface::class . ' S '
+             . 'WHERE S.user = :userId AND S.journalControlNumberOrBundleName = :journalControlNumberOrBundleName';
+
+        $query = $this->entityManager->createQuery($dql);
+        $query->setParameters([
+            'userId' => $user->getId(),
+            'journalControlNumberOrBundleName' => $journalControlNumberOrBundleName
+        ]);
+        return $query->getOneOrNullResult();
     }
 
-    public function subscribe($userId, $recordId) {
-        $row = $this->getNew($userId, $recordId);
-        $row->save();
-        return $row->user_id;
+    public function subscribe(UserEntityInterface $user, string $journalControlNumberOrBundleName): SubscriptionEntityInterface
+    {
+        $subscription = $this->createEntity();
+        $subscription->setUser($user);
+        $subscription->setJournalControlNumberOrBundleName($journalControlNumberOrBundleName);
+        $this->entityManager->persist($subscription);
+        return $subscription;
     }
 
-    public function unsubscribe($userId, $recordId) {
-        return $this->delete(['user_id' => $userId, 'journal_control_number_or_bundle_name' => $recordId]);
+    public function unsubscribe(UserEntityInterface $user, $recordId)
+    {
+        return $this->delete(['user_id' => $user, 'journal_control_number_or_bundle_name' => $recordId]);
     }
 
-    public function getAll($userId, $sort) {
+    public function getAll(UserEntityInterface $user, $sort)
+    {
         $dql = 'SELECT S FROM ' . SubscriptionEntityInterface::class . ' S ';
         $dql .= 'WHERE S.user = :userId ';
 
@@ -36,13 +48,14 @@ class SubscriptionService extends \VuFind\Db\Service\AbstractDbService implement
         //$dql .= 'ORDER BY journal_control_number_or_bundle_name ' . $sort;
 
         $query = $this->entityManager->createQuery($dql);
-        $query->setParameters(['userId' => $userId]);
+        $query->setParameters(['userId' => $user->getId()]);
 
         return $query->getResult();
     }
 
-    public function get($userId, $sort, $start, $limit) {
-        $select = $this->getSql()->select()->where(['user_id' => $userId])->offset($start)->limit($limit);
+    public function get(UserEntityInterface $user, $sort, $start, $limit): array
+    {
+        $select = $this->getSql()->select()->where(['user_id' => $user->getId()])->offset($start)->limit($limit);
         $this->applySort($select, $sort);
         return $this->selectWith($select);
     }

@@ -267,4 +267,65 @@ class SolrDefault extends \TueFind\RecordDriver\SolrMarc
     {
         return $this->translate(['BibleChapters', $code]);
     }
+
+    public function isSubscribable()
+    {
+        return (isset($this->fields['is_subscribable'])) ? $this->fields['is_subscribable'] : false;
+    }
+
+    public function subscribe($params, $user)
+    {
+        if (!$user) {
+            throw new LoginRequiredException('You must be logged in first');
+        }
+
+        $table = $this->getDbService(\IxTheo\Db\Service\SubscriptionServiceInterface::class);
+        $recordId = $this->getUniqueId();
+
+        if ($table->findExisting($user, $recordId)) {
+            return "Exists";
+        }
+        return $table->subscribe($user, $recordId, $this->getTitle(), $this->getAuthorsAsString(), $this->getPublicationDates()[0]);
+    }
+
+    public function unsubscribe($params, $user)
+    {
+        if (!$user) {
+            throw new LoginRequiredException('You must be logged in first');
+        }
+
+        $table = $this->getDbService(\IxTheo\Db\Service\SubscriptionServiceInterface::class);
+        $recordId = $this->getUniqueId();
+
+        return $table->unsubscribe($user, $recordId);
+    }
+
+    public function pdaSubscribe($params, $user, &$data)
+    {
+        if (!$user) {
+            throw new LoginRequiredException('You must be logged in first');
+        }
+
+        $table = $this->getDbService(\IxTheo\Db\Service\PDASubscriptionServiceInterface::class);
+        $recordId = $this->getUniqueId();
+        $userId = $user->id;
+
+        if ($table->findExisting($user, $recordId)) {
+            return "Exists";
+        }
+        $data = [$userId, $recordId, $this->getTitle(), $this->getAuthorsAsString(), $this->getPublicationDates()[0], $this->getCleanISBN()];
+        return call_user_func_array([$table, "subscribe"], $data);
+    }
+
+    public function pdaUnsubscribe($params, $user)
+    {
+        if (!$user) {
+            throw new LoginRequiredException('You must be logged in first');
+        }
+
+        $table = $this->getDbService(\IxTheo\Db\Service\PDASubscriptionServiceInterface::class);
+        $recordId = $this->getUniqueId();
+
+        return $table->unsubscribe($user, $recordId);
+    }
 }

@@ -651,75 +651,12 @@ class SolrDefault extends \VuFind\RecordDriver\SolrMarc
         return in_array($subsystem, $subsystems, true);
     }
 
-    public function isSubscribable()
+    public function stripTrailingDates($text)
     {
-        return (isset($this->fields['is_subscribable'])) ? $this->fields['is_subscribable'] : false;
-    }
-
-    public function stripTrailingDates($text) {
         $matches = [];
         if (!preg_match("/(\\D*)(\\d{4}).*/", $text, $matches))
             return $text;
         return rtrim($matches[1]);
-    }
-
-    public function subscribe($params, $user)
-    {
-        if (!$user) {
-            throw new LoginRequiredException('You must be logged in first');
-        }
-
-        $table = $this->getDbTable('Subscription');
-        $recordId = $this->getUniqueId();
-        $userId = $user->id;
-
-        if ($table->findExisting($userId, $recordId)) {
-            return "Exists";
-        }
-        return $table->subscribe($userId, $recordId, $this->getTitle(), $this->getAuthorsAsString(), $this->getPublicationDates()[0]);
-    }
-
-    public function unsubscribe($params, $user)
-    {
-        if (!$user) {
-            throw new LoginRequiredException('You must be logged in first');
-        }
-
-        $table = $this->getDbTable('Subscription');
-        $recordId = $this->getUniqueId();
-        $userId = $user->id;
-
-        return $table->unsubscribe($userId, $recordId);
-    }
-
-    public function pdaSubscribe($params, $user, &$data)
-    {
-        if (!$user) {
-            throw new LoginRequiredException('You must be logged in first');
-        }
-
-        $table = $this->getDbTable('PDASubscription');
-        $recordId = $this->getUniqueId();
-        $userId = $user->id;
-
-        if ($table->findExisting($userId, $recordId)) {
-            return "Exists";
-        }
-        $data = [$userId, $recordId, $this->getTitle(), $this->getAuthorsAsString(), $this->getPublicationDates()[0], $this->getCleanISBN()];
-        return call_user_func_array([$table, "subscribe"], $data);
-    }
-
-    public function pdaUnsubscribe($params, $user)
-    {
-        if (!$user) {
-            throw new LoginRequiredException('You must be logged in first');
-        }
-
-        $table = $this->getDbTable('PDASubscription');
-        $recordId = $this->getUniqueId();
-        $userId = $user->id;
-
-        return $table->unsubscribe($userId, $recordId);
     }
 
     /**

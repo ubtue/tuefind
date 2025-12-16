@@ -111,7 +111,7 @@ class IxTheo extends \Laminas\View\Helper\AbstractHelper
             $table = $this->container->get(\VuFind\Db\Service\PluginManager::class)
                 ->get(\IxTheo\Db\Service\SubscriptionServiceInterface::class);
 
-            $this->cachedSubscriptions = $table->getAll($user->getId(), 'asc');
+            $this->cachedSubscriptions = $table->getAll($user, 'asc');
         }
 
         foreach ($this->cachedSubscriptions as $subscription) {

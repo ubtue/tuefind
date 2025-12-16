@@ -96,7 +96,7 @@ class Results extends BaseResults
     {
         // If we haven't previously tried to load a list, do it now:
         if ($this->list === false) {
-            $this->list = $this->subscriptionTable->getAll($this->user->getId(), $this->getParams()->getSort());
+            $this->list = $this->subscriptionTable->getAll($this->user, $this->getParams()->getSort());
         }
         return $this->list;
     }
