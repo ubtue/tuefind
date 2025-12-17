@@ -116,7 +116,6 @@ class RecordController extends \TueFind\Controller\RecordController
         $driver = $this->loadRecord();
         $table = $driver->getDbService(\IxTheo\Db\Service\PDASubscriptionServiceInterface::class);
         $recordId = $driver->getUniqueId();
-        $userId = $user->id;
 
         $infoText = $this->forward()->dispatch('Content', [
             'action' => 'content',
@@ -125,7 +124,7 @@ class RecordController extends \TueFind\Controller\RecordController
         $bookDescription = $driver->getAuthorsAsString() . ": " .
                            $driver->getTitle() .  ($driver->getYear() != "" ? "(" . $driver->getYear() . ")" : "") .
                            ", ISBN: " . $driver->getISBNs()[0];
-        return $this->createViewModel(["pdasubscription" => !($table->findExisting($userId, $recordId)), "infoText" => $infoText,
+        return $this->createViewModel(["pdasubscription" => !($table->findExisting($user, $recordId)), "infoText" => $infoText,
                                        "bookDescription" => $bookDescription]);
     }
 }

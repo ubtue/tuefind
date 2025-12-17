@@ -241,7 +241,7 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
         $userAuthorities = [];
         foreach ($view->userAuthorities as $userAuthority) {
             $selected = false;
-            $authorityRecord = $view->authorityRecords[$userAuthority['authority_id']];
+            $authorityRecord = $view->authorityRecords[$userAuthority->getAuthorityControlNumber()];
             $GNDNumber = $authorityRecord->getGNDNumber();
             $authorityTitle = htmlspecialchars($authorityRecord->getTitle());
             foreach ($dublinCore['DC.creator'] as $creator) {
@@ -250,7 +250,7 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
                 }
             }
             $userAuthorities[] = [
-                'authority_id' => $userAuthority['authority_id'],
+                'authority_id' => $userAuthority->getAuthorityControlNumber(),
                 'authority_title' => $authorityTitle,
                 'authority_GNDNumber' => $GNDNumber,
                 'select_title' => $authorityTitle . ' (GND: ' .  $GNDNumber . ')',

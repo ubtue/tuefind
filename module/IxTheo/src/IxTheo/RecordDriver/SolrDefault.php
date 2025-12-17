@@ -308,12 +308,11 @@ class SolrDefault extends \TueFind\RecordDriver\SolrMarc
 
         $table = $this->getDbService(\IxTheo\Db\Service\PDASubscriptionServiceInterface::class);
         $recordId = $this->getUniqueId();
-        $userId = $user->id;
 
         if ($table->findExisting($user, $recordId)) {
             return "Exists";
         }
-        $data = [$userId, $recordId, $this->getTitle(), $this->getAuthorsAsString(), $this->getPublicationDates()[0], $this->getCleanISBN()];
+        $data = [$user, $recordId, $this->getTitle(), $this->getAuthorsAsString(), $this->getPublicationDates()[0], $this->getCleanISBN()];
         return call_user_func_array([$table, "subscribe"], $data);
     }
 

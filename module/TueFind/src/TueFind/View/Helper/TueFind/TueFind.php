@@ -19,7 +19,8 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
 
     protected $container;
 
-    public function __construct(ContainerInterface $container) {
+    public function __construct(ContainerInterface $container)
+    {
         $this->container = $container;
     }
 
@@ -32,7 +33,8 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
      * @param string $string
      * @return string
      */
-    public function base64UrlEncode(string $string): string {
+    public function base64UrlEncode(string $string): string
+    {
         $data = base64_encode($string);
         $data = str_replace(['+','/','='],['-','_','.'], $data);
         return $data;
@@ -48,7 +50,8 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
      *
      * @return string
      */
-    public function base64UrlDecode(string $string): string {
+    public function base64UrlDecode(string $string): string
+    {
         $data = str_replace(['-','_','.'], ['+','/','='], $string);
         $mod4 = strlen($data) % 4;
         if ($mod4) {
@@ -70,7 +73,8 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
      * @param string $datetimeRaw
      * @return string
      */
-    public function convertDateTimeToIso8601($datetimeRaw) {
+    public function convertDateTimeToIso8601($datetimeRaw)
+    {
         $datetimeCleaned = preg_replace('"[\[\]]"', '', $datetimeRaw);
         if (preg_match('"^\d{4}$"', $datetimeCleaned))
             return $datetimeCleaned;
@@ -88,7 +92,8 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
      * @param string $value
      * @return bool
      */
-    public function isUnassigned($value) {
+    public function isUnassigned($value)
+    {
         return ($value == '[Unassigned]') || ($value == $this->translate('[Unassigned]'));
     }
 
@@ -100,7 +105,8 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
      *
      * @return \Laminas\Config\Config
      */
-    public function getConfig($id = 'tuefind', ?array $options = null) {
+    public function getConfig($id = 'tuefind', ?array $options = null)
+    {
         return $this->container->get('VuFind\Config\PluginManager')->get($id, $options);
     }
 
@@ -110,7 +116,8 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
      *
      * @return string
      */
-    public function getControllerName() {
+    public function getControllerName()
+    {
         $default = 'index';
         $route_match = $this->container->get('application')->getMvcEvent()->getRouteMatch();
         if ($route_match == null)
@@ -120,7 +127,8 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
     }
 
 
-    public function getRouteParams() {
+    public function getRouteParams()
+    {
         $defaultRouteParams = [
             'controller' => null,
             'action' => null
@@ -141,7 +149,8 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
      *
      * @return double
      */
-    public function getOverallPercentage($count, \VuFind\Search\Solr\Results $results) {
+    public function getOverallPercentage($count, \VuFind\Search\Solr\Results $results)
+    {
         return ($count * 100) / $results->getResultTotal();
     }
 
@@ -155,7 +164,8 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
      * @return string
      */
     public function getLocalizedOverallPercentage(\Laminas\View\Renderer\PhpRenderer $view,
-                                           $count, \VuFind\Search\Solr\Results $results) {
+                                           $count, \VuFind\Search\Solr\Results $results)
+                                           {
         $percentage = $this->getOverallPercentage($count, $results);
         return $percentage > 0.1 ? $view->localizedNumber($percentage, 1) : "&lt; 0.1";
     }
@@ -165,7 +175,8 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
      *
      * @return string
      */
-    public function getTeamEmail() {
+    public function getTeamEmail()
+    {
         $config = $this->container->get('VuFind\Config')->get('config');
         $team_email = isset($config->Site->email_team) ? $config->Site->email_team : '';
         return $team_email;
@@ -174,7 +185,8 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
     /**
      * Appropriately format the roles for authors
      */
-    public function formatRoles(array $roles): string {
+    public function formatRoles(array $roles): string
+    {
         if (count($roles) == 0) {
             return '';
         }
@@ -200,7 +212,8 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
      *
      * @return string
      */
-    public function getRssFeedIcon($rssFeedId='rss') {
+    public function getRssFeedIcon($rssFeedId='rss')
+    {
         $imgSrc = $this->getView()->imageLink('rss/' . $rssFeedId . '.png');
         if ($imgSrc == null)
             $imgSrc = $this->getView()->imageLink('rss/rss.png');
@@ -215,7 +228,8 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
      *
      * @return string
      */
-    public function getDetailsIcon($detailsId='details') {
+    public function getDetailsIcon($detailsId='details')
+    {
         if (str_contains($detailsId, "(")) {
             $detailsId = trim(explode("(", $detailsId)[0]);
         }
@@ -229,7 +243,8 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
      *
      * @return string
      */
-    private function filterRssItemDescription(string $htmlPart): string {
+    private function filterRssItemDescription(string $htmlPart): string
+    {
         $html = '<html><meta charset="UTF-8"/><body id="htmlPartWrapper">'.$htmlPart.'</body></html>';
 
         $dom = new \DOMDocument();
@@ -260,7 +275,8 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
      *
      * @return string
      */
-    public function getRedirectUrl(string $targetUrl, string $group=null): string {
+    public function getRedirectUrl(string $targetUrl, string $group=null): string
+    {
         $urlHelper = $this->container->get('ViewHelperManager')->get('url');
         return $urlHelper('redirect', ['url' => $this->base64UrlEncode($targetUrl), 'group' => $group]);
     }
@@ -273,7 +289,8 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
      *
      * @return array
      */
-    public function getRssNewsEntries(int $maxItemCount=null, bool $onlyNewestItemPerFeed=false) {
+    public function getRssNewsEntries(int $maxItemCount=null, bool $onlyNewestItemPerFeed=false)
+    {
 
         $rssTable = $this->getDbService(\TueFind\Db\Service\RssItemServiceInterface::class);
         $rssItems = $rssTable->getItemsSortedByPubDate($this->getTueFindInstance());
@@ -305,7 +322,8 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
      *
      * @return string
      */
-    public function getRssNewsUrl() {
+    public function getRssNewsUrl()
+    {
         $rssFeedPath = $this->getConfig()->General->rss_feed_path;
         if (!is_file($rssFeedPath))
             return false;
@@ -317,7 +335,8 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
      * Implemented as a workaround, because getenv('TUEFIND_FLAVOUR')
      * does not work in apache environment.
      */
-    public function getTueFindFlavour(): string {
+    public function getTueFindFlavour(): string
+    {
         if ($this->getTueFindSubtype() == 'KRI')
             return 'krimdok';
         else
@@ -329,11 +348,13 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
       * Get TueFind Instance as defined by VUFIND_LOCAL_DIR variable
       * @return string
       */
-    public function getTueFindInstance() {
+    public function getTueFindInstance()
+    {
         return basename(getenv('VUFIND_LOCAL_DIR'));
     }
 
-    public function getTueFindSubsystem(): string {
+    public function getTueFindSubsystem(): string
+    {
         $instance = $this->getTueFindInstance();
         $map = ['ixtheo' => 'ixtheo',
                 'relbib' => 'relbib',
@@ -346,9 +367,10 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
       * Derive textual description of TueFind (Subsystems of IxTheo return IxTheo)
       * @return string or false of no matching value could be found
       */
-    public function getTueFindType() {
+    public function getTueFindType()
+    {
         $instance = $this->getTueFindInstance();
-        $instance = preg_replace('/\d+$/', "", $instance);
+        $instance = preg_replace('/\d+$/', '', $instance);
         switch ($instance) {
             case 'ixtheo':
             case 'bibstudies':
@@ -366,9 +388,10 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
       * Derive textual description of TueFind Subsystem
       * @return string
       */
-    public function getTueFindSubtype() {
+    public function getTueFindSubtype()
+    {
         $instance = $this->getTueFindInstance();
-        $instance = preg_replace('/\d+$/', "", $instance);
+        $instance = preg_replace('/\d+$/', '', $instance);
         switch ($instance) {
             case 'ixtheo':
                 return 'IXT';
@@ -388,9 +411,10 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
       * Derive the German FID denomination
       * @return string or false of no matching value could be found
       */
-    public function getTueFindFID($short=false) {
+    public function getTueFindFID($short=false)
+    {
         $instance = $this->getTueFindInstance();
-        $instance = preg_replace('/\d+$/', "", $instance);
+        $instance = preg_replace('/\d+$/', '', $instance);
         $fid = false;
         switch($instance) {
             case 'ixtheo':
@@ -416,7 +440,8 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
       * Get the user address from a logged in user
       * @return string
       */
-    public function getUserEmail() {
+    public function getUserEmail()
+    {
         $auth = $this->container->get('ViewHelperManager')->get('auth');
         $manager = $auth->getManager();
         return ($user = $manager->getUserObject()) ? $user->getEmail() : '';
@@ -426,7 +451,8 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
     * Get the first name of the logged in user
     * @return string
     */
-    public function getUserFirstName() {
+    public function getUserFirstName()
+    {
         $auth = $this->container->get('ViewHelperManager')->get('auth');
         $manager = $auth->getManager();
         return ($user = $manager->getUserObject()) ? $user->getFirstname() : '';
@@ -436,7 +462,8 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
      * Get the full name of the logged in user
      * @return string
      */
-    public function getUserFullName() {
+    public function getUserFullName()
+    {
         $auth = $this->container->get('ViewHelperManager')->get('auth');
         $manager = $auth->getManager();
         return ($user = $manager->getUserObject()) ? $user->getFirstname() . ' ' . $user->getLastname() : '';
@@ -446,13 +473,15 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
       * Get the last name of the logged in user
       * @return string
       */
-    public function getUserLastName() {
+    public function getUserLastName()
+    {
         $auth = $this->container->get('ViewHelperManager')->get('auth');
         $manager = $auth->getManager();
         return ($user = $manager->getUserObject()) ? $user->getLastname() : '';
     }
 
-    public function isRssSubscriptionEnabled(): bool {
+    public function isRssSubscriptionEnabled(): bool
+    {
         $setting = $this->getConfig()->General->rss_subscriptions ?? 'disabled';
         return $setting == 'enabled';
     }
@@ -460,7 +489,8 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
     /**
      * Check if a searchbox tab is enabled, e.g. "SolrAuth".
      */
-    public function isSearchTabEnabled($tabId): bool {
+    public function isSearchTabEnabled($tabId): bool
+    {
         $tabConfig = $this->getConfig('config')->SearchTabs ?? [];
         foreach ($tabConfig as $tabKey => $tabText) {
             if ($tabKey == $tabId)
@@ -472,7 +502,8 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
     /**
      * Check if user account deletion is enabled in config file.
      */
-    public function isUserAccountDeletionEnabled() {
+    public function isUserAccountDeletionEnabled()
+    {
         $config = $this->container->get('VuFind\Config')->get('config');
         return !empty($config->Authentication->account_deletion);
     }
@@ -496,13 +527,15 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
         '/Safari/i',
     ];
 
-    public function isUserAgentBot(): bool {
+    public function isUserAgentBot(): bool
+    {
         $userAgent = $_SERVER['HTTP_USER_AGENT'];
         if (empty($userAgent)) {
             return false;
         }
 
-        foreach (static::USER_AGENT_BOT_PATTERNS as $pattern) {
+        foreach (static::USER_AGENT_BOT_PATTERNS as $pattern)
+        {
             if (preg_match($pattern, $userAgent)) {
                 return true;
             }
@@ -510,13 +543,15 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
         return false;
     }
 
-    public function isUserAgentBrowser(): bool {
+    public function isUserAgentBrowser(): bool
+    {
         $userAgent = $_SERVER['HTTP_USER_AGENT'];
         if (empty($userAgent)) {
             return false;
         }
 
-        foreach (static::USER_AGENT_BROWSER_PATTERNS as $pattern) {
+        foreach (static::USER_AGENT_BROWSER_PATTERNS as $pattern)
+        {
             if (preg_match($pattern, $userAgent)) {
                 return true;
             }
@@ -524,11 +559,13 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
         return false;
     }
 
-    public function isUserAgentPositive(): bool {
+    public function isUserAgentPositive(): bool
+    {
         return ($this->isUserAgentBrowser() && !$this->isUserAgentBot());
     }
 
-    public function printSuperiorSeries($superior_record) {
+    public function printSuperiorSeries($superior_record)
+    {
         $superior_series = $superior_record->tryMethod('getSeries');
         if (is_array($superior_series)) {
             foreach ($superior_series as $current) {
@@ -541,7 +578,8 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
         return false;
     }
 
-    public function printPublicationInformation($pubPlaces, $pubDates, $pubNames) {
+    public function printPublicationInformation($pubPlaces, $pubDates, $pubNames)
+    {
         if (is_array($pubPlaces) && is_array($pubDates) && is_array($pubNames) &&
             !(empty($pubPlaces) && empty($pubDates) && empty($pubNames)))
         {
@@ -571,11 +609,13 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
         return false;
     }
 
-    public function getKfL() {
+    public function getKfL()
+    {
         return $this->container->get(\TueFind\Service\KfL::class);
     }
 
-    public function getPublicationByControlNumber(string $controlNumber) {
+    public function getPublicationByControlNumber(string $controlNumber)
+    {
         $publicationTable = $this->getDbService(\TueFind\Db\Service\PublicationServiceInterface::class);
         return $publicationTable->getByControlNumber($controlNumber);
     }
@@ -611,7 +651,7 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
             $table = $this->getDbService(\TueFind\Db\Service\UserAuthorityServiceInterface::class);
             foreach($authorsIds as $authorityId) {
                 $row = $table->getByUserAndAuthorityId($user, $authorityId);
-                if(!empty($row) && $row->access_state == "granted") {
+                if(!empty($row) && $row->getAccessState() == "granted") {
                     $access = true;
                 }
             }
@@ -630,7 +670,7 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
             $table = $this->getDbService(\TueFind\Db\Service\UserAuthorityServiceInterface::class);
             foreach($secondaryAuthorsIds as $authorId) {
                 $row = $table->getByUserAndAuthorityId($user, $authorId);
-                if(!empty($row) && $row->access_state == "granted") {
+                if(!empty($row) && $row->getAccessState() == "granted") {
                     $showButton = true;
                 }
             }
@@ -640,7 +680,7 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
     }
 
 
-    public function userAlreadyMadeAuthorityRequest(\TueFind\Db\Entity\User $user): bool
+    public function userAlreadyMadeAuthorityRequest(UserEntityInterface $user): bool
     {
         $service = $this->getDbService(\TueFind\Db\Service\UserAuthorityServiceInterface::class);
         $row = $service->getByUser($user);
@@ -648,7 +688,7 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
     }
 
 
-    public function getUserAccessPublishRecord($userId, $recordAuthors): bool
+    public function getUserAccessPublishRecord(UserEntityInterface $user, array $recordAuthors): bool
     {
         $authorsIds = [];
         foreach($recordAuthors as $authorArray) {
@@ -662,40 +702,47 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
         }
 
         $service = $this->getDbService(\TueFind\Db\Service\UserAuthorityServiceInterface::class);
-        return $service->hasGrantedAuthorityRight($userId, $authorsIds);
+        return $service->hasGrantedAuthorityRight($user, $authorsIds);
     }
 
-    public function showRSSBlock(): bool {
+    public function showRSSBlock(): bool
+    {
         $instance = $this->getTueFindInstance();
         $map = ['ixtheo'];
         return in_array($instance, $map);
     }
 
-    public function getFullRouteName(): string {
+    public function getFullRouteName(): string
+    {
         $currentRoute = $this->getRouteParams();
         return isset($currentRoute['page']) ? $currentRoute['controller'].'/'.$currentRoute['action'].'/'.$currentRoute['page'] : $currentRoute['controller'].'/'.$currentRoute['action'];
     }
 
-    public function getPublicationEmail(): string {
+    public function getPublicationEmail(): string
+    {
         $config = $this->getConfig('tuefind');
-        return $config->Publication->email ?? "";
+        return $config->Publication->email ?? '';
     }
 
-    public function getSelfArchivingEmail(): string {
+    public function getSelfArchivingEmail(): string
+    {
         $config = $this->getConfig('tuefind');
-        return $config->Publication->selfarchivingemail ?? "";
+        return $config->Publication->selfarchivingemail ?? '';
     }
 
-    public function getSiteEmail(): string {
+    public function getSiteEmail(): string
+    {
         $config = $this->container->get('VuFind\Config')->get('config');
-        return $config->Site->email ?? "";
+        return $config->Site->email ?? '';
     }
 
-    public function getHierarchicalDisplayText($filterDisplayText): string {
+    public function getHierarchicalDisplayText($filterDisplayText): string
+    {
         return $this->container->get(\VuFind\Search\Solr\HierarchicalFacetHelper::class)->formatDisplayText($filterDisplayText)->getDisplayString();
     }
 
-    public function isNewItem(string $searchClassId): bool {
+    public function isNewItem(string $searchClassId): bool
+    {
         $hiddenFilters = $this->getView()->plugin('searchTabs')->getHiddenFilters($searchClassId);
         if(isset($hiddenFilters['first_indexed'])) {
             return true;
@@ -703,7 +750,8 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
         return false;
     }
 
-    public function searchMenuNavActive(): array {
+    public function searchMenuNavActive(): array
+    {
         $currentRoute = $this->getRouteParams();
         $navActive['historyActive'] = '';
         $navActive['newItemActive'] = '';

@@ -56,7 +56,7 @@ class PDASubscription implements PDASubscriptionEntityInterface
 
     public function setBookTitle(string $title): static
     {
-        $this->title = $title;
+        $this->bookTitle = $title;
         return $this;
     }
 
@@ -67,7 +67,7 @@ class PDASubscription implements PDASubscriptionEntityInterface
 
     public function setBookAuthor(string $author): static
     {
-        $this->author = $author;
+        $this->bookAuthor = $author;
         return $this;
     }
 
@@ -78,7 +78,7 @@ class PDASubscription implements PDASubscriptionEntityInterface
 
     public function setBookYear(string $year): static
     {
-        $this->year = $year;
+        $this->bookYear = $year;
         return $this;
     }
 
@@ -89,7 +89,7 @@ class PDASubscription implements PDASubscriptionEntityInterface
 
     public function setBookPpn(string $ppn): static
     {
-        $this->ppn = $ppn;
+        $this->bookPpn = $ppn;
         return $this;
     }
 
@@ -100,7 +100,7 @@ class PDASubscription implements PDASubscriptionEntityInterface
 
     public function setBookIsbn(string $isbn): static
     {
-        $this->isbn = $isbn;
+        $this->bookIsbn = $isbn;
         return $this;
     }
 }

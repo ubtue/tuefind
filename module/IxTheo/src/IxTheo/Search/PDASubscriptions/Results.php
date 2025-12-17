@@ -32,7 +32,7 @@ class Results extends BaseResults
      * DB table
      * @var \IxTheo\Db\Table\PDASubscription
      */
-    protected $pdasubscriptionTable = null;
+    protected $pdasubscriptionService = null;
 
     /**
      * Returns the stored list of facets for the last search
@@ -68,7 +68,7 @@ class Results extends BaseResults
         // Apply offset and limit if necessary!
         $limit = $this->getParams()->getLimit();
         if ($this->resultTotal > $limit) {
-            $list = $this->pdasubscriptionTable->get($this->user->getId(), $this->getParams()->getSort(), $this->getStartRecord() - 1, $limit);
+            $list = $this->pdasubscriptionService->get($this->user->getId(), $this->getParams()->getSort(), $this->getStartRecord() - 1, $limit);
         }
 
         // Retrieve record drivers for the selected items.
@@ -94,12 +94,12 @@ class Results extends BaseResults
     {
         // If we haven't previously tried to load a list, do it now:
         if ($this->list === false) {
-            $this->list = $this->pdasubscriptionTable->getAll($this->user->getId(), $this->getParams()->getSort());
+            $this->list = $this->pdasubscriptionService->getAll($this->user, $this->getParams()->getSort());
         }
         return $this->list;
     }
 
-    public function setPDAsubscriptionService(PDASubscriptionService $pdasubscriptionTable) {
-        $this->pdasubscriptionTable = $pdasubscriptionTable;
+    public function setPDAsubscriptionService(PDASubscriptionService $pdasubscriptionService) {
+        $this->pdasubscriptionService = $pdasubscriptionService;
     }
 }

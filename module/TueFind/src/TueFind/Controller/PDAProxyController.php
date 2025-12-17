@@ -96,7 +96,7 @@ class PDAProxyController extends \VuFind\Controller\AbstractBase implements \Psr
         try {
             $pda_available = ($isbn != $NO_ISBN) ? (!$this->isAvailableForILL($isbn)) : false;
         } catch (Exception $e) {
-            echo 'We got exception' . $e->getMessage() . "\n";
+            $this->log('error', 'We got exception ' . $e->getMessage());
         }
 
         $pda_status = $pda_available ? "OFFER_PDA" : "NO_OFFER_PDA";

@@ -3,70 +3,71 @@ namespace IxTheo\Db\Service;
 
 use VuFind\Db\Service\AbstractDbService;
 use IxTheo\Db\Entity\PDASubscriptionEntityInterface;
+use IxTheo\Db\Entity\UserEntityInterface;
 
 class PDASubscriptionService extends AbstractDbService implements PDASubscriptionServiceInterface
 {
     use \VuFind\Db\Service\DbServiceAwareTrait;
 
-    /**
-     * Session container for last list information.
-     *
-     * @var \Laminas\Session\Container
-     */
-    protected $session;
-
-    public function getNew($userId, $ppn, $title, $author, $year, $isbn)
+    public function createEntity(): PDASubscriptionEntityInterface
     {
-        $row = $this->createRow();
-        $row->id = $userId;
-        $row->book_title = $title ?: "";
-        $row->book_author = $author ?: "";
-        $row->book_year = $year ?: "";
-        $row->book_ppn = $ppn ?: "";
-        $row->book_isbn = $isbn ?: "";
-        return $row;
+        return $this->entityPluginManager->get(PDASubscriptionEntityInterface::class);
     }
 
-    public function findExisting($userId, $ppn)
-    {
-        return $this->select(['id' => $userId, 'book_ppn' => $ppn])->current();
-    }
-
-    public function subscribe($userId, $ppn, $title, $author, $year, $isbn)
-    {
-        $row = $this->getNew($userId, $ppn, $title, $author, $year, $isbn);
-        $row->save();
-        return $row->id;
-    }
-
-    public function unsubscribe($userId, $recordId)
-    {
-        return $this->delete(['id' => $userId, 'book_ppn' => $recordId]);
-    }
-
-    public function getAll($userId, $sort)
+    public function findExisting(UserEntityInterface $user, $ppn): ?PDASubscriptionEntityInterface
     {
         $dql = 'SELECT P '
             . 'FROM ' . PDASubscriptionEntityInterface::class . ' P '
-            . 'WHERE P.user = :userId';
+            . 'WHERE P.user = :user '
+            . 'AND P.bookPpn = :ppn ';
+
+        $query = $this->entityManager->createQuery($dql);
+        $query->setParameters(['user' => $user, 'ppn' => $ppn]);
+        return $query->getOneOrNullResult();
+    }
+
+    public function subscribe(UserEntityInterface $user, $ppn, $title, $author, $year, $isbn): PDASubscriptionEntityInterface
+    {
+        $entity = $this->createEntity();
+        $entity->setUser($user);
+        $entity->setBookTitle($title ?: '');
+        $entity->setBookAuthor($author ?: '');
+        $entity->setBookYear($year ?: '');
+        $entity->setBookPpn($ppn ?: '');
+        $entity->setBookIsbn($isbn ?: '');
+        $this->persistEntity($entity);
+        return $entity;
+    }
+
+    public function unsubscribe(UserEntityInterface $user, $recordId): void
+    {
+        $entity = $this->findExisting($user, $recordId);
+        $this->deleteEntity($entity);
+    }
+
+    public function getAll(UserEntityInterface $user, $sort): array
+    {
+        $dql = 'SELECT P '
+            . 'FROM ' . PDASubscriptionEntityInterface::class . ' P '
+            . 'WHERE P.user = :user';
 
         $this->applySort($dql, $sort);
         $query = $this->entityManager->createQuery($dql);
-        $query->setParameters(['userId' => $userId]);
+        $query->setParameters(['user' => $user]);
         return $query->getResult();
     }
 
-    public function get($userId, $sort, $start, $limit)
+    public function get(UserEntityInterface $user, $sort, $start, $limit)
     {
         $dql = 'SELECT P '
             . 'FROM ' . PDASubscriptionEntityInterface::class . ' P '
-            . 'WHERE P.user = :userId '
+            . 'WHERE P.user = :user '
             . 'LIMIT ' . $limit
             . 'OFFSET ' . $start;
 
         $this->applySort($dql, $sort);
         $query = $this->entityManager->createQuery($dql);
-        $query->setParameters(['userId' => $userId]);
+        $query->setParameters(['userId' => $user]);
         return $query->getResult();
     }
 

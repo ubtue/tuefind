@@ -1,11 +1,13 @@
 <?php
 
 namespace IxTheo\Controller\Plugin;
+
 use Laminas\Mail\Address,
     Laminas\Mail\AddressList,
     Laminas\Mvc\Controller\Plugin\AbstractPlugin,
     VuFind\Db\Row\User,
-    VuFind\Exception\Mail as MailException;
+    VuFind\Exception\Mail as MailException,
+    \IxTheo\Db\Entity\UserEntityInterface;
 
 
 /**
@@ -19,7 +21,7 @@ class PDASubscriptions extends AbstractPlugin
     protected $config;
     protected $renderer;
 
-    public function __construct(\IxTheo\Db\Table\PluginManager $dbTableManager, \TueFind\Mailer\Mailer $mailer,
+    public function __construct(\IxTheo\Db\Service\PluginManager $dbTableManager, \TueFind\Mailer\Mailer $mailer,
                                 \VuFind\Record\Loader $recordLoader, \VuFind\Config\PluginManager $config,
                                 \Laminas\View\Renderer\PhpRenderer $renderer) {
         $this->dbTableManager = $dbTableManager;
@@ -67,21 +69,18 @@ class PDASubscriptions extends AbstractPlugin
         }
     }
 
-    function getUserData($userId) {
-       $userTable = $this->dbTableManager->get('User');
-       $select = $userTable->getSql()->select()->where(['id' => $userId]);
-       $userRow = $userTable->selectWith($select)->current();
-       $userData = [ 'title' => $userRow->ixtheo_title != "Other" ? $userRow->ixtheo_title . " " : "",
-                     'firstname' => $userRow->firstname,
-                     'lastname' =>  $userRow->lastname,
-                     'email' => $userRow->email,
-                     'country' => $userRow->tuefind_country,
-                     'user_type' => $userRow->ixtheo_user_type ];
+    function getUserData(UserEntityInterface $user) {
+       $userData = [ 'title' => $user->getTitle() != 'Other' ? $user->getTitle() . ' ' : '',
+                     'firstname' => $user->getFirstname(),
+                     'lastname' =>  $user->getLastname(),
+                     'email' => $user->getEmail(),
+                     'country' => $user->getCountry(),
+                     'user_type' => $user->getUserType() ];
        return $userData;
     }
 
     function formatUserData($userData) {
-       return [ ($userData['title'] != "" ? $userData['title'] . " " : "") . $userData['firstname'] . " " . $userData['lastname'],
+       return [ ($userData['title'] != '' ? $userData['title'] . ' ' : '') . $userData['firstname'] . ' ' . $userData['lastname'],
                 $userData['email'],
                 $userData['country']
               ];
@@ -123,8 +122,8 @@ class PDASubscriptions extends AbstractPlugin
     /*
      * Send notification to library
      */
-    function sendPDANotificationEmail($post, $user, $data, $id) {
-        $userDataRaw = $this->getUserData($user->id);
+    function sendPDANotificationEmail($post, UserEntityInterface $user, $data, $id) {
+        $userDataRaw = $this->getUserData($user);
         $userType = $userDataRaw['user_type'];
         $userData = $this->formatUserData($userDataRaw);
         $senderData = $this->getPDASenderData($userType);
@@ -183,8 +182,8 @@ class PDASubscriptions extends AbstractPlugin
         return ['email' => $email, 'name' => $name];
     }
 
-    function sendPDAUserNotificationEmail($post, $user, $data, $id) {
-        $userDataRaw = $this->getUserData($user->id);
+    function sendPDAUserNotificationEmail($post, UserEntityInterface $user, $data, $id) {
+        $userDataRaw = $this->getUserData($user);
         $userType = $userDataRaw['user_type'];
         $userData = $this->formatUserData($userDataRaw);
         $senderData = $this->getPDASenderData($userType);
@@ -207,8 +206,8 @@ class PDASubscriptions extends AbstractPlugin
     /*
      * Send unsubscribe notification to library
      */
-    function sendPDAUnsubscribeEmail($user, $id) {
-        $userDataRaw = $this->getUserData($user->id);
+    function sendPDAUnsubscribeEmail(UserEntityInterface $user, $id) {
+        $userDataRaw = $this->getUserData($user);
         $userType = $userDataRaw['user_type'];
         $userData = $this->formatUserData($userDataRaw);
         $senderData = $this->getPDASenderData($userType);
@@ -224,8 +223,8 @@ class PDASubscriptions extends AbstractPlugin
     /*
      * Send unsubscribe notification to user
      */
-    function sendPDAUserUnsubscribeEmail($user, $id) {
-        $userDataRaw = $this->getUserData($user->id);
+    function sendPDAUserUnsubscribeEmail(UserEntityInterface $user, $id) {
+        $userDataRaw = $this->getUserData($user);
         $userType = $userDataRaw['user_type'];
         $userData = $this->formatUserData($userDataRaw);
         $senderData = $this->getPDASenderData($userType);

@@ -24,17 +24,19 @@ class UserAuthorityService extends AbstractDbService implements UserAuthoritySer
         return $query->getResult();
     }
 
-    public function hasGrantedAuthorityRight($userId, $authorityIds): bool
+    public function hasGrantedAuthorityRight(UserEntityInterface $user, string $authorityControlNumber): bool
     {
-        $select = $this->getSql()->select();
-        $where = new \Laminas\Db\Sql\Where();
-        $where->in("authority_id", $authorityIds);
-        $where->equalTo('user_id', $userId);
-        $where->equalTo('access_state', 'granted');
-        $select->where($where);
+        $dql = 'SELECT ua '
+            . 'FROM ' . UserAuthorityEntityInterface::class . ' ua '
+            . 'WHERE ua.user = :user '
+            . 'AND ua.authorityControlNumber = :authorityControlNumber '
+            . 'AND ua.accessState = :accessState ';
 
-        $rows = $this->selectWith($select);
-        return count($rows) > 0;
+        $query = $this->entityManager->createQuery($dql);
+        $query->setParameter('user', $user);
+        $query->setParameter('authorityControlNumber', $authorityControlNumber);
+        $query->setParameter('accessState', 'granted');
+        return ($query->getOneOrNullResult() != null);
     }
 
     public function getAllByUserAccessState(UserEntityInterface $user, $accessState=null): array
