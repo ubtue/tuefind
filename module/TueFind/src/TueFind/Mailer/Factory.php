@@ -28,4 +28,26 @@ class Factory extends \VuFind\Mailer\Factory {
 
         return $class;
     }
+
+    protected function getDSN(array $config): string
+    {
+        $dsn = parent::getDSN($config);
+
+        // Allow self-signed certificates for localhost setups
+        if (preg_match('"^smtp://(localhost|127\.0\.0\.)"', $dsn)) {
+            $additionalParams = [
+                'allow_self_signed' => 'true',
+                'verify_peer' => 'false',
+                'verify_peer_name' => 'false',
+            ];
+
+            if (str_contains($dsn, '?'))
+                $dsn .= '&';
+            else
+                $dsn .= '?';
+
+            $dsn .= http_build_query($additionalParams);
+        }
+        return $dsn;
+    }
 }
