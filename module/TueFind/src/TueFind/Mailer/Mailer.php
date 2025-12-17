@@ -107,14 +107,12 @@ class Mailer extends \VuFind\Mailer\Mailer
             }
 
             // TueFind: Append footer
-            $tmpBody = $email->getBody()->bodyToString();
-            $footer = $this->translate('mail_footer_please_contact') . PHP_EOL . $this->siteAddress;
-            $tmpBody .= PHP_EOL . '--' . PHP_EOL . $footer;
-            $email->text($tmpBody);
+            $footer = PHP_EOL . '--' . PHP_EOL . $this->translate('mail_footer_please_contact') . PHP_EOL . $this->siteAddress;
+            $email->text($email->getTextBody() . $footer);
 
             // TueFind: Add header for spamfilter
             if ($tuefindSpamfilter) {
-                $headers = $email->getHeaders()->addTextHeader('X-TueFind-Spamfilter', 'enabled');
+                $email->getHeaders()->addTextHeader('X-TueFind-Spamfilter', 'enabled');
             }
 
             $email->addFrom($from);
