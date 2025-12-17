@@ -66,13 +66,15 @@ class UserService extends \TueFind\Db\Service\UserService implements UserService
     {
         $dql = 'SELECT U '
             . 'FROM ' . UserEntityInterface::class . ' U '
-            . 'WHERE FIND_IN_SET(:right, tuefind_rights) > 0'
+            //. 'WHERE FIND_IN_SET(:right, tuefind_rights) > 0'
+            //. 'WHERE :right MEMBER OF U.tuefindRights '
+            . 'WHERE U.tuefindRights LIKE :right '
             . 'AND U.ixtheoUserType = :ixtheoUserType '
             . 'ORDER BY U.username ASC';
 
         $query = $this->entityManager->createQuery($dql);
         $query->setParameter('ixtheoUserType', \IxTheo\Utility::getUserTypeFromUsedEnvironment());
-        $query->setParameter('right', $right);
+        $query->setParameter('right', '%' . $right . '%');
         return $query->getResult();
     }
 }

@@ -23,7 +23,7 @@ class PublicationService extends AbstractDbService implements PublicationService
         $publication->setExternalDocumentId($externalDocumentId);
         $publication->setExternalDocumentGuid($externalDocumentGuid);
         $publication->setTermsDate($termsDate);
-        $this->entityManager->persist($publication);
+        $this->persistEntity($publication);
         return $publication;
     }
 
@@ -37,13 +37,13 @@ class PublicationService extends AbstractDbService implements PublicationService
         return $query->getResult();
     }
 
-    public function getByUserId($userId): array
+    public function getByUser(UserEntityInterface $user): array
     {
         $dql = 'SELECT P '
             . 'FROM ' . PublicationEntityInterface::class . ' P '
-            . 'WHERE P.user = :userId';
+            . 'WHERE P.user = :user';
         $query = $this->entityManager->createQuery($dql);
-        $query->setParameters(['userId' => $userId]);
+        $query->setParameters(['user' => $user]);
         return $query->getResult();
     }
 

@@ -9,7 +9,7 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
         $table = $this->getDbService(\TueFind\Db\Service\UserAuthorityServiceInterface::class);
 
         $accessState = $onlyGranted ? 'granted' : null;
-        $userAuthorities = $table->getByUserId($user->getId(), $accessState);
+        $userAuthorities = $table->getByUser($user, $accessState);
 
         if ($exceptionIfEmpty && count($userAuthorities) == 0) {
             throw new \Exception('No authority linked to this user!');
@@ -93,9 +93,9 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
         $dspaceServer = $config->Publication->dspace_url_base;
         $dspaceVersion = $config->Publication->dspace_version;
 
-        $authorityUsers = $this->getDbService(\TueFind\Db\Service\UserAuthorityServiceInterface::class)->getByUserId($user);
+        $authorityUsers = $this->getDbService(\TueFind\Db\Service\UserAuthorityServiceInterface::class)->getByUser($user);
         $authorityUsersArray = [];
-        foreach($authorityUsers as $authorityUser) {
+        foreach ($authorityUsers as $authorityUser) {
             $authorityUserLoader = $this->serviceLocator->get(\VuFind\Record\Loader::class)->load($authorityUser->getAuthorityControlNumber(), 'SolrAuth');
             $authorityUsersArray[] = [
                 'id'=>$authorityUser->getAuthorityControlNumber(),
@@ -104,7 +104,7 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
             ];
         }
         $publications = [];
-        $dbPublications = $this->getDbService(\TueFind\Db\Service\PublicationServiceInterface::class)->getByUserId($user->getId());
+        $dbPublications = $this->getDbService(\TueFind\Db\Service\PublicationServiceInterface::class)->getByUser($user);
         foreach ($dbPublications as $dbPublication) {
             $existingRecord = $this->getRecordLoader()->load($dbPublication->getControlNumber(), 'Solr', /*tolerate_missing=*/true);
             $publication = ['db' => $dbPublication, 'record' => $existingRecord];

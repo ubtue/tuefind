@@ -6,10 +6,14 @@ use TueFind\Db\Entity\UserAuthorityEntityInterface;
 use TueFind\Db\Entity\UserEntityInterface;
 use VuFind\Db\Service\AbstractDbService;
 
-class UserAuthorityService extends AbstractDbService implements UserAuthorityHistoryServiceInterface
+class UserAuthorityService extends AbstractDbService implements UserAuthorityServiceInterface
 {
+    protected function createEntity(): UserAuthorityEntityInterface
+    {
+        return $this->entityPluginManager->get(UserAuthorityEntityInterface::class);
+    }
 
-    public function getAll()
+    public function getAll(): array
     {
         $dql = 'SELECT ua '
             . 'FROM ' . UserAuthorityEntityInterface::class . ' ua '
@@ -33,14 +37,14 @@ class UserAuthorityService extends AbstractDbService implements UserAuthorityHis
         return count($rows) > 0;
     }
 
-    public function getByUserId(UserEntityInterface|int $userOrId, $accessState=null): array
+    public function getAllByUserAccessState(UserEntityInterface $user, $accessState=null): array
     {
         $dql = 'SELECT ua '
             . 'FROM ' . UserAuthorityEntityInterface::class . ' ua '
             . 'WHERE ua.user = :user ';
 
         $parameters = [
-            'user' => $this->getDoctrineReference(UserEntityInterface::class, $userOrId),
+            'user' => $user,
         ];
 
         if (isset($accessState)) {
@@ -54,19 +58,19 @@ class UserAuthorityService extends AbstractDbService implements UserAuthorityHis
         return $results;
     }
 
-    public function getByUserIdCurrent($userId): ?UserAuthorityEntityInterface
+    public function getByUser(UserEntityInterface $user): array
     {
         $dql = 'SELECT ua '
             . 'FROM ' . UserAuthorityEntityInterface::class . ' ua '
             . 'WHERE ua.user = :user ';
 
         $parameters = [
-            'user' => $this->getDoctrineReference(UserEntityInterface::class, $userId),
+            'user' => $user,
         ];
 
         $query = $this->entityManager->createQuery($dql);
         $query->setParameters($parameters);
-        return $query->getOneOrNullResult();
+        return $query->getResult();
     }
 
     public function getByAuthorityControlNumber($authorityControlNumber): ?UserAuthorityEntityInterface
@@ -80,7 +84,7 @@ class UserAuthorityService extends AbstractDbService implements UserAuthorityHis
         return $query->getOneOrNullResult();
     }
 
-    public function getByUserIdAndAuthorityId($userId, $authorityControlNumber): ?UserAuthorityEntityInterface
+    public function getByUserAndAuthorityId(UserEntityInterface $user, $authorityControlNumber): ?UserAuthorityEntityInterface
     {
         $dql = 'SELECT ua '
             . 'FROM ' . UserAuthorityEntityInterface::class . ' ua '
@@ -89,13 +93,25 @@ class UserAuthorityService extends AbstractDbService implements UserAuthorityHis
 
         $query = $this->entityManager->createQuery($dql);
         $query->setParameters(['authorityControlNumber' => $authorityControlNumber,
-                               'user' => $this->getDoctrineReference(UserEntityInterface::class, $userId)]
+                               'user' => $user]
         );
         return $query->getOneOrNullResult();
     }
 
-    public function addRequest($userId, $authorityId)
+    public function addRequest(UserEntityInterface $user, $authorityControlNumber): UserAuthorityEntityInterface
     {
-        $this->insert(['user_id' => $userId, 'authority_id' => $authorityId, 'access_state' => 'requested']);
+        $entity = $this->createEntity();
+        $entity->setUser($user);
+        $entity->setAuthorityControlNumber($authorityControlNumber);
+        $entity->setAccessState('requested');
+        $this->persistEntity($entity);
+        return $entity;
+    }
+
+    public function updateAccessState(UserAuthorityEntityInterface $entity, $accessState)
+    {
+        $entity->setAccessState($accessState);
+        $entity->setGrantedDateTime(new \DateTime());
+        $this->persistEntity($entity);
     }
 }

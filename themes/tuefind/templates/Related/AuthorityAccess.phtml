@@ -1,4 +1,4 @@
-<?php $userAccess = $this->tuefind()->getUserAccessState($this->driver->getUniqueId(), $this->user->id ?? null);?>
+<?php $userAccess = $this->tuefind()->getUserAccessState($this->driver->getUniqueId(), $this->user ?? null);?>
 <div class="action-toolbar">
   <?php if ($this->user != false):
     $userAlreadyMadeAuthorityRequest = $this->tuefind()->userAlreadyMadeAuthorityRequest($this->user->id);?>

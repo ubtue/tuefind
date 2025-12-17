@@ -30,7 +30,12 @@ class UserAuthority implements UserAuthorityEntityInterface
     protected DateTime $requestedDatetime;
 
     #[ORM\Column(name: 'granted_datetime', type: 'datetime', nullable: true)]
-    protected DateTime $grantedDatetime;
+    protected ?DateTime $grantedDatetime = null;
+
+    public function __construct()
+    {
+        $this->requestedDatetime = new DateTime();
+    }
 
     public function getId(): ?int
     {
@@ -51,6 +56,12 @@ class UserAuthority implements UserAuthorityEntityInterface
     public function getUser(): UserEntityInterface
     {
         return $this->user;
+    }
+
+    public function setUser(UserEntityInterface $user): static
+    {
+        $this->user = $user;
+        return $this;
     }
 
     public function getRequestedDatetime(): DateTime
@@ -78,12 +89,5 @@ class UserAuthority implements UserAuthorityEntityInterface
     {
         $this->accessState = $accessState;
         return $this;
-    }
-
-    public function updateAccessState($accessState)
-    {
-        $this->access_state = $accessState;
-        $this->granted_datetime = date('Y-m-d H:i:s');
-        $this->save();
     }
 }

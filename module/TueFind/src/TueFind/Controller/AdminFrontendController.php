@@ -29,27 +29,29 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
         }
 
         $userId = $this->params()->fromRoute('user_id');
-        $authorityId = $this->params()->fromRoute('authority_id');
-        $entry = $this->getDbService(\TueFind\Db\Service\UserAuthorityServiceInterface::class)->getByUserIdAndAuthorityId($userId, $authorityId);
         $requestUser = $this->getDbService(\TueFind\Db\Service\UserServiceInterface::class)->getEntityByID(\TueFind\Db\Entity\UserEntityInterface::class, $userId);
-        $requestUserLanguage = $requestUser->last_language;
+        $authorityId = $this->params()->fromRoute('authority_id');
+        $userAuthorityService = $this->getDbService(\TueFind\Db\Service\UserAuthorityServiceInterface::class);
+        $entry = $userAuthorityService->getByUserAndAuthorityId($requestUser, $authorityId);
+        $requestUserLanguage = $requestUser->getLastLanguage();
         $adminUser = $this->getUser();
-        $userAuthorityHistoryTable = $this->getDbService(\TueFind\Db\Service\UserAuthorityHistoryServiceInterface::class)->getLatestRequestByUserId($userId);
+        $userAuthorityHistoryService = $this->getDbService(\TueFind\Db\Service\UserAuthorityHistoryServiceInterface::class);
+        $userAuthorityHistoryEntry = $userAuthorityHistoryService->getLatestRequestByUser($requestUser);
         $action = $this->params()->fromPost('action');
-        $accessInfo = "grant";
+        $accessInfo = 'grant';
         if ($action != '') {
             if ($action == 'grant') {
-                $entry->updateAccessState('granted');
-                $userAuthorityHistoryTable->updateUserAuthorityHistory($adminUser->id, 'granted');
+                $userAuthorityHistoryService->updateHistoryEntry($userAuthorityHistoryEntry, $adminUser, 'granted');
+                $userAuthorityService->updateAccessState($entry, 'granted');
             } elseif ($action == 'decline') {
-                $accessInfo = "declined";
-                $userAuthorityHistoryTable->updateUserAuthorityHistory($adminUser->id, $accessInfo);
-                $entry->delete();
+                $accessInfo = 'declined';
+                $userAuthorityHistoryService->updateHistoryEntry($userAuthorityHistoryEntry, $adminUser, $accessInfo);
+                $userAuthorityService->deleteEntity($entry);
             }
 
             // receivers
-            $receivers = new \Laminas\Mail\AddressList();
-            $receivers->add($requestUser->email);
+            $receivers = [];
+            $receivers[] = $requestUser->getEmail();
 
             $config = $this->getConfig();
             $mailer = $this->serviceLocator->get(\VuFind\Mailer\Mailer::class);

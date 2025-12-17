@@ -36,6 +36,11 @@ class UserAuthorityHistory implements UserAuthorityHistoryEntityInterface
     #[ORM\Column(name: 'process_admin_date', type: 'datetime', nullable: true)]
     protected ?DateTime $processAdminDate = null;
 
+    public function __construct()
+    {
+        $this->requestUserDate = new DateTime();
+    }
+
     public function getId(): ?int
     {
         return $this->id ?? null;
@@ -99,13 +104,5 @@ class UserAuthorityHistory implements UserAuthorityHistoryEntityInterface
     {
         $this->accessState = $accessState;
         return $this;
-    }
-
-    public function updateUserAuthorityHistory($adminId, $access)
-    {
-        $this->admin_id = $adminId;
-        $this->access_state = $access;
-        $this->process_admin_date = date('Y-m-d H:i:s');
-        $this->save();
     }
 }

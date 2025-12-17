@@ -9,6 +9,9 @@ interface UserAuthorityEntityInterface extends EntityInterface
 {
     public function getId(): ?int;
 
+    public function getUser(): UserEntityInterface;
+    public function setUser(UserEntityInterface $user): static;
+
     public function getAuthorityControlNumber(): string;
     public function setAuthorityControlNumber(string $authorityControlNumber): static;
 

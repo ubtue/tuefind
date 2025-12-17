@@ -5,6 +5,7 @@ namespace TueFind\View\Helper\TueFind;
 use Psr\Container\ContainerInterface;
 use VuFind\Search\SearchTabsHelper;
 use VuFind\View\Helper\Root\SearchTabs;
+use TueFind\Db\Entity\UserEntityInterface;
 
 /**
  * General View Helper for TueFind, containing miscellaneous functions
@@ -418,7 +419,7 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
     public function getUserEmail() {
         $auth = $this->container->get('ViewHelperManager')->get('auth');
         $manager = $auth->getManager();
-        return ($user = $manager->getUserObject()) ? $user->email : '';
+        return ($user = $manager->getUserObject()) ? $user->getEmail() : '';
     }
 
     /**
@@ -428,7 +429,7 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
     public function getUserFirstName() {
         $auth = $this->container->get('ViewHelperManager')->get('auth');
         $manager = $auth->getManager();
-        return ($user = $manager->getUserObject()) ? $user->firstname : '';
+        return ($user = $manager->getUserObject()) ? $user->getFirstname() : '';
     }
 
     /**
@@ -438,7 +439,7 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
     public function getUserFullName() {
         $auth = $this->container->get('ViewHelperManager')->get('auth');
         $manager = $auth->getManager();
-        return ($user = $manager->getUserObject()) ? $user->firstname . ' ' . $user->lastname : '';
+        return ($user = $manager->getUserObject()) ? $user->getFirstname() . ' ' . $user->getLastname() : '';
     }
 
     /**
@@ -448,7 +449,7 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
     public function getUserLastName() {
         $auth = $this->container->get('ViewHelperManager')->get('auth');
         $manager = $auth->getManager();
-        return ($user = $manager->getUserObject()) ? $user->lastname : '';
+        return ($user = $manager->getUserObject()) ? $user->getLastname() : '';
     }
 
     public function isRssSubscriptionEnabled(): bool {
@@ -579,18 +580,18 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
         return $publicationTable->getByControlNumber($controlNumber);
     }
 
-    public function getUserAccessState($authorityId, $userId = null): array
+    public function getUserAccessState($authorityControlNumber, UserEntityInterface $user = null): array
     {
-        $table = $this->getDbService(\TueFind\Db\Service\UserAuthorityServiceInterface::class);
-        $row = $table->getByAuthorityControlNumber($authorityId);
+        $service = $this->getDbService(\TueFind\Db\Service\UserAuthorityServiceInterface::class);
+        $userAuthority = $service->getByAuthorityControlNumber($authorityControlNumber);
 
         $result = ['availability' => '', 'access_state' => ''];
-        if ($row == null) {
+        if ($userAuthority == null) {
             // Nobody got permission yet, feel free to take it
             $result['availability'] = 'free';
         } else {
-            $result['access_state'] = $row->access_state;
-            if (isset($userId) && ($userId == $row->user_id)) {
+            $result['access_state'] = $userAuthority->getAccessState();
+            if (isset($user) && ($user->getId() == $userAuthority->getUser()->getId())) {
                 $result['availability'] = 'mine';
             } else {
                 $result['availability'] = 'other';
@@ -609,7 +610,7 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
         if($user) {
             $table = $this->getDbService(\TueFind\Db\Service\UserAuthorityServiceInterface::class);
             foreach($authorsIds as $authorityId) {
-                $row = $table->getByUserIdAndAuthorityId($user->getId(), $authorityId);
+                $row = $table->getByUserAndAuthorityId($user, $authorityId);
                 if(!empty($row) && $row->access_state == "granted") {
                     $access = true;
                 }
@@ -628,7 +629,7 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
         if($user) {
             $table = $this->getDbService(\TueFind\Db\Service\UserAuthorityServiceInterface::class);
             foreach($secondaryAuthorsIds as $authorId) {
-                $row = $table->getByUserIdAndAuthorityId($user->getId(), $authorId);
+                $row = $table->getByUserAndAuthorityId($user, $authorId);
                 if(!empty($row) && $row->access_state == "granted") {
                     $showButton = true;
                 }
@@ -639,10 +640,10 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
     }
 
 
-    public function userAlreadyMadeAuthorityRequest($userId): bool
+    public function userAlreadyMadeAuthorityRequest(\TueFind\Db\Entity\User $user): bool
     {
-        $table = $this->getDbService(\TueFind\Db\Service\UserAuthorityServiceInterface::class);
-        $row = $table->getByUserIdCurrent($userId);
+        $service = $this->getDbService(\TueFind\Db\Service\UserAuthorityServiceInterface::class);
+        $row = $service->getByUser($user);
         return (empty($row))? false: true;
     }
 
@@ -660,8 +661,8 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
             }
         }
 
-        $table = $this->getDbService(\TueFind\Db\Service\UserAuthorityServiceInterface::class);
-        return $table->hasGrantedAuthorityRight($userId, $authorsIds);
+        $service = $this->getDbService(\TueFind\Db\Service\UserAuthorityServiceInterface::class);
+        return $service->hasGrantedAuthorityRight($userId, $authorsIds);
     }
 
     public function showRSSBlock(): bool {

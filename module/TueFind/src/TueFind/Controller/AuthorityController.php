@@ -64,30 +64,30 @@ class AuthorityController extends \VuFind\Controller\AuthorityController {
         }
 
         if ($this->params()->fromPost('request') == 'yes') {
-            $userAuthorityTable = $this->getTable('user_authority');
-            $userAuthorityTable->addRequest($user->id, $authorityId);
+            $userAuthorityService = $this->getDbService(\TueFind\Db\Service\UserAuthorityServiceInterface::class);
+            $userAuthorityService->addRequest($user, $authorityId);
 
-            $authorityAccessHistoryTable = $this->getTable('user_authority_history');
-            $authorityAccessHistoryTable->addUserRequest($user->id, $authorityId);
+            $authorityAccessHistoryService = $this->getDbService(\TueFind\Db\Service\UserAuthorityHistoryServiceInterface::class);
+            $authorityAccessHistoryService->addRequest($user, $authorityId);
 
             // body
             $renderer = $this->getViewRenderer();
             $message = $renderer->render(
                 'Email/authority-request-access.phtml',
                 [
-                    'userName' => $user->username,
-                    'userEmail' => $user->email,
+                    'userName' => $user->getUsername(),
+                    'userEmail' => $user->getEmail(),
                     'authorityUrl' => $this->getServerUrl('solrauthrecord') . $authorityId,
                     'processRequestUrl' => $this->getServerUrl('adminfrontend-showuserauthorities'),
                 ]
             );
 
             // receivers
-            $userTable = $this->getTable('user');
-            $receivingUsers = $userTable->getByRight('user_authorities');
-            $receivers = new \Laminas\Mail\AddressList();
+            $userService = $this->getDbService(\TueFind\Db\Service\UserServiceInterface::class);
+            $receivingUsers = $userService->getByRight('user_authorities');
+            $receivers = [];
             foreach ($receivingUsers as $receivingUser) {
-                $receivers->add($receivingUser->email);
+                $receivers[] = $receivingUser->getEmail();
             }
 
             $config = $this->getConfig();
@@ -103,6 +103,6 @@ class AuthorityController extends \VuFind\Controller\AuthorityController {
             $mailer->send($receivers, $config->Site->email_from, 'A user has requested access to an authority dataset', $message);
         }
 
-        return $this->createViewModel(['userId' => $user->getId()]);
+        return $this->createViewModel(['user' => $user]);
     }
 }
