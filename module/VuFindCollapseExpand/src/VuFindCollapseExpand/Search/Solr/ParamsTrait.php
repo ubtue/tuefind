@@ -242,4 +242,9 @@ trait ParamsTrait
         return $this->collapse_expand_grouping->isActive();
     }
 
+
+    public function getExpandField(){
+        return $this->collapse_expand_grouping->getExpandField();
+    }
+
 }

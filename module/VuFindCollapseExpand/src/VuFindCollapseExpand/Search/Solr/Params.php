@@ -37,7 +37,7 @@ class Params extends \VuFind\Search\Solr\Params
 {
     use ParamsTrait;
 
-    protected $collapse_expand_grouping;
+    public $collapse_expand_grouping;
     protected $limit = 10;
 
     /**

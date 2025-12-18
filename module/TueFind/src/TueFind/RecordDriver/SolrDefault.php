@@ -25,7 +25,7 @@ use VuFind\Exception\RecordMissing as RecordMissingException;
 
 class SolrDefault extends \VuFind\RecordDriver\SolrMarc
 {
-    use Feature\CollapseExpandTrait;
+    use \VuFindCollapseExpand\RecordDriver\Feature\OtherDocumentTrait;
 
 
     public const SUBITO_BROKER_ID = 'TUEFIND';
@@ -854,14 +854,6 @@ class SolrDefault extends \VuFind\RecordDriver\SolrMarc
         }
 
         return true;
-    }
-
-    /**
-     * This function is used by collapse and expand to get the title sort field
-     */
-    public function getContainerTitleSort()
-    {
-        return $this->fields['title_sort'] ?? '';
     }
 
     /**

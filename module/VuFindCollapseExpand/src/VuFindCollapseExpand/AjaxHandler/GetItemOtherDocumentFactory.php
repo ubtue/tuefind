@@ -7,20 +7,20 @@
  *
  * Copyright (C) The Library of Tuebingen University 2025
  *
- * @category TueFind
+ * @category VuFindCollapseExpand
  * @package  AJAX
  * @author   Steven Lolong <steven.lolong@uni-tuebingen.de>
  *
   */
 
-namespace TueFind\AjaxHandler;
+namespace VuFindCollapseExpand\AjaxHandler;
 
 use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 use Psr\Container\ContainerExceptionInterface as ContainerException;
 use Psr\Container\ContainerInterface;
 
-class GetItemCollapseExpandFactory implements \Laminas\ServiceManager\Factory\FactoryInterface
+class GetItemOtherDocumentFactory implements \Laminas\ServiceManager\Factory\FactoryInterface
 {
     /**
      * Create an object

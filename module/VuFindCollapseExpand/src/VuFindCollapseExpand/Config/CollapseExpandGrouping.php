@@ -184,4 +184,9 @@ class CollapseExpandGrouping
         return $expandConfig;
     }
 
+    public function getExpandField(){
+        $currentSettings = $this->getCurrentSettingsExpand();
+        return $currentSettings['expand.field'];
+    }
+
 }

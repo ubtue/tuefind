@@ -25,7 +25,7 @@ trait OtherDocumentTrait
      * Collapse and expand variable from config
      */
     protected $expand_row = 0;
-    protected $expand_field = '';
+    protected $expandField = '';
 
 
 
@@ -72,32 +72,23 @@ trait OtherDocumentTrait
             $plugin_manager_solr = $container->get('VuFind\SearchResultsPluginManager')->get('Solr');
             $default_params = $plugin_manager_solr->getParams();
 
-
-            $config = $container->get('VuFind\Config\PluginManager')->get('config');
-            $configIndex = $config->get("CollapseExpand");
-            // $cookie = $container->get('Request')->getCookie();
-            $collapse_expand = $configIndex->get('collapse.field') !== null ? true : false;
-
-
-
-            if ((bool)$collapse_expand === true) {
-                $default_field = array('title_sort');
-                $group_field =  ($configIndex->get('collapse.field') !== null) ? explode(":", $configIndex->get('collapse.field')) : $default_field;
-                $this->expand_row = ($configIndex->get('expand.rows') !== null) ? $configIndex->get('expand.rows') : 10;
-                $this->expand_field = ($configIndex->get('expand.field') !== null) ? $configIndex->get('expand.field') : $default_field[0];
-
-
+            if($default_params->isActivatedCollapseExpand()){
                 // $searchCommand = new SearchCommand($this->backendId,  $query, 0, 0, $params);
                 $params = new ParamBag();
+                
                 $params->add('expand', 'true');
-                $params->add('expand.rows', $this->expand_row);
-                $params->add('expand.field', $this->expand_field);
-                $params->add('fl', '*');
 
-                for ($i = 0; $i < count($group_field); $i++) {
-                    $params->add('fq', '{!collapse field=' . $group_field[$i] . '}');
+                $params->add('fq', $default_params->constructingCollapseParams());
+
+                foreach($default_params->constructingExpandParams() as $key => $value){
+                    $params->add($key, $value);
                 }
-
+                $expand_config = $default_params->collapse_expand_grouping->getExpandConfig();
+                $this->expand_row = $expand_config['expand.rows'];
+                $this->expandField = $expand_config['expand.field'];
+                
+                $params->add('fl', '*');
+                
                 // search those shards that answer, accept partial results
                 $params->add('shards.tolerant', 'true');
 
@@ -173,7 +164,6 @@ trait OtherDocumentTrait
 
 
                 $query_string = "$this->expandField:" . '"'  . $keyword . '"';
-                // $query_string = 'title_sort:"' . $keyword . '"';
 
                 $query = new Query(
                     $query_string
@@ -183,7 +173,7 @@ trait OtherDocumentTrait
                     $this->getSourceIdentifier(),
                     $query,
                     0,
-                    $this->groupLimit,
+                    $this->expand_row,
                     $params
                 );
                 $this->otherDocuments =  $this->searchService->invoke($command)->getResult();
@@ -199,7 +189,19 @@ trait OtherDocumentTrait
 
         $plugin_manager_solr = $container->get('VuFind\SearchResultsPluginManager')->get('Solr');
         $params = $plugin_manager_solr->getParams();
-
+        
+        // params->isActivatedCollapseExpand() is a function in ParamsTrait.php
         return $params->isActivatedCollapseExpand();
+    }
+
+    public function getExpandField()
+    {
+        $container = $this->getContainer();
+
+        $plugin_manager_solr = $container->get('VuFind\SearchResultsPluginManager')->get('Solr');
+        $params = $plugin_manager_solr->getParams();
+
+        // params->getExpandField() is a function in ParamsTrait.php
+        return $params->getExpandField();
     }
 }

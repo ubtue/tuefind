@@ -9,7 +9,6 @@ if ($this->results instanceof Results):
   // general = Solr 
   $search_id = $this->params->getSearchClassId(); 
   if($search_id == "Solr"):
-  print("Halloe");
     if ($this->params->isEnableCollapseExpand()):
 ?>
       <form class="form-inline search-grouping" action="<?= $this->currentPath() ?>"

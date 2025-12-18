@@ -100,6 +100,22 @@ class Your RecordDriver extends SolrMarc {
 }
 ```
 
+### Record Tab
+
+tabs[CollapseExpand] = ItemOtherDocument
+
+For record tab use the `OtherDocumentTrait` in SorlMarc
+
+```php
+class SolrDefault extends \VuFind\RecordDriver\SolrMarc
+{
+    use \VuFindCollapseExpand\RecordDriver\Feature\OtherDocumentTrait;
+}
+```
+
+add this theme in the res:
+templates/RecordTab/itemotherdocument.phtml
+
 This just adds some accessor methods. It will not interfere with your
 custom code.
 

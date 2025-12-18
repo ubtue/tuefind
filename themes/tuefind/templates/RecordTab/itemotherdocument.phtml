@@ -1,12 +1,11 @@
 <?php
 $container = $this->driver->getContainer();
-$config = $container->get('VuFind\Config\PluginManager')->get('config');
-$configIndex = $config->get("Index");
-$expand_field = $configIndex->get('group.expand');
-
+$plugin_manager_solr = $container->get('VuFind\SearchResultsPluginManager')->get('Solr');
+$params = $plugin_manager_solr->getParams();
+$expand_field = $this->driver->getExpandField();
 
 $results = $this->driver->tryMethod('getOtherDocument', [$this->driver->getContainerExpandField($expand_field)]);
-$view = 'collapse-and-expand-tab';
+$view = 'collapse-expand-tab';
 $this->parentRecordId = $this->driver->getRecordId();
 ?>
 <?php if($results !== null): ?>

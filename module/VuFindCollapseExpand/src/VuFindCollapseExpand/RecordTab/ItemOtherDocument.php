@@ -57,14 +57,11 @@ class ItemOtherDocument extends \VuFind\RecordTab\AbstractContent implements Tra
     }
 
     public function isActive()
-    {
-        $index = $this->config->get('Index');
-        $collapse_expand = $index->get('collapse_expand') !== null ? $index->get('collapse_expand') : false;
-        if ((bool) $collapse_expand === true && $this->driver->isActiveCnEParams()) {
+    {   
+        if ($this->driver->isActiveCnEParams()) {
             if ($this->results == null) {
-                // $results = $this->driver->tryMethod('getOtherDocument', [$this->driver->getContainerTitleSort()]);
-                // $this->numOfExpandedDoc = $results->countExpandedDoc($this->driver->getContainerTitleSort());
-                $expand_field = $index->get('group.expand');
+
+                $expand_field = $this->driver->getExpandField();
                 $results = $this->driver->tryMethod('getOtherDocument', [$this->driver->getContainerExpandField($expand_field)]);
                 $this->numOfExpandedDoc = $results->countExpandedDoc($this->driver->getContainerExpandField($expand_field));
 

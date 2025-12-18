@@ -7,7 +7,7 @@
  *
  * Copyright (C) The Library of Tuebingen University 2025
  *
- * @category TueFind
+ * @category VuFindCollapseExpand
  * @package  AJAX
  * @author   Steven Lolong <steven.lolong@uni-tuebingen.de>
  *
@@ -70,23 +70,6 @@ class GetItemOtherDocument extends \VuFind\AjaxHandler\AbstractBase
      */
     public function getItemOtherDocument($id, $source, $searchId)
     {
-        // $params = $this->getController()->plugin(Params::class);
-        // $recordId = $params('id');
-        // $recordDriver = $this->recordLoader->load($recordId);
-        // if ($recordDriver === null) {
-        //     return [];
-        // }
-        // $this->recordPlugin->setRecordDriver($recordDriver);
-        // $this->tabManager->setRecordDriver($recordDriver);
-
-        // // Get the tab content
-        // $tabContent = $this->tabManager->getTabContent('ItemCollapseExpand');
-        // return [
-        //     'content' => $tabContent,
-        //     'title' => 'Other Document',
-        //     'icon' => 'fa fa-book',
-        //     'id' => 'collapse-expand',
-        // ];
         $driver = $this->recordLoader->load($id, $source, $searchId);
         $tabs = $this->tabManager->getTabsForRecord($driver);
         $full = true;
@@ -108,6 +91,6 @@ class GetItemOtherDocument extends \VuFind\AjaxHandler\AbstractBase
         $this->setSessionSettings($params);
         $this->setRequest($params->getRequest());
         $this->setResponse($params->getResponse());
-        return $this->getItemCollapseExpand();
+        return $this->getItemOtherDocument();
     }
 }
