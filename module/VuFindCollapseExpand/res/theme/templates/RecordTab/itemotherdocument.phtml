@@ -1,0 +1,28 @@
+<?php
+$container = $this->driver->getContainer();
+$plugin_manager_solr = $container->get('VuFind\SearchResultsPluginManager')->get('Solr');
+$params = $plugin_manager_solr->getParams();
+$expand_field = $this->driver->getExpandField();
+
+$results = $this->driver->tryMethod('getOtherDocument', [$this->driver->getContainerExpandField($expand_field)]);
+$view = 'collapse-expand-tab';
+$this->parentRecordId = $this->driver->getRecordId();
+?>
+<?php if($results !== null): ?>
+<?php foreach ($results as $current): ?>
+  <?php if ($current->getRecordId() != $this->driver->getRecordId()): ?>
+    <?=$this->record($current)->getSearchResult($view)?>
+    <?="<br />"?>
+  <?php endif; ?>
+
+  <?php if ($current->hasSubRecords()): ?>
+    <?php $sub_records = $current->getSubRecords(); ?>
+    <?php foreach ($sub_records as $sub_record): ?>
+      <?php if ($sub_record->getRecordId() != $this->driver->getRecordId()): ?>
+        <?=$this->record($sub_record)->getSearchResult($view)?>
+        <?="<br />"?>
+      <?php endif; ?>
+    <?php endforeach; ?>
+  <?php endif; ?>
+<?php endforeach; ?>
+<?php endif; ?>
