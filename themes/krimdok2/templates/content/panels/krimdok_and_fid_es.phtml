@@ -1,0 +1,12 @@
+<div class="panel panel-top panel-default tf-panel-home-3">
+    <a class="panel-default-link" href="<?=$this->url('content-page', ['page' => 'krimdok_and_fid', 'container' => 'false']) ?>">
+        <div class="panel-image" style="background-image: url(<?=$this->imageLink('background_fid.jpg') ?>);"></div>
+        <div class="panel-content">
+            <h4>KrimDok</h4>
+        </div>
+    </a>
+    <div class="tf-result-link-block" style="margin-top:55px; margin-right:15px;">
+        <a style="margin-bottom: 5px;" href="<?=$this->url('content-page', ['page' => 'news_fid']) ?>" class="btn btn-default btn-panel-more btn-panel-more-new" role="button" ><?=$this->transEsc('KrimBlog')?></a><br />
+        <a href="<?=$this->url('content-page', ['page' => 'old_news']) ?>" class="btn btn-default btn-panel-more btn-panel-more-new" role="button" ><?=$this->transEsc('Noticias anteriores')?></a>
+    </div>
+</div>

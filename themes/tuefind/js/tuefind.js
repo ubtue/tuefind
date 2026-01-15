@@ -394,14 +394,14 @@ var TueFind = {
                     } else {
                         $("#" + jop_place_holder_id).each(function () {
                             $(this).replaceWith('<?=$this->transEsc("Not available")?>.');
-                        })
+                        });
                     }
                 });
             }, // end success
             error: function (xhr, ajaxOptions, thrownError) {
                 $("#" + jop_place_holder_id).each(function () {
                     $(this).replaceWith('Invalid server response. (JOP server down?)');
-                })
+                });
                 if (window.console && window.console.log) {
                     console.log("Status: " + xhr.status + ", Error: " + thrownError);
                 }
@@ -665,6 +665,19 @@ var TueFind = {
                 }
             })
         });
+    },
+
+    MoveCursorToEnd: function(elementID="searchForm_lookfor") {
+        const input = document.getElementById(elementID);
+        // if element exist
+        if (input) {
+            const length = input.value.length;
+            // if search input not empty
+            if(length > 0) {
+                input.focus();
+                input.setSelectionRange(length, length);
+            }
+        }
     }
 };
 

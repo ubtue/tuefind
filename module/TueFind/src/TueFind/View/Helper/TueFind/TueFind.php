@@ -474,6 +474,57 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
         return !empty($config->Authentication->account_deletion);
     }
 
+    const USER_AGENT_BOT_PATTERNS = [
+        '/Bot/i',
+        '/ChatGPT-User/i',
+        '/Crawler/i',
+        '/Spider/i',
+    ];
+
+    const USER_AGENT_BROWSER_PATTERNS = [
+        '/AppleWebKit/i',
+        '/Chrome/i',
+        '/Edge/i',
+        '/Epiphany/i',
+        '/Gecko/i',
+        '/Konqueror/i',
+        '/Mozilla/i',
+        '/Opera/i',
+        '/Safari/i',
+    ];
+
+    public function isUserAgentBot(): bool {
+        $userAgent = $_SERVER['HTTP_USER_AGENT'];
+        if (empty($userAgent)) {
+            return false;
+        }
+
+        foreach (static::USER_AGENT_BOT_PATTERNS as $pattern) {
+            if (preg_match($pattern, $userAgent)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function isUserAgentBrowser(): bool {
+        $userAgent = $_SERVER['HTTP_USER_AGENT'];
+        if (empty($userAgent)) {
+            return false;
+        }
+
+        foreach (static::USER_AGENT_BROWSER_PATTERNS as $pattern) {
+            if (preg_match($pattern, $userAgent)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function isUserAgentPositive(): bool {
+        return ($this->isUserAgentBrowser() && !$this->isUserAgentBot());
+    }
+
     public function printSuperiorSeries($superior_record) {
         $superior_series = $superior_record->tryMethod('getSeries');
         if (is_array($superior_series)) {

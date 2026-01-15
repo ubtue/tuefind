@@ -20,9 +20,10 @@ Disallow: /Alphabrowse/
 Disallow: /Author/
 Disallow: /Authority/
 Disallow: /Browse/
+Disallow: /Cart/
 Disallow: /Combined/
 Disallow: /Feedback/
-Disallow: /FindbuchProxy
+Disallow: /FindbuchProxy/
 Disallow: /fulltextsnippetproxy/
 Disallow: /index.php/
 Disallow: /MyResearch/
@@ -37,4 +38,4 @@ Disallow: /Summon/
 Disallow: /SummonRecord/
 Disallow: /WikidataProxy/
 Sitemap: https://krimdok.uni-tuebingen.de/sitemaps/krimdok/sitemapIndex.xml
-Crawl-delay: 1
+Crawl-delay: 10

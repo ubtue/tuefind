@@ -86,14 +86,26 @@
 <?php
 $jsSnippet = <<< 'EOD'
 $(document).ready(function(){
-    $('.slick-slider-multiple-item').slick({
+    let $slider = $('.slick-slider-multiple-item');
+
+    $slider.slick({
         dots: true,
-        autoplay: true,
+        autoplay: false,       // default stop autorotation
         infinite: true,
         speed: 1000,
         fade: true,
         cssEase: 'linear',
         arrows: true
+    });
+
+    // run slider rotation  if mous hover
+    $slider.on('mouseenter', function () {
+        $slider.slick('slickPlay');
+    });
+
+    // stop slider rotation
+    $slider.on('mouseleave', function () {
+        $slider.slick('slickPause');
     });
 });
 EOD;?>
