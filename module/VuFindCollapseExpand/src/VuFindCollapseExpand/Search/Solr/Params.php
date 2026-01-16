@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2021 (C) Bibliotheksservice-Zentrum Baden-
  * Württemberg, Konstanz, Germany
@@ -22,14 +23,14 @@
 namespace VuFindCollapseExpand\Search\Solr;
 
 use VuFind\Config\PluginManager;
-use \VuFind\Search\Solr\HierarchicalFacetHelper;
-use VuFindCollapseExpand\Config\CollapseExpandGrouping;
+use VuFind\Search\Solr\HierarchicalFacetHelper;
+use VuFindCollapseExpand\Config\CollapseExpand;
 
 /**
  * Description of Params
  *
  * @author Cornelius Amzar <cornelius.amzar@bsz-bw.de>
- * 
+ *
  * Controlling Result is changed from Result Grouping to Collapse and Expand
  * @author Steven Lolong <steven.lolong@uni-tuebingen.de>
  */
@@ -37,7 +38,8 @@ class Params extends \VuFind\Search\Solr\Params
 {
     use ParamsTrait;
 
-    public $collapse_expand_grouping;
+    public $collapseExpandConfig;
+
     protected $limit = 10;
 
     /**
@@ -46,15 +48,15 @@ class Params extends \VuFind\Search\Solr\Params
      * @param $options
      * @param PluginManager $configLoader
      * @param HierarchicalFacetHelper|null $facetHelper
-     * @param CollapseExpandGrouping|null $collapse_expand_grouping
+     * @param CollapseExpand|null $collapseExpandConfig
      */
     public function __construct(
         $options,
         PluginManager $configLoader,
         HierarchicalFacetHelper $facetHelper = null,
-        CollapseExpandGrouping $collapse_expand_grouping = null
+        CollapseExpand $collapseExpandConfig = null
     ) {
         parent::__construct($options, $configLoader, $facetHelper);
-        $this->collapse_expand_grouping = $collapse_expand_grouping;
+        $this->collapseExpandConfig = $collapseExpandConfig;
     }
 }

@@ -1,16 +1,19 @@
-<?php use VuFind\Search\Solr\Results;
+<?php  use VuFind\Search\Solr\Results;
 
-if ($this->results instanceof Results): ?>
-    <form class="form-inline search-grouping" action="<?= $this->currentPath() ?>"
-          method="POST" id="collapse_expand_grouping">
-        <div class="form-group">
-            <label for="grouping-checkbox"><?= $this->transEsc('group hits') ?></label>
-            <input type="checkbox" name="grouping-enabled" value=""
-                   id="grouping-checkbox"
-                   <?php if ($this->collapse_expand_grouping): ?>checked<?php endif; ?>/>
-        </div>
-        <noscript>
-            <p>Please enable JavaScript</p>
-        </noscript>
-    </form>
+?>
+<?php if ($this->results instanceof Results): ?>
+    <?php if ($this->params->getSearchClassId() == 'Solr' && $this->params->isEnableCollapseExpand()): ?>
+        <form class="form-inline search-collapse-expand" action="<?= $this->currentPath() ?>"
+            method="POST" id="collapse-expand-form">
+            <div class="form-group">
+                <label for="collapse-expand-checkbox"><?= $this->transEsc('group hits') ?></label>
+                <input type="checkbox" name="collapse-expand-enabled" value=""
+                    id="collapse-expand-checkbox"
+                    <?php if ($this->collapseExpandConfig): ?>checked<?php endif; ?>/>
+            </div>
+            <noscript>
+                <p>Please enable JavaScript</p>
+            </noscript>
+        </form>
+    <?php endif; ?>
 <?php endif; ?>

@@ -13,7 +13,6 @@ class SolrMarc extends SolrDefault
         // c.f. the overwritten functions below
     }
 
-    use \VuFindCollapseExpand\RecordDriver\SubrecordTrait;
 
     public const ISIL_PREFIX_GND = '(DE-588)';
     public const ISIL_PREFIX_K10PLUS = '(DE-627)';

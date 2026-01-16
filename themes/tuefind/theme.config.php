@@ -15,6 +15,10 @@ return [
 
             // special overrides related to VuFindTheme\Module.php
             'TueFind\View\Helper\SetupThemeResources' => 'VuFindTheme\View\Helper\SetupThemeResourcesFactory',
+            'VuFindCollapseExpand\View\Helper\CollapseExpand\CollapseExpand' => 'VuFindCollapseExpand\View\Helper\CollapseExpand\CollapseExpandFactory',
+        ],
+        'initializers' => [
+            'VuFindCollapseExpand\ServiceManager\ServiceInitializer',
         ],
         'aliases' => [
             'accountMenu' => 'TueFind\View\Helper\Root\AccountMenu',
@@ -30,6 +34,7 @@ return [
 
             // special overrides related to VuFindTheme\Module.php
             'setupThemeResources' => 'TueFind\View\Helper\SetupThemeResources',
+            'collapseExpand' => 'VuFindCollapseExpand\View\Helper\CollapseExpand\CollapseExpand',
         ],
     ],
     'css' => [
@@ -42,7 +47,6 @@ return [
         ['file' => 'collapse_expand.js', 'priority' => 1450],
         ['file' => 'vendor/jquery-ui.min.js', 'priority' => 1400],
         ['file' => 'vendor/jquery.dataTable.js', 'priority' => 1300],
-        ['file' => 'vendor/collapseExpand.js', 'priority' => 1200],
     ],
     'icons' => [
         'upload' => 'FontAwesome:upload',

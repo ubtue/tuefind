@@ -20,15 +20,20 @@
 
 namespace VuFindCollapseExpand\Search\Params;
 
-use VuFindCollapseExpand\Search\Solr\Params;
-use VuFindCollapseExpand\Search\Solr\AuthorParams;
 use Psr\Container\ContainerInterface;
+use VuFindCollapseExpand\Search\Solr\AuthorParams;
+use VuFindCollapseExpand\Search\Solr\Params;
 
 /**
  * Search params Factory
  *
+ * @package VuFindCollapseExpand\Search\Params
+ *
  * @author Cornelius Amzar <cornelius.amzar@bsz-bw.de>
  * @author Robert Lange <lange@ub.uni-leipzig.de>
+ *
+ * change from Grouping to CollapseExpand
+ * @author Steven Lolong <steven.lolong@uni-tuebingen.de>
  */
 class Factory
 {
@@ -41,10 +46,10 @@ class Factory
      */
     public static function getSolr(ContainerInterface $container)
     {
-        $config = $container->get('VuFind\Config');
-        $options = $container->get('VuFind\SearchOptionsPluginManager')->get('solr');
-        $collapse_expand_grouping = $container->get('VuFindCollapseExpand\Config\CollapseExpandGrouping');
-        $params = new Params($options, $config, null, $collapse_expand_grouping);
+        $config = $container->get(\VuFind\Config::class);
+        $options = $container->get(\VuFind\SearchOptionsPluginManager::class)->get('solr');
+        $collapseExpandConfig = $container->get(\VuFindCollapseExpand\Config\CollapseExpand::class);
+        $params = new Params($options, $config, null, $collapseExpandConfig);
 
         return $params;
     }
@@ -58,10 +63,10 @@ class Factory
      */
     public static function getSolrAuthor(ContainerInterface $container)
     {
-        $config = $container->get('VuFind\Config');
-        $options = $container->get('VuFind\SearchOptionsPluginManager')->get('solrauthor');
-        $collapse_expand_grouping = $container->get('VuFindCollapseExpand\Config\CollapseExpandGrouping');
-        $params = new AuthorParams($options, $config, null, $collapse_expand_grouping);
+        $config = $container->get(\VuFind\Config::class);
+        $options = $container->get(\VuFind\SearchOptionsPluginManager::class)->get('solrauthor');
+        $collapseExpandConfig = $container->get(\VuFindCollapseExpand\Config\CollapseExpand::class);
+        $params = new AuthorParams($options, $config, null, $collapseExpandConfig);
 
         return $params;
     }

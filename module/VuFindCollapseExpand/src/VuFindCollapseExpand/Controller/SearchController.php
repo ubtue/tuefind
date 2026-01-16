@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2021 (C) Bibliotheksservice-Zentrum Baden-
  * Württemberg, Konstanz, Germany
@@ -21,27 +22,27 @@
 
 namespace VuFindCollapseExpand\Controller;
 
+use function in_array;
+
 /**
  * This adds grouping handling to VuFinds search controller
  *
  * Class SearchController
- * @package  VuFindCollapseExpand\Controller
- * @author   Cornelius Amzar <cornelius.amzar@bsz-bw.de>
- * 
+ *
+ * @package VuFindCollapseExpand\Controller
+ * @author  Cornelius Amzar <cornelius.amzar@bsz-bw.de>
+ *
  * Controlling Result is changed from Result Grouping to Collapse and Expand
- * @author Steven Lolong <steven.lolong@uni-tuebingen.de>
+ * @author  Steven Lolong <steven.lolong@uni-tuebingen.de>
  */
 class SearchController extends \VuFind\Controller\SearchController
 {
-    /**
-     * @return mixed
-     */
     public function resultsAction()
     {
-        $collapse_expand_grouping = $this->serviceLocator->get('VuFindCollapseExpand\Config\CollapseExpandGrouping');
+        $collapseExpandConfig = $this->serviceLocator->get(\VuFindCollapseExpand\Config\CollapseExpand::class);
 
-        $view = Parent::resultsAction();
-        $view->collapse_expand_grouping = $collapse_expand_grouping->isActive();
+        $view = parent::resultsAction();
+        $view->collapseExpandConfig = $collapseExpandConfig->isActive();
         return $view;
     }
 
@@ -90,9 +91,7 @@ class SearchController extends \VuFind\Controller\SearchController
                 // If we haven't already found a selected facet and the current
                 // facet has been applied to the search, we should store it as
                 // the selected facet for the current control.
-                if ($searchObject
-                    && $searchObject->getParams()->hasFilter($fullFilter)
-                ) {
+                if ($searchObject && $searchObject->getParams()->hasFilter($fullFilter)) {
                     $list['list'][$key]['selected'] = true;
                     // Remove the filter from the search object -- we don't want
                     // it to show up in the "applied filters" sidebar since it

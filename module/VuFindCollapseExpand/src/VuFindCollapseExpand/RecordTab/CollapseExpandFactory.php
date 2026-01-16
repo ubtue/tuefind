@@ -1,26 +1,18 @@
 <?php
 
-/**
- * Factory for GetItemCollapseExpand AJAX handler
- *
- * PHP version 8
- *
- * Copyright (C) The Library of Tuebingen University 2025
- *
- * @category VuFindCollapseExpand
- * @package  AJAX
- * @author   Steven Lolong <steven.lolong@uni-tuebingen.de>
- *
-  */
-
-namespace VuFindCollapseExpand\AjaxHandler;
+namespace VuFindCollapseExpand\RecordTab;
 
 use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
-use Psr\Container\ContainerExceptionInterface as ContainerException;
 use Psr\Container\ContainerInterface;
 
-class GetItemOtherDocumentFactory implements \Laminas\ServiceManager\Factory\FactoryInterface
+/**
+ * Factory for building the CollapseExpand tab.
+ *
+ * @package VuFindCollapseExpand\RecordTab
+ * @author  Steven Lolong <steven.lolong@uni-tuebingen.de>
+ */
+class CollapseExpandFactory implements \Laminas\ServiceManager\Factory\FactoryInterface
 {
     /**
      * Create an object
@@ -35,6 +27,8 @@ class GetItemOtherDocumentFactory implements \Laminas\ServiceManager\Factory\Fac
      * @throws ServiceNotCreatedException if an exception is raised when
      * creating a service.
      * @throws ContainerException&\Throwable if any other error occurs
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __invoke(
         ContainerInterface $container,
@@ -45,10 +39,7 @@ class GetItemOtherDocumentFactory implements \Laminas\ServiceManager\Factory\Fac
             throw new \Exception('Unexpected options passed to factory.');
         }
         return new $requestedName(
-            $container->get(\VuFind\Session\Settings::class),
-            $container->get(\VuFind\Record\Loader::class),
-            $container->get('ViewRenderer')->plugin('record'),
-            $container->get(\VuFind\RecordTab\TabManager::class)
+            $container->get('ViewHelperManager'),
         );
     }
 }

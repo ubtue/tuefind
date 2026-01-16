@@ -1,48 +1,74 @@
 <?php
+
 namespace VuFindCollapseExpand\Module\Configuration;
 
 $config = [
     'service_manager' => [
         'factories' => [
-            'VuFindCollapseExpand\Config\CollapseExpandGrouping'  => 'VuFindCollapseExpand\Config\Factory::getCollapseExpandGrouping',
+            \VuFindCollapseExpand\Config\CollapseExpand::class  => \VuFindCollapseExpand\Config\CollapseExpandFactory::class,
         ],
     ],
     'controllers' => [
         'factories' => [
-            'VuFindCollapseExpand\Controller\AuthorController' => 'VuFind\Controller\AbstractBaseFactory',
-            'VuFindCollapseExpand\Controller\SearchController' => 'VuFind\Controller\AbstractBaseFactory',
+            \VuFindCollapseExpand\Controller\AuthorController::class => \VuFind\Controller\AbstractBaseFactory::class,
+            \VuFindCollapseExpand\Controller\SearchController::class => \VuFind\Controller\AbstractBaseFactory::class,
+        ],
+        'initializers' => [
+            \VuFindCollapseExpand\ServiceManager\ServiceInitializer::class
         ],
         'aliases' => [
-            'VuFind\Controller\AuthorController'    => 'VuFindCollapseExpand\Controller\AuthorController',
-            'VuFind\Controller\SearchController'    => 'VuFindCollapseExpand\Controller\SearchController',
+            \VuFind\Controller\AuthorController::class    => \VuFindCollapseExpand\Controller\AuthorController::class,
+            \VuFind\Controller\SearchController::class    => \VuFindCollapseExpand\Controller\SearchController::class,
         ],
     ],
     'vufind' => [
         'plugin_managers' => [
             'ajaxhandler' => [
                 'factories' => [
-                    'VuFindCollapseExpand\AjaxHandler\GroupingCheckbox' =>
-                        'VuFindCollapseExpand\AjaxHandler\GroupingCheckboxFactory',
+                    \VuFindCollapseExpand\AjaxHandler\CollapseExpandCheckbox::class =>
+                        \Laminas\ServiceManager\Factory\InvokableFactory::class,
+                ],
+                'initializers' => [
+                    \VuFindCollapseExpand\ServiceManager\ServiceInitializer::class
                 ],
                 'aliases' => [
-                    'groupingCheckbox' => 'VuFindCollapseExpand\AjaxHandler\GroupingCheckbox',
+                    'collapseExpandCheckbox' => \VuFindCollapseExpand\AjaxHandler\CollapseExpandCheckbox::class,
                 ]
+            ],
+            'recorddriver' => [
+                'initializers' => [
+                    \VuFindCollapseExpand\ServiceManager\ServiceInitializer::class
+                ],
+            ],
+            'recordtab' => [
+                'factories' => [
+                    \VuFindCollapseExpand\RecordTab\CollapseExpand::class => \VuFindCollapseExpand\RecordTab\CollapseExpandFactory::class,
+                ],
+                'initializers' => [
+                    \VuFindCollapseExpand\ServiceManager\ServiceInitializer::class
+                ],
+                'aliases' => [
+                    'CollapseExpand' => \VuFindCollapseExpand\RecordTab\CollapseExpand::class,
+                ],
             ],
             'search_backend' => [
                 'factories' => [
-                    'Solr' => 'VuFindCollapseExpand\Search\Factory\SolrDefaultBackendFactory',
+                    'Solr' => \VuFindCollapseExpand\Search\Factory\SolrDefaultBackendFactory::class,
                 ],
             ],
             'search_params'  => [
                 'factories' => [
-                    'VuFindCollapseExpand\Search\Solr\Params' => 'VuFindCollapseExpand\Search\Params\Factory::getSolr',
-                    'VuFindCollapseExpand\Search\Solr\AuthorParams' => 'VuFindCollapseExpand\Search\Params\Factory::getSolrAuthor'
+                    \VuFindCollapseExpand\Search\Solr\Params::class => \VuFindCollapseExpand\Search\Params\Factory::class . '::getSolr',
+                    \VuFindCollapseExpand\Search\Solr\AuthorParams::class => \VuFindCollapseExpand\Search\Params\Factory::class . '::getSolrAuthor'
+                ],
+                'initializers' => [
+                    \VuFindCollapseExpand\ServiceManager\ServiceInitializer::class
                 ],
                 'aliases' => [
-                    'VuFind\Search\Solr\Params' => 'VuFindCollapseExpand\Search\Solr\Params',
-                    'VuFind\Search\SolrAuthor\Params' => 'VuFindCollapseExpand\Search\Solr\AuthorParams',
+                    \VuFind\Search\Solr\Params::class => \VuFindCollapseExpand\Search\Solr\Params::class,
+                    \VuFind\Search\SolrAuthor\Params::class => \VuFindCollapseExpand\Search\Solr\AuthorParams::class,
                 ]
-            ],
+            ]
         ],
         'template_injection' => [
             'VuFindCollapseExpand/'
@@ -50,7 +76,7 @@ $config = [
     ],
     'view_manager' => [
         'template_path_stack' => [
-            '/usr/local/vufind/vendor/finc/vufind-collapse-expand/res/theme/templates',
+            '/usr/local/vufind/vendor/ubtue/vufind-collapse-expand/res/theme/templates',
         ],
     ],
 ];

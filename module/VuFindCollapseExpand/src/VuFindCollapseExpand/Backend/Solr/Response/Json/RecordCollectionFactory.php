@@ -2,13 +2,9 @@
 
 /**
  * Simple JSON-based factory for record collection.
- *
- * @category Ida
- * @package  Search
- * @author   <dku@outermedia.de>
- *
- * Controlling Result is changed from Result Grouping to Collapse and Expand.
+ * Collapse and Expand.
  * Update the collection
+ *
  * @author Steven Lolong <steven.lolong@uni-tuebingen.de>
  */
 
@@ -17,13 +13,16 @@ namespace VuFindCollapseExpand\Backend\Solr\Response\Json;
 use VuFindSearch\Backend\Solr\Response\Json\Record;
 use VuFindSearch\Exception\InvalidArgumentException;
 use VuFindSearch\Response\RecordCollectionFactoryInterface;
-use VuFindCollapseExpand\Backend\Solr\Response\Json\RecordCollection;
 
-class RecordCollectionFactory extends \VuFindSearch\Backend\Solr\Response\Json\RecordCollectionFactory implements RecordCollectionFactoryInterface
+use function array_key_exists;
+use function call_user_func;
+use function gettype;
+use function is_array;
+use function sprintf;
+
+class RecordCollectionFactory extends \VuFindSearch\Backend\Solr\Response\Json\RecordCollectionFactory implements
+    RecordCollectionFactoryInterface
 {
-    /**
-     * @var string
-     */
     protected $expandFieldName;
 
     /**
@@ -36,7 +35,8 @@ class RecordCollectionFactory extends \VuFindSearch\Backend\Solr\Response\Json\R
      */
     public function __construct(
         $recordFactory = null,
-        $collectionClass = 'VuFindCollapseExpand\Backend\Solr\Response\Json\RecordCollection'
+        $serviceLocator = null,
+        $collectionClass = \VuFindCollapseExpand\Backend\Solr\Response\Json\RecordCollection::class
     ) {
         if (null === $recordFactory) {
             $this->recordFactory = function ($data) {
@@ -48,13 +48,9 @@ class RecordCollectionFactory extends \VuFindSearch\Backend\Solr\Response\Json\R
 
         $this->collectionClass = $collectionClass;
 
-        $pluginManager = $this->recordFactory[0];
-        $solrDef = $pluginManager->get('TueFind\RecordDriver\SolrDefault');
-        $container = $solrDef->getContainer();
-        $config = $container->get(\VuFind\Config\PluginManager::class)->get('config');
-        $collapse_expand_section = $config->get('CollapseExpand');
-        $this->expandFieldName = $collapse_expand_section->get('expand.field');
-
+        $config = $serviceLocator->get(\VuFindCollapseExpand\Config\CollapseExpand::class);
+        $serDef = $config->getCurrentSettings();
+        $this->expandFieldName = $serDef['expand.field'];
     }
 
     /**
@@ -75,15 +71,16 @@ class RecordCollectionFactory extends \VuFindSearch\Backend\Solr\Response\Json\R
             );
         }
 
-
         $collection = new $this->collectionClass($response);
         $collectionHasGroups = $collection->hasExpanded();
 
         if (true === $collectionHasGroups) {
             if (isset($response['response']['docs'])) {
                 foreach ($response['response']['docs'] as $doc) {
-
-                    if (array_key_exists($doc[$this->expandFieldName], $response['expanded']) && true === is_array($response['expanded'][$doc[$this->expandFieldName]]['docs'])) {
+                    if (
+                        array_key_exists($doc[$this->expandFieldName], $response['expanded'])
+                        && is_array($response['expanded'][$doc[$this->expandFieldName]]['docs'])
+                    ) {
                         $docFirst = $doc;
                         $topics = [];
                         $collectionSub = new $this->collectionClass($doc);
@@ -91,7 +88,7 @@ class RecordCollectionFactory extends \VuFindSearch\Backend\Solr\Response\Json\R
                         foreach ($response['expanded'][$doc[$this->expandFieldName]]['docs'] as $sub_doc) {
                             $sub_doc['_isSubRecord'] = true;
                             $collectionSub->add(call_user_func($this->recordFactory, $sub_doc));
-                            if (array_key_exists('topic', $sub_doc) && true === is_array($sub_doc['topic'])) {
+                            if (array_key_exists('topic', $sub_doc) && is_array($sub_doc['topic'])) {
                                 $topics = array_merge($topics, $sub_doc['topic']);
                             }
                         }
@@ -114,5 +111,4 @@ class RecordCollectionFactory extends \VuFindSearch\Backend\Solr\Response\Json\R
 
         return $collection;
     }
-
 }

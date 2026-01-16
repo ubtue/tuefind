@@ -7,6 +7,7 @@
  * @package  Search
  * @author   <dku@outermedia.de>
  */
+
 namespace VuFindCollapseExpand\Search\Factory;
 
 use VuFindCollapseExpand\Backend\Solr\Response\Json\RecordCollectionFactory;
@@ -38,8 +39,7 @@ class SolrDefaultBackendFactory extends AbstractSolrBackendFactory
     {
         $config = $this->config->get('config');
 
-        return isset($config->Index->default_core)
-            ? $config->Index->default_core : 'biblio';
+        return $config->Index->default_core ?? 'biblio';
     }
 
     /**
@@ -52,9 +52,9 @@ class SolrDefaultBackendFactory extends AbstractSolrBackendFactory
     protected function createBackend(Connector $connector)
     {
         $backend = parent::createBackend($connector);
-        $manager = $this->serviceLocator->get('VuFind\RecordDriverPluginManager');
+        $manager = $this->serviceLocator->get(\VuFind\RecordDriverPluginManager::class);
 
-        $factory = new RecordCollectionFactory([$manager, 'getSolrRecord']);
+        $factory = new RecordCollectionFactory([$manager, 'getSolrRecord'], $this->serviceLocator);
         $backend->setRecordCollectionFactory($factory);
         return $backend;
     }

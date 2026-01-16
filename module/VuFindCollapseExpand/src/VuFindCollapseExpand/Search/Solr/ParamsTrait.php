@@ -28,14 +28,15 @@ use VuFindSearch\ParamBag;
  * This trait adds some accessor methods to VuFind params
  *
  * Trait ParamTrait
+ *
  * @package VuFindCollapseExpand\Search\Solr
+ *
  * @author Cornelius Amzar <cornelius.amzar@bsz-bw.de>
  * @author Robert Lange <lange@ub.uni-leipzig.de>
  *
  *
  * Controlling Result is changed from Result Grouping to Collapse and Expand
  * @author Steven Lolong <steven.lolong@uni-tuebingen.de>
- *
  */
 trait ParamsTrait
 {
@@ -54,7 +55,7 @@ trait ParamsTrait
             $this->filterList
         );
         foreach ($filterList as $field => $filter) {
-            if ($orFacet = (substr($field, 0, 1) == '~')) {
+            if ($orFacet = (substr($field, 0, 1) === '~')) {
                 $field = substr($field, 1);
             }
             if ($filter === '') {
@@ -64,7 +65,8 @@ trait ParamsTrait
                 // Special case -- complex filter, that should be taken as-is:
                 if ($field == '#') {
                     $q = $value;
-                } elseif (substr($value, -1) == '*'
+                } elseif (
+                    substr($value, -1) === '*'
                     || preg_match('/\[[^\]]+\s+TO\s+[^\]]+\]/', $value)
                 ) {
                     // Special case -- allow trailing wildcards and ranges
@@ -73,7 +75,7 @@ trait ParamsTrait
                     $q = $field . ':"' . addcslashes($value, '"\\') . '"';
                 }
                 if ($orFacet) {
-                    $orFilters[$field] = $orFilters[$field] ?? [];
+                    $orFilters[$field] ??= [];
                     $orFilters[$field][] = $q;
                 } else {
                     $filterQuery[] = $q;
@@ -88,29 +90,30 @@ trait ParamsTrait
     }
 
     // Construct collapse parameters
-    public function constructingCollapseParams(){
-        $collapseConfig =$this->collapse_expand_grouping->getCollapseConfig();
-        $currentSettings = $this->collapse_expand_grouping->getCurrentSettings();
+    public function constructingCollapseParams()
+    {
+        $collapseConfig = $this->collapseExpandConfig->getCollapseConfig();
+        $currentSettings = $this->collapseExpandConfig->getCurrentSettings();
 
-        $str_params = '{!collapse ';
+        $param = '{!collapse ';
         foreach (array_keys($collapseConfig) as $key) {
-            if(isset($currentSettings[$key]) && $currentSettings[$key] != null){
-
-                $str_params .= explode('.', $key)[1] . '=' . $currentSettings[$key] . ' ';
+            if (isset($currentSettings[$key]) && $currentSettings[$key] != null) {
+                $param .= explode('.', $key)[1] . '=' . $currentSettings[$key] . ' ';
             }
         }
-        $str_params .= '}';
-        return $str_params;
+        $param .= '}';
+        return $param;
     }
 
     // Construct expand parameters
-    public function constructingExpandParams(){
-        $expandConfig =$this->collapse_expand_grouping->getExpandConfig();
-        $currentSettings = $this->collapse_expand_grouping->getCurrentSettings();
+    public function constructingExpandParams()
+    {
+        $expandConfig = $this->collapseExpandConfig->getExpandConfig();
+        $currentSettings = $this->collapseExpandConfig->getCurrentSettings();
         $params = [];
 
         foreach (array_keys($expandConfig) as $key) {
-            if(isset($currentSettings[$key]) && $currentSettings[$key] != null){
+            if (isset($currentSettings[$key]) && $currentSettings[$key] != null) {
                 $params[$key] = $currentSettings[$key];
             }
         }
@@ -126,22 +129,19 @@ trait ParamsTrait
     {
         $backendParams = new ParamBag();
         // restore grouping settings from cookie
-        $this->collapse_expand_grouping->restoreFromCookie();
+        $this->collapseExpandConfig->restoreFromCookie();
 
-        // check if grouping is enabled in the configuration
-        if ($this->collapse_expand_grouping->isEnabled()) {
-            // check if grouping is activated by the user in the session (frontend)
-            if ($this->collapse_expand_grouping->isActive()) {
-                $backendParams->add('expand', 'true');
+        // check if grouping is enabled in the configuration && by the user in the session (frontend)
+        if ($this->collapseExpandConfig->isEnabled() && $this->collapseExpandConfig->isActive()) {
+            $backendParams->add('expand', 'true');
 
-                // construct collapse parameters
-                $backendParams->add('fq', $this->constructingCollapseParams());
-                
-                // enabling expand
-                // construct expand parameters
-                foreach($this->constructingExpandParams() as $key => $value){
-                    $backendParams->add($key, $value);
-                }
+            // construct collapse parameters
+            $backendParams->add('fq', $this->constructingCollapseParams());
+
+            // enabling expand
+            // construct expand parameters
+            foreach ($this->constructingExpandParams() as $key => $value) {
+                $backendParams->add($key, $value);
             }
         }
         // search those shards that answer, accept partial results
@@ -151,10 +151,10 @@ trait ParamsTrait
         // $backendParams->add('timeAllowed', '4000');
 
         // defaultOperator=AND was removed in schema.xml
-        $backendParams->add('q.op', "AND");
+        $backendParams->add('q.op', 'AND');
 
         // increase performance for facet queries
-        $backendParams->add('facet.threads', "4");
+        $backendParams->add('facet.threads', '4');
 
         // Spellcheck
         $backendParams->set(
@@ -169,7 +169,7 @@ trait ParamsTrait
 
             foreach ($facets as $key => $value) {
                 // prefix keys with "facet" unless they already have a "f." prefix:
-                $fullKey = substr($key, 0, 2) == 'f.' ? $key : "facet.$key";
+                $fullKey = substr($key, 0, 2) === 'f.' ? $key : "facet.$key";
                 $backendParams->add($fullKey, $value);
             }
             $backendParams->add('facet.mincount', 1);
@@ -203,7 +203,8 @@ trait ParamsTrait
         if ($sort) {
             // If we have an empty search with relevance sort, see if there is
             // an override configured:
-            if ($sort == 'relevance' && $this->getQuery()->getAllTerms() == ''
+            if (
+                $sort == 'relevance' && $this->getQuery()->getAllTerms() == ''
                 && ($relOv = $this->getOptions()->getEmptySearchRelevanceOverride())
             ) {
                 $sort = $relOv;
@@ -223,28 +224,18 @@ trait ParamsTrait
         return $backendParams;
     }
 
-    /** 
-     * Check if Collapse and Expand is enabled in the configuration
-     * @return bool
-     */
-    public function isEnableCollapseExpand()
+    public function isEnableCollapseExpand(): bool
     {
-        return $this->collapse_expand_grouping->isEnabled();
+        return $this->collapseExpandConfig->isEnabled();
     }
 
-
-    /** 
-     * Check if Collapse and Expand is activated by the user
-     * @return bool
-     */
-    public function isActivatedCollapseExpand()
+    public function isActivatedCollapseExpand(): bool
     {
-        return $this->collapse_expand_grouping->isActive();
+        return $this->collapseExpandConfig->isActive();
     }
 
-
-    public function getExpandField(){
-        return $this->collapse_expand_grouping->getExpandField();
+    public function getExpandField(): string
+    {
+        return $this->collapseExpandConfig->getExpandField();
     }
-
 }
