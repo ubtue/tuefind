@@ -10,7 +10,6 @@
 
 namespace VuFindCollapseExpand\Search\Factory;
 
-use VuFindCollapseExpand\Backend\Solr\Backend;
 use VuFindSearch\Backend\Solr\Connector;
 
 abstract class AbstractSolrBackendFactory extends \VuFind\Search\Factory\AbstractSolrBackendFactory
