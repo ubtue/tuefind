@@ -4,7 +4,6 @@ return [
     'favicon' => 'krimdok-favicon.ico',
     'js' => [
         'overrides.js',
-        'vendor/collapseExpand.js',
     ],
     'helpers' => [
         'factories' => [
