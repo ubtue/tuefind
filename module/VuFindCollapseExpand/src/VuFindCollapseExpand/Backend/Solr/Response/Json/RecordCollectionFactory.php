@@ -48,12 +48,9 @@ class RecordCollectionFactory extends \VuFindSearch\Backend\Solr\Response\Json\R
 
         $this->collectionClass = $collectionClass;
 
-        // Fulltext search in TueFind doesn't have service locator here 
-        if(is_object($serviceLocator) ) {
-            $config = $serviceLocator->get(\VuFindCollapseExpand\Config\CollapseExpand::class);
-            $serDef = $config->getCurrentSettings();
-            $this->expandFieldName = $serDef['expand.field'];
-        }
+        $config = $serviceLocator->get(\VuFindCollapseExpand\Config\CollapseExpand::class);
+        $serDef = $config->getCurrentSettings();
+        $this->expandFieldName = $serDef['expand.field'];
         
     }
 
