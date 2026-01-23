@@ -96,7 +96,7 @@ class SolrDefaultBackendFactory extends \VuFindCollapseExpand\Search\Factory\Sol
             $backend->setLogger($this->logger);
         }
         $manager = $this->serviceLocator->get(\VuFind\RecordDriver\PluginManager::class);
-        $factory = new RecordCollectionFactory([$manager, 'getSolrRecord']);
+        $factory = new RecordCollectionFactory([$manager, 'getSolrRecord'], $this->serviceLocator);
         $backend->setRecordCollectionFactory($factory);
         return $backend;
     }
