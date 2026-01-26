@@ -2,14 +2,15 @@
 
 ?>
 <?php if ($this->results instanceof Results): ?>
-    <?php if ($this->params->getSearchClassId() == 'Solr' && $this->params->isEnableCollapseExpand()): ?>
+    <?php if ($this->params->getSearchClassId() == 'Solr' && $this->collapseExpandConfig->isEnabled()): ?>
         <form class="form-inline search-collapse-expand" action="<?= $this->currentPath() ?>"
             method="POST" id="collapse-expand-form">
             <div class="form-group">
-                <label for="collapse-expand-checkbox"><?= $this->transEsc('group hits') ?></label>
+              hello
+                <label for="collapse-expand-checkbox"><?= $this->transEsc('collapse results') ?></label>
                 <input type="checkbox" name="collapse-expand-enabled" value=""
                     id="collapse-expand-checkbox"
-                    <?php if ($this->collapseExpandConfig): ?>checked<?php endif; ?>/>
+                    <?php if ($this->collapseExpandConfig->isActive()): ?>checked<?php endif; ?>/>
             </div>
             <noscript>
                 <p>Please enable JavaScript</p>
