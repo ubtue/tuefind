@@ -58,7 +58,7 @@ public class KrimDokBiblio extends TueFindBiblio {
         if (HasLocalSelector(record, "kreb"))
             results.add("0/Albert Krebs Bibliothek/");
         if (getRecordSelectors(record).contains("rexa"))
-+           results.add("0/Rechtsextremismus & Antisemitismus/");
+            results.add("0/Rechtsextremismus & Antisemitismus/");
         if (HasFormalKeywordSelector(record, "Statistik"))
             results.add("0/Statistiken/");
         if (HasFormalKeywordSelector(record, "Forschungsdaten"))
