@@ -1,0 +1,25 @@
+<?php
+
+$results = $this->collapseExpand()->getOtherDocuments($this->driver);
+
+$view = 'collapse-expand-tab';
+$this->parentRecordId = $this->driver->getUniqueID();
+?>
+<?php if ($results !== null): ?>
+<?php foreach ($results as $current): ?>
+  <?php if ($current->getUniqueID() != $this->driver->getUniqueID()): ?>
+    <?=$this->record($current)->getSearchResult($view)?>
+    <?='<br />'?>
+  <?php endif; ?>
+
+  <?php if ($current->hasSubRecords()): ?>
+    <?php $sub_records = $current->getSubRecords(); ?>
+    <?php foreach ($sub_records as $sub_record): ?>
+      <?php if ($sub_record->getUniqueID() != $this->driver->getUniqueID()): ?>
+        <?=$this->record($sub_record)->getSearchResult($view)?>
+        <?='<br />'?>
+      <?php endif; ?>
+    <?php endforeach; ?>
+  <?php endif; ?>
+<?php endforeach; ?>
+<?php endif; ?>

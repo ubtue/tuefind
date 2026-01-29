@@ -1,10 +1,10 @@
 <?php
-  $recordLinker = $this->recordLinker($this->results);
-  $coverDetails = $this->record($this->driver)->getCoverDetails('result-list', 'medium', $recordLinker->getUrl($this->driver));
-  $cover = $coverDetails['html'];
-  $thumbnail = false;
-  $thumbnailAlignment = $this->record($this->driver)->getThumbnailAlignment('result');
-  if ($cover):
+$recordLinker = $this->recordLinker($this->results);
+$coverDetails = $this->record($this->driver)->getCoverDetails('result-list', 'medium', $recordLinker->getUrl($this->driver));
+$cover = $coverDetails['html'];
+$thumbnail = false;
+$thumbnailAlignment = $this->record($this->driver)->getThumbnailAlignment('result');
+if ($cover):
     ob_start(); ?>
 <div class="media-<?=$thumbnailAlignment ?> <?=$this->escapeHtmlAttr($coverDetails['size'])?>">
   <?=$cover ?>
@@ -35,18 +35,19 @@
       </div>
 
       <div>
-        <?php if($this->driver->isCollection()): ?>
+        <?php if ($this->driver->isCollection()): ?>
         <?=implode('<br>', array_map([$this, 'escapeHtml'], $this->driver->getSummary())); ?>
         <?php else: ?>
-        <?php // Handle displaying of author according to rule 3 of issue 131 ?>
+        <?php // Handle displaying of author according to rule 3 of issue 131?>
         <?php $authors = $this->driver->getDeduplicatedAuthors(); ?>
         <?php if (isset($authors['primary']) && !empty($authors['primary'])): ?>
-        <?php // Limit to showing at most three authors ?>
+        <?php // Limit to showing at most three authors?>
         <?php $truncate_authors = (count($authors['primary']) > 3); ?>
         <?php if ($truncate_authors): ?>
         <?php $authors['primary'] = array_splice($authors['primary'], 0, 3); ?>
         <?php endif; ?>
-        <?php $i = 0; foreach ($authors['primary'] as $author => $authorProperties): ?><?=($i++ == 0)?'':'; '?>
+        <?php $i = 0;
+            foreach ($authors['primary'] as $author => $authorProperties): ?><?=($i++ == 0) ? '' : '; '?>
         <span>
           <?php if ($this->tuefind()->isSearchTabEnabled('SolrAuth')): ?>
           <?php /* Display separate links to title search + authority page */ ?>
@@ -68,19 +69,19 @@
           <?php endif; ?>
         </span>
         <?php endforeach; ?>
-        <?php // Show dots if we exceedeed max display length ?>
+        <?php // Show dots if we exceedeed max display length?>
         <?php if ($truncate_authors): ?>
         <?php echo '...' ?>
         <?php endif; ?>
         <?php else: ?>
-        <?php // Handle corporation information... ?>
+        <?php // Handle corporation information...?>
         <?php
-            if(!is_null($this->driver->tryMethod('getCorporateAuthorsIds'))){
-              $corporationsIds = $this->driver->tryMethod('getCorporateAuthorsIds');
-              $corporation = $this->driver->tryMethod('getCorporation');
-              if (!empty($corporationsIds)){
-                $corporetionIndex = 0;
-                foreach($corporationsIds as $corporationID) { ?>
+                if (!is_null($this->driver->tryMethod('getCorporateAuthorsIds'))) {
+                    $corporationsIds = $this->driver->tryMethod('getCorporateAuthorsIds');
+                    $corporation = $this->driver->tryMethod('getCorporation');
+                    if (!empty($corporationsIds)) {
+                        $corporetionIndex = 0;
+                        foreach ($corporationsIds as $corporationID) { ?>
         <?=$this->escapeHtml($corporation[$corporetionIndex])?>
         <?php if ($corporationID && $authorityDriver = $this->authority()->recordExists($corporationID)): ?>
         <a href="<?=$this->record($authorityDriver)->getLink('titles-by', $authorityDriver)?>" rel="nofollow"><i class="fa fa-book"
@@ -93,11 +94,11 @@
         <?php endif; ?>
         <br />
         <?php $corporetionIndex++;
+                        }
+                    }
                 }
-              }
-            }
-          endif; ?>
-        <?php // Handle superior data according to Issue 131 / Rule 5 ?>
+        endif; ?>
+        <?php // Handle superior data according to Issue 131 / Rule 5?>
         <?php $journal_issue = $this->driver->tryMethod('getJournalIssue'); ?>
         <?php $superior_ppn = null; ?>
         <?php if (is_array($journal_issue) && count($journal_issue) > 0): ?>
@@ -110,9 +111,9 @@
         <?php endif; ?>
         <?php endforeach; ?>
         <div>
-          <?php $journal_issue_display = preg_replace('/(\d+)(\()/','$1 $2', implode(", ", $journal_issue_display_parts)) ?>
+          <?php $journal_issue_display = preg_replace('/(\d+)(\()/', '$1 $2', implode(", ", $journal_issue_display_parts)) ?>
           <?=$this->transEsc('in')?>:
-          <?php if(!empty($superior_ppn)): ?>
+          <?php if (!empty($superior_ppn)): ?>
           <a href="<?=$this->url('record', ['id' => $superior_ppn]) ?>"><?=$journal_issue_display?></a>
           <?php else: ?>
           <?=$journal_issue_display?>
@@ -120,14 +121,14 @@
         </div>
         <?php else: ?>
         <div>
-          <?php // Fill with non article handling code ?>
-          <?=!is_null($this->driver->tryMethod('getPublicationDetailsNoPlaces')) ? implode(" ", $this->driver->tryMethod('getPublicationDetailsNoPlaces'))  : "" ?>
+          <?php // Fill with non article handling code?>
+          <?=!is_null($this->driver->tryMethod('getPublicationDetailsNoPlaces')) ? implode(" ", $this->driver->tryMethod('getPublicationDetailsNoPlaces')) : "" ?>
         </div>
         <?php endif; ?>
         <?php endif; ?>
       </div>
 
-      <?php if(!$this->driver->isCollection()): ?>
+      <?php if (!$this->driver->isCollection()): ?>
       <?php if ($snippet = $this->driver->getHighlightedSnippet()): ?>
       <?php if (!empty($snippet['caption'])): ?>
       <strong><?=$this->transEsc($snippet['caption']) ?>:</strong>
@@ -144,29 +145,29 @@
       if ($dedupData = $this->driver->getDedupData()): ?>
       <div class="dedupInformation">
         <?php
-          $i = 0;
+        $i = 0;
           foreach ($dedupData as $source => $current) {
-            if (++$i == 1) {
-              ?><span class="currentSource"><a href="<?=$this->escapeHtmlAttr($recordLinker->getUrl($this->driver))?>"
+              if (++$i == 1) {
+                  ?><span class="currentSource"><a href="<?=$this->escapeHtmlAttr($recordLinker->getUrl($this->driver))?>"
             rel="nofollow"><?=$this->transEsc("source_$source", [], $source)?></a></span><?php
-            } else {
-              if ($i == 2) {
-                ?> <span class="otherSources">(<?=$this->transEsc('Other Sources')?>: <?php
               } else {
-                ?>, <?php
-              }
-              ?><a href="<?=$this->escapeHtmlAttr($recordLinker->getUrl($current['id']))?>"
+                  if ($i == 2) {
+                      ?> <span class="otherSources">(<?=$this->transEsc('Other Sources')?>: <?php
+                  } else {
+                      ?>, <?php
+                  }
+                  ?><a href="<?=$this->escapeHtmlAttr($recordLinker->getUrl($current['id']))?>"
             rel="nofollow"><?=$this->transEsc("source_$source", [], $source)?></a><?php
-            }
+              }
           }
-          if ($i > 1) {
-            ?>)</span><?php
-          }?>
+if ($i > 1) {
+    ?>)</span><?php
+}?>
       </div>
       <?php endif; ?>
 
       <?php if ($this->driver->tryMethod('getWorkKeys') && $this->searchOptions($this->driver->getSourceIdentifier())->getVersionsAction()): ?>
-      <?php // TueFind: we want this feature only to be active in the tab, but not here in the result list due to performance issues. ?>
+      <?php // TueFind: we want this feature only to be active in the tab, but not here in the result list due to performance issues.?>
       <!--<div class="record-versions ajax"></div>-->
       <?php endif; ?>
 
@@ -182,7 +183,8 @@
         </span>
         <div class="locationDetails"></div>
         <?php else: ?>
-        <?php $summCallNo = $this->driver->getCallNumber(); if (!empty($summCallNo)): ?>
+        <?php $summCallNo = $this->driver->getCallNumber();
+            if (!empty($summCallNo)): ?>
         <strong><?=$this->transEsc('Call Number')?>:</strong> <?=$this->escapeHtml($summCallNo)?>
         <?php endif; ?>
         <?php endif; ?>
@@ -204,40 +206,35 @@
       <?php endforeach; ?>
       <?php endif; ?>
       <?php $openUrl = $this->openUrl($this->driver, 'results');
-         $openUrlActive = $openUrl->isActive();
-         $urls = $this->record($this->driver)->getLinkDetails($openUrlActive); ?>
+$openUrlActive = $openUrl->isActive();
+$urls = $this->record($this->driver)->getLinkDetails($openUrlActive); ?>
       <?php if (!$openUrlActive && empty($urls) && $this->driver->supportsAjaxStatus()): ?>
       <span class="status ajax-availability hidden">
         <span class="label label-default"><?=$this->transEsc('Loading')?>...</span>
       </span>
       <?php endif; ?>
 
-      <?php if ($this->tuefind()->getKfl()->hasTitle($this->driver)): ?>
-      <a href="<?=$this->url('redirect-license', ['id' => $this->driver->getUniqueId()])?>" data-lightbox="" rel="nofollow"><i
-          class="fa fa-external-link"></i> FID-Lizenz: Zugriff mit <?=$this->tuefind()->getTueFindType()?>-Konto</a><br>
-      <?php endif; ?>
-
       <?php $bibleRangesString = $this->driver->tryMethod('getBibleRangesString');
-        if (!empty($bibleRangesString)) {
-          echo '<div>' . $this->transEsc($bibleRangesString) . '</div>';
-        }
-      ?>
+if (!empty($bibleRangesString)) {
+    echo '<div>' . $this->transEsc($bibleRangesString) . '</div>';
+}
+?>
 
       <?php $canonLawRangesStrings = $this->driver->tryMethod('getCanonLawRangesStrings');
-        if (!empty($canonLawRangesStrings) && count($canonLawRangesStrings) > 0) {
-          echo '<div>' . implode('; ', array_unique($canonLawRangesStrings)) . '</div>';
-        }
-      ?>
+if (!empty($canonLawRangesStrings) && count($canonLawRangesStrings) > 0) {
+    echo '<div>' . implode('; ', array_unique($canonLawRangesStrings)) . '</div>';
+}
+?>
 
       <?php $timeRangesString = $this->driver->tryMethod('getTimeRangesString');
-        if (!empty($timeRangesString)) {
-          echo '<div>' . implode('<br>', $timeRangesString) . '</div>';
-        }
-      ?>
+if (!empty($timeRangesString)) {
+    echo '<div>' . implode('<br>', $timeRangesString) . '</div>';
+}
+?>
 
       <?php if (strtolower($this->tuefind()->getControllerName()) != 'search2'): ?>
       <div class="result-formats">
-        <?php $label=str_replace('class="', 'class="label label-info ', $this->record($this->driver)->getFormatList())?>
+        <?php $label = str_replace('class="', 'class="label label-info ', $this->record($this->driver)->getFormatList())?>
         <?php /* Remove separator needed for long title view */ ?>
         <?=str_replace(' | ', '', $label)?>
         <!-- Display a hidden version of PPN that can be copied to the clipboard -->
@@ -258,9 +255,9 @@
       <?php /* Display qrcode if appropriate: */ ?>
       <?php if ($QRCode = $this->record($this->driver)->getQRCode("results")): ?>
       <?php
-          // Add JS Variables for QrCode
-          $this->jsTranslations()->addStrings(['qrcode_hide' => 'qrcode_hide', 'qrcode_show' => 'qrcode_show']);
-        ?>
+    // Add JS Variables for QrCode
+    $this->jsTranslations()->addStrings(['qrcode_hide' => 'qrcode_hide', 'qrcode_show' => 'qrcode_show']);
+          ?>
       <span class="hidden-xs">
         <i class="fa fa-fw fa-qrcode" aria-hidden="true"></i> <a href="<?=$this->escapeHtmlAttr($QRCode);?>"
           class="qrcodeLink"><?=$this->transEsc('qrcode_show')?></a>
@@ -309,8 +306,8 @@
       <?php endif; ?>
 
       <?php /* Hierarchy tree link */ ?>
-      <?php $trees = $this->driver->tryMethod('getHierarchyTrees'); ?>
-      <?php if (!empty($trees)): ?>
+      <?php $trees = $this->driver->tryMethod('getHierarchyTrees');
+if (!empty($trees)): ?>
       <?php foreach ($trees as $hierarchyID => $hierarchyTitle): ?>
       <div class="hierarchyTreeLink">
         <input type="hidden" value="<?=$this->escapeHtmlAttr($hierarchyID)?>" class="hiddenHierarchyId" />
@@ -328,80 +325,15 @@
       <?php endif; ?>
       <?php if ($this->driver->tryMethod('explainEnabled')): ?>
       <?=
-          $this->record($this->driver)->renderTemplate('result-list-explain.phtml', [
-            'driver' => $this->driver,
-            'request' => $this->request,
-            'result' => $this->result,
-          ]);
-        ?>
+    $this->record($this->driver)->renderTemplate('result-list-explain.phtml', [
+      'driver' => $this->driver,
+      'request' => $this->request,
+      'result' => $this->result,
+    ]);
+          ?>
       <?php endif; ?>
       <?=$this->driver->supportsCoinsOpenUrl() ? '<span class="Z3988" aria-hidden="true" title="' . $this->escapeHtmlAttr($this->driver->getCoinsOpenUrl()) . '"></span>' : ''?>
     </div>
-
-    <?php /* BEGIN Button to show extended records */ ?>
-    <?php
-    $hasSubRecords = $this->driver->hasSubRecords();
-    $subRecords = $this->driver->getSubRecords();
-    $subRecordsCount = 0;
-    if ($subRecords) {
-        $subRecordsCount = count($subRecords);
-    }
-    ?>
-    <?php if ($hasSubRecords): ?>
-        <!-- grouping button -->
-        <?php
-        $rand = rand(1, 10000);
-        // beware that pgid and pid must be forwarded to be used in result-list-grouped-subrecords.phtml
-        $this->pgid = $pgid = 'accordion-' . $rand;
-        $this->pid = $pid = 'panel-' . $rand . '-';
-        ?>
-        <div>
-            <a class="btn result-link-label collapse-expand-toggle" data-toggle="collapse" href="#<?=$pgid?>">
-                <i class="result-link-icon fa fa-arrow-down"></i>
-                <?=$this->transEsc('expand results')?>
-                <span class="badge pull-right"><?=$subRecordsCount?></span>
-            </a>
-        </div>
-        <!-- grouping button - END -->
-    <?php endif; ?>
-    <?php /* END Button to show extended records */ ?>
-
-    <?php /* BEGIN Show extended records */ ?>
-    <?php
-          $hasSubRecords = $this->driver->hasSubRecords();
-          $subRecords = $this->driver->getSubRecords();
-          $subRecordsCount = 0;
-          if ($subRecords) {
-            $subRecordsCount = count($subRecords);
-          }
-        ?>
-
-    <?php if ($hasSubRecords): ?>
-    <!-- Begin subrecords -->
-    <div class="row">
-      <div class="col-xs-11 col-xs-offset-1">
-        <div class="panel-group grouped-items collapse" id="<?=$pgid?>">
-          <?php $i = 0; ?>
-          <?php foreach ($subRecords as $sub): ?>
-          <div class="panel <?php echo $i % 2 == 0 ? 'panel-default' : 'panel-primary';
-          $i++; ?>">
-            <div id="<?=$pid . "-$i"?>" class="panel-collapse">
-              <div class="panel-body">
-                <div class="row">
-                  <?=$this->record($sub)->getSearchResult('list')?>
-                </div> <!-- end row -->
-              </div> <!-- end panel-body -->
-            </div> <!-- end colllappsible part -->
-          </div> <!-- end panel -->
-          <?php endforeach; ?>
-        </div> <!-- end panel group -->
-      </div>
-      <!--end column -->
-    </div>
-    <!--end row -->
-    <!-- end subrecords -->
-    <?php endif; ?>
-    <?php /* END Show extended records */ ?>
 
   </div>
   <?php if ($thumbnail && $thumbnailAlignment == 'right'): ?>
