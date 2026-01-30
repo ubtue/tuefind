@@ -147,14 +147,23 @@
         <xhtml:link rel="alternate" hreflang="es" href="https://krimdok.uni-tuebingen.de/Content/zeitschriften?lng=es" />
     </url>
     <url>
-        <loc>https://krimdok.uni-tuebingen.de/Content/research_data_management</loc>
+        <loc>https://krimdok.uni-tuebingen.de/Content/classics</loc>
         <changefreq>monthly</changefreq>
-        <xhtml:link rel="alternate" hreflang="de" href="https://krimdok.uni-tuebingen.de/Content/research_data_management?lng=de" />
-        <xhtml:link rel="alternate" hreflang="en" href="https://krimdok.uni-tuebingen.de/Content/research_data_management?lng=en" />
-        <xhtml:link rel="alternate" hreflang="es" href="https://krimdok.uni-tuebingen.de/Content/research_data_management?lng=es" />
+        <xhtml:link rel="alternate" hreflang="de" href="https://krimdok.uni-tuebingen.de/Content/classics?lng=de" />
+        <xhtml:link rel="alternate" hreflang="en" href="https://krimdok.uni-tuebingen.de/Content/classics?lng=en" />
+        <xhtml:link rel="alternate" hreflang="es" href="https://krimdok.uni-tuebingen.de/Content/classics?lng=es" />
     </url>
 
-    <!-- Cooperations -->
+    <!-- literature -->
+    <url>
+        <loc>https://krimdok.uni-tuebingen.de/Content/literature</loc>
+        <changefreq>monthly</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://krimdok.uni-tuebingen.de/Content/literature?lng=de" />
+        <xhtml:link rel="alternate" hreflang="en" href="https://krimdok.uni-tuebingen.de/Content/literature?lng=en" />
+        <xhtml:link rel="alternate" hreflang="es" href="https://krimdok.uni-tuebingen.de/Content/literature?lng=es" />
+    </url>
+
+    <!-- partners -->
     <url>
         <loc>https://krimdok.uni-tuebingen.de/Content/partners</loc>
         <changefreq>monthly</changefreq>
