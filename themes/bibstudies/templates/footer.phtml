@@ -1,5 +1,27 @@
 <hr/>
 <footer class="hidden-print">
+  <div class="footer-container" style="padding:20px 0 30px 0;">
+    <div class="footer-column" align="center">
+        <a target="_blank" href="//www.uni-tuebingen.de">
+          <img src="<?=$this->imageLink('Logo_Universitaet_Tuebingen.svg') ?>" alt="Universität T&uuml;bingen" width="260"/>
+        </a>
+        <br/>
+        <br/>
+        <a target="_blank" href="//ub.uni-tuebingen.de">
+          <img src="<?=$this->imageLink('Logo_Universitaetsbibliothek_Tuebingen.svg') ?>" alt="UB" />
+        </a>
+        <br/>
+        <br/>
+    </div>
+    <div class="footer-column" align="center">
+        <img src="<?=$this->imageLink('innsbruck.svg')?>" alt="Innsbruck"><br><br>
+        <p>Institut für Bibelwissenschaften <br /> und Historische Theologie</p>
+    </div>
+    <div class="footer-column" align="center">
+        <img src="<?=$this->imageLink('logo_unil.svg')?>" alt="Lausanne" width="190"><br><br>
+        <p>Institut romand des sciences bibliques</p>
+    </div>
+  </div>
   <div class="footer-container">
     <div class="footer-column">
       <?php $this->slot('footer-left')->start(); ?>
