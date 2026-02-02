@@ -1,0 +1,61 @@
+<hr/>
+<footer class="hidden-print">
+  <div class="footer-container" style="padding:20px 0 30px 0;">
+    <div class="footer-column" align="center">
+        <a target="_blank" href="//www.uni-tuebingen.de">
+          <img src="<?=$this->imageLink('Logo_Universitaet_Tuebingen.svg') ?>" alt="Universität T&uuml;bingen" width="260"/>
+        </a>
+        <br/>
+        <br/>
+        <a target="_blank" href="//ub.uni-tuebingen.de">
+          <img src="<?=$this->imageLink('Logo_Universitaetsbibliothek_Tuebingen.svg') ?>" alt="UB" />
+        </a>
+        <br/>
+        <br/>
+    </div>
+    <div class="footer-column" align="center">
+        <img src="<?=$this->imageLink('innsbruck.svg')?>" alt="Innsbruck"><br><br>
+        <p>Institut für Bibelwissenschaften <br /> und Historische Theologie</p>
+    </div>
+    <div class="footer-column" align="center">
+        <img src="<?=$this->imageLink('logo_unil.svg')?>" alt="Lausanne" width="190"><br><br>
+        <p>Institut romand des sciences bibliques</p>
+    </div>
+  </div>
+  <div class="footer-container">
+    <div class="footer-column">
+      <?php $this->slot('footer-left')->start(); ?>
+        <p><strong><?=$this->transEsc('footer_header_search_options')?></strong></p>
+        <ul>
+          <li><a href="<?=$this->url('search-history')?>" rel="nofollow"><?=$this->transEsc('Search History')?></a></li>
+          <li><a href="<?=$this->url('search-advanced')?>" rel="nofollow"><?=$this->transEsc('Advanced Search')?></a></li>
+        </ul>
+      <?=$this->slot('footer-left')->end(); ?>
+    </div>
+    <div class="footer-column">
+      <?php $this->slot('footer-center')->start(); ?>
+        <p><strong><?=$this->transEsc('Find More')?></strong></p>
+        <ul>
+          <li><a href="<?=$this->url('keywordchainsearch-home')?>" rel="nofollow"><?=$this->transEsc('Browse Keywordchains')?></a></li>
+          <li><a href="<?=$this->url('browse-home')?>" rel="nofollow"><?=$this->transEsc('Browse the Catalog')?></a></li>
+          <li><a href="<?=$this->url('alphabrowse-home')?>" rel="nofollow"><?=$this->transEsc('Browse Alphabetically')?></a></li>
+          <li><a href="<?=$this->url('search-newitem')?>" rel="nofollow"><?=$this->transEsc('New Items')?></a></li>
+        </ul>
+      <?=$this->slot('footer-center')->end(); ?>
+    </div>
+    <div class="footer-column">
+      <?php $this->slot('footer-right')->start(); ?>
+        <p><strong><?=$this->transEsc('link_text_need_help')?></strong></p>
+        <ul>
+          <li><a href="<?=$this->url('help-home')?>?topic=search" data-lightbox class="help-link" title="<?=$this->transEsc('Search Tips')?>" rel="nofollow"><?=$this->transEsc('Search Tips')?></a></li>
+          <li><a href="/Feedback/Form/AcquisitionRequest" rel="nofollow"><?=$this->transEsc('Acquisition Request')?></a></li>
+        </ul>
+      <?=$this->slot('footer-right')->end(); ?>
+    </div>
+    <div class="footer-column">
+        <p><strong><?=$this->transEsc('Social Media')?></strong></p>
+        <a target="blank" href="//bsky.app/profile/ixtheo.bsky.social"><img src="<?=$this->imageLink('bluesky.svg')?>" height="30" alt="Bluesky"></a>
+        <a target="blank" href="//hcommons.social/@ixtheo"><img src="<?=$this->imageLink('mastodon.svg')?>" height="30" alt="Mastodon"></a>
+    </div>
+  </div>
+</footer>
