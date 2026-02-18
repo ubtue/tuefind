@@ -140,11 +140,11 @@
         <xhtml:link rel="alternate" hreflang="es" href="https://krimdok.uni-tuebingen.de/Content/repository?lng=es" />
     </url>
     <url>
-        <loc>https://krimdok.uni-tuebingen.de/Content/zweitveroffentlichungsservice</loc>
+        <loc>https://krimdok.uni-tuebingen.de/Content/zweitveroeffentlichungsservice</loc>
         <changefreq>monthly</changefreq>
-        <xhtml:link rel="alternate" hreflang="de" href="https://krimdok.uni-tuebingen.de/Content/zweitveroffentlichungsservice?lng=de" />
-        <xhtml:link rel="alternate" hreflang="en" href="https://krimdok.uni-tuebingen.de/Content/zweitveroffentlichungsservice?lng=en" />
-        <xhtml:link rel="alternate" hreflang="es" href="https://krimdok.uni-tuebingen.de/Content/zweitveroffentlichungsservice?lng=es" />
+        <xhtml:link rel="alternate" hreflang="de" href="https://krimdok.uni-tuebingen.de/Content/zweitveroeffentlichungsservice?lng=de" />
+        <xhtml:link rel="alternate" hreflang="en" href="https://krimdok.uni-tuebingen.de/Content/zweitveroeffentlichungsservice?lng=en" />
+        <xhtml:link rel="alternate" hreflang="es" href="https://krimdok.uni-tuebingen.de/Content/zweitveroeffentlichungsservice?lng=es" />
     </url>
     <url>
         <loc>https://krimdok.uni-tuebingen.de/Content/classics</loc>
