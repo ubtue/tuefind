@@ -2,7 +2,7 @@
 
 namespace KrimDok\Search\Solr;
 
-class Params extends \VuFind\Search\Solr\Params
+class Params extends \VuFindCollapseExpand\Search\Solr\Params
 {
 
     /**

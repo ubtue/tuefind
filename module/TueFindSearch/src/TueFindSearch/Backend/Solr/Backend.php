@@ -1,11 +1,12 @@
 <?php
+
 namespace TueFindSearch\Backend\Solr;
 
 use VuFindSearch\ParamBag;
 use VuFindSearch\Query\AbstractQuery;
 
-class Backend extends \VuFindSearch\Backend\Solr\Backend implements \TueFindSearch\Feature\GetSitemapFieldsInterface {
-
+class Backend extends \VuFindSearch\Backend\Solr\Backend implements \TueFindSearch\Feature\GetSitemapFieldsInterface
+{
     public function __construct(\VuFindSearch\Backend\Solr\Connector $connector)
     {
         parent::__construct($connector);

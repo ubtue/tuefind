@@ -1,4 +1,5 @@
 <?php
+
 return [
     'extends' => 'bootstrap3',
     'helpers' => [
@@ -46,4 +47,5 @@ return [
         'user-plus' => 'FontAwesome:user-plus',
         'user-secret' => 'FontAwesome:user-secret',
     ],
+    'mixins' => ['collapse_expand_mixin'],
 ];

@@ -29,7 +29,7 @@ class SolrDefaultBackendFactory extends \TueFind\Search\Factory\SolrDefaultBacke
             $backend->setLogger($this->logger);
         }
         $manager = $this->serviceLocator->get(\VuFind\RecordDriver\PluginManager::class);
-        $factory = new RecordCollectionFactory([$manager, 'getSolrRecord']);
+        $factory = new RecordCollectionFactory([$manager, 'getSolrRecord'], $this->serviceLocator);
         $backend->setRecordCollectionFactory($factory);
         return $backend;
     }
@@ -44,7 +44,6 @@ class SolrDefaultBackendFactory extends \TueFind\Search\Factory\SolrDefaultBacke
     protected function createConnector()
     {
         $timeout = $this->getIndexConfig('timeout', 30);
-        $config = $this->config->get($this->mainConfig);
         $this->setTranslator($this->serviceLocator->get(\Laminas\Mvc\I18n\Translator::class));
         $current_lang = $this->getTranslatorLocale();
 

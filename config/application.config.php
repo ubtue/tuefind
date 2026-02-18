@@ -20,6 +20,7 @@ $modules = [
     'VuFind',
     'VuFindAdmin',
     'VuFindApi',
+    'VuFindCollapseExpand',
 ];
 if (!extension_loaded('intl')) {
     // Disable SlmLocale module if intl extension is missing:

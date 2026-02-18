@@ -6,7 +6,8 @@ class PluginManager extends \VuFind\AjaxHandler\PluginManager
 {
     use \TueFind\PluginManagerExtensionTrait;
 
-    public function __construct($configOrContainerInstance = null,
+    public function __construct(
+        $configOrContainerInstance = null,
         array $v3config = []
     ) {
         $this->addOverride('aliases', 'getSubscriptionBundleEntries', GetSubscriptionBundleEntries::class);
