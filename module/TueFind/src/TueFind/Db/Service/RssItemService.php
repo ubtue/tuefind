@@ -2,36 +2,53 @@
 
 namespace TueFind\Db\Service;
 
-use Laminas\Db\Sql\Select;
+use Doctrine\ORM\EntityManagerInterface;
+use TueFind\Db\Entity\RssItem;
+use TueFind\Db\Entity\RssSubscription;
 
 class RssItemService extends RssBaseService implements RssItemServiceInterface
 {
 
-    public function getItemsSortedByPubDate()
+    public function getItemsSortedByPubDate(): array
     {
-        $select = $this->getSql()->select();
-        $select->join('tuefind_rss_feeds', 'tuefind_rss_items.rss_feeds_id = tuefind_rss_feeds.id', Select::SQL_STAR, SELECT::JOIN_LEFT);
-        $select->where->like('tuefind_rss_feeds.subsystem_types', '%' . $this->instance . '%');
-        $select->where(['active'=>'1']);
-        $select->order('pub_date DESC');
-        return $this->selectWith($select);
+        $qb = $this->entityManager->createQueryBuilder();
+
+        $qb->select('ri', 'rf')
+            ->from(RssItem::class, 'ri')
+            ->leftJoin('ri.rssFeed', 'rf') // связь ManyToOne
+            ->where('rf.subsystemTypes LIKE :instance')
+            ->andWhere('rf.active = 1')
+            ->setParameter('instance', '%' . $this->instance . '%')
+            ->orderBy('ri.publicationDateTime', 'DESC');
+
+        return $qb->getQuery()->getArrayResult();
     }
 
-    public function getItemsForUserSortedByPubDate($userId) {
-        $select = $this->getSql()->select();
-        $select->join('tuefind_rss_feeds', 'tuefind_rss_items.rss_feeds_id = tuefind_rss_feeds.id', Select::SQL_STAR, SELECT::JOIN_LEFT);
-        $select->join('tuefind_rss_subscriptions', 'tuefind_rss_items.rss_feeds_id = tuefind_rss_subscriptions.rss_feeds_id', Select::SQL_STAR, SELECT::JOIN_LEFT);
-        $select->where(['tuefind_rss_subscriptions.user_id' => $userId]);
-        $select->where(['active'=>'1']);
-        $select->order('pub_date DESC');
-        return $this->selectWith($select);
+    public function getItemsForUserSortedByPubDate(int $userId): array
+    {
+        $qb = $this->entityManager->createQueryBuilder();
+
+        $qb->select('ri', 'rf', 'rs')
+            ->from(RssItem::class, 'ri')
+            ->leftJoin('ri.feed', 'rf')
+            ->leftJoin(RssSubscription::class, 'rs', 'WITH', 'ri.feed = rs.feed')
+            ->where('rs.user = :userId')
+            ->andWhere('ri.active = 1')
+            ->setParameter('userId', $userId)
+            ->orderBy('ri.pubDate', 'DESC');
+
+        return $qb->getQuery()->getResult();
     }
 
-    public function hasUrl($url)
+    public function hasUrl(string $url): bool
     {
-        $select = $this->getSql()->select();
-        $select->where(['item_url' => $url]);
-        $rows = $this->selectWith($select);
-        return (count($rows) > 0);
+        $qb = $this->entityManager->createQueryBuilder();
+
+        $qb->select('COUNT(ri.id)')
+            ->from(RssItem::class, 'ri')
+            ->where('ri.itemUrl = :url')
+            ->setParameter('url', $url);
+
+        return (bool) $qb->getQuery()->getSingleScalarResult();
     }
 }

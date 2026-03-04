@@ -1,0 +1,46 @@
+<?php
+// Set up page title:
+$this->headTitle($this->translate('Admins'));
+
+// Set up breadcrumbs:
+$this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') . '">' . $this->transEsc('Your Account') . '</a></li> <li class="active">' . $this->transEsc('Admins') . '</li>';
+?>
+
+<div class="<?=$this->layoutClass('mainbody')?>">
+  <h1><?=$this->transEsc('CMS pages history')?></h1>
+  <?=$this->flashmessages()?>
+
+  <table class="table dataTable table-striped content-list custom-link-list">
+    <thead>
+      <tr>
+        <th><?=$this->transEsc('CMS page')?></th>
+        <th><?=$this->transEsc('Sub System')?></th>
+        <th><?=$this->transEsc('Admin ID')?></th>
+        <th><?=$this->transEsc('Updated')?></th>
+      </tr>
+    </thead>
+    <tbody>
+      <?php foreach ($this->CMSPagesHistory as $one): ?>
+        <tr class="custom-link-row" data-custom-link-id="<?=$this->escapeHtmlAttr($one['id'])?>">
+          <td>
+            <?=$this->escapeHtml($one['cmsPage']['pageSystemId'])?>
+          </td>
+          <td>
+            <?=$this->escapeHtml($one['cmsPage']['subSystem'])?>
+          </td>
+          <td>
+            <?=$this->escapeHtml($one['user']['username'])?>
+          </td>
+          <td>
+            <?=$this->escapeHtml($one['cmsPage']['changeDate']->format('d.m.Y H:i'))?>
+          </td>
+        </tr>
+      <?php endforeach; ?>
+    </tbody>
+  </table>
+</div>
+
+<div class="<?=$this->layoutClass('sidebar')?>" id="myresearch-sidebar" role="navigation" aria-label="<?=$this->transEsc('account_menu_label')?>">
+  <?=$this->accountMenu()->render('showallcmshistory')?>
+</div>
+

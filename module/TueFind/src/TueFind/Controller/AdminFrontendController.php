@@ -136,4 +136,160 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
         return $this->createViewModel(['publications' => $this->getDbService(\TueFind\Db\Service\PublicationServiceInterface::class)->getStatistics()]);
     }
 
+     public function showCMSMainAction() {
+        $this->forceAdminLogin();
+
+        $allCMS = ['allCMSPages' => $this->getDbService(\TueFind\Db\Service\CmsPagesServiceInterface::class)->getCmsPages()];
+
+        return $this->createViewModel($allCMS);
+    }
+
+    public function addCMSPageAction()
+    {
+        $user = $this->getUser();
+        if ($user == false) {
+            return $this->forceLogin();
+        }
+
+        $config = $this->serviceLocator->get(\VuFind\Config\PluginManager::class)->get('config');
+
+        $langs = $config->Languages;
+
+        $subsystem = $this->serviceLocator->get('ViewHelperManager')->get('tuefind')->getAllTueFindSubsystems();
+
+        $action = $this->params()->fromPost('action');
+
+        $page_content = $this->params()->fromPost('page_content');
+        $page_title = $this->params()->fromPost('page_title');
+
+        if ($action == 'publish') {
+
+            $cms_page_id = $this->getDbService(\TueFind\Db\Service\CmsPagesServiceInterface::class)->addCMSPage(
+                $this->params()->fromPost('sybsystem'),
+                $this->params()->fromPost('page_system_id'),
+                new \DateTime(),
+                new \DateTime()
+            );
+
+            if (!$cms_page_id) {
+                throw new \RuntimeException('CMS page was not created');
+            }
+
+            $iLang=0;
+            foreach ($langs as $key=>$name) {
+                $this->getDbService(\TueFind\Db\Service\CmsPagesTranslationServiceInterface::class)->addCMSPageTranslation(
+                    $cms_page_id,
+                    $key,
+                    $page_title[$iLang],
+                    $page_content[$iLang]
+                );
+                $iLang++;
+            }
+
+            $this->flashMessenger()->addMessage(['msg' => 'page created!', 'html' => true], 'success');
+            $this->redirect()->toUrl('/AdminFrontend/ShowCMSMain');
+        }
+
+        $view = $this->createViewModel();
+        $view->langs = $langs;
+        $view->subsystem = $subsystem;
+        return $view;
+    }
+
+    public function updateCMSPageAction()
+    {
+        $user = $this->getUser();
+        if ($user == false) {
+            return $this->forceLogin();
+        }
+
+        $config = $this->serviceLocator->get(\VuFind\Config\PluginManager::class)->get('config');
+
+        $langs = $config->Languages;
+
+        $action = $this->params()->fromPost('action');
+        $cms_page_id = $this->params()->fromQuery('cms_page_id');
+        $page_content = $this->params()->fromPost('page_content');
+        $page_title = $this->params()->fromPost('page_title');
+
+        $cmsPage = $this->getDbService(\TueFind\Db\Service\CmsPagesServiceInterface::class)->getCMSPageByID($cms_page_id);
+
+        $subsystem = $this->serviceLocator->get('ViewHelperManager')->get('tuefind')->getAllTueFindSubsystems();
+
+        if ($action == 'update') {
+
+            $result = $this->getDbService(\TueFind\Db\Service\CmsPagesServiceInterface::class)->updateCMSPage(
+                $cms_page_id,
+                $cmsPage['subSystem'],
+                $cmsPage['pageSystemId']
+            );
+            $result = $this->getDbService(\TueFind\Db\Service\CmsPagesTranslationServiceInterface::class)->deleteCMSPageTranslation($cms_page_id);
+
+            $iLang=0;
+            foreach ($langs as $key=>$name) {
+                $this->getDbService(\TueFind\Db\Service\CmsPagesTranslationServiceInterface::class)->addCMSPageTranslation(
+                    $cms_page_id,
+                    $key,
+                    $page_title[$iLang],
+                    $page_content[$iLang]
+                );
+                $iLang++;
+            }
+
+            $this->flashMessenger()->addMessage(['msg' => 'page updated!', 'html' => true], 'success');
+
+            $cmsPage = $this->getDbService(\TueFind\Db\Service\CmsPagesServiceInterface::class)->getCMSPageByID($cms_page_id);
+
+            $user = $this->getUser();
+
+            $this->getDbService(\TueFind\Db\Service\CmsHistoryServiceInterface::class)->addCMSPageHistory($cms_page_id, $user);
+        }
+
+        $view = $this->createViewModel();
+        $view->langs = $langs;
+        $view->cmsPage = $cmsPage;
+        $view->subsystem = $subsystem;
+        return $view;
+    }
+
+    public function deleteCMSPageAction()
+    {
+        $user = $this->getUser();
+        if ($user == false) {
+            return $this->forceLogin();
+        }
+
+        $cms_page_id = $this->params()->fromQuery('cms_page_id');
+
+        $this->getDbService(\TueFind\Db\Service\CmsPagesServiceInterface::class)->deleteCMSPage($cms_page_id);
+        $this->getDbService(\TueFind\Db\Service\CmsPagesTranslationServiceInterface::class)->deleteCMSPageTranslation($cms_page_id);
+
+        $this->flashMessenger()->addMessage(['msg' => 'page deleted!', 'html' => true], 'success');
+
+        return $this->redirect()->toUrl('/AdminFrontend/ShowCMSMain');
+
+    }
+
+    public function showAllCMSHistoryAction() {
+        $this->forceAdminLogin();
+        $user = $this->getUser();
+        $CMSPagesHistory = ['CMSPagesHistory' => $this->getDbService(\TueFind\Db\Service\CmsHistoryServiceInterface::class)->getCmsHistory()];
+        return $this->createViewModel($CMSPagesHistory);
+    }
+
+    public function showCMSHistoryAction() {
+        $this->forceAdminLogin();
+
+        $cms_page_id = $this->params()->fromQuery('cms_page_id');
+
+        $CMSPages =  $this->getDbService(\TueFind\Db\Service\CmsPagesServiceInterface::class)->getCMSPageByID($cms_page_id);
+
+        $CMSPagesHistory = $this->getDbService(\TueFind\Db\Service\CmsHistoryServiceInterface::class)->getCmsHistoryByPageId($cms_page_id);
+
+        return $this->createViewModel([
+            'CMSPage' => $CMSPages,
+            'CMSPagesHistory' => $CMSPagesHistory
+        ]);
+    }
+
 }
