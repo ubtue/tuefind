@@ -1,6 +1,6 @@
 <h3><?=$this->transEsc('rss_list_blogs')?></h3>
 <ul>
-  <?php foreach ($rssFeeds as $rssFeed): ?>
-    <li><a href="<?=$this->tuefind()->getRedirectUrl($rssFeed['website_url'], 'relbib-rss-full')?>" target="_blank" rel="nofollow"><img src="<?=$this->tuefind()->getRssFeedIcon($rssFeed['feed_name'])?>" width="16"> <?=htmlspecialchars($rssFeed['feed_name'])?></a></li>
+  <?php foreach ($rssFeeds as $key => $rssFeed): ?>
+    <li><a href="<?=$this->tuefind()->getRedirectUrl($rssFeed->getWebsiteUrl(), 'relbib-rss-full')?>" target="_blank" rel="nofollow"><img src="<?=$this->tuefind()->getRssFeedIcon($rssFeed->getFeedName())?>" width="16"> <?=htmlspecialchars($rssFeed->getFeedName())?></a></li>
   <?php endforeach; ?>
 </ul>
