@@ -16,8 +16,8 @@ class SolrDefaultBackendFactory extends \TueFind\Search\Factory\SolrDefaultBacke
 
     protected function createConnector()
     {
+        // die("KrimDok\Search\Factory\SolrDefaultBackendFactory::createConnector() is not implemented yet");
         $timeout = $this->getIndexConfig('timeout', 30);
-        $config = $this->config->get($this->mainConfig);
         $this->setTranslator($this->serviceLocator->get(\Laminas\Mvc\I18n\Translator::class));
         $current_lang = $this->getTranslatorLocale();
 
@@ -37,6 +37,7 @@ class SolrDefaultBackendFactory extends \TueFind\Search\Factory\SolrDefaultBacke
         foreach ($this->getHiddenFilters() as $filter) {
             array_push($handlers['select']['appends']['fq'], $filter);
         }
+        
 
         // Careful: Inherited TueFind HandlerMap is used here, see "use" statement at top
         $connector = new $this->connectorClass(
@@ -108,13 +109,13 @@ class SolrDefaultBackendFactory extends \TueFind\Search\Factory\SolrDefaultBacke
     protected function createQueryBuilder()
     {
         $specs   = $this->loadSpecs();
-        $config = $this->config->get($this->mainConfig);
+        $config = $this->configManager->getConfigObject($this->mainConfig);
         $defaultDismax = isset($config->Index->default_dismax_handler)
                          ? $config->Index->default_dismax_handler : 'dismax';
         $builder = new QueryBuilder($specs, $defaultDismax);
 
         // Configure builder:
-        $search = $this->config->get($this->searchConfig);
+        $search = $this->configManager->getConfigObject($this->searchConfig);
         $caseSensitiveBooleans = isset($search->General->case_sensitive_bools)
                                  ? $search->General->case_sensitive_bools : true;
         $caseSensitiveRanges = isset($search->General->case_sensitive_ranges)
