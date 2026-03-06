@@ -45,7 +45,6 @@ class SolrDefaultBackendFactory extends \TueFind\Search\Factory\SolrDefaultBacke
     protected function createConnector()
     {
         $timeout = $this->getIndexConfig('timeout', 30);
-        // $config = $this->configManager->getConfigArray($this->mainConfig);
         $this->setTranslator($this->serviceLocator->get(\Laminas\Mvc\I18n\Translator::class));
         $current_lang = $this->getTranslatorLocale();
 

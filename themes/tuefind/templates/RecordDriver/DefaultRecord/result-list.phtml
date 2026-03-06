@@ -184,8 +184,7 @@
           // Display an OpenURL link if configured to do so:
           $openUrl = $this->openUrl($this->driver, 'results');
           $openUrlActive = $openUrl->isActive();
-          $doi = $this->doi($this->driver, 'results');
-          $doiActive = $doi->isActive();
+          $doiActive = $this->identifierLinker($this->driver, 'results');
           // Account for replace_other_urls setting
           $urls = $this->record($this->driver)->getLinkDetails($openUrlActive);
         ?>
@@ -196,7 +195,7 @@
           <?php endif; ?>
           <?php if ($doiActive): ?>
             <br />
-            <?=$doi->renderTemplate()?>
+            <?=$doiActive->renderTemplate()?>
           <?php endif; ?>
           <?php $urls = is_array($urls) ? $urls : []; ?>
           <?php if (!$this->driver->isCollection()): ?>

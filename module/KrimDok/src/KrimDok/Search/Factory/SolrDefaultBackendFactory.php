@@ -16,7 +16,6 @@ class SolrDefaultBackendFactory extends \TueFind\Search\Factory\SolrDefaultBacke
 
     protected function createConnector()
     {
-        // die("KrimDok\Search\Factory\SolrDefaultBackendFactory::createConnector() is not implemented yet");
         $timeout = $this->getIndexConfig('timeout', 30);
         $this->setTranslator($this->serviceLocator->get(\Laminas\Mvc\I18n\Translator::class));
         $current_lang = $this->getTranslatorLocale();
