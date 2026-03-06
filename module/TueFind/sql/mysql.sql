@@ -18,9 +18,11 @@ CREATE TABLE tuefind_publications (
 
 
 CREATE TABLE tuefind_redirect (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
     url VARCHAR(1000) NOT NULL,
     group_name VARCHAR(1000) DEFAULT NULL,
-    timestamp TIMESTAMP DEFAULT NOW() NOT NULL
+    timestamp TIMESTAMP DEFAULT NOW() NOT NULL,
+    PRIMARY KEY (id)
 ) DEFAULT CHARSET=utf8;
 
 
