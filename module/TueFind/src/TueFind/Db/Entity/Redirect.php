@@ -17,7 +17,7 @@ class Redirect implements RedirectEntityInterface
     protected string $url;
 
     #[ORM\Column(name: 'group_name', type: 'string', length: 1000, nullable: true)]
-    protected string $groupName = '';
+    protected ?string $groupName = null;
 
     #[ORM\Column(name: 'timestamp', type: 'datetime', nullable: false)]
     protected \DateTime $timestamp;
