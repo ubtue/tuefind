@@ -1,6 +1,7 @@
 {
-    "require": {
-        "elasticsearch/elasticsearch": "8.14.0",
-        "symfony/intl": "^5.4"
-    }
+  "require": {
+    "elasticsearch/elasticsearch": "8.14.0",
+    "symfony/intl": "^5.4",
+    "ubtue/vufind-collapse-expand": "@dev"
+  }
 }
