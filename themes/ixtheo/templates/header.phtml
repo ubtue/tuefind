@@ -41,7 +41,7 @@
             </li>
           <?php endif; ?>
           <?php if (is_object($account) && $account->loginEnabled()): // hide login/logout if unavailable ?>
-            <?php if ($account->getUserObject()): ?>
+            <?php if ($account->getIdentity()): ?>
               <li class="logoutOptions<?php if ($account->dropdownEnabled()): ?> with-dropdown<?php endif ?>">
                 <a href="<?=$this->url('myresearch-home', [], ['query' => ['redirect' => 0]])?>" class="icon-link">
                   <span id="account-icon" class="icon-link__icon"><?=$this->icon('my-account') ?></span>
@@ -49,14 +49,14 @@
                 </a>
             </li>
               <?php if ($account->dropdownEnabled()): ?>
-                <li id="login-dropdown" class="dropdown<?php if(!$account->getUserObject()): ?> hidden-xs<?php endif ?>">
+                <li id="login-dropdown" class="dropdown<?php if(!$account->getIdentity()): ?> hidden-xs<?php endif ?>">
                 <a href="#" data-toggle="dropdown"><?=$this->icon('dropdown-caret') ?></a>
                 <div class="dropdown-menu">
                   <?=$this->render('myresearch/menu'); ?>
                 </div>
               </li>
             <?php endif; ?>
-              <li class="logoutOptions<?php if(!$account->getUserObject()): ?> hidden<?php endif ?>">
+              <li class="logoutOptions<?php if(!$account->getIdentity()): ?> hidden<?php endif ?>">
               <a href="<?=$this->url('myresearch-logout')?>" class="logout icon-link">
                     <?=$this->icon('sign-out', 'icon-link__icon') ?>
                     <span class="icon-link__label"><?=$this->transEsc('Log Out')?></span>
