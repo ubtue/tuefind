@@ -1,0 +1,1 @@
+ALTER TABLE `tuefind_redirect` ADD COLUMN `id` INT UNSIGNED NOT NULL AUTO_INCREMENT FIRST, ADD PRIMARY KEY (`id`), ADD INDEX `tuefind_redirect_url_index` (`url`(768)), ADD INDEX `tuefind_redirect_group_name_index` (`group_name`(768)), ADD INDEX `tuefind_redirect_timestamp_index` (`timestamp`);

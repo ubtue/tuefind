@@ -8,6 +8,7 @@ use TueFindSearch\Backend\Solr\Response\Json\RecordCollectionFactory;
 use IxTheo\Search\Backend\Solr\Backend;
 use IxTheo\Search\Backend\Solr\LuceneSyntaxHelper;
 use IxTheo\Search\Backend\Solr\QueryBuilder;
+use PhpParser\Node\Expr\Print_;
 
 class SolrDefaultBackendFactory extends \TueFind\Search\Factory\SolrDefaultBackendFactory implements TranslatorAwareInterface
 {
@@ -44,7 +45,6 @@ class SolrDefaultBackendFactory extends \TueFind\Search\Factory\SolrDefaultBacke
     protected function createConnector()
     {
         $timeout = $this->getIndexConfig('timeout', 30);
-        $config = $this->configManager->get($this->mainConfig);
         $this->setTranslator($this->serviceLocator->get(\Laminas\Mvc\I18n\Translator::class));
         $current_lang = $this->getTranslatorLocale();
 
@@ -118,13 +118,13 @@ class SolrDefaultBackendFactory extends \TueFind\Search\Factory\SolrDefaultBacke
     protected function createQueryBuilder()
     {
         $specs   = $this->loadSpecs();
-        $config = $this->configManager->get($this->mainConfig);
+        $config = $this->configManager->getConfigObject($this->mainConfig);
         $defaultDismax = isset($config->Index->default_dismax_handler)
                          ? $config->Index->default_dismax_handler : 'dismax';
         $builder = new QueryBuilder($specs, $defaultDismax);
 
         // Configure builder:
-        $search = $this->configManager->get($this->searchConfig);
+        $search = $this->configManager->getConfigObject($this->searchConfig);
         $caseSensitiveBooleans = isset($search->General->case_sensitive_bools)
                                  ? $search->General->case_sensitive_bools : true;
         $caseSensitiveRanges = isset($search->General->case_sensitive_ranges)
