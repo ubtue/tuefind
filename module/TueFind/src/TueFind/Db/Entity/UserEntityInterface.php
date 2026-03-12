@@ -4,6 +4,7 @@ namespace TueFind\Db\Entity;
 
 use DateTime;
 use VuFind\Db\Entity\EntityInterface;
+use Doctrine\Common\Collections\Collection;
 
 interface UserEntityInterface extends EntityInterface
 {
@@ -22,4 +23,7 @@ interface UserEntityInterface extends EntityInterface
     public function setRssFeedLastNotification(DateTime $dateTime): static;
 
     public function getTueFindRights(): array;
+
+    public function cmsHistory(): array;
+    public function getCmsPages(): Collection;
 }

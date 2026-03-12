@@ -100,3 +100,18 @@ MenuItems:
     icon: user-plus
     checkMethod: checkUserPublications
     section: admin
+
+  - name: showcmsmain
+    label: Show CMS pages
+    route: adminfrontend-showcmsmain
+    icon: user-secret
+    checkMethod: checkCMS
+    section: admin
+
+  - name: showallcmshistory
+    label: Show CMS History
+    route: adminfrontend-showallcmshistory
+    icon: user-plus
+    checkMethod: checkAllCMSHistory
+    section: admin
+

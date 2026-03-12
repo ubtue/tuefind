@@ -733,4 +733,27 @@ $(document).ready(function () {
         scrollX: true
     });
 
+    $('.editor').summernote({
+        placeholder: '',
+        tabsize: 2,
+        height: 600,
+        toolbar: [
+            ['style', ['style']],
+            ['font', ['bold', 'underline', 'clear']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['table', ['table']],
+            ['insert', ['link', 'picture', 'video']],
+            ['view', ['fullscreen', 'codeview', 'help']]
+        ]
+    });
+
+    $('.cms_preview').click(function(thisEvent){
+        let activeTab =  $(thisEvent.currentTarget).parent().prev().find('.tab-content .tab-pane.active');
+        let pagetitle = activeTab.find('.page_title').val();
+        let pageContent = activeTab.find('.editor').summernote('code');
+        $('#exampleModal .preview_title').html(pagetitle);
+        $('#exampleModal .preview_body').html(pageContent);
+    });
+
 });

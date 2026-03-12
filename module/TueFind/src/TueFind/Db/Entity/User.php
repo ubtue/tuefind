@@ -4,6 +4,10 @@ namespace TueFind\Db\Entity;
 
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
+use VuFind\Db\Entity\EntityInterface;
+use TueFind\Db\Entity\CmsPages;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity]
 class User extends \VuFind\Db\Entity\User implements UserEntityInterface
@@ -31,6 +35,29 @@ class User extends \VuFind\Db\Entity\User implements UserEntityInterface
     // Careful, this is type SET in the database
     #[ORM\Column(name: 'tuefind_rights', type: 'string', nullable: true)]
     protected ?string $tuefindRights = null;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: CmsHistory::class)]
+    private Collection $cmsHistories;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: CmsPages::class)]
+    private Collection $cmsPages;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->cmsHistories = new ArrayCollection();
+        $this->cmsPages = new ArrayCollection();
+    }
+
+    public function getCmsHistories(): Collection
+    {
+        return $this->cmsHistories;
+    }
+
+    public function getCmsPages(): Collection
+    {
+        return $this->cmsPages;
+    }
 
     public function getUuid(): string
     {
@@ -96,5 +123,10 @@ class User extends \VuFind\Db\Entity\User implements UserEntityInterface
             return [];
         }
         return explode(',', $this->tuefindRights);
+    }
+
+    public function cmsHistory(): array
+    {
+        return $this->cmsHistory;
     }
 }

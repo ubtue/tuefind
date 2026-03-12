@@ -10,25 +10,25 @@ class SideFacets extends \VuFind\Recommend\SideFacets
      * Facet where facet counts are not displayed
      */
     protected $suppressCountFacets = [];
+    protected $configLoader;
 
     public function __construct(
-        \VuFind\Config\PluginManager $configLoader,
-        HierarchicalFacetHelper $facetHelper = null
+        \VuFind\Config\ConfigManagerInterface $configLoader,
+        HierarchicalFacetHelper $facetHelper
     ) {
+        $this->configLoader = $configLoader;
         parent::__construct($configLoader, $facetHelper);
     }
 
     public function setConfig($settings) {
         parent::setConfig($settings);
-
         // Parse the additional settings:
         $settings = explode(':', $settings);
         $mainSection = empty($settings[0]) ? 'Results' : $settings[0];
         $checkboxSection = $settings[1] ?? false;
         $iniName = $settings[2] ?? 'facets';
-
         // Load the desired facet information...
-        $config = $this->configLoader->get($iniName);
+        $config = $this->configLoader->getConfigArray($iniName);
         if (isset($config->Results_Settings->suppress_count))
             $this->suppressCountFacets = explode(',', $config->Results_Settings->suppress_count);
     }

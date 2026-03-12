@@ -1,0 +1,60 @@
+<?php
+// Set up page title:
+$this->headTitle($this->translate('Admins'));
+
+// Set up breadcrumbs:
+$this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') . '">' . $this->transEsc('Your Account') . '</a></li> <li class="active">' . $this->transEsc('Admins') . '</li>';
+?>
+
+<div class="<?=$this->layoutClass('mainbody')?>">
+  <h1><?=$this->transEsc('All CMS pages')?></h1>
+  <?=$this->flashmessages()?>
+
+  <table class="table dataTable table-striped content-list custom-link-list">
+    <thead>
+      <tr>
+        <th><?=$this->transEsc('ID')?></th>
+        <th><?=$this->transEsc('Page System ID')?></th>
+        <th><?=$this->transEsc('Subsystem')?></th>
+        <th><?=$this->transEsc('History')?></th>
+        <th><?=$this->transEsc('Created')?></th>
+        <th><?=$this->transEsc('Updated')?></th>
+        <th class="content-list-edit-col"><?=$this->transEsc('Edit')?></th>
+      </tr>
+    </thead>
+    <tbody>
+      <?php foreach ($this->allCMSPages as $page): ?>
+        <tr class="custom-link-row" data-custom-link-id="<?=$this->escapeHtmlAttr($page['id'])?>">
+          <td>
+            <?php echo $page['id'];?>
+          </td>
+          <td>
+            <a target="_blank" href="/Content/<?php echo $page['pageSystemId'];?>"><?php echo $page['pageSystemId'];?></a>
+          </td>
+          <td>
+            <?php echo $page['subSystem'];?>
+          </td>
+          <td>
+            <a href="/AdminFrontend/showCMSHistory?cms_page_id=<?=$page['id']?>"><?=$this->transEsc('history')?></a>
+          </td>
+          <td>
+            <?php echo $page['createDate']->format('d.m.Y H:i');?>
+          </td>
+          <td>
+            <?php echo $page['changeDate']->format('d.m.Y H:i');?>
+          </td>
+          <td class="content-edit-cell">
+            <a class="content-edit-button" href="/AdminFrontend/updateCMSPage?cms_page_id=<?=$page['id']?>" title="<?=$this->transEsc('Edit')?>"><?php echo 'edit';//=$this->icon('content-edit')?></a>
+            <a class="content-edit-button" href="/AdminFrontend/deleteCMSPage?cms_page_id=<?=$page['id']?>" title="<?=$this->transEsc('Delete')?>"><?php echo 'delete';//=$this->icon('content-delete')?></a>
+          </td>
+        </tr>
+      <?php endforeach; ?>
+    </tbody>
+  </table>
+  <a href="/AdminFrontend/addCMSPage"><?=$this->transEsc('Add New CMS page')?></a>
+</div>
+
+<div class="<?=$this->layoutClass('sidebar')?>" id="myresearch-sidebar" role="navigation" aria-label="<?=$this->transEsc('account_menu_label')?>">
+  <?=$this->accountMenu()->render('showcmsmain')?>
+</div>
+

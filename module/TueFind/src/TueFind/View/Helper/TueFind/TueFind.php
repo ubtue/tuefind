@@ -304,14 +304,14 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
             if ($maxItemCount !== null && $i >= $maxItemCount)
                 break;
 
-            $rssItem['item_description'] = $this->filterRssItemDescription($rssItem['item_description']);
+            $rssItem['itemDescription'] = $this->filterRssItemDescription($rssItem['itemDescription']);
             // Do certain items need to be decoded with htmlspecialchars_decode?
 
-            if ($onlyNewestItemPerFeed === false || !in_array($rssItem['feed_name'], $processedFeeds)) {
+            if ($onlyNewestItemPerFeed === false || !in_array($rssItem['rssFeed']['feedName'], $processedFeeds)) {
                 $rssItemsToReturn[] = $rssItem;
                 ++$i;
             }
-            $processedFeeds[] = $rssItem['feed_name'];
+            $processedFeeds[] = $rssItem['rssFeed']['feedName'];
         }
 
         return $rssItemsToReturn;
@@ -361,6 +361,15 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
                 'bibstudies' => 'biblestudies',
                 'churchlaw' => 'canonlaw'];
         return $map[$instance] ?? $instance;
+    }
+
+    public function getAllTueFindSubsystems(): array {
+        $map = ['ixtheo',
+                'relbib',
+                'bibstudies',
+                'canonlaw',
+                'krimdok'];
+        return $map;
     }
 
     /**

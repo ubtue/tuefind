@@ -37,4 +37,22 @@ class AccountMenu extends \VuFind\Navigation\AccountMenu
     {
         return $this->checkAdmins() && $this->accountCapabilities->getPublicationSetting() === 'enabled';
     }
+
+    public function checkCMS(): bool
+    {
+        $user = $this->getUser();
+        if ($user && in_array('CMS', $user->getTueFindRights())) {
+            return true;
+        }
+        return false;
+    }
+
+    public function checkAllCMSHistory(): bool
+    {
+        $user = $this->getUser();
+        if ($user && in_array('CMS', $user->getTueFindRights())) {
+            return true;
+        }
+        return false;
+    }
 }
