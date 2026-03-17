@@ -11,15 +11,10 @@ interface CmsPagesTranslationEntityInterface extends EntityInterface
 {
     public function getId(): ?int;
 
-
     public function getCmsPage(): CmsPages;
    
-    public function setCmsPage(CmsPages $cmsPage): self;
+    public function setCmsPage(CmsPages $cmsPage): static;
 
-    /*
-    public function getCmsPagesId(): ?int;
-    public function setCmsPagesId(int $cmsPagesId): bool;
-    */
     public function getLanguage(): ?string;
     public function setLanguage(string $language): bool;
 

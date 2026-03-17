@@ -13,10 +13,6 @@ use TueFind\Db\Entity\CmsPages;
 #[ORM\Table(name: 'cms_pages_translation')]
 class CmsPagesTranslation implements CmsPagesTranslationEntityInterface
 {
-    public function __construct()
-    {
-       
-    }
 
     #[ORM\Column(name: 'id', type: 'integer', nullable: false)]
     #[ORM\Id]
@@ -51,30 +47,16 @@ class CmsPagesTranslation implements CmsPagesTranslationEntityInterface
         return $this->cmsPage;
     }
 
-    public function setCmsPage(CmsPages $cmsPage): self
+    public function setCmsPage(CmsPages $cmsPage): static
     {
         $this->cmsPage = $cmsPage;
         return $this;
     }
 
-
     public function getId(): ?int
     {
         return $this->id ?? null;
     }
-
-    /*
-    public function getCmsPagesId(): ?int
-    {
-        return $this->cmsPagesId ?? null;
-    }
-
-    public function setCmsPagesId(int $cmsPagesId): bool
-    {
-        $this->cmsPagesId = $cmsPagesId;
-        return true;
-    }
-    */   
 
     public function getLanguage(): ?string
     {

@@ -13,7 +13,9 @@ class ContentController extends \VuFind\Controller\ContentController
         $page = $this->params()->fromRoute('page');
         $this->setTranslator($this->serviceLocator->get(\Laminas\Mvc\I18n\Translator::class));
         $language = $this->getTranslatorLocale();
-        $cmsPage = $this->getDbService(\TueFind\Db\Service\CmsPagesServiceInterface::class)->getCMSPageByPageSystemId($page, $language);
+        $subSystem = $this->serviceLocator->get('ViewHelperManager')->get('tuefind')->getTueFindInstance();
+
+        $cmsPage = $this->getDbService(\TueFind\Db\Service\CmsPagesServiceInterface::class)->getCMSPageByPageSystemId($page, $subSystem, $language);
 
         // Path regex should prevent dots, but double-check to make sure:
         if (str_contains($page, '..')) {
@@ -33,18 +35,13 @@ class ContentController extends \VuFind\Controller\ContentController
         // If a CMS page is found, override path prefix and page to ensure the correct template is used. 
         // The template name is not determined by the URL, but by the database entry for the CMS page.     
         if ($cmsPage) {
-            //$view = $this->createViewModel(['data' => [
-            //    'cmspage' => $cmsPage
-            //]]);
-            //$view->setTemplate('templates/content/cmspage/main');
-            //return $view;
             $pathPrefix = 'templates/content/cmspage/';
             $page = 'main';
         }
 
         $data = $pageLocator->determineTemplateAndRenderer($pathPrefix, $page);
         
-        if ($cmsPage) {
+        if ($cmsPage && isset($data)) {
             $data['cmspage'] = $cmsPage;
             $data['renderer'] = 'CmsPage';
             return $this->getViewForCmsPage($data['page'], $data['relativePath'], $data['path'], $cmsPage);

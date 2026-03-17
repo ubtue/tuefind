@@ -15,14 +15,13 @@ interface CmsPagesServiceInterface extends DbServiceInterface
 
     public function getCMSPageByID(int $cmsPageId): ?array;
 
-    public function getCMSPageByPageSystemId(string $pageSystemId, string $language): ?array;
+    public function getCMSPageByPageSystemId(string $pageSystemId, string $subSystem, string $language): ?array;
 
-    public function addCMSPage(string $subSystem, string $pageSystemId, DateTime $dateCreated, DateTime $dateModified): int;
+    public function addCMSPage(string $pageSystemId, DateTime $dateCreated, DateTime $dateModified): int;
 
     public function updateCMSPage(
         int $cmsPageId,
-        string $subSystem,
-        string $pageSystemId
+        DateTime $dateModified
     ): bool;
 
     public function deleteCMSPage(int $cmsPageId): void;

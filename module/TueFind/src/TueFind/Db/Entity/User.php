@@ -36,7 +36,7 @@ class User extends \VuFind\Db\Entity\User implements UserEntityInterface
     #[ORM\Column(name: 'tuefind_rights', type: 'string', nullable: true)]
     protected ?string $tuefindRights = null;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: CmsHistory::class)]
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: CmsPagesHistory::class)]
     private Collection $cmsHistories;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: CmsPages::class)]
@@ -125,7 +125,7 @@ class User extends \VuFind\Db\Entity\User implements UserEntityInterface
         return explode(',', $this->tuefindRights);
     }
 
-    public function cmsHistory(): array
+    public function cmsHistory(): Collection
     {
         return $this->cmsHistory;
     }

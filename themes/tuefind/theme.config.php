@@ -40,7 +40,7 @@ return [
         ['file' => 'tuefind.js', 'priority' => 1500],
         ['file' => 'vendor/jquery-ui.min.js', 'priority' => 1400],
         ['file' => 'vendor/jquery.dataTable.js', 'priority' => 1300],
-        ['file' => 'vendor/sum_lite.js', 'priority' => 1350],
+        ['file' => 'vendor/summernote_lite.js', 'priority' => 1350],
 
     ],
     'icons' => [

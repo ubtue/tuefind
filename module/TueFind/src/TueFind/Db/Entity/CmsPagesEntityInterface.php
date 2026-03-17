@@ -10,9 +10,6 @@ interface CmsPagesEntityInterface extends EntityInterface
 {
     public function getId(): ?int;
 
-    public function getSubSystem(): ?string;
-    public function setSubSystem(string $subSystem): bool;
-
     public function getPageSystemId(): ?string;
     public function setPageSystemId(string $pageSystemId): bool;
 

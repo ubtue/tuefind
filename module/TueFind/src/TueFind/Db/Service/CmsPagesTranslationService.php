@@ -40,7 +40,6 @@ class CmsPagesTranslationService extends AbstractDbService implements  CmsPagesT
     ): bool {
         $cmsPageTranslation = new CmsPagesTranslation();
 
-        // 🔑 ВАЖНО: устанавливаем ENTITY, а не ID
         $cmsPage = $this->entityManager->getReference(
             CmsPages::class,
             $cmsPageId
@@ -57,25 +56,6 @@ class CmsPagesTranslationService extends AbstractDbService implements  CmsPagesT
         return true;
     }
     
-    /*
-    public function deleteCMSPageTranslation(int $cmsPageId): bool
-
-    {
-        return $this->entityManager->transactional(function ($em) use ($cmsPageId) {
-            $dql = '
-                DELETE FROM ' . CmsPagesTranslation::class . ' cpt
-                WHERE cpt.cmsPages = :page
-            ';
-
-            $pageRef = $em->getReference(CmsPages::class, $cmsPageId);
-
-            $query = $em->createQuery($dql);
-            $query->setParameter('page', $pageRef);
-
-            return $query->execute() > 0;
-        });
-    }
-        */
     public function deleteCMSPageTranslation(int $cmsPageId): void
     {
         $translations = $this->entityManager->getRepository(CmsPagesTranslation::class)

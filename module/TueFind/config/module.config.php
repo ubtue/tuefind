@@ -406,23 +406,23 @@ $recordRoutes = [];
 $nonTabRecordActions = ['Publish'];
 $dynamicRoutes = [];
 $staticRoutes = [
+    'AdminFrontend/CmsPages',
+    'AdminFrontend/CmsPagesAllHistory',
+    'AdminFrontend/CmsPagesHistory',
     'AdminFrontend/ShowAdmins',
     'AdminFrontend/ShowUserAuthorities',
     'AdminFrontend/ShowUserAuthorityHistory',
     'AdminFrontend/ShowUserPublications',
     'AdminFrontend/ShowUserPublicationStatistics',
-    'AdminFrontend/ShowCMSMain',
-    'AdminFrontend/ShowAllCMSHistory',
-    'AdminFrontend/ShowCMSHistory',
     'MyResearch/Newsletter',
     'MyResearch/Publications',
-    'MyResearch/RssFeedSettings',
     'MyResearch/RssFeedPreview',
+    'MyResearch/RssFeedSettings',
     'MyResearch/SelfArchiving',
     'RssFeed/Full',
+    'Search3/FacetList',
     'Search3/Home',
     'Search3/Results',
-    'Search3/FacetList',
     'Search3/Versions',
 ];
 

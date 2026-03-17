@@ -24,6 +24,6 @@ interface UserEntityInterface extends EntityInterface
 
     public function getTueFindRights(): array;
 
-    public function cmsHistory(): array;
+    public function cmsHistory(): Collection;
     public function getCmsPages(): Collection;
 }

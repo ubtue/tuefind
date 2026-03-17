@@ -18,16 +18,6 @@
             <form method="post" action="/AdminFrontend/updateCMSPage?cms_page_id=<?=$this->cmsPage['id'];?>">
 
               <div class="mb-3">
-                <label class="form-label">Subsystem</label>
-                <select name="sybsystem" disabled class="form-select">
-                  <?php foreach ($this->subsystem as $system): ?>
-                    <option class="form-control" <?=($system == $this->cmsPage['subSystem'])? ' selected': '';?> value="<?=$system;?>"><?=$system;?></option>
-                  <?php endforeach; ?>
-                </select>
-              </div>
-              <br />
-
-              <div class="mb-3">
                 <label class="form-label">Page system name</label>
                 <input type="text" name="page_system_id" disabled value="<?=$this->cmsPage['pageSystemId'];?>" class="form-control">
               </div>

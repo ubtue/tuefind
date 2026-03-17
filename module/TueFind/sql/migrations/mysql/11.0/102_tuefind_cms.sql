@@ -29,9 +29,9 @@ CREATE TABLE `cms_pages_translation` (
 DEFAULT CHARSET=utf8mb4
 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE `cms_history` (
+CREATE TABLE `cms_pages_history` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` int unsigned DEFAULT NULL,
+  `user_id` int DEFAULT NULL,
   `cms_id` int unsigned NOT NULL,
   `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
@@ -47,6 +47,22 @@ CREATE TABLE `cms_history` (
     REFERENCES `cms_pages` (`id`)
     ON DELETE CASCADE
 ) ENGINE=InnoDB
+DEFAULT CHARSET=utf8mb4
+COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE `cms_pages_subsystem` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `cms_id` int unsigned NOT NULL,
+  `subsystem` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uniq_page_subsystem` (`cms_id`),
+  KEY `idx_subsystem` (`subsystem`),
+  CONSTRAINT `fk_pages_cms`
+    FOREIGN KEY (`cms_id`)
+    REFERENCES `cms_pages` (`id`)
+    ON DELETE CASCADE
+)
+ENGINE=InnoDB
 DEFAULT CHARSET=utf8mb4
 COLLATE=utf8mb4_unicode_ci;
 

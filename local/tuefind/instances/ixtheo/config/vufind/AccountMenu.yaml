@@ -101,17 +101,17 @@ MenuItems:
     checkMethod: checkUserPublications
     section: admin
 
-  - name: showcmsmain
-    label: Show CMS pages
-    route: adminfrontend-showcmsmain
-    icon: user-secret
+  - name: cmspages
+    label: CMS pages
+    route: adminfrontend-cmspages
+    icon: file-word
     checkMethod: checkCMS
     section: admin
 
-  - name: showallcmshistory
-    label: Show CMS History
-    route: adminfrontend-showallcmshistory
-    icon: user-plus
+  - name: cmspageshistory
+    label: CMS Pages History
+    route: adminfrontend-cmspagesallhistory
+    icon: clock-rotate-left
     checkMethod: checkAllCMSHistory
     section: admin
 

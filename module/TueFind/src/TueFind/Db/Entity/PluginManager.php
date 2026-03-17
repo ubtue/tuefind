@@ -32,7 +32,8 @@ class PluginManager extends \VuFind\Db\Entity\PluginManager
         $this->addOverride('aliases', UserAuthorityHistoryEntityInterface::class, UserAuthorityHistory::class);
         $this->addOverride('aliases', CmsPagesEntityInterface::class, CmsPages::class);
         $this->addOverride('aliases', CmsPagesTranslationEntityInterface::class, CmsPagesTranslation::class);
-        $this->addOverride('aliases', CmsHistoryEntityInterface::class, CmsHistory::class);
+        $this->addOverride('aliases', CmsPagesHistoryEntityInterface::class, CmsPagesHistory::class);
+        $this->addOverride('aliases', CmsPagesSubsystemEntityInterface::class, CmsPagesSubsystem::class);
 
         $this->addOverride('factories', Publication::class, InvokableFactory::class);
         $this->addOverride('factories', Redirect::class, InvokableFactory::class);
@@ -43,8 +44,9 @@ class PluginManager extends \VuFind\Db\Entity\PluginManager
         $this->addOverride('factories', UserAuthority::class, InvokableFactory::class);
         $this->addOverride('factories', UserAuthorityHistory::class, InvokableFactory::class);
         $this->addOverride('factories', CmsPages::class, InvokableFactory::class);
-        $this->addOverride('factories', CmsHistory::class, InvokableFactory::class);
+        $this->addOverride('factories', CmsPagesHistory::class, InvokableFactory::class);
         $this->addOverride('factories', CmsPagesTranslation::class, InvokableFactory::class);
+        $this->addOverride('factories', CmsPagesSubsystem::class, InvokableFactory::class);
         $this->applyOverrides();
 
         parent::__construct($configOrContainerInstance, $v3config);

@@ -41,7 +41,7 @@ class AccountMenu extends \VuFind\Navigation\AccountMenu
     public function checkCMS(): bool
     {
         $user = $this->getUser();
-        if ($user && in_array('CMS', $user->getTueFindRights())) {
+        if ($user && in_array('cms', $user->getTueFindRights())) {
             return true;
         }
         return false;
@@ -50,7 +50,7 @@ class AccountMenu extends \VuFind\Navigation\AccountMenu
     public function checkAllCMSHistory(): bool
     {
         $user = $this->getUser();
-        if ($user && in_array('CMS', $user->getTueFindRights())) {
+        if ($user && in_array('cms', $user->getTueFindRights())) {
             return true;
         }
         return false;

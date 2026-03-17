@@ -13,8 +13,8 @@ use TueFind\Db\Entity\CmsHistoryEntityInterface;
 
 
 #[ORM\Entity]
-#[ORM\Table(name: 'cms_history')]
-class CmsHistory implements CmsHistoryEntityInterface
+#[ORM\Table(name: 'cms_pages_history')]
+class CmsPagesHistory implements CmsPagesHistoryEntityInterface
 {
 
     #[ORM\Column(name: 'id', type: 'integer', nullable: false)]
@@ -24,9 +24,6 @@ class CmsHistory implements CmsHistoryEntityInterface
 
     #[ORM\Column(name: 'user_id', type: 'integer', nullable: false)]
     protected int $userId;
-
-    #[ORM\Column(name: 'cms_id', type: 'integer', nullable: false)]
-    protected int $cmsId;
     
     #[ORM\Column(name: 'created', type: 'datetime', length: 255, nullable: false, options: ['default' => 'CURRENT_TIMESTAMP'])]
     protected DateTime $created;
@@ -49,10 +46,10 @@ class CmsHistory implements CmsHistoryEntityInterface
         return $this->userId ?? null;
     }
 
-    public function setUserID(int $userId): bool
+    public function setUserID(int $userId): static
     {
         $this->userId = $userId;
-        return true;
+        return $this;
     }
 
     public function getCmsPage(): ?CmsPages
@@ -60,7 +57,7 @@ class CmsHistory implements CmsHistoryEntityInterface
         return $this->cmsPage;
     }
 
-    public function setCmsPage(?CmsPages $cmsPage): self
+    public function setCmsPage(?CmsPages $cmsPage): static
     {
         $this->cmsPage = $cmsPage;
         return $this;
@@ -71,7 +68,7 @@ class CmsHistory implements CmsHistoryEntityInterface
         return $this->user;
     }
 
-    public function setUser(?User $user): self
+    public function setUser(?User $user): static
     {
         $this->user = $user;
         return $this;

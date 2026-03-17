@@ -7,7 +7,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use VuFind\Db\Entity\EntityInterface;
 use TueFind\Db\Entity\CmsPagesTranslation;
-use TueFind\Db\Entity\CmsHistory;
+use TueFind\Db\Entity\CmsPagesHistory;
+use TueFind\Db\Entity\CmsPagesSubsystem;
 use Doctrine\Common\Collections\ArrayCollection;
 
 
@@ -21,23 +22,21 @@ class CmsPages implements CmsPagesEntityInterface
         $this->users = new ArrayCollection();
         $this->cmsPagesTranslations = new ArrayCollection();
         $this->history = new ArrayCollection();
+        $this->subsystems = new ArrayCollection();
     }
 
     #[ORM\Column(name: 'id', type: 'integer', nullable: false)]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected int $id;
-
-    #[ORM\Column(name: 'subsystem', type: 'string', length: 255, nullable: false)]
-    protected string $subSystem;
     
     #[ORM\Column(name: 'page_system_id', type: 'string', length: 255, nullable: false)]
     protected string $pageSystemId;
     
-    #[ORM\Column(name: 'create_date', type: 'datetime', length: 255, nullable: false, options: ['default' => 'CURRENT_TIMESTAMP'])]
+    #[ORM\Column(name: 'created', type: 'datetime', length: 255, nullable: false, options: ['default' => 'CURRENT_TIMESTAMP'])]
     protected DateTime $createDate;
 
-    #[ORM\Column(name: 'change_date', type: 'datetime', length: 255, nullable: false)]
+    #[ORM\Column(name: 'changed', type: 'datetime', length: 255, nullable: false)]
     protected DateTime $changeDate;
 
     #[ORM\OneToMany(
@@ -54,24 +53,19 @@ class CmsPages implements CmsPagesEntityInterface
 
     #[ORM\OneToMany(
         mappedBy: 'cmsPage', 
-        targetEntity: CmsHistory::class
+        targetEntity: CmsPagesHistory::class
     )]
     private Collection $history;
+
+    #[ORM\OneToOne(
+        mappedBy: 'cmsPage',
+        targetEntity: CmsPagesSubsystem::class
+    )]
+    private ?CmsPagesSubsystem $subsystem = null;
 
     public function getId(): ?int
     {
         return $this->id ?? null;
-    }
-
-    public function getSubSystem(): ?string
-    {
-        return $this->subSystem ?? null;
-    }
-
-    public function setSubSystem(string $subSystem): bool
-    {
-        $this->subSystem = $subSystem;
-        return true;
     }
 
     public function getPageSystemId(): ?string
@@ -106,6 +100,5 @@ class CmsPages implements CmsPagesEntityInterface
         $this->changeDate = $changeDate;
         return $this;
     }
-
 
 }
