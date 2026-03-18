@@ -8,7 +8,6 @@ use TueFindSearch\Backend\Solr\Response\Json\RecordCollectionFactory;
 use IxTheo\Search\Backend\Solr\Backend;
 use IxTheo\Search\Backend\Solr\LuceneSyntaxHelper;
 use IxTheo\Search\Backend\Solr\QueryBuilder;
-use PhpParser\Node\Expr\Print_;
 
 class SolrDefaultBackendFactory extends \TueFind\Search\Factory\SolrDefaultBackendFactory implements TranslatorAwareInterface
 {

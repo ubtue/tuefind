@@ -27,12 +27,12 @@ class RssItemService extends RssBaseService implements RssItemServiceInterface
 
         $qb->select('ri', 'rf', 'rs')
             ->from(RssItem::class, 'ri')
-            ->leftJoin('ri.feed', 'rf')
-            ->leftJoin(RssSubscription::class, 'rs', 'WITH', 'ri.feed = rs.feed')
+            ->leftJoin('ri.rssFeed', 'rf')
+            ->leftJoin(RssSubscription::class, 'rs', 'WITH', 'ri.rssFeed = rs.rssFeed')
             ->where('rs.user = :userId')
-            ->andWhere('ri.active = 1')
+            ->andWhere('rf.active = 1')
             ->setParameter('userId', $userId)
-            ->orderBy('ri.pubDate', 'DESC');
+            ->orderBy('ri.publicationDateTime', 'DESC');
 
         return $qb->getQuery()->getResult();
     }

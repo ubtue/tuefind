@@ -23,7 +23,12 @@ class UserService extends \VuFind\Db\Service\UserService implements UserServiceI
      */
     public function getByUuid($uuid)
     {
-        return $this->select(['tuefind_uuid' => $uuid])->current();
+        $dql = 'SELECT U '
+            . 'FROM ' . UserEntityInterface::class . ' U '
+            . 'WHERE U.tuefindUuid = :uuid';
+        $query = $this->entityManager->createQuery($dql);
+        $query->setParameter('uuid', $uuid);
+        return $query->getOneOrNullResult();
     }
 
     public function getAdmins()
