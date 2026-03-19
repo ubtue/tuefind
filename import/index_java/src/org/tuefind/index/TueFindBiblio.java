@@ -588,7 +588,7 @@ public class TueFindBiblio extends TueFind {
                     materialType = code_to_material_type_map.get(materialType);
                 if (subfield_z != null)
                     materialLicence = subfield_z.getData();
-                else if (subfield_x != null)
+                else if (!materialType.equals("Inhaltsverzeichnis") && subfield_x != null)
                     materialLicence = subfield_x.getData();
             } else {
                 if (subfield_z != null)
