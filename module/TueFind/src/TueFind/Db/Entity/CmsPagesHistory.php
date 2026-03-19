@@ -4,13 +4,8 @@ namespace TueFind\Db\Entity;
 
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\Collection;
-use VuFind\Db\Entity\EntityInterface;
 use TueFind\Db\Entity\CmsPages;
 use TueFind\Db\Entity\User;
-use Doctrine\Common\Collections\ArrayCollection;
-use TueFind\Db\Entity\CmsHistoryEntityInterface;
-
 
 #[ORM\Entity]
 #[ORM\Table(name: 'cms_pages_history')]

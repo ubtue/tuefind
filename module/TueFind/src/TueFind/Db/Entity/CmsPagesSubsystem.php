@@ -3,11 +3,7 @@
 namespace TueFind\Db\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\Collection;
-use VuFind\Db\Entity\EntityInterface;
 use TueFind\Db\Entity\CmsPages;
-use Doctrine\Common\Collections\ArrayCollection;
-
 
 #[ORM\Entity]
 #[ORM\Table(name: 'cms_pages_subsystem')]
@@ -20,9 +16,9 @@ class CmsPagesSubsystem implements CmsPagesSubsystemEntityInterface
     protected int $id;
     
     #[ORM\Column(name: 'subsystem', type: 'string', length: 50, nullable: false)]
-    protected string $subsystem;
+    protected string $subSystem;
 
-    #[ORM\OneToOne(targetEntity: CmsPages::class, inversedBy: 'subsystems')]
+    #[ORM\OneToOne(targetEntity: CmsPages::class, inversedBy: 'subSystems')]
     #[ORM\JoinColumn(name: 'cms_id', referencedColumnName: 'id', nullable: false)]
     private ?CmsPages $cmsPage = null;
 
@@ -33,12 +29,12 @@ class CmsPagesSubsystem implements CmsPagesSubsystemEntityInterface
 
     public function getSubsystem(): ?string
     {
-        return $this->subsystem ?? null;
+        return $this->subSystem ?? null;
     }
 
-    public function setSubsystem(string $subsystem): static
+    public function setSubsystem(string $subSystem): static
     {
-        $this->subsystem = $subsystem;
+        $this->subSystem = $subSystem;
         return $this;
     }
 

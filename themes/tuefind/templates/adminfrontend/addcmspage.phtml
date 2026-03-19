@@ -21,7 +21,7 @@
               <div class="mb-3">
                 <label class="form-label">Subsystem</label>
                 <select name="subsystem" class="form-select">
-                  <?php foreach ($this->subsystem as $system): ?>
+                  <?php foreach ($this->subSystem as $system): ?>
                     <option class="form-control" value="<?=$system;?>"><?=$system;?></option>
                   <?php endforeach; ?>
                 </select>
@@ -76,3 +76,23 @@
 <div class="<?=$this->layoutClass('sidebar')?>" id="myresearch-sidebar" role="navigation" aria-label="<?=$this->transEsc('account_menu_label')?>">
   <?=$this->accountMenu()->render('showcmsmain')?>
 </div>
+
+<?php
+  $script = <<<JS
+        $('.editor').summernote({
+            placeholder: '',
+            tabsize: 2,
+            height: 600,
+            toolbar: [
+                ['style', ['style']],
+                ['font', ['bold', 'underline', 'clear']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['table', ['table']],
+                ['insert', ['link', 'picture', 'video']],
+                ['view', ['fullscreen', 'codeview', 'help']]
+            ]
+        });
+      JS;
+?>
+<?=$this->assetManager()->outputInlineScriptString($script) ?>

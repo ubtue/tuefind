@@ -3,35 +3,31 @@
 namespace TueFind\Db\Service;
 
 use DateTime;
-use TueFind\Db\Entity\CmsPages;
-use TueFind\Db\Entity\CmsPagesEntityInterface;
-use TueFind\Db\Entity\CmsPagesTranslation;
+
 use VuFind\Db\Service\AbstractDbService;
 use Doctrine\ORM\Query\Expr\Join;
-use TueFind\Db\Entity\CmsPagesSubsystem;
-
-use function intval;
-
+use TueFind\Db\Entity\CmsPages;
+use TueFind\Db\Entity\CmsPagesEntityInterface;
+use TueFind\Db\Service\CmsPagesServiceInterface;
 
 class CmsPagesService extends AbstractDbService implements  CmsPagesServiceInterface
 {
-    
-    public function getById(int $id): ?CmsPagesEntityInterface
+    public function getByID(int $id): ?CmsPagesEntityInterface
     {
         return $this->entityManager->find(CmsPagesEntityInterface::class, $id);
     }
 
-    public function getCmsPages(): array {
+    public function getAll(): array {
         $dql = 'SELECT cp, cpt '
             . 'FROM ' . CmsPages::class . ' cp '
-            . 'LEFT JOIN cp.subsystem cpt '
+            . 'LEFT JOIN cp.subSystem cpt '
             . 'ORDER BY cp.id DESC';
         $query = $this->entityManager->createQuery($dql);
         
         return  $query->getArrayResult();;
     }
 
-    public function getCMSPageByID(int $cmsPageId): ?array
+    public function getByIDFull(int $cmsPageId): ?array
     {
         $dql = '
             SELECT cp, cpt
@@ -68,17 +64,17 @@ class CmsPagesService extends AbstractDbService implements  CmsPagesServiceInter
         return $page;
     }
 
-    public function getCMSPageByPageSystemId(string $pageSystemId, string $subSystem, string $language): ?array
+    public function getByPageSystemID(string $pageSystemId, string $subSystem, string $language): ?array
     {
 
         $qb = $this->entityManager->createQueryBuilder();
 
-        $qb->select('cms', 'subsystem', 'cpt')
+        $qb->select('cms', 'subSystem', 'cpt')
             ->from(CmsPages::class, 'cms')
             ->leftJoin('cms.cmsPagesTranslations', 'cpt', Join::WITH, 'cpt.language = :language')
-            ->leftJoin('cms.subsystem', 'subsystem')
+            ->leftJoin('cms.subSystem', 'subSystem')
             ->where('cms.pageSystemId = :pageSystemId')
-            ->andWhere('subsystem.subsystem = :subSystem')
+            ->andWhere('subSystem.subSystem = :subSystem')
             ->setParameter('language', $language)
             ->setParameter('pageSystemId', $pageSystemId)
             ->setParameter('subSystem', $subSystem);
@@ -92,7 +88,7 @@ class CmsPagesService extends AbstractDbService implements  CmsPagesServiceInter
         return $result;
     }
 
-    public function addCMSPage(string $pageSystemId, DateTime $createdDate, DateTime $changeDate): int
+    public function add(string $pageSystemId, DateTime $createdDate, DateTime $changeDate): int
     {   
         $cmsPage = new CmsPages();
         $cmsPage->setPageSystemId($pageSystemId);
@@ -103,7 +99,7 @@ class CmsPagesService extends AbstractDbService implements  CmsPagesServiceInter
         return $cmsPage->getId();
     }
 
-    public function updateCMSPage(int $cmsPageId, DateTime $dateModified): bool
+    public function update(int $cmsPageId, DateTime $dateModified): CmsPages
     {
 
         // Load page (adapt to your table/service)
@@ -115,10 +111,10 @@ class CmsPagesService extends AbstractDbService implements  CmsPagesServiceInter
         $this->entityManager->persist($page);
         $this->entityManager->flush();
 
-        return true;
+        return $page;
     }
 
-    public function deleteCMSPage(int $id): void
+    public function delete(int $id): void
     {
 
         $CMSPage = $this->getById($id);

@@ -3,26 +3,26 @@
 namespace TueFind\Db\Service;
 
 use DateTime;
+use VuFind\Db\Service\DbServiceInterface;
 use TueFind\Db\Entity\CmsPages;
 use TueFind\Db\Entity\CmsPagesEntityInterface;
-use VuFind\Db\Service\DbServiceInterface;
 
 interface CmsPagesServiceInterface extends DbServiceInterface
 {
-    public function getById(int $id): ?CmsPagesEntityInterface;
+    public function getByID(int $id): ?CmsPagesEntityInterface;
 
-    public function getCmsPages(): array;
+    public function getAll(): array;
 
-    public function getCMSPageByID(int $cmsPageId): ?array;
+    public function getByIDFull(int $cmsPageId): ?array;
 
-    public function getCMSPageByPageSystemId(string $pageSystemId, string $subSystem, string $language): ?array;
+    public function getByPageSystemID(string $pageSystemId, string $subSystem, string $language): ?array;
 
-    public function addCMSPage(string $pageSystemId, DateTime $dateCreated, DateTime $dateModified): int;
+    public function add(string $pageSystemId, DateTime $dateCreated, DateTime $dateModified): int;
 
-    public function updateCMSPage(
+    public function update(
         int $cmsPageId,
         DateTime $dateModified
-    ): bool;
+    ): CmsPages;
 
-    public function deleteCMSPage(int $cmsPageId): void;
+    public function delete(int $cmsPageId): void;
 }

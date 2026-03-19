@@ -5,13 +5,10 @@ namespace TueFind\Db\Entity;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
-use VuFind\Db\Entity\EntityInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 use TueFind\Db\Entity\CmsPagesTranslation;
 use TueFind\Db\Entity\CmsPagesHistory;
 use TueFind\Db\Entity\CmsPagesSubsystem;
-use Doctrine\Common\Collections\ArrayCollection;
-
-
 
 #[ORM\Entity]
 #[ORM\Table(name: 'cms_pages')]
@@ -22,7 +19,7 @@ class CmsPages implements CmsPagesEntityInterface
         $this->users = new ArrayCollection();
         $this->cmsPagesTranslations = new ArrayCollection();
         $this->history = new ArrayCollection();
-        $this->subsystems = new ArrayCollection();
+        $this->subSystems = new ArrayCollection();
     }
 
     #[ORM\Column(name: 'id', type: 'integer', nullable: false)]
@@ -61,7 +58,7 @@ class CmsPages implements CmsPagesEntityInterface
         mappedBy: 'cmsPage',
         targetEntity: CmsPagesSubsystem::class
     )]
-    private ?CmsPagesSubsystem $subsystem = null;
+    private ?CmsPagesSubsystem $subSystem = null;
 
     public function getId(): ?int
     {
@@ -73,10 +70,10 @@ class CmsPages implements CmsPagesEntityInterface
         return $this->pageSystemId ?? null;
     }
 
-    public function setPageSystemId(string $pageSystemId): bool
+    public function setPageSystemId(string $pageSystemId): string
     {
         $this->pageSystemId = $pageSystemId;
-        return true;
+        return $pageSystemId;
     }
 
     public function getCreateDate(): ?DateTime

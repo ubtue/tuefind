@@ -2,12 +2,8 @@
 
 namespace TueFind\Db\Entity;
 
-use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\Collection;
-use VuFind\Db\Entity\EntityInterface;
 use TueFind\Db\Entity\CmsPages;
-
 
 #[ORM\Entity]
 #[ORM\Table(name: 'cms_pages_translation')]
@@ -63,10 +59,10 @@ class CmsPagesTranslation implements CmsPagesTranslationEntityInterface
         return $this->language ?? null;
     }
 
-    public function setLanguage(string $language): bool
+    public function setLanguage(string $language): string
     {
         $this->language = $language;
-        return true;
+        return $language;
     }
 
     public function getTitle(): ?string
@@ -74,10 +70,10 @@ class CmsPagesTranslation implements CmsPagesTranslationEntityInterface
         return $this->title ?? null;
     }
 
-    public function setTitle(string $title): bool
+    public function setTitle(string $title): string
     {
         $this->title = $title;
-        return true;
+        return $title;
     }
 
     public function getContent(): ?string
@@ -85,10 +81,10 @@ class CmsPagesTranslation implements CmsPagesTranslationEntityInterface
         return $this->content ?? null;
     }
 
-    public function setContent(string $content): bool
+    public function setContent(string $content): string
     {
         $this->content = $content;
-        return true;
+        return $content;
     }
 
 }

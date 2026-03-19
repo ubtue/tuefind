@@ -3,7 +3,6 @@
 namespace TueFind\Db\Entity;
 
 use DateTime;
-use Doctrine\Common\Collections\Collection;
 use VuFind\Db\Entity\EntityInterface;
 
 interface CmsPagesEntityInterface extends EntityInterface
@@ -11,7 +10,7 @@ interface CmsPagesEntityInterface extends EntityInterface
     public function getId(): ?int;
 
     public function getPageSystemId(): ?string;
-    public function setPageSystemId(string $pageSystemId): bool;
+    public function setPageSystemId(string $pageSystemId): string;
 
     public function getCreateDate(): ?DateTime;
     public function setCreateDate(DateTime $createDate): static;

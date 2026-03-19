@@ -2,19 +2,19 @@
 
 namespace TueFind\Db\Service;
 
-//use HebisTmp\Db\Entity\ContentPageInterface;
 use VuFind\Db\Service\DbServiceInterface;
+use TueFind\Db\Entity\CmsPagesTranslation;
 
 interface CmsPagesTranslationServiceInterface extends DbServiceInterface
 {
-    public function getCMSPageTranslationByCMSId(int $cmsPageId): ?array;
+    public function getByCMSID(int $cmsPageId): ?array;
 
-    public function addCMSPageTranslation(
+    public function add(
         int $cmsPageId,
         string $language,
         string $title,
         string $content
-    ): bool;
+    ): CmsPagesTranslation;
 
-    public function deleteCMSPageTranslation(int $cmsPageId): void;
+    public function delete(int $cmsPageId): void;
 }

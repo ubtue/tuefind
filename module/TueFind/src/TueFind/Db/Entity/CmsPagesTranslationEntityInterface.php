@@ -16,12 +16,12 @@ interface CmsPagesTranslationEntityInterface extends EntityInterface
     public function setCmsPage(CmsPages $cmsPage): static;
 
     public function getLanguage(): ?string;
-    public function setLanguage(string $language): bool;
+    public function setLanguage(string $language): string;
 
     public function getTitle(): ?string;
-    public function setTitle(string $title): bool;
+    public function setTitle(string $title): string;
 
     public function getContent(): ?string;
-    public function setContent(string $content): bool;
+    public function setContent(string $content): string;
     
 }

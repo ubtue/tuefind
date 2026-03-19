@@ -2,20 +2,14 @@
 
 namespace TueFind\Db\Service;
 
-use DateTime;
+use VuFind\Db\Service\AbstractDbService;
 use TueFind\Db\Entity\CmsPages;
 use TueFind\Db\Entity\CmsPagesTranslation;
-use VuFind\Db\Service\AbstractDbService;
-use Doctrine\ORM\Query\Expr\Join;
-use TueFind\Db\Entity\CmsPagesTranslation as EntityCmsPagesTranslation;
-
-use function intval;
-
 
 class CmsPagesTranslationService extends AbstractDbService implements  CmsPagesTranslationServiceInterface
 {
     
-    public function getCMSPageTranslationByCMSId(int $cmsPageId): ?array
+    public function getByCMSID(int $cmsPageId): ?array
     {
         $dql = '
             SELECT cpt
@@ -32,12 +26,12 @@ class CmsPagesTranslationService extends AbstractDbService implements  CmsPagesT
        
     }
 
-    public function addCMSPageTranslation(
+    public function add(
         int $cmsPageId,
         string $language,
         string $title,
         string $content
-    ): bool {
+    ): CmsPagesTranslation {
         $cmsPageTranslation = new CmsPagesTranslation();
 
         $cmsPage = $this->entityManager->getReference(
@@ -53,10 +47,10 @@ class CmsPagesTranslationService extends AbstractDbService implements  CmsPagesT
         $this->entityManager->persist($cmsPageTranslation);
         $this->entityManager->flush();
 
-        return true;
+        return $cmsPageTranslation;
     }
     
-    public function deleteCMSPageTranslation(int $cmsPageId): void
+    public function delete(int $cmsPageId): void
     {
         $translations = $this->entityManager->getRepository(CmsPagesTranslation::class)
                      ->findBy(['cmsPagesId' => $cmsPageId]);

@@ -3,7 +3,6 @@
 namespace TueFind\Db\Entity;
 
 use DateTime;
-use Doctrine\Common\Collections\Collection;
 use VuFind\Db\Entity\EntityInterface;
 use TueFind\Db\Entity\CmsPages;
 use TueFind\Db\Entity\User;

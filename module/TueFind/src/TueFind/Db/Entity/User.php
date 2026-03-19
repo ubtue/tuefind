@@ -4,10 +4,9 @@ namespace TueFind\Db\Entity;
 
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\Collection;
-use VuFind\Db\Entity\EntityInterface;
-use TueFind\Db\Entity\CmsPages;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use TueFind\Db\Entity\CmsPages;
 
 #[ORM\Entity]
 class User extends \VuFind\Db\Entity\User implements UserEntityInterface
@@ -125,8 +124,8 @@ class User extends \VuFind\Db\Entity\User implements UserEntityInterface
         return explode(',', $this->tuefindRights);
     }
 
-    public function cmsHistory(): Collection
+    public function cmsPagesHistory(): Collection
     {
-        return $this->cmsHistory;
+        return $this->cmsHistories;
     }
 }
