@@ -2,7 +2,6 @@ CREATE TABLE `tuefind_subsystems` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `subsystem` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `idx_subsystem` (`subsystem`),
   UNIQUE KEY `uniq_subsystem` (`subsystem`)
 )
 ENGINE=InnoDB
