@@ -15,7 +15,7 @@ class ContentController extends \VuFind\Controller\ContentController
         $language = $this->getTranslatorLocale();
         $subSystem = $this->serviceLocator->get('ViewHelperManager')->get('tuefind')->getTueFindInstance();
 
-        $cmsPage = $this->getDbService(\TueFind\Db\Service\CmsPagesServiceInterface::class)->getCMSPageByPageSystemId($page, $subSystem, $language);
+        $cmsPage = $this->getDbService(\TueFind\Db\Service\CmsPagesServiceInterface::class)->getByPageSystemId($page, $subSystem, $language);
 
         // Path regex should prevent dots, but double-check to make sure:
         if (str_contains($page, '..')) {

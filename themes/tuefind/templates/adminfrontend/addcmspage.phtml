@@ -1,5 +1,6 @@
 <?php
-  $this->headTitle($this->translate('Add new CMS page'));
+  $this->breadcrumbs()->set($this->translate('Admins'), $this->url('adminfrontend-cmspages'))
+      ->add($this->translate('Add CMS Page'), active: true);
 ?>
 
 <div class="<?=$this->layoutClass('mainbody')?>">
@@ -16,13 +17,13 @@
         <div class="card shadow-sm">
 
           <div class="card-body">
-            <form method="post" action="/AdminFrontend/addCMSPage">
+            <form method="post" action="<?=$this->url('adminfrontend-addcmspage')?>">
 
               <div class="mb-3">
                 <label class="form-label">Subsystem</label>
                 <select name="subsystem" class="form-select">
                   <?php foreach ($this->subSystem as $system): ?>
-                    <option class="form-control" value="<?=$system;?>"><?=$system;?></option>
+                    <option class="form-control" value="<?=$system['id'];?>"><?=$system['subSystem'];?></option>
                   <?php endforeach; ?>
                 </select>
               </div>

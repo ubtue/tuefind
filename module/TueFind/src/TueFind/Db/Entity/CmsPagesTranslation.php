@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use TueFind\Db\Entity\CmsPages;
 
 #[ORM\Entity]
-#[ORM\Table(name: 'cms_pages_translation')]
+#[ORM\Table(name: 'tuefind_cms_pages_translation')]
 class CmsPagesTranslation implements CmsPagesTranslationEntityInterface
 {
 
@@ -18,7 +18,7 @@ class CmsPagesTranslation implements CmsPagesTranslationEntityInterface
     #[ORM\Column(name: 'cms_pages_id', type: 'integer', nullable: false)]
     protected int $cmsPagesId;
 
-    #[ORM\Column(name: 'language', type: 'string', length: 50, nullable: true)]
+    #[ORM\Column(name: 'language', type: 'string', length: 50, nullable: false)]
     protected string $language;
 
     #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: true)]

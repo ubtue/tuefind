@@ -224,6 +224,75 @@ $config = [
                     ]
                 ],
             ],
+            'adminfrontend-cmspages' => [
+                'type'    => 'Laminas\Router\Http\Literal',
+                'options' => [
+                    'route'    => '/AdminFrontend/CMSPages',
+                    'defaults' => [
+                        'controller' => 'AdminFrontend',
+                        'action'     => 'CMSPages',
+                    ],
+                ],
+            ],
+            'adminfrontend-updatecmspage' => [
+                'type'    => 'Laminas\Router\Http\Segment',
+                'options' => [
+                    'route'    => '/AdminFrontend/updateCMSPage/:cms_page_id',
+                    'constraints' => [
+                        'cms_page_id'     => '\d+',
+                    ],
+                    'defaults' => [
+                        'controller' => 'AdminFrontend',
+                        'action'     => 'updateCMSPage',
+                    ],
+                ],
+            ],
+            'adminfrontend-deletecmspage' => [
+                'type'    => 'Laminas\Router\Http\Segment',
+                'options' => [
+                    'route'    => '/AdminFrontend/deleteCMSPage/:cms_page_id',
+                    'constraints' => [
+                        'cms_page_id'     => '\d+',
+                    ],
+                    'defaults' => [
+                        'controller' => 'AdminFrontend',
+                        'action'     => 'deleteCMSPage',
+                    ],
+                ],
+            ],
+            'adminfrontend-cmspageshistory' => [
+                'type'    => 'Laminas\Router\Http\Segment',
+                'options' => [
+                    'route'    => '/AdminFrontend/CMSPagesHistory/:cms_page_id',
+                    'constraints' => [
+                        'cms_page_id'     => '\d+',
+                    ],
+                    'defaults' => [
+                        'controller' => 'AdminFrontend',
+                        'action'     => 'CMSPagesHistory',
+                    ],
+                ],
+            ],
+            'adminfrontend-cmspagesallhistory' => [
+                'type'    => 'Laminas\Router\Http\Segment',
+                'options' => [
+                    'route'    => '/AdminFrontend/CMSPagesAllHistory',
+                    'defaults' => [
+                        'controller' => 'AdminFrontend',
+                        'action'     => 'CMSPagesAllHistory',
+                    ],
+                ],
+            ],
+            'adminfrontend-addcmspage' => [
+                'type'    => 'Laminas\Router\Http\Literal',
+                'options' => [
+                    'route'    => '/AdminFrontend/addCMSPage',
+                    'defaults' => [
+                        'controller' => 'AdminFrontend',
+                        'action'     => 'addCMSPage',
+                    ],
+                ],
+            ],
         ],
     ],
     'controllers' => [
@@ -406,9 +475,6 @@ $recordRoutes = [];
 $nonTabRecordActions = ['Publish'];
 $dynamicRoutes = [];
 $staticRoutes = [
-    'AdminFrontend/CmsPages',
-    'AdminFrontend/CmsPagesAllHistory',
-    'AdminFrontend/CmsPagesHistory',
     'AdminFrontend/ShowAdmins',
     'AdminFrontend/ShowUserAuthorities',
     'AdminFrontend/ShowUserAuthorityHistory',

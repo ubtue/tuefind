@@ -9,6 +9,7 @@ use Doctrine\ORM\Query\Expr\Join;
 use TueFind\Db\Entity\CmsPages;
 use TueFind\Db\Entity\CmsPagesEntityInterface;
 use TueFind\Db\Service\CmsPagesServiceInterface;
+use TueFind\Db\Entity\Subsystems;
 
 class CmsPagesService extends AbstractDbService implements  CmsPagesServiceInterface
 {
@@ -18,13 +19,14 @@ class CmsPagesService extends AbstractDbService implements  CmsPagesServiceInter
     }
 
     public function getAll(): array {
-        $dql = 'SELECT cp, cpt '
-            . 'FROM ' . CmsPages::class . ' cp '
-            . 'LEFT JOIN cp.subSystem cpt '
-            . 'ORDER BY cp.id DESC';
-        $query = $this->entityManager->createQuery($dql);
         
-        return  $query->getArrayResult();;
+        $dql = 'SELECT cp, s
+                FROM ' . CmsPages::class . ' cp
+                LEFT JOIN cp.subSystem s
+                ORDER BY cp.id DESC';
+        $query = $this->entityManager->createQuery($dql);
+
+        return  $query->getArrayResult();
     }
 
     public function getByIDFull(int $cmsPageId): ?array
@@ -88,9 +90,10 @@ class CmsPagesService extends AbstractDbService implements  CmsPagesServiceInter
         return $result;
     }
 
-    public function add(string $pageSystemId, DateTime $createdDate, DateTime $changeDate): int
-    {   
+    public function add(int $subSystemId, string $pageSystemId, DateTime $createdDate, DateTime $changeDate): int
+    {
         $cmsPage = new CmsPages();
+        $cmsPage->setSubSystemId($subSystemId);
         $cmsPage->setPageSystemId($pageSystemId);
         $cmsPage->setCreateDate($createdDate);
         $cmsPage->setChangeDate($changeDate);

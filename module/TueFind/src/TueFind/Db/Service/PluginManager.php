@@ -33,7 +33,7 @@ class PluginManager extends \VuFind\Db\Service\PluginManager
         $this->addOverride('aliases', CmsPagesServiceInterface::class, CmsPagesService::class);
         $this->addOverride('aliases', CmsPagesTranslationServiceInterface::class, CmsPagesTranslationService::class);
         $this->addOverride('aliases', CmsPagesHistoryServiceInterface::class, CmsPagesHistoryService::class);
-        $this->addOverride('aliases', CmsPagesSubsystemServiceInterface::class, CmsPagesSubsystemService::class);
+        $this->addOverride('aliases', SubsystemsServiceInterface::class, SubsystemsService::class);
 
         $this->addOverride('factories', PublicationService::class, AbstractDbServiceFactory::class);
         $this->addOverride('factories', RedirectService::class, AbstractDbServiceFactory::class);
@@ -46,7 +46,7 @@ class PluginManager extends \VuFind\Db\Service\PluginManager
         $this->addOverride('factories', CmsPagesService::class, AbstractDbServiceFactory::class);
         $this->addOverride('factories', CmsPagesTranslationService::class, AbstractDbServiceFactory::class);
         $this->addOverride('factories', CmsPagesHistoryService::class, AbstractDbServiceFactory::class);
-        $this->addOverride('factories', CmsPagesSubsystemService::class, AbstractDbServiceFactory::class);
+        $this->addOverride('factories', SubsystemsService::class, AbstractDbServiceFactory::class);
 
         $this->applyOverrides();
 

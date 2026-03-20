@@ -8,7 +8,7 @@ use TueFind\Db\Entity\CmsPages;
 use TueFind\Db\Entity\User;
 
 #[ORM\Entity]
-#[ORM\Table(name: 'cms_pages_history')]
+#[ORM\Table(name: 'tuefind_cms_pages_history')]
 class CmsPagesHistory implements CmsPagesHistoryEntityInterface
 {
 

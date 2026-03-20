@@ -1,9 +1,6 @@
 <?php
-// Set up page title:
-$this->headTitle($this->translate('Admins'));
-
-// Set up breadcrumbs:
-$this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') . '">' . $this->transEsc('Your Account') . '</a></li> <li class="active">' . $this->transEsc('Admins') . '</li>';
+$this->breadcrumbs()->set($this->translate('Admins'), $this->url('myresearch-home'))
+      ->add($this->translate('CMS Pages'), active: true);
 ?>
 
 <div class="<?=$this->layoutClass('mainbody')?>">
@@ -35,7 +32,7 @@ $this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') 
             <?php echo $page['subSystem']['subSystem'];?>
           </td>
           <td>
-            <a href="/AdminFrontend/CMSPagesHistory?cms_page_id=<?=$page['id']?>"><?=$this->transEsc('history')?></a>
+            <a href="<?=$this->url('adminfrontend-cmspageshistory', ['cms_page_id' => $page['id']])?>"><?=$this->transEsc('history')?></a>
           </td>
           <td>
             <?php echo $page['createDate']->format('d.m.Y H:i');?>
@@ -44,14 +41,14 @@ $this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') 
             <?php echo $page['changeDate']->format('d.m.Y H:i');?>
           </td>
           <td class="content-edit-cell">
-            <a class="content-edit-button" href="/AdminFrontend/updateCMSPage?cms_page_id=<?=$page['id']?>" title="<?=$this->transEsc('Edit')?>"><?=$this->icon('edit')?></a>&nbsp;
-            <a class="content-edit-button" href="/AdminFrontend/deleteCMSPage?cms_page_id=<?=$page['id']?>" title="<?=$this->transEsc('Delete')?>"><?=$this->icon('trash')?></a>
+            <a class="content-edit-button" href="<?=$this->url('adminfrontend-updatecmspage', ['cms_page_id' => $page['id']])?>" title="<?=$this->transEsc('Edit')?>"><?=$this->icon('edit')?></a>&nbsp;
+            <a class="content-edit-button" href="<?=$this->url('adminfrontend-deletecmspage', ['cms_page_id' => $page['id']])?>" title="<?=$this->transEsc('Delete')?>"><?=$this->icon('trash')?></a>
           </td>
         </tr>
       <?php endforeach; ?>
     </tbody>
   </table>
-  <a href="/AdminFrontend/addCMSPage"><?=$this->transEsc('Add New CMS page')?></a>
+  <a href="<?=$this->url('adminfrontend-addcmspage')?>"><?=$this->transEsc('Add New CMS page')?></a>
 </div>
 
 <div class="<?=$this->layoutClass('sidebar')?>" id="myresearch-sidebar" role="navigation" aria-label="<?=$this->transEsc('account_menu_label')?>">

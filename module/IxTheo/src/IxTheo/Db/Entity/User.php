@@ -45,11 +45,6 @@ class User extends \TueFind\Db\Entity\User implements UserEntityInterface
         $this->cmsPages = new ArrayCollection();
     }
 
-    public function getCmsHistories(): Collection
-    {
-        return $this->cmsHistories;
-    }
-
     public function getCmsPages(): Collection
     {
         return $this->cmsPages;

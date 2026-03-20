@@ -155,7 +155,7 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
 
         $langs = $config->Languages;
 
-        $subSystem = $this->serviceLocator->get('ViewHelperManager')->get('tuefind')->getAllTueFindSubsystems();
+        $subSystem = $this->getDbService(\TueFind\Db\Service\SubsystemsServiceInterface::class)->getAll();
 
         $action = $this->params()->fromPost('action');
 
@@ -167,6 +167,7 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
         if ($action == 'publish') {
 
             $cmsPageId = $this->getDbService(\TueFind\Db\Service\CmsPagesServiceInterface::class)->add(
+                $this->params()->fromPost('subsystem'),
                 $this->params()->fromPost('page_system_id'),
                 new \DateTime(),
                 new \DateTime()
@@ -175,11 +176,6 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
             if (!$cmsPageId) {
                 throw new \RuntimeException('CMS page was not created');
             }
-
-            $this->getDbService(\TueFind\Db\Service\CmsPagesSubsystemServiceInterface::class)->add(
-                $cmsPageId,
-                $this->params()->fromPost('subsystem')
-            );
 
             $iLang=0;
             foreach ($langs as $key=>$name) {
@@ -214,7 +210,7 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
         $langs = $config->Languages;
 
         $action = $this->params()->fromPost('action');
-        $cmsPageId = $this->params()->fromQuery('cms_page_id');
+        $cmsPageId = $this->params()->fromRoute('cms_page_id');
         $pageContent = $this->params()->fromPost('page_content');
         $pageTitle = $this->params()->fromPost('page_title');
 
@@ -260,7 +256,7 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
             return $this->forceLogin();
         }
 
-        $cmsPageId = $this->params()->fromQuery('cms_page_id');
+        $cmsPageId = $this->params()->fromRoute('cms_page_id');
 
         $this->getDbService(\TueFind\Db\Service\CmsPagesServiceInterface::class)->delete($cmsPageId);
         $this->getDbService(\TueFind\Db\Service\CmsPagesTranslationServiceInterface::class)->delete($cmsPageId);
@@ -282,7 +278,7 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
     public function CmsPagesHistoryAction() {
         $this->forceAdminLogin();
 
-        $cmsPageId = $this->params()->fromQuery('cms_page_id');
+        $cmsPageId = $this->params()->fromRoute('cms_page_id');
 
         $CMSPages =  $this->getDbService(\TueFind\Db\Service\CmsPagesServiceInterface::class)->getByIDFull($cmsPageId);
 

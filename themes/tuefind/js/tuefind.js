@@ -733,12 +733,4 @@ $(document).ready(function () {
         scrollX: true
     });
 
-    $('.cms_preview').click(function(thisEvent){
-        let activeTab =  $(thisEvent.currentTarget).parent().prev().find('.tab-content .tab-pane.active');
-        let pagetitle = activeTab.find('.page_title').val();
-        let pageContent = activeTab.find('.editor').summernote('code');
-        $('#exampleModal .preview_title').html(pagetitle);
-        $('#exampleModal .preview_body').html(pageContent);
-    });
-
 });

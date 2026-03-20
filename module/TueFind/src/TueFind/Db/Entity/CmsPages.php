@@ -8,10 +8,10 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use TueFind\Db\Entity\CmsPagesTranslation;
 use TueFind\Db\Entity\CmsPagesHistory;
-use TueFind\Db\Entity\CmsPagesSubsystem;
+use TueFind\Db\Entity\Subsystems;
 
 #[ORM\Entity]
-#[ORM\Table(name: 'cms_pages')]
+#[ORM\Table(name: 'tuefind_cms_pages')]
 class CmsPages implements CmsPagesEntityInterface
 {
     public function __construct()
@@ -19,14 +19,16 @@ class CmsPages implements CmsPagesEntityInterface
         $this->users = new ArrayCollection();
         $this->cmsPagesTranslations = new ArrayCollection();
         $this->history = new ArrayCollection();
-        $this->subSystems = new ArrayCollection();
     }
 
     #[ORM\Column(name: 'id', type: 'integer', nullable: false)]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected int $id;
-    
+
+    #[ORM\Column(name: 'subsystem_id', type: 'integer', nullable: false)]
+    protected int $subSystemId;
+
     #[ORM\Column(name: 'page_system_id', type: 'string', length: 255, nullable: false)]
     protected string $pageSystemId;
     
@@ -54,15 +56,24 @@ class CmsPages implements CmsPagesEntityInterface
     )]
     private Collection $history;
 
-    #[ORM\OneToOne(
-        mappedBy: 'cmsPage',
-        targetEntity: CmsPagesSubsystem::class
-    )]
-    private ?CmsPagesSubsystem $subSystem = null;
+    #[ORM\ManyToOne(targetEntity: Subsystems::class)]
+    #[ORM\JoinColumn(name: 'subsystem_id', referencedColumnName: 'id', nullable: false)]
+    private ?Subsystems $subSystem = null;
 
     public function getId(): ?int
     {
         return $this->id ?? null;
+    }
+
+    public function getSubSystemId(): ?int
+    {
+        return $this->subSystemId ?? null;
+    }
+
+    public function setSubSystemId(int $subSystemId): int
+    {
+        $this->subSystemId = $subSystemId;
+        return $subSystemId;
     }
 
     public function getPageSystemId(): ?string
