@@ -103,8 +103,8 @@ var IxTheo2 = {
 
         cmap = L.map('map');
 
-        L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+        L.tileLayer('https://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors',
         }).addTo(cmap);
 
         let markers = {
@@ -260,7 +260,7 @@ $(function () {
       // -----------------------------
       //  On Scroll
       // -----------------------------
-      $(window).scroll(function () {  
+      $(window).scroll(function () {
         var scroll = $(window).scrollTop();
         if (scroll > 50) {
           $('.navigation').addClass('sticky-header');
@@ -268,7 +268,7 @@ $(function () {
           $('.navigation').removeClass('sticky-header');
         }
       });
-    
+
       $('.ix2-search-form-bottom-nav .bibel-button').click(function(){
         $('.searchForm_type option').each(function(){
             if($(this).val() == 'BibleRangeSearch') {
