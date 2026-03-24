@@ -1,6 +1,6 @@
 CREATE TABLE `tuefind_subsystems` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `subsystem` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `subsystem` varchar(50) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uniq_subsystem` (`subsystem`)
 )
@@ -11,7 +11,7 @@ COLLATE=utf8mb4_unicode_ci;
 CREATE TABLE `tuefind_cms_pages` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `subsystem_id` int unsigned NOT NULL,
-  `page_system_id` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `page_system_id` varchar(50) NOT NULL,
   `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `changed` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
@@ -30,9 +30,9 @@ COLLATE=utf8mb4_unicode_ci;
 CREATE TABLE `tuefind_cms_pages_translation` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `cms_pages_id` int unsigned NOT NULL,
-  `language` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `content` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `language` varchar(50) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `content` mediumtext NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uniq_cms_pages_language` (`cms_pages_id`, `language`),
   KEY `cms_pages_id` (`cms_pages_id`),
