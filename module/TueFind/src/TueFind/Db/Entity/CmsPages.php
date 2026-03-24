@@ -26,9 +26,6 @@ class CmsPages implements CmsPagesEntityInterface
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected int $id;
 
-    #[ORM\Column(name: 'subsystem_id', type: 'integer', nullable: false)]
-    protected int $subSystemId;
-
     #[ORM\Column(name: 'page_system_id', type: 'string', length: 255, nullable: false)]
     protected string $pageSystemId;
     
@@ -65,15 +62,15 @@ class CmsPages implements CmsPagesEntityInterface
         return $this->id ?? null;
     }
 
-    public function getSubSystemId(): ?int
+    public function getSubSystem(): ?Subsystems
     {
-        return $this->subSystemId ?? null;
+        return $this->subSystem;
     }
 
-    public function setSubSystemId(int $subSystemId): int
+    public function setSubSystem(Subsystems $subSystem): static
     {
-        $this->subSystemId = $subSystemId;
-        return $subSystemId;
+        $this->subSystem = $subSystem;
+        return $this;
     }
 
     public function getPageSystemId(): ?string
