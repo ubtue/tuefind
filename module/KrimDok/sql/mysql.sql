@@ -19,3 +19,7 @@ CREATE TABLE full_text_cache_urls (
 
 ALTER TABLE user ADD krimdok_subscribed_to_newsletter BOOLEAN NOT NULL DEFAULT FALSE;
 CREATE INDEX krimdok_subscribed_to_newsletter_index ON user (krimdok_subscribed_to_newsletter);
+
+INSERT INTO tuefind_subsystems (subsystem)
+VALUES
+  ('krimdok');
