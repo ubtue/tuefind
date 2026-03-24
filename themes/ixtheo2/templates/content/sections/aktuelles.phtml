@@ -8,11 +8,6 @@
                 </div>
 
                 <div class="slick-slider-multiple-item" align="center">
-                    <a href="/Content/digi2026">
-                        <div class="ix-slick-slider-item" title="Wissenschaftliche Tagung und Festakt IxTheo" style="background-image: url(<?=$this->imageLink('slider/mode/News_Tagung.jpg')?>);">
-                            <div class="ix-slick-slider-item-title">Wissenschaftliche Tagung und Festakt IxTheo</div>
-                        </div>
-                    </a>
                     <a href="<?=$this->url('content-page', ['page' => 'News']) ?>#new_homepage">
                         <div class="ix-slick-slider-item" title="<?=$this->transEscAttr('symbolic_image_table63');?>" style="background-image: url(<?=$this->imageLink('slider/hands-2178566.jpg')?>);">
                             <div class="ix-slick-slider-item-title"><?=$this->translate("section_aktuelles_title17")?></div>
@@ -90,7 +85,7 @@ $(document).ready(function(){
 
     $slider.slick({
         dots: true,
-        autoplay: false,       // default stop autorotation
+        autoplay: true,
         infinite: true,
         speed: 1000,
         fade: true,
@@ -98,15 +93,6 @@ $(document).ready(function(){
         arrows: true
     });
 
-    // run slider rotation  if mous hover
-    $slider.on('mouseenter', function () {
-        $slider.slick('slickPlay');
-    });
-
-    // stop slider rotation
-    $slider.on('mouseleave', function () {
-        $slider.slick('slickPause');
-    });
 });
 EOD;?>
 <?=$this->assetManager()->outputInlineScriptString($jsSnippet)?>
