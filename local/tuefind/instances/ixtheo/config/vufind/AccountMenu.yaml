@@ -100,3 +100,18 @@ MenuItems:
     icon: user-plus
     checkMethod: checkUserPublications
     section: admin
+
+  - name: cmspages
+    label: CMS pages
+    route: adminfrontend-cmspages
+    icon: file-word
+    checkMethod: checkCMS
+    section: admin
+
+  - name: cmspageshistory
+    label: CMS Pages History
+    route: adminfrontend-cmspagesallhistory
+    icon: clock-rotate-left
+    checkMethod: checkAllCMSHistory
+    section: admin
+

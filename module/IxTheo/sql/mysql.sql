@@ -44,3 +44,10 @@ ALTER TABLE user DROP INDEX `user_username_idx`;
 ALTER TABLE user DROP INDEX `user_email_idx`;
 CREATE UNIQUE INDEX `subsystem_username` ON user (`ixtheo_user_type`, `username`);
 CREATE UNIQUE INDEX `subsystem_email` ON user (`ixtheo_user_type`, `email`);
+
+INSERT INTO tuefind_subsystems (subsystem)
+VALUES 
+  ('ixtheo'),
+  ('relbib'),
+  ('bibstudies'),
+  ('churchlaw');

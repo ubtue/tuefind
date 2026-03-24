@@ -94,7 +94,9 @@ class Results extends BaseResults
      */
     public function getListObject()
     {
-        // If we haven't previously tried to load a list, do it now:
+        $auth = $this->getAuthorizationService();
+        $this->user = $auth ? $auth->getIdentity() : false;
+    // If we haven't previously tried to load a list, do it now:
         if ($this->list === false) {
             $this->list = $this->subscriptionTable->getAll($this->user, $this->getParams()->getSort());
         }

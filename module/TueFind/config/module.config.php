@@ -224,6 +224,75 @@ $config = [
                     ]
                 ],
             ],
+            'adminfrontend-cmspages' => [
+                'type'    => 'Laminas\Router\Http\Literal',
+                'options' => [
+                    'route'    => '/AdminFrontend/CMSPages',
+                    'defaults' => [
+                        'controller' => 'AdminFrontend',
+                        'action'     => 'CMSPages',
+                    ],
+                ],
+            ],
+            'adminfrontend-updatecmspage' => [
+                'type'    => 'Laminas\Router\Http\Segment',
+                'options' => [
+                    'route'    => '/AdminFrontend/updateCMSPage/:cms_page_id',
+                    'constraints' => [
+                        'cms_page_id'     => '\d+',
+                    ],
+                    'defaults' => [
+                        'controller' => 'AdminFrontend',
+                        'action'     => 'updateCMSPage',
+                    ],
+                ],
+            ],
+            'adminfrontend-deletecmspage' => [
+                'type'    => 'Laminas\Router\Http\Segment',
+                'options' => [
+                    'route'    => '/AdminFrontend/deleteCMSPage/:cms_page_id',
+                    'constraints' => [
+                        'cms_page_id'     => '\d+',
+                    ],
+                    'defaults' => [
+                        'controller' => 'AdminFrontend',
+                        'action'     => 'deleteCMSPage',
+                    ],
+                ],
+            ],
+            'adminfrontend-cmspageshistory' => [
+                'type'    => 'Laminas\Router\Http\Segment',
+                'options' => [
+                    'route'    => '/AdminFrontend/CMSPagesHistory/:cms_page_id',
+                    'constraints' => [
+                        'cms_page_id'     => '\d+',
+                    ],
+                    'defaults' => [
+                        'controller' => 'AdminFrontend',
+                        'action'     => 'CMSPagesHistory',
+                    ],
+                ],
+            ],
+            'adminfrontend-cmspagesallhistory' => [
+                'type'    => 'Laminas\Router\Http\Segment',
+                'options' => [
+                    'route'    => '/AdminFrontend/CMSPagesAllHistory',
+                    'defaults' => [
+                        'controller' => 'AdminFrontend',
+                        'action'     => 'CMSPagesAllHistory',
+                    ],
+                ],
+            ],
+            'adminfrontend-addcmspage' => [
+                'type'    => 'Laminas\Router\Http\Literal',
+                'options' => [
+                    'route'    => '/AdminFrontend/addCMSPage',
+                    'defaults' => [
+                        'controller' => 'AdminFrontend',
+                        'action'     => 'addCMSPage',
+                    ],
+                ],
+            ],
         ],
     ],
     'controllers' => [
@@ -233,6 +302,7 @@ $config = [
             'TueFind\Controller\AuthorController' => '\VuFind\Controller\AbstractBaseFactory',
             'TueFind\Controller\AuthorityController' => 'VuFind\Controller\AbstractBaseFactory',
             'TueFind\Controller\CartController' => 'VuFind\Controller\CartControllerFactory',
+            'TueFind\Controller\ContentController' => 'VuFind\Controller\AbstractBaseFactory',
             'TueFind\Controller\FeedbackController' => 'VuFind\Controller\AbstractBaseFactory',
             'TueFind\Controller\FindbuchProxyController' => 'TueFind\Controller\AbstractProxyControllerFactory',
             'TueFind\Controller\FulltextSnippetProxyController' => '\TueFind\Controller\FulltextSnippetProxyControllerFactory',
@@ -262,6 +332,8 @@ $config = [
             'authority' => 'TueFind\Controller\AuthorityController',
             'Cart' => 'TueFind\Controller\CartController',
             'cart' => 'TueFind\Controller\CartController',
+            'Content' => 'TueFind\Controller\ContentController',
+            'content' => 'TueFind\Controller\ContentController',
             'Feedback' => 'TueFind\Controller\FeedbackController',
             'feedback' => 'TueFind\Controller\FeedbackController',
             'FindbuchProxy' => 'TueFind\Controller\FindbuchProxyController',
@@ -410,13 +482,13 @@ $staticRoutes = [
     'AdminFrontend/ShowUserPublicationStatistics',
     'MyResearch/Newsletter',
     'MyResearch/Publications',
-    'MyResearch/RssFeedSettings',
     'MyResearch/RssFeedPreview',
+    'MyResearch/RssFeedSettings',
     'MyResearch/SelfArchiving',
     'RssFeed/Full',
+    'Search3/FacetList',
     'Search3/Home',
     'Search3/Results',
-    'Search3/FacetList',
     'Search3/Versions',
 ];
 

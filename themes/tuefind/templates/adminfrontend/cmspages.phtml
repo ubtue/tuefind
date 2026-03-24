@@ -1,0 +1,57 @@
+<?php
+$this->breadcrumbs()->set($this->translate('Admins'), $this->url('myresearch-home'))
+      ->add($this->translate('CMS Pages'), active: true);
+?>
+
+<div class="<?=$this->layoutClass('mainbody')?>">
+  <h1><?=$this->transEsc('All CMS pages')?></h1>
+  <?=$this->flashmessages()?>
+
+  <table class="table dataTable table-striped content-list custom-link-list">
+    <thead>
+      <tr>
+        <th><?=$this->transEsc('ID')?></th>
+        <th><?=$this->transEsc('Page System ID')?></th>
+        <th><?=$this->transEsc('SubSystem')?></th>
+        <th><?=$this->transEsc('History')?></th>
+        <th><?=$this->transEsc('Created')?></th>
+        <th><?=$this->transEsc('Updated')?></th>
+        <th class="content-list-edit-col"><?=$this->transEsc('Edit')?></th>
+      </tr>
+    </thead>
+    <tbody>
+      <?php foreach ($this->allCMSPages as $page): ?>
+        <tr class="custom-link-row" data-custom-link-id="<?=$this->escapeHtmlAttr($page['id'])?>">
+          <td>
+            <?php echo $page['id'];?>
+          </td>
+          <td>
+            <?php echo $page['pageSystemId'];?>
+          </td>
+          <td>
+            <?php echo $page['subSystem']['subSystem'];?>
+          </td>
+          <td>
+            <a href="<?=$this->url('adminfrontend-cmspageshistory', ['cms_page_id' => $page['id']])?>"><?=$this->transEsc('history')?></a>
+          </td>
+          <td>
+            <?php echo $page['createDate']->format('d.m.Y H:i');?>
+          </td>
+          <td>
+            <?php echo $page['changeDate']->format('d.m.Y H:i');?>
+          </td>
+          <td class="content-edit-cell">
+            <a class="content-edit-button" href="<?=$this->url('adminfrontend-updatecmspage', ['cms_page_id' => $page['id']])?>" title="<?=$this->transEsc('Edit')?>"><?=$this->icon('edit')?></a>&nbsp;
+            <a class="content-edit-button" href="<?=$this->url('adminfrontend-deletecmspage', ['cms_page_id' => $page['id']])?>" title="<?=$this->transEsc('Delete')?>"><?=$this->icon('trash')?></a>
+          </td>
+        </tr>
+      <?php endforeach; ?>
+    </tbody>
+  </table>
+  <a href="<?=$this->url('adminfrontend-addcmspage')?>"><?=$this->transEsc('Add New CMS page')?></a>
+</div>
+
+<div class="<?=$this->layoutClass('sidebar')?>" id="myresearch-sidebar" role="navigation" aria-label="<?=$this->transEsc('account_menu_label')?>">
+  <?=$this->accountMenu()->render('showcmsmain')?>
+</div>
+
