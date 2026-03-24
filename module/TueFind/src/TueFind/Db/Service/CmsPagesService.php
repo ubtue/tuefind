@@ -93,12 +93,20 @@ class CmsPagesService extends AbstractDbService implements  CmsPagesServiceInter
     public function add(int $subSystemId, string $pageSystemId, DateTime $createdDate, DateTime $changeDate): int
     {
         $cmsPage = new CmsPages();
-        $cmsPage->setSubSystemId($subSystemId);
+
+        $subSystem = $this->entityManager->find(Subsystems::class, $subSystemId);
+        if (!$subSystem) {
+            throw new \RuntimeException("Subsystem not found");
+        }
+
+        $cmsPage->setSubSystem($subSystem);
         $cmsPage->setPageSystemId($pageSystemId);
         $cmsPage->setCreateDate($createdDate);
         $cmsPage->setChangeDate($changeDate);
+
         $this->entityManager->persist($cmsPage);
         $this->entityManager->flush();
+
         return $cmsPage->getId();
     }
 
