@@ -2,7 +2,6 @@
 namespace TueFind\Recommend;
 
 use VuFind\Search\Solr\HierarchicalFacetHelper;
-use VuFind\Solr\Utils as SolrUtils;
 
 class SideFacets extends \VuFind\Recommend\SideFacets
 {
@@ -10,11 +9,11 @@ class SideFacets extends \VuFind\Recommend\SideFacets
      * Facet where facet counts are not displayed
      */
     protected $suppressCountFacets = [];
-    protected $configLoader;
+    public $configLoader;
 
     public function __construct(
         \VuFind\Config\ConfigManagerInterface $configLoader,
-        HierarchicalFacetHelper $facetHelper
+        ?HierarchicalFacetHelper $facetHelper = null
     ) {
         $this->configLoader = $configLoader;
         parent::__construct($configLoader, $facetHelper);

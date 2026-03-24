@@ -18,10 +18,15 @@ CREATE TABLE tuefind_publications (
 
 
 CREATE TABLE tuefind_redirect (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
     url VARCHAR(1000) NOT NULL,
     group_name VARCHAR(1000) DEFAULT NULL,
-    timestamp TIMESTAMP DEFAULT NOW() NOT NULL
-) DEFAULT CHARSET=utf8;
+    timestamp TIMESTAMP DEFAULT NOW() NOT NULL,
+    PRIMARY KEY (id),
+    INDEX tuefind_redirect_url_index (url(768)),
+    INDEX tuefind_redirect_group_name_index (group_name(768)),
+    INDEX tuefind_redirect_timestamp_index (timestamp)
+) DEFAULT CHARSET=utf8mb4;
 
 
 CREATE TABLE tuefind_rss_feeds (

@@ -53,15 +53,6 @@ $config = [
             ],
         ],
     ],
-    'vufind' => [
-        'recorddriver_tabs' => [
-            'VuFind\RecordDriver\SolrMarc' => [
-                'tabs' => [
-                    'Similar' => null,
-                ],
-            ],
-        ],
-    ],
 ];
 
 $recordRoutes = [ 'search2record' => 'Search2Record' ];

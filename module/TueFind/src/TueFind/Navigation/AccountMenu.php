@@ -38,6 +38,16 @@ class AccountMenu extends \VuFind\Navigation\AccountMenu
         return $this->checkAdmins() && $this->accountCapabilities->getPublicationSetting() === 'enabled';
     }
 
+    public function checkPda(): bool
+    {
+        return $this->accountCapabilities->getPdaSetting() === 'enabled';
+    }
+
+    public function checkSubscriptions(): bool
+    {
+        return $this->accountCapabilities->getSubscriptionSetting() === 'enabled';
+    }
+    
     public function checkCMS(): bool
     {
         $user = $this->getUser();

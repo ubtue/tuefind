@@ -306,8 +306,7 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
             return $this->forceLogin();
         }
 
-        $rssItems = $this->getDbService(\TueFind\Db\Service\RssItemServiceInterface::class)->getItemsSortedByPubDate();
-
+        $rssItems = $this->getDbService(\TueFind\Db\Service\RssItemServiceInterface::class)->getItemsForUserSortedByPubDate($user->getId());
         return $this->createViewModel(['user' => $user,
                                        'rssItems' => $rssItems,
                                        'page' => $this->params()->fromQuery('page') ?? 1]);
@@ -323,7 +322,7 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
     public function rssFeedRawAction()
     {
         $userUuid = $this->params()->fromRoute('user_uuid');
-        $user = $this->serviceLocator->get(\VuFind\Db\Table\PluginManager::class)->get('user')->getByUuid($userUuid);
+        $user = $this->getDbService(\TueFind\Db\Service\UserServiceInterface::class)->getByUuid($userUuid);
         $instance = $this->serviceLocator->get('ViewHelperManager')->get('tuefind')->getTueFindInstance();
         $cmd = '/usr/local/bin/rss_subset_aggregator --mode=rss_xml ' . escapeshellarg($user->getId()) . ' ' . escapeshellarg($instance);
 

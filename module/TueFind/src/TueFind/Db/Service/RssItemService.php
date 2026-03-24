@@ -2,20 +2,18 @@
 
 namespace TueFind\Db\Service;
 
-use Doctrine\ORM\EntityManagerInterface;
 use TueFind\Db\Entity\RssItem;
 use TueFind\Db\Entity\RssSubscription;
 
 class RssItemService extends RssBaseService implements RssItemServiceInterface
 {
 
-    public function getItemsSortedByPubDate(): array
-    {
+    public function getItemsSortedByPubDate() : array{
         $qb = $this->entityManager->createQueryBuilder();
 
         $qb->select('ri', 'rf')
             ->from(RssItem::class, 'ri')
-            ->leftJoin('ri.rssFeed', 'rf') // связь ManyToOne
+            ->leftJoin('ri.rssFeed', 'rf') 
             ->where('rf.subsystemTypes LIKE :instance')
             ->andWhere('rf.active = 1')
             ->setParameter('instance', '%' . $this->instance . '%')
@@ -24,23 +22,22 @@ class RssItemService extends RssBaseService implements RssItemServiceInterface
         return $qb->getQuery()->getArrayResult();
     }
 
-    public function getItemsForUserSortedByPubDate(int $userId): array
-    {
+    public function getItemsForUserSortedByPubDate($userId){
         $qb = $this->entityManager->createQueryBuilder();
 
         $qb->select('ri', 'rf', 'rs')
             ->from(RssItem::class, 'ri')
-            ->leftJoin('ri.feed', 'rf')
-            ->leftJoin(RssSubscription::class, 'rs', 'WITH', 'ri.feed = rs.feed')
+            ->leftJoin('ri.rssFeed', 'rf')
+            ->leftJoin(RssSubscription::class, 'rs', 'WITH', 'ri.rssFeed = rs.rssFeed')
             ->where('rs.user = :userId')
-            ->andWhere('ri.active = 1')
+            ->andWhere('rf.active = 1')
             ->setParameter('userId', $userId)
-            ->orderBy('ri.pubDate', 'DESC');
+            ->orderBy('ri.publicationDateTime', 'DESC');
 
         return $qb->getQuery()->getResult();
     }
 
-    public function hasUrl(string $url): bool
+    public function hasUrl($url) : bool
     {
         $qb = $this->entityManager->createQueryBuilder();
 

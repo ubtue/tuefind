@@ -13,7 +13,13 @@ class RedirectService extends AbstractDbService implements RedirectServiceInterf
      * @param string $url   The redirect target
      * @param string $group A group which might be use for later statistics
      */
-    public function insertUrl(string $url, string $group=null) {
-        $this->insert(['url' => $url, 'group_name' => $group]);
+    public function insertUrl(string $url, ?string $group=null) {
+        // inserting data into table tuefind_redirect
+        $this->entityManager->persist(
+            (new \TueFind\Db\Entity\Redirect())
+                ->setUrl($url)
+                ->setGroupName($group)
+        );
+        $this->entityManager->flush();
     }
 }

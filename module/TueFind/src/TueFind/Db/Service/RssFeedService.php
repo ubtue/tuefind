@@ -3,29 +3,30 @@
 namespace TueFind\Db\Service;
 
 use TueFind\Db\Entity\RssFeedEntityInterface;
-use Laminas\Db\Sql\Predicate\PredicateSet;
 
 class RssFeedService extends RssBaseService implements RssFeedServiceInterface
 {
 
-    public function getFeedsSortedByName(): array
+    public function getFeedsSortedByName()
     {
-        $dql = 'SELECT R '
-            . 'FROM ' . RssFeedEntityInterface::class . ' R '
-            . 'WHERE R.active = 1 '
-            . 'AND R.subsystemTypes LIKE :subsystem_type '
-            . 'ORDER BY R.feedName ASC ';
-
-        $query = $this->entityManager->createQuery($dql);
-        $query->setParameter('subsystem_type', '%' . $this->instance . '%');
-        return $query->getResult();
+         $qb = $this->entityManager->createQueryBuilder();
+            $qb->select('rf')
+                ->from(RssFeedEntityInterface::class, 'rf')
+                ->where('rf.active = 1')
+                ->andWhere('rf.subsystemTypes LIKE :instance')
+                ->setParameter('instance', '%' . $this->instance . '%')
+                ->orderBy('rf.feedName', 'ASC');
+        return $qb->getQuery()->getResult();
     }
 
     public function hasUrl($url)
     {
-        $select = $this->getSql()->select();
-        $select->where(['website_url' => $url, 'feed_url' => $url], PredicateSet::OP_OR);
-        $rows = $this->selectWith($select);
-        return (count($rows) > 0);
+        $qb = $this->entityManager->createQueryBuilder();
+        $qb->select('COUNT(rf.id)')
+            ->from(RssFeedEntityInterface::class, 'rf')
+            ->where('rf.websiteUrl = :url')
+            ->orWhere('rf.feedUrl = :url')
+            ->setParameter('url', $url);
+        return (bool) $qb->getQuery()->getSingleScalarResult();
     }
 }

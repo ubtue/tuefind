@@ -11,7 +11,7 @@ use VuFindSearch\Query\Query;
  */
 class RedirectController extends \VuFind\Controller\AbstractBase implements \VuFind\Db\Service\DbServiceAwareInterface
 {
-    use \VuFind\Db\Table\DbServiceAwareTrait;
+    use \VuFind\Db\Service\DbServiceAwareTrait;
 
     /**
      * Allowed Group IDs in Redirects
@@ -77,7 +77,7 @@ class RedirectController extends \VuFind\Controller\AbstractBase implements \VuF
             return;
         }
 
-        $this->getDbService('redirect')->insertUrl($url, $group);
+        $this->getDbService(\TueFind\Db\Service\RedirectServiceInterface::class)->insertUrl($url, $group);
         $view = $this->createViewModel();
         $view->redirectTarget = $url;
         $view->redirectDelay = 0;

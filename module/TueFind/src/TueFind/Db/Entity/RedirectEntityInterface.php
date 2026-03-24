@@ -13,5 +13,6 @@ interface RedirectEntityInterface extends EntityInterface
     public function getGroupName(): ?string;
     public function setGroupName(?string $groupName): static;
 
-    public function getTimestamp(): DateTime;
+    public function getTimestamp();
+    public function setTimestamp(\DateTime $timestamp): void;
 }
