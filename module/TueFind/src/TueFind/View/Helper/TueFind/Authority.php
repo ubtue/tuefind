@@ -2,11 +2,12 @@
 
 namespace TueFind\View\Helper\TueFind;
 
-use \TueFind\RecordDriver\SolrAuthMarc as AuthorityRecordDriver;
-use \TueFind\RecordDriver\SolrMarc as TitleRecordDriver;
+use TueFind\RecordDriver\SolrAuthMarc as AuthorityRecordDriver;
+use TueFind\RecordDriver\SolrMarc as TitleRecordDriver;
 use VuFindSearch\Query\Query;
 use VuFindSearch\Command\SearchCommand;
-use \VuFindSearch\ParamBag;
+use VuFindSearch\ParamBag;
+use Laminas\Cache\Storage\StorageInterface;
 
 /**
  * View Helper for TueFind, containing functions related to authority data + schema.org
@@ -15,6 +16,13 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
                 implements \VuFind\I18n\Translator\TranslatorAwareInterface
 {
     use \VuFind\I18n\Translator\TranslatorAwareTrait;
+
+    protected $caches = [];
+
+    /* Is caching enabled regarding e.g. Solr queries? We can move this to config later */
+    protected $cacheEnabled = true;
+
+    protected $cacheManager;
 
     protected $dbTableManager;
 
@@ -44,8 +52,10 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
     public function __construct(\VuFindSearch\Service $searchService,
                                 \Laminas\View\HelperPluginManager $viewHelperManager,
                                 \VuFind\Record\Loader $recordLoader,
-                                \VuFind\Db\Service\PluginManager $dbTableManager)
+                                \VuFind\Db\Service\PluginManager $dbTableManager,
+                                \TueFind\Cache\Manager $cacheManager)
     {
+        $this->cacheManager = $cacheManager;
         $this->dbTableManager = $dbTableManager;
         $this->recordLoader = $recordLoader;
         $this->searchService = $searchService;
@@ -95,6 +105,20 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
         }
 
         return $display;
+    }
+
+    public function getCache(string $cacheId): ?StorageInterface
+    {
+        if (!$this->cacheEnabled) {
+            return null;
+        }
+        if (!isset($this->caches[$cacheId])) {
+            $cacheName = $this->cacheManager->addAuthorityCache(
+                $cacheId
+            );
+            $this->caches[$cacheId] = $this->cacheManager->getCache($cacheName);
+        }
+        return $this->caches[$cacheId];
     }
 
     /**
@@ -413,7 +437,7 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
         $params->set('facet', 'true');
         $params->set('facet.field', 'author_and_id_facet');
         $params->set('facet.limit', 9999);
-        $params->set('hl', "true");
+        $params->set('hl', 'true');
         $params->set('facet.sort', 'count');
         $params->set('spellcheck', 'false');
         $params->set('facet.mincount', 1);
@@ -587,53 +611,60 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
 
     public function getChartData(AuthorityRecordDriver &$driver): array
     {
-        $params = ["facet.field"=>"publishDate",
-                   "facet.mincount"=>"1",
-                   "facet"=>"on",
-                   "facet.sort"=>"count"];
+        $params = ['facet.field' => 'publishDate',
+                   'facet.mincount' => '1',
+                   'facet' => 'on',
+                   'facet.sort' => 'count'];
 
         $identifier = 'Solr';
+        $cacheKey = $driver->getUniqueID();
+        $cache = $this->getCache('chart-data');
 
-        $query = new \VuFindSearch\Query\Query($this->getTitlesByQueryParams($driver), 'AllFields');
-        $searchCommand = new SearchCommand($identifier, $query,
-            0, 0, new ParamBag($params));
-        $publishingData = $this->searchService->invoke($searchCommand)->getResult();
-        $allFacets = $publishingData->getFacets();
-        $publishArray = $allFacets['publishDate'];
-        $publishDates = array_keys($publishArray);
+        if (($chartData = $cache->getItem($cacheKey)) != null) {
+            return $chartData;
+        } else {
+            $query = new \VuFindSearch\Query\Query($this->getTitlesByQueryParams($driver), 'AllFields');
+            $searchCommand = new SearchCommand($identifier, $query,
+                0, 0, new ParamBag($params));
+            $publishingData = $this->searchService->invoke($searchCommand)->getResult();
+            $allFacets = $publishingData->getFacets();
+            $publishArray = $allFacets['publishDate'];
+            $publishDates = array_keys($publishArray);
 
-        $query = new \VuFindSearch\Query\Query($this->getTitlesAboutQueryParamsChartDate($driver), 'AllFields');
-        $searchCommand = new SearchCommand($identifier, $query,
-            0, 0, new ParamBag($params));
-        $aboutData = $this->searchService->invoke($searchCommand)->getResult();
+            $query = new \VuFindSearch\Query\Query($this->getTitlesAboutQueryParamsChartDate($driver), 'AllFields');
+            $searchCommand = new SearchCommand($identifier, $query,
+                0, 0, new ParamBag($params));
+            $aboutData = $this->searchService->invoke($searchCommand)->getResult();
 
-        $allFacetsAbout = $aboutData->getFacets();
-        $aboutArray = $allFacetsAbout['publishDate'];
+            $allFacetsAbout = $aboutData->getFacets();
+            $aboutArray = $allFacetsAbout['publishDate'];
 
-        $aboutDates = array_keys($aboutArray);
+            $aboutDates = array_keys($aboutArray);
 
-        $allDates = array_merge($publishDates, $aboutDates);
-        $allDates = array_unique($allDates);
+            $allDates = array_merge($publishDates, $aboutDates);
+            $allDates = array_unique($allDates);
 
-        $allDatesKeys = array_values($allDates);
-        asort($allDatesKeys);
+            $allDatesKeys = array_values($allDates);
+            asort($allDatesKeys);
 
-        $chartData = [];
-        foreach($allDatesKeys as $oneDate) {
-            if(!empty($oneDate)){
-                $by = '';
-                $about = '';
-                if (array_key_exists($oneDate, $publishArray)) {
-                    $by = $publishArray[$oneDate];
+            $chartData = [];
+            foreach($allDatesKeys as $oneDate) {
+                if(!empty($oneDate)){
+                    $by = '';
+                    $about = '';
+                    if (array_key_exists($oneDate, $publishArray)) {
+                        $by = $publishArray[$oneDate];
+                    }
+                    if (array_key_exists($oneDate, $aboutArray)) {
+                        $about = $aboutArray[$oneDate];
+                    }
+                    $chartData[] = array($oneDate,$by,$about);
                 }
-                if (array_key_exists($oneDate, $aboutArray)) {
-                    $about = $aboutArray[$oneDate];
-                }
-                $chartData[] = array($oneDate,$by,$about);
             }
-        }
 
-        return $chartData;
+            $cache->setItem($cacheKey, $chartData);
+            return $chartData;
+        }
     }
 
     /**
@@ -676,75 +707,83 @@ class Authority extends \Laminas\View\Helper\AbstractHelper
         //       to reduce the result size and avoid out of memory problems.
         //       Example: Martin Luther, 133813363
 
-        $query = new \VuFindSearch\Query\Query($this->getTitlesByQueryParams($driver), null, $settings['searchType']);
-        $searchCommand = new SearchCommand($identifier, $query,
-            0 , $settings['maxTopicRows'], new ParamBag($settings['paramBag']));
-        $result = $this->searchService->invoke($searchCommand)->getResult();
+        $cacheKey = $driver->getUniqueID();
+        $cache = $this->getCache('topics-data');
+        if (($topicsData = $cache->getItem($cacheKey)) != null) {
+            return $topicsData;
+        } else {
+            $query = new \VuFindSearch\Query\Query($this->getTitlesByQueryParams($driver), null, $settings['searchType']);
+            $searchCommand = new SearchCommand($identifier, $query,
+                0 , $settings['maxTopicRows'], new ParamBag($settings['paramBag']));
+            $result = $this->searchService->invoke($searchCommand)->getResult();
 
-        $countedTopics = [];
-        foreach ($result->getResponseDocs() as $oneRecord) {
-            $keywords = $this->getTopicsCloudField($oneRecord, $translatorLocale);
-            foreach ($keywords as $keyword) {
-                if(strpos($keyword, "\\") !== false) {
-                    $keyword = str_replace("\\", "", $keyword);
-                }
-                if (isset($countedTopics[$keyword])) {
-                    ++$countedTopics[$keyword];
-                } else {
-                    $countedTopics[$keyword] = 1;
-                }
-            }
-        }
-
-        arsort($countedTopics);
-
-        $urlHelper = $this->viewHelperManager->get('url');
-        $tuefindHelper = $this->viewHelperManager->get('tuefind');
-
-        $searchType = 'AllFields';
-        $lookfor = $this->getTitlesByQueryParams($driver);
-
-        if ($tuefindHelper->getTueFindFlavour() == 'ixtheo') {
-            $settings['filter'] = 'key_word_chain_bag';
-        }
-
-        $topicLink = $urlHelper('search-results').'?lookfor='.urlencode($lookfor).'&type='.urlencode($searchType).'&filter[]='.urlencode($settings['filter']).':';
-
-        $topicsArray = [];
-        foreach($countedTopics as $topic => $topicCount) {
-            $originalTopicName = $topic;
-            $pos = strripos($topic, '"');
-            if ($pos !== false) {
-                $topic = preg_replace( '/"([^"]*)"/', "«$1»", $topic);
-            }
-
-            $topicsArray[] = ['topicTitle'=>$topic, 'topicCount'=>$topicCount, 'topicLink'=>$topicLink.urlencode($originalTopicName)];
-        }
-
-        $mainTopicsArray = [];
-        if(!empty($topicsArray)){
-            $topWeight = $settings['maxNumber'];
-            $firstWeight = $topicsArray[0]['topicCount'];
-            for($i=0;$i<count($topicsArray);$i++) {
-                if($i == 0) {
-                    if(mb_strlen($topicsArray[$i]['topicTitle']) > $settings['firstTopicLength']) {
-                        $topicsArray[$i]['topicTitle'] = mb_strimwidth($topicsArray[$i]['topicTitle'], 0, $settings['firstTopicWidth'] + 3, '...');
+            $countedTopics = [];
+            foreach ($result->getResponseDocs() as $oneRecord) {
+                $keywords = $this->getTopicsCloudField($oneRecord, $translatorLocale);
+                foreach ($keywords as $keyword) {
+                    if(strpos($keyword, "\\") !== false) {
+                        $keyword = str_replace("\\", "", $keyword);
+                    }
+                    if (isset($countedTopics[$keyword])) {
+                        ++$countedTopics[$keyword];
+                    } else {
+                        $countedTopics[$keyword] = 1;
                     }
                 }
-                $one = $topicsArray[$i];
-                if($topWeight > $settings['minNumber']) {
-                    $topWeight--;
-                }else{
-                    if(count($topicsArray) < 30) {
-                        $topWeight = $settings['maxNumber']-1;
-                    }
-                }
-                $one['topicNumber'] = $topWeight;
-                $mainTopicsArray[] = $one;
             }
-            $mainTopicsArray[0]['topicNumber'] = $settings['maxNumber'];
+
+            arsort($countedTopics);
+
+            $urlHelper = $this->viewHelperManager->get('url');
+            $tuefindHelper = $this->viewHelperManager->get('tuefind');
+
+            $searchType = 'AllFields';
+            $lookfor = $this->getTitlesByQueryParams($driver);
+
+            if ($tuefindHelper->getTueFindFlavour() == 'ixtheo') {
+                $settings['filter'] = 'key_word_chain_bag';
+            }
+
+            $topicLink = $urlHelper('search-results').'?lookfor='.urlencode($lookfor).'&type='.urlencode($searchType).'&filter[]='.urlencode($settings['filter']).':';
+
+            $topicsArray = [];
+            foreach($countedTopics as $topic => $topicCount) {
+                $originalTopicName = $topic;
+                $pos = strripos($topic, '"');
+                if ($pos !== false) {
+                    $topic = preg_replace( '/"([^"]*)"/', "«$1»", $topic);
+                }
+
+                $topicsArray[] = ['topicTitle'=>$topic, 'topicCount'=>$topicCount, 'topicLink'=>$topicLink.urlencode($originalTopicName)];
+            }
+
+            $mainTopicsArray = [];
+            if(!empty($topicsArray)){
+                $topWeight = $settings['maxNumber'];
+                $firstWeight = $topicsArray[0]['topicCount'];
+                for($i=0;$i<count($topicsArray);$i++) {
+                    if($i == 0) {
+                        if(mb_strlen($topicsArray[$i]['topicTitle']) > $settings['firstTopicLength']) {
+                            $topicsArray[$i]['topicTitle'] = mb_strimwidth($topicsArray[$i]['topicTitle'], 0, $settings['firstTopicWidth'] + 3, '...');
+                        }
+                    }
+                    $one = $topicsArray[$i];
+                    if($topWeight > $settings['minNumber']) {
+                        $topWeight--;
+                    }else{
+                        if(count($topicsArray) < 30) {
+                            $topWeight = $settings['maxNumber']-1;
+                        }
+                    }
+                    $one['topicNumber'] = $topWeight;
+                    $mainTopicsArray[] = $one;
+                }
+                $mainTopicsArray[0]['topicNumber'] = $settings['maxNumber'];
+            }
+            $topicsData = [$mainTopicsArray, $settings];
+            $cache->setItem($cacheKey, $topicsData);
+            return $topicsData;
         }
-        return [$mainTopicsArray, $settings];
     }
 
     public function userHasRightsOnRecord(\VuFind\Db\Row\User $user, TitleRecordDriver &$titleRecord): bool
