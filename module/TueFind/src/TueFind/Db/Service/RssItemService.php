@@ -13,7 +13,7 @@ class RssItemService extends RssBaseService implements RssItemServiceInterface
 
         $qb->select('ri', 'rf')
             ->from(RssItem::class, 'ri')
-            ->leftJoin('ri.rssFeed', 'rf') // связь ManyToOne
+            ->leftJoin('ri.rssFeed', 'rf') 
             ->where('rf.subsystemTypes LIKE :instance')
             ->andWhere('rf.active = 1')
             ->setParameter('instance', '%' . $this->instance . '%')

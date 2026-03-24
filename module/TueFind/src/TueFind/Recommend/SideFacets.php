@@ -14,7 +14,7 @@ class SideFacets extends \VuFind\Recommend\SideFacets
 
     public function __construct(
         \VuFind\Config\ConfigManagerInterface $configLoader,
-        HierarchicalFacetHelper $facetHelper
+        ?HierarchicalFacetHelper $facetHelper = null
     ) {
         $this->configLoader = $configLoader;
         parent::__construct($configLoader, $facetHelper);
