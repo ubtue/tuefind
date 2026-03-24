@@ -47,4 +47,22 @@ class AccountMenu extends \VuFind\Navigation\AccountMenu
     {
         return $this->accountCapabilities->getSubscriptionSetting() === 'enabled';
     }
+    
+    public function checkCMS(): bool
+    {
+        $user = $this->getUser();
+        if ($user && in_array('cms', $user->getTueFindRights())) {
+            return true;
+        }
+        return false;
+    }
+
+    public function checkAllCMSHistory(): bool
+    {
+        $user = $this->getUser();
+        if ($user && in_array('cms', $user->getTueFindRights())) {
+            return true;
+        }
+        return false;
+    }
 }

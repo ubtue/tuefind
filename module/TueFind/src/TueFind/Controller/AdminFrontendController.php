@@ -136,4 +136,158 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
         return $this->createViewModel(['publications' => $this->getDbService(\TueFind\Db\Service\PublicationServiceInterface::class)->getStatistics()]);
     }
 
+     public function CMSPagesAction() {
+        $this->forceAdminLogin();
+
+        $allCMS = ['allCMSPages' => $this->getDbService(\TueFind\Db\Service\CmsPagesServiceInterface::class)->getAll()];
+
+        return $this->createViewModel($allCMS);
+    }
+
+    public function addCMSPageAction()
+    {
+        $user = $this->getUser();
+        if ($user == false) {
+            return $this->forceLogin();
+        }
+
+        $config = $this->serviceLocator->get(\VuFind\Config\PluginManager::class)->get('config');
+
+        $langs = $config->Languages;
+
+        $subSystem = $this->getDbService(\TueFind\Db\Service\SubsystemsServiceInterface::class)->getAll();
+
+        $action = $this->params()->fromPost('action');
+
+        $pageContent = $this->params()->fromPost('page_content');
+        $pageTitle = $this->params()->fromPost('page_title');
+
+        //$user_type = $user->getUserType(); for now we do not have different user types, but in the future we might want to use this to determine if a user has access to certain subsystems or not
+
+        if ($action == 'publish') {
+
+            $cmsPageId = $this->getDbService(\TueFind\Db\Service\CmsPagesServiceInterface::class)->add(
+                $this->params()->fromPost('subsystem'),
+                $this->params()->fromPost('page_system_id'),
+                new \DateTime(),
+                new \DateTime()
+            );
+
+            if (!$cmsPageId) {
+                throw new \RuntimeException('CMS page was not created');
+            }
+
+            $iLang=0;
+            foreach ($langs as $key=>$name) {
+                $this->getDbService(\TueFind\Db\Service\CmsPagesTranslationServiceInterface::class)->add(
+                    $cmsPageId,
+                    $key,
+                    $pageTitle[$iLang],
+                    $pageContent[$iLang]
+                );
+                $iLang++;
+            }
+
+            $this->flashMessenger()->addMessage(['msg' => 'page created!', 'html' => true], 'success');
+            $this->redirect()->toUrl('/AdminFrontend/CMSPages');
+        }
+
+        $view = $this->createViewModel();
+        $view->langs = $langs;
+        $view->subSystem = $subSystem;
+        return $view;
+    }
+
+    public function updateCMSPageAction()
+    {
+        $user = $this->getUser();
+        if ($user == false) {
+            return $this->forceLogin();
+        }
+
+        $config = $this->serviceLocator->get(\VuFind\Config\PluginManager::class)->get('config');
+
+        $langs = $config->Languages;
+
+        $action = $this->params()->fromPost('action');
+        $cmsPageId = $this->params()->fromRoute('cms_page_id');
+        $pageContent = $this->params()->fromPost('page_content');
+        $pageTitle = $this->params()->fromPost('page_title');
+
+        $cmsPage = $this->getDbService(\TueFind\Db\Service\CmsPagesServiceInterface::class)->getByIDFull($cmsPageId);
+
+        if ($action == 'update') {
+
+            //for now we only update changeDate fild in cms_pages table, but in the future we might want to update other fields as well, for example pageSystemId if we want to allow that to be changed
+            $this->getDbService(\TueFind\Db\Service\CmsPagesServiceInterface::class)->update($cmsPageId, new \DateTime());
+
+            $result = $this->getDbService(\TueFind\Db\Service\CmsPagesTranslationServiceInterface::class)->delete($cmsPageId);
+
+            $iLang=0;
+            foreach ($langs as $key=>$name) {
+                $this->getDbService(\TueFind\Db\Service\CmsPagesTranslationServiceInterface::class)->add(
+                    $cmsPageId,
+                    $key,
+                    $pageTitle[$iLang],
+                    $pageContent[$iLang]
+                );
+                $iLang++;
+            }
+
+            $this->flashMessenger()->addMessage(['msg' => 'page updated!', 'html' => true], 'success');
+
+            $cmsPage = $this->getDbService(\TueFind\Db\Service\CmsPagesServiceInterface::class)->getByIDFull($cmsPageId);
+
+            $user = $this->getUser();
+
+            $this->getDbService(\TueFind\Db\Service\CmsPagesHistoryServiceInterface::class)->add($cmsPageId, $user);
+        }
+
+        $view = $this->createViewModel();
+        $view->langs = $langs;
+        $view->cmsPage = $cmsPage;
+        return $view;
+    }
+
+    public function deleteCMSPageAction()
+    {
+        $user = $this->getUser();
+        if ($user == false) {
+            return $this->forceLogin();
+        }
+
+        $cmsPageId = $this->params()->fromRoute('cms_page_id');
+
+        $this->getDbService(\TueFind\Db\Service\CmsPagesServiceInterface::class)->delete($cmsPageId);
+        $this->getDbService(\TueFind\Db\Service\CmsPagesTranslationServiceInterface::class)->delete($cmsPageId);
+
+        $this->flashMessenger()->addMessage(['msg' => 'page deleted!', 'html' => true], 'success');
+
+        return $this->redirect()->toUrl('/AdminFrontend/CMSPages');
+
+    }
+
+    public function CmsPagesAllHistoryAction() {
+        $this->forceAdminLogin();
+        $user = $this->getUser();
+        $CMSPagesHistory = ['CMSPagesHistory' => $this->getDbService(\TueFind\Db\Service\CmsPagesHistoryServiceInterface::class)->getAll()];
+
+        return $this->createViewModel($CMSPagesHistory);
+    }
+
+    public function CmsPagesHistoryAction() {
+        $this->forceAdminLogin();
+
+        $cmsPageId = $this->params()->fromRoute('cms_page_id');
+
+        $CMSPages =  $this->getDbService(\TueFind\Db\Service\CmsPagesServiceInterface::class)->getByIDFull($cmsPageId);
+
+        $CMSPagesHistory = $this->getDbService(\TueFind\Db\Service\CmsPagesHistoryServiceInterface::class)->getByPageID($cmsPageId);
+
+        return $this->createViewModel([
+            'CMSPage' => $CMSPages,
+            'CMSPagesHistory' => $CMSPagesHistory
+        ]);
+    }
+
 }

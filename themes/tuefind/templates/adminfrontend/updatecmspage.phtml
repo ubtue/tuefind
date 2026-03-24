@@ -1,0 +1,123 @@
+<?php
+  $this->breadcrumbs()->set($this->translate('Admins'), $this->url('adminfrontend-cmspages'))
+      ->add($this->translate('Update CMS Page'), active: true);
+?>
+
+<div class="<?=$this->layoutClass('mainbody')?>">
+  <h1><?=$this->transEsc('update CMS page')?></h1>
+  <?=$this->flashmessages()?>
+
+  <div>
+  <!-- form start -->
+   <div class="container mt-5">
+    <div class="row justify-content-center">
+      <div class="col-md-12">
+
+        <div class="card shadow-sm">
+
+          <div class="card-body">
+            <form method="post" action="<?=$this->url('adminfrontend-updatecmspage', ['cms_page_id' => $this->cmsPage['id']])?>">
+
+              <div class="mb-3">
+                <label class="form-label">Page system name</label>
+                <input type="text" name="page_system_id" disabled value="<?=$this->cmsPage['pageSystemId'];?>" class="form-control">
+              </div>
+              <br />
+
+             <div class="mb-3">
+                <nav>
+                  <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <?php $iLang=0; foreach ($this->langs as $oneLang=>$name): ?>
+                      <button class="nav-link <?=($iLang == 0)? 'active': ''?>" id="<?=$oneLang;?>-tab" data-bs-toggle="tab" data-bs-target="#<?=$oneLang;?>" type="button" role="tab" aria-controls="<?=$oneLang;?>" aria-selected="true"><?=$oneLang;?></button>
+                    <?php $iLang++; endforeach; ?> 
+                  </div>
+                </nav>
+                <div class="tab-content" id="nav-tabContent">
+                  <?php $iLang2=0; foreach ($this->langs as $oneLang2=>$name): ?>
+                    <div class="tab-pane fade <?=($iLang2 == 0)? ' show active': ''?>" id="<?=$oneLang2;?>" role="tabpanel" aria-labelledby="<?=$oneLang2;?>-tab">
+                      <div class="mb-3">
+                          <label class="form-label">Title</label>
+                          <input type="text" name="page_title[]" value="<?=$this->cmsPage['translations'][$iLang2]['title'];?>" class="form-control page_title">
+                        </div>
+                        <div class="mb-3">
+                          <label class="form-label">Content</label>
+                          <textarea name="page_content[]" class="form-control editor" ><?=$this->cmsPage['translations'][$iLang2]['content'];?></textarea>
+                        </div>
+                    </div>
+                  <?php $iLang2++; endforeach; ?>
+                </div>      
+              </div>
+
+              <!-- Update -->
+              <div class="">
+                <button type="submit" class="btn btn-primary" name="action" value="update"><?=$this->transEsc('Update')?></button>
+                <span class="btn btn-secondary cms_preview" data-bs-toggle="modal" data-bs-target="#exampleModal"><?=$this->transEsc('Preview')?></span>
+              </div>
+
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- form end -->  
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="min-width: 1200px;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel"></h5>
+      </div>
+      <div class="modal-body">
+        <div class="container " id="container">
+          <div class="cw-row">
+            <div class="cw-col-lg-12">
+              <div class="cw-text-block">
+                <h1 class="preview_title"></h1>
+                <div class="preview_body"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="<?=$this->layoutClass('sidebar')?>" id="myresearch-sidebar" role="navigation" aria-label="<?=$this->transEsc('account_menu_label')?>">
+  <?=$this->accountMenu()->render('showcmsmain')?>
+</div>
+
+<?php
+  $script = <<<JS
+        $('.editor').summernote({
+            placeholder: '',
+            tabsize: 2,
+            height: 600,
+            toolbar: [
+                ['style', ['style']],
+                ['font', ['bold', 'underline', 'clear']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['table', ['table']],
+                ['insert', ['link', 'picture', 'video']],
+                ['view', ['fullscreen', 'codeview', 'help']]
+            ]
+        });
+
+        $('.cms_preview').click(function(thisEvent){
+            let activeTab =  $(thisEvent.currentTarget).parent().prev().find('.tab-content .tab-pane.active');
+            let pagetitle = activeTab.find('.page_title').val();
+            let pageContent = activeTab.find('.editor').summernote('code');
+            $('#exampleModal .preview_title').html(pagetitle);
+            $('#exampleModal .preview_body').html(pageContent);
+        });
+      JS;
+?>
+<?=$this->assetManager()->outputInlineScriptString($script) ?>

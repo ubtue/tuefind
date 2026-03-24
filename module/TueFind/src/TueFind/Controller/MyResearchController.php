@@ -306,7 +306,7 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
             return $this->forceLogin();
         }
 
-         $rssItems = $this->getDbService(\TueFind\Db\Service\RssItemServiceInterface::class)->getItemsForUserSortedByPubDate($user->getId());
+        $rssItems = $this->getDbService(\TueFind\Db\Service\RssItemServiceInterface::class)->getItemsForUserSortedByPubDate($user->getId());
         return $this->createViewModel(['user' => $user,
                                        'rssItems' => $rssItems,
                                        'page' => $this->params()->fromQuery('page') ?? 1]);

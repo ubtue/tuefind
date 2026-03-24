@@ -1,0 +1,99 @@
+<?php
+  $this->breadcrumbs()->set($this->translate('Admins'), $this->url('adminfrontend-cmspages'))
+      ->add($this->translate('Add CMS Page'), active: true);
+?>
+
+<div class="<?=$this->layoutClass('mainbody')?>">
+  <h1><?=$this->transEsc('Add new CMS page')?></h1>
+  <?=$this->flashmessages()?>
+
+  <div>
+  <!-- form start -->
+   <div class="container mt-5">
+    <div class="row justify-content-center">
+      <br />
+      <div class="col-md-12">
+
+        <div class="card shadow-sm">
+
+          <div class="card-body">
+            <form method="post" action="<?=$this->url('adminfrontend-addcmspage')?>">
+
+              <div class="mb-3">
+                <label class="form-label">Subsystem</label>
+                <select name="subsystem" class="form-select">
+                  <?php foreach ($this->subSystem as $system): ?>
+                    <option class="form-control" value="<?=$system['id'];?>"><?=$system['subSystem'];?></option>
+                  <?php endforeach; ?>
+                </select>
+              </div>
+              <br />
+
+              <div class="mb-3">
+                <label class="form-label">Page system name</label>
+                <input type="text" name="page_system_id" value="" class="form-control">
+              </div>
+              <br />
+
+              <div class="mb-3">
+                <nav>
+                  <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <?php $iLang=0; foreach ($this->langs as $oneLang=>$name): ?>
+                      <button class="nav-link <?=($iLang == 0)? 'active': ''?>" id="<?=$oneLang;?>-tab" data-bs-toggle="tab" data-bs-target="#<?=$oneLang;?>" type="button" role="tab" aria-controls="<?=$oneLang;?>" aria-selected="true"><?=$oneLang;?></button>
+                    <?php $iLang++; endforeach; ?> 
+                  </div>
+                </nav>
+                <div class="tab-content" id="nav-tabContent">
+                  <?php $iLang2=0; foreach ($this->langs as $oneLang2=>$name): ?>
+                    <div class="tab-pane fade <?=($iLang2 == 0)? ' show active': ''?>" id="<?=$oneLang2;?>" role="tabpanel" aria-labelledby="<?=$oneLang2;?>-tab">
+                      <div class="mb-3">
+                          <label class="form-label">Title</label>
+                          <input type="text" name="page_title[]" value="" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                          <label class="form-label">Content</label>
+                          <textarea name="page_content[]" class="form-control editor" ></textarea>
+                        </div>
+                    </div>
+                  <?php $iLang2++; endforeach; ?>
+                </div>      
+              </div>
+              <br />        
+              <!-- Submit -->
+              <div class="d-grid">
+                <button type="submit" class="btn btn-primary" name="action" value="publish"><?=$this->transEsc('Submit')?></button>
+              </div>
+
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- form end -->  
+  </div>
+</div>
+
+<div class="<?=$this->layoutClass('sidebar')?>" id="myresearch-sidebar" role="navigation" aria-label="<?=$this->transEsc('account_menu_label')?>">
+  <?=$this->accountMenu()->render('showcmsmain')?>
+</div>
+
+<?php
+  $script = <<<JS
+        $('.editor').summernote({
+            placeholder: '',
+            tabsize: 2,
+            height: 600,
+            toolbar: [
+                ['style', ['style']],
+                ['font', ['bold', 'underline', 'clear']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['table', ['table']],
+                ['insert', ['link', 'picture', 'video']],
+                ['view', ['fullscreen', 'codeview', 'help']]
+            ]
+        });
+      JS;
+?>
+<?=$this->assetManager()->outputInlineScriptString($script) ?>

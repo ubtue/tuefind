@@ -2,16 +2,20 @@
 
 namespace TueFind\Db\Service;
 
+use Doctrine\ORM\EntityManagerInterface;
 use VuFind\Db\Service\AbstractDbService;
 
-class RssBaseService extends AbstractDbService implements RssBaseServiceInterface
+abstract class RssBaseService extends AbstractDbService implements RssBaseServiceInterface
 {
-    use \VuFind\Db\Service\DbServiceAwareTrait;
+    protected string $instance;
 
-    protected $instance;
-
-    public function setInstance($instance)
+    public function setInstance(string $instance): void
     {
         $this->instance = $instance;
+    }
+
+    protected function getInstance(): string
+    {
+        return $this->instance;
     }
 }

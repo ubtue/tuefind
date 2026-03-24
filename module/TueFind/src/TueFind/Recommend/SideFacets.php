@@ -2,7 +2,6 @@
 namespace TueFind\Recommend;
 
 use VuFind\Search\Solr\HierarchicalFacetHelper;
-use VuFind\Solr\Utils as SolrUtils;
 
 class SideFacets extends \VuFind\Recommend\SideFacets
 {
@@ -22,7 +21,6 @@ class SideFacets extends \VuFind\Recommend\SideFacets
 
     public function setConfig($settings) {
         parent::setConfig($settings);
-
         // Parse the additional settings:
         $settings = explode(':', $settings);
         $mainSection = empty($settings[0]) ? 'Results' : $settings[0];

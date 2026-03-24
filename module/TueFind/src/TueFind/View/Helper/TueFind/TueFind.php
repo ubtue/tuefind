@@ -363,6 +363,15 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper
         return $map[$instance] ?? $instance;
     }
 
+    public function getAllTueFindSubsystems(): array {
+        $map = ['ixtheo',
+                'relbib',
+                'bibstudies',
+                'canonlaw',
+                'krimdok'];
+        return $map;
+    }
+
     /**
       * Derive textual description of TueFind (Subsystems of IxTheo return IxTheo)
       * @return string or false of no matching value could be found

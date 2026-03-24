@@ -9,8 +9,9 @@ class Ini extends \VuFind\Config\Handler\Ini {
     /**
      * TueFind: Override this function in 11.0 as workaround to lost "@include" behaviour
      *          due to laminas-config being replaced by native parse_ini_file.
-     *          This will hopefully be replaced by a better solution in the future.
-     *          (see vufind-tech mailing list).
+     *
+     *          Update: In the meantime there is already work-in-progress on this topic:
+     *          https://github.com/vufind-org/vufind/pull/5139
      */
     public function parseConfig(ConfigLocationInterface $configLocation, bool $handleParentConfig = true): array
     {
