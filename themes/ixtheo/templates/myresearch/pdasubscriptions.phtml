@@ -31,7 +31,7 @@ $user = $this->auth()->getUserObject();
                 <?=$this->record($current)->getPDASubscriptionListEntry($list, $user)?>
             <?php endforeach; ?>
         </form>
-        <?=$this->paginationControl($this->results->getPaginator(), 'Sliding', 'search/pagination.phtml', array('results' => $this->results))?>
+        <?=$this->paginationControl($this->results->getPaginator(), 'Sliding', 'Helpers/pagination.phtml', array('results' => $this->results))?>
     <?php else: ?>
         <p><?=$this->transEsc('You do not have any saved PDA resources')?></p>
     <?php endif; ?>
