@@ -4,10 +4,6 @@ namespace IxTheo\Db\Entity;
 
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-use TueFind\Db\Entity\CmsPages;
-use TueFind\Db\Entity\CmsPagesHistory;
 use IxTheo\Db\Entity\UserEntityInterface;
 
 #[ORM\Entity]
@@ -28,32 +24,6 @@ class User extends \TueFind\Db\Entity\User implements UserEntityInterface
 
     #[ORM\Column(name: 'ixtheo_journal_subscription_format', type: 'string', nullable: true, options: ['lengths' => [64]])]
     protected ?string $ixtheoJournalSubscriptionFormat = null;
-
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: CmsPagesHistory::class)]
-    private Collection $cmsHistories;
-
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: CmsPages::class)]
-    private Collection $cmsPages;
-
-    #[ORM\ManyToMany(mappedBy: 'adminUser', targetEntity: CmsPages::class)]
-    private Collection $adminCmsPages;
-
-    public function __construct()
-    {
-        parent::__construct();
-        $this->cmsHistories = new ArrayCollection();
-        $this->cmsPages = new ArrayCollection();
-    }
-
-    public function getCmsPages(): Collection
-    {
-        return $this->cmsPages;
-    }
-
-    public function cmsPagesHistory(): Collection
-    {
-        return $this->cmsHistories;
-    }
 
     public function getUserType(): string
     {
