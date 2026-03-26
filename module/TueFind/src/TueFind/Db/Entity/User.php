@@ -36,10 +36,13 @@ class User extends \VuFind\Db\Entity\User implements UserEntityInterface
     protected ?string $tuefindRights = null;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: CmsPagesHistory::class)]
-    private Collection $cmsHistories;
+    protected Collection $cmsHistories;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: CmsPages::class)]
-    private Collection $cmsPages;
+    protected Collection $cmsPages;
+
+    #[ORM\ManyToMany(mappedBy: 'adminUser', targetEntity: CmsPages::class)]
+    protected Collection $adminCmsPages;
 
     public function __construct()
     {
