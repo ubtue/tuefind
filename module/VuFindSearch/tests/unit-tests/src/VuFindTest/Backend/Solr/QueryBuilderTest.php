@@ -1020,4 +1020,30 @@ class QueryBuilderTest extends \PHPUnit\Framework\TestCase
             $this->assertEquals($output, $processedQ[0]);
         }
     }
+
+    /**
+     * Test that dismax munge is only applied once in query group.
+     *
+     * @return void
+     */
+    public function testDismaxMungeQueryGroupOnlyOnce()
+    {
+        $specs = [
+            'test' => [
+                'DismaxFields' => ['foo'],
+                'DismaxMunge' => [
+                    ['preg_replace', '/^(.*)$/', '22@$1'],
+                ],
+            ],
+        ];
+        $qb = new QueryBuilder($specs);
+        $query = new QueryGroup(
+            'AND',
+            [ new Query('some-coded-value', 'test') ]
+        );
+        $response = $qb->build($query);
+        $processedQ = $response->get('q');
+        $this->assertMatchesRegularExpression('/\}22@some-coded-value"/', $processedQ[0]);
+        $this->assertDoesNotMatchRegularExpression('/\}22@22@some-coded-value"/', $processedQ[0]);
+    }
 }
