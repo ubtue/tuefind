@@ -233,7 +233,7 @@ a.navbar-brand, nav > .nav > li > a {
 }
 
 .searchbar {
-  box-shadow: 2px 2px 10px rgba(50, 50, 50, 1);
+  //box-shadow: 2px 2px 10px rgba(50, 50, 50, 1);
 }
 
 .search-button {
@@ -241,7 +241,7 @@ a.navbar-brand, nav > .nav > li > a {
 }
 
 #searchForm_type {
-  box-shadow: 2px 2px 5px rgba(50, 50, 50, 1);
+  //box-shadow: 2px 2px 5px rgba(50, 50, 50, 1);
 }
 
 ul .dropdown-menu {
@@ -833,3 +833,7 @@ input[type="checkbox"] {
     &:extend(.media-body){
     vertical-align: middle;
 }}
+
+.form-control, .form-select {
+  max-width: 100% !important;
+}
