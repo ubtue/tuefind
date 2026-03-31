@@ -277,9 +277,15 @@ body {
 }
 #header-collapse .nav-item .header-link {
     color: #951e37;
-    padding: 15px;
-    line-height: 24px;
+    padding:15px 13px;
+    line-height: 1.4;
+    font-size: 14px;
 }
+
+#header-collapse .nav-item .header-link i{
+    font-size: 12px;
+}
+
 .dropdown-toggle::after {
     display: inline-block !important;
     margin-left: .255em;
