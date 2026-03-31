@@ -48,39 +48,39 @@
     <field name="ixtheo_notation_expanded" type="text" indexed="true" stored="true" multiValued="true" />
     <field name="ixtheo_notation" type="stringCaseInsensitive" indexed="true" stored="true" multiValued="true" />
     <field name="ixtheo_notation_facet" type="textFacet" indexed="true" stored="true" multiValued="true"/>
-    <field name="key_word_chain_bag" type="text" indexed="true" stored="true" multiValued="true" />
-    <field name="key_word_chain_bag_de" type="text" indexed="true" stored="true" multiValued="true" />
-    <field name="key_word_chain_bag_el" type="text" indexed="true" stored="true" multiValued="true" />
-    <field name="key_word_chain_bag_en" type="text" indexed="true" stored="true" multiValued="true" />
-    <field name="key_word_chain_bag_es" type="text" indexed="true" stored="true" multiValued="true" />
-    <field name="key_word_chain_bag_fr" type="text" indexed="true" stored="true" multiValued="true" />
-    <field name="key_word_chain_bag_hans" type="text" indexed="true" stored="true" multiValued="true" />
-    <field name="key_word_chain_bag_hant" type="text" indexed="true" stored="true" multiValued="true" />
-    <field name="key_word_chain_bag_it" type="text" indexed="true" stored="true" multiValued="true" />
-    <field name="key_word_chain_bag_pt" type="text" indexed="true" stored="true" multiValued="true" />
-    <field name="key_word_chain_bag_ru" type="text" indexed="true" stored="true" multiValued="true" />
-    <field name="key_word_chains" type="string" indexed="true" stored="true" multiValued="true" />
-    <field name="key_word_chains_sorted" type="string" indexed="true" stored="true" multiValued="true" />
-    <field name="key_word_chains_de" type="string" indexed="true" stored="true" multiValued="true" />
-    <field name="key_word_chains_sorted_de" type="string" indexed="true" stored="true" multiValued="true" />
-    <field name="key_word_chains_el" type="string" indexed="true" stored="true" multiValued="true" />
-    <field name="key_word_chains_sorted_el" type="string" indexed="true" stored="true" multiValued="true" />
-    <field name="key_word_chains_en" type="string" indexed="true" stored="true" multiValued="true" />
-    <field name="key_word_chains_sorted_en" type="string" indexed="true" stored="true" multiValued="true" />
-    <field name="key_word_chains_es" type="string" indexed="true" stored="true" multiValued="true" />
-    <field name="key_word_chains_sorted_es" type="string" indexed="true" stored="true" multiValued="true" />
-    <field name="key_word_chains_fr" type="string" indexed="true" stored="true" multiValued="true" />
-    <field name="key_word_chains_sorted_fr" type="string" indexed="true" stored="true" multiValued="true" />
-    <field name="key_word_chains_hans" type="string" indexed="true" stored="true" multiValued="true" />
-    <field name="key_word_chains_sorted_hans" type="string" indexed="true" stored="true" multiValued="true" />
-    <field name="key_word_chains_hant" type="string" indexed="true" stored="true" multiValued="true" />
-    <field name="key_word_chains_sorted_hant" type="string" indexed="true" stored="true" multiValued="true" />
-    <field name="key_word_chains_it" type="string" indexed="true" stored="true" multiValued="true" />
-    <field name="key_word_chains_sorted_it" type="string" indexed="true" stored="true" multiValued="true" />
-    <field name="key_word_chains_pt" type="string" indexed="true" stored="true" multiValued="true" />
-    <field name="key_word_chains_sorted_pt" type="string" indexed="true" stored="true" multiValued="true" />
-    <field name="key_word_chains_ru" type="string" indexed="true" stored="true" multiValued="true" />
-    <field name="key_word_chains_sorted_ru" type="string" indexed="true" stored="true" multiValued="true" />
+    <field name="key_word_chain_bag" type="text" indexed="true" stored="true" multiValued="true"  docValues="true" />
+    <field name="key_word_chain_bag_de" type="text" indexed="true" stored="true" multiValued="true" docValues="true" />
+    <field name="key_word_chain_bag_el" type="text" indexed="true" stored="true" multiValued="true" docValues="true" />
+    <field name="key_word_chain_bag_en" type="text" indexed="true" stored="true" multiValued="true" docValues="true" />
+    <field name="key_word_chain_bag_es" type="text" indexed="true" stored="true" multiValued="true" docValues="true" />
+    <field name="key_word_chain_bag_fr" type="text" indexed="true" stored="true" multiValued="true" docValues="true" />
+    <field name="key_word_chain_bag_hans" type="text" indexed="true" stored="true" multiValued="true" docValues="true" />
+    <field name="key_word_chain_bag_hant" type="text" indexed="true" stored="true" multiValued="true" docValues="true" />
+    <field name="key_word_chain_bag_it" type="text" indexed="true" stored="true" multiValued="true" docValues="true" />
+    <field name="key_word_chain_bag_pt" type="text" indexed="true" stored="true" multiValued="true" docValues="true" />
+    <field name="key_word_chain_bag_ru" type="text" indexed="true" stored="true" multiValued="true" docValues="true" />
+    <field name="key_word_chains" type="string" indexed="true" stored="true" multiValued="true" docValues="true" />
+    <field name="key_word_chains_sorted" type="string" indexed="true" stored="true" multiValued="true" docValues="true" />
+    <field name="key_word_chains_de" type="string" indexed="true" stored="true" multiValued="true" docValues="true" />
+    <field name="key_word_chains_sorted_de" type="string" indexed="true" stored="true" multiValued="true" docValues="true" />
+    <field name="key_word_chains_el" type="string" indexed="true" stored="true" multiValued="true" docValues="true" />
+    <field name="key_word_chains_sorted_el" type="string" indexed="true" stored="true" multiValued="true" docValues="true" />
+    <field name="key_word_chains_en" type="string" indexed="true" stored="true" multiValued="true" docValues="true" />
+    <field name="key_word_chains_sorted_en" type="string" indexed="true" stored="true" multiValued="true" docValues="true" />
+    <field name="key_word_chains_es" type="string" indexed="true" stored="true" multiValued="true" docValues="true" />
+    <field name="key_word_chains_sorted_es" type="string" indexed="true" stored="true" multiValued="true" docValues="true" />
+    <field name="key_word_chains_fr" type="string" indexed="true" stored="true" multiValued="true" docValues="true" />
+    <field name="key_word_chains_sorted_fr" type="string" indexed="true" stored="true" multiValued="true" docValues="true" />
+    <field name="key_word_chains_hans" type="string" indexed="true" stored="true" multiValued="true" docValues="true" />
+    <field name="key_word_chains_sorted_hans" type="string" indexed="true" stored="true" multiValued="true" docValues="true" />
+    <field name="key_word_chains_hant" type="string" indexed="true" stored="true" multiValued="true" docValues="true" />
+    <field name="key_word_chains_sorted_hant" type="string" indexed="true" stored="true" multiValued="true" docValues="true" />
+    <field name="key_word_chains_it" type="string" indexed="true" stored="true" multiValued="true"  docValues="true" />
+    <field name="key_word_chains_sorted_it" type="string" indexed="true" stored="true" multiValued="true"  docValues="true" />
+    <field name="key_word_chains_pt" type="string" indexed="true" stored="true" multiValued="true"  docValues="true" />
+    <field name="key_word_chains_sorted_pt" type="string" indexed="true" stored="true" multiValued="true"  docValues="true" />
+    <field name="key_word_chains_ru" type="string" indexed="true" stored="true" multiValued="true"  docValues="true" />
+    <field name="key_word_chains_sorted_ru" type="string" indexed="true" stored="true" multiValued="true"  docValues="true" />
     <field name="last_modification_time" type="date" indexed="true" stored="true" multiValued="false"/>
     <field name="other_titles" type="text" indexed="true" stored="true" multiValued="true"/>
     <field name="publisher_facet" type="textFacet" indexed="true" stored="true" multiValued="true"/>
