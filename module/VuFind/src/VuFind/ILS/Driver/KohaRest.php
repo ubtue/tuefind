@@ -3168,7 +3168,7 @@ class KohaRest extends \VuFind\ILS\Driver\AbstractBase implements
     }
 
     /**
-     * Add translation prefix to a given message
+     * Add translation prefix to a given message.
      *
      * @param string $msg Message
      *
