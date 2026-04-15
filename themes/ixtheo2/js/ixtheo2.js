@@ -103,8 +103,10 @@ var IxTheo2 = {
 
         cmap = L.map('map');
 
-        L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+        // Using tile.osm.org is causing referrer errors since april 2026
+        //L.tileLayer('https://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }).addTo(cmap);
 
         let markers = {
@@ -160,7 +162,7 @@ var IxTheo2 = {
         let targetCoordinates = {
             lat: "50.72319649759073",
             lon: "7.110015253718861"
-        }
+        };
 
         partnersArray.forEach(function(oneParter){
 
@@ -176,7 +178,7 @@ var IxTheo2 = {
                 title: oneParter.name,
                 draggable:false,
                 icon:myIcon
-            }
+            };
 
             let marker = new L.Marker([oneParter.lat, oneParter.lon] , iconOptions);
 
@@ -260,7 +262,7 @@ $(function () {
       // -----------------------------
       //  On Scroll
       // -----------------------------
-      $(window).scroll(function () {  
+      $(window).scroll(function () {
         var scroll = $(window).scrollTop();
         if (scroll > 50) {
           $('.navigation').addClass('sticky-header');
@@ -268,13 +270,13 @@ $(function () {
           $('.navigation').removeClass('sticky-header');
         }
       });
-    
+
       $('.ix2-search-form-bottom-nav .bibel-button').click(function(){
         $('.searchForm_type option').each(function(){
             if($(this).val() == 'BibleRangeSearch') {
                 $(this).attr('selected',true);
             }
-        })
+        });
         $(this).parent().addClass('active');
       });
 
