@@ -103,8 +103,6 @@ var IxTheo2 = {
 
         cmap = L.map('map');
 
-        // Using tile.osm.org is causing referrer errors since april 2026
-        //L.tileLayer('https://{s}.tile.osm.org/{z}/{x}/{y}.png', {
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }).addTo(cmap);

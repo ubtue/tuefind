@@ -1,5 +1,7 @@
 <?php
 
+// Note: OpenStreetMap requires a special Referrer policy. See ContentController for more information.
+
 $this->assetManager()->appendStyleLink('vendor/fontawesome-free-6/awesome.css');
 $this->assetManager()->appendStyleLink('vendor/fontawesome-free-6/solid.css');
 
@@ -314,9 +316,9 @@ $this->assetManager()->appendStyleLink('vendor/fontawesome-free-6/solid.css');
 $(function () {
     let partnersArray = {$partners};
     IxTheo2.DrawMap('all',partnersArray);
-    
+
     $('.high-light-marker-group').click(function(){
-    
+
         $(this).parents('.map-navigation').find('button').each(function(){
             $(this).removeClass( "btn-primary" );
         })
@@ -327,7 +329,7 @@ $(function () {
         let lightGroup = $(this).data('group');
         IxTheo2.DrawMap(lightGroup,partnersArray);
     })
-    
+
 });
 EOD;
 ?>
