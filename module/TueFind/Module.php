@@ -69,7 +69,6 @@ class Module
      */
     public function onBootstrap(MvcEvent $e)
     {
-
         $bootstrapper = new Bootstrapper($e);
         $bootstrapper->bootstrap();
 
@@ -77,6 +76,26 @@ class Module
 
         $eventManager = $e->getApplication()->getEventManager();
         $eventManager->attach(MvcEvent::EVENT_FINISH, array($this, 'onFinish'), 1000);
+
+        // Set referrer policy for certain sub-pages, see Issue #3611 (OpenStreetMap)
+        // This did NOT work in other locations
+        // - apache conf: If you set it for /, it will always override sub-pages (tested with several types of config)
+        // - CspContentGenerator: Uses Laminas, which will only allow a specific set of headers, but not Referrer-Policy
+        $eventManager->attach(MvcEvent::EVENT_FINISH, function (MvcEvent $e) {
+            $request = $e->getRequest();
+            $response = $e->getResponse();
+
+            if (!method_exists($request, 'getUri')) {
+                return;
+            }
+
+            $path = $request->getUri()->getPath();
+            if (str_starts_with($path, '/Content/Networking')) {
+                $response->getHeaders()->addHeaderLine('Referrer-Policy', 'strict-origin-when-cross-origin');
+            } else {
+                $response->getHeaders()->addHeaderLine('Referrer-Policy', 'same-origin');
+            }
+        });
     }
 
 
