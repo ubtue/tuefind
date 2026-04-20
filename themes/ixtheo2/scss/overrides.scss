@@ -1319,7 +1319,7 @@ body {
 .breadcrumb {
   background-color: #fff;
   margin-top: .5rem;
-  margin-bottom: .5rem
+  margin-bottom: .5rem;
 }
 
 .breadcrumb a {
@@ -1361,23 +1361,23 @@ a {
     font-weight: 400;
     line-height: 1.5;
     color: #212529;
-    white-space: nowrap
+    white-space: nowrap;
 }
 
 .dropdown-menu>li>a:hover,.dropdown-menu>li>a:focus {
     color: #16181b;
     text-decoration: none;
-    background-color: #f8f9fa
+    background-color: #f8f9fa;
 }
 
 .dropdown-menu>.active>a,.dropdown-menu>.active>a:hover,.dropdown-menu>.active>a:focus {
     color: #fff;
     text-decoration: none;
-    outline: 0
+    outline: 0;
 }
 
 .dropdown-menu>.disabled>a,.dropdown-menu>.disabled>a:hover,.dropdown-menu>.disabled>a:focus {
-    color: #7b7d84
+    color: #7b7d84;
 }
 
 .dropdown-menu>.disabled>a:hover,.dropdown-menu>.disabled>a:focus {
@@ -1385,4 +1385,47 @@ a {
     cursor: not-allowed;
     background-color: #fff0;
     background-image: none;
+}
+.dropdown-menu .divider {
+    height: 1px;
+    margin: 11px 0;
+    overflow: hidden;
+    background-color: #e9ecef;
+}
+#advSearchForm .adv-search select.adv-term-type{
+  max-width: 30% !important;
+}
+
+.dropdown-item.keyboard-selection-item.active, .dropdown-item.keyboard-selection-item.active:hover {
+  color: #fff !important;
+  background-color: #265680 !important;
+  text-decoration: none;
+}
+
+.ix-journals-table > tbody > tr > td {
+  padding: 0;
+  margin: 0;
+}
+
+.ix-journals-table .text-td {
+  border: 1px solid gray;
+}
+
+.ix-journals-table .img-td img{
+    max-height: 200px;
+}
+
+#image-gallery .modal-dialog {
+    min-width: 1000px;
+    margin-top: 200px;
+}
+.cw-container.panel-group .card.card-body ul{
+  padding: 15px 15px 15px 35px;
+}
+.hover-animate .collapse .card.card-body{
+  padding: 15px;
+}
+
+.digiTabs .nav.nav-tabs .nav-link {
+  cursor: pointer;
 }
