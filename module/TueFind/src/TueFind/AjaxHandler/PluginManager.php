@@ -12,8 +12,6 @@ class PluginManager extends \VuFind\AjaxHandler\PluginManager
         $this->addOverride('aliases', 'getSubscriptionBundleEntries', GetSubscriptionBundleEntries::class);
         $this->addOverride('factories', GetSubscriptionBundleEntries::class, GetSubscriptionBundleEntriesFactory::class);
 
-        $this->addOverride('aliases', 'CmsDocs', CmsDocsEntries::class);
-        $this->addOverride('factories', CmsDocsEntries::class, CmsDocsEntriesFactory::class);
         $this->addOverride('aliases', 'Mapping', MappingEntries::class);
         $this->addOverride('factories', MappingEntries::class, MappingEntriesFactory::class);
 
