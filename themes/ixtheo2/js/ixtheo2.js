@@ -197,6 +197,25 @@ var IxTheo2 = {
         var target = L.latLng(targetCoordinates['lat'], targetCoordinates['lon']);
 
         cmap.setView(target, zoom);
+    },
+
+    async loadMap (group = 'all') {
+        try {
+
+            let lang = document.documentElement.getAttribute('lang');
+
+            const response = await fetch(`/AJAX/JSON?method=Mapping&action=getPartners&group=${group}&lang=${lang}`);
+            const data = await response.json();
+
+            if (typeof cmap !== 'undefined') {
+                cmap.remove();
+            }
+
+            IxTheo2.DrawMap(group, data.data);
+
+        } catch (error) {
+            console.error('Error loading data:', error);
+        }
     }
 
 }; //end Ixtheo2
