@@ -1,8 +1,10 @@
 <div class="tf-background-body">
     <div id="content" class="container">
-        <?=$this->content()->renderTranslated('panels/fulltexts'); ?>
-        <?=$this->content()->renderTranslated('panels/tools'); ?>
-        <?=$this->content()->renderTranslated('panels/zeitschriften'); ?>
-        <?=$this->content()->renderTranslated('panels/catalogs'); ?>
+        <div class="row">
+            <?=$this->content()->renderTranslated('panels/fulltexts'); ?>
+            <?=$this->content()->renderTranslated('panels/tools'); ?>
+            <?=$this->content()->renderTranslated('panels/zeitschriften'); ?>
+            <?=$this->content()->renderTranslated('panels/catalogs'); ?>
+        </div>
     </div>
 </div>

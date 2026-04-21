@@ -233,7 +233,7 @@ body {
 #searchForm .search-button {
     height: 38px;
     padding: 0 16px;
-    font-size: 16px;
+    font-size: 15px;
     line-height: 1.5;
 }
 #header-collapse .nav-link {
@@ -315,4 +315,11 @@ body {
 }
 .navbar-nav i {
     font-size: 14px;
+}
+form#advSearchForm i.fa-plus-circle, form#advSearchForm .add_search_link, #groupPlaceHolder a{
+    color: #a51e37;
+}
+
+form#advSearchForm div.sidebar.right a {
+    color: #a51e37;
 }

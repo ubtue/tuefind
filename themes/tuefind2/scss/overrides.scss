@@ -833,7 +833,3 @@ input[type="checkbox"] {
     &:extend(.media-body){
     vertical-align: middle;
 }}
-
-.form-control, .form-select {
-  max-width: 100% !important;
-}
