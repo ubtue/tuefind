@@ -1,12 +1,12 @@
-<div class="panel panel-top panel-default tf-panel-home-4">
+<div class="panel panel-top panel-default col-md-3">
     <a class="panel-default-link" href="<?=$this->url('content-page', ['page' => 'statistiksuche']) ?>">
         <div class="panel-image" style="background-image: url(<?=$this->imageLink('newfrontpage/diagramm.jpg') ?>);"></div>
         <div class="panel-content">
             <h4>Statistiken</h4>  
         </div>
     </a>
-    <div class="col-lg-12 mini-search-block">
-        <form action="<?=$this->url("search-results", [], [])?>" method="get">
+    <div class="col-lg-12 mini-search-block p-3">
+        <form class="w-100" action="<?=$this->url("search-results", [], [])?>" method="get">
             <input type="hidden" name="filter" value="topic_facet:Statistik">
             <div class="input-group">
                 <input type="text" class="form-control" name="lookfor" value="" placeholder="Hier suchen...">

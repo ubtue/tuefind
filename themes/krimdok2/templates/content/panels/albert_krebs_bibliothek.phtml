@@ -1,13 +1,13 @@
-<div class="panel panel-top panel-default tf-panel-home-4">
+<div class="panel panel-top panel-default col-md-3">
     <a class="panel-default-link" href="<?=$this->url('content-page', ['page' => 'albert_krebs_bibliothek']) ?>">
         <div class="panel-image" style="background-image: url(<?=$this->imageLink('newfrontpage/albert_krebs_bibliothek.jpg') ?>);"></div>
         <div class="panel-content">
             <h4>Albert-Krebs Library</h4>
         </div>
     </a>
-    <div class="col-lg-12 mini-search-block">
+    <div class="col-lg-12 mini-search-block p-3">
         <div class="input-group">
-            <form class="krebs_form" action="<?=$this->url("search-results", [], [])?>" method="get">
+            <form class="krebs_form w-100" action="<?=$this->url("search-results", [], [])?>" method="get">
                 <div class="input-group">
                     <input type="text" class="form-control lookfor" name="lookfor" value="" placeholder="Search for...">
                     <span class="input-group-btn">
