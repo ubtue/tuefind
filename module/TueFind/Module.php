@@ -89,11 +89,34 @@ class Module
                 return;
             }
 
-            $path = $request->getUri()->getPath();
-            if (str_starts_with($path, '/Content/Networking')) {
-                $response->getHeaders()->addHeaderLine('Referrer-Policy', 'strict-origin-when-cross-origin');
-            } else {
-                $response->getHeaders()->addHeaderLine('Referrer-Policy', 'same-origin');
+            $referrerPolicyDefault = 'same-origin';
+            $referrerPolicyMap = [
+                'strict-origin-when-cross-origin' => [
+                    '/Content/Networking',
+
+                    // Derivatives of "Networking"-Page
+                    '/Content/Bibliographies',
+                    '/Content/LibrarianAssociations',
+                    '/Content/Libraries',
+                    '/Content/SpecialistInformationServices',
+                    '/Content/TheologicalCommunity',
+                ],
+            ];
+
+            $currentPath = $request->getUri()->getPath();
+            $specialPolicyFound = false;
+            foreach ($referrerPolicyMap as $referrerPolicy => $referrerPaths) {
+                foreach ($referrerPaths as $referrerPath) {
+                    if (str_starts_with($currentPath, $referrerPath)) {
+                        $response->getHeaders()->addHeaderLine('Referrer-Policy', $referrerPolicy);
+                        $specialPolicyFound = true;
+                        break 2;
+                    }
+                }
+            }
+
+            if (!$specialPolicyFound) {
+                $response->getHeaders()->addHeaderLine('Referrer-Policy', $referrerPolicyDefault);
             }
         });
     }
