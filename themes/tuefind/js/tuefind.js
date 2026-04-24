@@ -675,6 +675,50 @@ var TueFind = {
             input.focus();
             input.setSelectionRange(length, length);
         }
+    },
+
+    getCMSDocs: function() {
+        let table = $('.dataTable').DataTable({
+            destroy: true, // if the table already exists, destroy it before reinitializing
+            processing: true,
+            serverSide: false, // later change to true if needed
+            ajax: {
+                url: '/AJAX/JSON?method=CmsDocs&action=listFiles',
+                method: 'GET',
+                dataSrc: 'data'
+            },
+            columns: [
+                {
+                    data: 'name',
+                    render: function (data, type, row) {
+                        return `<a href="${row.url}" target="_blank">${data}</a>`;
+                    }
+                },
+                {
+                    data: null,
+                    orderable: false,
+                    render: function (data, type, row) {
+                        return `
+                            <a href="${row.url}" class="me-3" target="_blank">👁</a>
+                            <a href="${row.url}" class="text-center text-danger col-6 delete-btn" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        `;
+                    }
+                }
+            ]
+        });
+    },
+
+    getCMSImages: function() {
+        $.ajax({
+            type: "GET",
+            url: '/AJAX/JSON?method=CmsDocs&action=listImages',
+            dataType: "json",
+            success: function (data) {
+                $('.ajax-content-images-container').html(data.data);
+            }
+        }); // end ajax
     }
 };
 
@@ -729,8 +773,9 @@ $(document).ready(function () {
         $("#searchForm").submit();
     });
 
+    /* disabled for now, as it causes problems with the CMS docs table, which is currently the only table in the frontend
     new DataTable('.dataTable',{
         scrollX: true
     });
-
+    */
 });
