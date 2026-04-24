@@ -115,3 +115,10 @@ MenuItems:
     checkMethod: checkAllCMSHistory
     section: admin
 
+  - name: cmspagesdocs
+    label: CMS Pages Docs
+    route: adminfrontend-cmspagesdocs
+    icon: folder-tree
+    checkMethod: checkCMSDocs
+    section: admin
+

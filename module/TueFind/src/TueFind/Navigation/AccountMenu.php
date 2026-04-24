@@ -65,4 +65,13 @@ class AccountMenu extends \VuFind\Navigation\AccountMenu
         }
         return false;
     }
+
+    public function checkCMSDocs(): bool
+    {
+        $user = $this->getUser();
+        if ($user && in_array('cms', $user->getTueFindRights())) {
+            return true;
+        }
+        return false;
+    }
 }

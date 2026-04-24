@@ -293,6 +293,36 @@ $config = [
                     ],
                 ],
             ],
+            'adminfrontend-cmspagesdocs' => [
+                'type'    => 'Laminas\Router\Http\Segment',
+                'options' => [
+                    'route'    => '/AdminFrontend/CMSPagesDocs',
+                    'defaults' => [
+                        'controller' => 'AdminFrontend',
+                        'action'     => 'CMSPagesDocs',
+                    ],
+                ],
+            ],
+            'adminfrontend-cmspagesfiles' => [
+                'type'    => 'Laminas\Router\Http\Literal',
+                'options' => [
+                    'route'    => '/AdminFrontend/CMSPagesFiles',
+                    'defaults' => [
+                        'controller' => 'AdminFrontend',
+                        'action'     => 'CMSPagesFiles',
+                    ],
+                ],
+            ],
+            'adminfrontend-cmspagesimages' => [
+                'type'    => 'Laminas\Router\Http\Literal',
+                'options' => [
+                    'route'    => '/AdminFrontend/CMSPagesImages',
+                    'defaults' => [
+                        'controller' => 'AdminFrontend',
+                        'action'     => 'CMSPagesImages',
+                    ],
+                ],
+            ],
         ],
     ],
     'controllers' => [

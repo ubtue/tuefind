@@ -290,4 +290,37 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
         ]);
     }
 
+    public function CmsPagesDocsAction() {
+        $this->forceAdminLogin();
+
+        $subSystem = $this->getDbService(\TueFind\Db\Service\SubsystemsServiceInterface::class)->getAll();
+        //$user_type = $user->getUserType(); for now we do not have different user types, but in the future we might want to use this to determine if a user has access to certain subsystems or not
+
+        return $this->createViewModel([
+            'subSystem' => $subSystem
+        ]);
+    }
+
+    public function CmsPagesFilesAction() {
+        $this->forceAdminLogin();
+
+        $subSystem = $this->getDbService(\TueFind\Db\Service\SubsystemsServiceInterface::class)->getAll();
+        //$user_type = $user->getUserType(); for now we do not have different user types, but in the future we might want to use this to determine if a user has access to certain subsystems or not
+
+        return $this->createViewModel([
+            'subSystem' => $subSystem
+        ]);
+    }
+
+    public function CmsPagesImagesAction() {
+        $this->forceAdminLogin();
+
+        $subSystem = $this->getDbService(\TueFind\Db\Service\SubsystemsServiceInterface::class)->getAll();
+        //$user_type = $user->getUserType(); for now we do not have different user types, but in the future we might want to use this to determine if a user has access to certain subsystems or not
+
+        return $this->createViewModel([
+            'subSystem' => $subSystem
+        ]);
+    }
+
 }

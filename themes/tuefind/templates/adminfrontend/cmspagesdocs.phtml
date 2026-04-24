@@ -1,0 +1,33 @@
+<?php
+$this->breadcrumbs()->set($this->translate('Admins'), $this->url('myresearch-home'))
+      ->add($this->translate('CMS Pages Docs'), active: true);
+?>
+
+<div class="<?=$this->layoutClass('mainbody')?>">
+  <h1 class="text-center"><?=$this->transEsc('All CMS Docs')?></h1>
+  <?=$this->flashmessages()?>
+
+  <div class="container-md">
+    <div class="row gy-3 mt-4" style="min-height: 150px;">
+      <div class="col-1"></div>
+      <a href="<?=$this->url('adminfrontend-cmspagesfiles')?>" class="col-4 card" style="background-color: #868E96;">
+          <div class="card-body d-flex flex-column justify-content-center align-items-center">
+            <h5 class="card-title" style="color: #dee2e6;"><?=$this->transEsc('Files')?></h5>
+          </div>
+      </a>
+      <div class="col-1"></div>
+      <div class="col-1"></div>
+      <a href="<?=$this->url('adminfrontend-cmspagesimages')?>" class="col-4 card" style="background-color: #868E96;">
+          <div class="card-body d-flex flex-column justify-content-center align-items-center">
+            <h5 class="card-title" style="color: #dee2e6;"><?=$this->transEsc('Images')?></h5>
+          </div>
+      </a>
+      <div class="col-1"></div>
+    </div>
+  </div>
+</div>
+
+<div class="<?=$this->layoutClass('sidebar')?>" id="myresearch-sidebar" role="navigation" aria-label="<?=$this->transEsc('account_menu_label')?>">
+  <?=$this->accountMenu()->render('cmspagesdocs')?>
+</div>
+
