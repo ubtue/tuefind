@@ -121,7 +121,7 @@
             $this->headLink()->appendStylesheet('vendor/simple-keyboard/index.css');
             ?>
             <div class="keyboard-selection dropdown">
-              <button class="btn btn-primary dropdown-toggle" type="button" id="keyboard-selection-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <button class="btn btn-primary dropdown-toggle" type="button" id="keyboard-selection-button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <?=$this->icon('keyboard-o') ?>
                 <?=$this->icon('caret-down') ?>
               </button>
@@ -248,7 +248,7 @@
     <?php endif; ?>
 
         <li class="dropdown">
-          <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+          <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
             <?=$this->transEsc('Browse')?> <span class="caret"></span>
           </a>
           <ul class="dropdown-menu">
@@ -259,7 +259,7 @@
         </li>
 
         <li class="dropdown">
-          <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+          <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
             <?=$this->transEsc('link_text_need_help')?> <span class="caret"></span>
           </a>
           <ul class="dropdown-menu">

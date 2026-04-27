@@ -184,14 +184,14 @@
     <div id="modal" class="modal fade hidden-print" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
-          <button type="button" class="close" data-dismiss="modal" aria-label="<?=$this->transEscAttr('Close')?>">
+          <button type="button" class="close" data-bs-dismiss="modal" aria-label="<?=$this->transEscAttr('Close')?>">
             <?=$this->icon('lightbox-close')?>
           </button>
           <div class="modal-body"></div>
         </div>
       </div>
     </div>
-    <div class="vufind-offcanvas-overlay" data-toggle="vufind-offcanvas"></div>
+    <div class="vufind-offcanvas-overlay" data-bs-toggle="vufind-offcanvas"></div>
     <?=$this->render('Helpers/analytics.phtml')?>
     <?php foreach ($this->captcha()->js() as $jsInclude):?>
       <?=$this->assetManager()->outputInlineScriptLink($jsInclude)?>

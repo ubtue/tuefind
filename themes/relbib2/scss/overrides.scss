@@ -360,3 +360,7 @@ body {
     background-color: #fff;
     color: #323232;
 }
+
+form.dynamic-form.DoD div.form-group .form-control, form.dynamic-form.AcquisitionRequest div.form-group .form-control {
+    min-width: 100%;
+}
