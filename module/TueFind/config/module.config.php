@@ -395,6 +395,7 @@ $config = [
             'TueFind\Search\Options\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'TueFind\Search\Params\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'TueFind\Search\Results\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
+            'TueFind\Service\CmsSync' => 'TueFind\Service\CmsSyncFactory',
             'TueFind\Service\DSpace6' => 'TueFind\Service\DSpaceFactory',
             'TueFind\Service\DSpace7' => 'TueFind\Service\DSpaceFactory',
             'TueFind\Service\KfL' => 'TueFind\Service\KfLFactory',
