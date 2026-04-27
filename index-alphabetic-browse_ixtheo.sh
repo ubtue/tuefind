@@ -76,7 +76,7 @@ CLASSPATH="browse-indexing.jar:${SOLRMARC_CLASSPATH}:${VUFIND_HOME}/import/lib/*
 
 mkdir -p ${TMP_RAMDISK_DIR}
 if ! mountpoint --quiet ${TMP_RAMDISK_DIR}; then
-   ${mount_command} -t tmpfs -o size=10G tmpfs ${TMP_RAMDISK_DIR}
+   ${mount_command} -t tmpfs -o size=15G tmpfs ${TMP_RAMDISK_DIR}
 fi
 
 # make index work with replicated index
@@ -196,8 +196,6 @@ function GenerateIndexForSystem {
 
 GenerateIndexForSystem &
 GenerateIndexForSystem "is_religious_studies" &
-rm -f ${TMP_RAMDISK_DIR}/*.tmp
-wait
 GenerateIndexForSystem "is_biblical_studies" &
 GenerateIndexForSystem "is_canon_law" &
 wait
