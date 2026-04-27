@@ -124,13 +124,13 @@
 
                     <?php if(empty($searchTypeSelected)):?>
                       <input id="searchForm_type" class="searchForm_type" type="hidden" name="type" value="<?=$this->transEsc('All Fields')?>">
-                      <a class="dropdown-toggle" href="#" aria-haspopup="true" aria-expaned="false" aria-label="<?=$this->transEsc("Search type")?>" data-toggle="dropdown">
+                      <a class="dropdown-toggle" href="#" aria-haspopup="true" aria-expaned="false" aria-label="<?=$this->transEsc("Search type")?>" data-bs-toggle="dropdown">
                           <span id="searchForm_typeCaption"><?=$this->transEsc('All Fields')?></span>
                           <b class="caret"></b>
                       </a>
                     <?php else: ?>
                         <input id="searchForm_type" class="searchForm_type" type="hidden" name="type" value="<?=$searchTypeSelected['value'];?>">
-                        <a class="dropdown-toggle" href="#" aria-haspopup="true" aria-expaned="false" aria-label="<?=$this->transEsc("Search type")?>" data-toggle="dropdown">
+                        <a class="dropdown-toggle" href="#" aria-haspopup="true" aria-expaned="false" aria-label="<?=$this->transEsc("Search type")?>" data-bs-toggle="dropdown">
                             <span id="searchForm_typeCaption"><?=$searchTypeSelected['label'];?></span>
                             <b class="caret"></b>
                         </a>
