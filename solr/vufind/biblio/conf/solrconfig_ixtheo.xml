@@ -59,7 +59,7 @@
       before flushing.
       If both ramBufferSizeMB and maxBufferedDocs is set, then
       Lucene will flush based on whichever limit is hit first.  -->
-    <ramBufferSizeMB>100</ramBufferSizeMB>
+    <ramBufferSizeMB>2048</ramBufferSizeMB>
     <!-- <maxBufferedDocs>1000</maxBufferedDocs> -->
 
 
@@ -90,6 +90,29 @@
           <str name="maxCommitAge">1DAY</str>
       -->
     </deletionPolicy>
+
+
+
+   <mergePolicyFactory
+      class="org.apache.solr.index.TieredMergePolicyFactory">
+
+    <!-- How many segments allowed per size tier -->
+    <int name="segmentsPerTier">40</int>
+
+    <!-- Max segments merged in one merge -->
+    <int name="maxMergeAtOnce">15</int>
+
+    <!-- Cap merged segment size (MB) -->
+    <int name="maxMergedSegmentMB">20480</int> <!-- 20 GB -->
+
+    <!-- Small segments treated equally -->
+    <double name="floorSegmentMB">8.0</double>
+
+    <!-- Allow more deletes during bulk builds -->
+    <double name="deletesPctAllowed">25</double>
+    <double name="forceMergeDeletesPctAllowed">30</double>
+  </mergePolicyFactory>
+
 
   </indexConfig>
 
