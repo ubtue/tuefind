@@ -18,3 +18,46 @@
         padding: 10px;
     }
 }
+
+nav#ix-nav-header>.nav>li{
+    float: right;
+    margin: 0 5px;
+}
+
+nav#ix-nav-header>.nav>li>a{
+    display: inline;
+    float: right;
+    padding: 10px;
+}
+
+.nav.searchbox .nav-tabs,#searchForm .nav-tabs{
+    margin-bottom: 0;
+}
+
+nav#ix-nav-header ul.dropdown-menu {
+    padding: 10px;
+}
+ul.nav.nav-pills {
+    padding-top: 5px;
+}
+ul.nav.nav-pills li {
+    padding: 8px;
+    margin: 0;
+}
+ul.nav.nav-pills li.searchbox-small {
+    padding: 0 8px;
+}
+ul.nav.nav-pills li a {
+    padding: 0;
+    margin: 0;
+}
+ul.nav.nav-pills li form.searchForm {
+    padding: 0;
+    margin: 0;
+}
+ul.nav.nav-pills .nav-link {
+    padding-top: 0;
+}
+ul.nav.nav-pills li form.searchForm .btn.btn-primary.search-button {
+    margin-top: 1px;
+}

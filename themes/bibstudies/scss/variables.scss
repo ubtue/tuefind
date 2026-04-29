@@ -356,8 +356,8 @@ $container-lg:                 $container-large-desktop;
 $navbar-height:                    50px;
 $navbar-margin-bottom:             $line-height-computed;
 $navbar-border-radius:             $border-radius-base;
-$navbar-padding-horizontal:        floor(($grid-gutter-width / 2));
-$navbar-padding-vertical:          (($navbar-height - $line-height-computed) / 2);
+$navbar-padding-horizontal:        300px;
+$navbar-padding-vertical:          200px;
 $navbar-collapse-max-height:       340px;
 
 $navbar-default-color:             #777;
@@ -860,3 +860,112 @@ $page-header-border-color:    $gray-lighter;
 $dl-horizontal-offset:        $component-offset-horizontal;
 //** Horizontal line color.
 $hr-border:                   $gray-lighter;
+
+.background {
+  background-color: $brand-secondary;
+  position: absolute;
+  z-index: -1000;
+  display: block;
+  width: 100%;
+  height: 270px;
+
+  .background-stripe {
+    width: 100%;
+    background-color: $brand-primary;
+    height: 52px;
+  }
+}
+
+.background-small {
+  height: 200px;
+}
+
+.background-footer:extend(.background) {
+  background-color: $brand-primary;
+  height: 1000px;
+  left: 0;
+  margin-top: -20px;
+  overflow: hidden;
+
+  .background-stripe {
+    width: 100%;
+    background-color: $brand-secondary;
+    height: 52px;
+  }
+}
+
+nav#ix-nav-header>.nav>li{
+    float: right;
+    margin: 0 5px;
+}
+
+nav#ix-nav-header>.nav>li>a{
+    display: inline;
+    float: right;
+    padding: 10px;
+}
+
+.nav.searchbox .nav-tabs,#searchForm .nav-tabs{
+    margin-bottom: 0;
+}
+
+nav#ix-nav-header ul.dropdown-menu {
+    padding: 10px;
+}
+ul.nav.nav-pills {
+    padding-top: 5px;
+}
+ul.nav.nav-pills li {
+    padding: 8px;
+    margin: 0;
+}
+ul.nav.nav-pills li.searchbox-small {
+    padding: 0 8px;
+}
+ul.nav.nav-pills li a {
+    padding: 0;
+    margin: 0;
+}
+ul.nav.nav-pills li form.searchForm {
+    padding: 0;
+    margin: 0;
+}
+ul.nav.nav-pills .nav-link {
+    padding-top: 0;
+}
+ul.nav.nav-pills li form.searchForm .btn.btn-primary.search-button {
+    margin-top: 1px;
+}
+
+.navbar-brand {
+  font-size: 26px;
+  text-decoration: none;
+  margin-top: -3px;
+  margin-left: 15px;
+}
+
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+}
+
+#content {
+  color: $text-color !important;
+}
+
+a, .nav-link, .btn-link {
+  color: $brand-primary;
+}
+
+.btn-primary {
+  background-color: $brand-primary;
+  border-color: $brand-primary;
+}
+
+.nav-tabs>li.active>a {
+  color:#555 !important;
+}
+
+.nav.nav-tabs.tuefind-event-resetsearchhandlers {
+  padding-bottom: 0;
+}
