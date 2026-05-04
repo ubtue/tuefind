@@ -3,8 +3,11 @@
 namespace TueFind\Service;
 
 use Gitonomy\Git\Repository;
+use TueFind\Db\Entity\CmsPages;
 
 class CmsSync {
+    const DATETIME_FORMAT = 'Y-m-d H:i:s';
+
     // Passed through via constructor
     protected $config;
     protected $dbServiceManager;
@@ -26,14 +29,39 @@ class CmsSync {
         return isset($this->config->enabled) && $this->config->enabled == 1;
     }
 
-    public function getRepositoryPath(): string
+    public function getBranch(): string
+    {
+        return $this->config->repository_branch;
+    }
+
+    protected function getRepositoryPath(): string
     {
         return $this->config->repository_path;
     }
 
-    public function getBranch(): string
+    protected function getSubsystemPath(): string
     {
-        return $this->config->repository_branch;
+        return $this->getRepositoryPath() . DIRECTORY_SEPARATOR . $this->subsystem;
+    }
+
+    protected function getFilesPath(): string
+    {
+        return $this->getSubsystemPath() . DIRECTORY_SEPARATOR . 'files';
+    }
+
+    protected function getPagesPath(): string
+    {
+        return $this->getSubsystemPath() . DIRECTORY_SEPARATOR . 'pages';
+    }
+
+    protected function getPagePath(CmsPages $page): string
+    {
+        return $this->getPagesPath() . DIRECTORY_SEPARATOR . $page->getPageSystemId() . '.json';
+    }
+
+    protected function getSshKeyPath(): string
+    {
+        return $this->config->ssh_key_path;
     }
 
     /**
@@ -43,6 +71,10 @@ class CmsSync {
     {
         if (!isset($this->repository)) {
             $this->repository = new Repository($this->getRepositoryPath());
+            $this->repository->run('config', [
+                'core.sshCommand',
+                'ssh -i ' . escapeshellarg($this->getSshKeyPath()) . ' -o StrictHostKeyChecking=no'
+            ]);
         }
         $activeBranch = $this->repository->getHead()->getName();
         if ($activeBranch != $this->getBranch()) {
@@ -51,16 +83,82 @@ class CmsSync {
         return $this->repository;
     }
 
-    protected function cmsPageToArray($pageSystemId, $subSystem, $language)
+    /**
+     * This will map either an array or a DB object to an array without local IDs etc.
+     * so we can use it to sync with other systems.
+     *
+     * @return array
+     */
+    public function pageToArray($page): array
     {
-        $page = $this->cmsPagesService->getByPageSystemID($pageSystemId, $subSystem, $language);
+        $array = [];
+        if (!$page instanceof CmsPages) {
+            $page = $this->cmsPagesService->getByID($page['id']);
+        }
+        $array['created'] = $page->getCreateDate()->format(static::DATETIME_FORMAT);
+        $array['changed'] = $page->getChangeDate()->format(static::DATETIME_FORMAT);
 
-        // TODO: Map page and all translations to array structure
+        $translations = [];
+        foreach ($page->getTranslations() as $translation) {
+            $translationArray = [];
+            $translationArray['title'] = $translation->getTitle();
+            $translationArray['content'] = $translation->getContent();
+            $translations[$translation->getLanguage()] = $translationArray;
+        }
+        $array['translations'] = $translations;
+
+        return $array;
     }
 
-       protected function diffPageArrays(array $array1, array $array2)
+    /**
+     * Handle with care!
+     *
+     * This sample function will write the whole DB to JSON files and push to the
+     * selected file in the git repo!
+     */
+    public function pushAll()
     {
-        // TODO: Check whether they are similar or there is any conflict
+        // get all pages
+        // TODO: Do we filter by subsytem here, or does the DB Service already handle this?
+        $pages = $this->cmsPagesService->getAll();
+        if (count($pages) > 0) {
+            foreach ($pages as $page) {
+                if (!$page instanceof CmsPages) {
+                    $page = $this->cmsPagesService->getByID($page['id']);
+                }
+                $pageArray = $this->pageToArray($page);
+                $pagePath = $this->getPagePath($page);
+                $pageJson = json_encode($pageArray);
+                file_put_contents($pagePath, $pageJson);
+                $this->gitAdd($pagePath);
+            }
+            // TODO: Check whether there have actually been changes before commit/push!!!
+            $this->gitCommit('Server-sided push');
+            $this->gitPush();
+        }
+    }
+
+    public function pullAll()
+    {
+        $this->gitPull();
+        $jsonFiles = array_diff(scandir($this->getPagesPath()), array('.', '..'));
+        foreach ($jsonFiles as $jsonFile) {
+            if (preg_match('"\.json$"', $jsonFile)) {
+                $pageJson = file_get_contents($this->getPagesPath() . DIRECTORY_SEPARATOR . $jsonFile);
+                $pageArray = json_decode($pageJson, /* associative */true);
+                $pageSystemId = preg_replace('"\.json$"', '', $jsonFile);
+
+                // Does it exist in DB?
+                $pageInDb = $this->cmsPagesService->getByPageSystemIDWithoutTranslations($pageSystemId, $this->subsystem);
+
+                if ($pageInDb != null) {
+                    // TODO: import page
+                } else {
+                    // TODO: Page exists, diff content
+                    // What should we do if different? Ask the user which one we should use?
+                }
+            }
+        }
     }
 
     /**
@@ -98,7 +196,8 @@ class CmsSync {
     {
         $repo = $this->initRepo();
         $repo->run('commit', [
-            '-m' => $message
+            '-m',
+            $message
         ]);
     }
 

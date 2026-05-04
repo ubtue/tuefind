@@ -19,7 +19,7 @@ class CmsPagesService extends AbstractDbService implements  CmsPagesServiceInter
     }
 
     public function getAll(): array {
-        
+
         $dql = 'SELECT cp, s
                 FROM ' . CmsPages::class . ' cp
                 LEFT JOIN cp.subSystem s
@@ -66,6 +66,8 @@ class CmsPagesService extends AbstractDbService implements  CmsPagesServiceInter
         return $page;
     }
 
+    // Note: This function does not make sense
+    // - Everything with languages should be kept either in the Entity or in the TranslationService
     public function getByPageSystemID(string $pageSystemId, string $subSystem, string $language): ?array
     {
 
@@ -87,6 +89,24 @@ class CmsPagesService extends AbstractDbService implements  CmsPagesServiceInter
             return null;
         }
 
+        return $result;
+    }
+
+    // Quick & Dirty Workaround
+    public function getByPageSystemIDWithoutTranslations(string $pageSystemId, string $subSystem): ?array
+    {
+
+        $qb = $this->entityManager->createQueryBuilder();
+
+        $qb->select('cms', 'subSystem')
+            ->from(CmsPages::class, 'cms')
+            ->leftJoin('cms.subSystem', 'subSystem')
+            ->where('cms.pageSystemId = :pageSystemId')
+            ->andWhere('subSystem.subSystem = :subSystem')
+            ->setParameter('pageSystemId', $pageSystemId)
+            ->setParameter('subSystem', $subSystem);
+
+        $result = $qb->getQuery()->getOneOrNullResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $result;
     }
 
