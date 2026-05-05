@@ -128,7 +128,7 @@ class CmsSync {
                 }
                 $pageArray = $this->pageToArray($page);
                 $pagePath = $this->getPagePath($page);
-                $pageJson = json_encode($pageArray);
+                $pageJson = json_encode($pageArray, JSON_PRETTY_PRINT);
                 file_put_contents($pagePath, $pageJson);
                 $this->gitAdd($pagePath);
             }
