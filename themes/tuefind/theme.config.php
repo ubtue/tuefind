@@ -32,7 +32,6 @@ return [
     'css' => [
         ['file' => 'vendor/jquery-ui.min.css'],
         ['file' => 'vendor/jquery.dataTable.css'],
-        ['file' => 'botprotect.css'],
         ['file' => 'vendor/sum_lite.css']
 
     ],
