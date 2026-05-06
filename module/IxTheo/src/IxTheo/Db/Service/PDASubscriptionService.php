@@ -57,7 +57,7 @@ class PDASubscriptionService extends AbstractDbService implements PDASubscriptio
         return $query->getResult();
     }
 
-    public function get(UserEntityInterface $user, $sort, $start, $limit)
+    public function get(UserEntityInterface $user, $sort, $start, $limit): array
     {
         $dql = 'SELECT P '
             . 'FROM ' . PDASubscriptionEntityInterface::class . ' P '

@@ -6,7 +6,7 @@ use TueFind\Db\Entity\UserEntityInterface;
 
 class UserService extends \VuFind\Db\Service\UserService implements UserServiceInterface
 {
-    public function getByRight($right)
+    public function getByRight($right): array
     {
         $select = $this->getSql()->select();
         $select->where('FIND_IN_SET("' . $right . '", tuefind_rights) > 0');
@@ -14,14 +14,7 @@ class UserService extends \VuFind\Db\Service\UserService implements UserServiceI
         return $this->selectWith($select);
     }
 
-    /**
-     * Retrieve a user object from the database based on ID.
-     *
-     * @param string $uuid Uuid.
-     *
-     * @return UserRow
-     */
-    public function getByUuid($uuid)
+    public function getByUuid($uuid): ?UserEntityInterface
     {
         $dql = 'SELECT U '
             . 'FROM ' . UserEntityInterface::class . ' U '
@@ -31,7 +24,7 @@ class UserService extends \VuFind\Db\Service\UserService implements UserServiceI
         return $query->getOneOrNullResult();
     }
 
-    public function getAdmins()
+    public function getAdmins(): array
     {
         $dql = 'SELECT U '
             . 'FROM ' . UserEntityInterface::class . ' U '

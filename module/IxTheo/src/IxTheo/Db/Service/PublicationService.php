@@ -6,7 +6,7 @@ use Laminas\Db\Sql\Select;
 
 class PublicationService extends \TueFind\Db\Service\PublicationService implements PublicationServiceInterface
 {
-    public function getAll()
+    public function getAll(): array
     {
         $select = $this->getSql()->select();
         $select->join('user', 'tuefind_publications.user_id = user.id', Select::SQL_STAR, Select::JOIN_LEFT);

@@ -7,7 +7,7 @@ use TueFind\Db\Entity\RssFeedEntityInterface;
 class RssFeedService extends RssBaseService implements RssFeedServiceInterface
 {
 
-    public function getFeedsSortedByName()
+    public function getFeedsSortedByName(): array
     {
          $qb = $this->entityManager->createQueryBuilder();
             $qb->select('rf')
@@ -19,7 +19,7 @@ class RssFeedService extends RssBaseService implements RssFeedServiceInterface
         return $qb->getQuery()->getResult();
     }
 
-    public function hasUrl($url)
+    public function hasUrl($url): bool
     {
         $qb = $this->entityManager->createQueryBuilder();
         $qb->select('COUNT(rf.id)')

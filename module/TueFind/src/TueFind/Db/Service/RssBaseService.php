@@ -2,7 +2,6 @@
 
 namespace TueFind\Db\Service;
 
-use Doctrine\ORM\EntityManagerInterface;
 use VuFind\Db\Service\AbstractDbService;
 
 abstract class RssBaseService extends AbstractDbService implements RssBaseServiceInterface
