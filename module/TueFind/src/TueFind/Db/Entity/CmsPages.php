@@ -111,4 +111,18 @@ class CmsPages implements CmsPagesEntityInterface
         return $this->cmsPagesTranslations;
     }
 
+    public function getTranslation($language): ?CmsPagesTranslation
+    {
+        foreach ($this->getTranslations() as $translation) {
+            if ($translation->getLanguage() == $language) {
+                return $translation;
+            }
+        }
+        return null;
+    }
+
+    public function getHistory(): Collection
+    {
+        return $this->history;
+    }
 }

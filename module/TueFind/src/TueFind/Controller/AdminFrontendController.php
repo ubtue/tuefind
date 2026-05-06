@@ -216,7 +216,7 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
         $pageContent = $this->params()->fromPost('page_content');
         $pageTitle = $this->params()->fromPost('page_title');
 
-        $cmsPage = $this->getDbService(\TueFind\Db\Service\CmsPagesServiceInterface::class)->getByIDFull($cmsPageId);
+        $cmsPage = $this->getDbService(\TueFind\Db\Service\CmsPagesServiceInterface::class)->getByID($cmsPageId);
 
         if ($action == 'update') {
 
@@ -238,7 +238,7 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
 
             $this->flashMessenger()->addMessage(['msg' => 'page updated!', 'html' => true], 'success');
 
-            $cmsPage = $this->getDbService(\TueFind\Db\Service\CmsPagesServiceInterface::class)->getByIDFull($cmsPageId);
+            $cmsPage = $this->getDbService(\TueFind\Db\Service\CmsPagesServiceInterface::class)->getByID($cmsPageId);
 
             $user = $this->getUser();
 
@@ -271,9 +271,7 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
 
     public function CmsPagesAllHistoryAction() {
         $this->forceAdminLogin();
-        $user = $this->getUser();
         $CMSPagesHistory = ['CMSPagesHistory' => $this->getDbService(\TueFind\Db\Service\CmsPagesHistoryServiceInterface::class)->getAll()];
-
         return $this->createViewModel($CMSPagesHistory);
     }
 
@@ -281,14 +279,9 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
         $this->forceAdminLogin();
 
         $cmsPageId = $this->params()->fromRoute('cms_page_id');
-
-        $CMSPages =  $this->getDbService(\TueFind\Db\Service\CmsPagesServiceInterface::class)->getByIDFull($cmsPageId);
-
-        $CMSPagesHistory = $this->getDbService(\TueFind\Db\Service\CmsPagesHistoryServiceInterface::class)->getByPageID($cmsPageId);
-
+        $CMSPages =  $this->getDbService(\TueFind\Db\Service\CmsPagesServiceInterface::class)->getByID($cmsPageId);
         return $this->createViewModel([
             'CMSPage' => $CMSPages,
-            'CMSPagesHistory' => $CMSPagesHistory
         ]);
     }
 

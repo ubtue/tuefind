@@ -16,11 +16,11 @@
         <div class="card shadow-sm">
 
           <div class="card-body">
-            <form method="post" action="<?=$this->url('adminfrontend-updatecmspage', ['cms_page_id' => $this->cmsPage['id']])?>">
+            <form method="post" action="<?=$this->url('adminfrontend-updatecmspage', ['cms_page_id' => $this->cmsPage->getId()])?>">
 
               <div class="mb-3">
                 <label class="form-label">Page system name</label>
-                <input type="text" name="page_system_id" disabled value="<?=$this->cmsPage['pageSystemId'];?>" class="form-control">
+                <input type="text" name="page_system_id" disabled value="<?=$this->cmsPage->getPageSystemId();?>" class="form-control">
               </div>
               <br />
 
@@ -29,23 +29,24 @@
                   <div class="nav nav-tabs" id="nav-tab" role="tablist">
                     <?php $iLang=0; foreach ($this->langs as $oneLang=>$name): ?>
                       <button class="nav-link <?=($iLang == 0)? 'active': ''?>" id="<?=$oneLang;?>-tab" data-bs-toggle="tab" data-bs-target="#<?=$oneLang;?>" type="button" role="tab" aria-controls="<?=$oneLang;?>" aria-selected="true"><?=$oneLang;?></button>
-                    <?php $iLang++; endforeach; ?> 
+                    <?php $iLang++; endforeach; ?>
                   </div>
                 </nav>
                 <div class="tab-content" id="nav-tabContent">
                   <?php $iLang2=0; foreach ($this->langs as $oneLang2=>$name): ?>
+                    <?php $translation = $this->cmsPage->getTranslation($oneLang2); ?>
                     <div class="tab-pane fade <?=($iLang2 == 0)? ' show active': ''?>" id="<?=$oneLang2;?>" role="tabpanel" aria-labelledby="<?=$oneLang2;?>-tab">
                       <div class="mb-3">
                           <label class="form-label">Title</label>
-                          <input type="text" name="page_title[]" value="<?=$this->cmsPage['translations'][$iLang2]['title'];?>" class="form-control page_title">
+                          <input type="text" name="page_title[]" value="<?=$translation ? $this->escapeHtmlAttr($translation->getTitle()) : ''?>" class="form-control page_title" placeholder="Enter title to create, clear title to delete">
                         </div>
                         <div class="mb-3">
                           <label class="form-label">Content</label>
-                          <textarea name="page_content[]" class="form-control editor" ><?=$this->cmsPage['translations'][$iLang2]['content'];?></textarea>
+                          <textarea name="page_content[]" class="form-control editor" ><?=$translation ? $translation->getContent() : ''?></textarea>
                         </div>
                     </div>
                   <?php $iLang2++; endforeach; ?>
-                </div>      
+                </div>
               </div>
 
               <!-- Update -->
@@ -60,7 +61,7 @@
       </div>
     </div>
   </div>
-  <!-- form end -->  
+  <!-- form end -->
   </div>
 </div>
 
