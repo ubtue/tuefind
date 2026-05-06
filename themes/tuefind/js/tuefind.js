@@ -716,7 +716,31 @@ var TueFind = {
             url: '/AJAX/JSON?method=CmsDocs&action=listImages',
             dataType: "json",
             success: function (data) {
-                $('.ajax-content-images-container').html(data.data);
+                let file = data.data;
+                let HTMlData = '';
+                for (let i = 0; i < file.length; i++) {
+                    let oneBlock = `
+                        <div class="col-3">
+                            <div class="card h-100 smc-card">
+                                <div class="card-header">
+                                    ${file[i]['name']}
+                                </div>
+                                <div class="card-body">
+                                    <img src="${file[i]['url']}" class="card-img-top" alt="${file[i]['name']}">
+                                </div>
+                                <div class="card-footer text-muted row gx-0">
+                                    <a href="#" class="text-center d-block text-default cms_preview col-6" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a href="${file[i]['url']}" class="text-center d-block text-danger col-6 delete-btn" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>`;
+                    HTMlData += oneBlock;
+                }
+                $('.ajax-content-images-container').html(HTMlData);
             }
         }); // end ajax
     }

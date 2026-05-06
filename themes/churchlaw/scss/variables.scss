@@ -862,3 +862,68 @@ $page-header-border-color:    $gray-lighter;
 $dl-horizontal-offset:        $component-offset-horizontal;
 //** Horizontal line color.
 $hr-border:                   $gray-lighter;
+
+.background {
+  background-color: $brand-secondary;
+  position: absolute;
+  z-index: -1000;
+  display: block;
+  width: 100%;
+  height: 270px;
+
+  .background-stripe {
+    width: 100%;
+    background-color: $brand-primary;
+    height: 52px;
+  }
+}
+
+.background-small {
+  height: 200px;
+}
+
+.background-footer:extend(.background) {
+  background-color: $brand-primary;
+  height: 1000px;
+  left: 0;
+  margin-top: -20px;
+  overflow: hidden;
+
+  .background-stripe {
+    width: 100%;
+    background-color: $brand-secondary;
+    height: 52px;
+  }
+}
+
+.navbar-brand {
+  font-size: 26px;
+  text-decoration: none;
+  margin-top: -3px;
+  margin-left: 15px;
+}
+
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+#content {
+  color: $text-color !important;
+}
+
+a, .nav-link, .btn-link {
+  color: $brand-primary;
+}
+
+.btn-primary {
+  background-color: $brand-primary;
+  border-color: $brand-primary;
+}
+
+.nav-tabs>li.active>a {
+  color:#555 !important;
+}
+
+.nav.nav-tabs.tuefind-event-resetsearchhandlers {
+  padding-bottom: 0;
+}

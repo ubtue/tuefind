@@ -32,7 +32,7 @@
     <?php $exportFormats = $this->export()->getFormatsForRecord($this->driver); ?>
     <?php if(count($exportFormats) > 0): ?>
       <li role="none" class="dropdown">
-        <a class="export-toggle toolbar-btn btn-type-export dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" href="<?=$this->recordLinker()->getActionUrl($this->driver, 'Export')?>" rel="nofollow" aria-expanded="false" aria-controls="export-options">
+        <a class="export-toggle toolbar-btn btn-type-export dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" href="<?=$this->recordLinker()->getActionUrl($this->driver, 'Export')?>" rel="nofollow" aria-expanded="false" aria-controls="export-options">
           <span class="icon icon--font fa fa-external-link" role="img" aria-hidden="true"></span>
           <?=$this->transEsc('Export Record') ?>
         </a>

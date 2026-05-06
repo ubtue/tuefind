@@ -5,7 +5,7 @@
   </li>
   <?php if($account->dropdownEnabled()): ?>
     <li id="login-dropdown" class="nav-item dropdown<?php if(!$account->getIdentity()): ?> hidden<?php endif ?>">
-      <a href="#" data-toggle="dropdown"><i class="fa fa-caret-down"></i></a>
+      <a href="#" data-bs-toggle="dropdown"><i class="fa fa-caret-down"></i></a>
       <div class="dropdown-menu">
         <?=$this->render('myresearch/menu'); ?>
       </div>

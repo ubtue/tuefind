@@ -186,7 +186,7 @@
         </div>
       </div>
     </div>
-    <div class="vufind-offcanvas-overlay" data-toggle="vufind-offcanvas"></div>
+    <div class="vufind-offcanvas-overlay" data-bs-toggle="vufind-offcanvas"></div>
     <?=$this->render('Helpers/analytics.phtml')?>
     <?php foreach ($this->captcha()->js() as $jsInclude):?>
       <?=$this->assetManager()->outputInlineScriptLink($jsInclude)?>

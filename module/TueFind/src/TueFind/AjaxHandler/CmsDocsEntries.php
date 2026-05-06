@@ -36,41 +36,25 @@ class CmsDocsEntries extends \VuFind\AjaxHandler\AbstractBase
 
         if ($params->fromQuery('action') === 'listImages') {
 
-            
             $baseDir = $_SERVER['REDIRECT_VUFIND_HOME'] . '/themes/krimdok2/images/';
             $baseUrl = '/themes/krimdok2/images/';
 
-            $ajaxHTML = "";
+            $images = [];
 
             if (is_dir($baseDir)) {
                 foreach (scandir($baseDir) as $file) {
                     if ($file === '.' || $file === '..') {
                         continue;
                     }
-
-                    $ajaxHTML .= '<div class="col-3">
-                        <div class="card h-100 smc-card">
-                            <div class="card-header">
-                                ' . $file . '
-                            </div>
-                            <div class="card-body">
-                                <img src="' . $baseUrl . $file . '" class="card-img-top" alt="' . $file . '">
-                            </div>
-                            <div class="card-footer text-muted row gx-0">
-                                <a href="#" class="text-center d-block text-default cms_preview col-6" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                    <i class="fas fa-eye"></i>
-                                </a>
-                                <a href="' . $baseUrl . $file . '" class="text-center d-block text-danger col-6 delete-btn" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">
-                                    <i class="fas fa-trash"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>';
+                    $images[] = [
+                        'name' => $file,
+                        'url' => $baseUrl . $file
+                    ];
                 }
             }
 
             return $this->formatResponse(
-               $ajaxHTML
+               $images
             );
 
         }
