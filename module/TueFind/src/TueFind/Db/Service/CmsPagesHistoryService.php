@@ -17,19 +17,34 @@ class CmsPagesHistoryService extends AbstractDbService implements  CmsPagesHisto
         return $this->entityManager->find(CmsPagesHistoryEntityInterface::class, $id);
     }
 
-    public function getAll(): array
+    public function getAllBySubsystemId(int $subsystemId): array
     {
-
         $qb = $this->entityManager->createQueryBuilder();
 
-        $qb->select('ch', 'cms', 'user', 'subSystem')
-            ->from(CmsPagesHistory::class, 'ch')
+        $qb->select('ch')
+            ->from(CmsPagesHistoryEntityInterface::class, 'ch')
             ->leftJoin('ch.cmsPage', 'cms')
-            ->leftJoin('ch.user', 'user')
-            ->leftJoin('cms.subSystem', 'subSystem')
+            ->leftJoin('cms.subSystem', 'ss')
+            ->where('ss.id = :subsystemId')
+            ->setParameter('subsystemId', $subsystemId)
             ->orderBy('ch.id', 'DESC');
 
-        return $qb->getQuery()->getArrayResult();
+        return $qb->getQuery()->getResult();
+    }
+
+    public function getAllBySubsystemName(string $subsystemName): array
+    {
+        $qb = $this->entityManager->createQueryBuilder();
+
+        $qb->select('ch')
+            ->from(CmsPagesHistoryEntityInterface::class, 'ch')
+            ->leftJoin('ch.cmsPage', 'cms')
+            ->leftJoin('cms.subSystem', 'ss')
+            ->where('ss.subSystem = :subsystemName')
+            ->setParameter('subsystemName', $subsystemName)
+            ->orderBy('ch.id', 'DESC');
+
+        return $qb->getQuery()->getResult();
     }
 
     public function getByPageID(int $cmsPageId): array
@@ -38,14 +53,14 @@ class CmsPagesHistoryService extends AbstractDbService implements  CmsPagesHisto
         $qb = $this->entityManager->createQueryBuilder();
 
         $qb->select('ch', 'cms', 'user')
-            ->from(CmsPagesHistory::class, 'ch')
+            ->from(CmsPagesHistoryEntityInterface::class, 'ch')
             ->leftJoin('ch.cmsPage', 'cms')
             ->leftJoin('ch.user', 'user')
             ->where('cms.id = :cmsId')
             ->setParameter('cmsId', $cmsPageId)
             ->orderBy('ch.id', 'DESC');
 
-        return $qb->getQuery()->getArrayResult();
+        return $qb->getQuery()->getResult();
     }
 
     public function add(int $cmsPageId, User $user): CmsPagesHistory

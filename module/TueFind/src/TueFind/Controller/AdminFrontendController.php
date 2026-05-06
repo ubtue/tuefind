@@ -279,7 +279,8 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
 
     public function CmsPagesAllHistoryAction() {
         $this->forceAdminLogin();
-        $CMSPagesHistory = ['CMSPagesHistory' => $this->getDbService(\TueFind\Db\Service\CmsPagesHistoryServiceInterface::class)->getAll()];
+
+        $CMSPagesHistory = ['CMSPagesHistory' => $this->getDbService(\TueFind\Db\Service\CmsPagesHistoryServiceInterface::class)->getAllBySubsystemName(\IxTheo\Utility::getUserTypeFromUsedEnvironment())];
         return $this->createViewModel($CMSPagesHistory);
     }
 

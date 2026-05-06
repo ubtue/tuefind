@@ -11,25 +11,21 @@ $this->breadcrumbs()->set($this->translate('Admins'), $this->url('adminfrontend-
     <thead>
       <tr>
         <th><?=$this->transEsc('CMS page')?></th>
-        <th><?=$this->transEsc('Sub System')?></th>
         <th><?=$this->transEsc('Admin ID')?></th>
         <th><?=$this->transEsc('Updated')?></th>
       </tr>
     </thead>
     <tbody>
       <?php foreach ($this->CMSPagesHistory as $one): ?>
-        <tr class="custom-link-row" data-custom-link-id="<?=$this->escapeHtmlAttr($one['id'])?>">
+        <tr class="custom-link-row" data-custom-link-id="<?=$this->escapeHtmlAttr($one->getId())?>">
           <td>
-            <?=$this->escapeHtml($one['cmsPage']['pageSystemId'])?>
+            <?=$this->escapeHtml($one->getCmsPage()->getPageSystemId())?>
           </td>
           <td>
-            <?=$this->escapeHtml($one['cmsPage']['subSystem']['subSystem'])?>
+            <?=$this->escapeHtml($one->getUser()->getUsername())?>
           </td>
           <td>
-            <?=$this->escapeHtml($one['user']['username'])?>
-          </td>
-          <td>
-            <?=$this->escapeHtml($one['created']->format('d.m.Y H:i:s'))?>
+            <?=$this->escapeHtml($one->getCreated()->format('d.m.Y H:i:s'))?>
           </td>
         </tr>
       <?php endforeach; ?>
