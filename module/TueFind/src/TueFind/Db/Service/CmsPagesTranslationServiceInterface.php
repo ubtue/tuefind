@@ -3,7 +3,7 @@
 namespace TueFind\Db\Service;
 
 use VuFind\Db\Service\DbServiceInterface;
-use TueFind\Db\Entity\CmsPagesTranslation;
+use TueFind\Db\Entity\CmsPagesTranslationEntityInterface;
 
 interface CmsPagesTranslationServiceInterface extends DbServiceInterface
 {
@@ -14,7 +14,9 @@ interface CmsPagesTranslationServiceInterface extends DbServiceInterface
         string $language,
         string $title,
         string $content
-    ): CmsPagesTranslation;
+    ): CmsPagesTranslationEntityInterface;
 
-    public function delete(int $cmsPageId): void;
+    public function save(CmsPagesTranslationEntityInterface $cmsPageTranslation);
+
+    public function delete(int $cmsPageId, string $language=null): void;
 }
