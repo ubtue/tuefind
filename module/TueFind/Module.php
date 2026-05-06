@@ -57,14 +57,11 @@ class Module
         $bootstrapper = new Bootstrapper($e);
         $bootstrapper->bootstrap();
 
-        BotProtect::ProcessRequest($e);
-
         $eventManager = $e->getApplication()->getEventManager();
         $eventManager->attach(MvcEvent::EVENT_FINISH, array($this, 'onFinish'), 1000);
     }
 
 
     public function onFinish(MvcEvent $e) {
-        BotProtect::ProcessResponse($e);
     }
 }

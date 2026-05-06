@@ -49,6 +49,17 @@ $this->breadcrumbs()->set($this->translate('Admins'), $this->url('myresearch-hom
     </tbody>
   </table>
   <a href="<?=$this->url('adminfrontend-addcmspage')?>"><?=$this->transEsc('Add New CMS page')?></a>
+
+  <?php if ($this->cmsSync->isEnabled()): ?>
+  <div id="cms_sync">
+    <p><b>Here you can sync your local pages with the remote git repository</b></p>
+    <p>Active branch: <a href="//github.com/ubtue/tuefind_cms_sync/tree/<?=urlencode($this->cmsSync->getBranch())?>"><?=htmlspecialchars($this->cmsSync->getBranch())?></a></p>
+    <ul>
+        <li>pull (check for new changes in git)</li>
+        <li>push (publish local changes to git)</li>
+    </ul>
+  </div>
+  <?php endif; ?>
 </div>
 
 <div class="<?=$this->layoutClass('sidebar')?>" id="myresearch-sidebar" role="navigation" aria-label="<?=$this->transEsc('account_menu_label')?>">

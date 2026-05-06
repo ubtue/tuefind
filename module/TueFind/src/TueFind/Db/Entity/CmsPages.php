@@ -28,7 +28,7 @@ class CmsPages implements CmsPagesEntityInterface
 
     #[ORM\Column(name: 'page_system_id', type: 'string', length: 255, nullable: false)]
     protected string $pageSystemId;
-    
+
     #[ORM\Column(name: 'created', type: 'datetime', length: 255, nullable: false, options: ['default' => 'CURRENT_TIMESTAMP'])]
     protected DateTime $createDate;
 
@@ -48,7 +48,7 @@ class CmsPages implements CmsPagesEntityInterface
     protected Collection $cmsPagesTranslations;
 
     #[ORM\OneToMany(
-        mappedBy: 'cmsPage', 
+        mappedBy: 'cmsPage',
         targetEntity: CmsPagesHistory::class
     )]
     private Collection $history;
@@ -104,6 +104,11 @@ class CmsPages implements CmsPagesEntityInterface
     {
         $this->changeDate = $changeDate;
         return $this;
+    }
+
+    public function getTranslations(): Collection
+    {
+        return $this->cmsPagesTranslations;
     }
 
 }
