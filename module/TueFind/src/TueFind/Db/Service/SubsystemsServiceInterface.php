@@ -3,7 +3,6 @@
 namespace TueFind\Db\Service;
 
 use VuFind\Db\Service\DbServiceInterface;
-use TueFind\Db\Entity\Subsystems;
 use TueFind\Db\Entity\SubsystemsEntityInterface;
 
 

@@ -17,6 +17,8 @@ interface CmsPagesServiceInterface extends DbServiceInterface
 
     public function getByPageSystemID(string $pageSystemId, string $subSystem, string $language): ?array;
 
+    public function getByPageSystemIDWithoutTranslations(string $pageSystemId, string $subSystem): ?array;
+
     public function add(int $subSystemId, string $pageSystemId, DateTime $dateCreated, DateTime $dateModified): int;
 
     public function update(

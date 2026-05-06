@@ -49,7 +49,7 @@ class UserService extends \TueFind\Db\Service\UserService implements UserService
         throw new \InvalidArgumentException('Field name must be ' . implode(', ', array_keys($legalFieldMap)));
     }
 
-    public function getAdmins()
+    public function getAdmins(): array
     {
         $dql = 'SELECT U '
             . 'FROM ' . UserEntityInterface::class . ' U '
@@ -62,7 +62,7 @@ class UserService extends \TueFind\Db\Service\UserService implements UserService
         return $query->getResult();
     }
 
-    public function getByRight($right)
+    public function getByRight($right): array
     {
         $dql = 'SELECT U '
             . 'FROM ' . UserEntityInterface::class . ' U '

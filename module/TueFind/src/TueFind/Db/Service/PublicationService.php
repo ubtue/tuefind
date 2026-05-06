@@ -15,7 +15,7 @@ class PublicationService extends AbstractDbService implements PublicationService
         return $this->entityPluginManager->get(PublicationEntityInterface::class);
     }
 
-    public function createPublication(UserEntityInterface $user, string $controlNumber, string $externalDocumentId, string $externalDocumentGuid, string $termsDate): PublicationServiceInterface
+    public function createPublication(UserEntityInterface $user, string $controlNumber, string $externalDocumentId, string $externalDocumentGuid, string $termsDate): PublicationEntityInterface
     {
         $publication = $this->createEntity();
         $publication->setUser($user);
@@ -27,7 +27,7 @@ class PublicationService extends AbstractDbService implements PublicationService
         return $publication;
     }
 
-    public function getAll()
+    public function getAll(): array
     {
         $dql = 'SELECT p '
             . 'FROM ' . PublicationEntityInterface::class . ' p '

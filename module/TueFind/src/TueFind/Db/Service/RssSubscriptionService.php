@@ -30,7 +30,7 @@ class RssSubscriptionService extends RssBaseService
         return $subscription;
     }
 
-    public function getSubscription(UserEntityInterface $user, RssFeedEntityInterface $feed)
+    public function getSubscription(UserEntityInterface $user, RssFeedEntityInterface $feed): RssSubscriptionEntityInterface
     {
         $dql = 'SELECT r '
             . 'FROM ' . RssSubscriptionEntityInterface::class . ' r '

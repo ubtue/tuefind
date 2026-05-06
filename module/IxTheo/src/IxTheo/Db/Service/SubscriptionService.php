@@ -39,7 +39,7 @@ class SubscriptionService extends \VuFind\Db\Service\AbstractDbService implement
         return $this->delete(['user_id' => $user, 'journal_control_number_or_bundle_name' => $recordId]);
     }
 
-    public function getAll(UserEntityInterface $user, $sort)
+    public function getAll(UserEntityInterface $user, $sort): array
     {
         $dql = 'SELECT S FROM ' . SubscriptionEntityInterface::class . ' S ';
         $dql .= 'WHERE S.user = :userId ';
