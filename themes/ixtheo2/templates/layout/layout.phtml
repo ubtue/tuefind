@@ -1,4 +1,11 @@
-<?=$this->doctype()?>
+<?php
+  if (($children = $this->layout()->getChildren()) && $children[0]?->getTemplate() === 'laminas_whoops/simple_error') {
+    // Whoops error is a complete page, so just output it and nothing else:
+    echo $this->layout()->content;
+    return;
+  }
+  echo $this->doctype();
+?>
 <?php
   // Set up the search box -- there are three possible cases:
   // 1. No search box was set; we should default to the normal box
@@ -15,7 +22,6 @@
 <html lang="<?=$this->layout()->userLang?>"<?php if ($this->layout()->rtl): ?> dir="rtl"<?php endif; ?>>
   <head>
     <?php $this->setupThemeResources(); ?>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <?=$this->headMeta()?>
     <?=$this->googleTagManager()->getHeadCode()?>
@@ -47,21 +53,21 @@
         ]
       );
       // We need to generate the icons early, because they may add some stylesheets;
-      // if we render them after the headLink / headStyle calls, some dependencies
-      // may not load correctly. Thus, we render early, but use this later.
+      // if we render them after calling AssetManager's outputHeaderAssets method,
+      // some dependencies may not load correctly. Thus, we render early, but use
+      // this later.
       $icons = !isset($this->renderingError) ? $this->render('js-icons.phtml') : '{}';
     ?>
     <?php if ($this->layout()->rtl) {
       // RTL styling
       $this->assetManager()->appendStyleLink('vendor/bootstrap-rtl.min.css');
     } ?>
-    <?=$this->headLink()?>
-    <?=$this->headStyle()?>
     <?php
       // Collect small scripts together and append as one block:
       $appendScripts = [];
 
-      if (!empty($this->themeConfig()['stickyElements'])) {
+      $themeConfig = $this->themeConfig();
+      if (!empty($themeConfig['stickyElements'])) {
         $this->assetManager()->appendScriptLink('sticky_elements.js');
       }
 
@@ -71,16 +77,7 @@
         if ($cart->isActive()) {
           $this->assetManager()->appendScriptLink('vendor/js.cookie.js');
           $this->assetManager()->appendScriptLink('cart.js');
-          if ($domain = $cart->getCookieDomain()) {
-            $appendScripts[] = 'VuFind.cart.setDomain("' . $domain . '");';
           }
-          if ($cookiePath = $cart->getCookiePath()) {
-            $appendScripts[] = 'VuFind.cart.setCookiePath("' . $cookiePath . '");';
-          }
-          if ($cookieSameSite = $cart->getCookieSameSite()) {
-            $appendScripts[] = 'VuFind.cart.setCookieSameSite("' . $cookieSameSite . '");';
-          }
-        }
         $this->assetManager()->prependScriptString(
             'var userIsLoggedIn = ' . ($this->auth()->getIdentity() ? 'true' : 'false') . ';'
         );
@@ -111,6 +108,8 @@
       $dsb = DEFAULT_SEARCH_BACKEND;
       $cspNonce = $this->csp()->getNonce();
       $searchId = json_encode($this->layout()->searchId);
+      $theme = json_encode($themeConfig['themeName']);
+
       $appendScripts[] = <<<JS
           VuFind.path = '{$root}';
           VuFind.defaultSearchBackend = '{$dsb}';
@@ -119,7 +118,18 @@
           VuFind.addIcons({$icons});
           VuFind.setCspNonce('{$cspNonce}');
           VuFind.setCurrentSearchId($searchId);
+          VuFind.setTheme($theme);
           JS;
+
+      if ($domain = $this->cookieManager()->getDomain()) {
+        $appendScripts[] = 'VuFind.cookie.setDomain(' . json_encode($domain) . ');';
+      }
+      if ($cookiePath = $this->cookieManager()->getPath()) {
+        $appendScripts[] = 'VuFind.cookie.setCookiePath(' . json_encode($cookiePath) . ');';
+      }
+      if ($cookieSameSite = $this->cookieManager()->getSameSite()) {
+        $appendScripts[] = 'VuFind.cookie.setCookieSameSite(' . json_encode($cookieSameSite) . ');';
+      }
 
       if (!empty($lightboxParent)) {
         $lightboxParent = json_encode((string)$lightboxParent);
@@ -132,10 +142,6 @@
       }
 
       $this->assetManager()->appendScriptString(implode("\n", $appendScripts));
-
-      if ($this->config()->ajaxCoversEnabled()) {
-        $this->assetManager()->appendScriptLink('covers.js');
-      }
     ?>
     <?=$this->cookieConsent()->render()?>
     <?=$this->assetManager()->outputHeaderAssets()?>
@@ -179,14 +185,14 @@
     <div id="modal" class="modal fade hidden-print" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
-          <button type="button" class="close" data-bs-dismiss="modal">
-            <?=$this->icon('lightbox-close', ['aria-label' => $this->transEscAttr('Close')]) ?>
+          <button type="button" class="close" data-bs-dismiss="modal" aria-label="<?=$this->transEscAttr('Close')?>">
+            <?=$this->icon('lightbox-close')?>
           </button>
           <div class="modal-body"></div>
         </div>
       </div>
     </div>
-    <div class="vufind-offcanvas-overlay" data-bs-toggle="vufind-offcanvas"></div>
+    <div class="vufind-offcanvas-overlay" data-toggle="vufind-offcanvas"></div>
     <?=$this->render('Helpers/analytics.phtml')?>
     <?php foreach ($this->captcha()->js() as $jsInclude):?>
       <?=$this->assetManager()->outputInlineScriptLink($jsInclude)?>
