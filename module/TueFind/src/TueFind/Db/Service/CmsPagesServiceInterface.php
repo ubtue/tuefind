@@ -13,11 +13,7 @@ interface CmsPagesServiceInterface extends DbServiceInterface
 
     public function getAll(): array;
 
-    public function getByIDFull(int $cmsPageId): ?array;
-
-    public function getByPageSystemID(string $pageSystemId, string $subSystem, string $language): ?array;
-
-    public function getByPageSystemIDWithoutTranslations(string $pageSystemId, string $subSystem): ?array;
+    public function getByPageSystemID(string $pageSystemId, string $subSystem): ?CmsPagesEntityInterface;
 
     public function add(int $subSystemId, string $pageSystemId, DateTime $dateCreated, DateTime $dateModified): int;
 

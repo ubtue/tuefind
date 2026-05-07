@@ -14,6 +14,21 @@ class SubsystemsService extends AbstractDbService implements SubsystemsServiceIn
         return $this->entityManager->find(SubsystemsEntityInterface::class, $id);
     }
 
+    public function getByName(string $name): ?SubsystemsEntityInterface
+    {
+        $dql = 'SELECT s '
+            . 'FROM ' . SubsystemsEntityInterface::class . ' s '
+            . 'WHERE s.subSystem = :name ';
+
+        $parameters = [
+            'name' => $name,
+        ];
+
+        $query = $this->entityManager->createQuery($dql);
+        $query->setParameters($parameters);
+        return $query->getOneOrNullResult();
+    }
+
     public function getAll(): array
     {
         $dql = 'SELECT s

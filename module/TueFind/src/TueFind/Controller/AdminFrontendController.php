@@ -157,19 +157,15 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
 
         $langs = $config->Languages;
 
-        $subSystem = $this->getDbService(\TueFind\Db\Service\SubsystemsServiceInterface::class)->getAll();
-
         $action = $this->params()->fromPost('action');
 
         $pageContent = $this->params()->fromPost('page_content');
         $pageTitle = $this->params()->fromPost('page_title');
-
-        //$user_type = $user->getUserType(); for now we do not have different user types, but in the future we might want to use this to determine if a user has access to certain subsystems or not
-
         if ($action == 'publish') {
 
+            $subsystem = $this->getDbService(\TueFind\Db\Service\SubsystemsServiceInterface::class)->getByName(\IxTheo\Utility::getUserTypeFromUsedEnvironment());
             $cmsPageId = $this->getDbService(\TueFind\Db\Service\CmsPagesServiceInterface::class)->add(
-                $this->params()->fromPost('subsystem'),
+                $subsystem->getId(),
                 $this->params()->fromPost('page_system_id'),
                 new \DateTime(),
                 new \DateTime()
@@ -181,12 +177,14 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
 
             $iLang=0;
             foreach ($langs as $key=>$name) {
-                $this->getDbService(\TueFind\Db\Service\CmsPagesTranslationServiceInterface::class)->add(
-                    $cmsPageId,
-                    $key,
-                    $pageTitle[$iLang],
-                    $pageContent[$iLang]
-                );
+                if ($pageTitle[$iLang] != '') {
+                    $this->getDbService(\TueFind\Db\Service\CmsPagesTranslationServiceInterface::class)->add(
+                        $cmsPageId,
+                        $key,
+                        $pageTitle[$iLang],
+                        $pageContent[$iLang]
+                    );
+                }
                 $iLang++;
             }
 
@@ -196,7 +194,6 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
 
         $view = $this->createViewModel();
         $view->langs = $langs;
-        $view->subSystem = $subSystem;
         return $view;
     }
 
@@ -213,32 +210,43 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
 
         $action = $this->params()->fromPost('action');
         $cmsPageId = $this->params()->fromRoute('cms_page_id');
-        $pageContent = $this->params()->fromPost('page_content');
-        $pageTitle = $this->params()->fromPost('page_title');
+        $pageContents = $this->params()->fromPost('page_content');
+        $pageTitles = $this->params()->fromPost('page_title');
 
-        $cmsPage = $this->getDbService(\TueFind\Db\Service\CmsPagesServiceInterface::class)->getByIDFull($cmsPageId);
+        $cmsPage = $this->getDbService(\TueFind\Db\Service\CmsPagesServiceInterface::class)->getByID($cmsPageId);
 
         if ($action == 'update') {
-
-            //for now we only update changeDate fild in cms_pages table, but in the future we might want to update other fields as well, for example pageSystemId if we want to allow that to be changed
-            $this->getDbService(\TueFind\Db\Service\CmsPagesServiceInterface::class)->update($cmsPageId, new \DateTime());
-
-            $result = $this->getDbService(\TueFind\Db\Service\CmsPagesTranslationServiceInterface::class)->delete($cmsPageId);
-
             $iLang=0;
             foreach ($langs as $key=>$name) {
-                $this->getDbService(\TueFind\Db\Service\CmsPagesTranslationServiceInterface::class)->add(
-                    $cmsPageId,
-                    $key,
-                    $pageTitle[$iLang],
-                    $pageContent[$iLang]
-                );
+                $pageTitle = $pageTitles[$iLang];
+                $pageContent = $pageContents[$iLang];
+                $existingTranslation = $cmsPage->getTranslation($key);
+                if ($existingTranslation == null && $pageTitle != '') {
+                    // add
+                    $this->getDbService(\TueFind\Db\Service\CmsPagesTranslationServiceInterface::class)->add(
+                        $cmsPageId,
+                        $key,
+                        $pageTitle,
+                        $pageContent
+                    );
+                } else if ($existingTranslation != null) {
+                    if ($pageTitle != '') {
+                        // update
+                        $this->getDbService(\TueFind\Db\Service\CmsPagesServiceInterface::class)->update($cmsPageId, new \DateTime());
+                        $existingTranslation->setTitle($pageTitle);
+                        $existingTranslation->setContent($pageContent);
+                        $this->getDbService(\TueFind\Db\Service\CmsPagesTranslationServiceInterface::class)->save($existingTranslation);
+                    } else {
+                        // delete
+                        $this->getDbService(\TueFind\Db\Service\CmsPagesTranslationServiceInterface::class)->delete($cmsPageId, $key);
+                    }
+                }
                 $iLang++;
             }
 
             $this->flashMessenger()->addMessage(['msg' => 'page updated!', 'html' => true], 'success');
 
-            $cmsPage = $this->getDbService(\TueFind\Db\Service\CmsPagesServiceInterface::class)->getByIDFull($cmsPageId);
+            $cmsPage = $this->getDbService(\TueFind\Db\Service\CmsPagesServiceInterface::class)->getByID($cmsPageId);
 
             $user = $this->getUser();
 
@@ -271,9 +279,8 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
 
     public function CmsPagesAllHistoryAction() {
         $this->forceAdminLogin();
-        $user = $this->getUser();
-        $CMSPagesHistory = ['CMSPagesHistory' => $this->getDbService(\TueFind\Db\Service\CmsPagesHistoryServiceInterface::class)->getAll()];
 
+        $CMSPagesHistory = ['CMSPagesHistory' => $this->getDbService(\TueFind\Db\Service\CmsPagesHistoryServiceInterface::class)->getAllBySubsystemName(\IxTheo\Utility::getUserTypeFromUsedEnvironment())];
         return $this->createViewModel($CMSPagesHistory);
     }
 
@@ -281,14 +288,9 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
         $this->forceAdminLogin();
 
         $cmsPageId = $this->params()->fromRoute('cms_page_id');
-
-        $CMSPages =  $this->getDbService(\TueFind\Db\Service\CmsPagesServiceInterface::class)->getByIDFull($cmsPageId);
-
-        $CMSPagesHistory = $this->getDbService(\TueFind\Db\Service\CmsPagesHistoryServiceInterface::class)->getByPageID($cmsPageId);
-
+        $CMSPages =  $this->getDbService(\TueFind\Db\Service\CmsPagesServiceInterface::class)->getByID($cmsPageId);
         return $this->createViewModel([
             'CMSPage' => $CMSPages,
-            'CMSPagesHistory' => $CMSPagesHistory
         ]);
     }
 

@@ -11,7 +11,9 @@ interface CmsPagesHistoryServiceInterface extends DbServiceInterface
 {
     public function getByID(int $id): ?CmsPagesHistoryEntityInterface;
 
-    public function getAll(): array;
+    public function getAllBySubsystemId(int $subsystemId): array;
+
+    public function getAllBySubsystemName(string $subsystemName): array;
 
     public function getByPageID(int $cmsPageId): array;
 

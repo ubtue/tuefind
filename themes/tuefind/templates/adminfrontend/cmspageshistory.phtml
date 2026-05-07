@@ -4,7 +4,7 @@ $this->breadcrumbs()->set($this->translate('Admins'), $this->url('adminfrontend-
 ?>
 
 <div class="<?=$this->layoutClass('mainbody')?>">
-  <h1><?=$this->transEsc('History of')?> <i style="color:#2f78a0;"><?=$this->CMSPage['pageSystemId'] ?></i> <?=$this->transEsc('page')?></h1>
+  <h1><?=$this->transEsc('History of')?> <i style="color:#2f78a0;"><?=$this->CMSPage->getPageSystemId() ?></i> <?=$this->transEsc('page')?></h1>
   <?=$this->flashmessages()?>
 
   <table class="table dataTable table-striped content-list custom-link-list">
@@ -14,15 +14,15 @@ $this->breadcrumbs()->set($this->translate('Admins'), $this->url('adminfrontend-
         <th><?=$this->transEsc('Updated')?></th>
       </tr>
     </thead>
-    
+
     <tbody>
-      <?php foreach ($this->CMSPagesHistory as $one): ?>
-        <tr class="custom-link-row" data-custom-link-id="<?=$this->escapeHtmlAttr($one['id'])?>">
+      <?php foreach ($this->CMSPage->getHistory() as $one): ?>
+        <tr class="custom-link-row" data-custom-link-id="<?=$this->escapeHtmlAttr($one->getId())?>">
           <td>
-            <?=$this->escapeHtml($one['user']['username'])?>
+            <?=$this->escapeHtml($one->getUser()->getUsername())?>
           </td>
           <td>
-            <?=$this->escapeHtml($one['created']->format('d.m.Y H:i:s'))?>
+            <?=$this->escapeHtml($one->getCreated()->format('d.m.Y H:i:s'))?>
           </td>
         </tr>
       <?php endforeach; ?>

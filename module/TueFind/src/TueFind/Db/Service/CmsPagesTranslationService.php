@@ -5,10 +5,11 @@ namespace TueFind\Db\Service;
 use VuFind\Db\Service\AbstractDbService;
 use TueFind\Db\Entity\CmsPages;
 use TueFind\Db\Entity\CmsPagesTranslation;
+use TueFind\Db\Entity\CmsPagesTranslationEntityInterface;
 
 class CmsPagesTranslationService extends AbstractDbService implements  CmsPagesTranslationServiceInterface
 {
-    
+
     public function getByCMSID(int $cmsPageId): ?array
     {
         $dql = '
@@ -23,7 +24,7 @@ class CmsPagesTranslationService extends AbstractDbService implements  CmsPagesT
         $result = $query->getOneOrNullResult();
 
         return $result;
-       
+
     }
 
     public function add(
@@ -31,7 +32,7 @@ class CmsPagesTranslationService extends AbstractDbService implements  CmsPagesT
         string $language,
         string $title,
         string $content
-    ): CmsPagesTranslation {
+    ): CmsPagesTranslationEntityInterface {
         $cmsPageTranslation = new CmsPagesTranslation();
 
         $cmsPage = $this->entityManager->getReference(
@@ -49,13 +50,21 @@ class CmsPagesTranslationService extends AbstractDbService implements  CmsPagesT
 
         return $cmsPageTranslation;
     }
-    
-    public function delete(int $cmsPageId): void
+
+    public function save(CmsPagesTranslationEntityInterface $cmsPageTranslation)
     {
-        $translations = $this->entityManager->getRepository(CmsPagesTranslation::class)
+        $this->entityManager->persist($cmsPageTranslation);
+        $this->entityManager->flush();
+    }
+
+    public function delete(int $cmsPageId, string $language=null): void
+    {
+        $translations = $this->entityManager->getRepository(CmsPagesTranslationEntityInterface::class)
                      ->findBy(['cmsPagesId' => $cmsPageId]);
         foreach ($translations as $t) {
-            $this->entityManager->remove($t);
+            if ($language == null || $language == $t->getLanguage()) {
+                $this->entityManager->remove($t);
+            }
         }
         $this->entityManager->flush();
     }

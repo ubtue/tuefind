@@ -3,6 +3,7 @@
 namespace TueFind\Db\Entity;
 
 use DateTime;
+use Doctrine\Common\Collections\Collection;
 use VuFind\Db\Entity\EntityInterface;
 
 interface CmsPagesEntityInterface extends EntityInterface
@@ -20,5 +21,10 @@ interface CmsPagesEntityInterface extends EntityInterface
 
     public function getChangeDate(): ?DateTime;
     public function setChangeDate(DateTime $changeDate): static;
-    
+
+    public function getTranslations(): Collection;
+    public function getTranslation($language): ?CmsPagesTranslation;
+
+    public function getHistory(): Collection;
+
 }

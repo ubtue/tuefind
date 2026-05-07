@@ -5,7 +5,6 @@ namespace TueFind\Db\Service;
 use DateTime;
 
 use VuFind\Db\Service\AbstractDbService;
-use Doctrine\ORM\Query\Expr\Join;
 use TueFind\Db\Entity\CmsPages;
 use TueFind\Db\Entity\CmsPagesEntityInterface;
 use TueFind\Db\Service\CmsPagesServiceInterface;
@@ -29,71 +28,7 @@ class CmsPagesService extends AbstractDbService implements  CmsPagesServiceInter
         return  $query->getArrayResult();
     }
 
-    public function getByIDFull(int $cmsPageId): ?array
-    {
-        $dql = '
-            SELECT cp, cpt
-            FROM ' . CmsPages::class . ' cp
-            LEFT JOIN cp.cmsPagesTranslations cpt
-            WHERE cp.id = :id
-            ORDER BY cpt.id ASC
-        ';
-
-        $query = $this->entityManager->createQuery($dql);
-        $query->setParameter('id', $cmsPageId);
-
-        $result = $query->getArrayResult();
-
-        if (empty($result)) {
-            return null;
-        }
-
-        $page = $result[0];
-        $page['translations'] = [];
-
-        foreach ($result as $row) {
-            if (!empty($row['cmsPagesTranslations'])) {
-                foreach ($row['cmsPagesTranslations'] as $tr) {
-                    $page['translations'][] = [
-                        'language' => $tr['language'],
-                        'title'    => $tr['title'],
-                        'content'  => $tr['content'],
-                    ];
-                }
-            }
-        }
-
-        return $page;
-    }
-
-    // Note: This function does not make sense
-    // - Everything with languages should be kept either in the Entity or in the TranslationService
-    public function getByPageSystemID(string $pageSystemId, string $subSystem, string $language): ?array
-    {
-
-        $qb = $this->entityManager->createQueryBuilder();
-
-        $qb->select('cms', 'subSystem', 'cpt')
-            ->from(CmsPages::class, 'cms')
-            ->leftJoin('cms.cmsPagesTranslations', 'cpt', Join::WITH, 'cpt.language = :language')
-            ->leftJoin('cms.subSystem', 'subSystem')
-            ->where('cms.pageSystemId = :pageSystemId')
-            ->andWhere('subSystem.subSystem = :subSystem')
-            ->setParameter('language', $language)
-            ->setParameter('pageSystemId', $pageSystemId)
-            ->setParameter('subSystem', $subSystem);
-
-        $result = $qb->getQuery()->getOneOrNullResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-
-        if (empty($result) || empty($result['cmsPagesTranslations'][0]['title'])) {
-            return null;
-        }
-
-        return $result;
-    }
-
-    // Quick & Dirty Workaround
-    public function getByPageSystemIDWithoutTranslations(string $pageSystemId, string $subSystem): ?array
+    public function getByPageSystemID(string $pageSystemId, string $subSystem): ?CmsPagesEntityInterface
     {
 
         $qb = $this->entityManager->createQueryBuilder();
@@ -106,7 +41,7 @@ class CmsPagesService extends AbstractDbService implements  CmsPagesServiceInter
             ->setParameter('pageSystemId', $pageSystemId)
             ->setParameter('subSystem', $subSystem);
 
-        $result = $qb->getQuery()->getOneOrNullResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        $result = $qb->getQuery()->getOneOrNullResult();
         return $result;
     }
 
