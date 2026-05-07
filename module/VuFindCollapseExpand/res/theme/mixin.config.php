@@ -1,6 +1,8 @@
 <?php
 return [
-    'js' => ['collapse_expand.js'],
+    'js' => [
+        ['file' => 'collapse_expand.js', 'priority' => 600],
+        ],
     'helpers' => [
         'factories' => [
             'VuFindCollapseExpand\View\Helper\CollapseExpand\CollapseExpand' => 'VuFindCollapseExpand\View\Helper\CollapseExpand\CollapseExpandFactory',
