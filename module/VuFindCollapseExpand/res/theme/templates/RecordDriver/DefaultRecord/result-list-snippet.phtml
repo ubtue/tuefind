@@ -1,0 +1,54 @@
+<?php
+    $hasSubRecords = $this->driver->hasSubRecords();
+    $subRecords = $this->driver->getSubRecords();
+    $subRecordsCount = 0;
+    if ($subRecords) {
+      $subRecordsCount = count($subRecords);
+    }
+?>
+<?php if ($hasSubRecords): ?>
+    <div class="collapse-expand-container">
+        <?php /* BEGIN Button to show extended records */ ?>
+        <?php
+        $rand = rand(1, 10000);
+        // beware that pgid and pid must be forwarded to be used in result-list-grouped-subrecords.phtml
+        $this->pgid = $pgid = 'accordion-' . $rand;
+        $this->pid = $pid = 'panel-' . $rand . '-';
+        ?>
+        <button
+            class="btn result-link-label collapse-expand-toggle collapsed"
+            data-toggle="collapse"
+            data-bs-toggle="collapse"
+            aria-expanded="false"
+            href="#<?=$pgid?>"
+        >
+          <?=$this->icon('collapse')?>
+          <?=$this->transEsc('expand results')?>
+          <span class="badge"><?=$subRecordsCount?></span>
+        </button>
+        <?php /* END Button to show extended records */ ?>
+
+        <?php /* BEGIN Show extended records */ ?>
+        <?php /* needs $showCheckboxes from search/list-list.phtml */
+            $showCheckboxes = $this->searchSettings($this->results->getParams())->checkboxesEnabled();
+        ?>
+        <ol class="record-list collapse" id="<?=$pgid?>">
+            <?php foreach ($subRecords as $count => $sub): ?>
+              <?php /* adds .single-grouped-record selector for displaying containing favorite-list via JS (check_save_statuses.js) */ ?>
+              <?php /* adds .ajaxItem selector for displaying item status via JS (check_item_statuses.js) */ ?>
+              <li id="<?=$pid . $count?>" class="result ajaxItem">
+                  <div class="record-number"><?= $count+1 ?></div>  
+                  <?php /* reuses logic from search/list-list.phtml */ ?>
+                  <?php if ($showCheckboxes): ?>
+                      <?=$this->record($sub)->getCheckbox('', 'search-cart-form', $pid . $count)?>
+                  <?php endif; ?>
+                  <?=$this->record($sub)->getSearchResult('list')?>
+                  <?php /* reuses logic from search/list-list.phtml -- END */ ?>
+
+              </li>
+            <?php endforeach; ?>
+            <?php unset($this->dropInID); ?>
+        </ol>
+        <?php /* END Show extended records */ ?>
+    </div>
+<?php endif; ?>
