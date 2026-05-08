@@ -328,7 +328,6 @@ $config = [
     'controllers' => [
         'factories' => [
             'TueFind\Controller\AdminFrontendController' => 'VuFind\Controller\AbstractBaseFactory',
-            'TueFind\Controller\AjaxController' => 'VuFind\Controller\AjaxControllerFactory',
             'TueFind\Controller\AuthorController' => '\VuFind\Controller\AbstractBaseFactory',
             'TueFind\Controller\AuthorityController' => 'VuFind\Controller\AbstractBaseFactory',
             'TueFind\Controller\CartController' => 'VuFind\Controller\CartControllerFactory',
@@ -354,8 +353,6 @@ $config = [
         ],
         'aliases' => [
             'AdminFrontend' => 'TueFind\Controller\AdminFrontendController',
-            'AJAX' => 'TueFind\Controller\AjaxController',
-            'ajax' => 'TueFind\Controller\AjaxController',
             'Author' => 'TueFind\Controller\AuthorController',
             'author' => 'TueFind\Controller\AuthorController',
             'Authority' => 'TueFind\Controller\AuthorityController',
