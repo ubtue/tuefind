@@ -769,15 +769,6 @@ class SolrDefault extends \VuFind\RecordDriver\SolrMarc implements \VuFindCollap
         return true;
     }
 
-    /**
-     * This function is used by collapse and expand to get the expand field
-     */
-    public function getContainerExpandField($expand_field)
-    {
-        return $this->fields[$expand_field] ?? '';
-    }
-    
-
     public function getTueRemarks() : array
     {
         return $this->fields['tue_remarks'] ?? [];
