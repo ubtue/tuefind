@@ -8,7 +8,7 @@ use TueFindSearch\Backend\Solr\Backend;
 use TueFind\Search\Solr\InjectFulltextMatchIdsListener;
 
 
-class AbstractSolrBackendFactory extends \VuFind\Search\Factory\SolrDefaultBackendFactory {
+class AbstractSolrBackendFactory extends \VuFindCollapseExpand\Search\Factory\SolrDefaultBackendFactory {
    /**
      * Create service
      *

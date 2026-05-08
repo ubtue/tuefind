@@ -51,7 +51,9 @@ class Results extends \VuFind\Search\Solr\Results
 
         // Loop through every field returned by the result set
         $translatedFacets = $this->getOptions()->getTranslatedFacets();
-        $translatedFacetsUnassigned = $this->getOptions()->getTranslatedFacetsUnassigned();
+        $translatedFacetsUnassigned = $translatedFacetsUnassigned = is_callable([$this->getOptions(), 'getTranslatedFacetsUnassigned'])
+            ? $this->getOptions()->getTranslatedFacetsUnassigned()
+            : [];
         $hierarchicalFacets
             = is_callable([$this->getOptions(), 'getHierarchicalFacets'])
             ? $this->getOptions()->getHierarchicalFacets()
