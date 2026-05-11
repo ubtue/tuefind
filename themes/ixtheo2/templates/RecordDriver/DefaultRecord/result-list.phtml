@@ -251,7 +251,11 @@
           echo '<div>' . $this->transEsc($timeRangesString) . '</div>';
         }
       ?>
-
+      
+      <?php /* BEGIN Show extended records */ ?>
+      <?=$this->render('RecordDriver/DefaultRecord/result-list-snippet.phtml')?>
+      <?php /* END Show extended records */ ?>
+      
       <div class="result-previews">
         <?=$this->record($this->driver)->getPreviews()?>
       </div>
