@@ -236,23 +236,10 @@ $(function () {
 
     IxTheo2.IxTheoSimpleGalley(true, 'a.thumbnail');
 
-    $('.logo-tooltip').tooltip({
-        position: {
-          my: "center bottom-5",
-          at: "center top",
-          using: function( position, feedback ) {
-            $( this ).css( position );
-            $( "<div>" )
-              .addClass( "arrow" )
-              .addClass( feedback.vertical )
-              .addClass( feedback.horizontal )
-              .appendTo( this );
-          }
-        },
-        content: function() {
-          var element = $( this );
-            return element.find('.ix-copyright-name').html();
-        }
+    $('.logo-tooltip').hover(function() {
+        $(this).find('.ix-copyright-name').fadeIn(200);
+    }, function() {
+        $(this).find('.ix-copyright-name').fadeOut(200);
     });
 
     /* ========================================================================= */
@@ -300,6 +287,4 @@ $(function () {
       if($('.ix2-searchForm .searchForm_type').val() == 'BibleRangeSearch') {
         $('.ix2-search-form-bottom-nav .bibel-button').parent().addClass('active');
       }
-
-
 });

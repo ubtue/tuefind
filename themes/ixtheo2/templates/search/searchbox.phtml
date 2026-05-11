@@ -226,15 +226,15 @@
                 </div>
             </div>
         </div>
-        <div class="row g-0 ix2-search-form-bottom-nav">
-            <div class="col-1 col-md-12">
-                <div class="navbar navbar-default home-navbar">
-                    <div class="container-navbar">
-                        <div class="navbar navbar-expand-lg">
-                            <ul class="nav navbar-nav search-nav-list col-sm-12 col-md-12 col-lg-12 ix2-nopadding">
+        <div class="row ix2-search-form-bottom-nav" bis_skin_checked="1">
+            <div class="col-12 col-md-12" bis_skin_checked="1">
+                <div class="navbar-default home-navbar" bis_skin_checked="1">
+                    <div class="container-navbar" bis_skin_checked="1">
+                        <div class="ix2-parent-search-nav" bis_skin_checked="1">
+                            <ul class="row ix2-nopadding">
                                 <!-- IxTheo 2: Advanced search -->
                                 <?php if ($advSearch != ''):?>
-                                    <li class="nav-item">
+                                    <li class="nav-item ">
                                         <a href="<?=$this->url($advSearch) .  ((isset($this->searchId) && $this->searchId) ? '?edit=' . $this->escapeHtmlAttr($this->searchId) : $this->hiddenFilterParams)?>" class="" role="button" rel="nofollow">
                                             <?= $this->transEsc("Advanced Search") ?>
                                         </a>
@@ -281,5 +281,4 @@
         </div>
     </div>
 </section>
-
 <?php endif;?>
