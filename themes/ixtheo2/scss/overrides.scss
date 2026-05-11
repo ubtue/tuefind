@@ -908,12 +908,6 @@ a.black-icon {
   display: none;
 }
 
-
-/* Extra small devices (portrait phones, less than 576px) */
-
-
-/* Small devices (landscape phones, 576px and up) */
-
 .ix2-footer-block .copyright, .ix2-footer-block .footer-menu {
   text-align: center;
 }
@@ -928,8 +922,19 @@ a.black-icon {
   position: absolute;
   z-index: 1029;
 }
+
 .ix-copyright-name {
   display: none;
+  position: absolute;
+  bottom: 100%;
+  left: 115px;
+  transform: translateX(-50%);
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 5px;
+  border-radius: 3px;
+  font-size: 12px;
+  text-align: center;
+  white-space: nowrap;
   color: #495057;
 }
 
@@ -1428,4 +1433,30 @@ a {
 
 .digiTabs .nav.nav-tabs .nav-link {
   cursor: pointer;
+}
+
+.ix2-parent-search-nav {
+    margin-left: 10px;
+}
+
+.ix2-search-form-bottom-nav ul.row>li.nav-item {
+    list-style: none;
+    float: left;
+    display: contents;
+}
+.ix2-search-form-bottom-nav ul.nav .nav-item {
+    float: left;
+    display: contents;
+    flex-direction: row;
+}
+.ix2-search-form-bottom-nav ul.row>li.nav-item a, .bibel-button {
+    padding: 13px;
+}
+
+.dropdown-menu.show {
+  position: absolute;
+}
+
+.navbar-expand-lg .navbar-nav .dropdown-menu {
+  margin-top: -15px;
 }

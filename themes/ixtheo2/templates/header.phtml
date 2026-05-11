@@ -33,7 +33,7 @@ Fixed Navigation
   <div class="container">
     <!-- main nav -->
 
-    <nav class="navbar container-fluid navbar-expand-lg navbar-light px-0">
+    <nav class="navbar container-fluid navbar-expand-lg navbar-expand-md navbar-expand-sm navbar-expand-xsm navbar-light px-0">
       <!-- logo -->
       <a class="navbar-brand logo" href="/">
         <img class="main-logo" src="<?=$this->imageLink('/logos/Logo-IxTheo-ai-rgb_black.png');?>" alt="logo" />
@@ -93,7 +93,7 @@ Fixed Navigation
 
         <!-- TueFind extension template -->
         <!-- About -->
-        <li class="nav-item tf-cursor-pointer dropdown">
+        <li class="nav-item tf-cursor-pointer about-icon dropdown">
             <span class="dropdown-toggle black-icon nav-link" data-bs-toggle="dropdown"  aria-haspopup="true" aria-expanded="false">
               <i class='fa fa-navicon' ></i> <?=$this->icon('dropdown-caret') ?>
             </span>
@@ -147,7 +147,7 @@ Welcome Slider
 </div>
 
 <?php if($homePage):?>
-  <span class="ix-copyright logo-tooltip" title="test" >© <span class="ix-copyright-name"><img src="<?=$this->imageLink('Seezeichen.jpg');?>" width="600" />Seezeichen, © Marco Varenkamp</span></span>
+  <span class="ix-copyright logo-tooltip" title="" >© <span class="ix-copyright-name "><img src="<?=$this->imageLink('Seezeichen.jpg');?>" width="600" /><p class="mb-0">Seezeichen, © Marco Varenkamp</p></span></span>
 <?php endif;?>
 
 <?php if (isset($this->layout()->srmessage)): // message for benefit of screen-reader users ?>
