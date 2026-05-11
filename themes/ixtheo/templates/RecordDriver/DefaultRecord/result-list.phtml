@@ -242,6 +242,11 @@
       <div class="result-previews">
         <?=$this->record($this->driver)->getPreviews()?>
       </div>
+
+      <?php /* BEGIN Show extended records */ ?>
+      <?=$this->render('RecordDriver/DefaultRecord/result-list-snippet.phtml')?>
+      <?php /* END Show extended records */ ?>
+    
     </div>
     <div class="result-links hidden-print">
       <?php /* Display qrcode if appropriate: */ ?>
