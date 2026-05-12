@@ -32,7 +32,6 @@
           </div>
         <?php endif; ?>
       </div>
-
       <div>
         <?php if($this->driver->isCollection()): ?>
           <?=implode('<br>', array_map([$this, 'escapeHtml'], $this->driver->getSummary())); ?>
@@ -155,10 +154,6 @@
         </div>
       <?php endif; ?>
 
-      <?php if ($this->driver->tryMethod('getWorkKeys') && $this->searchOptions($this->driver->getSourceIdentifier())->getVersionsAction()): ?>
-        <?php // TueFind: we want this feature only to be active in the tab, but not here in the result list due to performance issues. ?>
-        <!--<div class="record-versions ajax"></div>-->
-      <?php endif; ?>
 
       <div class="callnumAndLocation ajax-availability hidden">
         <?php if ($this->driver->supportsAjaxStatus()): ?>
