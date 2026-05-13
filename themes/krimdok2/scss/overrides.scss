@@ -16,11 +16,6 @@ h1 {
     font-size: 30px;
 }
 
-div.title {
-    /* will only be visible on low res, see overrides-media.scss */
-    display: none;
-}
-
 .panel-button a {
     font-size: 1.2em;
 }
@@ -423,4 +418,8 @@ a {
 a:hover,a:focus {
     color: #13191d;
     text-decoration: underline
+}
+
+button.btn.btn-primary.search-button {
+  white-space: nowrap;
 }
