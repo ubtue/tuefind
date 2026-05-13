@@ -49,9 +49,6 @@
         <div class="panel-home">
             <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, 'TueFind2.ChangeSearchboxHeight();', 'SET')?>
             <div class="searchbox col-12 mx-auto">
-
-                <?=$this->render('search/searchbox/title');?>
-
                 <!-- Begin warnings -->
                 <?php if ($this->ils()->getOfflineMode() == "ils-offline"): ?>
                     <div class="alert alert-warning">
