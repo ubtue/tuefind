@@ -39,7 +39,7 @@
                 <li id="<?=$pid . $count?>" class="result ajaxItem"> 
                     <?php /* reuses logic from search/list-list.phtml */ ?>
                     <?php if ($showCheckboxes): ?>
-                        <?=$this->record($sub)->getCheckbox('', 'search-cart-form', $count+2)?>
+                        <?=$this->record($sub)->getCheckbox('', 'search-cart-form', $count+1)?>
                     <?php endif; ?>
                     <?=$this->record($sub)->getSearchResult('list')?>
                     <?php /* reuses logic from search/list-list.phtml -- END */ ?>
