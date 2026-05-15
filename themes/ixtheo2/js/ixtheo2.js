@@ -28,30 +28,36 @@ var IxTheo2 = {
                 }
             }
         }
-        if($('#searchForm').html() != undefined) {
-            if(is_anchor === false) {
-                //$(".searchForm_lookfor:visible").focus();
-            }else{
-                if(content_block_element != undefined && index_page == undefined && ix2_search_form != undefined && anchor_name.length > 0) {
-                    let search_form_element = document.getElementById(anchor_name);
-                    let y = search_form_element.getBoundingClientRect().top + window.scrollY;
-                    let toggle_block = $('#'+anchor_name);
-                    if(is_js_anchor === true) {
-                        y = toggle_block.prev().offset().top;
-                        toggle_block.addClass('in');
-                    }
-                    if(is_more_anchor === true) {
-                        y = toggle_block.parent().offset().top;
-                        toggle_block.parent().find('.read-more-trigger').click();
-                    }
-                    window.scroll({
-                        top: y-default_scroll,
-                        behavior: 'smooth'
-                    });
-                }else{
-                    //$(".searchForm_lookfor:visible").focus();
-                }
+        if(content_block_element != undefined
+        && index_page == undefined
+        && ix2_search_form != undefined
+        && anchor_name.length > 0) {
+
+            let search_form_element = document.getElementById(anchor_name);
+
+            if (!search_form_element) {
+                console.warn('Anchor not found:', anchor_name);
+                return;
             }
+
+            let y = search_form_element.getBoundingClientRect().top + window.scrollY;
+
+            let toggle_block = $('#'+anchor_name);
+
+            if(is_js_anchor === true && toggle_block.length) {
+                y = toggle_block.prev().offset().top;
+                toggle_block.addClass('in');
+            }
+
+            if(is_more_anchor === true && toggle_block.length) {
+                y = toggle_block.parent().offset().top;
+                toggle_block.parent().find('.read-more-trigger').click();
+            }
+
+            window.scroll({
+                top: y - default_scroll,
+                behavior: 'smooth'
+            });
         }
     },
     ChangeHandlerMenuSearchForm: function() {
