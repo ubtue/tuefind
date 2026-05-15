@@ -45,20 +45,12 @@ class CspHeaderGeneratorTest extends \PHPUnit\Framework\TestCase
     use \VuFindTest\Feature\FixtureTrait;
 
     /**
-     * Nonce generator mock.
-     *
-     * @var \PHPUnit\Framework\MockObject&\VuFind\Security\NonceGenerator
-     */
-    protected $nonceGenerator;
-
-    /**
      * Set up the tests.
      *
      * @return void
      */
     public function setUp(): void
     {
-        $this->nonceGenerator = $this->createMock(\VuFind\Security\NonceGenerator::class);
     }
 
     /**
@@ -192,7 +184,7 @@ class CspHeaderGeneratorTest extends \PHPUnit\Framework\TestCase
     protected function buildGenerator($configData)
     {
         $config = new \VuFind\Config\Config($configData);
-        $generator = new CspHeaderGenerator($config, $this->nonceGenerator);
+        $generator = new CspHeaderGenerator($config, $this->createStub(\VuFind\Security\NonceGenerator::class));
         return $generator;
     }
 }

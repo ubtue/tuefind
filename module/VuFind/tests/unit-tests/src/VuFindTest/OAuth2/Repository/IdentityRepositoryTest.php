@@ -241,7 +241,7 @@ class IdentityRepositoryTest extends AbstractTokenRepositoryTestCase
     {
         $user = $this->getMockUser();
         $userService = $this->createMock(UserServiceInterface::class);
-        $userService->method('getUserByField')
+        $userService->expects($this->exactly(2))->method('getUserByField')
             ->willReturnMap(
                 [
                     ['id', 1, null],
