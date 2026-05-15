@@ -45,15 +45,6 @@ class CspHeaderGeneratorTest extends \PHPUnit\Framework\TestCase
     use \VuFindTest\Feature\FixtureTrait;
 
     /**
-     * Set up the tests.
-     *
-     * @return void
-     */
-    public function setUp(): void
-    {
-    }
-
-    /**
      * Test a basic ReportTo header configuration.
      *
      * @return void
