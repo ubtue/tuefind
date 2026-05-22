@@ -927,3 +927,28 @@ a, .nav-link, .btn-link {
 .nav.nav-tabs.tuefind-event-resetsearchhandlers {
   padding-bottom: 0;
 }
+
+@media (min-width: 600px) and (max-width: 1200px) {
+
+  div.banner.search.container > div.row div{
+    text-align: center;
+    width: 100%;
+  }
+
+  #ix-nav-header {
+    display: flex;
+    justify-content: center;
+  }
+
+  #ix-nav-header ul.nav {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 0 auto;
+    float: none !important;
+  }
+  .background .background-stripe {
+    height: 100px;
+  }
+}

@@ -1,52 +1,133 @@
-@use "../../ixtheo/scss/variables" as *;
-@media (max-width: $screen-sm-max) {
-    #rb-navbar-container { flex-direction: column; }
-    .nav > li { float: left; }
-
-    #rb-title-table {
-        flex-direction: column;
-
-        div {
-            padding: 0px;
-        }
-    }
-
-    #rb-title-table-left {
-        border-right: initial;
-    }
-
-    #rb-title-table-right {
-        text-align: center;
-        font-size: 200%;
-    }
+@media (min-width: 1400px) and (max-width: 1900px) {
+  .panel-home {
+    width: 80%;
+  }
+  .mobile-hide {
+    display: none;
+  }
 }
-
-@media (max-width: $screen-xs-max) {
-    .tf-row-home {
-        background: transparent url(/themes/relbib2/images/background_768.jpg) no-repeat;
-    }
-
-    #rb-title-table-right {
-        font-size: 150%;
-    }
+@media (min-width: 800px) and (max-width: 1399px) {
+  .panel-home {
+    width: 90%;
+  }
+  .header-block-left, .header-block-center, .header-block-right {
+    width: 100%;
+    text-align: center;
+  }
+  .mobile-hide {
+    display: inherit;
+  }
+  .header-block-right .navbar-nav {
+    justify-content: center !important;
+    width: 100%;
+  }
+  .rb-footer-partners-logos {
+    justify-content: center !important;
+  }
+  .rb-footer-partners-logos .rb-footer-supporter {
+    max-width: 20%;
+  }
+  .rb-footer-partners-logos .rb-footer-supporter:first-child, .rb-footer-partners-logos .rb-footer-supporter:last-child {
+    display: none;
+  }
 }
-
-@media (max-width: 360px) {
-    #rb-title-table-right {
-        font-size: 100%;
-    }
+@media (min-width: 700px) and (max-width: 799px) {
+  .panel-home {
+    width: 90%;
+  }
+  .header-block-left, .header-block-center, .header-block-right {
+    width: 100%;
+    text-align: center;
+  }
+  .mobile-hide {
+    display: none;
+  }
+  .header-block-right .navbar-nav {
+    justify-content: center !important;
+    width: 100%;
+  }
+  .rb-footer-partners-logos {
+    justify-content: center !important;
+  }
+  .rb-footer-partners-logos .rb-footer-supporter {
+    max-width: 20%;
+  }
+  .rb-footer-partners-logos .rb-footer-supporter:first-child, .rb-footer-partners-logos .rb-footer-supporter:last-child {
+    display: none;
+  }
 }
-
-@media (min-width: $screen-md-min) {
-    #tf-button-footer-feedback {
-        display: initial;
-    }
+@media (min-width: 500px) and (max-width: 699px) {
+  .panel-home {
+    width: 90%;
+  }
+  .header-block-left, .header-block-center, .header-block-right {
+    width: 100%;
+    text-align: center;
+  }
+  .mobile-hide {
+    display: none;
+  }
+  .header-block-right .navbar-nav {
+    justify-content: center !important;
+    width: 100%;
+  }
+  .tf-background-body .container .row .panel{
+    width: 100%;
+  }
+  .rb-footer-partners-logos {
+    justify-content: center !important;
+  }
+  .rb-footer-partners-logos .rb-footer-supporter {
+    max-width: 20%;
+  }
+  .rb-footer-partners-logos .rb-footer-supporter:first-child, .rb-footer-partners-logos .rb-footer-supporter:last-child {
+    display: none;
+  }
+  .tf-background-body {
+    padding-left: 12px;
+  }
 }
-
-@media (max-width: $screen-md-max) {
-    .panel-home { width: 90%; }
+@media (max-width: 499px) {
+  div.container-fluid > div.row > div.col-12 {
+    padding: 0;
+  }
+  .section-home {
+    padding: 0;
+    margin: 0;
+    text-align: center;
+  }
+  .panel-home {
+    width: 90%;
+  }
+  .header-block-left, .header-block-center, .header-block-right {
+    width: 100%;
+    text-align: center;
+  }
+  .mobile-hide {
+    display: none;
+  }
+  .header-block-right .navbar-nav {
+    justify-content: center !important;
+    width: 100%;
+  }
+  .tf-background-body .container .row .panel{
+    width: 100%;
+  }
+  .rb-footer-partners-logos {
+    justify-content: center !important;
+  }
+  .rb-footer-partners-logos .rb-footer-supporter:first-child, .rb-footer-partners-logos .rb-footer-supporter:last-child {
+    display: none;
+  }
+  .tf-background-body {
+    padding-left: 12px;
+  }
 }
-
-@media (max-width: $screen-xs-max) {
-    .panel-home { width: 90%; }
+#header-collapse .nav-item a.header-link {
+  white-space: nowrap;
+  display: inline-block;
+}
+html, body {
+  margin: 0;
+  padding: 0;
 }

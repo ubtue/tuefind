@@ -14,19 +14,19 @@
 
                         <div id="rb-navbar-container" class="row">
                             <!-- logo top left -->
-                            <div class="justify-content-start col-lg-4 col-xl-4 col-xxl-4">
+                            <div class="justify-content-start col-6 col-xs-12 col-md-8 col-lg-6 col-xl-4 header-block-left">
                                 <a target="blank" href="http://www.uni-tuebingen.de"><img src="<?=$this->imageLink('Logo_Universitaet_Tuebingen.svg') ?>" alt="Universität T&uuml;bingen" style="padding-top: 8px; padding-bottom: 8px;" width="269" height="70" /></a>
                             </div>
 
                             <!-- logo top middle -->
-                            <div class="rb-navbar-part col-lg-auto col-xl-auto col-xxl-auto">
+                            <div class="rb-navbar-part col-lg-auto col-xl-auto col-xxl-auto  header-block-center">
                                 <div>
                                     <a target="_blank" href="http://www.ub.uni-tuebingen.de/"><img src="<?=$this->imageLink('Logo_Universitaetsbibliothek_Tuebingen.svg') ?>" alt="Universitätsbibliothek" width="320" height="30" /></a><br/>
                                 </div>
                             </div>
 
                             <!-- menu top right -->
-                            <div class="col-lg-4 col-xl-4 col-xxl-4">
+                            <div class="col-6 col-xs-12 col-md-8 col-lg-6 col-xl-4 header-block-right">
                                 <ul class="navbar-nav d-flex flex-row align-items-center justify-content-end mt-2">
 
                                     <!-- Begin section Main Menu -->
@@ -34,7 +34,7 @@
                                     <li class="nav-item active">
                                         <a class="nav-link header-link" href="<?=$this->url('home')?>" >
                                             <i class="fa fa-home" aria-hidden="true"> </i>
-                                            <?=$this->transEsc('Home');?>
+                                            <span class="mobile-hide"><?=$this->transEsc('Home');?></span>
                                         </a>
                                     </li>
 
@@ -43,7 +43,7 @@
 
                                     <?php if (is_object($account) && $account->loginEnabled()): // hide login/logout if unavailable ?>
                                       <li class="nav-item logoutOptions<?php if($account->dropdownEnabled()): ?> with-dropdown<?php endif ?><?php if(!$account->getIdentity()): ?> hidden<?php endif ?>">
-                                        <a class="header-link" href="<?=$this->url('myresearch-home', [], ['query' => ['redirect' => 0]])?>"><i id="account-icon" class="fa fa-user-circle" aria-hidden="true"></i> <?=$this->transEsc("Your Account")?></a>
+                                        <a class="header-link" href="<?=$this->url('myresearch-home', [], ['query' => ['redirect' => 0]])?>"><i id="account-icon" class="fa fa-user-circle" aria-hidden="true"></i> <span class="mobile-hide"><?=$this->transEsc("Your Account")?></span></a>
                                       </li>
                                       <?php if($account->dropdownEnabled()): ?>
                                         <li id="login-dropdown" class="nav-item dropdown<?php if(!$account->getIdentity()): ?> hidden<?php endif ?>">
@@ -54,13 +54,13 @@
                                         </li>
                                       <?php endif; ?>
                                       <li class="nav-item logoutOptions<?php if(!$account->getIdentity()): ?> hidden<?php endif ?>">
-                                        <a class="header-link" href="<?=$this->url('myresearch-logout')?>" class="logout"><i class="fa fa-sign-out" aria-hidden="true"></i> <?=$this->transEsc("Log Out")?></a>
+                                        <a class="header-link" href="<?=$this->url('myresearch-logout')?>" class="logout"><i class="fa fa-sign-out" aria-hidden="true"></i> <span class="mobile-hide"><?=$this->transEsc("Log Out")?></span></a>
                                       </li>
-                                      <li id="loginOptions" class="nav-item"<?php if($account->getIdentity()): ?> class="hidden"<?php endif ?>>
+                                      <li id="loginOptions" class="nav-item <?php if($account->getIdentity()): ?> hidden<?php endif ?>">
                                         <?php if ($account->getSessionInitiator($this->serverUrl($this->url('myresearch-home')))): ?>
-                                          <a class="header-link" href="<?=$this->url('myresearch-userlogin')?>"><i class="fa fa-sign-in" aria-hidden="true"></i> <?=$this->transEsc("Institutional Login")?></a>
+                                          <a class="header-link" href="<?=$this->url('myresearch-userlogin')?>"><i class="fa fa-sign-in" aria-hidden="true"></i> <span class="mobile-hide"><?=$this->transEsc("Institutional Login")?></span></a>
                                         <?php else: ?>
-                                          <a class="header-link" href="<?=$this->url('myresearch-userlogin')?>" data-lightbox><i class="fa fa-sign-in" aria-hidden="true"></i> <?=$this->transEsc("Login")?></a>
+                                          <a class="header-link" href="<?=$this->url('myresearch-userlogin')?>" data-lightbox><i class="fa fa-sign-in" aria-hidden="true"></i> <span class="mobile-hide"><?=$this->transEsc("Login")?></span></a>
                                         <?php endif; ?>
                                       </li>
                                     <?php endif; ?>
@@ -72,7 +72,7 @@
                                           <?php foreach ($this->layout()->themeOptions as $current): ?>
                                             <li<?=$current['selected'] ? ' class="active"' : ''?>>
                                               <a href="<?=$this->escapeHtmlAttr($this->url()->addQueryParameters(['ui' => $current['name']])) ?>" rel="nofollow">
-                                                <?=$this->transEsc($current['desc']) ?>
+                                                <span class="mobile-hide"><?=$this->transEsc($current['desc']) ?></span>
                                               </a>
                                             </li>
                                           <?php endforeach; ?>
@@ -82,7 +82,7 @@
 
                                     <?php if (isset($this->layout()->allLangs) && count($this->layout()->allLangs) > 1): ?>
                                       <li class="nav-item language dropdown">
-                                        <a href="#" class="header-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-globe" aria-hidden="true"></i> <?=$this->transEsc("Language")?> <b class="caret"></b></a>
+                                        <a href="#" class="header-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-globe" aria-hidden="true"></i> <span class="mobile-hide"><?=$this->transEsc("Language")?></span> <b class="caret"></b></a>
                                         <ul class="dropdown-menu">
                                           <?php
                                             //TueFind: Basic VuFind functionality changed, removed author ID from URL

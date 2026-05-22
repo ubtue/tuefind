@@ -156,7 +156,16 @@
         <?=$this->render('header.phtml')?>
       </div>
     </header>
-    <?=$this->breadcrumbs()->render()?>
+    <?php if (($this->layout()->showBreadcrumbs ?? true) && $this->layout()->breadcrumbs !== false): ?>
+      <div class="container breadcrumb-wrapper hidden-print">
+        <nav aria-label="breadcrumb" aria-label="<?=$this->transEscAttr('Breadcrumbs') ?>">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><i class="fa fa-home" aria-hidden="true"></i> <a href="/">Home</a></li>
+            <?=$this->layout()->breadcrumbs ?>
+          </ol>
+        </nav>
+      </div>
+    <?php endif; ?>
     <div class="container-fluid">
       <div class="row">
         <div class="col-12 px-0 justify-content-center">
