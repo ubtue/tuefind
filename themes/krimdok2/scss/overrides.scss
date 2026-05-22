@@ -423,3 +423,15 @@ a:hover,a:focus {
 button.btn.btn-primary.search-button {
   white-space: nowrap;
 }
+
+a:hover {
+    color: #a51e37;
+}
+.result .format, .sidebar .format {
+    background-color: #7b7d84;
+}
+
+.facet-group .facet.active, .active-filters .facet {
+    background-color: #32414b;
+    color: #fff;
+}

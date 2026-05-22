@@ -585,3 +585,28 @@ form.dynamic-form.DoD div.form-group .form-control, form.dynamic-form.Acquisitio
     background-color: #951e37;
     border-color: #951e37
 }
+
+.facet-group .facet.active, .active-filters .facet {
+    background-color: #951e37;
+}
+
+a {
+    color: #951e37;
+    text-decoration: none;
+}
+
+.breadcrumb-item a {
+    color: #7b7d84;
+}
+
+.breadcrumb-item a:first-child {
+    color: #951e37;
+}
+
+.record-tabs .nav-link {
+    color: #951e37;
+}
+
+#mltmore {
+    color: #951e37 !important;
+}
