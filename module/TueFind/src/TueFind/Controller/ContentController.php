@@ -20,9 +20,12 @@ class ContentController extends \VuFind\Controller\ContentController
         $subSystem = $this->serviceLocator->get('ViewHelperManager')->get('tuefind')->getTueFindInstance();
 
         $cmsPage = $this->getDbService(\TueFind\Db\Service\CmsPagesServiceInterface::class)->getByPageSystemId($page, $subSystem);
-        $cmsPageTranslation = $cmsPage->getTranslation($language);
-        if ($cmsPageTranslation == null) {
-            $cmsPageTranslation = $cmsPage->getTranslation($defaultLanguage);
+        $cmsPageTranslation = null;
+        if ($cmsPage != null) {
+            $cmsPageTranslation = $cmsPage->getTranslation($language);
+            if ($cmsPageTranslation == null) {
+                $cmsPageTranslation = $cmsPage->getTranslation($defaultLanguage);
+            }
         }
 
         // Path regex should prevent dots, but double-check to make sure:
