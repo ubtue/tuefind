@@ -9,6 +9,15 @@ use VuFind\I18n\Locale\LocaleSettings;
 class ContentController extends \VuFind\Controller\ContentController
 {
 
+    /**
+     * CMS-related changes
+     * - Check database and filesystem for the requested page and their translations
+     * - Priority for Resolving requested page:
+     *   - Database (exact language)
+     *   - Filesystem (exact language)
+     *   - Database (fallback language)
+     *   - Filesystem (fallback language)
+     */
     public function contentAction()
     {
         $pathPrefix = 'templates/content/'; // override path prefix to always use content, since the cms page content is determined by the database entry, not the template name
@@ -21,10 +30,12 @@ class ContentController extends \VuFind\Controller\ContentController
 
         $cmsPage = $this->getDbService(\TueFind\Db\Service\CmsPagesServiceInterface::class)->getByPageSystemId($page, $subSystem);
         $cmsPageTranslation = null;
+        $cmsPageIsFallback = false;
         if ($cmsPage != null) {
             $cmsPageTranslation = $cmsPage->getTranslation($language);
             if ($cmsPageTranslation == null) {
                 $cmsPageTranslation = $cmsPage->getTranslation($defaultLanguage);
+                $cmsPageIsFallback = true;
             }
         }
 
@@ -42,17 +53,21 @@ class ContentController extends \VuFind\Controller\ContentController
             }
             $page = substr($page, $p + 1);
         }
+
+        // Resolve original template
         $pageLocator = $this->getService(\VuFind\Content\PageLocator::class);
-        // If a CMS page is found, override path prefix and page to ensure the correct template is used.
-        // The template name is not determined by the URL, but by the database entry for the CMS page.
-        if ($cmsPage) {
-            $pathPrefix = 'templates/content/cmspage/';
-            $page = 'main';
-        }
-
         $data = $pageLocator->determineTemplateAndRenderer($pathPrefix, $page);
+        $isFallback = !preg_match('"_' . $language .'\.phtml"', $data['relativePath']);
 
-        if ($cmsPageTranslation && isset($data)) {
+        if (isset($data) && $cmsPageTranslation && !($cmsPageIsFallback && !$isFallback)) {
+            // If a CMS page is found, override path prefix and page to ensure the correct template is used.
+            // The template name is not determined by the URL, but by the database entry for the CMS page.
+            if ($cmsPage) {
+                $pathPrefix = 'templates/content/cmspage/';
+                $page = 'main';
+            }
+
+            $data = $pageLocator->determineTemplateAndRenderer($pathPrefix, $page);
             $data['cmspage'] = $cmsPage;
             $data['renderer'] = 'CmsPage';
             return $this->getViewForCmsPage($data['page'], $data['relativePath'], $data['path'], $cmsPageTranslation);
