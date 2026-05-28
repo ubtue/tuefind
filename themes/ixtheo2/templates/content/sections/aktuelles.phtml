@@ -1,3 +1,4 @@
+
 <section class="cw-py-5 col-md-12">
     <div class="container">
         <div class="row">
@@ -8,6 +9,16 @@
                 </div>
 
                 <div class="slick-slider-multiple-item" align="center">
+                     <a href="<?=$this->url('content-page', ['page' => 'News']) ?>#publikationsmeldungen">
+                        <div class="ix-slick-slider-item" title="publikationsmeldungen" style="background-image: url(<?=$this->imageLink('slider/mode/Publikationsmeldung.jpg')?>);">
+                            <div class="ix-slick-slider-item-title"><?=$this->translate("section_aktuelles_title19")?></div>
+                        </div>
+                    </a>
+                    <a href="<?=$this->url('content-page', ['page' => 'digi2026']) ?>">
+                        <div class="ix-slick-slider-item" title="digi2026" style="background-image: url(<?=$this->imageLink('slider/mode/Dokumentation_Tagung.png')?>);">
+                            <div class="ix-slick-slider-item-title"><?=$this->translate("section_aktuelles_title18")?></div>
+                        </div>
+                    </a>
                     <a href="<?=$this->url('content-page', ['page' => 'News']) ?>#new_homepage">
                         <div class="ix-slick-slider-item" title="<?=$this->transEscAttr('symbolic_image_table63');?>" style="background-image: url(<?=$this->imageLink('slider/hands-2178566.jpg')?>);">
                             <div class="ix-slick-slider-item-title"><?=$this->translate("section_aktuelles_title17")?></div>
