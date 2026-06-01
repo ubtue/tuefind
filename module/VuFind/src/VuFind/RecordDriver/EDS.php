@@ -271,7 +271,28 @@ class EDS extends DefaultRecord
     }
 
     /**
-     * Get the authors of the record
+     * Check whether access to the record is restricted.
+     *
+     * @return bool
+     */
+    public function isRestrictedView(): bool
+    {
+        $accessLevel = $this->getAccessLevel();
+        return !empty($accessLevel) && $accessLevel !== '3';
+    }
+
+    /**
+     * Check whether the record is a placeholder.
+     *
+     * @return bool
+     */
+    public function isPlaceholder(): bool
+    {
+        return $this->getAccessLevel() === '1';
+    }
+
+    /**
+     * Get the authors of the record.
      *
      * @return string
      */
