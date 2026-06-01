@@ -47,4 +47,5 @@ return [
         'user-plus' => 'FontAwesome:user-plus',
         'user-secret' => 'FontAwesome:user-secret',
     ],
+    'mixins' => ['vufind-collapse-expand'],
 ];

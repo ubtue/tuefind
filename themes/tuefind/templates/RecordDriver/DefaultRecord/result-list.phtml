@@ -46,9 +46,11 @@
           <?=implode('<br>', array_map([$this, 'escapeHtml'], $this->driver->getSummary())); ?>
         <?php else: ?>
           <?php /* TueFind: Add links to authority index, if active */ ?>
-          <?php $summAuthors = $this->driver->getPrimaryAuthorsWithHighlighting(); if (!empty($summAuthors)): ?>
+          <?php $summAuthors = $this->driver->getPrimaryAuthorsWithHighlighting(); 
+          if (!empty($summAuthors)): ?>
             <?=$this->transEsc('by')?>
-            <?php $i=0; $authorCount = count($summAuthors); foreach ($summAuthors as $summAuthor => $summAuthorProperties): ?>
+            <?php $i=0; $authorCount = count($summAuthors); 
+            foreach ($summAuthors as $summAuthor => $summAuthorProperties): ?>
               <?php if ($this->tuefind()->isSearchTabEnabled('SolrAuth')): ?>
                 <?php /* Display separate links to title search + authority page */ ?>
                 <?=$this->highlight(rtrim($summAuthor, ','))?> <?=$this->tuefind()->formatRoles($summAuthorProperties['role'] ?? [])?>
@@ -244,6 +246,11 @@
           <?=$this->record($this->driver)->getPreviews()?>
         </div>
       <?php endif; ?>
+
+      <?php /* BEGIN Show extended records */ ?>
+      <?=$this->render('RecordDriver/DefaultRecord/result-list-snippet.phtml')?>
+      <?php /* END Show extended records */ ?>  
+
     </div>
 
     <div class="result-links hidden-print">

@@ -23,8 +23,11 @@ use Psr\Container\ContainerInterface;
 use VuFind\Exception\LoginRequired as LoginRequiredException;
 use VuFind\Exception\RecordMissing as RecordMissingException;
 
-class SolrDefault extends \VuFind\RecordDriver\SolrMarc
+class SolrDefault extends \VuFind\RecordDriver\SolrMarc implements \VuFindCollapseExpand\Config\CollapseExpandConfigAwareInterface
 {
+    use \VuFindCollapseExpand\RecordDriver\Feature\CollapseExpandTrait;
+    use \VuFindCollapseExpand\Config\CollapseExpandConfigAwareTrait;
+    
     const SUBITO_BROKER_ID = 'TUEFIND';
     protected $authorImplode;
     protected $container;
