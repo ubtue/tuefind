@@ -3,7 +3,7 @@
         "elasticsearch/elasticsearch": "8.14.0",
         "gitonomy/gitlib": "^1.6",
         "symfony/intl": "^5.4",
-        "ubtue/vufind-collapse-expand": "dev-main"
+        "ubtue/vufind-collapse-expand": "dev-release-11.0"
     },
     "autoload": {
         "psr-4": {

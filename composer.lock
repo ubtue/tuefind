@@ -466,6 +466,7 @@
                     "type": "tidelift"
                 }
             ],
+            "abandoned": true,
             "time": "2022-01-17T14:14:24+00:00"
         },
         {
@@ -2836,16 +2837,16 @@
         },
         {
             "name": "guzzlehttp/psr7",
-            "version": "2.10.3",
+            "version": "2.10.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/psr7.git",
-                "reference": "7c1472269227dc6f18930bd903d7a88fe6c52130"
+                "reference": "d2a1a094e396da8957e797489fddaf860c340cfc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/psr7/zipball/7c1472269227dc6f18930bd903d7a88fe6c52130",
-                "reference": "7c1472269227dc6f18930bd903d7a88fe6c52130",
+                "url": "https://api.github.com/repos/guzzle/psr7/zipball/d2a1a094e396da8957e797489fddaf860c340cfc",
+                "reference": "d2a1a094e396da8957e797489fddaf860c340cfc",
                 "shasum": ""
             },
             "require": {
@@ -2933,7 +2934,7 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/psr7/issues",
-                "source": "https://github.com/guzzle/psr7/tree/2.10.3"
+                "source": "https://github.com/guzzle/psr7/tree/2.10.4"
             },
             "funding": [
                 {
@@ -2949,7 +2950,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-05-27T11:48:20+00:00"
+            "time": "2026-05-29T12:59:07+00:00"
         },
         {
             "name": "jaybizzle/crawler-detect",
@@ -12186,30 +12187,29 @@
         },
         {
             "name": "ubtue/vufind-collapse-expand",
-            "version": "dev-main",
+            "version": "dev-release-11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ubtue/vufind-collapse-expand.git",
-                "reference": "99285511ef9afdb7263b1e1788b40019f144cb8b"
+                "reference": "91aac3ffe672d3047aa04928b5d6ec637638e7ee"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ubtue/vufind-collapse-expand/zipball/99285511ef9afdb7263b1e1788b40019f144cb8b",
-                "reference": "99285511ef9afdb7263b1e1788b40019f144cb8b",
+                "url": "https://api.github.com/repos/ubtue/vufind-collapse-expand/zipball/91aac3ffe672d3047aa04928b5d6ec637638e7ee",
+                "reference": "91aac3ffe672d3047aa04928b5d6ec637638e7ee",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.1"
+                "php": ">=8.2"
             },
             "require-dev": {
-                "friendsofphp/php-cs-fixer": "3.75.0",
-                "phing/phing": "3.0.1",
+                "friendsofphp/php-cs-fixer": "3.89.2",
+                "phing/phing": "3.1.0",
                 "phpmd/phpmd": "2.15.0",
-                "phpstan/phpstan": "2.1.14",
-                "rector/rector": "^2.0.0",
-                "squizlabs/php_codesniffer": "3.12.2"
+                "phpstan/phpstan": "2.1.32",
+                "rector/rector": "2.2.7",
+                "squizlabs/php_codesniffer": "4.0.1"
             },
-            "default-branch": true,
             "type": "library",
             "extra": {
                 "vufind": {
@@ -12256,9 +12256,9 @@
             "description": "Adding Solr Collapse & Expand functionality to VuFind, initially based on finc/vufind-results-grouping.",
             "support": {
                 "issues": "https://github.com/ubtue/vufind-collapse-expand/issues",
-                "source": "https://github.com/ubtue/vufind-collapse-expand/tree/main"
+                "source": "https://github.com/ubtue/vufind-collapse-expand/tree/release-11.0"
             },
-            "time": "2026-05-28T13:13:22+00:00"
+            "time": "2026-06-01T07:54:31+00:00"
         },
         {
             "name": "vstelmakh/url-highlight",
