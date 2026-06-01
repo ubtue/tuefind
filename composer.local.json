@@ -2,7 +2,7 @@
     "require": {
         "elasticsearch/elasticsearch": "8.19.0",
         "gitonomy/gitlib": "^1.6",
-        "symfony/intl": "^5.4",
+        "symfony/intl": "^6.4",
         "ubtue/vufind-collapse-expand": "dev-release-11.0"
     },
     "autoload": {
