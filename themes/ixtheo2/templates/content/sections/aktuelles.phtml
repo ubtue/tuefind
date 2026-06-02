@@ -1,3 +1,4 @@
+
 <section class="cw-py-5 col-md-12">
     <div class="container">
         <div class="row">
@@ -8,9 +9,14 @@
                 </div>
 
                 <div class="slick-slider-multiple-item" align="center">
-                    <a href="/Content/digi2026">
-                        <div class="ix-slick-slider-item" title="Wissenschaftliche Tagung und Festakt IxTheo" style="background-image: url(<?=$this->imageLink('slider/mode/News_Tagung.jpg')?>);">
-                            <div class="ix-slick-slider-item-title">Wissenschaftliche Tagung und Festakt IxTheo</div>
+                     <a href="<?=$this->url('content-page', ['page' => 'News']) ?>#publikationsmeldungen">
+                        <div class="ix-slick-slider-item" title="<?=$this->translate("section_aktuelles_title21")?>" style="background-image: url(<?=$this->imageLink('slider/mode/Publikationsmeldung.jpg')?>);">
+                            <div class="ix-slick-slider-item-title"><?=$this->translate("section_aktuelles_title19")?></div>
+                        </div>
+                    </a>
+                    <a href="<?=$this->url('content-page', ['page' => 'digi2026']) ?>">
+                        <div class="ix-slick-slider-item" title="<?=$this->translate("section_aktuelles_title20")?>" style="background-image: url(<?=$this->imageLink('slider/mode/Dokumentation_Tagung.png')?>);">
+                            <div class="ix-slick-slider-item-title"><?=$this->translate("section_aktuelles_title18")?></div>
                         </div>
                     </a>
                     <a href="<?=$this->url('content-page', ['page' => 'News']) ?>#new_homepage">
@@ -90,7 +96,7 @@ $(document).ready(function(){
 
     $slider.slick({
         dots: true,
-        autoplay: false,       // default stop autorotation
+        autoplay: true,       // default stop autorotation
         infinite: true,
         speed: 1000,
         fade: true,
@@ -98,6 +104,7 @@ $(document).ready(function(){
         arrows: true
     });
 
+/*  for test
     // run slider rotation if mouse hover
     $slider.on('mouseenter', function () {
         $slider.slick('slickPlay');
@@ -107,6 +114,7 @@ $(document).ready(function(){
     $slider.on('mouseleave', function () {
         $slider.slick('slickPause');
     });
+*/
 });
 EOD;?>
 <?=$this->assetManager()->outputInlineScriptString($jsSnippet)?>

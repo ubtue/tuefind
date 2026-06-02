@@ -37,8 +37,6 @@
             if (!empty($issue))
                 $url_params['issue'] = $issue;
             $year = $this->escapeHtml($this->driver->getYear());
-            if (!empty($year))
-                $url_params['date'] = $year;
             $pages = $this->escapeHtml(str_replace(" ", "", $this->driver->getPages()));
             if (!empty($pages))
                 $url_params['pages'] = preg_match('/(^\d+$)/', $pages, $match) ? $match[0] . '-' . $match[0] :

@@ -589,7 +589,7 @@ public class TueFindBiblio extends TueFind {
                     materialType = code_to_material_type_map.get(materialType);
                 if (subfield_z != null)
                     materialLicence = subfield_z.getData();
-                else if (subfield_x != null)
+                else if (!materialType.equals("Inhaltsverzeichnis") && subfield_x != null)
                     materialLicence = subfield_x.getData();
             } else {
                 if (subfield_z != null)
@@ -1977,18 +1977,6 @@ public class TueFindBiblio extends TueFind {
         return validFourDigitYearMatcher.matches() ? fourDigitYear : "";
     }
 
-    protected String yyMMDateToYear(final String controlNumber, final String yyMMDate) {
-        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
-        int yearTwoDigit = currentYear - 2000;  // If extraction fails later we fall back to current year
-        try {
-            yearTwoDigit = Integer.parseInt(yyMMDate.substring(0, 1));
-        }
-        catch (NumberFormatException e) {
-            logger.severe("in yyMMDateToYear: expected date in YYMM format, found \"" + yyMMDate
-                          + "\" instead! (Control number was " + controlNumber + ")");
-        }
-        return Integer.toString(yearTwoDigit < (currentYear - 2000) ? (2000 + yearTwoDigit) : (1900 + yearTwoDigit));
-    }
 
     /**
      * Get all available years from the record.
@@ -2009,7 +1997,7 @@ public class TueFindBiblio extends TueFind {
                 logger.severe("getYearsBasedOnRecordType [No 008 Field for Website " + record.getControlNumber() + "]");
                 return years;
             }
-            years.add(yyMMDateToYear(record.getControlNumber(), _008_field.getData()));
+            years.add(_008_field.getData().substring(7,11));
             return years;
         }
 

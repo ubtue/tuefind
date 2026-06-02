@@ -28,38 +28,41 @@ var IxTheo2 = {
                 }
             }
         }
-        if(content_block_element != undefined
-        && index_page == undefined
-        && ix2_search_form != undefined
-        && anchor_name.length > 0) {
+        if($('#searchForm').html() != undefined) {
+            if(is_anchor === false) {
+                //$(".searchForm_lookfor:visible").focus();
+            }else{
+                if(content_block_element != undefined
+                && index_page == undefined
+                && ix2_search_form != undefined
+                && anchor_name.length > 0) {
 
-            let search_form_element = document.getElementById(anchor_name);
+                    let search_form_element = document.getElementById(anchor_name);
+                    if (!search_form_element) {
+                        console.warn('Anchor not found:', anchor_name);
+                        return;
+                    }
+                    let y = search_form_element.getBoundingClientRect().top + window.scrollY;
+                    let toggle_block = $('#'+anchor_name);
 
-            if (!search_form_element) {
-                console.warn('Anchor not found:', anchor_name);
-                return;
+                    if(is_js_anchor === true && toggle_block.length) {
+                        y = toggle_block.prev().offset().top;
+                        toggle_block.addClass('in');
+                    }
+
+                    if(is_more_anchor === true && toggle_block.length) {
+                        y = toggle_block.parent().offset().top;
+                        toggle_block.parent().find('.read-more-trigger').click();
+                    }
+                    window.scroll({
+                        top: y - default_scroll,
+                        behavior: 'smooth'
+                    });
+                }
             }
-
-            let y = search_form_element.getBoundingClientRect().top + window.scrollY;
-
-            let toggle_block = $('#'+anchor_name);
-
-            if(is_js_anchor === true && toggle_block.length) {
-                y = toggle_block.prev().offset().top;
-                toggle_block.addClass('in');
-            }
-
-            if(is_more_anchor === true && toggle_block.length) {
-                y = toggle_block.parent().offset().top;
-                toggle_block.parent().find('.read-more-trigger').click();
-            }
-
-            window.scroll({
-                top: y - default_scroll,
-                behavior: 'smooth'
-            });
         }
     },
+
     ChangeHandlerMenuSearchForm: function() {
         $('.handlers-menu a').click(function() {
             $('#searchForm_typeCaption').html($(this).html());
@@ -109,8 +112,8 @@ var IxTheo2 = {
 
         cmap = L.map('map');
 
-        L.tileLayer('https://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors',
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }).addTo(cmap);
 
         let markers = {
@@ -166,7 +169,7 @@ var IxTheo2 = {
         let targetCoordinates = {
             lat: "50.72319649759073",
             lon: "7.110015253718861"
-        }
+        };
 
         partnersArray.forEach(function(oneParter){
 
@@ -182,7 +185,7 @@ var IxTheo2 = {
                 title: oneParter.name,
                 draggable:false,
                 icon:myIcon
-            }
+            };
 
             let marker = new L.Marker([oneParter.lat, oneParter.lon] , iconOptions);
 
@@ -286,7 +289,7 @@ $(function () {
             if($(this).val() == 'BibleRangeSearch') {
                 $(this).attr('selected',true);
             }
-        })
+        });
         $(this).parent().addClass('active');
       });
 
