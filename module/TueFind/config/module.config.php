@@ -1,4 +1,5 @@
 <?php
+
 namespace TueFind\Module\Config;
 
 $config = [
@@ -18,7 +19,7 @@ $config = [
                     'defaults' => [
                         'controller' => 'Content',
                         'action'     => 'Content',
-                    ]
+                    ],
                 ],
             ],
             'proxy-load' => [
@@ -107,7 +108,7 @@ $config = [
                     'defaults' => [
                         'controller' => 'QuickLink',
                         'action'     => 'redirect',
-                    ]
+                    ],
                 ],
             ],
             'redirect' => [
@@ -122,7 +123,7 @@ $config = [
                     'defaults' => [
                         'controller' => 'Redirect',
                         'action'     => 'redirect',
-                    ]
+                    ],
                 ],
             ],
             'redirect-license' => [
@@ -149,7 +150,7 @@ $config = [
             'myresearch-publish' => [
                 'type'    => 'Laminas\Router\Http\Segment',
                 'options' => [
-                    'route'    => "/MyResearch/Publish/[:record_id]",
+                    'route'    => '/MyResearch/Publish/[:record_id]',
                     'constraints' => [
                         'record_id'     => '[0-9A-Z]{8,}',
                     ],
@@ -162,7 +163,7 @@ $config = [
             'myresearch-rssfeedraw' => [
                 'type'    => 'Laminas\Router\Http\Segment',
                 'options' => [
-                    'route'    => "/myrssfeed/:user_uuid",
+                    'route'    => '/myrssfeed/:user_uuid',
                     'constraints' => [
                         //example: 134b5a64-97ab-11eb-baff-309c23c4daa6
                         'user_uuid'     => '.{8}(-.{4}){3}-.{12}',
@@ -176,7 +177,7 @@ $config = [
             'authority-request-access' => [
                 'type'    => 'Laminas\Router\Http\Segment',
                 'options' => [
-                    'route'    => "/Authority/RequestAccess/:authority_id",
+                    'route'    => '/Authority/RequestAccess/:authority_id',
                     'constraints' => [
                         'authority_id'     => '[0-9A-Z]{8,}',
                     ],
@@ -189,7 +190,7 @@ $config = [
             'authority-process-request' => [
                 'type'    => 'Laminas\Router\Http\Segment',
                 'options' => [
-                    'route'    => "/Authority/RequestAccess/:authority_id/:user_id",
+                    'route'    => '/Authority/RequestAccess/:authority_id/:user_id',
                     'constraints' => [
                         'authority_id'     => '[0-9A-Z]{8,}',
                         'user_id'          => '\d+',
@@ -203,25 +204,25 @@ $config = [
             'crawler-info' => [
                 'type'    => 'Laminas\Router\Http\Literal',
                 'options' => [
-                    'route'    => "/crawler",
+                    'route'    => '/crawler',
                     'defaults' => [
                         'controller' => 'Content',
                         'action'     => 'Content',
-                        'page'       => 'crawler'
+                        'page'       => 'crawler',
 
-                    ]
+                    ],
                 ],
             ],
             'last_updated-info' => [
                 'type'    => 'Laminas\Router\Http\Literal',
                 'options' => [
-                    'route'    => "/Last_Updated",
+                    'route'    => '/Last_Updated',
                     'defaults' => [
                         'controller' => 'Content',
                         'action'     => 'Content',
-                        'page'       => 'Last_Updated'
+                        'page'       => 'Last_Updated',
 
-                    ]
+                    ],
                 ],
             ],
             'adminfrontend-cmspages' => [
@@ -493,6 +494,20 @@ $config = [
     'vufind' => [
         'plugin_managers' => [
             'metadatavocabulary' => [],
+        ],
+    ],
+    'lmc_rbac' => [
+        'assertion_manager' => [
+            'factories' => [
+                'TueFind\Role\Assertion\HasCmsRightsAssertion' => 'Laminas\ServiceManager\Factory\InvokableFactory',
+                'TueFind\Role\Assertion\HasUserAuthoritiesRightsAssertion' => 'Laminas\ServiceManager\Factory\InvokableFactory',
+                'TueFind\Role\Assertion\IsAdminAssertion' => 'Laminas\ServiceManager\Factory\InvokableFactory',
+            ],
+            'aliases' => [
+                'HasCmsRights' => 'TueFind\Role\Assertion\HasCmsRightsAssertion',
+                'HasUserAuthoritiesRights' => 'TueFind\Role\Assertion\HasUserAuthoritiesRightsAssertion',
+                'IsAdmin' => 'TueFind\Role\Assertion\IsAdminAssertion',
+            ],
         ],
     ],
 ];
