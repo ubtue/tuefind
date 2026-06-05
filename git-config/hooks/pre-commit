@@ -2,6 +2,8 @@
 #
 # Git hook for e.g. executing code checks before commit
 #
+set -o errexit -o nounset
+
 readonly CHANGED_FILES="$(git diff-tree -r --name-only --no-commit-id ORIG_HEAD HEAD)"
 readonly ADDED_FILES=$(git diff --cached --name-only --diff-filter=ACM)
 readonly MODIFIED_UNADDED_FILES=$(git ls-files --modified)
