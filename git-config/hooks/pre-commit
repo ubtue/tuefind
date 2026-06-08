@@ -55,6 +55,10 @@ for ADDED_FILE in $ADDED_FILES; do
                     "$DIR_VUFIND/vendor/bin/php-cs-fixer" fix "--config=$DIR_VUFIND/tests/vufind.php-cs-fixer.php" --quiet "$ADDED_FILE_PATH"
                 elif [[ $extension == "phtml" ]]; then
                     "$DIR_VUFIND/vendor/bin/php-cs-fixer" fix "--config=$DIR_VUFIND/tests/vufind_templates.php-cs-fixer.php" --quiet "$ADDED_FILE_PATH"
+                #elif [[ $extension == "js" ]]; then
+                    # experimental
+                    #npx eslint "$ADDED_FILE_PATH" -c "$DIR_VUFIND/.eslintrc.js" --fix
+                    #npx jshint "--config=$DIR_VUFIND/tests/jshint.json" "$ADDED_FILE_PATH"
                 fi
 
                 git add "$ADDED_FILE_PATH"
