@@ -51,7 +51,7 @@ for ADDED_FILE in $ADDED_FILES; do
                     # phpcbf-related notes:
                     # - will output unneccessary stuff even if in quiet mode (-q), so we pipe to /dev/null
                     # - will auto fix errors, but in case there are non-fixable errors remaining (e.g. missing comments) it will exit with code 2, and we don't want to abort there
-                    "$DIR_VUFIND/vendor/bin/phpcbf" "--standard=$DIR_VUFIND/tests/phpcs.xml" "-q" "$ADDED_FILE_PATH" > /dev/null 2&>1 || test $? -eq 2
+                    "$DIR_VUFIND/vendor/bin/phpcbf" "--standard=$DIR_VUFIND/tests/phpcs.xml" "-q" "$ADDED_FILE_PATH" > /dev/null 2>&1 || [[ $? -eq 2 ]]
                     "$DIR_VUFIND/vendor/bin/php-cs-fixer" fix "--config=$DIR_VUFIND/tests/vufind.php-cs-fixer.php" --quiet "$ADDED_FILE_PATH"
                 elif [[ $extension == "phtml" ]]; then
                     "$DIR_VUFIND/vendor/bin/php-cs-fixer" fix "--config=$DIR_VUFIND/tests/vufind_templates.php-cs-fixer.php" --quiet "$ADDED_FILE_PATH"
