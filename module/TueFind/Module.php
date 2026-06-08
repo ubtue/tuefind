@@ -103,7 +103,6 @@ class Module
         });
     }
 
-
     public function onFinish(MvcEvent $e) {
     }
 }
