@@ -953,8 +953,18 @@ body {
   color: $text-color !important;
 }
 
-a, .nav-link, .btn-link {
+a, .nav-link, .btn-link, a:hover, a:focus, a:active {
   color: $brand-primary;
+}
+
+nav#ix-nav-header>.nav>li>a:hover {
+  color: $brand-primary;
+}
+
+.btn-primary:hover {
+    color: $brand-primary;
+    background-color: #fff;
+    border-color: #000f00
 }
 
 .btn-primary {
@@ -964,6 +974,10 @@ a, .nav-link, .btn-link {
 
 .nav-tabs>li.active>a {
   color:#555 !important;
+}
+
+.nav>li>a:hover {
+  color: $brand-primary;
 }
 
 .nav.nav-tabs.tuefind-event-resetsearchhandlers {
