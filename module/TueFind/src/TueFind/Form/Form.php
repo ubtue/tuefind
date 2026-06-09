@@ -50,10 +50,10 @@ class Form extends \VuFind\Form\Form
             }
 
             // TueFind: local overrides / general email address
-            $recipient['email'] ??= 
+            $recipient['email'] ??=
                  $this->defaultFormConfig['recipient_email'] ?? $this->defaultSiteConfig['email'] ?? null;
 
-            $recipient['name'] ??= 
+            $recipient['name'] ??=
                  $this->defaultFormConfig['recipient_name'] ?? null;
         }
 
