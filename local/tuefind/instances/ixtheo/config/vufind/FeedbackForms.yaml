@@ -353,6 +353,7 @@ forms:
     title: SA_register_link_title
     recipientLocalOverridesKey: register_link_receivers
     useCaptcha: false
+    response: SA_register_link_response
 
     help:
       pre: SA_register_link_help_pre
