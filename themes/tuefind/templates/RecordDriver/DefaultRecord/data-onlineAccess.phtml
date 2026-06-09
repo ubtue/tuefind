@@ -29,5 +29,5 @@
 <?php /* IxTheo only: Show feedback form */ ?>
 <?php /* If you want to use this in other instances, ensure proper configuration in FeedbackForms.yaml */ ?>
 <?php if ($this->tuefind()->getTueFindSubsystem() == 'ixtheo'): ?>
-  <a href="<?=$this->url('feedback-form', ['id' => 'SelfArchivingRegisterLink'])?>?ppn=<?=urlencode($this->driver->getUniqueID())?>" rel="nofollow">Open-Access-Link zu Volltext melden</a>
+  <a href="<?=$this->url('feedback-form', ['id' => 'SelfArchivingRegisterLink'])?>?ppn=<?=urlencode($this->driver->getUniqueID())?>" rel="nofollow"><?=$this->transEsc('SA_register_link_hint')?></a>
 <?php endif; ?>
