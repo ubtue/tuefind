@@ -350,12 +350,12 @@ forms:
   SelfArchivingRegisterLink:
     enabled: true
     onlyForLoggedUsers: false
-    title: "Link zu einer vorhandenen Open-Access-Veröffentlichung ergänzen"
+    title: SA_register_link_title
     recipientLocalOverridesKey: register_link_receivers
     useCaptcha: false
 
     help:
-      pre: "Hier können Sie den Link zu einer bereits vorhandenen Open-Access-Zweitveröffentlichung Ihrer Publikation eintragen. Bitte verwenden Sie dauerhafte Links (doi, handle oder urn). Links zu kommerziellen Plattformen wie Academia.edu oder ResearchGate können nicht berücksichtigt werden."
+      pre: SA_register_link_help_pre
 
     fields:
       - name: ppn
