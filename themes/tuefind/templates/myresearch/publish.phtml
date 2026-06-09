@@ -32,5 +32,5 @@
   </p>
 
   <?php $url = $this->url('feedback-form', ['id' => 'SelfArchivingRegisterLink']) . '?ppn=' . urlencode($this->existingRecord->getUniqueId()) ?>
-  <p><?=$this->translate('SA_register_link_cross_reference', ['%%link_start%%' => '<a href="' . $this->escapeHtmlAttr($url) . '">', '%%link_end%%' => '</a>'])?></p>
+  <p><i><?=$this->translate('SA_register_link_cross_reference', ['%%link_start%%' => '<a href="' . $this->escapeHtmlAttr($url) . '">', '%%link_end%%' => '</a>'])?></i></p>
 <?php endif;?>
