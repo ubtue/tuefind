@@ -199,6 +199,7 @@ forms:
     response: Thank you for suggesting a title.
     senderInfoRequired: true
 
+    recipientLocalOverridesKey: acquisition_request_receivers
     #recipient:
     #  name: Your Library
     #  email: feedback@myuniversity.edu

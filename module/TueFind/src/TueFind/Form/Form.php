@@ -2,23 +2,23 @@
 
 namespace TueFind\Form;
 
-
 use Laminas\InputFilter\InputFilter;
-use Laminas\Validator\NotEmpty;
-use Laminas\Validator\EmailAddress;
+use Laminas\InputFilter\InputFilterInterface;
 use Laminas\Validator\Callback;
+use Laminas\Validator\EmailAddress;
 use Laminas\Validator\Identical;
+use Laminas\Validator\NotEmpty;
 use Laminas\View\HelperPluginManager;
 use VuFind\Config\YamlReader;
-use Laminas\InputFilter\InputFilterInterface;
 use VuFind\Form\Handler\PluginManager as HandlerManager;
+
+use function count;
+use function in_array;
+use function is_array;
 
 class Form extends \VuFind\Form\Form
 {
     public $defaultSiteConfig;
-
-    // to map a form id to its (optional existing) config key in local overrides
-    protected $emailReceiverLocalOverridesConfigKeys = ['AcquisitionRequest' => 'acquisition_request_receivers'];
 
     public function __construct(
         YamlReader $yamlReader,
@@ -42,19 +42,19 @@ class Form extends \VuFind\Form\Form
             $recipientEmail = $recipient['email'] ?? null;
 
             // TueFind: local overrides / special forms
-            if (!isset($recipient['email']) && isset($this->emailReceiverLocalOverridesConfigKeys[$formId])) {
-                $configKey = $this->emailReceiverLocalOverridesConfigKeys[$formId];
+            if (!isset($recipient['email']) && isset($this->formConfig['recipientLocalOverridesKey'])) {
+                $configKey = $this->formConfig['recipientLocalOverridesKey'];
                 if (isset($this->defaultSiteConfig[$configKey])) {
                     $recipient['email'] = $this->defaultSiteConfig[$configKey];
                 }
             }
 
             // TueFind: local overrides / general email address
-            $recipient['email'] = $recipient['email']
-                ?? $this->defaultFormConfig['recipient_email'] ?? $this->defaultSiteConfig['email'] ?? null;
+            $recipient['email'] ??= 
+                 $this->defaultFormConfig['recipient_email'] ?? $this->defaultSiteConfig['email'] ?? null;
 
-            $recipient['name'] = $recipient['name']
-                ?? $this->defaultFormConfig['recipient_name'] ?? null;
+            $recipient['name'] ??= 
+                 $this->defaultFormConfig['recipient_name'] ?? null;
         }
 
         return $recipients;
@@ -76,28 +76,25 @@ class Form extends \VuFind\Form\Form
         $map = [
             'language' => '\TueFind\Form\Element\Language',
             'multifieldtext' => '\Laminas\Form\Element\Text',
-            'exclusiveSelect' => '\Laminas\Form\Element\Radio'
+            'exclusiveSelect' => '\Laminas\Form\Element\Radio',
         ];
 
         return $map[$type] ?? parent::getFormElementClass($type);
     }
 
+    protected function getFormSettingFields()
+    {
+        $fields = parent::getFormSettingFields();
+        $fields[] = 'recipientLocalOverridesKey';
+        return $fields;
+    }
+
     protected function getFormElementSettingFields()
     {
-        return [
-            'format',
-            'group',
-            'help',
-            'inputType',
-            'maxValue',
-            'minValue',
-            'placeholder',
-            'required',
-            'requireOne',
-            'value',
-            'maxMultiFieldtext',
-            'groupMultiFieldtext'
-        ];
+        $fields = parent::getFormElementSettingFields();
+        $fields[] = 'maxMultiFieldtext';
+        $fields[] = 'groupMultiFieldtext';
+        return $fields;
     }
 
     protected function getFormElements($config)
@@ -107,13 +104,13 @@ class Form extends \VuFind\Form\Form
             if (!isset($field['type'])) {
                 continue;
             }
-            if ($field['type'] == "multifieldtext") {
-                $max_ = isset($field['maxMultiFieldtext']) ? $field['maxMultiFieldtext'] : 1;
+            if ($field['type'] == 'multifieldtext') {
+                $max_ = $field['maxMultiFieldtext'] ?? 1;
                 for ($i = 1; $i <= $max_; $i++) {
                     $new_field = $field;
                     $new_field['name'] .= "$i";
                     $new_field['required'] = isset($new_field['required']) ? ($i == 1 ? $new_field['required'] : 0) : 0;
-                    $new_field['groupMultiFieldtext'] = "multifieldtext_group" . $field['name'];
+                    $new_field['groupMultiFieldtext'] = 'multifieldtext_group' . $field['name'];
                     $elements[] = $new_field;
                 }
             } else {
@@ -208,27 +205,27 @@ class Form extends \VuFind\Form\Form
                 $conf['options'] = ['value_options' => $optionElements];
                 break;
             case 'exclusiveSelect':
-                    $options = [];
-                    if (isset($el['options'])) {
-                        $options = $el['options'];
-                    }
-                    $optionElements = [];
-                    $first = true;
-                    foreach ($options as $key => $option) {
-                        $elemId = $this->getElementId($el['name'] . '_' . $key);
-                        $optionElements[] = [
-                            'label' => $this->translate($option['label']),
-                            'value' => $option['value'],
-                            'label_attributes' => ['for' => $elemId],
-                            'attributes' => [
-                                'id' => $elemId,
-                            ],
-                            'selected' => $first,
-                        ];
-                        $first = false;
-                    }
-                    $conf['options'] = ['value_options' => $optionElements];
-                    break;
+                $options = [];
+                if (isset($el['options'])) {
+                    $options = $el['options'];
+                }
+                $optionElements = [];
+                $first = true;
+                foreach ($options as $key => $option) {
+                    $elemId = $this->getElementId($el['name'] . '_' . $key);
+                    $optionElements[] = [
+                        'label' => $this->translate($option['label']),
+                        'value' => $option['value'],
+                        'label_attributes' => ['for' => $elemId],
+                        'attributes' => [
+                            'id' => $elemId,
+                        ],
+                        'selected' => $first,
+                    ];
+                    $first = false;
+                }
+                $conf['options'] = ['value_options' => $optionElements];
+                break;
             case 'select':
                 if (isset($el['options'])) {
                     $options = $el['options'];
@@ -430,10 +427,10 @@ class Form extends \VuFind\Form\Form
 
         $exclusiveSelect = [];
         foreach ($this->getFormElementConfig() as $el) {
-            if($el['type'] == 'exclusiveSelect' && isset($this->data[$el['name']])) {
+            if ($el['type'] == 'exclusiveSelect' && isset($this->data[$el['name']])) {
                 $exclusiveSelect['activeGroup'] = $this->data[$el['name']];
-                foreach($el['options'] as $option) {
-                    if($option['value'] != $exclusiveSelect['activeGroup']) {
+                foreach ($el['options'] as $option) {
+                    if ($option['value'] != $exclusiveSelect['activeGroup']) {
                         $exclusiveSelect['disabledGroup'][] = $option['value'];
                     }
                 }
@@ -463,7 +460,7 @@ class Form extends \VuFind\Form\Form
             $requireOne = $isCheckbox && ($el['requireOne'] ?? false);
             $required = $el['required'] ?? $requireOne;
 
-            if(isset($el['group']) && isset($exclusiveSelect['disabledGroup'])) {
+            if (isset($el['group']) && isset($exclusiveSelect['disabledGroup'])) {
                 if (in_array($el['group'], $exclusiveSelect['disabledGroup'])) {
                     $required = false;
                 }
@@ -530,5 +527,4 @@ class Form extends \VuFind\Form\Form
 
         return $this->inputFilter;
     }
-
 }
