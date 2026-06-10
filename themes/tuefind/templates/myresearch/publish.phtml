@@ -2,7 +2,7 @@
 <h4><?=$this->transEsc('Title')?>: <?=$this->dublinCore['DC.title'][0]?> </h4>
 <?=$this->flashmessages()?>
 
-<?php if($this->showForm):?>
+<?php if ($this->showForm):?>
   <p>
     <form method="post" enctype="multipart/form-data">
       <!-- DC.creator -->
@@ -10,7 +10,7 @@
         <label><?=$this->transEsc('Author')?></label>
         <select class="form-control" name="creator" disabled>
           <?php foreach ($this->userAuthorities as $userAuthority): ?>
-            <option value="<?=$userAuthority['authority_GNDNumber']?>" <?php echo $userAuthority['selected'] ? "selected" : "";?> ><?=$userAuthority['select_title']?></option>
+            <option value="<?=$userAuthority['authority_GNDNumber']?>" <?php echo $userAuthority['selected'] ? 'selected' : '';?> ><?=$userAuthority['select_title']?></option>
           <?php endforeach; ?>
         </select>
       </div>
@@ -31,9 +31,6 @@
     </form>
   </p>
 
-  <!-- Work in Progress: -->
-  <!--
-    <?php $url = $this->url('feedback-form', ['id' => 'SelfArchivingRegisterLink']) . '?ppn=' . urlencode($this->existingRecord->getUniqueId()) . '&title=' . urlencode($this->dublinCore['DC.title'][0]) . '&author=' . urlencode($this->dublinCore['DC.creator'][0]); ?>
-    <p>Liegt Ihr Beitrag bereits als Zweitveröffentlichung auf einem anderen Repositorium vor? Dann können Sie statt eines erneuten Uploads <a href="<?=$this->escapeHtmlAttr($url)?>">hier</a> den Permalink eintragen, damit die vorhandene Zweitveröffentlichung in IxTheo verknüpft wird.</p>
-  -->
+  <?php $url = $this->url('feedback-form', ['id' => 'SelfArchivingRegisterLink']) . '?ppn=' . urlencode($this->existingRecord->getUniqueId()) ?>
+  <p><i><?=$this->translate('SA_register_link_cross_reference', ['%%link_start%%' => '<a href="' . $this->escapeHtmlAttr($url) . '">', '%%link_end%%' => '</a>'])?></i></p>
 <?php endif;?>

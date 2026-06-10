@@ -3,8 +3,8 @@
 <?php endif; ?>
 
 <?php $urls_and_material_types = $this->driver->getURLsAndMaterialTypes();?>
-  <?php if($this->showDspaceLink === true): ?>
-    <?php $urls_and_material_types[$this->dspacelink] = $this->tuefind()->getTueFindType()." publication service"; ?>
+  <?php if ($this->showDspaceLink === true): ?>
+    <?php $urls_and_material_types[$this->dspacelink] = $this->tuefind()->getTueFindType() . ' publication service'; ?>
   <?php endif; ?>
 <?php if (!empty($urls_and_material_types)): ?>
   <?php $material_types = array_values($urls_and_material_types); ?>
@@ -25,3 +25,9 @@
 <?php endif; ?>
 
 <?=$this->identifierLinker($this->driver, 'record')?>
+
+<?php /* IxTheo only: Show feedback form */ ?>
+<?php /* If you want to use this in other instances, ensure proper configuration in FeedbackForms.yaml */ ?>
+<?php if ($this->tuefind()->getTueFindSubsystem() == 'ixtheo'): ?>
+  <a href="<?=$this->url('feedback-form', ['id' => 'SelfArchivingRegisterLink'])?>?ppn=<?=urlencode($this->driver->getUniqueID())?>" rel="nofollow"><?=$this->transEsc('SA_register_link_hint')?></a>
+<?php endif; ?>
