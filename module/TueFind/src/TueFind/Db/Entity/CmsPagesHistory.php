@@ -4,14 +4,11 @@ namespace TueFind\Db\Entity;
 
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use TueFind\Db\Entity\CmsPages;
-use TueFind\Db\Entity\User;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'tuefind_cms_pages_history')]
 class CmsPagesHistory implements CmsPagesHistoryEntityInterface
 {
-
     #[ORM\Column(name: 'id', type: 'integer', nullable: false)]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
@@ -19,17 +16,22 @@ class CmsPagesHistory implements CmsPagesHistoryEntityInterface
 
     #[ORM\Column(name: 'user_id', type: 'integer', nullable: false)]
     protected int $userId;
-    
+
     #[ORM\Column(name: 'created', type: 'datetime', length: 255, nullable: false, options: ['default' => 'CURRENT_TIMESTAMP'])]
     protected DateTime $created;
 
     #[ORM\ManyToOne(targetEntity: CmsPages::class, inversedBy: 'history')]
     #[ORM\JoinColumn(name: 'cms_id', referencedColumnName: 'id', nullable: false)]
     private ?CmsPages $cmsPage = null;
-    
+
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'cmsHistories')]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false)]
     private ?User $user = null;
+
+    public function __construct()
+    {
+        $this->created = new DateTime();
+    }
 
     public function getId(): ?int
     {
@@ -79,5 +81,4 @@ class CmsPagesHistory implements CmsPagesHistoryEntityInterface
         $this->created = $created;
         return $this;
     }
-
 }

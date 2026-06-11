@@ -36,6 +36,11 @@ class RssItem implements RssItemEntityInterface
     #[ORM\Column(name: 'insertion_time', type: 'datetime', nullable: false, options: ['default' => 'CURRENT_TIMESTAMP'])]
     protected DateTime $insertionDateTime;
 
+    public function __construct()
+    {
+        $this->insertionDateTime = new DateTime();
+    }
+
     public function getId(): ?int
     {
         return $this->id ?? null;
