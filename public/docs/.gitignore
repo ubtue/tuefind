@@ -2,6 +2,7 @@
 bibstudies-beacon.txt
 canonlaw-beacon.txt
 ixtheo-beacon.txt
+krimdok-beacon.txt
 
 # ignore genereted news file (from aggregated rss feeds)
 news.rss
