@@ -11,7 +11,7 @@ class RssItemService extends RssBaseService implements RssItemServiceInterface
     {
         $qb = $this->entityManager->createQueryBuilder();
 
-        $qb->select('ri', 'rf')
+        $qb->select('ri')
             ->from(RssItem::class, 'ri')
             ->leftJoin('ri.rssFeed', 'rf')
             ->where('rf.subsystemTypes LIKE :instance')
@@ -19,7 +19,7 @@ class RssItemService extends RssBaseService implements RssItemServiceInterface
             ->setParameter('instance', '%' . $this->instance . '%')
             ->orderBy('ri.publicationDateTime', 'DESC');
 
-        return $qb->getQuery()->getArrayResult();
+        return $qb->getQuery()->getResult();
     }
 
     public function getItemsForUserSortedByPubDate($userId): array

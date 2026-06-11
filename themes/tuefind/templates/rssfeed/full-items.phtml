@@ -90,15 +90,12 @@ function renderPagination($currentPageNo, $maxPageNo, $itemsPerPage, $helpers)
                         <a href="<?=$this->tuefind()->getRedirectUrl($rssItem->getItemUrl(), $redirectGroup)?>" target="_blank" rel="nofollow"><img src="<?=$this->tuefind()->getRssFeedIcon($rssFeed->getFeedName())?>" height="20">&nbsp;<?=$this->escapeHtml($rssItem->getItemTitle())?></a>
                     </h2>
                     <p>
-                        <?php
-
-                        ?>
                         <a href="<?=$this->tuefind()->getRedirectUrl($rssFeed->getWebsiteUrl(), $redirectGroup)?>" target="_blank" rel="nofollow"><?=$this->escapeHtml($rssFeed->getFeedName())?></a>:
                         <?=$rssItem->getPublicationDateTime()->format('d.m.Y H:i:s')?>
                     </p>
                     <?php if (!empty($rssItem->getItemDescription())):?>
                         <p>
-                            <?=$rssItem->getItemDescription()?>
+                            <?=$this->tuefind()->filterRssItemDescription($rssItem->getItemDescription())?>
                         </p>
                     <?php endif;?>
                 </div>
