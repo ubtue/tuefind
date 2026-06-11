@@ -3,24 +3,14 @@
 namespace TueFind\Db\Entity;
 
 use DateTime;
-use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
-use TueFind\Db\Entity\CmsPagesTranslation;
-use TueFind\Db\Entity\CmsPagesHistory;
-use TueFind\Db\Entity\Subsystems;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'tuefind_cms_pages')]
 class CmsPages implements CmsPagesEntityInterface
 {
-    public function __construct()
-    {
-        $this->users = new ArrayCollection();
-        $this->cmsPagesTranslations = new ArrayCollection();
-        $this->history = new ArrayCollection();
-    }
-
     #[ORM\Column(name: 'id', type: 'integer', nullable: false)]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
@@ -55,14 +45,22 @@ class CmsPages implements CmsPagesEntityInterface
 
     #[ORM\ManyToOne(targetEntity: Subsystems::class)]
     #[ORM\JoinColumn(name: 'subsystem_id', referencedColumnName: 'id', nullable: false)]
-    private ?Subsystems $subSystem = null;
+    private Subsystems $subSystem;
+
+    public function __construct()
+    {
+        $this->users = new ArrayCollection();
+        $this->cmsPagesTranslations = new ArrayCollection();
+        $this->history = new ArrayCollection();
+        $this->createDate = new DateTime();
+    }
 
     public function getId(): ?int
     {
         return $this->id ?? null;
     }
 
-    public function getSubSystem(): ?Subsystems
+    public function getSubSystem(): Subsystems
     {
         return $this->subSystem;
     }

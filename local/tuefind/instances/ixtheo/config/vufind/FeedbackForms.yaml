@@ -199,6 +199,8 @@ forms:
     response: Thank you for suggesting a title.
     senderInfoRequired: true
 
+    recipientLocalOverridesKey: acquisition_request_receivers
+
     #recipient:
     #  name: Your Library
     #  email: feedback@myuniversity.edu
@@ -347,33 +349,32 @@ forms:
 
   SelfArchivingRegisterLink:
     enabled: true
-    onlyForLoggedUsers: true
-    title: "Link zu einer vorhandenen Zweitveröffentlichung ergänzen"
+    onlyForLoggedUsers: false
+    title: SA_register_link_title
+    recipientLocalOverridesKey: register_link_receivers
+    useCaptcha: false
+    response: SA_register_link_response
 
     help:
-      pre: "Hier können Sie den Link zu einer bereits vorhandenen Open-Access-Zweitveröffentlichung Ihrer Publikation eintragen. Bitte verwenden Sie dauerhafte Links (doi, handle oder urn)."
+      pre: SA_register_link_help_pre
 
     fields:
       - name: ppn
         type: text
         label: "PPN"
-
-      - name: title
-        type: text
-        label: "Title"
-
-      - name: author
-        type: text
-        label: "Autor"
+        required: true
 
       - name: link
         type: text
         label: "Link"
+        required: true
+
+      - name: comments
+        label: Comments
+        type: textarea
 
     prefillFields:
       - ppn
-      - title
-      - author
 
   SelfArchivingLexikonartikel:
     enabled: true

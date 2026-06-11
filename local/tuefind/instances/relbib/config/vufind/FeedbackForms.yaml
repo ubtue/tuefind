@@ -199,6 +199,8 @@ forms:
     primaryHandler: email
     senderInfoRequired: true
 
+    recipientLocalOverridesKey: acquisition_request_receivers
+
     #recipient:
     #  name: Your Library
     #  email: feedback@myuniversity.edu

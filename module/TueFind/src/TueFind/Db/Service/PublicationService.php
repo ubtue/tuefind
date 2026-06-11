@@ -3,10 +3,9 @@
 namespace TueFind\Db\Service;
 
 use Doctrine\ORM\Query\ResultSetMapping;
-use VuFind\Db\Service\AbstractDbService;
 use TueFind\Db\Entity\PublicationEntityInterface;
 use TueFind\Db\Entity\UserEntityInterface;
-
+use VuFind\Db\Service\AbstractDbService;
 
 class PublicationService extends AbstractDbService implements PublicationServiceInterface
 {
@@ -15,7 +14,7 @@ class PublicationService extends AbstractDbService implements PublicationService
         return $this->entityPluginManager->get(PublicationEntityInterface::class);
     }
 
-    public function createPublication(UserEntityInterface $user, string $controlNumber, string $externalDocumentId, string $externalDocumentGuid, string $termsDate): PublicationEntityInterface
+    public function createPublication(UserEntityInterface $user, string $controlNumber, string $externalDocumentId, string $externalDocumentGuid, \DateTime $termsDate): PublicationEntityInterface
     {
         $publication = $this->createEntity();
         $publication->setUser($user);
