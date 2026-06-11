@@ -14,8 +14,9 @@
       if (!isset($this->searchClassId)) {
         $config = $this->config()->get('config');
         $this->searchClassId = $config->Site->defaultSearchBackend ?? 'Solr';
-        if (preg_match('"/Authority"i', $this->serverUrl(true)))
+        if (preg_match('"/Authority"i', $this->serverUrl(true))) {
           $this->searchClassId = 'SolrAuth';
+        }
       }
       $options = $this->searchOptions($this->searchClassId);
       $hiddenFilters = $this->searchTabs()->getHiddenFilters($this->searchClassId, true, $this->ignoreHiddenFiltersInRequest ?? false);
@@ -67,8 +68,8 @@
       </p>
       <?=
         $this->context($this)->renderInContext(
-        'search/filters.phtml',
-        [
+            'search/filters.phtml',
+            [
           'params' => $params ?? null,
           'urlQuery' => isset($results) ? $results->getUrlQuery() : null,
           'filterList' => $showFilters ? $filterList : [],
@@ -198,7 +199,8 @@
     <?php endif; ?>
     <?php foreach ($hiddenFilters as $key => $filter): ?>
       <?php foreach ($filter as $value): ?>
-        <?php preg_match ( '/\[NOW-(\d+)DAY TO NOW\]-id:LR\*/', $value, $matchesValue ); if (count($filter) == 1 && !empty($matchesValue) && $routeParams['controller'] == 'Search' && $routeParams['action'] == 'NewItem'): ?>
+        <?php preg_match('/\[NOW-(\d+)DAY TO NOW\]-id:LR\*/', $value, $matchesValue);
+        if (count($filter) == 1 && !empty($matchesValue) && $routeParams['controller'] == 'Search' && $routeParams['action'] == 'NewItem'): ?>
           <input type="hidden" name="hiddenFilters[]" value="">
         <?php else: ?>
           <input type="hidden" name="hiddenFilters[]" value="<?=$this->escapeHtmlAttr($key) . ':' . $this->escapeHtmlAttr('"' . $value . '"')?>">
@@ -232,7 +234,7 @@
     );?>
   </form>
 
-  <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, 'TueFind.MoveCursorToEnd();', 'SET')?>
+  <?=$this->assetManager()->outputInlineScriptString('TueFind.MoveCursorToEnd();')?>
 
   <?php
   // Bibstudies / Churchlaw: The small search box MUST be moved here at the end because we need a separate <form>.
@@ -244,7 +246,7 @@
         $advSearchQuery = $results ? ['edit' => $results->getSearchId()] : $hiddenFilters;
         $advSearchLink = $this->url($advSearch, [], ['query' => $advSearchQuery]);
       ?>
-      <li><a href="<?=$advSearchLink?>" class="advanced-search-link btn btn-link" rel="nofollow"><?=$this->transEsc("Advanced")?></a></li>
+      <li><a href="<?=$advSearchLink?>" class="advanced-search-link btn btn-link" rel="nofollow"><?=$this->transEsc('Advanced')?></a></li>
     <?php endif; ?>
 
       <li class="dropdown">
@@ -273,11 +275,11 @@
       <li>
         <form class="searchForm" method="get" action="<?=$this->url($basicSearch)?>" name="searchForm" autocomplete="off">
           <div class="input-group input-group-sm pull-right">
-            <input id="searchForm_bibleranges" class="searchForm form-control search-query" type="text" name="lookfor" placeholder="<?=$this->transEsc("Bible Ranges")?>"
-                   value="<?=($currentHandler == "BibleRangeSearch") ? $this->escapeHtmlAttr($this->lookfor) : ''?>"/>
+            <input id="searchForm_bibleranges" class="searchForm form-control search-query" type="text" name="lookfor" placeholder="<?=$this->transEsc('Bible Ranges')?>"
+                   value="<?=($currentHandler == 'BibleRangeSearch') ? $this->escapeHtmlAttr($this->lookfor) : ''?>"/>
 
             <div class="input-group-btn">
-              <input type="hidden" name="type" value="<?=$this->escapeHtmlAttr("BibleRangeSearch")?>" data-type-protected="1"/>
+              <input type="hidden" name="type" value="<?=$this->escapeHtmlAttr('BibleRangeSearch')?>" data-type-protected="1"/>
               <input type="hidden" name="activeSearchClassId" value='Solr'>
                 <?php if (!empty($lastLimit)) {
                   echo '<input type="hidden" name="limit" value="' . $this->escapeHtmlAttr($lastLimit) . '" />';

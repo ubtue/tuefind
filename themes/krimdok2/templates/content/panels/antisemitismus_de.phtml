@@ -7,7 +7,7 @@
     </a>
     <div class="col-lg-12 mini-search-block b-big p-3">
         <div class="input-group">
-            <form class="form_anti w-100" action="<?=$this->url("search-results", [], [])?>" method="get">
+            <form class="form_anti w-100" action="<?=$this->url('search-results', [], [])?>" method="get">
                 <input type="hidden" name="filter" value="">
                 <div class="input-group">
                     <input type="text" class="form-control lookfor_anti" name="lookfor" value="" placeholder="Hier suchen...">
@@ -30,10 +30,10 @@
 </style>
 <?php
 $script = <<<JS
-    $('.form_anti').submit(function(){
-        let lookfor = $('.lookfor_anti');
-        lookfor.val("rs:rexa "+lookfor.val());
-    });
-JS;
+        $('.form_anti').submit(function(){
+            let lookfor = $('.lookfor_anti');
+            lookfor.val("rs:rexa "+lookfor.val());
+        });
+    JS;
 ?>
-<?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $script, 'SET');
+<?=$this->assetManager()->outputInlineScriptString($script)?>

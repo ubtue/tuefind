@@ -3,14 +3,14 @@
   <div class="panel panel-default">
     <div class="panel-heading">
       <?php //$bundle_id = preg_replace("/:/", "_", $bundle->getUniqueID())?>
-      <?php $bundle_id =  $bundle->getUniqueID()?>
-      <?php $bundle_id_normalized = preg_replace("/:/", "_", $bundle_id)?>
+      <?php $bundle_id = $bundle->getUniqueID()?>
+      <?php $bundle_id_normalized = preg_replace('/:/', '_', $bundle_id)?>
       <h4 class="panel-title">
         <a data-toggle="collapse" data-parent="#accordion" href="#<?=$bundle_id_normalized?>">
           <?=$bundle->getTitle()?>
         </a>
         <a class="subscribe-record save-record modal-link" data-lightbox  id="<?=$bundle_id_normalized?>_subscribe"
-                 href="/Record/<?=$bundle_id?>/Subscribe" rel="nofollow" title=<?=$this->transEsc("Subscribe")?>>
+                 href="/Record/<?=$bundle_id?>/Subscribe" rel="nofollow" title=<?=$this->transEsc('Subscribe')?>>
                  <i class="fa fa-fw fa-bell"></i>
         </a>
       </h4>
@@ -18,7 +18,7 @@
     <div id="<?=$bundle_id_normalized?>" class="panel-collapse collapse">
       <div class="panel-body">
         <?php $jsSnippet = '$("#' . $bundle_id_normalized . '").on("show.bs.collapse", IxTheo.GetSubscriptionBundleItems(\'' . $bundle_id . '\'));'; ?>
-        <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $jsSnippet, 'SET')?>
+        <?=$this->assetManager()->outputInlineScriptString($jsSnippet)?>
       </div>
     </div>
   </div>
