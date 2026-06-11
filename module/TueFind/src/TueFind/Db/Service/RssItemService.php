@@ -7,7 +7,6 @@ use TueFind\Db\Entity\RssSubscription;
 
 class RssItemService extends RssBaseService implements RssItemServiceInterface
 {
-
     public function getItemsSortedByPubDate(): array
     {
         $qb = $this->entityManager->createQueryBuilder();
@@ -27,7 +26,7 @@ class RssItemService extends RssBaseService implements RssItemServiceInterface
     {
         $qb = $this->entityManager->createQueryBuilder();
 
-        $qb->select('ri', 'rf', 'rs')
+        $qb->select('ri')
             ->from(RssItem::class, 'ri')
             ->leftJoin('ri.rssFeed', 'rf')
             ->leftJoin(RssSubscription::class, 'rs', 'WITH', 'ri.rssFeed = rs.rssFeed')
@@ -48,6 +47,6 @@ class RssItemService extends RssBaseService implements RssItemServiceInterface
             ->where('ri.itemUrl = :url')
             ->setParameter('url', $url);
 
-        return (bool) $qb->getQuery()->getSingleScalarResult();
+        return (bool)$qb->getQuery()->getSingleScalarResult();
     }
 }
