@@ -2,9 +2,12 @@
 
 namespace TueFind\Controller;
 
+use function count;
+use function in_array;
+
 class MyResearchController extends \VuFind\Controller\MyResearchController
 {
-    protected function getUserAuthoritiesAndRecords($user, $onlyGranted=false, $exceptionIfEmpty=false): array
+    protected function getUserAuthoritiesAndRecords($user, $onlyGranted = false, $exceptionIfEmpty = false): array
     {
         $table = $this->getDbService(\TueFind\Db\Service\UserAuthorityServiceInterface::class);
 
@@ -55,7 +58,7 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
         }
 
         $profileParams = $this->getProfileParams();
-        if ($this->getRequest()->getPost("submit")) {
+        if ($this->getRequest()->getPost('submit')) {
             // email may no longer be updated here, the separate action (+button) should be used
             // so that the verify_email functionality actually has an effect.
             $request = $this->getRequest();
@@ -98,9 +101,9 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
         foreach ($authorityUsers as $authorityUser) {
             $authorityUserLoader = $this->serviceLocator->get(\VuFind\Record\Loader::class)->load($authorityUser->getAuthorityControlNumber(), 'SolrAuth');
             $authorityUsersArray[] = [
-                'id'=>$authorityUser->getAuthorityControlNumber(),
-                'access_state'=>$authorityUser->getAccessState(),
-                'title'=>$authorityUserLoader->getTitle()
+                'id' => $authorityUser->getAuthorityControlNumber(),
+                'access_state' => $authorityUser->getAccessState(),
+                'title' => $authorityUserLoader->getTitle(),
             ];
         }
         $publications = [];
@@ -119,7 +122,8 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
         return $this->createViewModel($viewParams);
     }
 
-    public function selfarchivingAction() {
+    public function selfarchivingAction()
+    {
 
         $user = $this->getUser();
         if ($user == false) {
@@ -128,9 +132,8 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
 
         return $this->forward()->dispatch('Content', [
             'action' => 'content',
-            'page' => 'SelfArchivingGuide'
+            'page' => 'SelfArchivingGuide',
         ]);
-
     }
 
     public function publishAction()
@@ -159,10 +162,9 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
 
         $dbPublications = $this->getDbService(\TueFind\Db\Service\PublicationServiceInterface::class)->getByControlNumber($existingRecordId);
         if (!empty($dbPublications->external_document_id)) {
+            $publicationURL = ($dspaceVersion == 6) ? $dspaceServer . '/xmlui/handle/' . $dbPublications->external_document_id : $dspaceServer . '/handle/' . $dbPublications->handle;
 
-            $publicationURL = ($dspaceVersion == 6) ? $dspaceServer."/xmlui/handle/".$dbPublications->external_document_id : $dspaceServer."/handle/".$item->handle;
-
-            $this->flashMessenger()->addMessage(['msg' => $this->translate('publication_already_exists').": <a href='".$publicationURL."' target='_blank'>".$this->translate('click_here_to_go_to_file')."</a>", 'html' => true], 'error');
+            $this->flashMessenger()->addMessage(['msg' => $this->translate('publication_already_exists') . ": <a href='" . $publicationURL . "' target='_blank'>" . $this->translate('click_here_to_go_to_file') . '</a>', 'html' => true], 'error');
             $uploadError = true;
             $showForm = false;
         }
@@ -191,8 +193,9 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
 
             if (!$uploadError) {
                 $tmpdir = sys_get_temp_dir() . '/' . uniqid('publication_');
-                if (!is_dir($tmpdir))
+                if (!is_dir($tmpdir)) {
                     mkdir($tmpdir);
+                }
                 $tmpfile = $tmpdir . '/' . $uploadedFile['name'];
 
                 if (is_file($tmpfile)) {
@@ -215,22 +218,22 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
                     $bitstream = $dspace->addBitstream($item->uuid, basename($tmpfile), $tmpfile);
                     // Store information in database
                     $dbPublication = $dbPublicationService->createPublication($user, $existingRecordId, $item->handle, $item->uuid, $termFileData['termDate']);
-                    $publicationURL = $dspaceServer."/xmlui/handle/".$item->handle;
-                }else{
+                    $publicationURL = $dspaceServer . '/xmlui/handle/' . $item->handle;
+                } else {
                     $dspace = $this->serviceLocator->get(\TueFind\Service\DSpace7::class);
                     $dspace->login();
                     $configCollectionName = $config->Publication->collection_name;
                     $configCollectionName = 'UOJ 12'; //test collection name from DEMO
                     $collection = $dspace->getCollectionByName($configCollectionName);
                     $dspaceMetadata = $metadataVocabularyPluginManager->get('DSpace7')->getMappedData($existingRecord);
-                    $item = $dspace->addWorkspaceItem($tmpfile,$collection->uuid);
+                    $item = $dspace->addWorkspaceItem($tmpfile, $collection->uuid);
                     //$workflowItem = $dspace->addWorkflowItem($item->id); // not work
-                    $updateData = $dspace->updateWorkspaceItem($item->id,$dspaceMetadata);
+                    $updateData = $dspace->updateWorkspaceItem($item->id, $dspaceMetadata);
                     // Store information in database
                     $dbPublication = $dbPublicationService->createPublication($user, $existingRecordId, $item->id, $item->sections->upload->files[0]->uuid, $termFileData['termDate']);
-                    $publicationURL = $dspaceServer."/workspaceitems/".$item->id."/view";
+                    $publicationURL = $dspaceServer . '/workspaceitems/' . $item->id . '/view';
                 }
-                $this->flashMessenger()->addMessage(['msg' => $this->translate('publication_successfully_created').": <a href='".$publicationURL."' target='_blank'>".$this->translate('click_here_to_go_to_file')."</a>", 'html' => true], 'success');
+                $this->flashMessenger()->addMessage(['msg' => $this->translate('publication_successfully_created') . ": <a href='" . $publicationURL . "' target='_blank'>" . $this->translate('click_here_to_go_to_file') . '</a>', 'html' => true], 'success');
                 $showForm = false;
             }
         }
@@ -253,8 +256,8 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
                 'authority_id' => $userAuthority->getAuthorityControlNumber(),
                 'authority_title' => $authorityTitle,
                 'authority_GNDNumber' => $GNDNumber,
-                'select_title' => $authorityTitle . ' (GND: ' .  $GNDNumber . ')',
-                'selected' => $selected
+                'select_title' => $authorityTitle . ' (GND: ' . $GNDNumber . ')',
+                'selected' => $selected,
             ];
         }
 
@@ -337,27 +340,25 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
         return $response;
     }
 
-    private function getLatestTermFile(): array
+    protected function getLatestTermFile(): array
     {
         $termsDir =  $_SERVER['CONTEXT_DOCUMENT_ROOT'] . '/publication_terms/';
         $files = scandir($termsDir);
         $latestTermData = [];
         foreach ($files as $file) {
             if (preg_match('/(\d{4})(\d{2})(\d{2})/', $file, $matches)) {
-                $formatedDate = $matches[1] . "-" . $matches[2] . "-" . $matches[3];
-                $timeStamp = strtotime($formatedDate);
+                $formattedDate = $matches[1] . '-' . $matches[2] . '-' . $matches[3];
                 $latestTermData[] = [
-                    "milliseconds"=>$timeStamp,
-                    "termDate"=>$formatedDate,
-                    "fileName"=>$file
+                    'termDate' => new \DateTime($formattedDate),
+                    'fileName' => $file,
                 ];
             }
         }
         if (empty($latestTermData)) {
             throw new \Exception('Latest term file not found in: ' . $termsDir);
         }
-        usort($latestTermData, function($a, $b){
-            return ($b['milliseconds'] - $a['milliseconds']);
+        usort($latestTermData, function ($a, $b) {
+            return $b['termDate']->getTimestamp() - $a['termDate']->getTimestamp();
         });
         return $latestTermData[0];
     }
