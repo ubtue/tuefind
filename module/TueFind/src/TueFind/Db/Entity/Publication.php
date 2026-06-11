@@ -24,7 +24,7 @@ class Publication implements PublicationEntityInterface
 
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
     #[ORM\ManyToOne(targetEntity: UserEntityInterface::class)]
-    protected UserEntityInterface $user;
+    protected ?UserEntityInterface $user = null;
 
     #[ORM\Column(name: 'control_number', type: 'string', length: 255, nullable: false)]
     protected string $controlNumber;
@@ -33,20 +33,25 @@ class Publication implements PublicationEntityInterface
     protected string $externalDocumentId;
 
     #[ORM\Column(name: 'external_document_guid', type: 'string', length: 255, nullable: true)]
-    protected string $externalDocumentGuid;
+    protected ?string $externalDocumentGuid = null;
 
     #[ORM\Column(name: 'doi', type: 'string', length: 255, nullable: true)]
-    protected string $doi;
+    protected ?string $doi = null;
 
     #[ORM\Column(name: 'doi_notification_datetime', type: 'datetime', nullable: true)]
-    protected DateTime $doiNotificationDateTime;
+    protected ?DateTime $doiNotificationDateTime = null;
 
     // Unfortunately Doctrine does not support Date, it forces DateTime and sets time to 00:00:00
-    #[ORM\Column(name: 'terms_date', type: 'date', nullable: true)]
+    #[ORM\Column(name: 'terms_date', type: 'date', nullable: false)]
     protected DateTime $termsDate;
 
     #[ORM\Column(name: 'publication_datetime', type: 'datetime', nullable: false, options: ['default' => 'CURRENT_TIMESTAMP'])]
     protected DateTime $publicationDateTime;
+
+    public function __construct()
+    {
+        $this->publicationDateTime = new DateTime();
+    }
 
     /**
      * Get identifier (returns null for an uninitialized or non-persisted object).
