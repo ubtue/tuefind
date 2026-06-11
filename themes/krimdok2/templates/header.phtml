@@ -1,109 +1,107 @@
+<div class="col-12">
+    <?php $account = $this->auth()->getManager(); ?>
+    <!-- Begin section Navbar -->
 
-    <div class="row">
-        <div class="col-12">
-            <?php $account = $this->auth()->getManager(); ?>
-            <!-- Begin section Navbar -->
-
-                <?php if (!isset($this->layout()->renderingError)): ?>
-                <div class="mb-3" id="header-collapse">
-                    <div class="row">
-                        <!-- Images for supporters (TueFind extension template)   -->
-                        <div id="tuefind_logos" class="mt-3 header-block-left">
-                            <a class="ms-4" target="_blank" href="http://www.uni-tuebingen.de"><img src="<?=$this->imageLink('Logo_Universitaet_Tuebingen.svg') ?>" alt="Universit&auml;t T&uuml;bingen" width="269" height="85"/></a>
-                        </div>
-
-                        <div class="text-center mt-3 header-block-center logo-wrapper">
-                            <a target="_blank" href="http://www.ub.uni-tuebingen.de/"><img src="<?=$this->imageLink('Logo_Universitaetsbibliothek_Tuebingen.svg') ?>" alt="Universitätsbibliothek" width="320" height="30" /></a><br/>
-                            <a href="/"><img src="<?=$this->imageLink('krimdok.png') ?>" alt="KrimDok" width="195" height="40"/></a><br/>
-                            <a target="_blank" href="http://www.jura.uni-tuebingen.de/einrichtungen/ifk"><img src="<?=$this->imageLink('ifk.png') ?>" alt="Institut für Kriminologie" width="380" height="27"/></a>
-                        </div>
-
-                        <div class="header-block-right">
-                            <ul class="navbar-nav d-flex flex-row align-items-center justify-content-end mt-2">
-
-                                <!-- Begin section Main Menu -->
-                                <!-- Home -->
-                                <li class="nav-item active">
-                                    <a class="header-link" href="<?=$this->url('home')?>" >
-                                        <i class="fa fa-home" aria-hidden="true"> </i>
-                                        <span class="mobile-hide"><?=$this->transEsc('Home');?></span>
-                                    </a>
-                                </li>
-
-                                <!-- TueFind extension template -->
-                                <?=$this->render('header/extensions');?>
-
-                                <?php if (is_object($account) && $account->loginEnabled()): // hide login/logout if unavailable ?>
-                                  <li class="nav-item logoutOptions<?php if($account->dropdownEnabled()): ?> with-dropdown<?php endif ?><?php if(!$account->getIdentity()): ?> hidden<?php endif ?>">
-                                    <a class="header-link" href="<?=$this->url('myresearch-home', [], ['query' => ['redirect' => 0]])?>"><i id="account-icon" class="fa fa-user-circle" aria-hidden="true"></i> <span class="mobile-hide"><?=$this->transEsc("Your Account")?></span></a>
-                                  </li>
-                                  <?php if($account->dropdownEnabled()): ?>
-                                    <li id="login-dropdown" class="nav-item dropdown<?php if(!$account->getIdentity()): ?> hidden<?php endif ?>">
-                                      <a href="#" class="header-link" data-bs-toggle="dropdown"></a>
-                                      <div class="dropdown-menu">
-                                        <?=$this->render('myresearch/menu'); ?>
-                                      </div>
-                                    </li>
-                                  <?php endif; ?>
-                                  <li class="nav-item logoutOptions<?php if(!$account->getIdentity()): ?> hidden<?php endif ?>">
-                                    <a class="logout header-link" href="<?=$this->url('myresearch-logout')?>"><i class="fa fa-sign-out" aria-hidden="true"></i> <span class="mobile-hide"><?=$this->transEsc("Log Out")?></span></a>
-                                  </li>
-                                  <li id="loginOptions" class="nav-item <?php if($account->getIdentity()): ?> hidden <?php endif ?>">
-                                    <?php if ($account->getSessionInitiator($this->serverUrl($this->url('myresearch-home')))): ?>
-                                      <a class="header-link" href="<?=$this->url('myresearch-userlogin')?>"><i class="fa fa-sign-in" aria-hidden="true"></i> <span class="mobile-hide"><?=$this->transEsc("Institutional Login")?></span></a>
-                                    <?php else: ?>
-                                      <a class="header-link" href="<?=$this->url('myresearch-userlogin')?>" data-lightbox><i class="fa fa-sign-in" aria-hidden="true"></i> <span class="mobile-hide"><?=$this->transEsc("Login")?></span></a>
-                                    <?php endif; ?>
-                                  </li>
-                                <?php endif; ?>
-
-                                <?php if (isset($this->layout()->themeOptions) && count($this->layout()->themeOptions) > 1): ?>
-                                  <li class="nav-item theme dropdown">
-                                    <a href="#" class="dropdown-toggle header-link" data-bs-toggle="dropdown"><span class="mobile-hide"><?=$this->transEsc("Theme")?></span></a>
-                                    <ul class="dropdown-menu">
-                                      <?php foreach ($this->layout()->themeOptions as $current): ?>
-                                        <li<?=$current['selected'] ? ' class="active"' : ''?>>
-                                          <a href="<?=$this->escapeHtmlAttr($this->url()->addQueryParameters(['ui' => $current['name']])) ?>" rel="nofollow">
-                                            <?=$this->transEsc($current['desc']) ?>
-                                          </a>
-                                        </li>
-                                      <?php endforeach; ?>
-                                    </ul>
-                                  </li>
-                                <?php endif; ?>
-
-                                <?php if (isset($this->layout()->allLangs) && count($this->layout()->allLangs) > 1): ?>
-                                  <li class="nav-item language dropdown">
-                                    <a href="#" class="dropdown-toggle header-link" data-bs-toggle="dropdown"><i class="fa fa-globe" aria-hidden="true"></i> <span class="mobile-hide"><?=$this->transEsc("Language")?></span></a>
-                                    <ul class="dropdown-menu">
-                                      <?php
-                                        //TueFind: Basic VuFind functionality changed, removed author ID from URL
-                                        $routeParams = $this->tuefind()->getRouteParams();
-                                        foreach ($this->layout()->allLangs as $langCode => $langName): ?>
-                                          <li<?=$this->layout()->userLang == $langCode ? ' class="active"' : ''?>>
-                                            <?php $langURL = $this->escapeHtmlAttr($this->url()->addQueryParameters(['lng' => $langCode]));
-                                                if($routeParams['controller'] == "Authority" && $routeParams['action'] == "Home") {
-                                                    $langURL = $this->escapeHtmlAttr($this->url()->addQueryParametersToAuthority(['lng' => $langCode]));
-                                                }
-                                            ?>
-                                            <a href="<?=$langURL?>" rel="nofollow">
-                                              <?=$this->displayLanguageOption($langName) ?>
-                                            </a>
-                                          </li>
-                                      <?php endforeach; ?>
-                                    </ul>
-                                  </li>
-                                <?php endif; ?>
-
-                            <!-- End section Main Menu -->
-                            </ul>
-                        </div>
-                    </div>
+        <?php if (!isset($this->layout()->renderingError)): ?>
+        <div class="mb-3" id="header-collapse">
+            <div class="row">
+                <!-- Images for supporters (TueFind extension template)   -->
+                <div id="tuefind_logos" class="mt-3 header-block-left">
+                    <a class="ms-4" target="_blank" href="http://www.uni-tuebingen.de"><img src="<?=$this->imageLink('Logo_Universitaet_Tuebingen.svg') ?>" alt="Universit&auml;t T&uuml;bingen" width="269" height="85"/></a>
                 </div>
-            <?php endif; ?>
-            <!-- End section Navbar -->
-    </div><!-- close col's -->
-</div><!-- close row -->
+
+                <div class="text-center mt-3 header-block-center logo-wrapper">
+                    <a target="_blank" href="http://www.ub.uni-tuebingen.de/"><img src="<?=$this->imageLink('Logo_Universitaetsbibliothek_Tuebingen.svg') ?>" alt="Universitätsbibliothek" width="320" height="30" /></a><br/>
+                    <a href="/"><img src="<?=$this->imageLink('krimdok.png') ?>" alt="KrimDok" width="195" height="40"/></a><br/>
+                    <a target="_blank" href="http://www.jura.uni-tuebingen.de/einrichtungen/ifk"><img src="<?=$this->imageLink('ifk.png') ?>" alt="Institut für Kriminologie" width="380" height="27"/></a>
+                </div>
+
+                <div class="header-block-right">
+                    <ul class="navbar-nav d-flex flex-row align-items-center justify-content-end mt-2">
+
+                        <!-- Begin section Main Menu -->
+                        <!-- Home -->
+                        <li class="nav-item active">
+                            <a class="header-link" href="<?=$this->url('home')?>" >
+                                <i class="fa fa-home" aria-hidden="true"> </i>
+                                <span class="mobile-hide"><?=$this->transEsc('Home');?></span>
+                            </a>
+                        </li>
+
+                        <!-- TueFind extension template -->
+                        <?=$this->render('header/extensions');?>
+
+                        <?php if (is_object($account) && $account->loginEnabled()): // hide login/logout if unavailable ?>
+                          <li class="nav-item logoutOptions<?php if ($account->dropdownEnabled()): ?> with-dropdown<?php endif ?><?php if (!$account->getIdentity()): ?> hidden<?php endif ?>">
+                            <a class="header-link" href="<?=$this->url('myresearch-home', [], ['query' => ['redirect' => 0]])?>"><i id="account-icon" class="fa fa-user-circle" aria-hidden="true"></i> <span class="mobile-hide"><?=$this->transEsc('Your Account')?></span></a>
+                          </li>
+                          <?php if ($account->dropdownEnabled()): ?>
+                            <li id="login-dropdown" class="nav-item dropdown<?php if (!$account->getIdentity()): ?> hidden<?php endif ?>">
+                              <a href="#" class="header-link" data-bs-toggle="dropdown"></a>
+                              <div class="dropdown-menu">
+                                <?=$this->render('myresearch/menu'); ?>
+                              </div>
+                            </li>
+                          <?php endif; ?>
+                          <li class="nav-item logoutOptions<?php if (!$account->getIdentity()): ?> hidden<?php endif ?>">
+                            <a class="logout header-link" href="<?=$this->url('myresearch-logout')?>"><i class="fa fa-sign-out" aria-hidden="true"></i> <span class="mobile-hide"><?=$this->transEsc('Log Out')?></span></a>
+                          </li>
+                          <li id="loginOptions" class="nav-item <?php if ($account->getIdentity()): ?> hidden <?php endif ?>">
+                            <?php if ($account->getSessionInitiator($this->serverUrl($this->url('myresearch-home')))): ?>
+                              <a class="header-link" href="<?=$this->url('myresearch-userlogin')?>"><i class="fa fa-sign-in" aria-hidden="true"></i> <span class="mobile-hide"><?=$this->transEsc('Institutional Login')?></span></a>
+                            <?php else: ?>
+                              <a class="header-link" href="<?=$this->url('myresearch-userlogin')?>" data-lightbox><i class="fa fa-sign-in" aria-hidden="true"></i> <span class="mobile-hide"><?=$this->transEsc('Login')?></span></a>
+                            <?php endif; ?>
+                          </li>
+                        <?php endif; ?>
+
+                        <?php if (isset($this->layout()->themeOptions) && count($this->layout()->themeOptions) > 1): ?>
+                          <li class="nav-item theme dropdown">
+                            <a href="#" class="dropdown-toggle header-link" data-bs-toggle="dropdown"><span class="mobile-hide"><?=$this->transEsc('Theme')?></span></a>
+                            <ul class="dropdown-menu">
+                              <?php foreach ($this->layout()->themeOptions as $current): ?>
+                                <li<?=$current['selected'] ? ' class="active"' : ''?>>
+                                  <a href="<?=$this->escapeHtmlAttr($this->url()->addQueryParameters(['ui' => $current['name']])) ?>" rel="nofollow">
+                                    <?=$this->transEsc($current['desc']) ?>
+                                  </a>
+                                </li>
+                              <?php endforeach; ?>
+                            </ul>
+                          </li>
+                        <?php endif; ?>
+
+                        <?php if (isset($this->layout()->allLangs) && count($this->layout()->allLangs) > 1): ?>
+                          <li class="nav-item language dropdown">
+                            <a href="#" class="dropdown-toggle header-link" data-bs-toggle="dropdown"><i class="fa fa-globe" aria-hidden="true"></i> <span class="mobile-hide"><?=$this->transEsc('Language')?></span></a>
+                            <ul class="dropdown-menu">
+                              <?php
+                                //TueFind: Basic VuFind functionality changed, removed author ID from URL
+                                $routeParams = $this->tuefind()->getRouteParams();
+                                foreach ($this->layout()->allLangs as $langCode => $langName): ?>
+                                  <li<?=$this->layout()->userLang == $langCode ? ' class="active"' : ''?>>
+                                    <?php $langURL = $this->escapeHtmlAttr($this->url()->addQueryParameters(['lng' => $langCode]));
+                                        if ($routeParams['controller'] == 'Authority' && $routeParams['action'] == 'Home') {
+                                            $langURL = $this->escapeHtmlAttr($this->url()->addQueryParametersToAuthority(['lng' => $langCode]));
+                                        }
+                                    ?>
+                                    <a href="<?=$langURL?>" rel="nofollow">
+                                      <?=$this->displayLanguageOption($langName) ?>
+                                    </a>
+                                  </li>
+                              <?php endforeach; ?>
+                            </ul>
+                          </li>
+                        <?php endif; ?>
+
+                    <!-- End section Main Menu -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+    <?php endif; ?>
+    <!-- End section Navbar -->
+</div><!-- close col's -->
+
 
 <!--  Begin seachbox -->
 <?=$this->layout()->searchbox ?>
@@ -114,8 +112,8 @@
    //Accepts:
    //1. false; nothing will be displayed, this is default.
    //2. A string; the header image in the string will be displayed. JavaScript will not applied.
-if(isset($this->layout()->headerImage)) {
-    echo '<img src="'.$this->imageLink($this->layout()->headerImage).'" class="img-fluid header-image" alt="header image"/>';
+if (isset($this->layout()->headerImage)) {
+    echo '<img src="' . $this->imageLink($this->layout()->headerImage) . '" class="img-fluid header-image" alt="header image"/>';
 }
 ?>
 <!-- End header image -->

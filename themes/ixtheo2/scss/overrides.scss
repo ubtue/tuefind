@@ -693,7 +693,7 @@ background-color: #00000085;
   padding: 0 !important;
 }
 .ix2-nomargin {
-  padding: 0 !important;
+  margin: 0 !important;
 }
 .ix2-searchForm .searchForm-inputs {
   width: 100%;
@@ -1257,10 +1257,11 @@ table.ix-journals-table .img-td {
   padding: 10px 15px;
   right: 20px !important;
   background-color: #e2e5e8;
+  color: #333;
+  border: none;
 }
 .ix2-search-form-bottom-nav ul.nav .nav-item {
   padding: 13px;
-  display: block;
   cursor: pointer;
   color: #495057;
 }
@@ -1435,11 +1436,7 @@ a {
   cursor: pointer;
 }
 
-.ix2-parent-search-nav {
-    margin-left: 10px;
-}
-
-.ix2-search-form-bottom-nav ul.row>li.nav-item {
+.ix2-search-form-bottom-nav ul >li.nav-item {
     list-style: none;
     float: left;
     display: contents;
@@ -1449,7 +1446,7 @@ a {
     display: contents;
     flex-direction: row;
 }
-.ix2-search-form-bottom-nav ul.row>li.nav-item a, .bibel-button {
+.ix2-search-form-bottom-nav ul>li.nav-item a, .bibel-button {
     padding: 13px;
 }
 
@@ -1459,4 +1456,32 @@ a {
 
 .navbar-expand-lg .navbar-nav .dropdown-menu {
   margin-top: -15px;
+}
+
+.navbar-expand-xsm {
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+}
+
+.navbar-expand-xsm .navbar-collapse {
+  display: flex !important;
+  flex-basis: auto;
+}
+
+.ix2-parent-search-nav ul>li.nav-item a, .bibel-button{
+  padding: 13px;
+  cursor: pointer;
+  color: #495057;
+  display: inline-block;
+  text-decoration: none;
+}
+
+.ix2-parent-search-nav ul>li.nav-item a:hover, .bibel-button:hover {
+  background-color: #fff;
+  outline: dotted 1px #000;
+}
+
+.ix2-search-ul {
+  padding: 0;
+  margin: 0;
 }

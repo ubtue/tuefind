@@ -20,7 +20,7 @@
       $params = null;
     }
 
-    $isNewItemActiveClass = $tuefind->isNewItem($this->searchClassId) ? 'isNewItemActiveClass': '';
+    $isNewItemActiveClass = $tuefind->isNewItem($this->searchClassId) ? 'isNewItemActiveClass' : '';
 
     // Load search actions and settings (if any):
     $handlers = $this->searchbox()->getHandlers(
@@ -46,12 +46,13 @@
 <?php $tabConfig = $this->searchTabs()->getTabConfig($this->searchClassId, $this->lookfor, $this->searchIndex, $this->searchType, $hiddenFilters); ?>
 <?php $resetNewItemsURL = (isset($tabConfig['tabs'][0])) ? $tabConfig['tabs'][0]['url'] : ''; ?>
 
-<div class="row tf-row-home">
+<div class="tf-row-home">
     <!--  Begin section searchbar -->
     <section class="section-home">
         <div class="panel-home">
 
-            <?php $routeParams = $tuefind->getRouteParams(); if($routeParams['controller'] == "Search" && $routeParams['action'] == "Home") { ?>
+            <?php $routeParams = $tuefind->getRouteParams();
+            if ($routeParams['controller'] == 'Search' && $routeParams['action'] == 'Home') { ?>
                 <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, 'TueFind2.ChangeSearchboxHeightRelbib();', 'SET')?>
             <?php } else { ?>
                 <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, 'TueFind2.ChangeSearchboxHeight();', 'SET')?>
@@ -62,7 +63,7 @@
                 <?=$this->render('search/searchbox/title');?>
 
                 <!-- Begin warnings -->
-                <?php if ($this->ils()->getOfflineMode() == "ils-offline"): ?>
+                <?php if ($this->ils()->getOfflineMode() == 'ils-offline'): ?>
                     <div class="alert alert-warning">
                         <h2><?= $this->transEsc('ils_offline_title') ?></h2>
 
@@ -80,11 +81,11 @@
                         <div class="searchForm navbar-form navbar-left flip">
                             <?php $tabs = $this->context($this)->renderInContext('search/searchTabs', ['searchTabs' => $tabConfig['tabs']]); ?>
                             <?php if (!empty($tabs)): ?><?=$tabs ?><div class="tab-content clearfix"><?php endif; ?>
-                              <p class="adv_search_terms"><?=$this->transEsc("Your search terms")?>: "<strong><?=$this->escapeHtml($this->lookfor)?></strong>"</p>
+                              <p class="adv_search_terms"><?=$this->transEsc('Your search terms')?>: "<strong><?=$this->escapeHtml($this->lookfor)?></strong>"</p>
                                 <p class="adv_search_links">
-                                    <a href="<?=$this->url($advSearch)?>?edit=<?=$this->escapeHtmlAttr($this->searchId)?>"><?=$this->transEsc("Edit this Advanced Search")?></a> |
-                                    <a href="<?=$this->url($advSearch, [], ['query' => $hiddenFilters])?>"><?=$this->transEsc("Start a new Advanced Search")?></a> |
-                                    <a href="<?=$this->url($searchHome, [], ['query' => $hiddenFilters])?>"><?=$this->transEsc("Start a new Basic Search")?></a>
+                                    <a href="<?=$this->url($advSearch)?>?edit=<?=$this->escapeHtmlAttr($this->searchId)?>"><?=$this->transEsc('Edit this Advanced Search')?></a> |
+                                    <a href="<?=$this->url($advSearch, [], ['query' => $hiddenFilters])?>"><?=$this->transEsc('Start a new Advanced Search')?></a> |
+                                    <a href="<?=$this->url($searchHome, [], ['query' => $hiddenFilters])?>"><?=$this->transEsc('Start a new Basic Search')?></a>
                                 </p>
                             <?=
                               $this->context($this)->renderInContext(
@@ -97,15 +98,17 @@
                                     'searchClassId' => $this->searchClassId,
                                     'searchType' => $this->searchType,
                                   ]
-                                );
+                              );
                             ?>
                             <?php if (!empty($tabs)): ?></div><?php endif; ?>
                         </div>
                     <?php else: ?>
-                        <form id="searchForm" class="searchForm tuefind-event-searchForm-on-submit <?=$tuefind->getTueFindSubsystem()."-searchForm";?> <?=$isNewItemActiveClass?>" method="get" action="<?=$this->url($basicSearch)?>" name="searchForm" autocomplete="off">
+                        <form id="searchForm" class="searchForm tuefind-event-searchForm-on-submit <?=$tuefind->getTueFindSubsystem() . '-searchForm';?> <?=$isNewItemActiveClass?>" method="get" action="<?=$this->url($basicSearch)?>" name="searchForm" autocomplete="off">
                             <?=$this->context($this)->renderInContext('search/searchTabs', ['searchTabs' => $tabConfig['tabs']]); ?>
                             <?php $placeholder = $this->searchbox()->getPlaceholderText($tabConfig['selected']['id'] ?? null); ?>
-                            <?php if(!empty($isNewItemActiveClass)) { $placeholder = 'Search in New items'; } ?>
+                            <?php if (!empty($isNewItemActiveClass)) {
+                            $placeholder = 'Search in New items';
+                            } ?>
 
                             <div class="form-group row">
                                 <!-- Begin search input field -->
@@ -126,7 +129,7 @@
                                 <!-- Begin search select -->
                                 <div class="col-xs-12 col-sm-3 col-lg-2 searchForm_select">
                                     <?php if ($handlerCount > 1): ?>
-                                        <select id="searchForm_type" class="searchForm_type form-control" name="type" data-native-menu="false" aria-label="<?=$this->transEsc("Search type")?>">
+                                        <select id="searchForm_type" class="searchForm_type form-control" name="type" data-native-menu="false" aria-label="<?=$this->transEsc('Search type')?>">
                                             <?php $currentGroup = $insideGroup = false; ?>
                                             <?php foreach ($handlers as $handler): ?>
                                                 <?php
@@ -156,7 +159,7 @@
 
                                 <!-- Begin search button -->
                                 <div class="col-xs-12 col-sm-2 col-lg-auto col-search-button">
-                                    <button type="submit" class="btn btn-primary search-button"><i class="fa fa-search" aria-hidden="true"></i> <?= $this->transEsc("Find") ?></button>
+                                    <button type="submit" class="btn btn-primary search-button"><i class="fa fa-search" aria-hidden="true"></i> <?= $this->transEsc('Find') ?></button>
                                 </div>
                             </div>
 
@@ -165,13 +168,14 @@
                                   $advSearchQuery = $results ? ['edit' => $results->getSearchId()] : $hiddenFilters;
                                   $advSearchLink = $this->url($advSearch, [], ['query' => $advSearchQuery]);
                                 ?>
-                                <?=$this->context($this)->renderInContext('search/searchbox/pills.phtml', ['advSearchLink' => $advSearchLink, 'isNewItemActiveClass' => $isNewItemActiveClass, 'resetNewItemsURL' => $resetNewItemsURL] )?>
+                                <?=$this->context($this)->renderInContext('search/searchbox/pills.phtml', ['advSearchLink' => $advSearchLink, 'isNewItemActiveClass' => $isNewItemActiveClass, 'resetNewItemsURL' => $resetNewItemsURL])?>
                             <?php endif; ?>
                             <?php if ($geoUrl = $this->geocoords()->getSearchUrl($options)) : ?>
                                 <a href="<?=$geoUrl ?>" class="btn btn-link"><?=$this->transEsc('Geographic Search')?></a>
                             <?php endif; ?>
 
-                            <?php $shards = $options->getShards(); if ($options->showShardCheckboxes() && !empty($shards)): ?>
+                            <?php $shards = $options->getShards();
+                            if ($options->showShardCheckboxes() && !empty($shards)): ?>
                                 <?php
                                   $selectedShards = $this->selectedShards ?? $options->getDefaultSelectedShards();
                                 ?>
@@ -210,8 +214,8 @@
                             }
                             ?>
                             <?=$this->context($this)->renderInContext(
-                              'search/filters.phtml',
-                              [
+                                'search/filters.phtml',
+                                [
                                 'params' => $params ?? null,
                                 'urlQuery' => isset($results) ? $results->getUrlQuery() : null,
                                 'filterList' => $showFilters ? $filterList : [],
@@ -232,7 +236,7 @@
             </div><!-- close container -->
             <!--
             <div class="scroll-down" id="scroll-down">
-                <a href="" id="scroll-down-button"><span></span><?php $this->transEsc("Scroll"); ?></a>
+                <a href="" id="scroll-down-button"><span></span><?php $this->transEsc('Scroll'); ?></a>
             </div>
             -->
         </div><!-- close panel-home -->
