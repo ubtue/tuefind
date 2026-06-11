@@ -4,8 +4,8 @@
     // Get Handler delimiter
     $searchBoxConfig = $this->config()->get('searchbox');
     $handlerDelimiter = [];
-    if(isset($searchBoxConfig->General->setHrDelimiterInHandler) && !empty($searchBoxConfig->General->setHrDelimiterInHandler)) {
-        $handlerDelimiter = explode(',',$searchBoxConfig->General->setHrDelimiterInHandler);
+    if (isset($searchBoxConfig->General->setHrDelimiterInHandler) && !empty($searchBoxConfig->General->setHrDelimiterInHandler)) {
+        $handlerDelimiter = explode(',', $searchBoxConfig->General->setHrDelimiterInHandler);
     }
     // Initialize from current search (if available) or defaults:
     if ($results = ($this->results ?? $this->searchMemory()->getCurrentSearch())) {
@@ -19,8 +19,9 @@
       if (!isset($this->searchClassId)) {
         $config = $this->config()->get('config');
         $this->searchClassId = $config->Site->defaultSearchBackend ?? 'Solr';
-        if (preg_match('"/Authority"i', $this->serverUrl(true)))
+        if (preg_match('"/Authority"i', $this->serverUrl(true))) {
           $this->searchClassId = 'SolrAuth';
+        }
       }
       $options = $this->searchOptions($this->searchClassId);
       $hiddenFilters = $this->searchTabs()->getHiddenFilters($this->searchClassId, true, $this->ignoreHiddenFiltersInRequest ?? false);
@@ -59,7 +60,7 @@
     }
     $filterDetails = $this->searchbox()->getFilterDetails($filterList, $checkboxFilters);
     $showFilters = $filterDetails && ($results || $options->getRetainFilterSetting());
-    if($helper->availableToShowSearchForm()) :
+    if ($helper->availableToShowSearchForm()) :
 ?>
 <?php $tabConfig = $this->searchTabs()->getTabConfig($this->searchClassId, $this->lookfor, $this->searchIndex, $this->searchType, $hiddenFilters); ?>
 
@@ -132,7 +133,8 @@
                         <div class="col-12 col-xs-12 col-sm-3 col-md-3 col-lg-2 col ix2-nomargin ix2-searchForm-element-height ix2-main-searchForm-type">
                         <select id="searchForm_type" class="searchForm_type form-control form-select" name="type" data-native-menu="false" aria-label="<?=$this->transEscAttr('Search type')?>">
                             <?php $currentGroup = $insideGroup = false; ?>
-                            <?php $optionCount=1; foreach ($handlers as $handler): ?>
+                            <?php $optionCount = 1;
+                            foreach ($handlers as $handler): ?>
                                 <?php
                                 if ($currentGroup !== ($handler['group'] ?? false)) {
                                     $currentGroup = $handler['group'];
@@ -148,7 +150,9 @@
                                 }
                                 ?>
                                 <option value="<?=$this->escapeHtmlAttr($handler['value'])?>"<?=$handler['selected'] ? ' selected="selected"' : ''?>><?=$handler['indent'] ? '-- ' : ''?><?=$this->transEsc($handler['label'])?></option>
-                                <?php if (in_array($optionCount, $handlerDelimiter)) { echo "<hr />"; }?>
+                                <?php if (in_array($optionCount, $handlerDelimiter)) {
+                                echo '<hr />';
+                                }?>
                             <?php $optionCount++; endforeach; ?>
                             <?php if ($insideGroup): ?>
                                 </optgroup>
@@ -188,7 +192,7 @@
                     <?php endif; ?>
                     <?php foreach ($hiddenFilters as $key => $filter): ?>
                         <?php foreach ($filter as $value): ?>
-                                <?php preg_match ( '/\[NOW-(\d+)DAY TO NOW\]-id:LR\*/', $value, $matchesValue ); ?>
+                                <?php preg_match('/\[NOW-(\d+)DAY TO NOW\]-id:LR\*/', $value, $matchesValue); ?>
                                 <?php if (count($filter) == 1 && !empty($matchesValue) && $routeParams['controller'] == 'Search' && $routeParams['action'] == 'NewItem'): ?>
                                     <input type="hidden" name="hiddenFilters[]" value="">
                                 <?php else: ?>
@@ -227,17 +231,17 @@
                 </div>
             </div>
         </div>
-        <div class="row ix2-search-form-bottom-nav" bis_skin_checked="1">
+        <div class="ix2-search-form-bottom-nav" bis_skin_checked="1">
             <div class="col-12 col-md-12" bis_skin_checked="1">
                 <div class="navbar-default home-navbar" bis_skin_checked="1">
                     <div class="container-navbar" bis_skin_checked="1">
                         <div class="ix2-parent-search-nav" bis_skin_checked="1">
-                            <ul class="row ix2-nopadding">
+                            <ul class="ix2-search-ul">
                                 <!-- IxTheo 2: Advanced search -->
                                 <?php if ($advSearch != ''):?>
                                     <li class="nav-item ">
-                                        <a href="<?=$this->url($advSearch) .  ((isset($this->searchId) && $this->searchId) ? '?edit=' . $this->escapeHtmlAttr($this->searchId) : $this->hiddenFilterParams)?>" class="" role="button" rel="nofollow">
-                                            <?= $this->transEsc("Advanced Search") ?>
+                                        <a href="<?=$this->url($advSearch) . ((isset($this->searchId) && $this->searchId) ? '?edit=' . $this->escapeHtmlAttr($this->searchId) : $this->hiddenFilterParams)?>" class="" role="button" rel="nofollow">
+                                            <?= $this->transEsc('Advanced Search') ?>
                                         </a>
                                     </li>
                                 <?php endif;?>

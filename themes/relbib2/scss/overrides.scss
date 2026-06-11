@@ -21,6 +21,7 @@ a {
     background: transparent url(/themes/relbib2/images/background_1280.jpg) no-repeat;
     background-position: center center;
     background-size: cover;
+    padding-top: 40px;
 }
 
 .nav-link {
@@ -59,7 +60,6 @@ a {
 
     .searchbox {
         background-color: rgba(255, 255, 255, 0.8);
-        margin-top: 40px;
         padding: 0px 20px 15px 20px;
 
         .title {
@@ -609,4 +609,15 @@ a {
 
 #mltmore {
     color: #951e37 !important;
+}
+
+.header-block-center > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100%;
+}
+
+#tf-button-footer-feedback {
+    display: none;
 }

@@ -111,6 +111,32 @@
         /* display: flex; */
         justify-content: center;
     }
+    .tf-background-body #content div.row div.panel {
+        width: 100%;
+    }
+    .rb-panel-home.panel-home {
+        padding-top: 0;
+    }
+    #footer-bottom .col-xs-12 {
+        text-align: center;
+    }
+    #footer-bottom .copyright {
+        margin-bottom: 10px;
+    }
 
-    .tf-background-body #content div.row div.panel { width: 100%; }
+    #footer-bottom .footer-menu {
+        margin-top: 6px;
+    }
+
+    #footer-bottom .col-md-8 {
+        padding: 0;
+    }
+
+    #footer-bottom .footer-menu li{
+        display: block;
+        float: left;
+        width: 100%;
+        text-align: center;
+        margin: 0;
+    }
 }
