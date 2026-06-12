@@ -1,6 +1,7 @@
 <?php
 
-function renderPagination($currentPageNo, $maxPageNo, $itemsPerPage, $helpers) {
+function renderPagination($currentPageNo, $maxPageNo, $itemsPerPage, $helpers)
+{
     $minPageNo = 1;
     $countPagesToShow = 9;
     $countPagesLeftRight = floor($countPagesToShow / 2);
@@ -16,38 +17,46 @@ function renderPagination($currentPageNo, $maxPageNo, $itemsPerPage, $helpers) {
         $maxPageNoToShow = $maxPageNo;
     }
 
-    if ($minPageNoToShow < 1)
+    if ($minPageNoToShow < 1) {
         $minPageNoToShow = 1;
+    }
 
-    if ($maxPageNoToShow > $maxPageNo)
+    if ($maxPageNoToShow > $maxPageNo) {
         $maxPageNoToShow = $maxPageNo;
+    }
 
     $pagination = '<nav aria-label="pagination"><ul class="pagination">';
-    if ($minPageNoToShow != $minPageNo)
+    if ($minPageNoToShow != $minPageNo) {
         $pagination .= '<li class="page-item"><a class="page-link" href="?page=1#content">[1]</a></li>';
+    }
 
-    if ($currentPageNo != $minPageNo)
+    if ($currentPageNo != $minPageNo) {
         $pagination .= '<li class="page-item"><a class="page-link" href="?page=' . ($currentPageNo - 1) . '#content">« ' . $helpers->transEsc('Prev') . '</a></li>';
+    }
 
-    for ($i=$minPageNoToShow;$i<=$maxPageNoToShow;++$i) {
+    for ($i = $minPageNoToShow;$i <= $maxPageNoToShow;++$i) {
         $pagination .= '<li class="page-item';
-        if ($i == $currentPageNo)
+        if ($i == $currentPageNo) {
             $pagination .= ' active';
+        }
         $pagination .= '">';
 
-        if ($i == $currentPageNo)
+        if ($i == $currentPageNo) {
             $pagination .= '<span class="page-link">' . $i . '</span>';
-        else
-            $pagination .= '<a class="page-link" href="?page='.$i.'#content">' . $i . '</a>';
+        } else {
+        $pagination .= '<a class="page-link" href="?page=' . $i . '#content">' . $i . '</a>';
+        }
 
         $pagination .= '</li>';
     }
 
-    if ($currentPageNo != $maxPageNo)
+    if ($currentPageNo != $maxPageNo) {
         $pagination .= '<li class="page-item"><a class="page-link" href="?page=' . ($currentPageNo + 1) . '#content">' . $helpers->transEsc('Next') . ' »</a></li>';
+    }
 
-    if ($maxPageNo != $maxPageNoToShow)
+    if ($maxPageNo != $maxPageNoToShow) {
         $pagination .= '<li class="page-item"><a class="page-link" href="?page=' . $maxPageNo . '#content">[' . $maxPageNo . ']</a></li>';
+    }
 
     $pagination .= '</ul></nav>';
     return $pagination;
@@ -73,21 +82,20 @@ function renderPagination($currentPageNo, $maxPageNo, $itemsPerPage, $helpers) {
 
         <?php $i = 0?>
         <?php foreach ($rssItems as $rssItem):?>
+            <?php $rssFeed = $rssItem->getRssFeed(); ?>
             <?php if ($minItemId <= $i && $maxItemId >= $i): ?>
                 <div class="tf-rss-full-item">
                     <h2>
-                        <a href="<?=$this->tuefind()->getRedirectUrl($rssItem['itemUrl'], $redirectGroup)?>" target="_blank" rel="nofollow"><img src="<?=$this->tuefind()->getRssFeedIcon($rssItem['rssFeed']['feedName'])?>" height="20">&nbsp;<?=$rssItem['itemTitle']?></a>
+                        <?php /*die(get_class($rssItem))*/ ?>
+                        <a href="<?=$this->tuefind()->getRedirectUrl($rssItem->getItemUrl(), $redirectGroup)?>" target="_blank" rel="nofollow"><img src="<?=$this->tuefind()->getRssFeedIcon($rssFeed->getFeedName())?>" height="20">&nbsp;<?=$this->escapeHtml($rssItem->getItemTitle())?></a>
                     </h2>
                     <p>
-                        <?php
-
-                        ?>
-                        <a href="<?=$this->tuefind()->getRedirectUrl($rssItem['rssFeed']['websiteUrl'], $redirectGroup)?>" target="_blank" rel="nofollow"><?=$rssItem['rssFeed']['feedName']?></a>: 
-                        <?=date('d.m.Y H:i:s', $rssItem['publicationDateTime']->getTimestamp())?>
+                        <a href="<?=$this->tuefind()->getRedirectUrl($rssFeed->getWebsiteUrl(), $redirectGroup)?>" target="_blank" rel="nofollow"><?=$this->escapeHtml($rssFeed->getFeedName())?></a>:
+                        <?=$rssItem->getPublicationDateTime()->format('d.m.Y H:i:s')?>
                     </p>
-                    <?php if (!empty($rssItem['itemDescription'])):?>
+                    <?php if (!empty($rssItem->getItemDescription())):?>
                         <p>
-                            <?=$rssItem['itemDescription']?>
+                            <?=$this->tuefind()->filterRssItemDescription($rssItem->getItemDescription())?>
                         </p>
                     <?php endif;?>
                 </div>

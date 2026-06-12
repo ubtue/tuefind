@@ -7,12 +7,11 @@ use TueFind\Db\Entity\RssSubscription;
 
 class RssItemService extends RssBaseService implements RssItemServiceInterface
 {
-
     public function getItemsSortedByPubDate(): array
     {
         $qb = $this->entityManager->createQueryBuilder();
 
-        $qb->select('ri', 'rf')
+        $qb->select('ri')
             ->from(RssItem::class, 'ri')
             ->leftJoin('ri.rssFeed', 'rf')
             ->where('rf.subsystemTypes LIKE :instance')
@@ -20,14 +19,14 @@ class RssItemService extends RssBaseService implements RssItemServiceInterface
             ->setParameter('instance', '%' . $this->instance . '%')
             ->orderBy('ri.publicationDateTime', 'DESC');
 
-        return $qb->getQuery()->getArrayResult();
+        return $qb->getQuery()->getResult();
     }
 
     public function getItemsForUserSortedByPubDate($userId): array
     {
         $qb = $this->entityManager->createQueryBuilder();
 
-        $qb->select('ri', 'rf', 'rs')
+        $qb->select('ri')
             ->from(RssItem::class, 'ri')
             ->leftJoin('ri.rssFeed', 'rf')
             ->leftJoin(RssSubscription::class, 'rs', 'WITH', 'ri.rssFeed = rs.rssFeed')
@@ -48,6 +47,6 @@ class RssItemService extends RssBaseService implements RssItemServiceInterface
             ->where('ri.itemUrl = :url')
             ->setParameter('url', $url);
 
-        return (bool) $qb->getQuery()->getSingleScalarResult();
+        return (bool)$qb->getQuery()->getSingleScalarResult();
     }
 }

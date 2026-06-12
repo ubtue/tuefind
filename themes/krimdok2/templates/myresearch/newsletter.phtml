@@ -3,8 +3,8 @@
   <?php
     // Submit redirect with inline script to make it lightbox compatible
     $script = "setTimeout(function() { window.location = '{$this->url('myresearch-profile')}'; }, 0);";
-    print $this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $script, 'SET');
   ?>
+  <?=$this->assetManager()->outputInlineScriptString($script)?>
 <?php endif;?>
 <p>
   <form method="post" action="<?=$this->url('myresearch-newsletter')?>">
