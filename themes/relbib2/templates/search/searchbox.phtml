@@ -53,9 +53,9 @@
 
             <?php $routeParams = $tuefind->getRouteParams();
             if ($routeParams['controller'] == 'Search' && $routeParams['action'] == 'Home') { ?>
-                <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, 'TueFind2.ChangeSearchboxHeightRelbib();', 'SET')?>
+                <?=$this->assetManager()->outputInlineScriptString('TueFind2.ChangeSearchboxHeightRelbib();')?>
             <?php } else { ?>
-                <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, 'TueFind2.ChangeSearchboxHeight();', 'SET')?>
+                <?=$this->assetManager()->outputInlineScriptString('TueFind2.ChangeSearchboxHeight();')?>
             <?php } ?>
 
             <div class="searchbox col-12 mx-auto">
@@ -225,7 +225,7 @@
                               ]
                             );?>
                         </form>
-                        <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, 'TueFind.MoveCursorToEnd();', 'SET')?>
+                        <?=$this->assetManager()->outputInlineScriptString('TueFind.MoveCursorToEnd();')?>
 
                         <?php //optional extension template, e.g. for RelBib ?>
                         <?=$this->render('search/searchbox/extensions');?>

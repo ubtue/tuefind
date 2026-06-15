@@ -155,15 +155,15 @@
 
 <?php
 $jsSnippet = <<< 'EOD'
-    $(document).ready(function () {
-        let URL_string = window.location.href;
-        if (URL_string.indexOf("#") > -1) {
-            let URL_anchor = URL_string.split("#");
-            if(URL_anchor[1].length > 0) {
-                $('#'+URL_anchor[1]).next().find('a').click();
+        $(document).ready(function () {
+            let URL_string = window.location.href;
+            if (URL_string.indexOf("#") > -1) {
+                let URL_anchor = URL_string.split("#");
+                if(URL_anchor[1].length > 0) {
+                    $('#'+URL_anchor[1]).next().find('a').click();
+                }
             }
-        }
-    });
-EOD;
+        });
+    EOD;
 ?>
-<?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $jsSnippet, 'SET')?>
+<?=$this->assetManager()->outputInlineScriptString($jsSnippet)?>

@@ -226,7 +226,7 @@
                     ]
                     );?>
                 </form>
-                <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, 'TueFind.MoveCursorToEnd();', 'SET')?>
+                <?=$this->assetManager()->outputInlineScriptString('TueFind.MoveCursorToEnd();')?>
                 <?php endif;?>
                 </div>
             </div>
