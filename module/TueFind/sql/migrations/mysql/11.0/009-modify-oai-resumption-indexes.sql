@@ -1,1 +1,1 @@
-ALTER TABLE `oai_resumption` ADD KEY `oai_resumption_expires_idx` (`expires`);
+../../../../../VuFind/sql/migrations/mysql/11.0/009-modify-oai-resumption-indexes.sql

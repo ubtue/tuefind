@@ -4,7 +4,30 @@ namespace TueFind\Mailer;
 
 use Psr\Container\ContainerInterface;
 
-class Factory extends \VuFind\Mailer\Factory {
+class Factory extends \VuFind\Mailer\Factory
+{
+    protected function getDSN(array $config): string
+    {
+        $dsn = parent::getDSN($config);
+
+        // Allow self-signed certificates for localhost setups
+        if (preg_match('"^smtp://(localhost|127\.0\.0\.)"', $dsn)) {
+            $additionalParams = [
+                'allow_self_signed' => 'true',
+                'verify_peer' => 'false',
+                'verify_peer_name' => 'false',
+            ];
+
+            if (str_contains($dsn, '?')) {
+                $dsn .= '&';
+            } else {
+                $dsn .= '?';
+            }
+
+            $dsn .= http_build_query($additionalParams);
+        }
+        return $dsn;
+    }
 
     public function __invoke(
         ContainerInterface $container,
@@ -27,27 +50,5 @@ class Factory extends \VuFind\Mailer\Factory {
         $class->setSiteTitle($config['Site']['title']);
 
         return $class;
-    }
-
-    protected function getDSN(array $config): string
-    {
-        $dsn = parent::getDSN($config);
-
-        // Allow self-signed certificates for localhost setups
-        if (preg_match('"^smtp://(localhost|127\.0\.0\.)"', $dsn)) {
-            $additionalParams = [
-                'allow_self_signed' => 'true',
-                'verify_peer' => 'false',
-                'verify_peer_name' => 'false',
-            ];
-
-            if (str_contains($dsn, '?'))
-                $dsn .= '&';
-            else
-                $dsn .= '?';
-
-            $dsn .= http_build_query($additionalParams);
-        }
-        return $dsn;
     }
 }
