@@ -2,13 +2,14 @@
 
 namespace IxTheo\RecordDriver;
 
-class SolrAuthMarc extends SolrAuthDefault {
+class SolrAuthMarc extends SolrAuthDefault
+{
     public function getExternalSubsystems(): array
     {
         $subsystemLinks = [
             ['title' => 'RelBib', 'url' => 'https://relbib.de/AuthorityRecord/' . urlencode($this->getUniqueID()), 'label' => 'REL'],
             ['title' => 'Index Biblicus', 'url' => 'https://bible.ixtheo.de/AuthorityRecord/' . urlencode($this->getUniqueID()), 'label' => 'BIB'],
-            ['title' => 'Index Canonicus', 'url' => 'https://canonlaw.ixtheo.de/AuthorityRecord/' . urlencode($this->getUniqueID()), 'label' => 'CAN']
+            ['title' => 'Index Canonicus', 'url' => 'https://canonlaw.ixtheo.de/AuthorityRecord/' . urlencode($this->getUniqueID()), 'label' => 'CAN'],
         ];
 
         $result = [];

@@ -2,12 +2,15 @@
 
 namespace KrimDok\RecordDriver;
 
+use function in_array;
+use function strlen;
+
 class SolrMarc extends SolrDefault
 {
-    const SUBITO_BROKER_ID = 'KRIMDOK';
+    public const SUBITO_BROKER_ID = 'KRIMDOK';
 
     // ISIL to e.g. determine the correct default local data block. Should be overridden in child classes.
-    const ISIL_DEFAULT = 'DE-2619'; // KrimDok - Kriminologische Bibliographie
+    public const ISIL_DEFAULT = 'DE-2619'; // KrimDok - Kriminologische Bibliographie
 
     /**
      * Get all subject headings associated with this record.  Each heading is
@@ -94,8 +97,7 @@ class SolrMarc extends SolrDefault
         return in_array('kreb', $this->getRecordSelectors());
     }
 
-
-    const AKB_HOLDING_PREFIX = 'Bestand Albert-Krebs-Bibliothek: ';
+    public const AKB_HOLDING_PREFIX = 'Bestand Albert-Krebs-Bibliothek: ';
 
     public function getAlbertKrebsLibraryAvailability(): ?array
     {
@@ -109,12 +111,13 @@ class SolrMarc extends SolrDefault
             $e = null;
             foreach ($lokField['subfields'] as $subfield) {
                 if ($subfield['code'] == '0') {
-                    if ($subfield['data'] == '852 1')
+                    if ($subfield['data'] == '852 1') {
                         $isSignature = true;
-                    elseif ($subfield['data'] == '86630')
+                    } elseif ($subfield['data'] == '86630') {
                         $isHolding = true;
-                    elseif ($subfield['data'] == '541  ')
+                    } elseif ($subfield['data'] == '541  ') {
                         $isHolding = true;
+                    }
                 } elseif ($subfield['code'] == 'a') {
                     $a = $subfield['data'];
                 } elseif ($subfield['code'] == 'c') {
@@ -124,27 +127,29 @@ class SolrMarc extends SolrDefault
                 }
             }
 
-            if ($isSignature && $c !== null)
+            if ($isSignature && $c !== null) {
                 $availability['signature'] = $c;
-            elseif ($isHolding && $a !== null && str_starts_with($a, self::AKB_HOLDING_PREFIX)) {
+            } elseif ($isHolding && $a !== null && str_starts_with($a, self::AKB_HOLDING_PREFIX)) {
                 $holding = str_replace(self::AKB_HOLDING_PREFIX, '', $a);
                 array_push($availability['holding'], $holding);
-            }
-            elseif ($isHolding && $e !== null && str_starts_with($e, self::AKB_HOLDING_PREFIX)) {
+            } elseif ($isHolding && $e !== null && str_starts_with($e, self::AKB_HOLDING_PREFIX)) {
                 $holding = str_replace(self::AKB_HOLDING_PREFIX, '', $e);
                 array_push($availability['holding'], $holding);
             }
         }
 
-        if ($availability['signature'] || $availability['holding'])
+        if ($availability['signature'] || $availability['holding']) {
             return $availability;
+        }
 
         // Special case for articles: Check superior work availability information
         if ($akbField = $this->getMarcReader()->getField('AKB')) {
-            if ($a = $this->getSubfield($akbField, 'a'))
+            if ($a = $this->getSubfield($akbField, 'a')) {
                 $availability['holding'] = $a;
-            if ($b = $this->getSubfield($akbField, 'b'))
+            }
+            if ($b = $this->getSubfield($akbField, 'b')) {
                 $availability['signature'] = $b;
+            }
             return $availability;
         }
 
