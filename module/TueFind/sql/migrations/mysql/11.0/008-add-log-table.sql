@@ -1,8 +1,1 @@
-CREATE TABLE `log_table` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `logtime` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `ident` CHAR(16) NOT NULL DEFAULT '',
-  `priority` INT NOT NULL DEFAULT '0',
-  `message` TEXT,
-  PRIMARY KEY (id)
-);
+../../../../../VuFind/sql/migrations/mysql/11.0/008-add-log-table.sql
