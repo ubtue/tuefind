@@ -1485,3 +1485,11 @@ a {
   padding: 0;
   margin: 0;
 }
+
+.feedback-content .form-control{
+  min-width: 100%;
+}
+
+.feedback-content form .form-group ul {
+  margin-left: 60px;
+}
