@@ -95,9 +95,6 @@
                     <?php if (!empty($tabs)): ?></div><?php endif; ?>
                 </div>
                 <?php else: ?>
-                <div class="keyboard-box">
-                    <div class="simple-keyboard"></div>
-                </div>
                 <form id="searchForm" class="searchForm ix2-searchForm tuefind-event-search Form-on-submit" method="get" action="<?=$this->url($basicSearch)?>" name="searchForm" autocomplete="off">
                     <?= $this->context($this)->renderInContext('search/searchTabs', ['searchTabs' => $tabConfig['tabs'], 'hiddenFilters' => $hiddenFilters, 'showCounts' => $tabConfig['showCounts']]); ?>
                     <div class="searchForm-inputs row g-0">
@@ -225,6 +222,9 @@
                         'searchType' => $this->searchType,
                     ]
                     );?>
+                    <div class="keyboard-box">
+                        <div class="simple-keyboard"></div>
+                    </div>
                 </form>
                 <?=$this->assetManager()->outputInlineScriptString('TueFind.MoveCursorToEnd();')?>
                 <?php endif;?>

@@ -1137,10 +1137,7 @@ a.black-icon {
 #limit.form-control {
   width: 100%;
 }
-.keyboard-box {
-  position: absolute;
-  bottom: -50px;
-}
+
 .ix2-search-form-bottom-nav .nav li.active {
   background-color: #fff;
   outline: dotted 1px #000;
@@ -1492,4 +1489,47 @@ a {
 
 .feedback-content form .form-group ul {
   margin-left: 60px;
+}
+
+.ix2-parent-search-nav ul>li.nav-item .dropdown-menu a.keyboard-selection-item {
+  width: 100%;
+}
+
+.ix2-parent-search-nav ul>li.nav-item .dropdown-menu a.keyboard-selection-item:hover {
+  background-color: #265680 !important;
+  color: #fff !important;
+}
+
+.ix2-search-ul li.nav-item.dropdown .dropdown-menu a {
+  width: 100%;
+}
+
+.ix2-search-ul li.nav-item.dropdown .dropdown-menu a:hover {
+  background-color: #265680 !important;
+  color: #fff !important;
+}
+
+.ix2-search-ul li.nav-item.dropdown .dropdown-menu a.active {
+  background-color: #265680 !important;
+  color: #fff !important;
+}
+
+/* styles for on-screen keyboard */
+.simple-keyboard {
+    position: absolute;
+    z-index: 1;
+    top: 50px !important;
+    bottom: 0 !important;
+    left: 50% !important;
+    height: 230px;
+}
+
+.keyboard-box {
+    position: relative;
+    top: 0 !important;
+    bottom: 0 !important;
+    z-index: 60;
+    width: 100%;
+    left: 0 !important;
+    transform: translate(-50%,-50%)
 }
