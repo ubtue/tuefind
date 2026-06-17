@@ -1,12 +1,14 @@
 <?php
+
 namespace IxTheo\Db\Service;
 
 use IxTheo\Db\Entity\SubscriptionEntityInterface;
 use IxTheo\Db\Entity\UserEntityInterface;
 
+use function in_array;
+
 class SubscriptionService extends \VuFind\Db\Service\AbstractDbService implements SubscriptionServiceInterface
 {
-
     public function createEntity(): SubscriptionEntityInterface
     {
         return $this->entityPluginManager->get(SubscriptionEntityInterface::class);
@@ -20,7 +22,7 @@ class SubscriptionService extends \VuFind\Db\Service\AbstractDbService implement
         $query = $this->entityManager->createQuery($dql);
         $query->setParameters([
             'userId' => $user->getId(),
-            'journalControlNumberOrBundleName' => $journalControlNumberOrBundleName
+            'journalControlNumberOrBundleName' => $journalControlNumberOrBundleName,
         ]);
         return $query->getOneOrNullResult();
     }
@@ -36,28 +38,43 @@ class SubscriptionService extends \VuFind\Db\Service\AbstractDbService implement
 
     public function unsubscribe(UserEntityInterface $user, $recordId)
     {
-        return $this->delete(['user_id' => $user, 'journal_control_number_or_bundle_name' => $recordId]);
+        $dql = 'DELETE FROM ' . SubscriptionEntityInterface::class . ' s '
+        . ' WHERE s.user = :userId AND s.journalControlNumberOrBundleName = :recordId';
+        
+        $query = $this->entityManager->createQuery($dql);
+        $query->setParameters([
+            'userId' => $user->getId(),
+            'recordId' => $recordId,
+        ]);
+        $query->execute();
     }
 
-    public function getAll(UserEntityInterface $user, $sort): array
+    public function getByUser(UserEntityInterface $user, $sort = null, $start = null, $limit = null): array
     {
         $dql = 'SELECT S FROM ' . SubscriptionEntityInterface::class . ' S ';
         $dql .= 'WHERE S.user = :userId ';
 
-        //deprecated, see "applySort":
-        //$dql .= 'ORDER BY journal_control_number_or_bundle_name ' . $sort;
+        $parameters = ['userId' => $user->getId()];
+
+        // sorting deprecated, sorting is done on php side
+        // (fields like "title" are no longer stored in mysql,
+        // else we have updating problem e.g. if title is changed in original data)
+        if (isset($sort) && in_array('sort', ['journal_title'])) {
+            //$dql .= ' ORDER BY ' . $sort;
+        }
 
         $query = $this->entityManager->createQuery($dql);
-        $query->setParameters(['userId' => $user->getId()]);
+        $query->setParameters($parameters);
+
+        if (isset($start)) {
+            $query->setFirstResult($start);
+        }
+
+        if (isset($limit)) {
+            $query->setMaxResults($limit);
+        }
 
         return $query->getResult();
-    }
-
-    public function get(UserEntityInterface $user, $sort, $start, $limit): array
-    {
-        $select = $this->getSql()->select()->where(['user_id' => $user->getId()])->offset($start)->limit($limit);
-        $this->applySort($select, $sort);
-        return $this->selectWith($select);
     }
 
     /**
@@ -76,7 +93,7 @@ class SubscriptionService extends \VuFind\Db\Service\AbstractDbService implement
             // deprecated, sorting is done on php side
             // (fields like "title" are no longer stored in mysql,
             // else we have updating problem e.g. if title is changed in original data)
-            'journal_title'
+            'journal_title',
         ];
         if (!empty($sort) && in_array(strtolower($sort), $legalSorts)) {
             $query->order([$sort]);

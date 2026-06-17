@@ -1,23 +1,23 @@
 <?php
+
 namespace IxTheo\Search\Subscriptions;
 
-
+use IxTheo\Db\Service\SubscriptionService as SubscriptionTable;
 use Lmc\Rbac\Mvc\Service\AuthorizationServiceAwareInterface;
 use Lmc\Rbac\Mvc\Service\AuthorizationServiceAwareTrait;
 use VuFind\Exception\ListPermission as ListPermissionException;
 use VuFind\Search\Base\Results as BaseResults;
-use IxTheo\Db\Service\SubscriptionService as SubscriptionTable;
 
+use function count;
 
-class Results extends BaseResults
-    implements AuthorizationServiceAwareInterface
+class Results extends BaseResults implements AuthorizationServiceAwareInterface
 {
     use AuthorizationServiceAwareTrait;
 
     /**
      * Object if user is logged in, false otherwise.
      *
-     * @var \VuFind\Db\Row\User|bool
+     * @var \VuFind\Db\Entity\User|bool
      */
     protected $user = null;
 
@@ -30,7 +30,7 @@ class Results extends BaseResults
 
     /**
      *
-     * @var \IxTheo\Db\Table\Subscription
+     * @var \IxTheo\Db\Service\Subscription
      */
     protected $subscriptionTable = null;
 
@@ -61,7 +61,7 @@ class Results extends BaseResults
             throw new ListPermissionException('Cannot retrieve subscriptions without logged in user.');
         }
         $list = $this->getListObject();
-        if (is_null($list)) {
+        if (null === $list) {
             throw new ListPermissionException('Cannot retrieve subscriptions without logged in user.');
         }
 
@@ -70,7 +70,7 @@ class Results extends BaseResults
         // Apply offset and limit if necessary!
         $limit = $this->getParams()->getLimit();
         if ($this->resultTotal > $limit) {
-            $list = $this->subscriptionTable->get($this->user->id, $this->getParams()->getSort(), $this->getStartRecord() - 1, $limit);
+            $list = $this->subscriptionTable->getByUser($this->user->id, $this->getParams()->getSort(), $this->getStartRecord() - 1, $limit);
         }
 
         // Retrieve record drivers for the selected items.
@@ -78,11 +78,11 @@ class Results extends BaseResults
         foreach ($list as $row) {
             $recordsToRequest[] = [
                 'id' => $row->getJournalControlNumberOrBundleName(),
-                'source' => 'Solr'
+                'source' => 'Solr',
             ];
         }
 
-        $this->recordLoader->setCacheContext("Subscription");
+        $this->recordLoader->setCacheContext('Subscription');
         $this->results = $this->recordLoader->loadBatch($recordsToRequest);
     }
 
@@ -96,9 +96,9 @@ class Results extends BaseResults
     {
         $auth = $this->getAuthorizationService();
         $this->user = $auth ? $auth->getIdentity() : false;
-    // If we haven't previously tried to load a list, do it now:
+        // If we haven't previously tried to load a list, do it now:
         if ($this->list === false) {
-            $this->list = $this->subscriptionTable->getAll($this->user, $this->getParams()->getSort());
+            $this->list = $this->subscriptionTable->getByUser($this->user, $this->getParams()->getSort());
         }
         return $this->list;
     }
@@ -129,7 +129,8 @@ class Results extends BaseResults
         return $results_sorted;
     }
 
-    public function setSubscriptionTable(SubscriptionTable $subscriptionTable) {
+    public function setSubscriptionTable(SubscriptionTable $subscriptionTable)
+    {
         $this->subscriptionTable = $subscriptionTable;
     }
 }

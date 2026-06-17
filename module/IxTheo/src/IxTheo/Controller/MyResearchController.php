@@ -14,7 +14,7 @@ class MyResearchController extends \TueFind\Controller\MyResearchController
         $user = $this->getUser();
 
         // Update the TAD access flag:
-        exec("/usr/local/bin/set_tad_access_flag.sh " . $user->getId());
+        exec(\TueFind\Utility::BIN_DIR . '/set_tad_access_flag.sh ' . $user->getId());
 
         return $view;
     }
@@ -103,31 +103,6 @@ class MyResearchController extends \TueFind\Controller\MyResearchController
             throw new \Exception('Lists disabled');
         }
 
-        // Check for "delete item" request; parameter may be in GET or POST depending
-        // on calling context.
-        $deleteId = $this->params()->fromPost(
-            'delete', $this->params()->fromQuery('delete')
-        );
-        if ($deleteId) {
-            $deleteSource = $this->params()->fromPost(
-                'source',
-                $this->params()->fromQuery('source', DEFAULT_SEARCH_BACKEND)
-            );
-            // If the user already confirmed the operation, perform the delete now;
-            // otherwise prompt for confirmation:
-            $confirm = $this->params()->fromPost(
-                'confirm', $this->params()->fromQuery('confirm')
-            );
-            if ($confirm) {
-                $success = $this->performDeleteSubscription($deleteId, $deleteSource);
-                if ($success !== true) {
-                    return $success;
-                }
-            } else {
-                return $this->confirmDeleteSubscription($deleteId, $deleteSource);
-            }
-        }
-
         // If we got this far, we just need to display the subscriptions:
         try {
             $runner = $this->serviceLocator->get('VuFind\SearchRunner');
@@ -173,8 +148,8 @@ class MyResearchController extends \TueFind\Controller\MyResearchController
             throw new \Exception('Cannot delete empty ID!');
         }
 
-        $table = $this->getTable('Subscription');
-        $table->unsubscribe($user->getId(), $id);
+        $service = $this->getDbService(\IxTheo\Db\Service\SubscriptionServiceInterface::class);
+        $service->unsubscribe($user, $id);
         return true;
     }
 
@@ -191,8 +166,8 @@ class MyResearchController extends \TueFind\Controller\MyResearchController
             throw new \Exception('Cannot delete empty ID!');
         }
 
-        $table = $this->getTable('PDASubscription');
-        $table->unsubscribe($user->getId(), $id);
+        $service = $this->getDbService(\IxTheo\Db\Service\PDASubscriptionServiceInterface::class);
+        $service->unsubscribe($user, $id);
         $notifier = $this->PDASubscriptions();
         $notifier->sendPDAUnsubscribeEmail($user, $id);
         $notifier->sendPDAUserUnsubscribeEmail($user, $id);
