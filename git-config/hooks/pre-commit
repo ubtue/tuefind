@@ -40,6 +40,8 @@ for ADDED_FILE in $ADDED_FILES; do
             # we skip the optimization so we dont add unwanted changes
             if [[ "$MODIFIED_UNADDED_FILES" == *"$ADDED_FILE"* ]]; then
                 echo "pre-commit: Skipping code optimizations for $ADDED_FILE because we have unadded changes"
+            elif [[ "$ADDED_FILE" == *"module.config.php" ]]; then
+                echo "pre-commit: Skipping code optimization for $ADDED_FILE"
             else
                 ADDED_FILE_PATH="$GIT_ROOT/$ADDED_FILE"
                 echo "pre-commit: Optimizing code style for $ADDED_FILE"
