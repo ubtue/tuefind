@@ -25,6 +25,11 @@ class Subscription implements SubscriptionEntityInterface
     #[ORM\Column(name: 'max_last_modification_time', type: 'datetime', nullable: false)]
     protected DateTime $maxLastModificationTime;
 
+    public function __construct()
+    {
+        $this->maxLastModificationTime = new DateTime();
+    }
+
     public function getId(): ?int
     {
         return $this->id ?? null;

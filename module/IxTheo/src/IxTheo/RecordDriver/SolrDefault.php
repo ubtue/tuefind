@@ -296,13 +296,14 @@ class SolrDefault extends \TueFind\RecordDriver\SolrMarc
             throw new LoginRequiredException('You must be logged in first');
         }
 
-        $table = $this->getDbService(\IxTheo\Db\Service\SubscriptionServiceInterface::class);
+        $service = $this->getDbService(\IxTheo\Db\Service\SubscriptionServiceInterface::class);
         $recordId = $this->getUniqueId();
 
-        if ($table->findExisting($user, $recordId)) {
+        if ($service->findExisting($user, $recordId)) {
             return 'Exists';
         }
-        return $table->subscribe($user, $recordId, $this->getTitle(), $this->getAuthorsAsString(), $this->getPublicationDates()[0]);
+
+        return $service->subscribe($user, $recordId);
     }
 
     public function unsubscribe($params, $user)
@@ -311,10 +312,10 @@ class SolrDefault extends \TueFind\RecordDriver\SolrMarc
             throw new LoginRequiredException('You must be logged in first');
         }
 
-        $table = $this->getDbService(\IxTheo\Db\Service\SubscriptionServiceInterface::class);
+        $service = $this->getDbService(\IxTheo\Db\Service\SubscriptionServiceInterface::class);
         $recordId = $this->getUniqueId();
 
-        return $table->unsubscribe($user, $recordId);
+        return $service->unsubscribe($user, $recordId);
     }
 
     public function pdaSubscribe($params, $user, &$data)
@@ -323,14 +324,14 @@ class SolrDefault extends \TueFind\RecordDriver\SolrMarc
             throw new LoginRequiredException('You must be logged in first');
         }
 
-        $table = $this->getDbService(\IxTheo\Db\Service\PDASubscriptionServiceInterface::class);
+        $service = $this->getDbService(\IxTheo\Db\Service\PDASubscriptionServiceInterface::class);
         $recordId = $this->getUniqueId();
 
-        if ($table->findExisting($user, $recordId)) {
+        if ($service->findExisting($user, $recordId)) {
             return 'Exists';
         }
         $data = [$user, $recordId, $this->getTitle(), $this->getAuthorsAsString(), $this->getPublicationDates()[0], $this->getCleanISBN()];
-        return call_user_func_array([$table, 'subscribe'], $data);
+        return call_user_func_array([$service, 'subscribe'], $data);
     }
 
     public function pdaUnsubscribe($params, $user)
@@ -339,9 +340,9 @@ class SolrDefault extends \TueFind\RecordDriver\SolrMarc
             throw new LoginRequiredException('You must be logged in first');
         }
 
-        $table = $this->getDbService(\IxTheo\Db\Service\PDASubscriptionServiceInterface::class);
+        $service = $this->getDbService(\IxTheo\Db\Service\PDASubscriptionServiceInterface::class);
         $recordId = $this->getUniqueId();
 
-        return $table->unsubscribe($user, $recordId);
+        return $service->unsubscribe($user, $recordId);
     }
 }

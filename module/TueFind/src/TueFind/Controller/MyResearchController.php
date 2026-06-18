@@ -327,7 +327,7 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
         $userUuid = $this->params()->fromRoute('user_uuid');
         $user = $this->getDbService(\TueFind\Db\Service\UserServiceInterface::class)->getByUuid($userUuid);
         $instance = $this->serviceLocator->get('ViewHelperManager')->get('tuefind')->getTueFindInstance();
-        $cmd = '/usr/local/bin/rss_subset_aggregator --mode=rss_xml ' . escapeshellarg($user->getId()) . ' ' . escapeshellarg($instance);
+        $cmd = \TueFind\Utility::BIN_DIR . '/rss_subset_aggregator --mode=rss_xml ' . escapeshellarg($user->getId()) . ' ' . escapeshellarg($instance);
 
         // We need to explicitly pass through VUFIND_HOME, or database.conf cannot be found
         putenv('VUFIND_HOME=' . getenv('VUFIND_HOME'));
