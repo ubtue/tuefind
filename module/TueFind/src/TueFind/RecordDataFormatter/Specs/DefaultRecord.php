@@ -4,141 +4,202 @@ namespace TueFind\RecordDataFormatter\Specs;
 
 class DefaultRecord extends \VuFind\RecordDataFormatter\Specs\DefaultRecord
 {
-    protected function addChildRecords(&$spec) {
+    protected function addChildRecords(&$spec)
+    {
         $spec->setTemplateLine(
-            'child_records', 'getChildRecordCount', 'data-childRecords.phtml',
+            'child_records',
+            'getChildRecordCount',
+            'data-childRecords.phtml',
             ['allowZero' => false]
         );
     }
 
-    protected function addContainerIdsAndTitles(&$spec) {
+    protected function addContainerIdsAndTitles(&$spec)
+    {
         $spec->setTemplateLine(
-            'In', 'showContainerIdsAndTitles', 'data-container_ids_and_titles.phtml'
+            'In',
+            'showContainerIdsAndTitles',
+            'data-container_ids_and_titles.phtml'
         );
     }
 
-    protected function addDeduplicatedAuthors(&$spec) {
+    protected function addDeduplicatedAuthors(&$spec)
+    {
         $spec->setMultiLine(
-            'Authors', 'getDeduplicatedAuthors', $this->getAuthorFunction()
+            'Authors',
+            'getDeduplicatedAuthors',
+            $this->getAuthorFunction()
         );
     }
 
-    protected function addEdition(&$spec) {
+    protected function addEdition(&$spec)
+    {
         $spec->setLine(
-            'Edition', 'getEdition', null,
+            'Edition',
+            'getEdition',
+            null,
             ['prefix' => '<span property="bookEdition">', 'suffix' => '</span>']
         );
     }
 
-    protected function addFormats(&$spec) {
+    protected function addFormats(&$spec)
+    {
         $spec->setLine(
-            'Format', 'getFormats', 'RecordHelper',
+            'Format',
+            'getFormats',
+            'RecordHelper',
             ['helperMethod' => 'getFormatList']
         );
     }
 
-    protected function addHBZ(&$spec) {
+    protected function addHBZ(&$spec)
+    {
         $spec->setTemplateLine(
-            'Check Availability', 'showHBZ', 'data-HBZ.phtml'
+            'Check Availability',
+            'showHBZ',
+            'data-HBZ.phtml'
         );
     }
 
-    protected function addInterlibraryLoan(&$spec) {
+    protected function addInterlibraryLoan(&$spec)
+    {
         $spec->setTemplateLine(
-            'Interlibrary_Loan', 'showInterlibraryLoan', 'data-interlibraryLoan.phtml', ['translate' => true]
+            'Interlibrary_Loan',
+            'showInterlibraryLoan',
+            'data-interlibraryLoan.phtml',
+            ['translate' => true]
         );
     }
 
-    protected function addJOP(&$spec) {
+    protected function addJOP(&$spec)
+    {
         $spec->setTemplateLine(
-            'Journals Online & Print', 'showJOP', 'data-JOP.phtml'
+            'Journals Online & Print',
+            'showJOP',
+            'data-JOP.phtml'
         );
     }
 
-    protected function addWorldcat(&$spec) {
-         $spec->setTemplateLine(
-            'WorldCat', 'showWorldCat', 'data-WorldCat.phtml'
+    protected function addWorldcat(&$spec)
+    {
+        $spec->setTemplateLine(
+            'WorldCat',
+            'showWorldCat',
+            'data-WorldCat.phtml'
         );
     }
 
-    protected function addLanguages(&$spec) {
+    protected function addLanguages(&$spec)
+    {
         // note: translation added, will probably be fixed in VuFind 6
         $spec->setLine('Language', 'getLanguages', null, ['translate' => true]);
     }
 
-    protected function addFollowingTitle(&$spec) {
+    protected function addFollowingTitle(&$spec)
+    {
         // We use the "New Title" display text here because we can re-use
         // vufind-org translations for it.
         $spec->setTemplateLine(
-            'New Title', 'getFollowingPPNsAndTitles', 'data-following_title.phtml'
+            'New Title',
+            'getFollowingPPNsAndTitles',
+            'data-following_title.phtml'
         );
     }
 
-    protected function addLicense(&$spec) {
+    protected function addLicense(&$spec)
+    {
         $spec->setTemplateLine(
-            'Rights Information', 'getLicense', 'data-license.phtml'
+            'Rights Information',
+            'getLicense',
+            'data-license.phtml'
         );
     }
 
-    protected function addOnlineAccess(&$spec) {
+    protected function addOnlineAccess(&$spec)
+    {
         // = URLs and material types
         $spec->setTemplateLine('Online Access', true, 'data-onlineAccess.phtml');
     }
 
-    protected function addPrecedingTitle(&$spec) {
+    protected function addPrecedingTitle(&$spec)
+    {
         $spec->setTemplateLine(
-            'Previous Title', 'getPrecedingPPNsAndTitles', 'data-preceding_title.phtml'
+            'Previous Title',
+            'getPrecedingPPNsAndTitles',
+            'data-preceding_title.phtml'
         );
     }
 
-    protected function addPublications(&$spec) {
+    protected function addPublications(&$spec)
+    {
         $spec->setTemplateLine(
-            'Published', 'getPublicationDetails', 'data-publicationDetails.phtml'
+            'Published',
+            'getPublicationDetails',
+            'data-publicationDetails.phtml'
         );
     }
 
-    protected function addPublishedIn(&$spec) {
+    protected function addPublishedIn(&$spec)
+    {
         $spec->setTemplateLine(
-            'Published in', 'getContainerTitle', 'data-containerTitle.phtml'
+            'Published in',
+            'getContainerTitle',
+            'data-containerTitle.phtml'
         );
     }
 
-    protected function addRecordLinks(&$spec) {
+    protected function addRecordLinks(&$spec)
+    {
         $spec->setTemplateLine(
-            'Related Items', 'getAllRecordLinks', 'data-allRecordLinks.phtml'
+            'Related Items',
+            'getAllRecordLinks',
+            'data-allRecordLinks.phtml'
         );
     }
 
-    protected function addSeries(&$spec) {
+    protected function addSeries(&$spec)
+    {
         $spec->setTemplateLine('Series', 'getSeries', 'data-series.phtml');
     }
 
-    protected function addSubito(&$spec) {
+    protected function addSubito(&$spec)
+    {
         $spec->setTemplateLine(
-            'Subito Delivery Service', 'showSubito', 'data-subito.phtml'
+            'Subito Delivery Service',
+            'showSubito',
+            'data-subito.phtml'
         );
     }
 
-    protected function addSubjects(&$spec) {
+    protected function addSubjects(&$spec)
+    {
         $spec->setTemplateLine(
-            'Subjects', 'getAllSubjectHeadings', 'data-allSubjectHeadings.phtml'
+            'Subjects',
+            'getAllSubjectHeadings',
+            'data-allSubjectHeadings.phtml'
         );
     }
 
-    protected function addTags(&$spec) {
+    protected function addTags(&$spec)
+    {
         $spec->setTemplateLine('Tags', true, 'data-tags.phtml');
     }
 
-    protected function addVolumesAndArticles(&$spec) {
+    protected function addVolumesAndArticles(&$spec)
+    {
         $spec->setTemplateLine(
-            'Volumes / Articles', 'hasInferiorWorksInCurrentSubsystem', 'data-volumes_articles.phtml'
+            'Volumes / Articles',
+            'hasInferiorWorksInCurrentSubsystem',
+            'data-volumes_articles.phtml'
         );
     }
 
-    protected function addTueRemarks(&$spec) {
+    protected function addTueRemarks(&$spec)
+    {
         $spec->setTemplateLine(
-            'Tue Remarks', 'getTueRemarks', 'data-tueRemarks.phtml'
+            'Tue Remarks',
+            'getTueRemarks',
+            'data-tueRemarks.phtml'
         );
     }
 }
-

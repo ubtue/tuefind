@@ -28,16 +28,22 @@ class DefaultRecord extends \TueFind\RecordDataFormatter\Specs\DefaultRecord
         $this->addJOP($spec);
         // Availability in Tübingen (KrimDok-specific)
         $spec->setTemplateLine(
-            'Availability in Tubingen', 'showAvailabilityInTuebingen', 'data-availability_in_tuebingen.phtml'
+            'Availability in Tubingen',
+            'showAvailabilityInTuebingen',
+            'data-availability_in_tuebingen.phtml'
         );
         // Availability in Albert Krebs Library (KrimDok-specific)
         $spec->setTemplateLine(
-            'Availability in Albert-Krebs Library', 'showAvailabilityInAlbertKrebsLibrary', 'data-availability_in_albert_krebs_library.phtml'
+            'Availability in Albert-Krebs Library',
+            'showAvailabilityInAlbertKrebsLibrary',
+            'data-availability_in_albert_krebs_library.phtml'
         );
         $this->addHBZ($spec);
         // PDA (KrimDok-specific)
         $spec->setTemplateLine(
-            'PDA', 'showPDA', 'data-PDA.phtml'
+            'PDA',
+            'showPDA',
+            'data-PDA.phtml'
         );
         $this->addSubito($spec);
         $this->addVolumesAndArticles($spec);
@@ -46,7 +52,9 @@ class DefaultRecord extends \TueFind\RecordDataFormatter\Specs\DefaultRecord
         $this->addRecordLinks($spec);
 
         $spec->setTemplateLine(
-            'Parallel Edition', true, 'data-parallel_edition.phtml'
+            'Parallel Edition',
+            true,
+            'data-parallel_edition.phtml'
         );
         return $spec->getArray();
     }
