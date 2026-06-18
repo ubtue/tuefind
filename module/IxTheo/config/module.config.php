@@ -106,7 +106,7 @@ $config = [
         'plugin_managers' => [
             'recorddataformatter_specs' => [
                 'factories' => [
-                    'IxTheo\RecordDataFormatter\Specs\DefaultRecord' => 'VuFind\RecordDataFormatter\Specs\DefaultRecordFactory',
+                    'IxTheo\RecordDataFormatter\Specs\DefaultRecord' => 'IxTheo\RecordDataFormatter\Specs\DefaultRecordFactory',
                 ],
                 'aliases' => [
                     'DefaultRecord' => 'IxTheo\RecordDataFormatter\Specs\DefaultRecord',
