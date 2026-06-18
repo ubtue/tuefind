@@ -493,7 +493,15 @@ $config = [
     ],
     'vufind' => [
         'plugin_managers' => [
-            'metadatavocabulary' => [],
+            'recorddataformatter_specs' => [
+                'factories' => [
+                    'TueFind\RecordDataFormatter\Specs\DefaultRecord' => 'VuFind\RecordDataFormatter\Specs\DefaultRecordFactory',
+                ],
+                'aliases' => [
+                    'DefaultRecord' => 'TueFind\RecordDataFormatter\Specs\DefaultRecord',
+                    'VuFind\RecordDataFormatter\Specs\DefaultRecord' => 'TueFind\RecordDataFormatter\Specs\DefaultRecord',
+                ],
+            ],
         ],
     ],
     'lmc_rbac' => [

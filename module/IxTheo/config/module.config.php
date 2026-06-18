@@ -102,6 +102,19 @@ $config = [
             ],
         ],
     ],
+    'vufind' => [
+        'plugin_managers' => [
+            'recorddataformatter_specs' => [
+                'factories' => [
+                    'IxTheo\RecordDataFormatter\Specs\DefaultRecord' => 'IxTheo\RecordDataFormatter\Specs\DefaultRecordFactory',
+                ],
+                'aliases' => [
+                    'DefaultRecord' => 'IxTheo\RecordDataFormatter\Specs\DefaultRecord',
+                    'VuFind\RecordDataFormatter\Specs\DefaultRecord' => 'IxTheo\RecordDataFormatter\Specs\DefaultRecord',
+                ],
+            ],
+        ],
+    ],
 ];
 
 $nonTabRecordActions = ['PDASubscribe', 'Subscribe'];

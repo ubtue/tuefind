@@ -5,7 +5,6 @@ return [
         'factories' => [
             'TueFind\View\Helper\Root\Matomo' => 'TueFind\View\Helper\Root\MatomoFactory',
             'TueFind\View\Helper\Root\Record' => 'VuFind\View\Helper\Root\RecordFactory',
-            'TueFind\View\Helper\Root\RecordDataFormatter' => 'TueFind\View\Helper\Root\RecordDataFormatterFactory',
             'TueFind\View\Helper\Root\SearchTabs' => 'VuFind\View\Helper\Root\SearchTabsFactory',
             'TueFind\View\Helper\Root\Url' => 'VuFind\View\Helper\Root\UrlFactory',
             'TueFind\View\Helper\TueFind\Authority' => 'TueFind\View\Helper\TueFind\AuthorityFactory',
@@ -18,7 +17,6 @@ return [
             'authority' => 'TueFind\View\Helper\TueFind\Authority',
             'matomo' => 'TueFind\View\Helper\Root\Matomo',
             'record' => 'TueFind\View\Helper\Root\Record',
-            'recordDataFormatter' => 'TueFind\View\Helper\Root\RecordDataFormatter',
             'searchTabs' => 'TueFind\View\Helper\Root\SearchTabs',
             'url' => 'TueFind\View\Helper\Root\Url',
             'Url' => 'TueFind\View\Helper\Root\Url',
