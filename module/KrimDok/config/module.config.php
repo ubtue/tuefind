@@ -53,6 +53,19 @@ $config = [
             ],
         ],
     ],
+    'vufind' => [
+        'plugin_managers' => [
+            'recorddataformatter_specs' => [
+                'factories' => [
+                    'KrimDok\RecordDataFormatter\Specs\DefaultRecord' => 'VuFind\RecordDataFormatter\Specs\DefaultRecordFactory',
+                ],
+                'aliases' => [
+                    'DefaultRecord' => 'KrimDok\RecordDataFormatter\Specs\DefaultRecord',
+                    'VuFind\RecordDataFormatter\Specs\DefaultRecord' => 'KrimDok\RecordDataFormatter\Specs\DefaultRecord',
+                ],
+            ],
+        ],
+    ],
 ];
 
 $recordRoutes = [ 'search2record' => 'Search2Record' ];
