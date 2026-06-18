@@ -842,7 +842,7 @@ $(document).ready(function () {
         $('#searchForm_lookfor').val("");
         $("#searchForm").submit();
     });
-
+    TueFind.GetFulltextSnippets();
     /* disabled for now, as it causes problems with the CMS docs table, which is currently the only table in the frontend
     new DataTable('.dataTable',{
         scrollX: true
