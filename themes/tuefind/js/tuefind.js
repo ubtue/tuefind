@@ -96,6 +96,70 @@ var TueFind = {
         return '<div id="snippets_' + doc_id + '" class="alert alert-danger">' +  VuFind.translate('Proxy Error') + '</div>';
     },
 
+    GetFulltextSnippetItem: function(url, doc_id, query, verbose = false, synonyms = "", fulltext_types = "") {
+        var valid_synonym_terms = new RegExp('lang|all');
+        synonyms = synonyms.match(valid_synonym_terms) ? synonyms : false;
+        $.ajax({
+            type: "GET",
+            url: url + "fulltextsnippetproxy/load?search_query=" + query + "&doc_id=" + doc_id + (verbose ? "&verbose=1" : "")
+                                                                 + (synonyms ? "&synonyms=" + synonyms : "")
+                                                                 + (fulltext_types ? "&fulltext_types=" + fulltext_types : ""),
+            dataType: "json",
+            success: function (json) {
+                $(document).ready(function () {
+                    if (json.status === 'PROXY_ERROR') {
+                        if (verbose) {
+                             $("#snippets_" + doc_id).replaceWith(TueFind.GetProxyErrorMessage(doc_id));
+                        }
+                        $("#snippet_place_holder_" + doc_id).each(function () {
+                                $(this).replaceWith(TueFind.GetProxyErrorMessage(doc_id));
+                        });
+                        return;
+                    }
+                    var snippets = json['snippets'][doc_id]['snippets'];
+                    $("#snippet_place_holder_" + doc_id).each(function () {
+                        if (snippets)
+                            $(this).replaceWith('<div id="snippets_' + doc_id + '" class="snippet-div">' + snippets.join('<br/>') + '<br/></div>');
+                        else if (verbose)
+                            $(this).replaceWith(TueFind.GetNoMatchesMessage(doc_id));
+                        else
+                            $(this).replaceWith();
+                    });
+                    if (snippets)
+                        $(this).removeAttr('style');
+                    $("#snippets_" + doc_id).each(function () {
+                        if (snippets) {
+                            let styles = snippets.map(a => (a.hasOwnProperty('style') ? a.style : null )).filter(Boolean).join();
+                            $(styles).appendTo("head");
+                            let snippets_and_pages = snippets.map(a => a.snippet +
+                                                                 (a.hasOwnProperty('page') ? '<br/>' + TueFind.FormatPageInformation(a.page) : '') +
+                                                                 TueFind.FormatTextType(a.text_type, verbose, fulltext_types));
+                            $(this).html(snippets_and_pages.join('<hr class="snippet-separator"/>'));
+                        } else if (verbose)
+                            $(this).replaceWith(TueFind.GetNoMatchesMessage(doc_id));
+                        else
+                            $(this).html("");
+                    });
+                    $("[id^=snippets_] > p").each(function () {
+                                                      this.style.transform="none";
+                                                      // Try to fix erroneous snippets with huge font-sizes (c.f. tuefind/issues/3072)
+                                                      let currentFontValue = $(this).css('font-size');
+                                                      const [full, currentFontSize, unit] = currentFontValue.match(/(\d+(?:\.\d+)?)(.*)/);
+                                                      if (unit == 'px' && currentFontSize >= 50)
+                                                          $(this).css('font-size', '14px');
+                                                 });
+                    if (!verbose && snippets)
+                        $("#snippets_" + doc_id).after(TueFind.ItemFulltextLink(doc_id, query, synonyms));
+                });
+            }, // end success
+            error: function (xhr, ajaxOptions, thrownError) {
+                $("#snippet_place_holder").each(function () {
+                    $(this).replaceWith('Invalid server response!!!!!');
+                })
+            }
+        });
+    },
+
     GetFulltextSnippets: function (url, doc_id, query, verbose = false, synonyms = "", fulltext_types = "") {
         let url_api = "";
         let snippets_data = [];
@@ -529,7 +593,7 @@ var TueFind = {
         $(document).ready(function(){
             TueFind.HandlePassedFulltextQuery();
             $("#ItemFulltextSearchForm").submit(function(){
-                TueFind.GetFulltextSnippets(home_url,
+                TueFind.GetFulltextSnippetItem(home_url,
                                             record_id,
                                             $("#searchForm_fulltext").val(),
                                             true,
