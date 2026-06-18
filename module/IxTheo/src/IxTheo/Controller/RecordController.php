@@ -2,9 +2,14 @@
 
 namespace IxTheo\Controller;
 
+use function boolval;
+
+/**
+ * @method Plugin\PDASubscriptions PDASubscriptions() PDASubscriptions plugin
+ */
 class RecordController extends \TueFind\Controller\RecordController
 {
-    function processSubscribe()
+    protected function processSubscribe()
     {
         if (!($user = $this->getUser())) {
             return $this->forceLogin();
@@ -12,14 +17,15 @@ class RecordController extends \TueFind\Controller\RecordController
         $post = $this->getRequest()->getPost()->toArray();
         $results = $this->loadRecord()->subscribe($post, $user);
 
-        if ($results == null)
+        if ($results == null) {
             return $this->createViewModel();
+        }
 
         $this->flashMessenger()->addMessage('Success', 'success');
         return $this->redirectToRecord();
     }
 
-    function processUnsubscribe()
+    protected function processUnsubscribe()
     {
         if (!($user = $this->getUser())) {
             return $this->forceLogin();
@@ -31,12 +37,12 @@ class RecordController extends \TueFind\Controller\RecordController
         return $this->redirectToRecord();
     }
 
-    function subscribeAction()
+    public function subscribeAction()
     {
         // Process form submission:
         if ($this->params()->fromPost('action') == 'subscribe') {
             return $this->processSubscribe();
-        } else if ($this->params()->fromPost('action') == 'unsubscribe') {
+        } elseif ($this->params()->fromPost('action') == 'unsubscribe') {
             return $this->processUnsubscribe();
         }
 
@@ -50,12 +56,12 @@ class RecordController extends \TueFind\Controller\RecordController
 
         $infoText = $this->forward()->dispatch('Content', [
             'action' => 'content',
-            'page' => 'SubscriptionInfoText'
+            'page' => 'SubscriptionInfoText',
         ]);
 
         $subscribed = boolval($service->findExisting($user, $recordId));
         $bundles = [];
-        foreach($driver->getBundleIds() as $bundle) {
+        foreach ($driver->getBundleIds() as $bundle) {
             if (boolval($service->findExisting($user, $bundle))) {
                 $bundles[] = $bundle;
             }
@@ -66,7 +72,7 @@ class RecordController extends \TueFind\Controller\RecordController
                                        'infoText' => $infoText]);
     }
 
-    function processPDASubscribe()
+    public function processPDASubscribe()
     {
         if (!($user = $this->getUser())) {
             return $this->forceLogin();
@@ -81,11 +87,11 @@ class RecordController extends \TueFind\Controller\RecordController
         $notifier = $this->PDASubscriptions();
         $notifier->sendPDANotificationEmail($post, $user, $data, $id);
         $notifier->sendPDAUserNotificationEmail($post, $user, $data, $id);
-        $this->flashMessenger()->addMessage("Success", 'success');
+        $this->flashMessenger()->addMessage('Success', 'success');
         return $this->redirectToRecord();
     }
 
-    function processPDAUnsubscribe()
+    public function processPDAUnsubscribe()
     {
         if (!($user = $this->getUser())) {
             return $this->forceLogin();
@@ -96,16 +102,16 @@ class RecordController extends \TueFind\Controller\RecordController
         $notifier = $this->PDASubscriptions();
         $notifier->sendPDAUnsubscribeEmail($user, $id);
         $notifier->sendPDAUserUnsubscribeEmail($user, $id);
-        $this->flashMessenger()->addMessage("Success", 'success');
+        $this->flashMessenger()->addMessage('Success', 'success');
         return $this->redirectToRecord();
     }
 
-    function pdasubscribeAction()
+    public function pdasubscribeAction()
     {
         // Process form submission:
         if ($this->params()->fromPost('action') == 'pdasubscribe') {
             return $this->processPDASubscribe();
-        } else if ($this->params()->fromPost('action') == 'pdaunsubscribe') {
+        } elseif ($this->params()->fromPost('action') == 'pdaunsubscribe') {
             return $this->processPDAUnsubscribe();
         }
 
@@ -119,12 +125,12 @@ class RecordController extends \TueFind\Controller\RecordController
 
         $infoText = $this->forward()->dispatch('Content', [
             'action' => 'content',
-            'page' => 'PDASubscriptionInfoText'
+            'page' => 'PDASubscriptionInfoText',
         ]);
-        $bookDescription = $driver->getAuthorsAsString() . ": " .
-                           $driver->getTitle() .  ($driver->getYear() != "" ? "(" . $driver->getYear() . ")" : "") .
-                           ", ISBN: " . $driver->getISBNs()[0];
-        return $this->createViewModel(["pdasubscription" => !($table->findExisting($user, $recordId)), "infoText" => $infoText,
-                                       "bookDescription" => $bookDescription]);
+        $bookDescription = $driver->getAuthorsAsString() . ': ' .
+                           $driver->getTitle() . ($driver->getYear() != '' ? '(' . $driver->getYear() . ')' : '') .
+                           ', ISBN: ' . $driver->getISBNs()[0];
+        return $this->createViewModel(['pdasubscription' => !($table->findExisting($user, $recordId)), 'infoText' => $infoText,
+                                       'bookDescription' => $bookDescription]);
     }
 }

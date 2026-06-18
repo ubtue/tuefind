@@ -1,16 +1,16 @@
 <?php
+
 namespace IxTheo\Search\PDASubscriptions;
 
-
+use IxTheo\Db\Service\PDASubscriptionServiceInterface as PDASubscriptionService;
 use Lmc\Rbac\Mvc\Service\AuthorizationServiceAwareInterface;
 use Lmc\Rbac\Mvc\Service\AuthorizationServiceAwareTrait;
 use VuFind\Exception\ListPermission as ListPermissionException;
 use VuFind\Search\Base\Results as BaseResults;
-use IxTheo\Db\Service\PDASubscriptionServiceInterface as PDASubscriptionService;
 
+use function count;
 
-class Results extends BaseResults
-    implements AuthorizationServiceAwareInterface
+class Results extends BaseResults implements AuthorizationServiceAwareInterface
 {
     use AuthorizationServiceAwareTrait;
 
@@ -30,6 +30,7 @@ class Results extends BaseResults
 
     /**
      * DB table
+     *
      * @var \IxTheo\Db\Table\PDASubscription
      */
     protected $pdasubscriptionService = null;
@@ -59,7 +60,7 @@ class Results extends BaseResults
         $this->user = $auth ? $auth->getIdentity() : false;
         $list = $this->getListObject();
 
-        if (is_null($list) && !$this->user) {
+        if (null === $list && !$this->user) {
             throw new ListPermissionException('Cannot retrieve subscriptions without logged in user.');
         }
 
@@ -75,12 +76,12 @@ class Results extends BaseResults
         $recordsToRequest = [];
         foreach ($list as $row) {
             $recordsToRequest[] = [
-                'id' => $row->book_ppn,
-                'source' => 'Solr'
+                'id' => $row->getBookPpn(),
+                'source' => 'Solr',
             ];
         }
 
-        $this->recordLoader->setCacheContext("PDASubscription");
+        $this->recordLoader->setCacheContext('PDASubscription');
         $this->results = $this->recordLoader->loadBatch($recordsToRequest);
     }
 
@@ -99,7 +100,8 @@ class Results extends BaseResults
         return $this->list;
     }
 
-    public function setPDAsubscriptionService(PDASubscriptionService $pdasubscriptionService) {
+    public function setPDAsubscriptionService(PDASubscriptionService $pdasubscriptionService)
+    {
         $this->pdasubscriptionService = $pdasubscriptionService;
     }
 }

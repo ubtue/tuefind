@@ -2,22 +2,22 @@
 
 namespace IxTheo\AjaxHandler;
 
-use IxTheo\Db\Service\SubscriptionService;
+use IxTheo\Db\Service\PDASubscriptionService;
 use Laminas\Mvc\Controller\Plugin\Params;
 use VuFind\Db\Entity\UserEntityInterface;
 use VuFind\I18n\Translator\TranslatorAwareInterface;
 
-class DeleteSubscription extends \VuFind\AjaxHandler\AbstractBase implements TranslatorAwareInterface
+class DeletePDASubscription extends \VuFind\AjaxHandler\AbstractBase implements TranslatorAwareInterface
 {
     use \VuFind\I18n\Translator\TranslatorAwareTrait;
 
-    protected SubscriptionService $subscriptionService;
+    protected PDASubscriptionService $PDASubscriptionService;
 
     protected ?UserEntityInterface $user;
 
-    public function __construct(SubscriptionService $subscriptionService, ?UserEntityInterface $user)
+    public function __construct(PDASubscriptionService $PDASubscriptionService, ?UserEntityInterface $user)
     {
-        $this->subscriptionService = $subscriptionService;
+        $this->PDASubscriptionService = $PDASubscriptionService;
         $this->user = $user;
     }
 
@@ -39,7 +39,7 @@ class DeleteSubscription extends \VuFind\AjaxHandler\AbstractBase implements Tra
             );
         }
 
-        $this->subscriptionService->unsubscribe($this->user, $delete);
+        $this->PDASubscriptionService->unsubscribe($this->user, $delete);
 
         return $this->formatResponse('');
     }

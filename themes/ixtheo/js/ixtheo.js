@@ -66,12 +66,23 @@ var IxTheo = {
     });
   },
 
-  DeleteMyresearchSubscription: function(ID,Source) {
+  DeleteMyresearchSubscription: function(ID, Source) {
     const url = VuFind.path + '/AJAX/JSON?' + new URLSearchParams({ method: 'deleteSubscription' });
     $.post(url, {
             'delete': ID,
-            'source': Source,
-            'confirm': true
+            'source': Source
+        },
+        function(){
+            location.reload(true);
+        }
+    );
+  },
+
+  DeleteMyresearchPDASubscription: function(ID, Source) {
+    const url = VuFind.path + '/AJAX/JSON?' + new URLSearchParams({ method: 'deletePDASubscription' });
+    $.post(url, {
+            'delete': ID,
+            'source': Source
         },
         function(){
             location.reload(true);
@@ -102,7 +113,13 @@ $(document).ready(function() {
   $('.confirm_delete_subscription').click(function(){
     let ID = $(this).data('id');
     let Source = $(this).data('source');
-    IxTheo.DeleteMyresearchSubscription(ID,Source);
+    IxTheo.DeleteMyresearchSubscription(ID, Source);
+  });
+
+  $('.confirm_delete_pdasubscription').click(function(){
+    let ID = $(this).data('id');
+    let Source = $(this).data('source');
+    IxTheo.DeleteMyresearchPDASubscription(ID, Source);
   });
 
 });

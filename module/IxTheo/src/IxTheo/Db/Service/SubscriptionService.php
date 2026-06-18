@@ -32,7 +32,7 @@ class SubscriptionService extends \VuFind\Db\Service\AbstractDbService implement
         $subscription = $this->createEntity();
         $subscription->setUser($user);
         $subscription->setJournalControlNumberOrBundleName($journalControlNumberOrBundleName);
-        $this->entityManager->persist($subscription);
+        $this->persistEntity($subscription);
         return $subscription;
     }
 
@@ -40,7 +40,7 @@ class SubscriptionService extends \VuFind\Db\Service\AbstractDbService implement
     {
         $dql = 'DELETE FROM ' . SubscriptionEntityInterface::class . ' s '
         . ' WHERE s.user = :userId AND s.journalControlNumberOrBundleName = :recordId';
-        
+
         $query = $this->entityManager->createQuery($dql);
         $query->setParameters([
             'userId' => $user->getId(),
