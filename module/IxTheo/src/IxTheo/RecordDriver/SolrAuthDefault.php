@@ -2,6 +2,6 @@
 
 namespace IxTheo\RecordDriver;
 
-class SolrAuthDefault extends \TueFind\RecordDriver\SolrAuthMarc {
-
+class SolrAuthDefault extends \TueFind\RecordDriver\SolrAuthMarc
+{
 }

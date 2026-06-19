@@ -1,47 +1,27 @@
 <?php
 
-namespace IxTheo\View\Helper\Root;
+namespace IxTheo\RecordDataFormatter\Specs;
 
-use Psr\Container\ContainerInterface;
 use VuFind\View\Helper\Root\RecordDataFormatter\SpecBuilder;
 
-class RecordDataFormatterFactory extends \TueFind\View\Helper\Root\RecordDataFormatterFactory {
+class DefaultRecord extends \TueFind\RecordDataFormatter\Specs\DefaultRecord
+{
+    protected \VuFind\Config\AccountCapabilities $accountCapabilities;
 
-    /**
-     * User Account Capabilites Service
-     * @var \VuFind\Config\AccountCapabilities
-     */
-    protected $accountCapabilities;
+    protected \VuFind\Db\Service\PluginManager $dbServicePluginManager;
 
-    /**
-     * Db Table Plugin Manager (e.g. to check user-specific rights)
-     * @var \VuFind\Db\Service\PluginManager
-     */
-    protected $dbServicePluginManager;
-
-    /**
-     * The logged in user, or null if not logged in
-     * @var \VuFind\Db\Row\User
-     */
-    protected $user;
+    protected \VuFind\Db\Entity\UserEntityInterface $user;
 
     protected $tuefind;
 
-    public function __invoke(ContainerInterface $container, $requestedName,
-        array $options = null
-    ) {
+    public function initWithContainer($container)
+    {
         $this->user = $container->get('ViewHelperManager')->get('auth')->getUserObject();
         $this->tuefind = $container->get('ViewHelperManager')->get('tuefind');
         $this->dbServicePluginManager = $container->get(\VuFind\Db\Service\PluginManager::class);
         $this->accountCapabilities = $container->get(\VuFind\Config\AccountCapabilities::class);
-        return parent::__invoke($container, $requestedName, $options);
     }
 
-    /**
-     * Get default specifications for displaying data in core metadata.
-     *
-     * @return array
-     */
     public function getDefaultCoreSpecs(): array
     {
         $spec = new SpecBuilder();
@@ -49,7 +29,8 @@ class RecordDataFormatterFactory extends \TueFind\View\Helper\Root\RecordDataFor
         $this->addPrecedingTitle($spec);  // TueFind specific
         // Other Titles (IxTheo-specific)
         $spec->setLine(
-            'Other Titles', 'getOtherTitles'
+            'Other Titles',
+            'getOtherTitles'
         );
         $this->addDeduplicatedAuthors($spec);
         $this->addFormats($spec);
@@ -61,13 +42,18 @@ class RecordDataFormatterFactory extends \TueFind\View\Helper\Root\RecordDataFor
         // PDA (IxTheo-specific)
         if ($this->accountCapabilities->getPdaSetting()) {
             $spec->setTemplateLine(
-                'PDA', 'showPDA', 'data-PDA.phtml', ['rowId' => 'pda_row']
+                'PDA',
+                'showPDA',
+                'data-PDA.phtml',
+                ['rowId' => 'pda_row']
             );
         }
         // TAD (IxTheo-specific)
         if ($this->user != null && $this->user->getCanUseTAD()) {
             $spec->setTemplateLine(
-                'TAD', 'workIsTADCandidate', 'data-TAD.phtml'
+                'TAD',
+                'workIsTADCandidate',
+                'data-TAD.phtml'
             );
         }
         $this->addInterlibraryLoan($spec);
@@ -75,50 +61,68 @@ class RecordDataFormatterFactory extends \TueFind\View\Helper\Root\RecordDataFor
         $this->addContainerIdsAndTitles($spec);
         // Reviews (IxTheo-specific)
         $spec->setTemplateLine(
-            'Reviews', 'getReviews', 'data-reviews.phtml'
+            'Reviews',
+            'getReviews',
+            'data-reviews.phtml'
         );
         // Reviewed Records (IxTheo-specific)
         $spec->setTemplateLine(
-            'Reviewed', 'getReviewedRecords', 'data-reviewed_records.phtml'
+            'Reviewed',
+            'getReviewedRecords',
+            'data-reviewed_records.phtml'
         );
         // Enclosed Titles (IxTheo-specific)
         $spec->setTemplateLine(
-            'Enclosed titles', 'getEnclosedTitlesWithAuthors', 'data-enclosed_titles.phtml'
+            'Enclosed titles',
+            'getEnclosedTitlesWithAuthors',
+            'data-enclosed_titles.phtml'
         );
         // Subscription Bundle (IxTheo-specific)
         $spec->setTemplateLine(
-            'Subscription Bundle Journals', 'isSubscriptionBundle', 'data-subscription_bundle.phtml'
+            'Subscription Bundle Journals',
+            'isSubscriptionBundle',
+            'data-subscription_bundle.phtml'
         );
         $this->addVolumesAndArticles($spec);
         $this->addEdition($spec);
         $this->addSeries($spec);
         // Standardized Subjects (IxTheo-specific)
         $spec->setTemplateLine(
-            'Standardized Subjects', 'getAllStandardizedSubjectHeadings', 'data-allStandardizedSubjectHeadings.phtml'
+            'Standardized Subjects',
+            'getAllStandardizedSubjectHeadings',
+            'data-allStandardizedSubjectHeadings.phtml'
         );
 
         // Classification (IxTheo-specific)
         $tuefindTypeName = $this->tuefind->getTueFindType();
         $spec->setTemplateLine(
-            $tuefindTypeName.' Classification', 'getIxTheoClassifications', 'data-classification.phtml'
+            $tuefindTypeName . ' Classification',
+            'getIxTheoClassifications',
+            'data-classification.phtml'
         );
 
         // Non-standardized Subjects (IxTheo-specific)
         $spec->setTemplateLine(
-            'Nonstandardized Subjects', 'getAllNonStandardizedSubjectHeadings', 'data-allNonStandardizedSubjectHeadings.phtml'
+            'Nonstandardized Subjects',
+            'getAllNonStandardizedSubjectHeadings',
+            'data-allNonStandardizedSubjectHeadings.phtml'
         );
         $this->addChildRecords($spec);
         $this->addOnlineAccess($spec);
         $this->addLicense($spec); // TueFind specific
         // Parallel Edition PPNs + Unlinked parallel Editions (IxTheo-specific)
         $spec->setTemplateLine(
-                'Parallel Edition', true, 'data-parallel_edition.phtml'
+            'Parallel Edition',
+            true,
+            'data-parallel_edition.phtml'
         );
         $this->addRecordLinks($spec);
         $this->addTags($spec);
         // Collections (IxTheo-specific)
         $spec->setTemplateLine(
-            'Sammlungen', 'getCollectionsHierarchyRaw', 'data-collectionsHierarchy.phtml'
+            'Sammlungen',
+            'getCollectionsHierarchyRaw',
+            'data-collectionsHierarchy.phtml'
         );
         $this->addTueRemarks($spec);
 
@@ -142,12 +146,16 @@ class RecordDataFormatterFactory extends \TueFind\View\Helper\Root\RecordDataFor
         $spec->setLine('Bibliography', 'getBibliographyNotes');
         // Clean ISBN with schema.org-property (IxTheo-specific)
         $spec->setLine(
-            'ISBN', 'getISBNs', null,
+            'ISBN',
+            'getISBNs',
+            null,
             ['prefix' => '<span property="isbn">', 'suffix' => '</span>']
         );
         // ISSN with schema.org-property (IxTheo-specific)
         $spec->setLine(
-            'ISSN', 'getISSNs', null,
+            'ISSN',
+            'getISSNs',
+            null,
             ['prefix' => '<span property="issn">', 'suffix' => '</span>']
         );
         $spec->setLine('Related Items', 'getRelationshipNotes');

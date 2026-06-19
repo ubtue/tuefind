@@ -1,12 +1,16 @@
 <?php
 
 namespace IxTheo\Auth;
-use VuFind\Exception\Auth as AuthException, Laminas\Crypt\Password\Bcrypt;
+
+use VuFind\Exception\Auth as AuthException;
+
+use function in_array;
 
 class Database extends \TueFind\Auth\Database
 {
-    public static $appellations = ["", "Mr", "Ms"];
-    public static $titles = ["", "B.A.", "M.A.", "M.Div.", "Dipl. Theol.", "Dr.", "Ph.D.", "Th.D.", "Prof.", "Lic. theol.", "Lic. iur. can.", "Student", "Other"];
+    public static $appellations = ['', 'Mr', 'Ms'];
+
+    public static $titles = ['', 'B.A.', 'M.A.', 'M.Div.', 'Dipl. Theol.', 'Dr.', 'Ph.D.', 'Th.D.', 'Prof.', 'Lic. theol.', 'Lic. iur. can.', 'Student', 'Other'];
 
     /**
      * Collect parameters from request and populate them.
@@ -21,7 +25,7 @@ class Database extends \TueFind\Auth\Database
 
         $additionalParams = [
             'ixtheo_title' => '',
-            'ixtheo_appellation' => ''
+            'ixtheo_appellation' => '',
         ];
         foreach ($additionalParams as $param => $default) {
             $params[$param] = $request->getPost()->get($param, $default);
@@ -55,7 +59,7 @@ class Database extends \TueFind\Auth\Database
         // This cannot be executed in "createUserFromParams"
         // since the ID will be generated afterwards in the parent
         // after persist() is called on the entity manager.
-        exec("/usr/local/bin/set_tad_access_flag.sh " . $user->getId());
+        exec(\TueFind\Utility::BIN_DIR . '/set_tad_access_flag.sh ' . $user->getId());
 
         return $user;
     }
@@ -70,14 +74,16 @@ class Database extends \TueFind\Auth\Database
         // This is technically allowed right now and might lead to problems, so we would like to keep track of the users
         // to see if we can easily prevent them from switching instances at a later point.
         $logEntry = '[' . date('Y-m-d H:i:s') . '] User "' . $user->getUsername() . '" with type "' . $userSystem . '" logging into instance "' . basename(getenv('VUFIND_LOCAL_DIR')) . '"' . PHP_EOL;
-        file_put_contents('/usr/local/var/log/tuefind/vufind_auth.log', $logEntry, FILE_APPEND);
+        file_put_contents(\TueFind\Utility::LOG_DIR . '/vufind_auth.log', $logEntry, FILE_APPEND);
 
-        if ($userSystem != $currentSystem)
-            throw new AuthException($this->translate('authentication_error_wrong_system',
-                                    ['%%currentSystem%%' => $currentSystem,
-                                     '%%userSystem%%' => $userSystem]));
+        if ($userSystem != $currentSystem) {
+            throw new AuthException($this->translate(
+                'authentication_error_wrong_system',
+                ['%%currentSystem%%' => $currentSystem,
+                '%%userSystem%%' => $userSystem]
+            ));
+        }
 
         return $user;
     }
-
 }

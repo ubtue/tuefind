@@ -3,8 +3,9 @@
 namespace IxTheo\Db\Entity;
 
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use IxTheo\Db\Entity\UserEntityInterface;
 
 #[ORM\Entity]
 class User extends \TueFind\Db\Entity\User implements UserEntityInterface
@@ -24,6 +25,19 @@ class User extends \TueFind\Db\Entity\User implements UserEntityInterface
 
     #[ORM\Column(name: 'ixtheo_journal_subscription_format', type: 'string', nullable: true, options: ['lengths' => [64]])]
     protected ?string $ixtheoJournalSubscriptionFormat = null;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Subscription::class)]
+    protected Collection $ixtheoJournalSubscriptions;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: PDASubscription::class)]
+    protected Collection $ixtheoPDASubscriptions;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->ixtheoJournalSubscriptions = new ArrayCollection();
+        $this->ixtheoPDASubscriptions = new ArrayCollection();
+    }
 
     public function getUserType(): string
     {
@@ -68,10 +82,20 @@ class User extends \TueFind\Db\Entity\User implements UserEntityInterface
         return $this->ixtheoJournalSubscriptionFormat;
     }
 
+    public function getJournalSubscriptions(): Collection
+    {
+        return $this->ixtheoJournalSubscriptions;
+    }
+
+    public function getPDASubscriptions(): Collection
+    {
+        return $this->ixtheoPDASubscriptions;
+    }
+
     public function setEmailVerified(?DateTime $dateTime): static
     {
         $result = parent::setEmailVerified($dateTime);
-        exec('/usr/local/bin/set_tad_access_flag.sh ' . $this->id);
+        exec(\TueFind\Utility::BIN_DIR . '/set_tad_access_flag.sh ' . $this->id);
         return $result;
     }
 }
