@@ -161,6 +161,12 @@ var TueFind = {
     },
 
     GetFulltextSnippets: function (url, doc_id, query, verbose = false, synonyms = "", fulltext_types = "") {
+        
+        // Only run on Search2 results pages (fulltext)
+        if (!window.location.pathname.startsWith('/Search2/Results')) {
+            return;
+        }
+
         let url_api = "";
         let snippets_data = [];
         if (doc_id === undefined) {
@@ -907,6 +913,13 @@ $(document).ready(function () {
         $("#searchForm").submit();
     });
     TueFind.GetFulltextSnippets();
+
+    var stableParent = document.querySelector('ol.record-list, .js-result-list').parentNode;
+
+    // Observe changes in the search result list and update fulltext snippets accordingly.
+    new MutationObserver(function () {
+        TueFind.GetFulltextSnippets();
+    }).observe(stableParent, { childList: true });
     /* disabled for now, as it causes problems with the CMS docs table, which is currently the only table in the frontend
     new DataTable('.dataTable',{
         scrollX: true
