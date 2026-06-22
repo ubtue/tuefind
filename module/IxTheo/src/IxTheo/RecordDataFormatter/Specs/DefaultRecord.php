@@ -10,7 +10,7 @@ class DefaultRecord extends \TueFind\RecordDataFormatter\Specs\DefaultRecord
 
     protected \VuFind\Db\Service\PluginManager $dbServicePluginManager;
 
-    protected \VuFind\Db\Entity\UserEntityInterface $user;
+    protected ?\VuFind\Db\Entity\UserEntityInterface $user;
 
     protected $tuefind;
 
