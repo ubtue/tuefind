@@ -207,7 +207,7 @@ class SolrAuthMarc extends SolrAuthDefault
     /**
      * Get birth place
      */
-    public function getBirthPlace(): ?string
+    public function getBirthPlace(): ?array
     {
         return $this->getLifePlaces()['birth'] ?? null;
     }
@@ -247,7 +247,7 @@ class SolrAuthMarc extends SolrAuthDefault
     /**
      * Get death place
      */
-    public function getDeathPlace(): ?string
+    public function getDeathPlace(): ?array
     {
         return $this->getLifePlaces()['death'] ?? null;
     }
