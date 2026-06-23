@@ -61,7 +61,6 @@ $config = [
     ],
     'service_manager' => [
         'factories' => [
-            'IxTheo\AjaxHandler\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'IxTheo\Auth\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'IxTheo\Autocomplete\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'IxTheo\Db\Entity\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
@@ -75,7 +74,6 @@ $config = [
             'IxTheo\RecordTab\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
         ],
         'aliases' => [
-            'VuFind\AjaxHandler\PluginManager' => 'IxTheo\AjaxHandler\PluginManager',
             'VuFind\AuthPluginManager' => 'IxTheo\Auth\PluginManager',
             'VuFind\Auth\PluginManager' => 'IxTheo\Auth\PluginManager',
             'VuFind\Autocomplete\PluginManager' => 'IxTheo\Autocomplete\PluginManager',

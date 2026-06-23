@@ -396,7 +396,6 @@ $config = [
     'service_manager' => [
         'allow_override' => true,
         'factories' => [
-            'TueFind\AjaxHandler\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'TueFind\Export' => 'VuFind\ExportFactory',
             'TueFind\Auth\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'TueFind\Cache\Manager' => 'VuFind\Cache\ManagerFactory',
@@ -435,7 +434,6 @@ $config = [
         ],
         'aliases' => [
             'VuFind\AccountCapabilities' => 'TueFind\Config\AccountCapabilities',
-            'VuFind\AjaxHandler\PluginManager' => 'TueFind\AjaxHandler\PluginManager',
             'VuFind\AuthPluginManager' => 'TueFind\Auth\PluginManager',
             'VuFind\Auth\PluginManager' => 'TueFind\Auth\PluginManager',
             'VuFind\Cover\CachingProxy' => 'TueFind\Cover\CachingProxy',
