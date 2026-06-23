@@ -190,10 +190,10 @@ var TueFind = {
                     fulltext_types: $(this).data('fulltext-types')
                 });
             });
-            url_api = "/fulltextsnippetproxy/load?docs=" + JSON.stringify(snippets_data);
+            url_api = VuFind.path + "/fulltextsnippetproxy/load?docs=" + JSON.stringify(snippets_data);
 
         } else {
-            url_api = url + "fulltextsnippetproxy/load?search_query=" + query + "&doc_id=" + JSON.stringify(doc_id) + (verbose ? "&verbose=1" : "")
+            url_api = VuFind.path + "fulltextsnippetproxy/load?search_query=" + query + "&doc_id=" + JSON.stringify(doc_id) + (verbose ? "&verbose=1" : "")
                 + (synonyms ? "&synonyms=" + synonyms : "")
                 + (fulltext_types ? "&fulltext_types=" + fulltext_types : "")
 
@@ -275,7 +275,7 @@ var TueFind = {
             }, // end success
             error: function (xhr, ajaxOptions, thrownError) {
                 $("#snippet_place_holder").each(function () {
-                    $(this).replaceWith('Invalid server response!!!!!');
+                    $(this).replaceWith(VuFind.translate('Invalid server response'));
                 })
             }
         });
