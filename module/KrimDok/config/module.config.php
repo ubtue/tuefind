@@ -1,4 +1,5 @@
 <?php
+
 namespace KrimDok\Module\Config;
 
 $config = [
@@ -27,7 +28,6 @@ $config = [
     ],
     'service_manager' => [
         'factories' => [
-            'VuFind\Search\BackendManager' => 'KrimDok\Search\BackendManagerFactory',
             'KrimDok\Db\Entity\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'KrimDok\Db\Service\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'KrimDok\RecordDriver\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
@@ -62,6 +62,15 @@ $config = [
                 'aliases' => [
                     'DefaultRecord' => 'KrimDok\RecordDataFormatter\Specs\DefaultRecord',
                     'VuFind\RecordDataFormatter\Specs\DefaultRecord' => 'KrimDok\RecordDataFormatter\Specs\DefaultRecord',
+                ],
+            ],
+            'search_backend' => [
+                'factories' => [
+                    'Solr' => 'KrimDok\Search\Factory\SolrDefaultBackendFactory',
+                    'Search2' => 'KrimDok\Search\Factory\Search2BackendFactory',
+                ],
+                'aliases' => [
+
                 ],
             ],
         ],
