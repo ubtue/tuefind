@@ -64,7 +64,6 @@ $config = [
             'IxTheo\Auth\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'IxTheo\Db\Entity\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'IxTheo\Db\Service\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
-            'IxTheo\Navigation\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'IxTheo\Recommend\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'IxTheo\RecordDriver\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'IxTheo\Search\Options\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
@@ -77,7 +76,6 @@ $config = [
             'VuFind\Auth\PluginManager' => 'IxTheo\Auth\PluginManager',
             'VuFind\Db\Entity\PluginManager' => 'IxTheo\Db\Entity\PluginManager',
             'VuFind\Db\Service\PluginManager' => 'IxTheo\Db\Service\PluginManager',
-            'VuFind\Navigation\PluginManager' => 'IxTheo\Navigation\PluginManager',
             'VuFind\RecommendPluginManager' => 'IxTheo\Recommend\PluginManager',
             'VuFind\Recommend\PluginManager' => 'IxTheo\Recommend\PluginManager',
             'VuFind\RecordDriverPluginManager' => 'IxTheo\RecordDriver\PluginManager',
@@ -115,6 +113,14 @@ $config = [
                 ],
                 'aliases' => [
                     'solr' => 'IxTheo\Autocomplete\Solr',
+                ],
+            ],
+            'navigation' => [
+                'factories' => [
+                    'IxTheo\Navigation\AccountMenu' => 'VuFind\Navigation\AccountMenuFactory',
+                ],
+                'aliases' => [
+                    'VuFind\Navigation\AccountMenu' => 'IxTheo\Navigation\AccountMenu',
                 ],
             ],
             'recorddataformatter_specs' => [

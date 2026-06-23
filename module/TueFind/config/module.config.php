@@ -410,7 +410,6 @@ $config = [
             'TueFind\Sitemap\Generator' => 'VuFind\Sitemap\GeneratorFactory',
             'TueFind\Mailer\Mailer' => 'TueFind\Mailer\Factory',
             'TueFind\MetadataVocabulary\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
-            'TueFind\Navigation\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'TueFind\Recommend\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'TueFind\Record\FallbackLoader\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'TueFind\Record\Loader' => 'VuFind\Record\LoaderFactory',
@@ -448,7 +447,6 @@ $config = [
             'VuFind\Form\Handler\PluginManager' => 'TueFind\Form\Handler\PluginManager',
             'VuFind\Mailer\Mailer' => 'TueFind\Mailer\Mailer',
             'VuFind\MetadataVocabulary\PluginManager' => 'TueFind\MetadataVocabulary\PluginManager',
-            'VuFind\Navigation\PluginManager' => 'TueFind\Navigation\PluginManager',
             'VuFind\RecommendPluginManager' => 'TueFind\Recommend\PluginManager',
             'VuFind\Recommend\PluginManager' => 'TueFind\Recommend\PluginManager',
             'VuFind\Record\FallbackLoader\PluginManager' => 'TueFind\Record\FallbackLoader\PluginManager',
@@ -505,6 +503,14 @@ $config = [
                 ],
                 'aliases' => [
 
+                ],
+            ],
+            'navigation' => [
+                'factories' => [
+                    'TueFind\Navigation\AccountMenu' => 'VuFind\Navigation\AccountMenuFactory',
+                ],
+                'aliases' => [
+                    'VuFind\Navigation\AccountMenu' => 'TueFind\Navigation\AccountMenu',
                 ],
             ],
             'recorddataformatter_specs' => [
