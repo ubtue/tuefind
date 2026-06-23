@@ -424,7 +424,6 @@ $config = [
             'TueFind\Service\DSpace6' => 'TueFind\Service\DSpaceFactory',
             'TueFind\Service\DSpace7' => 'TueFind\Service\DSpaceFactory',
             'TueFind\Service\KfL' => 'TueFind\Service\KfLFactory',
-            'TueFind\Sitemap\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'TueFindSearch\Service' => 'VuFind\Service\SearchServiceFactory',
             'Laminas\Session\SessionManager' => 'TueFind\Session\ManagerFactory',
         ],
@@ -464,7 +463,6 @@ $config = [
             'VuFind\Search\Params\PluginManager' => 'TueFind\Search\Params\PluginManager',
             'VuFind\Search\Results\PluginManager' => 'TueFind\Search\Results\PluginManager',
             'VuFind\Sitemap\Generator' => 'TueFind\Sitemap\Generator',
-            'VuFind\Sitemap\PluginManager' => 'TueFind\Sitemap\PluginManager',
             'VuFindSearch\Service' => 'TueFindSearch\Service',
         ],
     ],
@@ -525,6 +523,14 @@ $config = [
                 ],
                 'aliases' => [
 
+                ],
+            ],
+            'sitemap' => [
+                'factories' => [
+                    'TueFind\Sitemap\Plugin\Index' => 'TueFind\Sitemap\Plugin\IndexFactory',
+                ],
+                'aliases' => [
+                    'Index' => 'TueFind\Sitemap\Plugin\Index',
                 ],
             ],
         ],
