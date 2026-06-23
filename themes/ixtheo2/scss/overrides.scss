@@ -1533,3 +1533,12 @@ a {
     left: 0 !important;
     transform: translate(-50%,-50%)
 }
+
+.ix2-parent-search-nav ul>li.nav-item a.active {
+  background-color: #fff;
+  outline: dotted 1px #000;
+}
+
+.filters-toggle-bar {
+  display: none;
+}

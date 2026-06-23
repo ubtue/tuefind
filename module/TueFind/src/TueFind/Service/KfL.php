@@ -1,6 +1,5 @@
 <?php
 
-
 namespace TueFind\Service;
 
 /**
@@ -12,26 +11,32 @@ namespace TueFind\Service;
 class KfL
 {
     protected $authManager;
+
     protected $tuefindInstance;
+
     protected $recordLoader;
 
     protected $baseUrl;
+
     protected $apiId;
+
     protected $encryptionKey;
+
     protected $cipher;
+
     protected $licenses;
 
-    const RETURN_REDIRECT = 0;
-    const RETURN_JSON = 1;
-    const RETURN_TEMPLATE = 2;
+    public const RETURN_REDIRECT = 0;
+    public const RETURN_JSON = 1;
+    public const RETURN_TEMPLATE = 2;
 
     /**
      * Constructor
      *
-     * @param Config $config            Configuration entries
-     * @param Manager $authManager      Auth Manager
-     * @param string $tuefindInstance   TueFind instance
-     * @param Loader $recordLoader      Record loader
+     * @param Config  $config          Configuration entries
+     * @param Manager $authManager     Auth Manager
+     * @param string  $tuefindInstance TueFind instance
+     * @param Loader  $recordLoader    Record loader
      */
     public function __construct($config, $authManager, $tuefindInstance, $recordLoader)
     {
@@ -68,10 +73,11 @@ class KfL
         $url = $this->baseUrl;
         $i = 0;
         foreach ($requestData as $key => $value) {
-            if ($i == 0)
+            if ($i == 0) {
                 $url .= '?';
-            else
+            } else {
                 $url .= '&';
+            }
             $url .= urlencode($key) . '=' . urlencode($value);
             ++$i;
         }
@@ -98,12 +104,14 @@ class KfL
         $ssoJson = openssl_decrypt($ssoBin, $this->cipher, $this->encryptionKey, OPENSSL_RAW_DATA);
 
         $error = '';
-        while (($errorLine = openssl_error_string()) != false)
+        while (($errorLine = openssl_error_string()) != false) {
             $error .= $errorLine . "\n";
+        }
         rtrim($error);
 
-        if ($error != '')
+        if ($error != '') {
             return $error;
+        }
 
         $ssoArray = json_decode($ssoJson);
         return $ssoArray;
@@ -124,34 +132,37 @@ class KfL
         // to errors in other actions in the same controller, which should still
         // be possible if the user is not logged in.
         $user = $this->authManager->getUserObject();
-        if (!$user)
+        if (!$user) {
             throw new \Exception('Could not generate KfL Frontend User Token, user is not logged in!');
+        }
 
-        if ($user->isLicenseAccessLocked())
+        if ($user->isLicenseAccessLocked()) {
             throw new \Exception('Could not generate KfL Frontend User Token, user\'s access to resources has been locked!');
+        }
 
         // We pass an anonymized version of the user id (tuefind_uuid) together with host+tuefind instance.
         // This value will be saved by the proxy and reported back to us in case of abuse.
-        return implode('#', [gethostname(), $this->tuefindInstance, $user->tuefind_uuid]);
+        return implode('#', [gethostname(), $this->tuefindInstance, $user->getUuid()]);
     }
 
     /**
      * Get encrypted Single Sign On part of the request (including user credentials)
      *
-     * @param string $entitlement   Entitlement (=license) for the given title, mandatory for redirects.
+     * @param string $entitlement Entitlement (=license) for the given title, mandatory for redirects.
      *
      * @return string
      *
-     * @throws Exception
+     * @throws \Exception
      */
-    protected function getSso($entitlement=null): string
+    protected function getSso($entitlement = null): string
     {
         $env = [];
-        if ($entitlement != null)
+        if ($entitlement != null) {
             $env[] = ['name' => 'entitlement', 'value' => $entitlement];
+        }
 
         // Amount of seconds from now until the URL is valid:
-        $validTimespan = 60*60*24*1; // 1 day
+        $validTimespan = 60 * 60 * 24 * 1; // 1 day
 
         $sso = ['user' => $this->getFrontendUserToken(),
                 'timestamp' => time() + $validTimespan,
@@ -159,8 +170,9 @@ class KfL
         ];
 
         $encryptedData = openssl_encrypt(json_encode($sso), $this->cipher, $this->encryptionKey, OPENSSL_RAW_DATA);
-        if ($encryptedData === false)
-            throw new Exception('Could not encrypt data!');
+        if ($encryptedData === false) {
+            throw new \Exception('Could not encrypt data!');
+        }
         return bin2hex($encryptedData);
     }
 
@@ -168,11 +180,11 @@ class KfL
      * Get basic request template needed for every request
      * (containing user credentials and so on)
      *
-     * @param string $entitlement   Entitlement (=license) for the given title, mandatory for redirects.
+     * @param string $entitlement Entitlement (=license) for the given title, mandatory for redirects.
      *
      * @return array
      */
-    protected function getRequestTemplate($entitlement=null): array
+    protected function getRequestTemplate($entitlement = null): array
     {
         $requestData = [];
         $requestData['id'] = $this->apiId;
@@ -183,22 +195,24 @@ class KfL
     /**
      * Get the URL to access the given record via the KfL proxy.
      *
-     * @param array $licenseInfo
+     * @param array  $licenseInfo
      * @param string $url
-     * @param title $title
+     * @param title  $title
      *
      * @return string
      */
-    protected function getUrl(array $licenseInfo, ?string $url=null, ?string $title=null): string
+    protected function getUrl(array $licenseInfo, ?string $url = null, ?string $title = null): string
     {
         $requestData = $this->getRequestTemplate($licenseInfo['entitlement']);
         $requestData['method'] = 'getHANID';
         $requestData['return'] = self::RETURN_REDIRECT;
         $requestData['hanid'] = $licenseInfo['hanId'];
-        if (!empty($url))
+        if (!empty($url)) {
             $requestData['url'] = $url;
-        if (!empty($title))
+        }
+        if (!empty($title)) {
             $requestData['title'] = $title;
+        }
 
         return $this->generateUrl($requestData);
     }
@@ -228,8 +242,9 @@ class KfL
         // Main: Get Han ID from License URL
         $url = $driver->getKflUrl();
         $licenseInfo = $this->getLicenseInfoByDriver($driver);
-        if (empty($licenseInfo))
-            throw new \Exception("No License found for record " . $driver->getUniqueId());
+        if (empty($licenseInfo)) {
+            throw new \Exception('No License found for record ' . $driver->getUniqueId());
+        }
         $title = $driver->getTitle();
 
         return $this->getUrl($licenseInfo, $url, $title);
@@ -243,7 +258,7 @@ class KfL
      *
      * @return string
      */
-    public function getUrlByHanID(string $hanId, ?string $url=null)
+    public function getUrlByHanID(string $hanId, ?string $url = null)
     {
         return $this->getUrl($this->getLicenseInfoByHanID($hanId), $url);
     }
@@ -255,7 +270,6 @@ class KfL
      *       since it might contain entitlements & other security-related functions.
      *       If you need specific information (e.g. countryMode), please use a separate public getter.
      *
-     *
      * @param SolrMarc $driver
      *
      * @return array|null
@@ -265,9 +279,10 @@ class KfL
         $url = $driver->getKflUrl();
         if ($url) {
             $urlInfo = $this->parseKflUrl($url);
-            foreach($this->licenses as $license) {
-                if ($license['hanId'] == $urlInfo['hanId'])
+            foreach ($this->licenses as $license) {
+                if ($license['hanId'] == $urlInfo['hanId']) {
                     return $license;
+                }
             }
         }
 
@@ -284,8 +299,9 @@ class KfL
     protected function getLicenseInfoByHanID(string $hanId): array
     {
         foreach ($this->licenses as $license) {
-            if ($license['hanId'] == $hanId)
+            if ($license['hanId'] == $hanId) {
                 return $license;
+            }
         }
 
         throw new \Exception('KfL license information missing for HAN ID: ' . $hanId);
@@ -300,8 +316,9 @@ class KfL
      */
     protected function parseKflUrl($url): array
     {
-        if (strstr($url, 'proxy.fid-lizenzen.de') === false)
-            throw new \Exception("Invalid KfL URL: " . $url);
+        if (strstr($url, 'proxy.fid-lizenzen.de') === false) {
+            throw new \Exception('Invalid KfL URL: ' . $url);
+        }
 
         $path = parse_url($url, PHP_URL_PATH);
 
