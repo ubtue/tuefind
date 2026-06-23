@@ -399,7 +399,6 @@ $config = [
             'TueFind\Export' => 'VuFind\ExportFactory',
             'TueFind\Auth\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'TueFind\Cache\Manager' => 'VuFind\Cache\ManagerFactory',
-            'TueFind\Captcha\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'TueFind\Config\AccountCapabilities' => 'TueFind\Config\AccountCapabilitiesFactory',
             'TueFind\ContentBlock\BlockLoader' => 'TueFind\ContentBlock\BlockLoaderFactory',
             'TueFind\ContentBlock\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
@@ -438,7 +437,6 @@ $config = [
             'VuFind\Auth\PluginManager' => 'TueFind\Auth\PluginManager',
             'VuFind\Cover\CachingProxy' => 'TueFind\Cover\CachingProxy',
             'VuFind\Cache\Manager' => 'TueFind\Cache\Manager',
-            'VuFind\Captcha\PluginManager' => 'TueFind\Captcha\PluginManager',
             'VuFind\Config\AccountCapabilities' => 'TueFind\Config\AccountCapabilities',
             'VuFind\ContentBlock\BlockLoader' => 'TueFind\ContentBlock\BlockLoader',
             'VuFind\ContentBlock\PluginManager' => 'TueFind\ContentBlock\PluginManager',
@@ -501,6 +499,14 @@ $config = [
                     'getSubscriptionBundleEntries' => 'TueFind\AjaxHandler\GetSubscriptionBundleEntries',
                     'CmsDocs' => 'TueFind\AjaxHandler\CmsDocsEntries',
                     'Mapping' => 'TueFind\AjaxHandler\MappingEntries',
+                ],
+            ],
+            'captcha' => [
+                'factories' => [
+                    'VuFind\Captcha\Image' => 'TueFind\Captcha\ImageFactory',
+                ],
+                'aliases' => [
+
                 ],
             ],
             'recorddataformatter_specs' => [
