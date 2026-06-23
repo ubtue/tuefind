@@ -502,6 +502,15 @@ $config = [
                     'VuFind\RecordDataFormatter\Specs\DefaultRecord' => 'TueFind\RecordDataFormatter\Specs\DefaultRecord',
                 ],
             ],
+            'search_backend' => [
+                'factories' => [
+                    'SolrAuth' => 'TueFind\Search\Factory\SolrAuthBackendFactory',
+                    'Search3' => 'TueFind\Search\Factory\Search3BackendFactory',
+                ],
+                'aliases' => [
+
+                ],
+            ],
         ],
     ],
     'lmc_rbac' => [
