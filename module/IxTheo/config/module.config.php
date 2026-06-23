@@ -111,6 +111,14 @@ $config = [
                     'deletePDASubscription' => 'IxTheo\AjaxHandler\DeletePDASubscription',
                 ],
             ],
+            'autocomplete' => [
+                'factories' => [
+                    'IxTheo\Autocomplete\Solr' => 'IxTheo\Autocomplete\SolrFactory',
+                ],
+                'aliases' => [
+                    'solr' => 'IxTheo\Autocomplete\Solr',
+                ],
+            ],
             'recorddataformatter_specs' => [
                 'factories' => [
                     'IxTheo\RecordDataFormatter\Specs\DefaultRecord' => 'IxTheo\RecordDataFormatter\Specs\DefaultRecordFactory',
