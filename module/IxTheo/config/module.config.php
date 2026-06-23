@@ -1,4 +1,5 @@
 <?php
+
 namespace IxTheo\Module\Config;
 
 $config = [
@@ -60,8 +61,6 @@ $config = [
     ],
     'service_manager' => [
         'factories' => [
-            'VuFind\Search\BackendManager' => 'IxTheo\Search\BackendManagerFactory',
-
             'IxTheo\AjaxHandler\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'IxTheo\Auth\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'IxTheo\Autocomplete\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
@@ -111,6 +110,15 @@ $config = [
                 'aliases' => [
                     'DefaultRecord' => 'IxTheo\RecordDataFormatter\Specs\DefaultRecord',
                     'VuFind\RecordDataFormatter\Specs\DefaultRecord' => 'IxTheo\RecordDataFormatter\Specs\DefaultRecord',
+                ],
+            ],
+            'search_backend' => [
+                'factories' => [
+                    'Solr' => 'IxTheo\Search\Factory\SolrDefaultBackendFactory',
+                    'Search2' => 'IxTheo\Search\Factory\Search2BackendFactory',
+                ],
+                'aliases' => [
+
                 ],
             ],
         ],
