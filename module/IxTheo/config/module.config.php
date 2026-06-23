@@ -103,6 +103,16 @@ $config = [
     ],
     'vufind' => [
         'plugin_managers' => [
+            'ajaxhandler' => [
+                'factories' => [
+                    'IxTheo\AjaxHandler\DeleteSubscription' => 'IxTheo\AjaxHandler\DeleteSubscriptionFactory',
+                    'IxTheo\AjaxHandler\DeletePDASubscription' => 'IxTheo\AjaxHandler\DeletePDASubscriptionFactory',
+                ],
+                'aliases' => [
+                    'deleteSubscription' => 'IxTheo\AjaxHandler\DeleteSubscription',
+                    'deletePDASubscription' => 'IxTheo\AjaxHandler\DeletePDASubscription',
+                ],
+            ],
             'recorddataformatter_specs' => [
                 'factories' => [
                     'IxTheo\RecordDataFormatter\Specs\DefaultRecord' => 'IxTheo\RecordDataFormatter\Specs\DefaultRecordFactory',

@@ -493,6 +493,18 @@ $config = [
     ],
     'vufind' => [
         'plugin_managers' => [
+            'ajaxhandler' => [
+                'factories' => [
+                    'TueFind\AjaxHandler\GetSubscriptionBundleEntries' => 'TueFind\AjaxHandler\GetSubscriptionBundleEntriesFactory',
+                    'TueFind\AjaxHandler\CmsDocsEntries' => 'TueFind\AjaxHandler\CmsDocsEntriesFactory',
+                    'TueFind\AjaxHandler\MappingEntries' => 'TueFind\AjaxHandler\MappingEntriesFactory',
+                ],
+                'aliases' => [
+                    'getSubscriptionBundleEntries' => 'TueFind\AjaxHandler\GetSubscriptionBundleEntries',
+                    'CmsDocs' => 'TueFind\AjaxHandler\CmsDocsEntries',
+                    'Mapping' => 'TueFind\AjaxHandler\MappingEntries',
+                ],
+            ],
             'recorddataformatter_specs' => [
                 'factories' => [
                     'TueFind\RecordDataFormatter\Specs\DefaultRecord' => 'VuFind\RecordDataFormatter\Specs\DefaultRecordFactory',
