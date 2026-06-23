@@ -116,7 +116,16 @@ var TueFind = {
                         });
                         return;
                     }
-                    var snippets = json['snippets'][doc_id]['snippets'];
+                    var snippets = [];
+                    if (
+                            json &&
+                            json.snippets_collection &&
+                            json.snippets_collection[doc_id] &&
+                            json.snippets_collection[doc_id].snippets
+                        ) {
+                            snippets = json.snippets_collection[doc_id].snippets;
+                        } 
+                    
                     $("#snippet_place_holder_" + doc_id).each(function () {
                         if (snippets)
                             $(this).replaceWith('<div id="snippets_' + doc_id + '" class="snippet-div">' + snippets.join('<br/>') + '<br/></div>');
@@ -200,7 +209,6 @@ var TueFind = {
         }
 
         var valid_synonym_terms = new RegExp('lang|all');
-        synonyms = synonyms.match(valid_synonym_terms) ? synonyms : false;
         $.ajax({
             type: "GET",
             url: url_api,
@@ -208,8 +216,8 @@ var TueFind = {
             success: function (json) {
                 $(document).ready(function () {
                     snippets_data.forEach(element => {
-                        let snippets = json['snippets'][element['id']]['snippets'];
-                        const status = json['snippets'][element['id']]['status'];
+                        let snippets = json['snippets_collection'][element['id']]['snippets'];
+                        const status = json['snippets_collection'][element['id']]['status'];
                         const doc_id = element['id'];
                         const verbose = element['verbose'];
                         const fulltext_types = (element['fulltext_type_filters'] !== "") ? element['fulltext_type_filters'] : element['fulltext_types'];
@@ -914,12 +922,16 @@ $(document).ready(function () {
     });
     TueFind.GetFulltextSnippets();
 
-    var stableParent = document.querySelector('ol.record-list, .js-result-list').parentNode;
+    var resultList = document.querySelector('ol.record-list, .js-result-list');
 
-    // Observe changes in the search result list and update fulltext snippets accordingly.
-    new MutationObserver(function () {
-        TueFind.GetFulltextSnippets();
-    }).observe(stableParent, { childList: true });
+    if (resultList && resultList.parentNode) {
+        var stableParent = resultList.parentNode;
+
+        // Observe changes in the search result list and update fulltext snippets accordingly.
+        new MutationObserver(function () {
+            TueFind.GetFulltextSnippets();
+        }).observe(stableParent, { childList: true });
+    }
     /* disabled for now, as it causes problems with the CMS docs table, which is currently the only table in the frontend
     new DataTable('.dataTable',{
         scrollX: true

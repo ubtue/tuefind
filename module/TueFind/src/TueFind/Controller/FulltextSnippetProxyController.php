@@ -582,7 +582,7 @@ class FulltextSnippetProxyController extends \VuFind\Controller\AbstractBase imp
         try {
             $model =  new JsonModel([
                 'status' => 'SUCCESS',
-                'snippets' => $snippets
+                'snippets_collection' => $snippets
             ]);
         }
         catch (\Exception $e) {
