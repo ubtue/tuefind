@@ -106,7 +106,7 @@ $config = [
             ],
             'auth' => [
                 'factories' => [
-                    'IxTheo\Auth\Database' => ' Laminas\ServiceManager\Factory\InvokableFactory',
+                    'IxTheo\Auth\Database' => 'Laminas\ServiceManager\Factory\InvokableFactory',
                 ],
                 'aliases' => [
                     'db' => 'IxTheo\Auth\Database',

@@ -57,7 +57,7 @@ $config = [
         'plugin_managers' => [
             'auth' => [
                 'factories' => [
-                    'KrimDok\Auth\Database' => ' Laminas\ServiceManager\Factory\InvokableFactory',
+                    'KrimDok\Auth\Database' => 'Laminas\ServiceManager\Factory\InvokableFactory',
                 ],
                 'aliases' => [
                     'db' => 'KrimDok\Auth\Database',

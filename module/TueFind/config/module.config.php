@@ -496,7 +496,7 @@ $config = [
             ],
             'auth' => [
                 'factories' => [
-                    'TueFind\Auth\Database' => ' Laminas\ServiceManager\Factory\InvokableFactory',
+                    'TueFind\Auth\Database' => 'Laminas\ServiceManager\Factory\InvokableFactory',
                 ],
                 'aliases' => [
                     'db' => 'TueFind\Auth\Database',
@@ -509,6 +509,14 @@ $config = [
                 ],
                 'aliases' => [
 
+                ],
+            ],
+            'form_handler' => [
+                'factories' => [
+                    'TueFind\Form\Handler\Email' => 'VuFind\Form\Handler\EmailFactory',
+                ],
+                'aliases' => [
+                    'email' => 'TueFind\Form\Handler\Email',
                 ],
             ],
             'navigation' => [
