@@ -408,7 +408,6 @@ $config = [
             'TueFind\Sitemap\Generator' => 'VuFind\Sitemap\GeneratorFactory',
             'TueFind\Mailer\Mailer' => 'TueFind\Mailer\Factory',
             'TueFind\MetadataVocabulary\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
-            'TueFind\Record\FallbackLoader\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'TueFind\Record\Loader' => 'VuFind\Record\LoaderFactory',
             'TueFind\RecordDriver\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'TueFind\RecordTab\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
@@ -441,7 +440,6 @@ $config = [
             'VuFind\Form\Handler\PluginManager' => 'TueFind\Form\Handler\PluginManager',
             'VuFind\Mailer\Mailer' => 'TueFind\Mailer\Mailer',
             'VuFind\MetadataVocabulary\PluginManager' => 'TueFind\MetadataVocabulary\PluginManager',
-            'VuFind\Record\FallbackLoader\PluginManager' => 'TueFind\Record\FallbackLoader\PluginManager',
             'VuFind\Record\Loader' => 'TueFind\Record\Loader',
             'VuFind\RecordLoader' => 'TueFind\Record\Loader',
             'VuFind\RecordDriverPluginManager' => 'TueFind\RecordDriver\PluginManager',
@@ -538,6 +536,14 @@ $config = [
                 'aliases' => [
                     'ids' => 'TueFind\Recommend\Ids',
                     'sidefacets' => 'TueFind\Recommend\SideFacets',
+                ],
+            ],
+            'record_fallbackloader' => [
+                'factories' => [
+                    'TueFind\Record\FallbackLoader\Solr' => 'TueFind\Record\FallbackLoader\SolrFactory',
+                ],
+                'aliases' => [
+                    'solr' => 'TueFind\Record\FallbackLoader\Solr',
                 ],
             ],
             'recorddataformatter_specs' => [
