@@ -408,7 +408,6 @@ $config = [
             'TueFind\MetadataVocabulary\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'TueFind\Record\Loader' => 'VuFind\Record\LoaderFactory',
             'TueFind\RecordDriver\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
-            'TueFind\RecordTab\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'TueFind\RecordTab\ItemFulltextSearch' => 'Laminas\ServiceManager\Factory\InvokableFactory',
             'TueFind\Service\CmsSync' => 'TueFind\Service\CmsSyncFactory',
             'TueFind\Service\DSpace6' => 'TueFind\Service\DSpaceFactory',
@@ -437,8 +436,6 @@ $config = [
             'VuFind\RecordLoader' => 'TueFind\Record\Loader',
             'VuFind\RecordDriverPluginManager' => 'TueFind\RecordDriver\PluginManager',
             'VuFind\RecordDriver\PluginManager' => 'TueFind\RecordDriver\PluginManager',
-            'VuFind\RecordTabPluginManager' => 'TueFind\RecordTab\PluginManager',
-            'VuFind\RecordTab\PluginManager' => 'TueFind\RecordTab\PluginManager',
             'VuFind\Search' => 'TueFindSearch\Service',
             'VuFind\Sitemap\Generator' => 'TueFind\Sitemap\Generator',
             'VuFindSearch\Service' => 'TueFindSearch\Service',
@@ -605,6 +602,16 @@ $config = [
                 'aliases' => [
                     'DefaultRecord' => 'TueFind\RecordDataFormatter\Specs\DefaultRecord',
                     'VuFind\RecordDataFormatter\Specs\DefaultRecord' => 'TueFind\RecordDataFormatter\Specs\DefaultRecord',
+                ],
+            ],
+            'recordtab' => [
+                'factories' => [
+                    'TueFind\RecordTab\AuthorityNameVariants' => 'Laminas\ServiceManager\Factory\InvokableFactory',
+                    'TueFind\RecordTab\ItemFulltextSearch' => 'Laminas\ServiceManager\Factory\InvokableFactory',
+                ],
+                'aliases' => [
+                    'AuthorityNameVariants' => 'TueFind\RecordTab\AuthorityNameVariants',
+                    'ItemFulltextSearch' => 'TueFind\RecordTab\ItemFulltextSearch',
                 ],
             ],
             'search_backend' => [
