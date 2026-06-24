@@ -61,14 +61,10 @@ $config = [
     ],
     'service_manager' => [
         'factories' => [
-            'IxTheo\Db\Entity\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
-            'IxTheo\Db\Service\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'IxTheo\RecordDriver\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'IxTheo\RecordTab\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
         ],
         'aliases' => [
-            'VuFind\Db\Entity\PluginManager' => 'IxTheo\Db\Entity\PluginManager',
-            'VuFind\Db\Service\PluginManager' => 'IxTheo\Db\Service\PluginManager',
             'VuFind\RecordDriverPluginManager' => 'IxTheo\RecordDriver\PluginManager',
             'VuFind\RecordDriver\PluginManager' => 'IxTheo\RecordDriver\PluginManager',
             'VuFind\RecordTab\PluginManager' => 'IxTheo\RecordTab\PluginManager',
@@ -110,6 +106,40 @@ $config = [
                 ],
                 'aliases' => [
                     'solr' => 'IxTheo\Autocomplete\Solr',
+                ],
+            ],
+            'db_entity' => [
+                'factories' => [
+                    'IxTheo\Db\Entity\PDASubscription' => 'Laminas\ServiceManager\Factory\InvokableFactory',
+                    'IxTheo\Db\Entity\Subscription' => 'Laminas\ServiceManager\Factory\InvokableFactory',
+                    'IxTheo\Db\Entity\User' => 'Laminas\ServiceManager\Factory\InvokableFactory',
+                ],
+                'aliases' => [
+                    'TueFind\Db\Entity\UserEntityInterface' => 'IxTheo\Db\Entity\UserEntityInterface',
+                    'TueFind\Db\Entity\User' => 'IxTheo\Db\Entity\User',
+                    'IxTheo\Db\Entity\PDASubscriptionEntityInterface' => 'IxTheo\Db\Entity\PDASubscription',
+                    'IxTheo\Db\Entity\SubscriptionEntityInterface' => 'IxTheo\Db\Entity\Subscription',
+                    'IxTheo\Db\Entity\UserEntityInterface' => 'IxTheo\Db\Entity\User',
+                ],
+            ],
+            'db_service' => [
+                'factories' => [
+                    'IxTheo\Db\Service\PDASubscriptionService' => 'VuFind\Db\Service\AbstractDbServiceFactory',
+                    'IxTheo\Db\Service\PublicationService' => 'VuFind\Db\Service\AbstractDbServiceFactory',
+                    'IxTheo\Db\Service\SubscriptionService' => 'VuFind\Db\Service\AbstractDbServiceFactory',
+                    'IxTheo\Db\Service\UserService' => 'VuFind\Db\Service\UserServiceFactory',
+                    'IxTheo\Db\Service\UserAuthorityService' => 'VuFind\Db\Service\AbstractDbServiceFactory',
+                    'IxTheo\Db\Service\UserAuthorityHistoryService' => 'VuFind\Db\Service\AbstractDbServiceFactory',
+                ],
+                'aliases' => [
+                    'VuFind\Db\Service\UserServiceInterface' => 'IxTheo\Db\Service\UserService',
+                    'TueFind\Db\Service\UserServiceInterface' => 'IxTheo\Db\Service\UserService',
+                    'IxTheo\Db\Service\PDASubscriptionServiceInterface' => 'IxTheo\Db\Service\PDASubscriptionService',
+                    'IxTheo\Db\Service\PublicationServiceInterface' => 'IxTheo\Db\Service\PublicationService',
+                    'IxTheo\Db\Service\SubscriptionServiceInterface' => 'IxTheo\Db\Service\SubscriptionService',
+                    'IxTheo\Db\Service\UserServiceInterface' => 'IxTheo\Db\Service\UserService',
+                    'IxTheo\Db\Service\UserAuthorityServiceInterface' => 'IxTheo\Db\Service\UserAuthorityService',
+                    'IxTheo\Db\Service\UserAuthorityHistoryServiceInterface' => 'IxTheo\Db\Service\UserAuthorityHistoryService',
                 ],
             ],
             'navigation' => [

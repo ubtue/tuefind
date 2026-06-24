@@ -28,13 +28,9 @@ $config = [
     ],
     'service_manager' => [
         'factories' => [
-            'KrimDok\Db\Entity\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
-            'KrimDok\Db\Service\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'KrimDok\RecordDriver\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
         ],
         'aliases' => [
-            'VuFind\Db\Entity\PluginManager' => 'KrimDok\Db\Entity\PluginManager',
-            'VuFind\Db\Service\PluginManager' => 'KrimDok\Db\Service\PluginManager',
             'VuFind\RecordDriverPluginManager' => 'KrimDok\RecordDriver\PluginManager',
             'VuFind\RecordDriver\PluginManager' => 'KrimDok\RecordDriver\PluginManager',
         ],
@@ -57,6 +53,25 @@ $config = [
                 'aliases' => [
                     'db' => 'KrimDok\Auth\Database',
                     'database' => 'KrimDok\Auth\Database',
+                ],
+            ],
+            'db_entity' => [
+                'factories' => [
+                    'KrimDok\Db\Entity\User' => 'Laminas\ServiceManager\Factory\InvokableFactory',
+                ],
+                'aliases' => [
+                    'KrimDok\Db\Entity\UserEntityInterface' => 'KrimDok\Db\Entity\User',
+                    'TueFind\Db\Entity\UserEntityInterface' => 'KrimDok\Db\Entity\UserEntityInterface',
+                    'TueFind\Db\Entity\User' => 'KrimDok\Db\Entity\User',
+                ],
+            ],
+            'db_service' => [
+                'factories' => [
+                    'KrimDok\Db\Service\UserService' => 'VuFind\Db\Service\UserServiceFactory',
+                ],
+                'aliases' => [
+                    'TueFind\Db\Service\UserServiceInterface' => 'KrimDok\Db\Service\UserServiceInterface',
+                    'KrimDok\Db\Service\UserServiceInterface' => 'KrimDok\Db\Service\UserService',
                 ],
             ],
             'recorddataformatter_specs' => [
