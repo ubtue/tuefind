@@ -412,9 +412,6 @@ $config = [
             'TueFind\RecordDriver\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'TueFind\RecordTab\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'TueFind\RecordTab\ItemFulltextSearch' => 'Laminas\ServiceManager\Factory\InvokableFactory',
-            'TueFind\Search\Options\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
-            'TueFind\Search\Params\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
-            'TueFind\Search\Results\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'TueFind\Service\CmsSync' => 'TueFind\Service\CmsSyncFactory',
             'TueFind\Service\DSpace6' => 'TueFind\Service\DSpaceFactory',
             'TueFind\Service\DSpace7' => 'TueFind\Service\DSpaceFactory',
@@ -447,9 +444,6 @@ $config = [
             'VuFind\RecordTabPluginManager' => 'TueFind\RecordTab\PluginManager',
             'VuFind\RecordTab\PluginManager' => 'TueFind\RecordTab\PluginManager',
             'VuFind\Search' => 'TueFindSearch\Service',
-            'VuFind\Search\Options\PluginManager' => 'TueFind\Search\Options\PluginManager',
-            'VuFind\Search\Params\PluginManager' => 'TueFind\Search\Params\PluginManager',
-            'VuFind\Search\Results\PluginManager' => 'TueFind\Search\Results\PluginManager',
             'VuFind\Sitemap\Generator' => 'TueFind\Sitemap\Generator',
             'VuFindSearch\Service' => 'TueFindSearch\Service',
         ],
@@ -562,6 +556,40 @@ $config = [
                 ],
                 'aliases' => [
 
+                ],
+            ],
+            'search_options' => [
+                'factories' => [
+                    'solrauthorfacets' => 'VuFind\Search\Options\OptionsFactory',
+                ],
+                'aliases' => [
+                    'search2' => 'TueFind\Search\Search2\Options',
+                    'search3' => 'TueFind\Search\Search3\Options',
+                    'solrauthorfacets' => 'TueFind\Search\SolrAuthorFacets\Options',
+                ],
+            ],
+            'search_params' => [
+                'factories' => [
+                    'TueFind\Search\SolrAuthorFacets\Params' => 'VuFind\Search\Solr\ParamsFactory',
+                ],
+                'aliases' => [
+                    'search3' => 'TueFind\Search\Search3\Params',
+                    'solr' => 'TueFind\Search\Solr\Params',
+                    'solrauthorfacets' => 'TueFind\Search\SolrAuthorFacets\Params',
+                ],
+            ],
+            'search_results' => [
+                'factories' => [
+                    'TueFind\Search\Search3\Results' => 'TueFind\Search\Search3\ResultsFactory',
+                    'TueFind\Search\Solr\Results' => 'VuFind\Search\Solr\ResultsFactory',
+                    'TueFind\Search\SolrAuth\Results' => 'VuFind\Search\Solr\ResultsFactory',
+                    'TueFind\Search\SolrAuthorFacets\Results' => 'VuFind\Search\Solr\ResultsFactory',
+                ],
+                'aliases' => [
+                    'search3' => 'TueFind\Search\Search3\Results',
+                    'solr' => 'TueFind\Search\Solr\Results',
+                    'solrauth' => 'TueFind\Search\SolrAuth\Results',
+                    'solrauthorfacets' => 'TueFind\Search\SolrAuthorFacets\Results',
                 ],
             ],
             'sitemap' => [

@@ -64,9 +64,6 @@ $config = [
             'IxTheo\Db\Entity\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'IxTheo\Db\Service\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'IxTheo\RecordDriver\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
-            'IxTheo\Search\Options\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
-            'IxTheo\Search\Params\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
-            'IxTheo\Search\Results\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'IxTheo\RecordTab\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
         ],
         'aliases' => [
@@ -74,9 +71,6 @@ $config = [
             'VuFind\Db\Service\PluginManager' => 'IxTheo\Db\Service\PluginManager',
             'VuFind\RecordDriverPluginManager' => 'IxTheo\RecordDriver\PluginManager',
             'VuFind\RecordDriver\PluginManager' => 'IxTheo\RecordDriver\PluginManager',
-            'VuFind\Search\Options\PluginManager' => 'IxTheo\Search\Options\PluginManager',
-            'VuFind\Search\Params\PluginManager' => 'IxTheo\Search\Params\PluginManager',
-            'VuFind\Search\Results\PluginManager' => 'IxTheo\Search\Results\PluginManager',
             'VuFind\RecordTab\PluginManager' => 'IxTheo\RecordTab\PluginManager',
         ],
     ],
@@ -150,6 +144,47 @@ $config = [
                 ],
                 'aliases' => [
 
+                ],
+            ],
+            'search_options' => [
+                'factories' => [
+                    'IxTheo\Search\Search2\Options' => 'VuFind\Search\Options\OptionsFactory',
+                    'IxTheo\Search\Solr\Options' => 'VuFind\Search\Options\OptionsFactory',
+                    'IxTheo\Search\KeywordChainSearch\Options' => 'VuFind\Search\Options\OptionsFactory',
+                    'IxTheo\Search\Subscriptions\Options' => 'VuFind\Search\Options\OptionsFactory',
+                    'IxTheo\Search\PDASubscriptions\Options' => 'VuFind\Search\Options\OptionsFactory',
+                ],
+                'aliases' => [
+                    'search2' => 'IxTheo\Search\Search2\Options',
+                    'solr' => 'IxTheo\Search\Solr\Options',
+                    'keywordchainsearch' => 'IxTheo\Search\KeywordChainSearch\Options',
+                    'Subscriptions' => 'IxTheo\Search\Subscriptions\Options',
+                    'pdasubscriptions' => 'IxTheo\Search\PDASubscriptions\Options',
+                ],
+            ],
+            'search_params' => [
+                'factories' => [
+
+                ],
+                'aliases' => [
+                    'solr' => 'IxTheo\Search\Solr\Params',
+                    'keywordchainsearch' => 'IxTheo\Search\KeywordChainSearch\Params',
+                ],
+            ],
+            'search_results' => [
+                'factories' => [
+                    'IxTheo\Search\Search2\Results' => 'VuFind\Search\Search2\ResultsFactory',
+                    'IxTheo\Search\Solr\Results' => 'VuFind\Search\Solr\ResultsFactory',
+                    'IxTheo\Search\KeywordChainSearch\Results' => 'VuFind\Search\Solr\ResultsFactory',
+                    'IxTheo\Search\Subscriptions\Results' => 'IxTheo\Search\Subscriptions\ResultsFactory',
+                    'IxTheo\Search\PDASubscriptions\Results' => 'IxTheo\Search\PDASubscriptions\ResultsFactory',
+                ],
+                'aliases' => [
+                    'search2' => 'IxTheo\Search\Search2\Results',
+                    'solr' => 'IxTheo\Search\Solr\Results',
+                    'keywordchainsearch' => 'IxTheo\Search\KeywordChainSearch\Results',
+                    'Subscriptions' => 'IxTheo\Search\Subscriptions\Results',
+                    'pdasubscriptions' => 'IxTheo\Search\PDASubscriptions\Results',
                 ],
             ],
         ],

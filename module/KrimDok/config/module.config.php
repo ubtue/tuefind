@@ -31,17 +31,12 @@ $config = [
             'KrimDok\Db\Entity\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'KrimDok\Db\Service\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'KrimDok\RecordDriver\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
-            'KrimDok\Search\Params\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
-            'KrimDok\Search\Results\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory'
         ],
         'aliases' => [
             'VuFind\Db\Entity\PluginManager' => 'KrimDok\Db\Entity\PluginManager',
             'VuFind\Db\Service\PluginManager' => 'KrimDok\Db\Service\PluginManager',
             'VuFind\RecordDriverPluginManager' => 'KrimDok\RecordDriver\PluginManager',
             'VuFind\RecordDriver\PluginManager' => 'KrimDok\RecordDriver\PluginManager',
-            'VuFind\SearchParamsPluginManager' => 'KrimDok\Search\Params\PluginManager',
-            'VuFind\Search\Params\PluginManager' => 'KrimDok\Search\Params\PluginManager',
-            'VuFind\Search\Results\PluginManager' => 'KrimDok\Search\Results\PluginManager'
         ],
     ],
     'doctrine' => [
@@ -80,6 +75,24 @@ $config = [
                 ],
                 'aliases' => [
 
+                ],
+            ],
+            'search_params' => [
+                'factories' => [
+
+                ],
+                'aliases' => [
+                    'solr' => 'KrimDok\Search\Solr\Params',
+                ],
+            ],
+            'search_results' => [
+                'factories' => [
+                    'KrimDok\Search\Search2\Results' => 'VuFind\Search\Search2\ResultsFactory',
+                    'KrimDok\Search\Solr\Results' => 'VuFind\Search\Solr\ResultsFactory',
+                ],
+                'aliases' => [
+                    'search2' => 'KrimDok\Search\Search2\Results',
+                    'solr' => 'KrimDok\Search\Solr\Results',
                 ],
             ],
         ],
