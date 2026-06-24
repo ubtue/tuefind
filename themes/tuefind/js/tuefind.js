@@ -193,7 +193,7 @@ var TueFind = {
             url_api = VuFind.path + "/fulltextsnippetproxy/load?docs=" + JSON.stringify(snippets_data);
 
         } else {
-            url_api = VuFind.path + "fulltextsnippetproxy/load?search_query=" + query + "&doc_id=" + JSON.stringify(doc_id) + (verbose ? "&verbose=1" : "")
+            url_api = VuFind.path + "/fulltextsnippetproxy/load?search_query=" + query + "&doc_id=" + JSON.stringify(doc_id) + (verbose ? "&verbose=1" : "")
                 + (synonyms ? "&synonyms=" + synonyms : "")
                 + (fulltext_types ? "&fulltext_types=" + fulltext_types : "")
 
@@ -203,7 +203,6 @@ var TueFind = {
                 query: query,
                 synonym_type: $(this).data('synonym-type'),
                 verbose: verbose,
-                // fulltext_type_filters: $(this).data('fulltext-type-filters'),
                 fulltext_types: fulltext_types
             });
         }

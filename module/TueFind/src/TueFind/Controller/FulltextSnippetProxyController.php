@@ -1,136 +1,159 @@
 <?php
+
 /**
  * Proxy Controller Module
  *
- * @category    TueFind
- * @author      Johannes Riedl <johannes.riedl@uni-tuebingen.de>
- * @copyright   2019 Universtitätsbibliothek Tübingen
+ * @category  TueFind
+ * @author    Johannes Riedl <johannes.riedl@uni-tuebingen.de>
+ * @copyright 2019 Universtitätsbibliothek Tübingen
  */
+
 namespace TueFind\Controller;
 
 use Laminas\View\Model\JsonModel;
 
+use function array_key_exists;
+use function array_slice;
+use function count;
+use function function_exists;
+use function is_array;
+use function strlen;
 
 /**
  * Proxy for Fulltext Snippets in Elasticsearch
- * @package  Controller
+ *
+ * @package Controller
  */
 
 class FulltextSnippetProxyController extends \VuFind\Controller\AbstractBase implements \VuFind\I18n\Translator\TranslatorAwareInterface
 {
-
     use \VuFind\I18n\Translator\TranslatorAwareTrait;
 
     protected $base_url; //Elasticsearch host and port (host:port)
+
     protected $index; //Elasticsearch index
+
     protected $html_index; //Elasticssearch index with single HTML pages
+
     protected $es; // Elasticsearch interface
+
     protected $logger;
+
     protected $maxSnippets = 5;
+
     protected $text_type_to_description_map;
-    const FIELD = 'full_text';
-    const DOCUMENT_ID = 'id';
-    const TEXT_TYPE = 'text_type';
-    const highlightStartTag = '<span class="highlight">';
-    const highlightEndTag = '</span>';
-    const fulltextsnippetIni = 'fulltextsnippet';
-    const MAX_SNIPPETS_DEFAULT = 3;
-    const MAX_SNIPPETS_VERBOSE = 1000;
-    const PHRASE_LIMIT = 10000000;
-    const FRAGMENT_SIZE_DEFAULT = 300;
-    const FRAGMENT_SIZE_VERBOSE = 700;
-    const ORDER_DEFAULT = 'none';
-    const ORDER_VERBOSE = 'score';
-    const esHighlightTag = 'em';
+    public const FIELD = 'full_text';
+    public const DOCUMENT_ID = 'id';
+    public const TEXT_TYPE = 'text_type';
+    public const highlightStartTag = '<span class="highlight">';
+    public const highlightEndTag = '</span>';
+    public const fulltextsnippetIni = 'fulltextsnippet';
+    public const MAX_SNIPPETS_DEFAULT = 3;
+    public const MAX_SNIPPETS_VERBOSE = 1000;
+    public const PHRASE_LIMIT = 10000000;
+    public const FRAGMENT_SIZE_DEFAULT = 300;
+    public const FRAGMENT_SIZE_VERBOSE = 700;
+    public const ORDER_DEFAULT = 'none';
+    public const ORDER_VERBOSE = 'score';
+    public const esHighlightTag = 'em';
     // must match definitions in TuelibMixin.java
-    const description_to_text_type_map = [ 'Fulltext' => '1', 'Table of Contents' => '2',
+    public const description_to_text_type_map = [ 'Fulltext' => '1', 'Table of Contents' => '2',
                                            'Abstract' => '4', 'Summary' => '8', 'List of References' => '16',
                                            'Unknown' => '0' ];
-    const CONTENT_LENGTH_TARGET_UPPER_LIMIT = 100;
-    const CONTENT_LENGTH_TARGET_LOWER_LIMIT = 20;
-    const CHUNK_LENGTH_MIN_SIZE = 10;
-    const DOTS = '...';
-    const MAX_AFTER_LAST_HIGHLIGHT_TEXT_LENGTH = 60;
-    const MAX_BEFORE_FIRST_HIGHLIGHT_TEXT_LENGTH = 60;
+    public const CONTENT_LENGTH_TARGET_UPPER_LIMIT = 100;
+    public const CONTENT_LENGTH_TARGET_LOWER_LIMIT = 20;
+    public const CHUNK_LENGTH_MIN_SIZE = 10;
+    public const DOTS = '...';
+    public const MAX_AFTER_LAST_HIGHLIGHT_TEXT_LENGTH = 60;
+    public const MAX_BEFORE_FIRST_HIGHLIGHT_TEXT_LENGTH = 60;
 
-
-    public function __construct(\Elastic\Elasticsearch\ClientBuilder $builder, \Laminas\ServiceManager\ServiceLocatorInterface $sm, \VuFind\Log\LoggerProxy $logger) {
+    public function __construct(\Elastic\Elasticsearch\ClientBuilder $builder, \Laminas\ServiceManager\ServiceLocatorInterface $sm, \VuFind\Log\LoggerProxy $logger)
+    {
         parent::__construct($sm);
         $this->logger = $logger;
         $config = $this->getConfig(self::fulltextsnippetIni);
-        $this->base_url = isset($config->Elasticsearch->base_url) ? $config->Elasticsearch->base_url : 'localhost:9200';
-        $this->index = isset($config->Elasticsearch->index) ? $config->Elasticsearch->index : 'full_text_cache';
-        $this->html_index = isset($config->Elasticsearch->html_index) ? $config->Elasticsearch->html_index : 'full_text_cache_html';
+        $this->base_url = $config->Elasticsearch->base_url ?? 'localhost:9200';
+        $this->index = $config->Elasticsearch->index ?? 'full_text_cache';
+        $this->html_index = $config->Elasticsearch->html_index ?? 'full_text_cache_html';
         $this->es = $builder::create()->setHosts([$this->base_url])->build();
         $this->text_type_to_description_map = array_flip(self::description_to_text_type_map);
     }
 
-
-    protected function getCurrentLang() {
+    protected function getCurrentLang()
+    {
         $this->setTranslator($this->serviceLocator->get(\Laminas\Mvc\I18n\Translator::class));
         return $this->getTranslatorLocale();
     }
 
-
-    protected function selectSynonymAnalyzer($synonyms) {
-        if ($synonyms == "all")
+    protected function selectSynonymAnalyzer($synonyms)
+    {
+        if ($synonyms == 'all') {
             return 'synonyms_all';
-        if ($synonyms == "lang")
+        }
+        if ($synonyms == 'lang') {
             return 'synonyms_' . $this->getCurrentLang();
+        }
         return 'fulltext_analyzer';
     }
 
-
-    protected function mapTextTypeDescriptionsToTypes(array $text_descriptions) : array {
+    protected function mapTextTypeDescriptionsToTypes(array $text_descriptions): array
+    {
         return array_filter(array_map(
-                            function ($description) {
-                                return self::description_to_text_type_map[$description] ?? null;
-                            },
-                            $text_descriptions));
+            function ($description) {
+                return self::description_to_text_type_map[$description] ?? null;
+            },
+            $text_descriptions
+        ));
     }
 
-
-    protected function getTextTypesFilter($types_filter) : array {
+    protected function getTextTypesFilter($types_filter): array
+    {
         $text_types = $this->mapTextTypeDescriptionsToTypes(explode(',', $types_filter));
-        if (empty($text_types))
+        if (empty($text_types)) {
             return [];
-        if (count($text_types) == 1)
+        }
+        if (count($text_types) == 1) {
             return  [ 'match' => [ self::TEXT_TYPE => $text_types[0] ]];
+        }
         return  [ 'bool' => [ 'should' =>
-                                  array_map(function ($text_type) { return [ 'match' => [ self::TEXT_TYPE => $text_type ]]; },
-                                             $text_types)
+                                  array_map(
+                                      function ($text_type) {
+                                          return [ 'match' => [ self::TEXT_TYPE => $text_type ]];
+                                      },
+                                      $text_types
+                                  ),
 
-                            ]
+                            ],
                 ];
     }
 
-
-    protected function assembleMustQueryParts($doc_id, $search_query, $synonym_analyzer, $text_types_filter) {
+    protected function assembleMustQueryParts($doc_id, $search_query, $synonym_analyzer, $text_types_filter)
+    {
         $must_query_parts = [ !empty($text_types_filter) ?
                                       [ 'bool' => [ 'must' => [  [ 'match' => [ self::DOCUMENT_ID => $doc_id ] ], $text_types_filter ] ] ] :
-                                      [ 'match' => [ self::DOCUMENT_ID => $doc_id ] ]
+                                      [ 'match' => [ self::DOCUMENT_ID => $doc_id ] ],
                             ];
         // c.f. https://stackoverflow.com/questions/2202435/php-explode-the-string-but-treat-words-in-quotes-as-a-single-word (200525)
         preg_match_all('/"(?:\\\\.|[^\\\\"])*"|\S+/', $search_query, $subqueries, PREG_PATTERN_ORDER);
         $subquery_parts = [];
         foreach (array_values($subqueries[0]) as $subquery) {
-           $is_phrase_query = \TueFind\Utility::isSurroundedByQuotes($subquery);
-           $subquery_parts[] = [ $is_phrase_query ? 'match_phrase' : 'match' =>
-                                  [ self::FIELD =>  [ 'query' => $subquery, 'analyzer' => $synonym_analyzer ] ]
+            $is_phrase_query = \TueFind\Utility::isSurroundedByQuotes($subquery);
+            $subquery_parts[] = [ $is_phrase_query ? 'match_phrase' : 'match' =>
+                                  [ self::FIELD =>  [ 'query' => $subquery, 'analyzer' => $synonym_analyzer ] ],
                                ];
         }
         $must_query_parts[] = [ 'bool' => [ 'must' => $subquery_parts ] ];
         return $must_query_parts;
     }
 
-
-    protected function getQueryParams($doc_id, $search_query, $verbose, $synonyms, $paged_results, $types_filter) {
+    protected function getQueryParams($doc_id, $search_query, $verbose, $synonyms, $paged_results, $types_filter)
+    {
         $this->maxSnippets = $verbose ? self::MAX_SNIPPETS_VERBOSE : self::MAX_SNIPPETS_DEFAULT;
         $index = $paged_results ? $this->html_index : $this->index;
         $synonym_analyzer = $this->selectSynonymAnalyzer($synonyms);
         $text_types_filter = !empty($types_filter) ? $this->getTextTypesFilter($types_filter) : [];
-        $source_fields = $paged_results ? [ "id", "full_text", "page", "text_type" ] : ["text_type"];
-        $source_fields = array_merge($source_fields, ($index == $this->html_index) ? [ "is_pdf_converted", "is_publisher_provided"] : ["is_publisher_provided"]);
+        $source_fields = $paged_results ? [ 'id', 'full_text', 'page', 'text_type' ] : ['text_type'];
+        $source_fields = array_merge($source_fields, ($index == $this->html_index) ? [ 'is_pdf_converted', 'is_publisher_provided'] : ['is_publisher_provided']);
         $params = [
             'index' => $index,
             'body' => [
@@ -140,8 +163,8 @@ class FulltextSnippetProxyController extends \VuFind\Controller\AbstractBase imp
                 'query' => [
                     'bool' => [
                         'must' => $this->assembleMustQueryParts($doc_id, $search_query, $synonym_analyzer, $text_types_filter),
-                        'must_not' => [ 'term' => [ '_index' => $index . '_write' ] ]
-                    ]
+                        'must_not' => [ 'term' => [ '_index' => $index . '_write' ] ],
+                    ],
                 ],
                 'highlight' => [
                     'fields' => [
@@ -151,41 +174,49 @@ class FulltextSnippetProxyController extends \VuFind\Controller\AbstractBase imp
                             'phrase_limit' => self::PHRASE_LIMIT,
                             'number_of_fragments' => $paged_results ? 0 : $this->maxSnippets, /* For page oriented approach get whole page */
                             'order' => $verbose ? self::ORDER_VERBOSE : self::ORDER_DEFAULT,
-                        ]
-                    ]
-                ]
-            ]
+                        ],
+                    ],
+                ],
+            ],
         ];
         return $params;
     }
 
-
-    protected function getPlainFulltext($doc_id, $search_query, $verbose, $synonyms, $types_filter) {
+    protected function getPlainFulltext($doc_id, $search_query, $verbose, $synonyms, $types_filter)
+    {
         // Is this an ordinary query or a phrase query (surrounded by quotes) ?
-        $params = $this->getQueryParams($doc_id, $search_query, $verbose,
-                                        $synonyms , false /*return paged results*/, $types_filter);
+        $params = $this->getQueryParams(
+            $doc_id,
+            $search_query,
+            $verbose,
+            $synonyms,
+            false /*return paged results*/,
+            $types_filter
+        );
         $response = $this->es->search($params)->asArray();
         error_log(print_r($response, true));
         $snippets = $this->extractSnippets($response);
-        if ($snippets == false)
+        if ($snippets == false) {
             return false;
+        }
         $results['snippets'] = $snippets['snippets'];
         return $results;
     }
 
-
-    protected function getHTMLFulltext($doc_id, $search_query, $verbose, $synonyms, $types_filter) {
+    protected function getHTMLFulltext($doc_id, $search_query, $verbose, $synonyms, $types_filter)
+    {
         $params = $this->getQueryParams($doc_id, $search_query, $verbose, $synonyms, true, $types_filter);
         $response = $this->es->search($params)->asArray();
         $snippets = $this->extractSnippets($response);
-        if ($snippets == false)
+        if ($snippets == false) {
             return false;
+        }
         $results['snippets'] = $snippets['snippets'];
         return $results;
     }
 
-
-    protected function extractStyle($html_page) {
+    protected function extractStyle($html_page)
+    {
         $dom = new \DOMDocument();
         $dom->loadHTML($html_page, LIBXML_NOERROR);
         $xpath = new \DOMXPath($dom);
@@ -194,17 +225,17 @@ class FulltextSnippetProxyController extends \VuFind\Controller\AbstractBase imp
         return $style;
     }
 
-
     // Needed because each page has its own classes that we finally have to import
     // So try to avoid clashes by prefixing them with id and page
-    protected function normalizeCSSClasses($doc_id, $page, $object) {
+    protected function normalizeCSSClasses($doc_id, $page, $object)
+    {
         // Replace patterns '.ftXXX{' or 'class=\n?"ftXXX"
         $object = preg_replace('/(?<=class="|class=\n"|\.)ft(\d+)(?=[{"])/', '_' . $doc_id . '_' . $page . '_ft\1', $object);
         return $object;
     }
 
-
-    protected function hasIntersectionWithPreviousEnd($xpath, &$previous_sibling_right, $node, $left_sibling_path, $right_sibling_path) {
+    protected function hasIntersectionWithPreviousEnd($xpath, &$previous_sibling_right, $node, $left_sibling_path, $right_sibling_path)
+    {
         $left_siblings = $xpath->query($left_sibling_path);
         if ($left_siblings->count()) {
             $left_sibling = $left_siblings->item(0);
@@ -213,28 +244,28 @@ class FulltextSnippetProxyController extends \VuFind\Controller\AbstractBase imp
                 return true;
             }
             $previous_sibling_right = $xpath->query($right_sibling_path)->item(0) ?? false;
-        }
-        else
+        } else {
             $previous_sibling_right = $node;
+        }
         return false;
     }
 
-
-    protected function isSkipSiblings($node) {
+    protected function isSkipSiblings($node)
+    {
         $text_content_length = strlen($node->textContent);
         return $text_content_length >= self::CONTENT_LENGTH_TARGET_UPPER_LIMIT &&
                !$text_content_length <= self::CONTENT_LENGTH_TARGET_LOWER_LIMIT;
     }
 
-
-    protected function chunkTooSmall($node) {
+    protected function chunkTooSmall($node)
+    {
         return strlen($node->textContent) < self::CHUNK_LENGTH_MIN_SIZE;
     }
 
-
-    protected function assembleSnippet($dom, $node, $left_sibling, $right_sibling, $snippet_tree) {
+    protected function assembleSnippet($dom, $node, $left_sibling, $right_sibling, $snippet_tree)
+    {
         $skip_siblings = $this->isSkipSiblings($node);
-        if (!is_null($left_sibling) && !$skip_siblings) {
+        if (null !== $left_sibling && !$skip_siblings) {
             if (!$this->chunkTooSmall($left_sibling)) {
                 $import_node_left = $snippet_tree->importNode($left_sibling, true);
                 $snippet_tree->appendChild($import_node_left);
@@ -242,7 +273,7 @@ class FulltextSnippetProxyController extends \VuFind\Controller\AbstractBase imp
         }
         $import_node = $snippet_tree->importNode($node, true /*deep*/);
         $snippet_tree->appendChild($import_node);
-        if (!is_null($right_sibling) && !$skip_siblings) {
+        if (null !== $right_sibling && !$skip_siblings) {
             if (!$this->chunkTooSmall($right_sibling)) {
                 $import_node_right = $snippet_tree->importNode($right_sibling, true /*deep*/);
                 $snippet_tree->appendChild($import_node_right);
@@ -251,23 +282,24 @@ class FulltextSnippetProxyController extends \VuFind\Controller\AbstractBase imp
         return $snippet_tree;
     }
 
-
-    protected function containsHighlightedPart($xpath, $node) {
-        return is_null($node) || $node == false ? false : $xpath->query('./' . self::esHighlightTag, $node)->count();
+    protected function containsHighlightedPart($xpath, $node)
+    {
+        return null === $node || $node == false ? false : $xpath->query('./' . self::esHighlightTag, $node)->count();
     }
 
-
-    protected function array_key_last($array) {
-        if (!function_exists("array_key_last")) {
-            if (!is_array($array) || empty($array))
-                return NULL;
-            return array_keys($array)[count($array)-1];
+    protected function array_key_last($array)
+    {
+        if (!function_exists('array_key_last')) {
+            if (!is_array($array) || empty($array)) {
+                return null;
+            }
+            return array_keys($array)[count($array) - 1];
         }
         return array_key_last($array);
     }
 
-
-    protected function extractPDFConvertedParagraph($snippet_page) {
+    protected function extractPDFConvertedParagraph($snippet_page)
+    {
         $dom = new \DOMDocument();
         $dom->loadHTML($snippet_page, LIBXML_NOERROR /*Needed since ES highlighting does not address nesting of tags properly*/);
         $dom->normalizeDocument(); //Hopefully get rid of strange empty textfields caused by whitespace nodes that prevent proper navigation
@@ -278,71 +310,85 @@ class FulltextSnippetProxyController extends \VuFind\Controller\AbstractBase imp
         $previous_sibling_right = null; // This variable is passed as reference to hasIntersectionWithPreviousEnd and thus transfers status during the iterations
         foreach ($highlight_nodes as $highlight_node) {
             $parent_node = $highlight_node->parentNode;
-            if (is_null($parent_node))
+            if (null === $parent_node) {
                 continue;
+            }
             $parent_node_path = $parent_node->getNodePath();
             // Make sure we do not get different snippets if we have several highlights in the same paragraph
-            if (isset($previous_highlight_parent_node) && $parent_node->isSameNode($previous_highlight_parent_node))
+            if (isset($previous_highlight_parent_node) && $parent_node->isSameNode($previous_highlight_parent_node)) {
                 continue;
+            }
             $previous_highlight_parent_node = $parent_node;
             // Make sure we do not get different snippets if the previous right sibling is identical to the current highlight node
-            if ($this->containsHighlightedPart($xpath, $previous_sibling_right ?? null) &&
-                $this->hasIntersectionWithPreviousEnd($xpath, $previous_sibling_right, $parent_node, $parent_node_path, $parent_node_path))
+            if (
+                $this->containsHighlightedPart($xpath, $previous_sibling_right ?? null) &&
+                $this->hasIntersectionWithPreviousEnd($xpath, $previous_sibling_right, $parent_node, $parent_node_path, $parent_node_path)
+            ) {
                 continue;
+            }
             $left_sibling_path = $parent_node_path . '/preceding-sibling::p[1]';
             $right_sibling_path = $parent_node_path . '/following-sibling::p[1]';
             $left_sibling = $xpath->query($left_sibling_path)->item(0);
             $right_sibling = $xpath->query($right_sibling_path)->item(0);
-            $has_intersection = $this->hasIntersectionWithPreviousEnd($xpath,
-                                                                      $previous_sibling_right,
-                                                                      $parent_node,
-                                                                      $left_sibling_path,
-                                                                      $right_sibling_path);
-            $snippet_tree = $this->assembleSnippet($dom,
-                                                   $parent_node,
-                                                   $has_intersection ? null : $left_sibling,
-                                                   $right_sibling,
-                                                   $has_intersection ? array_pop($snippet_trees) : new \DOMDocument);
+            $has_intersection = $this->hasIntersectionWithPreviousEnd(
+                $xpath,
+                $previous_sibling_right,
+                $parent_node,
+                $left_sibling_path,
+                $right_sibling_path
+            );
+            $snippet_tree = $this->assembleSnippet(
+                $dom,
+                $parent_node,
+                $has_intersection ? null : $left_sibling,
+                $right_sibling,
+                $has_intersection ? array_pop($snippet_trees) : new \DOMDocument()
+            );
 
             array_push($snippet_trees, $snippet_tree);
         }
 
-        array_walk($snippet_trees, function($snippet_tree, $index) use ($snippet_trees) {
-                                            if ($index != $this->array_key_last($snippet_trees))
-                                                $snippet_tree->appendChild($snippet_tree->createTextNode(self::DOTS));
-                                            return $snippet_tree; } );
+        array_walk($snippet_trees, function ($snippet_tree, $index) use ($snippet_trees) {
+            if ($index != $this->array_key_last($snippet_trees)) {
+                $snippet_tree->appendChild($snippet_tree->createTextNode(self::DOTS));
+            }
+            return $snippet_tree;
+        });
 
-        $snippets_html = array_unique(array_map(function($snippet_tree) { return $snippet_tree->saveHTML(); }, $snippet_trees ));
+        $snippets_html = array_unique(array_map(function ($snippet_tree) {
+            return $snippet_tree->saveHTML();
+        }, $snippet_trees));
 
-        return implode("", $snippets_html);
-
+        return implode('', $snippets_html);
     }
 
+    protected function extractSnippetTextType($hit)
+    {
+        $this->setTranslator($this->serviceLocator->get(\Laminas\Mvc\I18n\Translator::class));
 
-    protected function extractSnippetTextType($hit) {
-       $this->setTranslator($this->serviceLocator->get(\Laminas\Mvc\I18n\Translator::class));
-
-       if (isset($hit['_source']['text_type'])) {
-           $text_type_description = $this->text_type_to_description_map[$hit['_source']['text_type']];
-           return $this->translate($text_type_description);
-       }
-       return $this->translate("Unknown");
+        if (isset($hit['_source']['text_type'])) {
+            $text_type_description = $this->text_type_to_description_map[$hit['_source']['text_type']];
+            return $this->translate($text_type_description);
+        }
+        return $this->translate('Unknown');
     }
 
-
-    protected function getPublisherNonPageHighlighNodesOffsets(&$parent_node) {
+    protected function getPublisherNonPageHighlighNodesOffsets(&$parent_node)
+    {
         $em_offsets = [];
-        foreach ($parent_node->childNodes as $child_node)
+        foreach ($parent_node->childNodes as $child_node) {
             array_push($em_offsets, $child_node->nodeType == XML_ELEMENT_NODE && $child_node->tagName == self::esHighlightTag ? '1' : '0');
-        return implode("", $em_offsets);
+        }
+        return implode('', $em_offsets);
     }
 
-
-    protected function stripPublisherNonPageToTheRight(&$parent_node) {
+    protected function stripPublisherNonPageToTheRight(&$parent_node)
+    {
         $highlightNodesOffsets = $this->getPublisherNonPageHighlighNodesOffsets($parent_node);
         $nodeAfterLastHighlight = $parent_node->childNodes[strrpos($highlightNodesOffsets, '1')]->nextSibling;
-        if ($nodeAfterLastHighlight == null)
+        if ($nodeAfterLastHighlight == null) {
             return;
+        }
 
         $afterLastHighlightTextLength = 0;
         $afterLastHighlightNode = false;
@@ -355,12 +401,14 @@ class FulltextSnippetProxyController extends \VuFind\Controller\AbstractBase imp
                 $nodeTextLength = mb_strlen($childNode->nodeValue);
                 if ($afterLastHighlightTextLength + $nodeTextLength >= self::MAX_AFTER_LAST_HIGHLIGHT_TEXT_LENGTH) {
                     // Truncate to the right
-                    $childNode->nodeValue = mb_strimwidth($childNode->nodeValue,
-                                                          0,
-                                                          $afterLastHighlightTextLength == 0 ?
+                    $childNode->nodeValue = mb_strimwidth(
+                        $childNode->nodeValue,
+                        0,
+                        $afterLastHighlightTextLength == 0 ?
                                                              self::MAX_AFTER_LAST_HIGHLIGHT_TEXT_LENGTH :
                                                              self::MAX_AFTER_LAST_HIGHLIGHT_TEXT_LENGTH - $afterLastHighlightTextLength,
-                                                             self::DOTS);
+                        self::DOTS
+                    );
                     // Remove all further nodes
                     $currentChild = $childNode->nextSibling;
                     while ($currentChild) {
@@ -369,36 +417,37 @@ class FulltextSnippetProxyController extends \VuFind\Controller\AbstractBase imp
                         $currentChild = $nextChild;
                     }
                     break;
-
                 }
                 $afterLastHighlightTextLength += $nodeTextLength;
             }
         }
     }
 
-
-    protected function stripPublisherNonPageToTheLeft(&$parent_node) {
+    protected function stripPublisherNonPageToTheLeft(&$parent_node)
+    {
         $highlightNodesOffsets = $this->getPublisherNonPageHighlighNodesOffsets($parent_node);
-        //
+
         $nodeBeforeFirstHighlight = $parent_node->childNodes[strpos($highlightNodesOffsets, '1')]->previousSibling;
-        if ($nodeBeforeFirstHighlight == null)
+        if ($nodeBeforeFirstHighlight == null) {
             return;
+        }
 
         $beforeFirstHighlightTextLength = 0;
         $beforeFirstHighlightNode = false;
         foreach (array_reverse(iterator_to_array($parent_node->childNodes)) as $childNode) {
             if ($childNode->isSameNode($nodeBeforeFirstHighlight)) {
                 $beforeFirstHighlightNode = true;
-
             }
             if ($beforeFirstHighlightNode) {
                 $nodeTextLength = mb_strlen($childNode->nodeValue);
                 if ($beforeFirstHighlightTextLength + $nodeTextLength >= self::MAX_BEFORE_FIRST_HIGHLIGHT_TEXT_LENGTH) {
                     // Truncate to the left
-                    $childNode->nodeValue = self::DOTS . mb_substr($childNode->nodeValue,
-                                                      $beforeFirstHighlightTextLength == 0 ?
+                    $childNode->nodeValue = self::DOTS . mb_substr(
+                        $childNode->nodeValue,
+                        $beforeFirstHighlightTextLength == 0 ?
                                                           -self::MAX_BEFORE_FIRST_HIGHLIGHT_TEXT_LENGTH :
-                                                          -(self::MAX_BEFORE_FIRST_HIGHLIGHT_TEXT_LENGTH - $beforeFirstHighlightTextLength));
+                        -(self::MAX_BEFORE_FIRST_HIGHLIGHT_TEXT_LENGTH - $beforeFirstHighlightTextLength)
+                    );
                     // Remove further nodes to the left
                     $currentChild = $childNode->previousSibling;
                     while ($currentChild) {
@@ -413,8 +462,8 @@ class FulltextSnippetProxyController extends \VuFind\Controller\AbstractBase imp
         }
     }
 
-
-    protected function extractPublisherNonPageHighlightSnippet (&$snippets, $hit, $highlight_result) {
+    protected function extractPublisherNonPageHighlightSnippet(&$snippets, $hit, $highlight_result)
+    {
         $dom = new \DOMDocument();
         $dom->loadHTML(mb_convert_encoding($highlight_result, 'HTML-ENTITIES', 'UTF-8'), LIBXML_NOERROR);
         $dom->normalizeDocument();
@@ -433,8 +482,8 @@ class FulltextSnippetProxyController extends \VuFind\Controller\AbstractBase imp
         }
     }
 
-
-    protected function extractPageHighlightSnippet(&$snippets, $hit, $highlight_result) {
+    protected function extractPageHighlightSnippet(&$snippets, $hit, $highlight_result)
+    {
         $doc_id = $hit['_source']['id'];
         $page = $hit['_source']['page'];
         $style = $this->extractStyle($hit['_source']['full_text']);
@@ -442,65 +491,76 @@ class FulltextSnippetProxyController extends \VuFind\Controller\AbstractBase imp
         $snippet_page = $this->normalizeCSSClasses($doc_id, $page, $highlight_result);
         $snippet_page = preg_replace('/(<[^>]+) style=[\\s]*".*?"/i', '$1', $snippet_page); //remove styles with absolute positions
         // Disable links to avoid failing internal references
-        $snippet_page = preg_replace('/<a[^>]*?>/i','<a style="color:inherit; text-decoration:inherit; cursor:inherit">', $snippet_page);
+        $snippet_page = preg_replace('/<a[^>]*?>/i', '<a style="color:inherit; text-decoration:inherit; cursor:inherit">', $snippet_page);
         $snippet = $this->extractPDFConvertedParagraph($snippet_page);
         array_push($snippets, [ 'snippet' => $snippet, 'page' => $page, 'text_type' => $this->extractSnippetTextType($hit), 'style' => $style ]);
     }
 
-
-    protected function extractSnippets($response) {
+    protected function extractSnippets($response)
+    {
         $top_level_hits = [];
         $hits = [];
         $highlight_results = [];
-        if (empty($response))
+        if (empty($response)) {
             return false;
-        if (array_key_exists('hits', $response))
+        }
+        if (array_key_exists('hits', $response)) {
             $top_level_hits = $response['hits'];
-        if (empty($top_level_hits))
+        }
+        if (empty($top_level_hits)) {
             return false;
+        }
         //second order hits
-        if (array_key_exists('hits', $top_level_hits))
-           $hits = $top_level_hits['hits'];
-        if (empty($top_level_hits))
+        if (array_key_exists('hits', $top_level_hits)) {
+            $hits = $top_level_hits['hits'];
+        }
+
+        if (empty($hits)) {
             return false;
+        }
 
         $snippets = [];
         $pages = [];
-        if (count($hits) > $this->maxSnippets)
+        if (count($hits) > $this->maxSnippets) {
             $hits = array_slice($hits, 0, $this->maxSnippets);
+        }
         foreach ($hits as $hit) {
-            if (array_key_exists('highlight', $hit))
+            if (array_key_exists('highlight', $hit)) {
                 $highlight_results = $hit['highlight'][self::FIELD];
+            }
             if (count($highlight_results) > $this->maxSnippets);
-                $highlight_results = array_slice($highlight_results, 0, $this->maxSnippets);
+            $highlight_results = array_slice($highlight_results, 0, $this->maxSnippets);
             foreach ($highlight_results as $highlight_result) {
                 // Handle pages or generic highlight snippets accordingly
                 if (isset($hit['_source']['is_publisher_provided']) && !isset($hit['_source']['page']) && !isset($hit['_source']['is_converted_pdf'])) {
-                  $this->extractPublisherNonPageHighlightSnippet($snippets, $hit, $highlight_result);
-                } else if (isset($hit['_source']['page'])) {
-                  $this->extractPageHighlightSnippet($snippets, $hit, $highlight_result);
+                    $this->extractPublisherNonPageHighlightSnippet($snippets, $hit, $highlight_result);
+                } elseif (isset($hit['_source']['page'])) {
+                    $this->extractPageHighlightSnippet($snippets, $hit, $highlight_result);
                 } else {
-                   array_push($snippets, [ 'snippet' => $highlight_result, 'text_type' => $this->extractSnippetTextType($hit) ]);
+                    array_push($snippets, [ 'snippet' => $highlight_result, 'text_type' => $this->extractSnippetTextType($hit) ]);
                 }
             }
         }
-        if (empty($snippets))
+        if (empty($snippets)) {
             return false;
+        }
 
         $results['snippets'] = $snippets;
         return $results;
     }
 
-
-    protected function formatHighlighting($snippets) {
+    protected function formatHighlighting($snippets)
+    {
         $formatted_snippets = [];
-        foreach ($snippets as $snippet)
+        foreach ($snippets as $snippet) {
             array_push($formatted_snippets, str_replace(['<em>', '</em>'], [self::highlightStartTag, self::highlightEndTag], $snippet));
+        }
         return $formatted_snippets;
     }
 
-    protected function constructFulltextSnippet($doc_id, $search_query, $verbose, $synonyms, $types_filter){
-        $snippets['status'] = "";
+    protected function constructFulltextSnippet($doc_id, $search_query, $verbose, $synonyms, $types_filter)
+    {
+        $snippets['status'] = '';
         $snippets['snippets'] = [];
         foreach (explode(',', $types_filter) as $type_filter) {
             try {
@@ -511,17 +571,17 @@ class FulltextSnippetProxyController extends \VuFind\Controller\AbstractBase imp
                 }
                 // Use plain text as fallback
                 $text_snippets = $this->getPlainFulltext($doc_id, $search_query, $verbose, $synonyms, $type_filter);
-                if (!empty($text_snippets))
+                if (!empty($text_snippets)) {
                     $snippets['snippets'] = array_merge($snippets['snippets'], $text_snippets['snippets']);
-            }
-            catch (\Exception $e) {
+                }
+            } catch (\Exception $e) {
                 error_log($e);
-                $snippets['status'] = "PROXY_ERROR";
+                $snippets['status'] = "Error while retrieving document for doc_id: $doc_id";
                 return $snippets;
             }
         }
         if (empty($snippets['snippets'])) {
-            $snippets['status'] = "NO RESULTS";
+            $snippets['status'] = 'NO RESULTS';
             return $snippets;
         }
         // Deduplicate snippets (array_values for fixing indices)
@@ -531,61 +591,61 @@ class FulltextSnippetProxyController extends \VuFind\Controller\AbstractBase imp
 
         return $snippets;
     }
-    
 
-    public function loadAction() : JsonModel
+    public function loadAction(): JsonModel
     {
         $query = $this->getRequest()->getUri()->getQuery();
         $parameters = [];
+        $model = [];
         parse_str($query, $parameters);
         $snippets = [];
-        // keep the compatibility with old version 
-        if(array_key_exists('doc_id', $parameters)){
+        // keep the compatibility with old version
+        if (array_key_exists('doc_id', $parameters)) {
             $doc_id = $parameters['doc_id'];
-            if (empty($doc_id))
+            if (empty($doc_id)) {
                 return new JsonModel([
-                'status' => 'EMPTY DOC_ID'
+                'status' => 'EMPTY DOC_ID',
                     ]);
+            }
             $search_query = $parameters['search_query'];
-            if (empty($search_query))
+            if (empty($search_query)) {
                 return new JsonModel([
-                    'status' => 'EMPTY QUERY'
+                    'status' => 'EMPTY QUERY',
                     ]);
+            }
             $verbose = isset($parameters['verbose']) && $parameters['verbose'] == '1' ? true : false;
-            $synonyms = isset($parameters['synonyms']) && preg_match('/lang|all/', $parameters['synonyms']) ? $parameters['synonyms'] : "";
-            $types_filter = isset($parameters['fulltext_types']) ? $parameters['fulltext_types'] :
+            $synonyms = isset($parameters['synonyms']) && preg_match('/lang|all/', $parameters['synonyms']) ? $parameters['synonyms'] : '';
+            $types_filter = $parameters['fulltext_types'] ??
                             implode(',', array_keys(self::description_to_text_type_map)); // Iterate over all possible types
             $snippets[$doc_id] = $this->constructFulltextSnippet($doc_id, $search_query, $verbose, $synonyms, $types_filter);
         }
         // the new api
-        if(array_key_exists('docs', $parameters)){
+        if (array_key_exists('docs', $parameters)) {
             $docs_get = $parameters['docs'];
 
             $docs = json_decode(html_entity_decode($docs_get));
-            foreach($docs as $doc){ 
+            foreach ($docs as $doc) {
                 // $snippets[$item->id] = $item->id;
-                if(!empty($doc->id)){
+                if (!empty($doc->id)) {
                     $snippets[$doc->id] = [];
                     $types_filter = (!empty($doc->fulltext_type_filter) ? $doc->fulltext_type_filter : (!empty($doc->fulltext_types) ? $doc->fulltext_types : implode(',', array_keys(self::description_to_text_type_map))));
-                    
-                    $synonyms = preg_match('/lang|all/',$doc->synonym_type) ? $doc->synonym_type : "";
+
+                    $synonyms = preg_match('/lang|all/', $doc->synonym_type) ? $doc->synonym_type : '';
                     $verbose = $doc->verbose;
-                    if(empty($doc->query)){
+                    if (empty($doc->query)) {
                         $snippets[$doc->id]['status'] = 'EMPTY QUERY';
-                    }else{
+                    } else {
                         $snippets[$doc->id] = $this->constructFulltextSnippet($doc->id, $doc->query, $verbose, $synonyms, $types_filter);
                     }
-                    
                 }
             }
         }
         try {
             $model =  new JsonModel([
                 'status' => 'SUCCESS',
-                'snippets_collection' => $snippets
+                'snippets_collection' => $snippets,
             ]);
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             error_log($e);
         }
         return $model;
