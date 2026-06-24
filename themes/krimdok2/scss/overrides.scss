@@ -1,4 +1,6 @@
-@use "../../tuefind2/scss/variables" as *;
+@use "../../tuefind2/scss/variables" as tuefind2;
+@use "variables" as krimdok_v;
+
 .tf-row-home {
     background: transparent no-repeat;
 }
@@ -9,7 +11,7 @@
 }
 
 .section-home {
-    background-color: $gray-200;
+    background-color: tuefind2.$gray-200;
 }
 
 h1 {
@@ -21,15 +23,15 @@ h1 {
 }
 
 .panel-default, .panel-inverse, .panel-buttons {
-   border: 5px solid $gray-200;
+   border: 5px solid tuefind2.$gray-200;
    -webkit-box-shadow: none;
 }
 
 .panel-default-link {
-    color: $gray-900;
+    color: tuefind2.$gray-900;
     :hover {
-        color: $brand-primary;
-        text-decoration-color: $brand-primary;
+        color: krimdok_v.$brand-primary;
+        text-decoration-color: krimdok_v.$brand-primary;
         text-decoration: underline;
     }
 }
@@ -46,7 +48,7 @@ h1 {
 }
 
 .btn-panel-more {
-    background-color: $brand-primary;
+    background-color: krimdok_v.$brand-primary;
     color: white;
 }
 
@@ -544,4 +546,57 @@ a:hover {
     margin-top: 20px;
     margin-bottom: 0;
     text-align: left;
+}
+
+.btn-primary.search-button:hover {
+    background-color: #fff;
+    color: krimdok_v.$brand-primary;
+}
+
+.record-tabs .nav-link, .record-tabs .nav-link:hover {
+    color: krimdok_v.$brand-primary;
+}
+
+.sidebar.right .myresearch-menu a.active {
+    background-color: krimdok_v.$brand-primary;
+}
+
+.sidebar.right .myresearch-menu a:hover {
+    color: krimdok_v.$brand-primary;
+}
+
+.search-header a {
+    color: krimdok_v.$link-color;
+}
+
+.btn.btn-outline-primary {
+    color: #fff;
+    background-color: krimdok_v.$link-color;
+    border: none;
+}
+
+.form-search-newitem .btn {
+    background-color: krimdok_v.$link-color;
+    color: #fff;
+    border: 1px solid krimdok_v.$brand-primary;
+}
+
+.form-search-newitem .btn:hover {
+    background-color: black;
+    color: #fff;
+}
+
+.form-search-newitem .btn-check:checked+.btn {
+    background-color: #fff;
+    color: krimdok_v.$brand-primary;
+}
+
+.form-search-newitem .btn-check:checked+.btn:hover {
+    background-color: krimdok_v.$brand-primary;
+    color: #fff;
+}
+
+.browse-container .browse-item.active {
+    background-color: krimdok_v.$brand-primary;
+    color: #fff;
 }
