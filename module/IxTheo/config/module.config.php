@@ -62,12 +62,10 @@ $config = [
     'service_manager' => [
         'factories' => [
             'IxTheo\RecordDriver\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
-            'IxTheo\RecordTab\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
         ],
         'aliases' => [
             'VuFind\RecordDriverPluginManager' => 'IxTheo\RecordDriver\PluginManager',
             'VuFind\RecordDriver\PluginManager' => 'IxTheo\RecordDriver\PluginManager',
-            'VuFind\RecordTab\PluginManager' => 'IxTheo\RecordTab\PluginManager',
         ],
     ],
     'doctrine' => [

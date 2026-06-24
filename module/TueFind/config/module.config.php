@@ -405,7 +405,6 @@ $config = [
             'TueFind\Form\Handler\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'TueFind\Sitemap\Generator' => 'VuFind\Sitemap\GeneratorFactory',
             'TueFind\Mailer\Mailer' => 'TueFind\Mailer\Factory',
-            'TueFind\MetadataVocabulary\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'TueFind\Record\Loader' => 'VuFind\Record\LoaderFactory',
             'TueFind\RecordDriver\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'TueFind\RecordTab\ItemFulltextSearch' => 'Laminas\ServiceManager\Factory\InvokableFactory',
@@ -431,7 +430,6 @@ $config = [
             'VuFind\Form\Form' => 'TueFind\Form\Form',
             'VuFind\Form\Handler\PluginManager' => 'TueFind\Form\Handler\PluginManager',
             'VuFind\Mailer\Mailer' => 'TueFind\Mailer\Mailer',
-            'VuFind\MetadataVocabulary\PluginManager' => 'TueFind\MetadataVocabulary\PluginManager',
             'VuFind\Record\Loader' => 'TueFind\Record\Loader',
             'VuFind\RecordLoader' => 'TueFind\Record\Loader',
             'VuFind\RecordDriverPluginManager' => 'TueFind\RecordDriver\PluginManager',
@@ -567,6 +565,15 @@ $config = [
                 ],
                 'aliases' => [
                     'email' => 'TueFind\Form\Handler\Email',
+                ],
+            ],
+            'metadatavocabulary' => [
+                'factories' => [
+                    'TueFind\MetadataVocabulary\HighwirePress' => 'Laminas\ServiceManager\Factory\InvokableFactory',
+                ],
+                'aliases' => [
+                    'HighwirePress' => 'TueFind\MetadataVocabulary\HighwirePress',
+                    'VuFind\MetadataVocabulary\HighwirePress' => 'TueFind\MetadataVocabulary\HighwirePress',
                 ],
             ],
             'navigation' => [
