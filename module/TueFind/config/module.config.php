@@ -409,7 +409,6 @@ $config = [
             'TueFind\Sitemap\Generator' => 'VuFind\Sitemap\GeneratorFactory',
             'TueFind\Mailer\Mailer' => 'TueFind\Mailer\Factory',
             'TueFind\MetadataVocabulary\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
-            'TueFind\Recommend\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'TueFind\Record\FallbackLoader\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'TueFind\Record\Loader' => 'VuFind\Record\LoaderFactory',
             'TueFind\RecordDriver\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
@@ -444,8 +443,6 @@ $config = [
             'VuFind\Form\Handler\PluginManager' => 'TueFind\Form\Handler\PluginManager',
             'VuFind\Mailer\Mailer' => 'TueFind\Mailer\Mailer',
             'VuFind\MetadataVocabulary\PluginManager' => 'TueFind\MetadataVocabulary\PluginManager',
-            'VuFind\RecommendPluginManager' => 'TueFind\Recommend\PluginManager',
-            'VuFind\Recommend\PluginManager' => 'TueFind\Recommend\PluginManager',
             'VuFind\Record\FallbackLoader\PluginManager' => 'TueFind\Record\FallbackLoader\PluginManager',
             'VuFind\Record\Loader' => 'TueFind\Record\Loader',
             'VuFind\RecordLoader' => 'TueFind\Record\Loader',
@@ -525,6 +522,16 @@ $config = [
                 ],
                 'aliases' => [
                     'VuFind\Navigation\AccountMenu' => 'TueFind\Navigation\AccountMenu',
+                ],
+            ],
+            'recommend' => [
+                'factories' => [
+                    'TueFind\Recommend\Ids' => 'Laminas\ServiceManager\Factory\InvokableFactory',
+                    'TueFind\Recommend\SideFacets' => 'VuFind\Recommend\SideFacetsFactory',
+                ],
+                'aliases' => [
+                    'ids' => 'TueFind\Recommend\Ids',
+                    'sidefacets' => 'TueFind\Recommend\SideFacets',
                 ],
             ],
             'recorddataformatter_specs' => [

@@ -63,7 +63,6 @@ $config = [
         'factories' => [
             'IxTheo\Db\Entity\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'IxTheo\Db\Service\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
-            'IxTheo\Recommend\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'IxTheo\RecordDriver\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'IxTheo\Search\Options\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'IxTheo\Search\Params\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
@@ -73,8 +72,6 @@ $config = [
         'aliases' => [
             'VuFind\Db\Entity\PluginManager' => 'IxTheo\Db\Entity\PluginManager',
             'VuFind\Db\Service\PluginManager' => 'IxTheo\Db\Service\PluginManager',
-            'VuFind\RecommendPluginManager' => 'IxTheo\Recommend\PluginManager',
-            'VuFind\Recommend\PluginManager' => 'IxTheo\Recommend\PluginManager',
             'VuFind\RecordDriverPluginManager' => 'IxTheo\RecordDriver\PluginManager',
             'VuFind\RecordDriver\PluginManager' => 'IxTheo\RecordDriver\PluginManager',
             'VuFind\Search\Options\PluginManager' => 'IxTheo\Search\Options\PluginManager',
@@ -127,6 +124,14 @@ $config = [
                 ],
                 'aliases' => [
                     'VuFind\Navigation\AccountMenu' => 'IxTheo\Navigation\AccountMenu',
+                ],
+            ],
+            'recommend' => [
+                'factories' => [
+                    'IxTheo\Recommend\BibleRanges' => 'Laminas\ServiceManager\Factory\InvokableFactory',
+                ],
+                'aliases' => [
+                    'bibleranges' => 'IxTheo\Recommend\BibleRanges',
                 ],
             ],
             'recorddataformatter_specs' => [
