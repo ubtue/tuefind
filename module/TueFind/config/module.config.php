@@ -400,7 +400,6 @@ $config = [
             'TueFind\Cache\Manager' => 'VuFind\Cache\ManagerFactory',
             'TueFind\Config\AccountCapabilities' => 'TueFind\Config\AccountCapabilitiesFactory',
             'TueFind\ContentBlock\BlockLoader' => 'TueFind\ContentBlock\BlockLoaderFactory',
-            'TueFind\ContentBlock\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'TueFind\Cookie\CookieManager' => 'VuFind\Cookie\CookieManagerFactory',
             'TueFind\Db\Entity\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'TueFind\Db\Service\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
@@ -433,7 +432,6 @@ $config = [
             'VuFind\Cache\Manager' => 'TueFind\Cache\Manager',
             'VuFind\Config\AccountCapabilities' => 'TueFind\Config\AccountCapabilities',
             'VuFind\ContentBlock\BlockLoader' => 'TueFind\ContentBlock\BlockLoader',
-            'VuFind\ContentBlock\PluginManager' => 'TueFind\ContentBlock\PluginManager',
             'VuFind\Cookie\CookieManager' => 'TueFind\Cookie\CookieManager',
             'VuFind\CookieManager' => 'TueFind\Cookie\CookieManager',
             'VuFind\Db\Entity\PluginManager' => 'TueFind\Db\Entity\PluginManager',
@@ -506,6 +504,14 @@ $config = [
                 ],
                 'aliases' => [
 
+                ],
+            ],
+            'contentblock' => [
+                'factories' => [
+                    'TueFind\ContentBlock\Home' => 'Laminas\ServiceManager\Factory\InvokableFactory',
+                ],
+                'aliases' => [
+                    'home' => 'TueFind\ContentBlock\Home',
                 ],
             ],
             'form_handler' => [
