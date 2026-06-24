@@ -61,12 +61,9 @@ $config = [
     ],
     'service_manager' => [
         'factories' => [
-            'IxTheo\AjaxHandler\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'IxTheo\Auth\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
-            'IxTheo\Autocomplete\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'IxTheo\Db\Entity\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'IxTheo\Db\Service\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
-            'IxTheo\Navigation\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'IxTheo\Recommend\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'IxTheo\RecordDriver\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'IxTheo\Search\Options\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
@@ -75,13 +72,10 @@ $config = [
             'IxTheo\RecordTab\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
         ],
         'aliases' => [
-            'VuFind\AjaxHandler\PluginManager' => 'IxTheo\AjaxHandler\PluginManager',
             'VuFind\AuthPluginManager' => 'IxTheo\Auth\PluginManager',
             'VuFind\Auth\PluginManager' => 'IxTheo\Auth\PluginManager',
-            'VuFind\Autocomplete\PluginManager' => 'IxTheo\Autocomplete\PluginManager',
             'VuFind\Db\Entity\PluginManager' => 'IxTheo\Db\Entity\PluginManager',
             'VuFind\Db\Service\PluginManager' => 'IxTheo\Db\Service\PluginManager',
-            'VuFind\Navigation\PluginManager' => 'IxTheo\Navigation\PluginManager',
             'VuFind\RecommendPluginManager' => 'IxTheo\Recommend\PluginManager',
             'VuFind\Recommend\PluginManager' => 'IxTheo\Recommend\PluginManager',
             'VuFind\RecordDriverPluginManager' => 'IxTheo\RecordDriver\PluginManager',
@@ -103,6 +97,32 @@ $config = [
     ],
     'vufind' => [
         'plugin_managers' => [
+            'ajaxhandler' => [
+                'factories' => [
+                    'IxTheo\AjaxHandler\DeleteSubscription' => 'IxTheo\AjaxHandler\DeleteSubscriptionFactory',
+                    'IxTheo\AjaxHandler\DeletePDASubscription' => 'IxTheo\AjaxHandler\DeletePDASubscriptionFactory',
+                ],
+                'aliases' => [
+                    'deleteSubscription' => 'IxTheo\AjaxHandler\DeleteSubscription',
+                    'deletePDASubscription' => 'IxTheo\AjaxHandler\DeletePDASubscription',
+                ],
+            ],
+            'autocomplete' => [
+                'factories' => [
+                    'IxTheo\Autocomplete\Solr' => 'IxTheo\Autocomplete\SolrFactory',
+                ],
+                'aliases' => [
+                    'solr' => 'IxTheo\Autocomplete\Solr',
+                ],
+            ],
+            'navigation' => [
+                'factories' => [
+                    'IxTheo\Navigation\AccountMenu' => 'VuFind\Navigation\AccountMenuFactory',
+                ],
+                'aliases' => [
+                    'VuFind\Navigation\AccountMenu' => 'IxTheo\Navigation\AccountMenu',
+                ],
+            ],
             'recorddataformatter_specs' => [
                 'factories' => [
                     'IxTheo\RecordDataFormatter\Specs\DefaultRecord' => 'IxTheo\RecordDataFormatter\Specs\DefaultRecordFactory',

@@ -396,11 +396,9 @@ $config = [
     'service_manager' => [
         'allow_override' => true,
         'factories' => [
-            'TueFind\AjaxHandler\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'TueFind\Export' => 'VuFind\ExportFactory',
             'TueFind\Auth\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'TueFind\Cache\Manager' => 'VuFind\Cache\ManagerFactory',
-            'TueFind\Captcha\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'TueFind\Config\AccountCapabilities' => 'TueFind\Config\AccountCapabilitiesFactory',
             'TueFind\ContentBlock\BlockLoader' => 'TueFind\ContentBlock\BlockLoaderFactory',
             'TueFind\ContentBlock\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
@@ -412,7 +410,6 @@ $config = [
             'TueFind\Sitemap\Generator' => 'VuFind\Sitemap\GeneratorFactory',
             'TueFind\Mailer\Mailer' => 'TueFind\Mailer\Factory',
             'TueFind\MetadataVocabulary\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
-            'TueFind\Navigation\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'TueFind\Recommend\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'TueFind\Record\FallbackLoader\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'TueFind\Record\Loader' => 'VuFind\Record\LoaderFactory',
@@ -426,7 +423,6 @@ $config = [
             'TueFind\Service\DSpace6' => 'TueFind\Service\DSpaceFactory',
             'TueFind\Service\DSpace7' => 'TueFind\Service\DSpaceFactory',
             'TueFind\Service\KfL' => 'TueFind\Service\KfLFactory',
-            'TueFind\Sitemap\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'TueFindSearch\Service' => 'VuFind\Service\SearchServiceFactory',
             'Laminas\Session\SessionManager' => 'TueFind\Session\ManagerFactory',
         ],
@@ -435,12 +431,10 @@ $config = [
         ],
         'aliases' => [
             'VuFind\AccountCapabilities' => 'TueFind\Config\AccountCapabilities',
-            'VuFind\AjaxHandler\PluginManager' => 'TueFind\AjaxHandler\PluginManager',
             'VuFind\AuthPluginManager' => 'TueFind\Auth\PluginManager',
             'VuFind\Auth\PluginManager' => 'TueFind\Auth\PluginManager',
             'VuFind\Cover\CachingProxy' => 'TueFind\Cover\CachingProxy',
             'VuFind\Cache\Manager' => 'TueFind\Cache\Manager',
-            'VuFind\Captcha\PluginManager' => 'TueFind\Captcha\PluginManager',
             'VuFind\Config\AccountCapabilities' => 'TueFind\Config\AccountCapabilities',
             'VuFind\ContentBlock\BlockLoader' => 'TueFind\ContentBlock\BlockLoader',
             'VuFind\ContentBlock\PluginManager' => 'TueFind\ContentBlock\PluginManager',
@@ -453,7 +447,6 @@ $config = [
             'VuFind\Form\Handler\PluginManager' => 'TueFind\Form\Handler\PluginManager',
             'VuFind\Mailer\Mailer' => 'TueFind\Mailer\Mailer',
             'VuFind\MetadataVocabulary\PluginManager' => 'TueFind\MetadataVocabulary\PluginManager',
-            'VuFind\Navigation\PluginManager' => 'TueFind\Navigation\PluginManager',
             'VuFind\RecommendPluginManager' => 'TueFind\Recommend\PluginManager',
             'VuFind\Recommend\PluginManager' => 'TueFind\Recommend\PluginManager',
             'VuFind\Record\FallbackLoader\PluginManager' => 'TueFind\Record\FallbackLoader\PluginManager',
@@ -468,7 +461,6 @@ $config = [
             'VuFind\Search\Params\PluginManager' => 'TueFind\Search\Params\PluginManager',
             'VuFind\Search\Results\PluginManager' => 'TueFind\Search\Results\PluginManager',
             'VuFind\Sitemap\Generator' => 'TueFind\Sitemap\Generator',
-            'VuFind\Sitemap\PluginManager' => 'TueFind\Sitemap\PluginManager',
             'VuFindSearch\Service' => 'TueFindSearch\Service',
         ],
     ],
@@ -493,6 +485,34 @@ $config = [
     ],
     'vufind' => [
         'plugin_managers' => [
+            'ajaxhandler' => [
+                'factories' => [
+                    'TueFind\AjaxHandler\GetSubscriptionBundleEntries' => 'TueFind\AjaxHandler\GetSubscriptionBundleEntriesFactory',
+                    'TueFind\AjaxHandler\CmsDocsEntries' => 'TueFind\AjaxHandler\CmsDocsEntriesFactory',
+                    'TueFind\AjaxHandler\MappingEntries' => 'TueFind\AjaxHandler\MappingEntriesFactory',
+                ],
+                'aliases' => [
+                    'getSubscriptionBundleEntries' => 'TueFind\AjaxHandler\GetSubscriptionBundleEntries',
+                    'CmsDocs' => 'TueFind\AjaxHandler\CmsDocsEntries',
+                    'Mapping' => 'TueFind\AjaxHandler\MappingEntries',
+                ],
+            ],
+            'captcha' => [
+                'factories' => [
+                    'VuFind\Captcha\Image' => 'TueFind\Captcha\ImageFactory',
+                ],
+                'aliases' => [
+
+                ],
+            ],
+            'navigation' => [
+                'factories' => [
+                    'TueFind\Navigation\AccountMenu' => 'VuFind\Navigation\AccountMenuFactory',
+                ],
+                'aliases' => [
+                    'VuFind\Navigation\AccountMenu' => 'TueFind\Navigation\AccountMenu',
+                ],
+            ],
             'recorddataformatter_specs' => [
                 'factories' => [
                     'TueFind\RecordDataFormatter\Specs\DefaultRecord' => 'VuFind\RecordDataFormatter\Specs\DefaultRecordFactory',
@@ -509,6 +529,14 @@ $config = [
                 ],
                 'aliases' => [
 
+                ],
+            ],
+            'sitemap' => [
+                'factories' => [
+                    'TueFind\Sitemap\Plugin\Index' => 'TueFind\Sitemap\Plugin\IndexFactory',
+                ],
+                'aliases' => [
+                    'Index' => 'TueFind\Sitemap\Plugin\Index',
                 ],
             ],
         ],
