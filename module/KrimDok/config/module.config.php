@@ -28,11 +28,10 @@ $config = [
     ],
     'service_manager' => [
         'factories' => [
-            'KrimDok\RecordDriver\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
+
         ],
         'aliases' => [
-            'VuFind\RecordDriverPluginManager' => 'KrimDok\RecordDriver\PluginManager',
-            'VuFind\RecordDriver\PluginManager' => 'KrimDok\RecordDriver\PluginManager',
+
         ],
     ],
     'doctrine' => [
@@ -81,6 +80,16 @@ $config = [
                 'aliases' => [
                     'DefaultRecord' => 'KrimDok\RecordDataFormatter\Specs\DefaultRecord',
                     'VuFind\RecordDataFormatter\Specs\DefaultRecord' => 'KrimDok\RecordDataFormatter\Specs\DefaultRecord',
+                ],
+            ],
+            'recorddriver' => [
+                'factories' => [
+                    'KrimDok\RecordDriver\SolrDefault' => 'TueFind\RecordDriver\SolrDefaultFactory',
+                    'KrimDok\RecordDriver\SolrMarc' => 'TueFind\RecordDriver\SolrMarcFactory',
+                ],
+                'aliases' => [
+                    'solrdefault' => 'KrimDok\RecordDriver\SolrDefault',
+                    'solrmarc' => 'KrimDok\RecordDriver\SolrMarc',
                 ],
             ],
             'search_backend' => [

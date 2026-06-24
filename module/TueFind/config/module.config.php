@@ -406,7 +406,6 @@ $config = [
             'TueFind\Sitemap\Generator' => 'VuFind\Sitemap\GeneratorFactory',
             'TueFind\Mailer\Mailer' => 'TueFind\Mailer\Factory',
             'TueFind\Record\Loader' => 'VuFind\Record\LoaderFactory',
-            'TueFind\RecordDriver\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'TueFind\RecordTab\ItemFulltextSearch' => 'Laminas\ServiceManager\Factory\InvokableFactory',
             'TueFind\Service\CmsSync' => 'TueFind\Service\CmsSyncFactory',
             'TueFind\Service\DSpace6' => 'TueFind\Service\DSpaceFactory',
@@ -432,8 +431,6 @@ $config = [
             'VuFind\Mailer\Mailer' => 'TueFind\Mailer\Mailer',
             'VuFind\Record\Loader' => 'TueFind\Record\Loader',
             'VuFind\RecordLoader' => 'TueFind\Record\Loader',
-            'VuFind\RecordDriverPluginManager' => 'TueFind\RecordDriver\PluginManager',
-            'VuFind\RecordDriver\PluginManager' => 'TueFind\RecordDriver\PluginManager',
             'VuFind\Search' => 'TueFindSearch\Service',
             'VuFind\Sitemap\Generator' => 'TueFind\Sitemap\Generator',
             'VuFindSearch\Service' => 'TueFindSearch\Service',
@@ -609,6 +606,25 @@ $config = [
                 'aliases' => [
                     'DefaultRecord' => 'TueFind\RecordDataFormatter\Specs\DefaultRecord',
                     'VuFind\RecordDataFormatter\Specs\DefaultRecord' => 'TueFind\RecordDataFormatter\Specs\DefaultRecord',
+                ],
+            ],
+            'recorddriver' => [
+                'factories' => [
+                    'TueFind\RecordDriver\SolrAuthDefault' => 'VuFind\RecordDriver\SolrDefaultWithoutSearchServiceFactory',
+                    'TueFind\RecordDriver\SolrAuthMarc' => 'VuFind\RecordDriver\SolrDefaultWithoutSearchServiceFactory',
+                    'TueFind\RecordDriver\SolrDefault' => 'TueFind\RecordDriver\SolrDefaultFactory',
+                    'TueFind\RecordDriver\SolrMarc' => 'TueFind\RecordDriver\SolrMarcFactory',
+                ],
+                'delegators' => [
+                    'TueFind\RecordDriver\SolrMarc' => 'VuFind\RecordDriver\IlsAwareDelegatorFactory',
+                ],
+                'aliases' => [
+                    'solrauth' => 'TueFind\RecordDriver\SolrAuthMarc',
+                    'solrauthdefault' => 'TueFind\RecordDriver\SolrAuthMarc',
+                    'solrauthmarc' => 'TueFind\RecordDriver\SolrAuthMarc',
+                    'solrdefault' => 'TueFind\RecordDriver\SolrDefault',
+                    'solrmarc' => 'TueFind\RecordDriver\SolrMarc',
+                    'search3default' => 'TueFind\RecordDriver\Search3Default',
                 ],
             ],
             'recordtab' => [

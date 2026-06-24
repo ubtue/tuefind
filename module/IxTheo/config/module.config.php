@@ -61,11 +61,10 @@ $config = [
     ],
     'service_manager' => [
         'factories' => [
-            'IxTheo\RecordDriver\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
+
         ],
         'aliases' => [
-            'VuFind\RecordDriverPluginManager' => 'IxTheo\RecordDriver\PluginManager',
-            'VuFind\RecordDriver\PluginManager' => 'IxTheo\RecordDriver\PluginManager',
+
         ],
     ],
     'doctrine' => [
@@ -163,6 +162,21 @@ $config = [
                 'aliases' => [
                     'DefaultRecord' => 'IxTheo\RecordDataFormatter\Specs\DefaultRecord',
                     'VuFind\RecordDataFormatter\Specs\DefaultRecord' => 'IxTheo\RecordDataFormatter\Specs\DefaultRecord',
+                ],
+            ],
+             'recorddriver' => [
+                'factories' => [
+                    'IxTheo\RecordDriver\SolrAuthDefault' => 'VuFind\RecordDriver\SolrDefaultWithoutSearchServiceFactory',
+                    'IxTheo\RecordDriver\SolrAuthMarc' => 'VuFind\RecordDriver\SolrDefaultWithoutSearchServiceFactory',
+                    'IxTheo\RecordDriver\SolrDefault' => 'TueFind\RecordDriver\SolrDefaultFactory',
+                    'IxTheo\RecordDriver\SolrMarc' => 'TueFind\RecordDriver\SolrMarcFactory',
+                ],
+                'aliases' => [
+                    'solrauth' => 'IxTheo\RecordDriver\SolrAuthMarc',
+                    'solrauthdefault' => 'IxTheo\RecordDriver\SolrAuthMarc',
+                    'solrauthmarc' => 'IxTheo\RecordDriver\SolrAuthMarc',
+                    'solrdefault' => 'IxTheo\RecordDriver\SolrDefault',
+                    'solrmarc' => 'IxTheo\RecordDriver\SolrMarc',
                 ],
             ],
             'search_backend' => [
