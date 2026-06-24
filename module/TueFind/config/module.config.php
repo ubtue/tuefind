@@ -397,7 +397,6 @@ $config = [
         'allow_override' => true,
         'factories' => [
             'TueFind\Export' => 'VuFind\ExportFactory',
-            'TueFind\Auth\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'TueFind\Cache\Manager' => 'VuFind\Cache\ManagerFactory',
             'TueFind\Config\AccountCapabilities' => 'TueFind\Config\AccountCapabilitiesFactory',
             'TueFind\ContentBlock\BlockLoader' => 'TueFind\ContentBlock\BlockLoaderFactory',
@@ -431,8 +430,6 @@ $config = [
         ],
         'aliases' => [
             'VuFind\AccountCapabilities' => 'TueFind\Config\AccountCapabilities',
-            'VuFind\AuthPluginManager' => 'TueFind\Auth\PluginManager',
-            'VuFind\Auth\PluginManager' => 'TueFind\Auth\PluginManager',
             'VuFind\Cover\CachingProxy' => 'TueFind\Cover\CachingProxy',
             'VuFind\Cache\Manager' => 'TueFind\Cache\Manager',
             'VuFind\Config\AccountCapabilities' => 'TueFind\Config\AccountCapabilities',
@@ -495,6 +492,15 @@ $config = [
                     'getSubscriptionBundleEntries' => 'TueFind\AjaxHandler\GetSubscriptionBundleEntries',
                     'CmsDocs' => 'TueFind\AjaxHandler\CmsDocsEntries',
                     'Mapping' => 'TueFind\AjaxHandler\MappingEntries',
+                ],
+            ],
+            'auth' => [
+                'factories' => [
+                    'TueFind\Auth\Database' => ' Laminas\ServiceManager\Factory\InvokableFactory',
+                ],
+                'aliases' => [
+                    'db' => 'TueFind\Auth\Database',
+                    'database' => 'TueFind\Auth\Database',
                 ],
             ],
             'captcha' => [

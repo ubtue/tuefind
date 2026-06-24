@@ -61,7 +61,6 @@ $config = [
     ],
     'service_manager' => [
         'factories' => [
-            'IxTheo\Auth\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'IxTheo\Db\Entity\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'IxTheo\Db\Service\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'IxTheo\Recommend\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
@@ -72,8 +71,6 @@ $config = [
             'IxTheo\RecordTab\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
         ],
         'aliases' => [
-            'VuFind\AuthPluginManager' => 'IxTheo\Auth\PluginManager',
-            'VuFind\Auth\PluginManager' => 'IxTheo\Auth\PluginManager',
             'VuFind\Db\Entity\PluginManager' => 'IxTheo\Db\Entity\PluginManager',
             'VuFind\Db\Service\PluginManager' => 'IxTheo\Db\Service\PluginManager',
             'VuFind\RecommendPluginManager' => 'IxTheo\Recommend\PluginManager',
@@ -105,6 +102,15 @@ $config = [
                 'aliases' => [
                     'deleteSubscription' => 'IxTheo\AjaxHandler\DeleteSubscription',
                     'deletePDASubscription' => 'IxTheo\AjaxHandler\DeletePDASubscription',
+                ],
+            ],
+            'auth' => [
+                'factories' => [
+                    'IxTheo\Auth\Database' => ' Laminas\ServiceManager\Factory\InvokableFactory',
+                ],
+                'aliases' => [
+                    'db' => 'IxTheo\Auth\Database',
+                    'database' => 'IxTheo\Auth\Database',
                 ],
             ],
             'autocomplete' => [

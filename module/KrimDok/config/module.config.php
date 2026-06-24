@@ -55,6 +55,15 @@ $config = [
     ],
     'vufind' => [
         'plugin_managers' => [
+            'auth' => [
+                'factories' => [
+                    'KrimDok\Auth\Database' => ' Laminas\ServiceManager\Factory\InvokableFactory',
+                ],
+                'aliases' => [
+                    'db' => 'KrimDok\Auth\Database',
+                    'database' => 'KrimDok\Auth\Database',
+                ],
+            ],
             'recorddataformatter_specs' => [
                 'factories' => [
                     'KrimDok\RecordDataFormatter\Specs\DefaultRecord' => 'VuFind\RecordDataFormatter\Specs\DefaultRecordFactory',
