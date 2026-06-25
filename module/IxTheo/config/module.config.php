@@ -61,29 +61,10 @@ $config = [
     ],
     'service_manager' => [
         'factories' => [
-            'IxTheo\Auth\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
-            'IxTheo\Db\Entity\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
-            'IxTheo\Db\Service\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
-            'IxTheo\Recommend\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
-            'IxTheo\RecordDriver\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
-            'IxTheo\Search\Options\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
-            'IxTheo\Search\Params\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
-            'IxTheo\Search\Results\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
-            'IxTheo\RecordTab\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
+
         ],
         'aliases' => [
-            'VuFind\AuthPluginManager' => 'IxTheo\Auth\PluginManager',
-            'VuFind\Auth\PluginManager' => 'IxTheo\Auth\PluginManager',
-            'VuFind\Db\Entity\PluginManager' => 'IxTheo\Db\Entity\PluginManager',
-            'VuFind\Db\Service\PluginManager' => 'IxTheo\Db\Service\PluginManager',
-            'VuFind\RecommendPluginManager' => 'IxTheo\Recommend\PluginManager',
-            'VuFind\Recommend\PluginManager' => 'IxTheo\Recommend\PluginManager',
-            'VuFind\RecordDriverPluginManager' => 'IxTheo\RecordDriver\PluginManager',
-            'VuFind\RecordDriver\PluginManager' => 'IxTheo\RecordDriver\PluginManager',
-            'VuFind\Search\Options\PluginManager' => 'IxTheo\Search\Options\PluginManager',
-            'VuFind\Search\Params\PluginManager' => 'IxTheo\Search\Params\PluginManager',
-            'VuFind\Search\Results\PluginManager' => 'IxTheo\Search\Results\PluginManager',
-            'VuFind\RecordTab\PluginManager' => 'IxTheo\RecordTab\PluginManager',
+
         ],
     ],
     'doctrine' => [
@@ -107,6 +88,15 @@ $config = [
                     'deletePDASubscription' => 'IxTheo\AjaxHandler\DeletePDASubscription',
                 ],
             ],
+            'auth' => [
+                'factories' => [
+                    'IxTheo\Auth\Database' => 'Laminas\ServiceManager\Factory\InvokableFactory',
+                ],
+                'aliases' => [
+                    'db' => 'IxTheo\Auth\Database',
+                    'database' => 'IxTheo\Auth\Database',
+                ],
+            ],
             'autocomplete' => [
                 'factories' => [
                     'IxTheo\Autocomplete\Solr' => 'IxTheo\Autocomplete\SolrFactory',
@@ -115,12 +105,54 @@ $config = [
                     'solr' => 'IxTheo\Autocomplete\Solr',
                 ],
             ],
+            'db_entity' => [
+                'factories' => [
+                    'IxTheo\Db\Entity\PDASubscription' => 'Laminas\ServiceManager\Factory\InvokableFactory',
+                    'IxTheo\Db\Entity\Subscription' => 'Laminas\ServiceManager\Factory\InvokableFactory',
+                    'IxTheo\Db\Entity\User' => 'Laminas\ServiceManager\Factory\InvokableFactory',
+                ],
+                'aliases' => [
+                    'TueFind\Db\Entity\UserEntityInterface' => 'IxTheo\Db\Entity\UserEntityInterface',
+                    'TueFind\Db\Entity\User' => 'IxTheo\Db\Entity\User',
+                    'IxTheo\Db\Entity\PDASubscriptionEntityInterface' => 'IxTheo\Db\Entity\PDASubscription',
+                    'IxTheo\Db\Entity\SubscriptionEntityInterface' => 'IxTheo\Db\Entity\Subscription',
+                    'IxTheo\Db\Entity\UserEntityInterface' => 'IxTheo\Db\Entity\User',
+                ],
+            ],
+            'db_service' => [
+                'factories' => [
+                    'IxTheo\Db\Service\PDASubscriptionService' => 'VuFind\Db\Service\AbstractDbServiceFactory',
+                    'IxTheo\Db\Service\PublicationService' => 'VuFind\Db\Service\AbstractDbServiceFactory',
+                    'IxTheo\Db\Service\SubscriptionService' => 'VuFind\Db\Service\AbstractDbServiceFactory',
+                    'IxTheo\Db\Service\UserService' => 'VuFind\Db\Service\UserServiceFactory',
+                    'IxTheo\Db\Service\UserAuthorityService' => 'VuFind\Db\Service\AbstractDbServiceFactory',
+                    'IxTheo\Db\Service\UserAuthorityHistoryService' => 'VuFind\Db\Service\AbstractDbServiceFactory',
+                ],
+                'aliases' => [
+                    'VuFind\Db\Service\UserServiceInterface' => 'IxTheo\Db\Service\UserService',
+                    'TueFind\Db\Service\UserServiceInterface' => 'IxTheo\Db\Service\UserService',
+                    'IxTheo\Db\Service\PDASubscriptionServiceInterface' => 'IxTheo\Db\Service\PDASubscriptionService',
+                    'IxTheo\Db\Service\PublicationServiceInterface' => 'IxTheo\Db\Service\PublicationService',
+                    'IxTheo\Db\Service\SubscriptionServiceInterface' => 'IxTheo\Db\Service\SubscriptionService',
+                    'IxTheo\Db\Service\UserServiceInterface' => 'IxTheo\Db\Service\UserService',
+                    'IxTheo\Db\Service\UserAuthorityServiceInterface' => 'IxTheo\Db\Service\UserAuthorityService',
+                    'IxTheo\Db\Service\UserAuthorityHistoryServiceInterface' => 'IxTheo\Db\Service\UserAuthorityHistoryService',
+                ],
+            ],
             'navigation' => [
                 'factories' => [
                     'IxTheo\Navigation\AccountMenu' => 'VuFind\Navigation\AccountMenuFactory',
                 ],
                 'aliases' => [
                     'VuFind\Navigation\AccountMenu' => 'IxTheo\Navigation\AccountMenu',
+                ],
+            ],
+            'recommend' => [
+                'factories' => [
+                    'IxTheo\Recommend\BibleRanges' => 'Laminas\ServiceManager\Factory\InvokableFactory',
+                ],
+                'aliases' => [
+                    'bibleranges' => 'IxTheo\Recommend\BibleRanges',
                 ],
             ],
             'recorddataformatter_specs' => [
@@ -132,6 +164,21 @@ $config = [
                     'VuFind\RecordDataFormatter\Specs\DefaultRecord' => 'IxTheo\RecordDataFormatter\Specs\DefaultRecord',
                 ],
             ],
+             'recorddriver' => [
+                'factories' => [
+                    'IxTheo\RecordDriver\SolrAuthDefault' => 'VuFind\RecordDriver\SolrDefaultWithoutSearchServiceFactory',
+                    'IxTheo\RecordDriver\SolrAuthMarc' => 'VuFind\RecordDriver\SolrDefaultWithoutSearchServiceFactory',
+                    'IxTheo\RecordDriver\SolrDefault' => 'TueFind\RecordDriver\SolrDefaultFactory',
+                    'IxTheo\RecordDriver\SolrMarc' => 'TueFind\RecordDriver\SolrMarcFactory',
+                ],
+                'aliases' => [
+                    'solrauth' => 'IxTheo\RecordDriver\SolrAuthMarc',
+                    'solrauthdefault' => 'IxTheo\RecordDriver\SolrAuthMarc',
+                    'solrauthmarc' => 'IxTheo\RecordDriver\SolrAuthMarc',
+                    'solrdefault' => 'IxTheo\RecordDriver\SolrDefault',
+                    'solrmarc' => 'IxTheo\RecordDriver\SolrMarc',
+                ],
+            ],
             'search_backend' => [
                 'factories' => [
                     'Solr' => 'IxTheo\Search\Factory\SolrDefaultBackendFactory',
@@ -139,6 +186,47 @@ $config = [
                 ],
                 'aliases' => [
 
+                ],
+            ],
+            'search_options' => [
+                'factories' => [
+                    'IxTheo\Search\Search2\Options' => 'VuFind\Search\Options\OptionsFactory',
+                    'IxTheo\Search\Solr\Options' => 'VuFind\Search\Options\OptionsFactory',
+                    'IxTheo\Search\KeywordChainSearch\Options' => 'VuFind\Search\Options\OptionsFactory',
+                    'IxTheo\Search\Subscriptions\Options' => 'VuFind\Search\Options\OptionsFactory',
+                    'IxTheo\Search\PDASubscriptions\Options' => 'VuFind\Search\Options\OptionsFactory',
+                ],
+                'aliases' => [
+                    'search2' => 'IxTheo\Search\Search2\Options',
+                    'solr' => 'IxTheo\Search\Solr\Options',
+                    'keywordchainsearch' => 'IxTheo\Search\KeywordChainSearch\Options',
+                    'Subscriptions' => 'IxTheo\Search\Subscriptions\Options',
+                    'pdasubscriptions' => 'IxTheo\Search\PDASubscriptions\Options',
+                ],
+            ],
+            'search_params' => [
+                'factories' => [
+
+                ],
+                'aliases' => [
+                    'solr' => 'IxTheo\Search\Solr\Params',
+                    'keywordchainsearch' => 'IxTheo\Search\KeywordChainSearch\Params',
+                ],
+            ],
+            'search_results' => [
+                'factories' => [
+                    'IxTheo\Search\Search2\Results' => 'VuFind\Search\Search2\ResultsFactory',
+                    'IxTheo\Search\Solr\Results' => 'VuFind\Search\Solr\ResultsFactory',
+                    'IxTheo\Search\KeywordChainSearch\Results' => 'VuFind\Search\Solr\ResultsFactory',
+                    'IxTheo\Search\Subscriptions\Results' => 'IxTheo\Search\Subscriptions\ResultsFactory',
+                    'IxTheo\Search\PDASubscriptions\Results' => 'IxTheo\Search\PDASubscriptions\ResultsFactory',
+                ],
+                'aliases' => [
+                    'search2' => 'IxTheo\Search\Search2\Results',
+                    'solr' => 'IxTheo\Search\Solr\Results',
+                    'keywordchainsearch' => 'IxTheo\Search\KeywordChainSearch\Results',
+                    'Subscriptions' => 'IxTheo\Search\Subscriptions\Results',
+                    'pdasubscriptions' => 'IxTheo\Search\PDASubscriptions\Results',
                 ],
             ],
         ],
