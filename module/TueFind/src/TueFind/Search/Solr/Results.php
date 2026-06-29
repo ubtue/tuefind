@@ -2,6 +2,10 @@
 
 namespace TueFind\Search\Solr;
 
+use function get_class;
+use function in_array;
+use function is_callable;
+
 class Results extends \VuFind\Search\Solr\Results
 {
     /**
@@ -21,8 +25,13 @@ class Results extends \VuFind\Search\Solr\Results
      *
      * @return array list facet values for each index field with label and more bool
      */
-    public function getPartialFieldFacets($facetfields, $removeFilter = true,
-        $limit = -1, $facetSort = null, $page = null, $ored = false
+    public function getPartialFieldFacets(
+        $facetfields,
+        $removeFilter = true,
+        $limit = -1,
+        $facetSort = null,
+        $page = null,
+        $ored = false
     ) {
         $facets = parent::getPartialFieldFacets($facetfields, $removeFilter, $limit, $facetSort, $page, $ored);
 
@@ -38,50 +47,24 @@ class Results extends \VuFind\Search\Solr\Results
         return $facets;
     }
 
-    // TueFind: Similar to parent, with additional handling for "translatedFacetsUnassigned"
-    protected function buildFacetList(array $facetList, array $filter = null): array
+    /**
+     * TueFind: Similar to parent, with additional handling for "translatedFacetsUnassigned"
+     * (facets like author/publisher, where only the "[Unassigned]" Entry should be translated)
+     */
+    protected function setDisplayTextForFacetValues(array &$result, array $hierarchicalFacets, object $options): void
     {
-        // If there is no filter, we'll use all facets as the filter:
-        if (null === $filter) {
-            $filter = $this->getParams()->getFacetConfig();
-        }
-
-        // Start building the facet list:
-        $result = [];
-
-        // Loop through every field returned by the result set
-        $translatedFacets = $this->getOptions()->getTranslatedFacets();
+        $translatedFacets = $options->getTranslatedFacets();
         $translatedFacetsUnassigned = $translatedFacetsUnassigned = is_callable([$this->getOptions(), 'getTranslatedFacetsUnassigned'])
             ? $this->getOptions()->getTranslatedFacetsUnassigned()
             : [];
-        $hierarchicalFacets
-            = is_callable([$this->getOptions(), 'getHierarchicalFacets'])
-            ? $this->getOptions()->getHierarchicalFacets()
-            : [];
-        $hierarchicalFacetSortSettings
-            = is_callable([$this->getOptions(), 'getHierarchicalFacetSortSettings'])
-            ? $this->getOptions()->getHierarchicalFacetSortSettings()
-            : [];
 
-        foreach (array_keys($filter) as $field) {
-            $data = $facetList[$field] ?? [];
-            // Skip empty arrays:
-            if (count($data) < 1) {
-                continue;
-            }
-            // Initialize the settings for the current field
-            $result[$field] = [
-                'label' => $filter[$field],
-                'list' => [],
-            ];
-            // Should we translate values for the current facet?
+        foreach ($result as $field => $fieldResult) {
+            $resultList = $fieldResult['list'];
+            $hierarchical = in_array($field, $hierarchicalFacets);
             $translate = in_array($field, $translatedFacets);
             $translateUnassigned = in_array($field, $translatedFacetsUnassigned);
-            $hierarchical = in_array($field, $hierarchicalFacets);
-            $operator = $this->getParams()->getFacetOperator($field);
-            $resultList = [];
-            // Loop through values:
-            foreach ($data as $value => $count) {
+            foreach ($resultList as $index => $valueResult) {
+                $value = $valueResult['value'];
                 $displayText = $this->getParams()
                     ->getFacetValueRawDisplayText($field, $value);
                 if ($hierarchical) {
@@ -97,33 +80,10 @@ class Results extends \VuFind\Search\Solr\Results
                 $displayText = ($translate || ($translateUnassigned && $displayText == '[Unassigned]'))
                     ? $this->getParams()->translateFacetValue($field, $displayText)
                     : $displayText;
-                $isApplied = $this->getParams()->hasFilter("$field:" . $value)
-                    || $this->getParams()->hasFilter("~$field:" . $value);
-
-                $isExcluded = false;
-
-                // Store the collected values:
-                $resultList[] = compact(
-                    'value',
-                    'displayText',
-                    'count',
-                    'operator',
-                    'isApplied',
-                    'isExcluded'
-                );
+                $valueResult['displayText'] = $displayText;
+                $resultList[$index] = $valueResult;
             }
-
-            if ($hierarchical) {
-                $sort = $hierarchicalFacetSortSettings[$field]
-                    ?? $hierarchicalFacetSortSettings['*'] ?? 'count';
-                $this->hierarchicalFacetHelper->sortFacetList($resultList, $sort);
-
-                $resultList
-                    = $this->hierarchicalFacetHelper->buildFacetArray($field, $resultList);
-            }
-
             $result[$field]['list'] = $resultList;
         }
-        return $result;
     }
 }
