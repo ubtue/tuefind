@@ -1,0 +1,14 @@
+<?php
+  $form = $this->form;
+  $form->prepare();
+?>
+<?php if (!$this->inLightbox): ?><div class="feedback-content"><?php endif; ?>
+<?php if ($title = $form->getTitle()): ?>
+  <?php // TueFind: Add missing transEsc() call, see issue #3711 ?>
+  <?=$this->component('page-title', ['title' => $this->transEsc($title), 'level' => 1]);?>
+<?php endif; ?>
+<?=$this->flashmessages()?>
+<div role="status" class="alert alert-success">
+  <?=$this->translate($this->successMessage) ?>
+</div>
+<?php if (!$this->inLightbox): ?></div><?php endif; ?>
