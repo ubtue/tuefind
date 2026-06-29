@@ -100,7 +100,7 @@ class AuthorityController extends \VuFind\Controller\AuthorityController {
             }
 
             // send mail
-            $mailer->send($receivers, $config->Site->email_from, 'A user has requested access to an authority dataset', $message);
+            $mailer->send($receivers, $config->Site->email, 'A user has requested access to an authority dataset', $message);
         }
 
         return $this->createViewModel(['user' => $user]);

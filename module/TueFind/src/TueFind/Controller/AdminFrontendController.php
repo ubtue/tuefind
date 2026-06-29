@@ -2,22 +2,25 @@
 
 namespace TueFind\Controller;
 
+use function count;
+
 /**
  * This Controller cannot be named "AdminController" because it would conflict
  * with VuFindAdmin\Controller\AdminController, which is for
  * Backend administration, so we call this one AdminFrontendController instead.
  */
-class AdminFrontendController extends \VuFind\Controller\AbstractBase {
-
+class AdminFrontendController extends \VuFind\Controller\AbstractBase
+{
     protected function forceAdminLogin()
     {
         $user = $this->getUser();
         if ($user == false) {
-            throw new \Exception("You must be logged in first");
+            throw new \Exception('You must be logged in first');
         }
 
-        if ($user->getTueFindRights() == [])
-            throw new \Exception("This user has no admin rights!");
+        if ($user->getTueFindRights() == []) {
+            throw new \Exception('This user has no admin rights!');
+        }
     }
 
     public function processUserAuthorityRequestAction()
@@ -70,7 +73,7 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
             $renderer = $this->getViewRenderer();
             $message = $renderer->render($emailPathTemplate);
 
-            $mailer->send($receivers, $config->Site->email_from, $this->translate('authority_access_email_subject_'.$accessInfo), $message);
+            $mailer->send($receivers, $config->Site->email, $this->translate('authority_access_email_subject_' . $accessInfo), $message);
         }
 
         return $this->createViewModel(['action' => $action]);
@@ -111,13 +114,13 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
     //generate a path for email templates which is not related to the current user, since VuFind does not yet have such functionality
     protected function getEmailTemplatePath(string $requestUserLanguage, string $accessInfo): string
     {
-        $emailPathTemplate = 'Email/'.$requestUserLanguage.'/authority-request-access-'.$accessInfo.'.phtml';
-        $fullEmailPathTemplate =  $_SERVER['VUFIND_HOME'].'/themes/tuefind/templates/'.$emailPathTemplate;
+        $emailPathTemplate = 'Email/' . $requestUserLanguage . '/authority-request-access-' . $accessInfo . '.phtml';
+        $fullEmailPathTemplate =  $_SERVER['VUFIND_HOME'] . '/themes/tuefind/templates/' . $emailPathTemplate;
 
         if (!file_exists($fullEmailPathTemplate)) {
             $config = $this->serviceLocator->get(\VuFind\Config\PluginManager::class)->get('config');
             $defaultEmailLanguage = $config->Site->language;
-            $emailPathTemplate = 'Email/'.$defaultEmailLanguage.'/authority-request-access-'.$accessInfo.'.phtml';
+            $emailPathTemplate = 'Email/' . $defaultEmailLanguage . '/authority-request-access-' . $accessInfo . '.phtml';
         }
 
         return $emailPathTemplate;
@@ -130,17 +133,19 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
         return $this->createViewModel(['user_authority_history_datas' => $this->getDbService(\TueFind\Db\Service\UserAuthorityHistoryServiceInterface::class)->getAll()]);
     }
 
-    public function showUserPublicationStatisticsAction() {
+    public function showUserPublicationStatisticsAction()
+    {
         $this->forceAdminLogin();
 
         return $this->createViewModel(['publications' => $this->getDbService(\TueFind\Db\Service\PublicationServiceInterface::class)->getStatistics()]);
     }
 
-     public function CMSPagesAction() {
+    public function CMSPagesAction()
+    {
         $this->forceAdminLogin();
 
         $allCMS = ['allCMSPages' => $this->getDbService(\TueFind\Db\Service\CmsPagesServiceInterface::class)->getAll(),
-                   'cmsSync' => $this->serviceLocator->get(\TueFind\Service\CmsSync::class)
+                  'cmsSync' => $this->serviceLocator->get(\TueFind\Service\CmsSync::class),
         ];
 
         return $this->createViewModel($allCMS);
@@ -162,7 +167,6 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
         $pageContent = $this->params()->fromPost('page_content');
         $pageTitle = $this->params()->fromPost('page_title');
         if ($action == 'publish') {
-
             $subsystem = $this->getDbService(\TueFind\Db\Service\SubsystemsServiceInterface::class)->getByName(\IxTheo\Utility::getUserTypeFromUsedEnvironment());
             $cmsPageId = $this->getDbService(\TueFind\Db\Service\CmsPagesServiceInterface::class)->add(
                 $subsystem->getId(),
@@ -175,8 +179,8 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
                 throw new \RuntimeException('CMS page was not created');
             }
 
-            $iLang=0;
-            foreach ($langs as $key=>$name) {
+            $iLang = 0;
+            foreach ($langs as $key => $name) {
                 if ($pageTitle[$iLang] != '') {
                     $this->getDbService(\TueFind\Db\Service\CmsPagesTranslationServiceInterface::class)->add(
                         $cmsPageId,
@@ -216,8 +220,8 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
         $cmsPage = $this->getDbService(\TueFind\Db\Service\CmsPagesServiceInterface::class)->getByID($cmsPageId);
 
         if ($action == 'update') {
-            $iLang=0;
-            foreach ($langs as $key=>$name) {
+            $iLang = 0;
+            foreach ($langs as $key => $name) {
                 $pageTitle = $pageTitles[$iLang];
                 $pageContent = $pageContents[$iLang];
                 $existingTranslation = $cmsPage->getTranslation($key);
@@ -229,7 +233,7 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
                         $pageTitle,
                         $pageContent
                     );
-                } else if ($existingTranslation != null) {
+                } elseif ($existingTranslation != null) {
                     if ($pageTitle != '') {
                         // update
                         $this->getDbService(\TueFind\Db\Service\CmsPagesServiceInterface::class)->update($cmsPageId, new \DateTime());
@@ -274,17 +278,18 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
         $this->flashMessenger()->addMessage(['msg' => 'page deleted!', 'html' => true], 'success');
 
         return $this->redirect()->toUrl('/AdminFrontend/CMSPages');
-
     }
 
-    public function CmsPagesAllHistoryAction() {
+    public function CmsPagesAllHistoryAction()
+    {
         $this->forceAdminLogin();
 
         $CMSPagesHistory = ['CMSPagesHistory' => $this->getDbService(\TueFind\Db\Service\CmsPagesHistoryServiceInterface::class)->getAllBySubsystemName(\IxTheo\Utility::getUserTypeFromUsedEnvironment())];
         return $this->createViewModel($CMSPagesHistory);
     }
 
-    public function CmsPagesHistoryAction() {
+    public function CmsPagesHistoryAction()
+    {
         $this->forceAdminLogin();
 
         $cmsPageId = $this->params()->fromRoute('cms_page_id');
@@ -294,37 +299,39 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase {
         ]);
     }
 
-    public function CmsPagesDocsAction() {
+    public function CmsPagesDocsAction()
+    {
         $this->forceAdminLogin();
 
         $subSystem = $this->getDbService(\TueFind\Db\Service\SubsystemsServiceInterface::class)->getAll();
         //$user_type = $user->getUserType(); for now we do not have different user types, but in the future we might want to use this to determine if a user has access to certain subsystems or not
 
         return $this->createViewModel([
-            'subSystem' => $subSystem
+            'subSystem' => $subSystem,
         ]);
     }
 
-    public function CmsPagesFilesAction() {
+    public function CmsPagesFilesAction()
+    {
         $this->forceAdminLogin();
 
         $subSystem = $this->getDbService(\TueFind\Db\Service\SubsystemsServiceInterface::class)->getAll();
         //$user_type = $user->getUserType(); for now we do not have different user types, but in the future we might want to use this to determine if a user has access to certain subsystems or not
 
         return $this->createViewModel([
-            'subSystem' => $subSystem
+            'subSystem' => $subSystem,
         ]);
     }
 
-    public function CmsPagesImagesAction() {
+    public function CmsPagesImagesAction()
+    {
         $this->forceAdminLogin();
 
         $subSystem = $this->getDbService(\TueFind\Db\Service\SubsystemsServiceInterface::class)->getAll();
         //$user_type = $user->getUserType(); for now we do not have different user types, but in the future we might want to use this to determine if a user has access to certain subsystems or not
 
         return $this->createViewModel([
-            'subSystem' => $subSystem
+            'subSystem' => $subSystem,
         ]);
     }
-
 }
