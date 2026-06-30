@@ -600,3 +600,65 @@ a:hover {
     background-color: krimdok_v.$brand-primary;
     color: #fff;
 }
+
+.table_content {
+    width: 80%;
+    margin: 30px auto 0 auto;
+}
+.table_content_header {
+    padding: 20px;
+    border-radius: 5px 5px 0 0;
+    margin-bottom: 20px;
+}
+.table_content_header h1 {
+    margin: 0 0 10px 0;
+    font-size: 24px;
+    text-align: center;
+    color: #a51e37;
+}
+.table_content_header h2 {
+    margin: 0 0 5px 0;
+    font-size: 18px;
+    font-weight: normal;
+    text-align: center;
+    color: #a51e37;
+}
+.table_content_header h3 {
+    font-size: 16px;
+    font-weight: normal;
+    text-align: center;
+    margin:0 0 10px 0;
+}
+.table_content table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    /*box-shadow: 0 2px 5px #a51e37;*/
+    border-radius: 0 0 5px 5px;
+    overflow: hidden;
+}
+.table_content th, .table_content td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+.table_content tr:last-child td {
+    border-bottom: none;
+}
+.table_content td:first-child {
+    font-weight: bold;
+    color: #a51e37;
+    width: 30%;
+    vertical-align: top;
+}
+.table_content tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+.table_content_footer {
+    margin-top: 20px;
+    font-size: 12px;
+    text-align: center;
+}
+.table_content .kursiv {
+    font-style: italic;
+}
