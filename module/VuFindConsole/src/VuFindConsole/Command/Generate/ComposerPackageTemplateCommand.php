@@ -12,10 +12,10 @@ use Symfony\Component\Filesystem\Filesystem;
 use VuFind\Exception\FileAccess as FileAccessException;
 
 #[AsCommand(
-    name: 'generate/composerpackage',
-    description: 'Composer package generator'
+    name: 'generate/composerpackagetemplate',
+    description: 'Composer package template generator'
 )]
-class ComposerPackageCommand extends AbstractCommand {
+class ComposerPackageTemplateCommand extends AbstractCommand {
     protected InputInterface $input;
     protected OutputInterface $output;
     protected Filesystem $filesystem;

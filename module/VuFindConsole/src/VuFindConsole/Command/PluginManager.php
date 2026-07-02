@@ -49,7 +49,7 @@ class PluginManager extends \VuFind\ServiceManager\AbstractPluginManager
      */
     protected $aliases = [
         'compile/theme' => Compile\ThemeCommand::class,
-        'generate/composerpackage' => Generate\ComposerPackageCommand::class,
+        'generate/composerpackagetemplate' => Generate\ComposerPackageTemplateCommand::class,
         'generate/dynamicroute' => Generate\DynamicRouteCommand::class,
         'generate/extendclass' => Generate\ExtendClassCommand::class,
         'generate/extendservice' => Generate\ExtendServiceCommand::class,
@@ -110,7 +110,7 @@ class PluginManager extends \VuFind\ServiceManager\AbstractPluginManager
      */
     protected $factories = [
         Compile\ThemeCommand::class => Compile\ThemeCommandFactory::class,
-        Generate\ComposerPackageCommand::class => Generate\AbstractCommandFactory::class,
+        Generate\ComposerPackageTemplateCommand::class => Generate\AbstractCommandFactory::class,
         Generate\DynamicRouteCommand::class => Generate\AbstractRouteCommandFactory::class,
         Generate\ExtendClassCommand::class => Generate\AbstractContainerAwareCommandFactory::class,
         Generate\ExtendServiceCommand::class => Generate\AbstractCommandFactory::class,
