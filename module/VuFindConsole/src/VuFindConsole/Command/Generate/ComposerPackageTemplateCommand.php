@@ -53,10 +53,10 @@ class ComposerPackageTemplateCommand extends AbstractCommand {
     protected string $mixinTargetDirRelative = 'mixin';
     protected string $mixinTargetDirAbsolute;
 
-    protected string $testsTargetDirRelative = 'tests';
-    protected string $testsTargetDirAbsolute;
-    protected string $testsTemplateDirRelative = 'tests';
-    protected string $testsTemplateDirAbsolute;
+    protected string $checksTargetDirRelative = 'tests';
+    protected string $checksTargetDirAbsolute;
+    protected string $checksTemplateDirRelative = 'tests';
+    protected string $checksTemplateDirAbsolute;
 
     protected string $gitHubTargetDirRelative = '.github';
     protected string $gitHubTargetDirAbsolute;
@@ -88,10 +88,16 @@ class ComposerPackageTemplateCommand extends AbstractCommand {
                 InputOption::VALUE_NONE,
                 'when set, also create a custom mixin'
             )->addOption(
-                'tests',
+                'build',
                 null,
                 InputOption::VALUE_NONE,
-                'when set, also create tests'
+                'when set, also create build.xml'
+            )
+            ->addOption(
+                'checks',
+                null,
+                InputOption::VALUE_NONE,
+                'when set, also create checks'
             )->addOption(
                 'workflows',
                 null,
@@ -123,8 +129,11 @@ class ComposerPackageTemplateCommand extends AbstractCommand {
         if ($this->input->getOption('mixin')) {
             $this->generateMixin();
         }
-        if ($this->input->getOption('tests')) {
-            $this->generateTests();
+        if ($this->input->getOption('checks')) {
+            $this->generateChecks();
+        }
+        if ($this->input->getOption('build')) {
+            $this->generateBuildXml();
         }
         if ($this->input->getOption('workflows')) {
             $this->generateGitHubWorkflows();
@@ -149,8 +158,10 @@ class ComposerPackageTemplateCommand extends AbstractCommand {
             'description' => 'My custom composer package for VuFind',
             'license' => $templateArray['license'],
             'authors' => [
-                'name' => 'My Name',
-                'email' => 'my@email.com',
+                [
+                    'name' => 'My Name',
+                    'email' => 'my@email.com',
+                ],
             ],
             'config' => [
                 'platform' => [
@@ -158,11 +169,16 @@ class ComposerPackageTemplateCommand extends AbstractCommand {
                 ],
             ],
             'require' => [
-                'php' => '>=' . $templateArray['require']['php'],
+                'php' => $templateArray['require']['php'],
+                'vufind/vufind' => 'dev-dev', // can we get the current version number from vufind's own composer.json or somewhere else?
             ],
             'require-dev' => [
                 'phing/phing' => $templateArray['require']['phing/phing'],
             ],
+
+            // This might be necessary to avoid dependency problems when including vufind directly (even productive versions)
+            'minimum-stability' => 'dev',
+            'prefer-stable' => true,
         ];
 
         if ($this->input->getOption('module')) {
@@ -172,16 +188,10 @@ class ComposerPackageTemplateCommand extends AbstractCommand {
             // depends on optimization from FINC/alex-pu
             $targetArray['extra']['vufind']['themes'][$this->mixinTargetDirRelative] = $this->mixinName;
         }
-        if ($this->input->getOption('tests')) {
-            $dependencies = [
-                'friendsofphp/php-cs-fixer',
-                'phpmd/phpmd',
-                'phpstan/phpstan',
-                'squizlabs/php_codesniffer',
-                'rector/rector',
-            ];
-            foreach ($dependencies as $dependency) {
-                $targetArray['require-dev'][$dependency] = $templateArray['require-dev'][$dependency];
+        if ($this->input->getOption('checks')) {
+            // We might need to insert all standard vufind require-dev entries to run checks / workflows later
+            foreach ($templateArray['require-dev'] as $dependency => $version) {
+                $targetArray['require-dev'][$dependency] = $version;
             }
         }
 
@@ -209,6 +219,21 @@ class ComposerPackageTemplateCommand extends AbstractCommand {
         $config = $this->readFile($path);
         $config = str_replace($this->moduleTemplateName, $this->moduleNamespace, $config);
         $this->filesystem->dumpFile($path, $config);
+    }
+
+    protected function generateBuildXml()
+    {
+        $buildXmlTemplateFileAbsolute = $this->vuFindHomeDirAbsolute . DIRECTORY_SEPARATOR . 'build.xml';
+        $buildXmlTargetFileAbsolute = $this->targetDirAbsolute . DIRECTORY_SEPARATOR . 'build.xml';
+        $this->output->writeln('Generating build.xml...');
+        $dom = new \DOMDocument();
+        $dom->load($buildXmlTemplateFileAbsolute);
+
+        $dom->documentElement->setAttribute('name', $this->moduleNamespace);
+
+        // TODO: Which properties do we need to remove/modify/add?
+
+        $dom->save($buildXmlTargetFileAbsolute);
     }
 
     /**
@@ -245,25 +270,25 @@ CONFIG;
         $this->filesystem->mirror($this->mixinTemplateDirAbsolute, $this->mixinTargetDirAbsolute);
     }
 
-    protected function generateTests()
+    protected function generateChecks()
     {
-        $this->testsTemplateDirAbsolute = $this->vuFindHomeDirAbsolute . DIRECTORY_SEPARATOR . $this->testsTemplateDirRelative;
-        $this->testsTargetDirAbsolute = $this->targetDirAbsolute . DIRECTORY_SEPARATOR . $this->testsTargetDirRelative;
+        $this->checksTemplateDirAbsolute = $this->vuFindHomeDirAbsolute . DIRECTORY_SEPARATOR . $this->checksTemplateDirRelative;
+        $this->checksTargetDirAbsolute = $this->targetDirAbsolute . DIRECTORY_SEPARATOR . $this->checksTargetDirRelative;
 
-        $this->output->writeln('Generating tests in ' . $this->testsTargetDirRelative . '...');
+        $this->output->writeln('Generating checks in ' . $this->checksTargetDirRelative . '...');
 
-        $this->filesystem->mirror($this->testsTemplateDirAbsolute, $this->testsTargetDirAbsolute);
-        $this->filesystem->remove($this->testsTargetDirAbsolute . DIRECTORY_SEPARATOR . 'data');
+        $this->filesystem->mirror($this->checksTemplateDirAbsolute, $this->checksTargetDirAbsolute);
+        $this->filesystem->remove($this->checksTargetDirAbsolute . DIRECTORY_SEPARATOR . 'data');
 
-        $this->rewritePhpCsPaths([$this->moduleTargetDirRelative, $this->testsTargetDirRelative]);
-        $this->rewritePhpCsFixerPaths('vufind.php-cs-fixer.php', [$this->moduleTargetDirRelative, $this->testsTargetDirRelative]);
+        $this->rewritePhpCsPaths([$this->moduleTargetDirRelative, $this->checksTargetDirRelative]);
+        $this->rewritePhpCsFixerPaths('vufind.php-cs-fixer.php', [$this->moduleTargetDirRelative, $this->checksTargetDirRelative]);
         $this->rewritePhpCsFixerPaths('vufind_templates.php-cs-fixer.php', [$this->mixinTargetDirRelative]);
-        $this->rewriteRectorPaths([$this->moduleTargetDirRelative, $this->testsTargetDirRelative]);
+        $this->rewriteRectorPaths([$this->moduleTargetDirRelative, $this->checksTargetDirRelative]);
     }
 
     protected function rewritePhpCsPaths(array $pathsToInsert)
     {
-        $phpCsPath = $this->testsTargetDirAbsolute . DIRECTORY_SEPARATOR . 'phpcs.xml';
+        $phpCsPath = $this->checksTargetDirAbsolute . DIRECTORY_SEPARATOR . 'phpcs.xml';
 
         $dom = new \DOMDocument();
         $dom->preserveWhiteSpace = false;
@@ -302,7 +327,7 @@ CONFIG;
 
     protected function rewritePhpCsFixerPaths(string $configFilename, array $pathsToInsert)
     {
-        $configPath = $this->testsTargetDirAbsolute . DIRECTORY_SEPARATOR . $configFilename;
+        $configPath = $this->checksTargetDirAbsolute . DIRECTORY_SEPARATOR . $configFilename;
         $config = $this->readFile($configPath);
 
         $pattern = '"(->in\([^)]+\)\s*)+"';
@@ -323,7 +348,7 @@ CONFIG;
 
     protected function rewriteRectorPaths(array $pathsToInsert)
     {
-        $configPath = $this->testsTargetDirAbsolute . DIRECTORY_SEPARATOR . 'rector.php';
+        $configPath = $this->checksTargetDirAbsolute . DIRECTORY_SEPARATOR . 'rector.php';
         $config = $this->readFile($configPath);
 
         $pattern = '"->withPaths\(\[(\s|[^\]])+\]\)"';
