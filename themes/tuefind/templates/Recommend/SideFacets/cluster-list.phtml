@@ -1,5 +1,3 @@
-<?php $moreClass = 'narrowGroupHidden-' . $this->escapeHtmlAttr($this->title) . ' hidden'; ?>
-
 <?php if (empty($this->cluster['list'])): ?>
   <div class="facet"><?=$this->transEsc('facet_list_empty')?></div>
   <?php return; // We're done if the list is empty! ?>
@@ -15,12 +13,19 @@
     'more-label' => $this->transEsc('more_ellipsis'),
     'less-label' => $this->transEsc('less_ellipsis'),
     'wrapper-class' => false,
-    'wrapper-tagname' => 'div',
+    'wrapper-tagname' => 'li',
   ];
+  $facetop = 'AND';
+  foreach ($this->cluster['list'] as $f) {
+    if ($f['operator'] != 'NOT') {
+      $facetop = $f['operator'];
+      break;
+    }
+  }
   $facetLightboxParams = http_build_query(
       [
           'facet' => $this->title,
-          'facetop' => $this->cluster['list'][0]['operator'] ?? 'AND',
+          'facetop' => $facetop,
           'facetexclude' => $this->allowExclude ? 1 : 0,
       ],
       '',
@@ -42,17 +47,14 @@
 <ul<?=$ulAttrs?>>
   <?php foreach ($this->cluster['list'] as $i => $thisFacet): ?>
     <li class="facet__list__item">
-  <?php if ($i == $this->facets_before_more): ?>
+      <?php if ($i == $this->facets_before_more): ?>
         <?php if ($alwaysUseLightbox): ?>
           <a class="facet narrow-toggle more-facets" data-lightbox href="<?=$moreUrl ?>" rel="nofollow">
             <span class="text"><?=$this->transEsc('more_ellipsis')?></span>
-      </a>
-      <?php break; ?>
-    <?php endif; ?>
-    <a <?=$idAndClass ?> href="<?=$moreUrl ?>" data-title="<?=$this->escapeHtmlAttr($this->title) ?>" rel="nofollow">
-      <span class="text"><?=$this->transEsc('more')?> ...</span>
-    </a>
-  <?php endif; ?>
+          </a>
+          <?php break; ?>
+        <?php endif; ?>
+      <?php endif; ?>
 
       <?=$this->render('Recommend/SideFacets/single-facet.phtml', [
         'exclude' => $this->allowExclude,
@@ -60,22 +62,19 @@
         'group' => $this->title,
         'url' => $this->results->getUrlQuery(),
         'urlBase' => '',
-        'results' => $this->results
+        'results' => $this->results,
       ]) ?>
     </li>
-<?php endforeach; ?>
+  <?php endforeach; ?>
 
-<?php /* LESS and SEE MORE links */ ?>
-<?php if (isset($i) && $i >= $this->facets_before_more): ?>
+  <?php /* LESS and SEE MORE links */ ?>
+  <?php if (isset($i) && $i >= $this->facets_before_more): ?>
     <?php if ($this->showMoreInLightbox === 'more' && $facetLightbox): ?>
       <li class="facet__list__item">
         <a class="facet narrow-toggle all-facets" data-lightbox href="<?=$moreUrl ?>" rel="nofollow">
           <span class="text"><?=$this->transEsc('see_all_ellipsis')?></span>
-    </a>
+        </a>
       </li>
+    <?php endif; ?>
   <?php endif; ?>
-  <a class="facet narrow-toggle <?=$moreClass ?> less-facets" href="#" data-title="<?=$this->escapeHtmlAttr($this->title) ?>">
-    <span class="text"><?=$this->transEsc('less')?> ...</span>
-  </a>
-<?php endif; ?>
 </ul>
