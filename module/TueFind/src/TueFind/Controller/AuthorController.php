@@ -1,8 +1,11 @@
 <?php
+
 namespace TueFind\Controller;
 
-class AuthorController extends \VuFindCollapseExpand\Controller\AuthorController {
+use function count;
 
+class AuthorController extends \VuFindCollapseExpand\Controller\AuthorController
+{
     public function searchAction()
     {
 
@@ -12,11 +15,11 @@ class AuthorController extends \VuFindCollapseExpand\Controller\AuthorController
         $view = $this->getSearchResultsViewPageParam();
         $author_id = $this->params()->fromQuery('author_id');
         $page = $this->params()->fromQuery('page');
-        if(empty($author_id) && !empty($this->params()->fromQuery('lookfor'))) {
+        if (empty($author_id) && !empty($this->params()->fromQuery('lookfor'))) {
             $lookforID = explode(' ', $this->params()->fromQuery('lookfor'));
-            if(!empty($lookforID[0])) {
+            if (!empty($lookforID[0])) {
                 $lookforID = explode('"', $lookforID[0]);
-                if(!empty($lookforID[1])) {
+                if (!empty($lookforID[1])) {
                     $author_id = $lookforID[1];
                 }
             }
@@ -24,19 +27,19 @@ class AuthorController extends \VuFindCollapseExpand\Controller\AuthorController
 
         $view->authorId = $author_id;
         $relatedAuthors = [];
-        foreach($view->results->getResults() as $res) {
+        foreach ($view->results->getResults() as $res) {
             $updateData = $this->updateRelatedAuthor($res);
-            if(empty($updateData['relatedAuthorID']) || $updateData['relatedAuthorID'] != $view->authorId) {
+            if (empty($updateData['relatedAuthorID']) || $updateData['relatedAuthorID'] != $view->authorId) {
                 $relatedAuthors[] = $updateData;
             }
         }
 
-        if(empty($relatedAuthors)) {
+        if (empty($relatedAuthors)) {
             $view = $this->getSearchResultsViewPageParam(false);
             $relatedAuthors = [];
-            foreach($view->results->getResults() as $res) {
+            foreach ($view->results->getResults() as $res) {
                 $updateData = $this->updateRelatedAuthor($res);
-                if($updateData['relatedAuthorID'] != $author_id) {
+                if ($updateData['relatedAuthorID'] != $author_id) {
                     $relatedAuthors[] = $updateData;
                 }
             }
@@ -64,9 +67,8 @@ class AuthorController extends \VuFindCollapseExpand\Controller\AuthorController
         $request = $this->getRequest()->getQuery()->toArray()
             + $this->getRequest()->getPost()->toArray();
 
-
         // Remove the "page" parameter from the request array, to fix "sorting form"
-        if($pageParam === false && isset($request['page'])) {
+        if ($pageParam === false && isset($request['page'])) {
             unset($request['page']);
         }
 
@@ -74,7 +76,8 @@ class AuthorController extends \VuFindCollapseExpand\Controller\AuthorController
             ->retrieveLastSetting($this->searchClassId, 'view');
         try {
             $view->results = $results = $runner->run(
-                $request, $this->searchClassId,
+                $request,
+                $this->searchClassId,
                 null ?: $this->getSearchSetupCallback(),
                 $lastView
             );
@@ -104,7 +107,7 @@ class AuthorController extends \VuFindCollapseExpand\Controller\AuthorController
             }
 
             // Set up results scroller:
-            if ($this->resultScrollerActive()) {
+            if ($this->getOptionsForClass()->resultScrollerActive()) {
                 $this->resultScroller()->init($results);
             }
 
@@ -131,14 +134,15 @@ class AuthorController extends \VuFindCollapseExpand\Controller\AuthorController
         return $view;
     }
 
-    private function updateRelatedAuthor($originalAuthorData): array {
-       $explodeData = explode(':', $originalAuthorData['value']);
-       $relatedAuthorID = '';
-       if(isset($explodeData[1])) {
-          $relatedAuthorID = $explodeData[1];
-       }
-       $originalAuthorData['relatedAuthorID'] = $relatedAuthorID;
-       $originalAuthorData['relatedAuthorTitle'] = $explodeData[0];
-       return $originalAuthorData;
+    private function updateRelatedAuthor($originalAuthorData): array
+    {
+        $explodeData = explode(':', $originalAuthorData['value']);
+        $relatedAuthorID = '';
+        if (isset($explodeData[1])) {
+            $relatedAuthorID = $explodeData[1];
+        }
+        $originalAuthorData['relatedAuthorID'] = $relatedAuthorID;
+        $originalAuthorData['relatedAuthorTitle'] = $explodeData[0];
+        return $originalAuthorData;
     }
 }
