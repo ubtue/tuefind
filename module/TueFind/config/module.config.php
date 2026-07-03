@@ -564,9 +564,13 @@ $config = [
             ],
             'metadatavocabulary' => [
                 'factories' => [
+                    'TueFind\MetadataVocabulary\DSpace6' => 'Laminas\ServiceManager\Factory\InvokableFactory',
+                    'TueFind\MetadataVocabulary\DSpace7' => 'Laminas\ServiceManager\Factory\InvokableFactory',
                     'TueFind\MetadataVocabulary\HighwirePress' => 'Laminas\ServiceManager\Factory\InvokableFactory',
                 ],
                 'aliases' => [
+                    'DSpace6' => 'TueFind\MetadataVocabulary\DSpace6',
+                    'DSpace7' => 'TueFind\MetadataVocabulary\DSpace7',
                     'HighwirePress' => 'TueFind\MetadataVocabulary\HighwirePress',
                     'VuFind\MetadataVocabulary\HighwirePress' => 'TueFind\MetadataVocabulary\HighwirePress',
                 ],
