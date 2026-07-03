@@ -26,7 +26,7 @@ class PDASubscriptions extends AbstractPlugin
     protected $renderer;
 
     public function __construct(
-        \IxTheo\Db\Service\PluginManager $dbTableManager,
+        \VuFind\Db\Service\PluginManager $dbTableManager,
         \TueFind\Mailer\Mailer $mailer,
         \VuFind\Record\Loader $recordLoader,
         \VuFind\Config\ConfigManagerInterface $config,
