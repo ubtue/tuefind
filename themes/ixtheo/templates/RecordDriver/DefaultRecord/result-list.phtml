@@ -34,7 +34,7 @@
       </div>
 
       <div>
-        <?php if($this->driver->isCollection()): ?>
+        <?php if ($this->driver->isCollection()): ?>
           <?=implode('<br>', array_map([$this, 'escapeHtml'], $this->driver->getSummary())); ?>
         <?php else: ?>
           <?php // Handle displaying of author according to rule 3 of issue 131 ?>
@@ -45,7 +45,8 @@
             <?php if ($truncate_authors): ?>
               <?php $authors['primary'] = array_splice($authors['primary'], 0, 3); ?>
             <?php endif; ?>
-            <?php $i = 0; foreach ($authors['primary'] as $author => $authorProperties): ?><?=($i++ == 0)?'':'; '?>
+            <?php $i = 0;
+            foreach ($authors['primary'] as $author => $authorProperties): ?><?=($i++ == 0) ? '' : '; '?>
               <span>
                 <?php if ($this->tuefind()->isSearchTabEnabled('SolrAuth')): ?>
                   <?php /* Display separate links to title search + authority page */ ?>
@@ -70,12 +71,12 @@
           <?php else: ?>
             <?php // Handle corporation information... ?>
             <?php
-            if(!is_null($this->driver->tryMethod('getCorporateAuthorsIds'))){
+            if (null !== $this->driver->tryMethod('getCorporateAuthorsIds')) {
               $corporationsIds = $this->driver->tryMethod('getCorporateAuthorsIds');
               $corporation = $this->driver->tryMethod('getCorporation');
-              if (!empty($corporationsIds)){
+              if (!empty($corporationsIds)) {
                 $corporetionIndex = 0;
-                foreach($corporationsIds as $corporationID) { ?>
+                foreach ($corporationsIds as $corporationID) { ?>
                   <?=$this->escapeHtml($corporation[$corporetionIndex])?>
                   <?php if ($corporationID && $authorityDriver = $this->authority()->recordExists($corporationID)): ?>
                     <a href="<?=$this->record($authorityDriver)->getLink('titles-by', $authorityDriver)?>" rel="nofollow"><i class="fa fa-book" aria-hidden="true" title="<?=$this->transEsc('author_all_titles_tooltip')?>"></i></a>
@@ -102,9 +103,9 @@
               <?php endif; ?>
             <?php endforeach; ?>
             <div>
-              <?php $journal_issue_display = preg_replace('/(\d+)(\()/','$1 $2', implode(", ", $journal_issue_display_parts)) ?>
+              <?php $journal_issue_display = preg_replace('/(\d+)(\()/', '$1 $2', implode(', ', $journal_issue_display_parts)) ?>
               <?=$this->transEsc('in')?>:
-              <?php if(!empty($superior_ppn)): ?>
+              <?php if (!empty($superior_ppn)): ?>
                 <a href="<?=$this->url('record', ['id' => $superior_ppn]) ?>"><?=$journal_issue_display?></a>
               <?php else: ?>
                 <?=$journal_issue_display?>
@@ -113,13 +114,13 @@
           <?php else: ?>
             <div>
               <?php // Fill with non article handling code ?>
-              <?=!is_null($this->driver->tryMethod('getPublicationDetailsNoPlaces')) ? implode(" ", $this->driver->tryMethod('getPublicationDetailsNoPlaces'))  : "" ?>
+              <?=null !== $this->driver->tryMethod('getPublicationDetailsNoPlaces') ? implode(' ', $this->driver->tryMethod('getPublicationDetailsNoPlaces')) : '' ?>
             </div>
           <?php endif; ?>
         <?php endif; ?>
       </div>
 
-      <?php if(!$this->driver->isCollection()): ?>
+      <?php if (!$this->driver->isCollection()): ?>
         <?php if ($snippet = $this->driver->getHighlightedSnippet()): ?>
           <?php if (!empty($snippet['caption'])): ?>
             <strong><?=$this->transEsc($snippet['caption']) ?>:</strong>
@@ -226,7 +227,7 @@
 
       <?php if (strtolower($this->tuefind()->getControllerName()) != 'search2'): ?>
         <div class="result-formats">
-        <?php $label=str_replace('class="', 'class="label label-info ', $this->record($this->driver)->getFormatList())?>
+        <?php $label = $this->record($this->driver)->getFormatList()?>
         <?php /* Remove separator needed for long title view */ ?>
         <?=str_replace(' | ', '', $label)?>
         <!-- Display a hidden version of PPN that can be copied to the clipboard -->
@@ -246,11 +247,11 @@
       <?php /* BEGIN Show extended records */ ?>
       <?=$this->render('RecordDriver/DefaultRecord/result-list-snippet.phtml')?>
       <?php /* END Show extended records */ ?>
-    
+
     </div>
     <div class="result-links hidden-print">
       <?php /* Display qrcode if appropriate: */ ?>
-      <?php if ($QRCode = $this->record($this->driver)->getQRCode("results")): ?>
+      <?php if ($QRCode = $this->record($this->driver)->getQRCode('results')): ?>
         <?php
           // Add JS Variables for QrCode
           $this->jsTranslations()->addStrings(['qrcode_hide' => 'qrcode_hide', 'qrcode_show' => 'qrcode_show']);
@@ -273,7 +274,7 @@
         <div class="ix-result-links-items">
           <?php /* Saved lists */ ?>
           <div class="savedLists tf-d-none">
-            <strong><?=$this->transEsc("Saved in")?>:</strong>
+            <strong><?=$this->transEsc('Saved in')?>:</strong>
             <a href="<?=$this->url('myresearch-favorites')?>" data-lightbox class="tf-favoritesListModal tf-d-none" rel="nofollow">&nbsp;</a>
           </div>
           <div class="ix-result-list-actions">

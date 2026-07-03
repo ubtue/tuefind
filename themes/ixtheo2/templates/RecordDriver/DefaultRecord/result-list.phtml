@@ -29,7 +29,7 @@
       </div>
 
       <div>
-        <?php if($this->driver->isCollection()): ?>
+        <?php if ($this->driver->isCollection()): ?>
           <?=implode('<br>', array_map([$this, 'escapeHtml'], $this->driver->getSummary())); ?>
         <?php else: ?>
           <?php // Handle displaying of author according to rule 3 of issue 131 ?>
@@ -40,7 +40,8 @@
             <?php if ($truncate_authors): ?>
               <?php $authors['primary'] = array_splice($authors['primary'], 0, 3); ?>
             <?php endif; ?>
-            <?php $i = 0; foreach ($authors['primary'] as $author => $authorProperties): ?><?=($i++ == 0)?'':'; '?>
+            <?php $i = 0;
+            foreach ($authors['primary'] as $author => $authorProperties): ?><?=($i++ == 0) ? '' : '; '?>
               <span>
                 <?php if ($this->tuefind()->isSearchTabEnabled('SolrAuth')): ?>
                   <?php /* Display separate links to title search + authority page */ ?>
@@ -64,10 +65,10 @@
             <?php endif; ?>
           <?php else: ?>
             <?php // Handle corporation information... ?>
-            <?php $corporation = !is_null($this->driver->tryMethod('getCorporation')) ? implode(" ", $this->driver->tryMethod('getCorporation')) : ""?>
+            <?php $corporation = null !== $this->driver->tryMethod('getCorporation') ? implode(' ', $this->driver->tryMethod('getCorporation')) : ''?>
             <?php if (!empty($corporation)): ?>
                <a href="<?=$this->record($this->driver)->getLink('author', $corporation)?>" rel="nofollow"><?php
-                $summCorporation = "";
+                $summCorporation = '';
                 echo !empty($summCorporation)
                   ? $this->highlight($summCorporation)
                   : $this->escapeHtml($corporation);
@@ -83,18 +84,18 @@
                 <?php unset($journal_issue[$superior_ppn_index]); ?>
             <?php endif; ?>
             <div>
-              <?php if(!empty($superior_ppn)): ?>
+              <?php if (!empty($superior_ppn)): ?>
                 <?=$this->transEsc('in')?>:
-                <?php $journal_issue_display = preg_replace('/(\d+)(\()/','$1 $2', implode(", ", $journal_issue)) ?>
+                <?php $journal_issue_display = preg_replace('/(\d+)(\()/', '$1 $2', implode(', ', $journal_issue)) ?>
                 <a href="<?=$this->url('record', ['id' => $superior_ppn]) ?>"><?=$journal_issue_display ?></a>
               <?php else: ?>
-                <?php implode(" ", $journal_issue) ?>
+                <?php implode(' ', $journal_issue) ?>
               <?php endif; ?>
             </div>
           <?php else: ?>
               <div>
               <?php // Fill with non article handling code ?>
-              <?=!is_null($this->driver->tryMethod('getPublicationDetailsNoPlaces')) ? implode(" ", $this->driver->tryMethod('getPublicationDetailsNoPlaces'))  : "" ?>
+              <?=null !== $this->driver->tryMethod('getPublicationDetailsNoPlaces') ? implode(' ', $this->driver->tryMethod('getPublicationDetailsNoPlaces')) : '' ?>
               </div>
           <?php endif; ?>
         <?php endif; ?>
@@ -154,7 +155,8 @@
           </span>
           <div class="locationDetails"></div>
         <?php else: ?>
-          <?php $summCallNo = $this->driver->getCallNumber(); if (!empty($summCallNo)): ?>
+          <?php $summCallNo = $this->driver->getCallNumber();
+          if (!empty($summCallNo)): ?>
             <strong><?=$this->transEsc('Call Number')?>:</strong> <?=$this->escapeHtml($summCallNo)?>
           <?php endif; ?>
         <?php endif; ?>
@@ -191,7 +193,7 @@
 
       <?php if (strtolower($this->tuefind()->getControllerName()) != 'search2'): ?>
         <div class="result-formats">
-          <?php $label=str_replace('class="', 'class="label label-info ', $this->record($this->driver)->getFormatList())?>
+          <?php $label = $this->record($this->driver)->getFormatList()?>
           <?php /* Remove separator needed for long title view */ ?>
           <?=str_replace(' | ', '', $label)?>
           <span  style="opacity: 0;"><small><?=$this->escapeHtmlAttr($this->driver->getUniqueID())?></small></span>
@@ -251,18 +253,18 @@
           echo '<div>' . $this->transEsc($timeRangesString) . '</div>';
         }
       ?>
-      
+
       <?php /* BEGIN Show extended records */ ?>
       <?=$this->render('RecordDriver/DefaultRecord/result-list-snippet.phtml')?>
       <?php /* END Show extended records */ ?>
-      
+
       <div class="result-previews">
         <?=$this->record($this->driver)->getPreviews()?>
       </div>
       </div>
       <div class="result-links hidden-print">
       <?php /* Display qrcode if appropriate: */ ?>
-      <?php if ($QRCode = $this->record($this->driver)->getQRCode("results")): ?>
+      <?php if ($QRCode = $this->record($this->driver)->getQRCode('results')): ?>
         <?php
           // Add JS Variables for QrCode
           $this->jsTranslations()->addStrings(['qrcode_hide' => 'qrcode_hide', 'qrcode_show' => 'qrcode_show']);
@@ -285,7 +287,7 @@
         <div class="ix-result-links-items">
           <?php /* Saved lists */ ?>
           <div class="savedLists tf-d-none">
-            <strong><?=$this->transEsc("Saved in")?>:</strong>
+            <strong><?=$this->transEsc('Saved in')?>:</strong>
             <a href="<?=$this->url('myresearch-favorites')?>" data-lightbox class="tf-favoritesListModal tf-d-none">&nbsp;</a>
           </div>
           <div class="ix-result-list-actions">
@@ -309,7 +311,8 @@
         <?php endif; ?>
 
         <?php /* Hierarchy tree link */ ?>
-        <?php $trees = $this->driver->tryMethod('getHierarchyTrees'); if (!empty($trees)): ?>
+        <?php $trees = $this->driver->tryMethod('getHierarchyTrees');
+        if (!empty($trees)): ?>
           <?php foreach ($trees as $hierarchyID => $hierarchyTitle): ?>
             <div class="hierarchyTreeLink">
               <input type="hidden" value="<?=$this->escapeHtmlAttr($hierarchyID)?>" class="hiddenHierarchyId" />
