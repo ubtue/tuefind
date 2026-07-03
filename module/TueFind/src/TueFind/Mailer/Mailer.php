@@ -7,9 +7,12 @@ use Symfony\Component\Mime\Email;
 use Symfony\Component\Mime\Exception\RfcComplianceException;
 use VuFind\Exception\Mail as MailException;
 
+use function count;
+
 class Mailer extends \VuFind\Mailer\Mailer
 {
     protected string $siteAddress;
+
     protected string $siteTitle;
 
     /**
@@ -27,7 +30,7 @@ class Mailer extends \VuFind\Mailer\Mailer
         string|Address|array|null $replyTo = null,
         bool $subjectInBody = true,
         array $parts = [],
-        bool $tuefindSpamfilter=false
+        bool $tuefindSpamfilter = false
     ) {
         try {
             if (!($from instanceof Address)) {
@@ -112,7 +115,18 @@ class Mailer extends \VuFind\Mailer\Mailer
 
             // TueFind: Add header for spamfilter
             if ($tuefindSpamfilter) {
-                $email->getHeaders()->addTextHeader('X-TueFind-Spamfilter', 'enabled');
+                // Unfortunately the Spamfilter will reject mails to meistertask, so we need to skip it based on the receivers
+                $recipientsContainMeistertask = false;
+                foreach ($recipients as $recipient) {
+                    if (str_contains($recipient->getAddress(), 'meistertask.com')) {
+                        $recipientsContainMeistertask = true;
+                        break;
+                    }
+                }
+
+                if (!$recipientsContainMeistertask) {
+                    $email->getHeaders()->addTextHeader('X-TueFind-Spamfilter', 'enabled');
+                }
             }
 
             $email->addFrom($from);
