@@ -6,9 +6,10 @@ use Laminas\View\Model\ViewModel;
 use TueFind\Db\Entity\CmsPagesTranslationEntityInterface;
 use VuFind\I18n\Locale\LocaleSettings;
 
+use function is_callable;
+
 class ContentController extends \VuFind\Controller\ContentController
 {
-
     /**
      * CMS-related changes
      * - Check database and filesystem for the requested page and their translations
@@ -57,7 +58,7 @@ class ContentController extends \VuFind\Controller\ContentController
         // Resolve original template
         $pageLocator = $this->getService(\VuFind\Content\PageLocator::class);
         $data = $pageLocator->determineTemplateAndRenderer($pathPrefix, $page);
-        $isFallback = !preg_match('"_' . $language .'\.phtml"', $data['relativePath']);
+        $isFallback = !isset($data) || !preg_match('"_' . $language . '\.phtml"', $data['relativePath']);
 
         if (isset($data) && $cmsPageTranslation && !($cmsPageIsFallback && !$isFallback)) {
             // If a CMS page is found, override path prefix and page to ensure the correct template is used.
@@ -83,7 +84,6 @@ class ContentController extends \VuFind\Controller\ContentController
         return $method && is_callable([$this, $method])
             ? $this->$method($data['page'], $data['relativePath'], $data['path'])
             : $this->notFoundAction();
-
     }
 
     protected function getViewForCmsPage(string $page, string $relPath, string $path, CmsPagesTranslationEntityInterface $cmsPagesTranslation): ViewModel
@@ -107,6 +107,4 @@ class ContentController extends \VuFind\Controller\ContentController
         $view->setTemplate('content/cmspage/main');
         return $view;
     }
-
-
 }
