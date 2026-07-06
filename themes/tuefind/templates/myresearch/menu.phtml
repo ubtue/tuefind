@@ -1,5 +1,6 @@
 <?php
   $user = $this->auth()->getUserObject();
+  $userTueFindRights = $user->getTueFindRights();
 ?>
 <?=$this->component('hide-offcanvas-button')?>
 <h3 id="<?=$this->idPrefix ?? ''?>acc-menu-acc-header"><?=$this->transEsc('Your Account')?></h3>
@@ -51,13 +52,15 @@
 <?php endif ?>
 
 <!-- TueFind: Add Admin section -->
-<h3 id="<?=$this->idPrefix ?? ''?>acc-menu-acc-header"><?=$this->transEsc('Admin')?></h3>
-<nav class="myresearch-menu" aria-labelledby="<?=$this->idPrefix ?? ''?>acc-menu-acc-header">
-  <ul class="account-menu">
-    <?php foreach ($this->items as $item): ?>
-      <?php if (isset($item['section']) && $item['section'] == 'admin'): ?>
-        <?=$this->render('myresearch/menu-item.phtml', ['active' => $this->active, ...$item])?>
-      <?php endif; ?>
-    <?php endforeach; ?>
-  </ul>
-</nav>
+<?php if (!empty($userTueFindRights) && array_intersect(['admin', 'cms'], $userTueFindRights)): ?>
+  <h3 id="<?=$this->idPrefix ?? ''?>acc-menu-acc-header"><?=$this->transEsc('Admin')?></h3>
+  <nav class="myresearch-menu" aria-labelledby="<?=$this->idPrefix ?? ''?>acc-menu-acc-header">
+    <ul class="account-menu">
+      <?php foreach ($this->items as $item): ?>
+        <?php if (isset($item['section']) && $item['section'] == 'admin'): ?>
+          <?=$this->render('myresearch/menu-item.phtml', ['active' => $this->active, ...$item])?>
+        <?php endif; ?>
+      <?php endforeach; ?>
+    </ul>
+  </nav>
+<?php endif; ?>
