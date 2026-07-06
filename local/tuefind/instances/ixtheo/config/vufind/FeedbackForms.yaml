@@ -354,6 +354,7 @@ forms:
     recipientLocalOverridesKey: register_link_receivers
     useCaptcha: false
     response: SA_register_link_response
+    emailSubject: "Linkmeldung %%ppn%%"
 
     help:
       pre: SA_register_link_help_pre
