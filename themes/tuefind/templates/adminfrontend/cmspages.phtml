@@ -41,6 +41,7 @@ $this->breadcrumbs()->set($this->translate('Admins'), $this->url('myresearch-hom
             <?php echo $page['changeDate']->format('d.m.Y H:i');?>
           </td>
           <td class="content-edit-cell">
+            <a class="content-edit-button" href="<?=$this->url('content-page', ['page' => $page['pageSystemId']])?>" title="<?=$this->transEsc('Show')?>"><?=$this->icon('link')?></a>&nbsp;
             <a class="content-edit-button" href="<?=$this->url('adminfrontend-updatecmspage', ['cms_page_id' => $page['id']])?>" title="<?=$this->transEsc('Edit')?>"><?=$this->icon('edit')?></a>&nbsp;
             <a class="content-edit-button" href="<?=$this->url('adminfrontend-deletecmspage', ['cms_page_id' => $page['id']])?>" title="<?=$this->transEsc('Delete')?>"><?=$this->icon('trash')?></a>
           </td>
