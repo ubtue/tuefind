@@ -51,14 +51,19 @@ $this->breadcrumbs()->set($this->translate('Admins'), $this->url('myresearch-hom
   <a href="<?=$this->url('adminfrontend-addcmspage')?>"><?=$this->transEsc('Add New CMS page')?></a>
 
   <?php if ($this->cmsSync->isEnabled()): ?>
-  <div id="cms_sync">
-    <p><b>Here you can sync your local pages with the remote git repository</b></p>
-    <p>Active branch: <a href="//github.com/ubtue/tuefind_cms_sync/tree/<?=urlencode($this->cmsSync->getBranch())?>"><?=htmlspecialchars($this->cmsSync->getBranch())?></a></p>
-    <ul>
-        <li>pull (check for new changes in git)</li>
-        <li>push (publish local changes to git)</li>
-    </ul>
-  </div>
+  <div class="cms-sync-container" style="margin: 20px 0;">
+    <h3>CMS Repository Synchronization</h3>
+    <button id="git-pull-btn" class="btn btn-primary">Git pull</button>
+    <button id="git-push-btn" class="btn btn-danger">Git push</button>
+
+    <span id="sync-spinner" style="display: none; margin-left: 10px;">
+        <i class="fa fa-spinner fa-spin"></i> Processing...
+    </span>
+
+    <div id="sync-log-console" style="margin-top: 15px; padding: 10px; background: #222; color: #fff; font-family: monospace; border-radius: 4px; min-height: 100px; max-height: 300px; overflow-y: auto;">
+        [Console] Ready. Press "Start Full Sync".
+    </div>
+</div>
   <?php endif; ?>
 </div>
 

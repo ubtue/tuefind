@@ -866,6 +866,75 @@ var TueFind = {
                 $('.ajax-content-images-container').html(HTMlData);
             }
         }); // end ajax
+    },
+
+    // helper function to run a single git stage (pull, import, push) and log the result to the console
+    _runGitStage: async function(action, stepText, failText, logFn) {
+        logFn(stepText, 'info');
+        try {
+            let response = await fetch(`/AJAX/JSON?method=Cms&action=${action}`);
+            if (!response.ok) throw new Error(`HTTP Error ${response.status}`);
+            
+            let result = await response.json();
+            let payload = result?.data;
+            if (!payload) throw new Error('Server returned empty data object');
+            if (!payload.success) throw new Error(payload.message || `Unknown error during ${action}`);
+            
+            logFn('Success: ' + payload.message, 'success');
+            return payload;
+        } catch (error) {
+            throw new Error(`${failText}: ${error.message}`);
+        }
+    },
+
+    // (button, spinner, console log) => execute all stages in order, logging to console and handling errors
+    _executeSyncProcess: async function(btn, stagesRunner) {
+        const $spinner = $('#sync-spinner');
+        const $consoleLog = $('#sync-log-console');
+        
+        btn.disabled = true;
+        $spinner.css('display', 'inline-block');
+        $consoleLog.empty();
+
+        function logToConsole(text, type = 'info') {
+            const color = type === 'error' ? '#ff6b6b' : (type === 'success' ? '#51cf66' : '#fff');
+            const time = new Date().toLocaleTimeString();
+            $consoleLog.append(`<div style="color: ${color}">[${time}] ${text}</div>`);
+            $consoleLog.scrollTop($consoleLog[0].scrollHeight);
+        }
+
+        try {
+            await stagesRunner(logToConsole);
+        } catch (error) {
+            logToConsole(error.message, 'error');
+            logToConsole('=== SYNC PROCESS ABORTED ===', 'error');
+        } finally {
+            btn.disabled = false;
+            $spinner.hide();
+        }
+    },
+
+    // button pull:
+    handleCmsGitPull: async function() {
+        await this._executeSyncProcess(this, async (log) => {
+            // Step 1: Pull
+            await this._runGitStage('gitPull', 'Step 1/3: Requesting git pull from remote repository...', 'PULL STAGE FAILED', log);
+            
+            // Step 2: Import
+            await this._runGitStage('gitImport', 'Step 2/3: Scanning JSON files and updating database...', 'IMPORT STAGE FAILED', log);
+            
+            // Step 3: Push
+            await this._runGitStage('gitPush', 'Step 3/3: Committing local changes and pushing to Git...', 'PUSH STAGE FAILED', log);
+            
+            log('=== ALL SYNC STAGES COMPLETED SUCCESSFULLY ===', 'success');
+        });
+    },
+
+    handleCmsGitPush: async function() {
+        await this._executeSyncProcess(this, async (log) => {
+            await this._runGitStage('gitPush', 'Step 1/1: Committing local changes and pushing to Git...', 'PUSH STAGE FAILED', log);
+            log('=== PUSH COMPLETED SUCCESSFULLY ===', 'success');
+        });
     }
 };
 
@@ -936,4 +1005,9 @@ $(document).ready(function () {
         scrollX: true
     });
     */
+
+    // ajax git pull test for CMS
+    $('#git-pull-btn').on('click', (e) => TueFind.handleCmsGitPull(e.currentTarget));
+    $('#git-push-btn').on('click', (e) => TueFind.handleCmsGitPush(e.currentTarget));
+
 });
