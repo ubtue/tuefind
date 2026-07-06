@@ -31,6 +31,10 @@
     </form>
   </p>
 
-  <?php $url = $this->url('feedback-form', ['id' => 'SelfArchivingRegisterLink']) . '?ppn=' . urlencode($this->existingRecord->getUniqueId()) ?>
-  <p><i><?=$this->translate('SA_register_link_cross_reference', ['%%link_start%%' => '<a href="' . $this->escapeHtmlAttr($url) . '">', '%%link_end%%' => '</a>'])?></i></p>
+  <?php /* IxTheo only: Show feedback form */ ?>
+  <?php /* If you want to use this in other instances, ensure proper configuration in FeedbackForms.yaml */ ?>
+  <?php if ($this->tuefind()->getTueFindSubsystem() == 'ixtheo'): ?>
+    <?php $url = $this->url('feedback-form', ['id' => 'SelfArchivingRegisterLink']) . '?ppn=' . urlencode($this->existingRecord->getUniqueId()) ?>
+    <p><i><?=$this->translate('SA_register_link_cross_reference', ['%%link_start%%' => '<a href="' . $this->escapeHtmlAttr($url) . '">', '%%link_end%%' => '</a>'])?></i></p>
+  <?php endif;?>
 <?php endif;?>
