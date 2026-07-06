@@ -52,7 +52,7 @@
 <?php endif ?>
 
 <!-- TueFind: Add Admin section -->
-<?php $cmsSectoinsNames = ['cmspages','cmspageshistory','cmspagesdocs']; ?> 
+<?php $cmsSectionsNames = ['cmspages','cmspageshistory','cmspagesdocs']; ?>
 <?php if (!empty($userTueFindRights) && array_intersect(['admin', 'cms'], $userTueFindRights)): ?>
   <h3 id="<?=$this->idPrefix ?? ''?>acc-menu-acc-header"><?=$this->transEsc('Admin')?></h3>
   <nav class="myresearch-menu" aria-labelledby="<?=$this->idPrefix ?? ''?>acc-menu-acc-header">
@@ -61,7 +61,8 @@
         <?php if (isset($item['section']) && $item['section'] == 'admin'): ?>
           <?php
           // Check if the item is a CMS section and if CMS sync is disabled, skip it
-          if (in_array($item['name'], $cmsSectoinsNames) && !$this->cmsSync->isEnabled()) {
+          $cmsEnabled = $this->tuefind()->getConfig()->CMS->enabled ?? false;
+          if (in_array($item['name'], $cmsSectionsNames) && !$cmsEnabled) {
               continue;
           }
           ?>

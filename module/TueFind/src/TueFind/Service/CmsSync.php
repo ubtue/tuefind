@@ -330,7 +330,7 @@ class CmsSync
 
     public function isEnabled(): bool
     {
-        return isset($this->config->enabled) && $this->config->enabled == 1;
+        return isset($this->config->sync_enabled) && $this->config->sync_enabled == 1;
     }
 
     public function getBranch(): string
