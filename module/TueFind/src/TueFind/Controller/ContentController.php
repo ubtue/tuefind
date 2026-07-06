@@ -60,7 +60,7 @@ class ContentController extends \VuFind\Controller\ContentController
         $data = $pageLocator->determineTemplateAndRenderer($pathPrefix, $page);
         $isFallback = !isset($data) || !preg_match('"_' . $language . '\.phtml"', $data['relativePath']);
 
-        if (isset($data) && $cmsPageTranslation && !($cmsPageIsFallback && !$isFallback)) {
+        if ($cmsPageTranslation && !($cmsPageIsFallback && !$isFallback)) {
             // If a CMS page is found, override path prefix and page to ensure the correct template is used.
             // The template name is not determined by the URL, but by the database entry for the CMS page.
             if ($cmsPage) {
