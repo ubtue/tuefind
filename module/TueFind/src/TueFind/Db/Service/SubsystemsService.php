@@ -2,19 +2,18 @@
 
 namespace TueFind\Db\Service;
 
-use VuFind\Db\Service\AbstractDbService;
 use TueFind\Db\Entity\Subsystems;
 use TueFind\Db\Entity\SubsystemsEntityInterface;
+use VuFind\Db\Service\AbstractDbService;
 
 class SubsystemsService extends AbstractDbService implements SubsystemsServiceInterface
 {
-
-    public function getByID(int $id): ?SubsystemsEntityInterface
+    public function getByID(int $id): SubsystemsEntityInterface
     {
         return $this->entityManager->find(SubsystemsEntityInterface::class, $id);
     }
 
-    public function getByName(string $name): ?SubsystemsEntityInterface
+    public function getByName(string $name): SubsystemsEntityInterface
     {
         $dql = 'SELECT s '
             . 'FROM ' . SubsystemsEntityInterface::class . ' s '
@@ -26,7 +25,7 @@ class SubsystemsService extends AbstractDbService implements SubsystemsServiceIn
 
         $query = $this->entityManager->createQuery($dql);
         $query->setParameters($parameters);
-        return $query->getOneOrNullResult();
+        return $query->getSingleResult();
     }
 
     public function getAll(): array
