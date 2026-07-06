@@ -48,7 +48,11 @@ $this->breadcrumbs()->set($this->translate('Admins'), $this->url('myresearch-hom
       <?php endforeach; ?>
     </tbody>
   </table>
-  <a href="<?=$this->url('adminfrontend-addcmspage')?>"><?=$this->transEsc('Add New CMS page')?></a>
+
+  <?php // restrict adding new pages to admins only!!! ?>
+  <?php if (in_array('admin', $this->user->getTueFindRights())): ?>
+    <a href="<?=$this->url('adminfrontend-addcmspage')?>">Admin only: <?=$this->transEsc('Add New CMS page')?></a>
+  <?php endif;?>
 
   <?php if ($this->cmsSync->isEnabled()): ?>
   <div class="cms-sync-container" style="margin: 20px 0;">

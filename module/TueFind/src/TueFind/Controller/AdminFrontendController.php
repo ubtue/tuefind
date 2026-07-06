@@ -146,6 +146,7 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase
 
         $allCMS = ['allCMSPages' => $this->getDbService(\TueFind\Db\Service\CmsPagesServiceInterface::class)->getAll(),
                   'cmsSync' => $this->serviceLocator->get(\TueFind\Service\CmsSync::class),
+                  'user' => $this->getUser(),
         ];
 
         return $this->createViewModel($allCMS);
