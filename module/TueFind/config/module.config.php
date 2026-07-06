@@ -458,11 +458,13 @@ $config = [
             'ajaxhandler' => [
                 'factories' => [
                     'TueFind\AjaxHandler\GetSubscriptionBundleEntries' => 'TueFind\AjaxHandler\GetSubscriptionBundleEntriesFactory',
+                    'TueFind\AjaxHandler\CmsEntries' => 'TueFind\AjaxHandler\CmsEntriesFactory',
                     'TueFind\AjaxHandler\CmsDocsEntries' => 'TueFind\AjaxHandler\CmsDocsEntriesFactory',
                     'TueFind\AjaxHandler\MappingEntries' => 'TueFind\AjaxHandler\MappingEntriesFactory',
                 ],
                 'aliases' => [
                     'getSubscriptionBundleEntries' => 'TueFind\AjaxHandler\GetSubscriptionBundleEntries',
+                    'Cms' => 'TueFind\AjaxHandler\CmsEntries',
                     'CmsDocs' => 'TueFind\AjaxHandler\CmsDocsEntries',
                     'Mapping' => 'TueFind\AjaxHandler\MappingEntries',
                 ],
