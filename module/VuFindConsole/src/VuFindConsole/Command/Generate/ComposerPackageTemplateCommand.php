@@ -242,8 +242,10 @@ class ComposerPackageTemplateCommand extends AbstractCommand
      */
     protected function generateComposerJson(): void
     {
-        $this->composerJsonTargetPathAbsolute = $this->targetDirAbsolute . DIRECTORY_SEPARATOR . $this->composerJsonName;
-        $this->composerJsonTemplatePathAbsolute = $this->vuFindHomeDirAbsolute . DIRECTORY_SEPARATOR . $this->composerJsonName;
+        $this->composerJsonTargetPathAbsolute =
+            $this->targetDirAbsolute . DIRECTORY_SEPARATOR . $this->composerJsonName;
+        $this->composerJsonTemplatePathAbsolute =
+            $this->vuFindHomeDirAbsolute . DIRECTORY_SEPARATOR . $this->composerJsonName;
         $this->output->writeln('Generating ' . $this->composerJsonName . '...');
 
         $templateJson = $this->readFile($this->composerJsonTemplatePathAbsolute);
@@ -272,7 +274,8 @@ class ComposerPackageTemplateCommand extends AbstractCommand
                 'phing/phing' => $templateArray['require']['phing/phing'],
             ],
 
-            // This might be necessary to avoid dependency problems when including vufind directly (even productive versions)
+            // This might be necessary to avoid dependency problems
+            // when including vufind directly (even productive versions)
             'minimum-stability' => 'dev',
             'prefer-stable' => true,
         ];
@@ -303,15 +306,20 @@ class ComposerPackageTemplateCommand extends AbstractCommand
     protected function generateModule(): void
     {
         //  Should we share code with \VuFindConsole\Command\InstallCommand?
-        $this->moduleTemplateDirAbsolute = $this->vuFindHomeDirAbsolute . DIRECTORY_SEPARATOR . 'module' . DIRECTORY_SEPARATOR . $this->moduleTemplateName;
-        $this->moduleTargetDirAbsolute = $this->targetDirAbsolute . DIRECTORY_SEPARATOR . $this->moduleTargetDirRelative;
+        $this->moduleTemplateDirAbsolute =
+            $this->vuFindHomeDirAbsolute . DIRECTORY_SEPARATOR
+            . 'module' . DIRECTORY_SEPARATOR . $this->moduleTemplateName;
+        $this->moduleTargetDirAbsolute =
+            $this->targetDirAbsolute . DIRECTORY_SEPARATOR . $this->moduleTargetDirRelative;
         $this->output->writeln('Generating module in ' . $this->moduleTargetDirRelative . '...');
         $this->filesystem->mirror($this->moduleTemplateDirAbsolute, $this->moduleTargetDirAbsolute);
 
         // rewrite namespace
-        $this->modulePhpFileAbsolute = $this->moduleTargetDirAbsolute . DIRECTORY_SEPARATOR . $this->modulePhpFileRelative;
+        $this->modulePhpFileAbsolute =
+            $this->moduleTargetDirAbsolute . DIRECTORY_SEPARATOR . $this->modulePhpFileRelative;
         $this->rewriteNamespace($this->modulePhpFileAbsolute);
-        $this->moduleConfigPhpFileAbsolute = $this->moduleTargetDirAbsolute . DIRECTORY_SEPARATOR . $this->moduleConfigPhpFileRelative;
+        $this->moduleConfigPhpFileAbsolute =
+            $this->moduleTargetDirAbsolute . DIRECTORY_SEPARATOR . $this->moduleConfigPhpFileRelative;
         $this->rewriteNamespace($this->moduleConfigPhpFileAbsolute);
     }
 
@@ -385,8 +393,11 @@ class ComposerPackageTemplateCommand extends AbstractCommand
     protected function generateMixin(): void
     {
         // Should we share code with ThemeMixinCommand + \VuFindTheme\MixinGenerator?
-        $this->mixinTemplateDirAbsolute = $this->vuFindHomeDirAbsolute . DIRECTORY_SEPARATOR . 'themes' . DIRECTORY_SEPARATOR . $this->mixinTemplateName;
-        $this->mixinTargetDirAbsolute = $this->targetDirAbsolute . DIRECTORY_SEPARATOR . $this->mixinTargetDirRelative;
+        $this->mixinTemplateDirAbsolute =
+            $this->vuFindHomeDirAbsolute . DIRECTORY_SEPARATOR
+            . 'themes' . DIRECTORY_SEPARATOR . $this->mixinTemplateName;
+        $this->mixinTargetDirAbsolute =
+            $this->targetDirAbsolute . DIRECTORY_SEPARATOR . $this->mixinTargetDirRelative;
         $this->output->writeln('Generating mixin in ' . $this->mixinTargetDirRelative . '...');
         $this->filesystem->mirror($this->mixinTemplateDirAbsolute, $this->mixinTargetDirAbsolute);
     }
@@ -398,8 +409,10 @@ class ComposerPackageTemplateCommand extends AbstractCommand
      */
     protected function generateQAToolConfig(): void
     {
-        $this->qaTemplateDirAbsolute = $this->vuFindHomeDirAbsolute . DIRECTORY_SEPARATOR . $this->qaTemplateDirRelative;
-        $this->qaTargetDirAbsolute = $this->targetDirAbsolute . DIRECTORY_SEPARATOR . $this->qaTargetDirRelative;
+        $this->qaTemplateDirAbsolute =
+            $this->vuFindHomeDirAbsolute . DIRECTORY_SEPARATOR . $this->qaTemplateDirRelative;
+        $this->qaTargetDirAbsolute =
+            $this->targetDirAbsolute . DIRECTORY_SEPARATOR . $this->qaTargetDirRelative;
 
         $this->output->writeln('Generating checks in ' . $this->qaTargetDirRelative . '...');
 
@@ -407,7 +420,10 @@ class ComposerPackageTemplateCommand extends AbstractCommand
         $this->filesystem->remove($this->qaTargetDirAbsolute . DIRECTORY_SEPARATOR . 'data');
 
         $this->rewritePhpCsPaths([$this->moduleTargetDirRelative, $this->qaTargetDirRelative]);
-        $this->rewritePhpCsFixerPaths('vufind.php-cs-fixer.php', [$this->moduleTargetDirRelative, $this->qaTargetDirRelative]);
+        $this->rewritePhpCsFixerPaths(
+            'vufind.php-cs-fixer.php',
+            [$this->moduleTargetDirRelative, $this->qaTargetDirRelative]
+        );
         $this->rewritePhpCsFixerPaths('vufind_templates.php-cs-fixer.php', [$this->mixinTargetDirRelative]);
         $this->rewriteRectorPaths([$this->moduleTargetDirRelative, $this->qaTargetDirRelative]);
     }
@@ -519,8 +535,10 @@ class ComposerPackageTemplateCommand extends AbstractCommand
     protected function generateGitHubWorkflows(): void
     {
         $this->output->writeln('Generating GitHub-Workflows in ' . $this->gitHubTargetDirRelative . '...');
-        $this->gitHubTargetDirAbsolute = $this->targetDirAbsolute . DIRECTORY_SEPARATOR . $this->gitHubTargetDirRelative;
-        $this->gitHubTemplateDirAbsolute = $this->vuFindHomeDirAbsolute . DIRECTORY_SEPARATOR . $this->gitHubTemplateDirRelative;
+        $this->gitHubTargetDirAbsolute =
+            $this->targetDirAbsolute . DIRECTORY_SEPARATOR . $this->gitHubTargetDirRelative;
+        $this->gitHubTemplateDirAbsolute =
+            $this->vuFindHomeDirAbsolute . DIRECTORY_SEPARATOR . $this->gitHubTemplateDirRelative;
         $this->filesystem->mirror($this->gitHubTemplateDirAbsolute, $this->gitHubTargetDirAbsolute);
     }
 
