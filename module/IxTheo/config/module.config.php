@@ -130,6 +130,7 @@ $config = [
                 ],
                 'aliases' => [
                     'VuFind\Db\Service\UserServiceInterface' => 'IxTheo\Db\Service\UserService',
+                    'TueFind\Db\Service\PublicationServiceInterface' => 'IxTheo\Db\Service\PublicationServiceInterface',
                     'TueFind\Db\Service\UserServiceInterface' => 'IxTheo\Db\Service\UserService',
                     'TueFind\Db\Service\UserAuthorityServiceInterface' => 'IxTheo\Db\Service\UserAuthorityServiceInterface',
                     'TueFind\Db\Service\UserAuthorityHistoryServiceInterface' => 'IxTheo\Db\Service\UserAuthorityHistoryServiceInterface',

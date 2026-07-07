@@ -2,16 +2,20 @@
 
 namespace IxTheo\Db\Service;
 
-use Laminas\Db\Sql\Select;
+use TueFind\Db\Entity\PublicationEntityInterface;
 
 class PublicationService extends \TueFind\Db\Service\PublicationService implements PublicationServiceInterface
 {
     public function getAll(): array
     {
-        $select = $this->getSql()->select();
-        $select->join('user', 'tuefind_publications.user_id = user.id', Select::SQL_STAR, Select::JOIN_LEFT);
-        $select->where('user.ixtheo_user_type = "' . \IxTheo\Utility::getUserTypeFromUsedEnvironment() . '"');
-        $select->order('publication_datetime DESC');
-        return $this->selectWith($select);
+        $dql = 'SELECT p '
+            . 'FROM ' . PublicationEntityInterface::class . ' p '
+            . 'JOIN p.user u '
+            . 'WHERE u.ixtheoUserType= :userType '
+            . 'ORDER BY p.publicationDateTime DESC ';
+
+        $query = $this->entityManager->createQuery($dql);
+        $query->setParameter('userType', \IxTheo\Utility::getUserTypeFromUsedEnvironment());
+        return $query->getResult();
     }
 }
