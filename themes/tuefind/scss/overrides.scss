@@ -10,6 +10,10 @@ a {
   }
 }
 
+.searchbox_home .active-filters {
+  display: none !important;
+}
+
 .facet .text {
   hyphens: auto;
 }
