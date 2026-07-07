@@ -1,4 +1,6 @@
-@use "../../tuefind2/scss/variables" as *;
+@use "../../tuefind2/scss/variables" as tuefind2;
+@use "variables" as krimdok_v;
+
 .tf-row-home {
     background: transparent no-repeat;
 }
@@ -9,7 +11,7 @@
 }
 
 .section-home {
-    background-color: $gray-200;
+    background-color: tuefind2.$gray-200;
 }
 
 h1 {
@@ -21,15 +23,15 @@ h1 {
 }
 
 .panel-default, .panel-inverse, .panel-buttons {
-   border: 5px solid $gray-200;
+   border: 5px solid tuefind2.$gray-200;
    -webkit-box-shadow: none;
 }
 
 .panel-default-link {
-    color: $gray-900;
+    color: tuefind2.$gray-900;
     :hover {
-        color: $brand-primary;
-        text-decoration-color: $brand-primary;
+        color: krimdok_v.$brand-primary;
+        text-decoration-color: krimdok_v.$brand-primary;
         text-decoration: underline;
     }
 }
@@ -46,7 +48,7 @@ h1 {
 }
 
 .btn-panel-more {
-    background-color: $brand-primary;
+    background-color: krimdok_v.$brand-primary;
     color: white;
 }
 
@@ -544,4 +546,123 @@ a:hover {
     margin-top: 20px;
     margin-bottom: 0;
     text-align: left;
+}
+
+.btn-primary.search-button:hover {
+    background-color: #fff;
+    color: krimdok_v.$brand-primary;
+}
+
+.record-tabs .nav-link, .record-tabs .nav-link:hover {
+    color: krimdok_v.$brand-primary;
+}
+
+.sidebar.right .myresearch-menu a.active {
+    background-color: krimdok_v.$brand-primary;
+}
+
+.sidebar.right .myresearch-menu a:hover {
+    color: krimdok_v.$brand-primary;
+}
+
+.search-header a {
+    color: krimdok_v.$link-color;
+}
+
+.btn.btn-outline-primary {
+    color: #fff;
+    background-color: krimdok_v.$link-color;
+    border: none;
+}
+
+.form-search-newitem .btn {
+    background-color: krimdok_v.$link-color;
+    color: #fff;
+    border: 1px solid krimdok_v.$brand-primary;
+}
+
+.form-search-newitem .btn:hover {
+    background-color: black;
+    color: #fff;
+}
+
+.form-search-newitem .btn-check:checked+.btn {
+    background-color: #fff;
+    color: krimdok_v.$brand-primary;
+}
+
+.form-search-newitem .btn-check:checked+.btn:hover {
+    background-color: krimdok_v.$brand-primary;
+    color: #fff;
+}
+
+.browse-container .browse-item.active {
+    background-color: krimdok_v.$brand-primary;
+    color: #fff;
+}
+
+.table_content {
+    width: 80%;
+    margin: 30px auto 0 auto;
+}
+.table_content_header {
+    padding: 20px;
+    border-radius: 5px 5px 0 0;
+    margin-bottom: 20px;
+}
+.table_content_header h1 {
+    margin: 0 0 10px 0;
+    font-size: 24px;
+    text-align: center;
+    color: #a51e37;
+}
+.table_content_header h2 {
+    margin: 0 0 5px 0;
+    font-size: 18px;
+    font-weight: normal;
+    text-align: center;
+    color: #a51e37;
+}
+.table_content_header h3 {
+    font-size: 16px;
+    font-weight: normal;
+    text-align: center;
+    margin:0 0 10px 0;
+}
+.table_content table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    /*box-shadow: 0 2px 5px #a51e37;*/
+    border-radius: 0 0 5px 5px;
+    overflow: hidden;
+}
+.table_content th, .table_content td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+.table_content tr:last-child td {
+    border-bottom: none;
+}
+.table_content td:first-child {
+    font-weight: bold;
+    color: #a51e37;
+    width: 30%;
+    vertical-align: top;
+}
+.table_content tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+.table_content_footer {
+    margin-top: 20px;
+    font-size: 12px;
+    text-align: center;
+}
+.table_content .kursiv {
+    font-style: italic;
+}
+
+.slider-container .noUi-horizontal .noUi-handle {
+    background: #a51e37;
 }

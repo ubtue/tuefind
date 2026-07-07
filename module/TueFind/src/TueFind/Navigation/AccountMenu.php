@@ -2,6 +2,8 @@
 
 namespace TueFind\Navigation;
 
+use function in_array;
+
 class AccountMenu extends \VuFind\Navigation\AccountMenu
 {
     public function checkRssSubscriptions(): bool
@@ -47,11 +49,11 @@ class AccountMenu extends \VuFind\Navigation\AccountMenu
     {
         return $this->accountCapabilities->getSubscriptionSetting() === 'enabled';
     }
-    
+
     public function checkCMS(): bool
     {
         $user = $this->getUser();
-        if ($user && in_array('cms', $user->getTueFindRights())) {
+        if ($user && array_intersect(['admin','cms'], $user->getTueFindRights())) {
             return true;
         }
         return false;
@@ -60,7 +62,7 @@ class AccountMenu extends \VuFind\Navigation\AccountMenu
     public function checkAllCMSHistory(): bool
     {
         $user = $this->getUser();
-        if ($user && in_array('cms', $user->getTueFindRights())) {
+        if ($user && array_intersect(['admin','cms'], $user->getTueFindRights())) {
             return true;
         }
         return false;
@@ -69,7 +71,7 @@ class AccountMenu extends \VuFind\Navigation\AccountMenu
     public function checkCMSDocs(): bool
     {
         $user = $this->getUser();
-        if ($user && in_array('cms', $user->getTueFindRights())) {
+        if ($user && array_intersect(['admin','cms'], $user->getTueFindRights())) {
             return true;
         }
         return false;
