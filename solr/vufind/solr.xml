@@ -27,7 +27,8 @@
 -->
 
 <solr>
-  <int name="maxBooleanClauses">${solr.max.booleanClauses:2048}</int>
+<!-- Enabling max boolean clauses, and it can be changed after. check the solr.sh script related for updating the value -->
+  <int name="maxBooleanClauses">${solr.max.booleanClauses:1024}</int>
   <solrcloud>
 
     <str name="host">${host:}</str>

@@ -96,5 +96,6 @@ then
   SOLR_ADDITIONAL_JVM_OPTIONS=""
 fi
 
+# The max boolean clauses option is set to 2048 to avoid errors with large queries. To change this value, the <int name="maxBooleanClauses">${solr.max.booleanClauses:1024}</int> should be added to setting in your solr/vufind/solr.xml file.
 export SOLR_LOGS_DIR=$SOLR_LOGS_DIR
 "$SOLR_BIN/solr" "$1" ${SOLR_ADDITIONAL_START_OPTIONS} -p "$SOLR_PORT" -s "$SOLR_HOME" -m "$SOLR_HEAP" --user-managed -a "-Dsolr.max.booleanClauses=2048 -Ddisable.configEdit=true -Dsolr.log=$SOLR_LOGS_DIR -Dsolr.config.lib.enabled=true $SOLR_ADDITIONAL_JVM_OPTIONS"
