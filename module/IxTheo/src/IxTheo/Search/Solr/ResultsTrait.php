@@ -2,13 +2,16 @@
 
 namespace IxTheo\Search\Solr;
 
+use function in_array;
+
 /**
  * This trait will be re-used in
  * - Solr\Results
  * - Search2\Results
  */
 
-trait ResultsTrait {
+trait ResultsTrait
+{
     /**
      * Returns the stored list of facets for the last search
      *
@@ -23,6 +26,7 @@ trait ResultsTrait {
     {
         $list = parent::getFacetList($filter);
         foreach ($list as $facetKey => $facet) {
+            // Note: This is only for results, make sure to also check IxTheo\Search\Solr\Params for similar logic!
             if (in_array($facetKey, ['ixtheo_notation_facet', 'relbib_notation_facet'])) {
                 $prefix = 'ixtheo-';
                 foreach ($facet['list'] as $listKey => $listItem) {

@@ -396,29 +396,16 @@ $config = [
     'service_manager' => [
         'allow_override' => true,
         'factories' => [
-            'TueFind\Export' => 'VuFind\ExportFactory',
-            'TueFind\Auth\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'TueFind\Cache\Manager' => 'VuFind\Cache\ManagerFactory',
             'TueFind\Config\AccountCapabilities' => 'TueFind\Config\AccountCapabilitiesFactory',
             'TueFind\ContentBlock\BlockLoader' => 'TueFind\ContentBlock\BlockLoaderFactory',
-            'TueFind\ContentBlock\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'TueFind\Cookie\CookieManager' => 'VuFind\Cookie\CookieManagerFactory',
-            'TueFind\Db\Entity\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
-            'TueFind\Db\Service\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
+            'TueFind\Export' => 'VuFind\ExportFactory',
             'TueFind\Form\Form' => 'TueFind\Form\FormFactory',
-            'TueFind\Form\Handler\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'TueFind\Sitemap\Generator' => 'VuFind\Sitemap\GeneratorFactory',
             'TueFind\Mailer\Mailer' => 'TueFind\Mailer\Factory',
-            'TueFind\MetadataVocabulary\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
-            'TueFind\Recommend\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
-            'TueFind\Record\FallbackLoader\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'TueFind\Record\Loader' => 'VuFind\Record\LoaderFactory',
-            'TueFind\RecordDriver\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
-            'TueFind\RecordTab\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'TueFind\RecordTab\ItemFulltextSearch' => 'Laminas\ServiceManager\Factory\InvokableFactory',
-            'TueFind\Search\Options\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
-            'TueFind\Search\Params\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
-            'TueFind\Search\Results\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'TueFind\Service\CmsSync' => 'TueFind\Service\CmsSyncFactory',
             'TueFind\Service\DSpace6' => 'TueFind\Service\DSpaceFactory',
             'TueFind\Service\DSpace7' => 'TueFind\Service\DSpaceFactory',
@@ -431,35 +418,18 @@ $config = [
         ],
         'aliases' => [
             'VuFind\AccountCapabilities' => 'TueFind\Config\AccountCapabilities',
-            'VuFind\AuthPluginManager' => 'TueFind\Auth\PluginManager',
-            'VuFind\Auth\PluginManager' => 'TueFind\Auth\PluginManager',
             'VuFind\Cover\CachingProxy' => 'TueFind\Cover\CachingProxy',
             'VuFind\Cache\Manager' => 'TueFind\Cache\Manager',
             'VuFind\Config\AccountCapabilities' => 'TueFind\Config\AccountCapabilities',
             'VuFind\ContentBlock\BlockLoader' => 'TueFind\ContentBlock\BlockLoader',
-            'VuFind\ContentBlock\PluginManager' => 'TueFind\ContentBlock\PluginManager',
             'VuFind\Cookie\CookieManager' => 'TueFind\Cookie\CookieManager',
             'VuFind\CookieManager' => 'TueFind\Cookie\CookieManager',
-            'VuFind\Db\Entity\PluginManager' => 'TueFind\Db\Entity\PluginManager',
-            'VuFind\Db\Service\PluginManager' => 'TueFind\Db\Service\PluginManager',
             'VuFind\Export' => 'TueFind\Export',
             'VuFind\Form\Form' => 'TueFind\Form\Form',
-            'VuFind\Form\Handler\PluginManager' => 'TueFind\Form\Handler\PluginManager',
             'VuFind\Mailer\Mailer' => 'TueFind\Mailer\Mailer',
-            'VuFind\MetadataVocabulary\PluginManager' => 'TueFind\MetadataVocabulary\PluginManager',
-            'VuFind\RecommendPluginManager' => 'TueFind\Recommend\PluginManager',
-            'VuFind\Recommend\PluginManager' => 'TueFind\Recommend\PluginManager',
-            'VuFind\Record\FallbackLoader\PluginManager' => 'TueFind\Record\FallbackLoader\PluginManager',
             'VuFind\Record\Loader' => 'TueFind\Record\Loader',
             'VuFind\RecordLoader' => 'TueFind\Record\Loader',
-            'VuFind\RecordDriverPluginManager' => 'TueFind\RecordDriver\PluginManager',
-            'VuFind\RecordDriver\PluginManager' => 'TueFind\RecordDriver\PluginManager',
-            'VuFind\RecordTabPluginManager' => 'TueFind\RecordTab\PluginManager',
-            'VuFind\RecordTab\PluginManager' => 'TueFind\RecordTab\PluginManager',
             'VuFind\Search' => 'TueFindSearch\Service',
-            'VuFind\Search\Options\PluginManager' => 'TueFind\Search\Options\PluginManager',
-            'VuFind\Search\Params\PluginManager' => 'TueFind\Search\Params\PluginManager',
-            'VuFind\Search\Results\PluginManager' => 'TueFind\Search\Results\PluginManager',
             'VuFind\Sitemap\Generator' => 'TueFind\Sitemap\Generator',
             'VuFindSearch\Service' => 'TueFindSearch\Service',
         ],
@@ -488,13 +458,24 @@ $config = [
             'ajaxhandler' => [
                 'factories' => [
                     'TueFind\AjaxHandler\GetSubscriptionBundleEntries' => 'TueFind\AjaxHandler\GetSubscriptionBundleEntriesFactory',
+                    'TueFind\AjaxHandler\CmsEntries' => 'TueFind\AjaxHandler\CmsEntriesFactory',
                     'TueFind\AjaxHandler\CmsDocsEntries' => 'TueFind\AjaxHandler\CmsDocsEntriesFactory',
                     'TueFind\AjaxHandler\MappingEntries' => 'TueFind\AjaxHandler\MappingEntriesFactory',
                 ],
                 'aliases' => [
                     'getSubscriptionBundleEntries' => 'TueFind\AjaxHandler\GetSubscriptionBundleEntries',
+                    'Cms' => 'TueFind\AjaxHandler\CmsEntries',
                     'CmsDocs' => 'TueFind\AjaxHandler\CmsDocsEntries',
                     'Mapping' => 'TueFind\AjaxHandler\MappingEntries',
+                ],
+            ],
+            'auth' => [
+                'factories' => [
+                    'TueFind\Auth\Database' => 'Laminas\ServiceManager\Factory\InvokableFactory',
+                ],
+                'aliases' => [
+                    'db' => 'TueFind\Auth\Database',
+                    'database' => 'TueFind\Auth\Database',
                 ],
             ],
             'captcha' => [
@@ -505,12 +486,121 @@ $config = [
 
                 ],
             ],
+            'contentblock' => [
+                'factories' => [
+                    'TueFind\ContentBlock\Home' => 'Laminas\ServiceManager\Factory\InvokableFactory',
+                ],
+                'aliases' => [
+                    'home' => 'TueFind\ContentBlock\Home',
+                ],
+            ],
+            'db_entity' => [
+                'factories' => [
+                    'TueFind\Db\Entity\CmsPages' => 'Laminas\ServiceManager\Factory\InvokableFactory',
+                    'TueFind\Db\Entity\CmsPagesHistory' => 'Laminas\ServiceManager\Factory\InvokableFactory',
+                    'TueFind\Db\Entity\CmsPagesTranslation' => 'Laminas\ServiceManager\Factory\InvokableFactory',
+                    'TueFind\Db\Entity\Publication' => 'Laminas\ServiceManager\Factory\InvokableFactory',
+                    'TueFind\Db\Entity\Redirect' => 'Laminas\ServiceManager\Factory\InvokableFactory',
+                    'TueFind\Db\Entity\RssFeed' => 'Laminas\ServiceManager\Factory\InvokableFactory',
+                    'TueFind\Db\Entity\RssItem' => 'Laminas\ServiceManager\Factory\InvokableFactory',
+                    'TueFind\Db\Entity\RssSubscription' => 'Laminas\ServiceManager\Factory\InvokableFactory',
+                    'TueFind\Db\Entity\User' => 'Laminas\ServiceManager\Factory\InvokableFactory',
+                    'TueFind\Db\Entity\UserAuthority' => 'Laminas\ServiceManager\Factory\InvokableFactory',
+                    'TueFind\Db\Entity\UserAuthorityHistory' => 'Laminas\ServiceManager\Factory\InvokableFactory',
+                    'TueFind\Db\Entity\Subsystems' => 'Laminas\ServiceManager\Factory\InvokableFactory',
+                ],
+                'aliases' => [
+                    'VuFind\Db\Entity\UserEntityInterface' => 'TueFind\Db\Entity\UserEntityInterface',
+                    'TueFind\Db\Entity\CmsPagesEntityInterface' => 'TueFind\Db\Entity\CmsPages',
+                    'TueFind\Db\Entity\CmsPagesTranslationEntityInterface' => 'TueFind\Db\Entity\CmsPagesTranslation',
+                    'TueFind\Db\Entity\CmsPagesHistoryEntityInterface' => 'TueFind\Db\Entity\CmsPagesHistory',
+                    'TueFind\Db\Entity\PublicationEntityInterface' => 'TueFind\Db\Entity\Publication',
+                    'TueFind\Db\Entity\RedirectEntityInterface' => 'TueFind\Db\Entity\Redirect',
+                    'TueFind\Db\Entity\RssFeedEntityInterface' => 'TueFind\Db\Entity\RssFeed',
+                    'TueFind\Db\Entity\RssItemEntityInterface' => 'TueFind\Db\Entity\RssItem',
+                    'TueFind\Db\Entity\RssSubscriptionEntityInterface' => 'TueFind\Db\Entity\RssSubscription',
+                    'TueFind\Db\Entity\SubsystemsEntityInterface' => 'TueFind\Db\Entity\Subsystems',
+                    'TueFind\Db\Entity\UserEntityInterface' => 'TueFind\Db\Entity\User',
+                    'TueFind\Db\Entity\UserAuthorityEntityInterface' => 'TueFind\Db\Entity\UserAuthority',
+                    'TueFind\Db\Entity\UserAuthorityHistoryEntityInterface' => 'TueFind\Db\Entity\UserAuthorityHistory',
+                ],
+            ],
+            'db_service' => [
+                'factories' => [
+                    'TueFind\Db\Service\CmsPagesService' => 'VuFind\Db\Service\AbstractDbServiceFactory',
+                    'TueFind\Db\Service\CmsPagesTranslationService' => 'VuFind\Db\Service\AbstractDbServiceFactory',
+                    'TueFind\Db\Service\CmsPagesHistoryService' => 'VuFind\Db\Service\AbstractDbServiceFactory',
+                    'TueFind\Db\Service\PublicationService' => 'VuFind\Db\Service\AbstractDbServiceFactory',
+                    'TueFind\Db\Service\RedirectService' => 'VuFind\Db\Service\AbstractDbServiceFactory',
+                    'TueFind\Db\Service\RssFeedService' => 'TueFind\Db\Service\RssFactory',
+                    'TueFind\Db\Service\RssItemService' => 'TueFind\Db\Service\RssFactory',
+                    'TueFind\Db\Service\RssSubscriptionService' => 'TueFind\Db\Service\RssFactory',
+                    'TueFind\Db\Service\SubsystemsService' => 'VuFind\Db\Service\AbstractDbServiceFactory',
+                    'TueFind\Db\Service\UserService' => 'VuFind\Db\Service\UserServiceFactory',
+                    'TueFind\Db\Service\UserAuthorityService' => 'VuFind\Db\Service\AbstractDbServiceFactory',
+                    'TueFind\Db\Service\UserAuthorityHistoryService' => 'VuFind\Db\Service\AbstractDbServiceFactory',
+                ],
+                'aliases' => [
+                    'VuFind\Db\Service\UserServiceInterface' => 'TueFind\Db\Service\UserServiceInterface',
+                    'TueFind\Db\Service\CmsPagesServiceInterface' => 'TueFind\Db\Service\CmsPagesService',
+                    'TueFind\Db\Service\CmsPagesTranslationServiceInterface' => 'TueFind\Db\Service\CmsPagesTranslationService',
+                    'TueFind\Db\Service\CmsPagesHistoryServiceInterface' => 'TueFind\Db\Service\CmsPagesHistoryService',
+                    'TueFind\Db\Service\PublicationServiceInterface' => 'TueFind\Db\Service\PublicationService',
+                    'TueFind\Db\Service\RedirectServiceInterface' => 'TueFind\Db\Service\RedirectService',
+                    'TueFind\Db\Service\RssFeedServiceInterface' => 'TueFind\Db\Service\RssFeedService',
+                    'TueFind\Db\Service\RssItemServiceInterface' => 'TueFind\Db\Service\RssItemService',
+                    'TueFind\Db\Service\RssSubscriptionServiceInterface' => 'TueFind\Db\Service\RssSubscriptionService',
+                    'TueFind\Db\Service\SubsystemsServiceInterface' => 'TueFind\Db\Service\SubsystemsService',
+                    'TueFind\Db\Service\UserServiceInterface' => 'TueFind\Db\Service\UserService',
+                    'TueFind\Db\Service\UserAuthorityServiceInterface' => 'TueFind\Db\Service\UserAuthorityService',
+                    'TueFind\Db\Service\UserAuthorityHistoryServiceInterface' => 'TueFind\Db\Service\UserAuthorityHistoryService',
+                ],
+            ],
+            'form_handler' => [
+                'factories' => [
+                    'TueFind\Form\Handler\Email' => 'VuFind\Form\Handler\EmailFactory',
+                ],
+                'aliases' => [
+                    'email' => 'TueFind\Form\Handler\Email',
+                ],
+            ],
+            'metadatavocabulary' => [
+                'factories' => [
+                    'TueFind\MetadataVocabulary\DSpace6' => 'Laminas\ServiceManager\Factory\InvokableFactory',
+                    'TueFind\MetadataVocabulary\DSpace7' => 'Laminas\ServiceManager\Factory\InvokableFactory',
+                    'TueFind\MetadataVocabulary\HighwirePress' => 'Laminas\ServiceManager\Factory\InvokableFactory',
+                ],
+                'aliases' => [
+                    'DSpace6' => 'TueFind\MetadataVocabulary\DSpace6',
+                    'DSpace7' => 'TueFind\MetadataVocabulary\DSpace7',
+                    'HighwirePress' => 'TueFind\MetadataVocabulary\HighwirePress',
+                    'VuFind\MetadataVocabulary\HighwirePress' => 'TueFind\MetadataVocabulary\HighwirePress',
+                ],
+            ],
             'navigation' => [
                 'factories' => [
                     'TueFind\Navigation\AccountMenu' => 'VuFind\Navigation\AccountMenuFactory',
                 ],
                 'aliases' => [
                     'VuFind\Navigation\AccountMenu' => 'TueFind\Navigation\AccountMenu',
+                ],
+            ],
+            'recommend' => [
+                'factories' => [
+                    'TueFind\Recommend\Ids' => 'Laminas\ServiceManager\Factory\InvokableFactory',
+                    'TueFind\Recommend\SideFacets' => 'VuFind\Recommend\SideFacetsFactory',
+                ],
+                'aliases' => [
+                    'ids' => 'TueFind\Recommend\Ids',
+                    'sidefacets' => 'TueFind\Recommend\SideFacets',
+                ],
+            ],
+            'record_fallbackloader' => [
+                'factories' => [
+                    'TueFind\Record\FallbackLoader\Solr' => 'TueFind\Record\FallbackLoader\SolrFactory',
+                ],
+                'aliases' => [
+                    'solr' => 'TueFind\Record\FallbackLoader\Solr',
                 ],
             ],
             'recorddataformatter_specs' => [
@@ -522,6 +612,35 @@ $config = [
                     'VuFind\RecordDataFormatter\Specs\DefaultRecord' => 'TueFind\RecordDataFormatter\Specs\DefaultRecord',
                 ],
             ],
+            'recorddriver' => [
+                'factories' => [
+                    'TueFind\RecordDriver\SolrAuthDefault' => 'VuFind\RecordDriver\SolrDefaultWithoutSearchServiceFactory',
+                    'TueFind\RecordDriver\SolrAuthMarc' => 'VuFind\RecordDriver\SolrDefaultWithoutSearchServiceFactory',
+                    'TueFind\RecordDriver\SolrDefault' => 'TueFind\RecordDriver\SolrDefaultFactory',
+                    'TueFind\RecordDriver\SolrMarc' => 'TueFind\RecordDriver\SolrMarcFactory',
+                ],
+                'delegators' => [
+                    'TueFind\RecordDriver\SolrMarc' => 'VuFind\RecordDriver\IlsAwareDelegatorFactory',
+                ],
+                'aliases' => [
+                    'solrauth' => 'TueFind\RecordDriver\SolrAuthMarc',
+                    'solrauthdefault' => 'TueFind\RecordDriver\SolrAuthMarc',
+                    'solrauthmarc' => 'TueFind\RecordDriver\SolrAuthMarc',
+                    'solrdefault' => 'TueFind\RecordDriver\SolrDefault',
+                    'solrmarc' => 'TueFind\RecordDriver\SolrMarc',
+                    'search3default' => 'TueFind\RecordDriver\Search3Default',
+                ],
+            ],
+            'recordtab' => [
+                'factories' => [
+                    'TueFind\RecordTab\AuthorityNameVariants' => 'Laminas\ServiceManager\Factory\InvokableFactory',
+                    'TueFind\RecordTab\ItemFulltextSearch' => 'Laminas\ServiceManager\Factory\InvokableFactory',
+                ],
+                'aliases' => [
+                    'AuthorityNameVariants' => 'TueFind\RecordTab\AuthorityNameVariants',
+                    'ItemFulltextSearch' => 'TueFind\RecordTab\ItemFulltextSearch',
+                ],
+            ],
             'search_backend' => [
                 'factories' => [
                     'SolrAuth' => 'TueFind\Search\Factory\SolrAuthBackendFactory',
@@ -529,6 +648,40 @@ $config = [
                 ],
                 'aliases' => [
 
+                ],
+            ],
+            'search_options' => [
+                'factories' => [
+                    'solrauthorfacets' => 'VuFind\Search\Options\OptionsFactory',
+                ],
+                'aliases' => [
+                    'search2' => 'TueFind\Search\Search2\Options',
+                    'search3' => 'TueFind\Search\Search3\Options',
+                    'solrauthorfacets' => 'TueFind\Search\SolrAuthorFacets\Options',
+                ],
+            ],
+            'search_params' => [
+                'factories' => [
+                    'TueFind\Search\SolrAuthorFacets\Params' => 'VuFind\Search\Solr\ParamsFactory',
+                ],
+                'aliases' => [
+                    'search3' => 'TueFind\Search\Search3\Params',
+                    'solr' => 'TueFind\Search\Solr\Params',
+                    'solrauthorfacets' => 'TueFind\Search\SolrAuthorFacets\Params',
+                ],
+            ],
+            'search_results' => [
+                'factories' => [
+                    'TueFind\Search\Search3\Results' => 'TueFind\Search\Search3\ResultsFactory',
+                    'TueFind\Search\Solr\Results' => 'VuFind\Search\Solr\ResultsFactory',
+                    'TueFind\Search\SolrAuth\Results' => 'VuFind\Search\Solr\ResultsFactory',
+                    'TueFind\Search\SolrAuthorFacets\Results' => 'VuFind\Search\Solr\ResultsFactory',
+                ],
+                'aliases' => [
+                    'search3' => 'TueFind\Search\Search3\Results',
+                    'solr' => 'TueFind\Search\Solr\Results',
+                    'solrauth' => 'TueFind\Search\SolrAuth\Results',
+                    'solrauthorfacets' => 'TueFind\Search\SolrAuthorFacets\Results',
                 ],
             ],
             'sitemap' => [

@@ -2,8 +2,10 @@
 
 namespace TueFind\Controller;
 
-class AuthorityController extends \VuFind\Controller\AuthorityController {
+use function count;
 
+class AuthorityController extends \VuFind\Controller\AuthorityController
+{
     use TabsTrait;
 
     /**
@@ -35,13 +37,13 @@ class AuthorityController extends \VuFind\Controller\AuthorityController {
     {
         $gndNumber = $this->params()->fromQuery('gnd');
         if ($gndNumber != null) {
-            $this->driver = $this->serviceLocator->get(\TueFind\Record\Loader::class)->loadAuthorityRecordByGNDNumber($gndNumber, 'SolrAuth');
+            $driver = $this->serviceLocator->get(\TueFind\Record\Loader::class)->loadAuthorityRecordByGNDNumber($gndNumber, 'SolrAuth');
         } else {
             $id = $this->params()->fromQuery('id');
-            $this->driver = $this->serviceLocator->get(\VuFind\Record\Loader::class)
+            $driver = $this->serviceLocator->get(\VuFind\Record\Loader::class)
                 ->load($id, 'SolrAuth');
         }
-        return $this->driver;
+        return $driver;
     }
 
     public function recordAction()
@@ -100,7 +102,7 @@ class AuthorityController extends \VuFind\Controller\AuthorityController {
             }
 
             // send mail
-            $mailer->send($receivers, $config->Site->email_from, 'A user has requested access to an authority dataset', $message);
+            $mailer->send($receivers, $config->Site->email, 'A user has requested access to an authority dataset', $message);
         }
 
         return $this->createViewModel(['user' => $user]);
