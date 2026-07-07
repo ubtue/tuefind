@@ -617,3 +617,44 @@ a {
     justify-content: center;
     min-height: 100%;
 }
+
+.tf-clear-search-input-span {
+    width: 32px;
+    color: #70757a;
+    vertical-align: middle;
+    cursor: pointer;
+    border: 0;
+    background: #fff0;
+    position: absolute;
+    right: 38px !important;
+    left: auto !important;
+    top: 16px;
+    transform: translateY(-50%);
+    z-index: 999;
+}
+
+#searchForm.relbib-searchForm.isNewItemActiveClass #searchForm_lookfor {
+    background-color: #951e37;
+    color: #fff !important;
+}
+
+#searchForm_lookfor::placeholder {
+    color: #6c757d !important;
+    opacity: 1;
+}
+
+#searchForm_lookfor:-ms-input-placeholder {
+    color: #6c757d !important;
+}
+
+#searchForm_lookfor::-ms-input-placeholder {
+    color: #6c757d !important;
+}
+
+.btn-primary.isNewItemActiveClass {
+    min-height: 100%;
+}
+
+.active-filters.active-filters--uncollapsible {
+    justify-content: flex-start;
+}
