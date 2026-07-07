@@ -11,7 +11,7 @@ class UserAuthorityService extends \TueFind\Db\Service\UserAuthorityService impl
         $dql = 'SELECT ua '
             . 'FROM ' . UserAuthorityEntityInterface::class . ' ua '
             . 'JOIN ua.user u '
-            . 'WHERE u.ixtheoUserType= :userType'
+            . 'WHERE u.ixtheoUserType= :userType '
             . 'ORDER BY u.username ASC, ua.authorityControlNumber ASC ';
 
         $query = $this->entityManager->createQuery($dql);
