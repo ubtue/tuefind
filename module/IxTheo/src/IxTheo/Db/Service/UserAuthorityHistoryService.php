@@ -12,7 +12,7 @@ class UserAuthorityHistoryService extends \TueFind\Db\Service\UserAuthorityHisto
             . 'FROM ' . UserAuthorityHistoryEntityInterface::class . ' uah '
             . 'JOIN uah.user u '
             . 'WHERE uah.processAdminDate IS NOT NULL '
-            . 'AND u.ixtheoUserType= :userType'
+            . 'AND u.ixtheoUserType= :userType '
             . 'ORDER BY uah.requestUserDate DESC ';
 
         $query = $this->entityManager->createQuery($dql);
