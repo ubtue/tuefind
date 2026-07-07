@@ -66,7 +66,10 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
             foreach ($profileParams as $param => $paramSettings) {
                 $user->{$paramSettings['setter']}($request->getPost()->get($param, $paramSettings['default']));
             }
-            $user->save();
+
+            $service = $this->getDbService(\TueFind\Db\Service\UserServiceInterface::class);
+            $service->persistEntity($user);
+
             $this->getAuthManager()->updateSession($user);
         }
 
