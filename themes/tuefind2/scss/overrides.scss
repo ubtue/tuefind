@@ -546,9 +546,6 @@ ul .dropdown-menu {
 #tf-button-footer-feedback {
     &:extend(.tf-button-footer){
     left: 5px;
-
-    /* disabled at the moment */
-    display: none;
 }}
 
 #tf-button-footer-feedback:hover {
