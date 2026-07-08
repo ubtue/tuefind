@@ -1481,8 +1481,21 @@ a {
   margin: 0;
 }
 
-.feedback-content .form-control{
+.feedback-content input[type="text"].form-control,
+.feedback-content input[type="email"].form-control,
+.feedback-content input[type="password"].form-control {
   min-width: 100%;
+}
+
+.feedback-content input[type="checkbox"].form-control,
+.feedback-content input[type="radio"].form-control {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    min-width: 0;
+    border: initial;
+    background: initial;
+    box-shadow: none;
 }
 
 .feedback-content form .form-group ul {

@@ -662,22 +662,22 @@ a {
 .form-search-newitem .btn {
     background-color: $brand-primary;
     color: #fff;
-    border: 1px solid #32414b
+    border: 1px solid #32414b;
 }
 
 .form-search-newitem .btn:hover {
     background-color: #000;
-    color: #fff
+    color: #fff;
 }
 
 .form-search-newitem .btn-check:checked+.btn {
     background-color: #fff;
-    color: #32414b
+    color: #32414b;
 }
 
 .form-search-newitem .btn-check:checked+.btn:hover {
     background-color: #32414b;
-    color: #fff
+    color: #fff;
 }
 
 .slider-container .noUi-horizontal .noUi-handle {
@@ -686,7 +686,7 @@ a {
     width: 20px;
     height: 20px;
     box-shadow: none;
-    right: -10px
+    right: -10px;
 }
 
 .fa-plus-circle {
