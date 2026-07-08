@@ -31,10 +31,10 @@ $this->breadcrumbs()->set($this->translate('Admins'), $this->url('myresearch-hom
             <a href="<?=$this->url('adminfrontend-cmspageshistory', ['cms_page_id' => $page->getId()])?>"><?=$this->transEsc('history')?></a>
           </td>
           <td>
-            <?php echo $page->getCreateDate()->format('d.m.Y H:i');?>
+            <?=$page->getCreateDate()->format('d.m.Y H:i')?>
           </td>
           <td>
-            <?php echo $page->getChangeDate()->format('d.m.Y H:i');?>
+            <?=$page->getChangeDate()->format('d.m.Y H:i')?>
           </td>
           <td class="content-edit-cell">
             <a class="content-edit-button" href="<?=$this->url('content-page', ['page' => $page->getPageSystemId()])?>" title="<?=$this->transEsc('Show')?>"><?=$this->icon('link')?></a>&nbsp;
