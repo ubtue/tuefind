@@ -41,11 +41,11 @@ class CmsPages implements CmsPagesEntityInterface
         mappedBy: 'cmsPage',
         targetEntity: CmsPagesHistory::class
     )]
-    private Collection $history;
+    protected Collection $history;
 
     #[ORM\ManyToOne(targetEntity: Subsystems::class)]
     #[ORM\JoinColumn(name: 'subsystem_id', referencedColumnName: 'id', nullable: false)]
-    private Subsystems $subSystem;
+    protected Subsystems $subSystem;
 
     public function __construct()
     {
