@@ -1,6 +1,6 @@
 <?php
   $this->headTitle($this->translate('Browse the Catalog'));
-  $this->layout()->breadcrumbs = '<li><a href="' . $this->url('browse-home') . '">' . $this->transEsc('Browse') . '</a></li>';
+  $this->layout()->breadcrumbs = '<li class="breadcrumb-item active"><a href="' . $this->url('browse-home') . '">' . $this->transEsc('Browse') . '</a></li>';
 
   $BROWSE_BASE = $this->url('browse-' . strtolower($this->currentAction));
   $SEARCH_BASE = $this->url($this->currentAction == 'Tag' ? 'tag-home' : 'search-results');
@@ -13,7 +13,7 @@
 <div class="browse-container">
   <div class="browse-list<?php if (!empty($this->categoryList) || !empty($this->secondaryList)): ?> hidden-xs<?php endif ?>" id="list1">
     <?php foreach ($this->browseOptions as $item => $currentOption): ?>
-      <a href="<?=$this->url('browse-' . strtolower($currentOption['action'])); ?>" class="browse-item<?php if($currentOption['action'] == $this->currentAction): ?> active<?php endif; ?>">
+      <a href="<?=$this->url('browse-' . strtolower($currentOption['action'])); ?>" class="browse-item<?php if ($currentOption['action'] == $this->currentAction): ?> active<?php endif; ?>">
         <?=$this->transEsc($currentOption['description']) ?>
         <span class="pull-right flip"><i class="fa fa-angle-right" title="<?=$this->transEscAttr('more') ?>"></i></span>
       </a>
@@ -38,7 +38,7 @@
 
   <?php if (!empty($this->secondaryList)): ?>
     <div class="browse-list<?php if (!empty($this->resultList)): ?> hidden-xs<?php endif ?>" id="list3">
-    <?php foreach($this->secondaryList as $secondary): ?>
+    <?php foreach ($this->secondaryList as $secondary): ?>
       <?php $url = $BROWSE_BASE . '?findby=' . urlencode($this->findby)
           . '&amp;category=' . urlencode($this->category)
           . '&amp;query=' . urlencode($secondary['value']);
@@ -51,7 +51,7 @@
 
         }
         if ($this->secondaryParams) {
-          foreach($this->secondaryParams as $var => $val) {
+          foreach ($this->secondaryParams as $var => $val) {
             $url .= '&amp;' . $var . '=' . urlencode($val);
           }
         }
