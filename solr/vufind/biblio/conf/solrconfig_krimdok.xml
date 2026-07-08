@@ -160,6 +160,7 @@
     <!-- Maximum number of clauses in a boolean query... can affect
         range or prefix queries that expand to big boolean
         queries.  An exception is thrown if exceeded.  -->
+    <!-- TueFind: Note that this value is overridden in the solr.sh start script -->
     <maxBooleanClauses>1024</maxBooleanClauses>
 
 
