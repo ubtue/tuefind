@@ -737,3 +737,7 @@ a {
 .back-to-login {
     color: $brand-primary;
 }
+
+.form-cart-email .form-label, .form-cart-email .checkbox {
+    font-weight: bold;
+}
