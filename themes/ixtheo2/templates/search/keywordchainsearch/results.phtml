@@ -1,20 +1,22 @@
 <?php
 $this->headTitle($this->translate('Browse Keywordchains'));
-$this->layout()->breadcrumbs = '<a href="' . $this->url('keywordchainsearch-home') . '">' . $this->transEsc('Browse Keywordchains') . '</a>';
+$this->layout()->breadcrumbs = '<li class="breadcrumb-item active"><a href="' . $this->url('keywordchainsearch-home') . '">' . $this->transEsc('Browse Keywordchains') . '</a></li>';
 
 $lookfor = '';
 if (isset($this->results)) {
     $lookfor = $this->results->getUrlQuery()->isQuerySuppressed() ? '' : $this->params->getDisplayQuery();
 }
 ?>
-<?= $this->context($this)->renderInContext('search/keywordchainsearch/searchbox.phtml',
-    array(
-        'lookfor' => $lookfor
-    )); ?>
+<?= $this->context($this)->renderInContext(
+    'search/keywordchainsearch/searchbox.phtml',
+    [
+        'lookfor' => $lookfor,
+    ]
+); ?>
 
 <?= $this->render('search/keywordchainsearch/result-list.phtml') ?>
-<?= $this->context($this)->renderInContext('search/bulk-action-buttons.phtml', array('idPrefix' => 'bottom_')) ?>
-<?= $this->paginationControl($this->results->getPaginator(), 'Sliding', 'Helpers/pagination.phtml', array('results' => $this->results)) ?>
+<?= $this->context($this)->renderInContext('search/bulk-action-buttons.phtml', ['idPrefix' => 'bottom_']) ?>
+<?= $this->paginationControl($this->results->getPaginator(), 'Sliding', 'Helpers/pagination.phtml', ['results' => $this->results]) ?>
 
 
 
