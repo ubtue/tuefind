@@ -409,3 +409,59 @@ div#topic_cloud span {
 #tf-button-footer-back-to-top {
     display: none;
 }
+
+.search-collapse-expand {
+  &.facet-group > .collapse,
+  &.facet-group > .collapsing {
+    border-bottom: 1px solid var(--bs-border-color);
+  }
+
+  .form-check.form-switch {
+    padding-left: 0;
+    min-height: auto;
+  }
+
+  .collapse-expand-switch {
+    width: 3.5rem;
+    height: 1.75rem;
+    margin: 0;
+    cursor: pointer;
+
+    border: 2px solid var(--bs-primary);
+    border-radius: 999px;
+
+    background-color: var(--bs-light);
+    background-image: radial-gradient(
+      circle,
+      var(--bs-primary) 0,
+      var(--bs-primary) 45%,
+      transparent 48%
+    );
+    background-size: 1.25rem 1.25rem;
+    background-position: .2rem center;
+    background-repeat: no-repeat;
+
+    transition:
+      background-position .15s ease-in-out,
+      background-color .15s ease-in-out,
+      border-color .15s ease-in-out,
+      box-shadow .15s ease-in-out;
+
+    &:checked {
+      background-color: var(--bs-primary);
+      border-color: var(--bs-primary);
+      background-image: radial-gradient(
+        circle,
+        #fff 0,
+        #fff 45%,
+        transparent 48%
+      );
+      background-position: calc(100% - .2rem) center;
+    }
+
+    &:focus {
+      border-color: var(--bs-primary);
+      box-shadow: 0 0 0 .25rem rgba(var(--bs-primary-rgb), .25);
+    }
+  }
+}

@@ -1,22 +1,6 @@
 <?php  use VuFind\Search\Solr\Results;
 
 ?>
-<?php if ($this->results instanceof Results): ?>
-    <?php if ($this->params->getSearchClassId() == 'Solr' && $this->collapseExpandConfig->isEnabled()): ?>
-        <form class="form-inline search-collapse-expand" action="<?= $this->currentPath() ?>"
-            method="POST" id="collapse-expand-form">
-            <div class="form-group">
-                <label for="collapse-expand-checkbox"><?= $this->transEsc('collapse results') ?></label>
-                <input type="checkbox" name="collapse-expand-enabled" value=""
-                    id="collapse-expand-checkbox"
-                    <?php if ($this->collapseExpandConfig->isActive()): ?>checked<?php endif; ?>/>
-            </div>
-            <noscript>
-                <p>Please enable JavaScript</p>
-            </noscript>
-        </form>
-    <?php endif; ?>
-<?php endif; ?>
 
 <?php
   // Set up page title:
@@ -67,6 +51,61 @@
       ]
   );
   $recommendations = $this->results->getRecommendations('side');
+  if ($this->results instanceof Results && $this->params->getSearchClassId() == 'Solr' && $this->collapseExpandConfig->isEnabled()) {
+    ob_start(); ?>
+    <div class="facet-group search-collapse-expand" id="side-panel-collapse-expand" data-title="<?=$this->transEscAttr('collapse results') ?>">
+      <h3 class="facet-title">
+        <div class="title">
+          <span class="facet-title"><?=$this->transEsc('collapse results') ?></span>
+        </div>
+      </h3>
+      <div class="collapse show">
+        <form
+          class="search-collapse-expand"
+          action="<?= $this->currentPath() ?>"
+          method="POST"
+          id="collapse-expand-form"
+        >
+          <div class="d-flex align-items-center justify-content-between gap-3 p-3">
+              <label
+                  for="collapse-expand-checkbox"
+                  class="h3 facet-title"
+              >
+                  <?php if ($this->collapseExpandConfig->isActive()): ?>
+                  <?= $this->transEsc('Deactivate') ?>
+                  <?php else: ?>
+                  <?= $this->transEsc('Activate') ?>
+                  <?php endif; ?>
+              </label>
+
+              <div class="form-check form-switch m-0">
+                  <input
+                      class="form-check-input fs-4 collapse-expand-switch"
+                      type="checkbox"
+                      role="switch"
+                      name="collapse-expand-enabled"
+                      value="1"
+                      id="collapse-expand-checkbox"
+                      aria-label="<?= $this->transEscAttr('collapse results') ?>"
+                      <?php if ($this->collapseExpandConfig->isActive()): ?>checked<?php endif; ?>
+                  >
+              </div>
+          </div>
+
+          <noscript>
+              <div class="mt-2">
+                  <p class="text-muted mb-2">Please enable JavaScript, or use the button below.</p>
+                  <button type="submit" class="btn btn-primary">
+                      <?= $this->transEsc('Apply') ?>
+                  </button>
+              </div>
+          </noscript>
+        </form>
+      </div>
+    </div>
+    <?php
+    $this->sideFacetExtraControls = ($this->sideFacetExtraControls ?? '') . ob_get_clean();
+  }
   $this->assetManager()->appendScriptString('var multiFacetsSelection = "' . $this->multiFacetsSelection . '";');
 ?>
 
