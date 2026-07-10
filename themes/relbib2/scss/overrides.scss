@@ -741,3 +741,26 @@ a {
 .form-cart-email .form-label, .form-cart-email .checkbox {
     font-weight: bold;
 }
+
+// workaround: Copy/paste section here due to problem with color inheritance, see #3801
+.search-collapse-expand {
+    .collapse-expand-switch {
+        border-color: $brand-primary;
+        background-image: radial-gradient(
+          circle,
+          $brand-primary 0,
+          $brand-primary 45%,
+          transparent 48%
+        );
+
+        &:checked {
+          background-color: $brand-primary;
+          border-color: $brand-primary;
+        }
+
+        &:focus {
+          border-color: $brand-primary;
+          box-shadow: 0 0 0 .25rem rgba($brand-secondary, .25);
+        }
+    }
+}
