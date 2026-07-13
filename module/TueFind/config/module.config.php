@@ -177,12 +177,12 @@ $config = [
             'authority-request-access' => [
                 'type'    => 'Laminas\Router\Http\Segment',
                 'options' => [
-                    'route'    => '/Authority/RequestAccess/:authority_id',
+                    'route'    => '/AuthorityRecord/RequestAccess/:authority_id',
                     'constraints' => [
                         'authority_id'     => '[0-9A-Z]{8,}',
                     ],
                     'defaults' => [
-                        'controller' => 'Authority',
+                        'controller' => 'AuthorityRecord',
                         'action'     => 'requestAccess',
                     ],
                 ],
@@ -190,7 +190,7 @@ $config = [
             'authority-process-request' => [
                 'type'    => 'Laminas\Router\Http\Segment',
                 'options' => [
-                    'route'    => '/Authority/RequestAccess/:authority_id/:user_id',
+                    'route'    => '/AuthorityRecord/RequestAccess/:authority_id/:user_id',
                     'constraints' => [
                         'authority_id'     => '[0-9A-Z]{8,}',
                         'user_id'          => '\d+',

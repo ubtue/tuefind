@@ -3,28 +3,37 @@
 namespace TueFind\Record;
 
 use VuFind\Exception\RecordMissing as RecordMissingException;
-use VuFindSearch\ParamBag;
+use VuFindSearch\Backend\Exception\BackendException;
 use VuFindSearch\Command\RetrieveCommand;
 use VuFindSearch\Command\SearchCommand;
+use VuFindSearch\ParamBag;
 use VuFindSearch\Query\Query;
 
-class Loader extends \VuFind\Record\Loader {
-    public function load($id, $source = DEFAULT_SEARCH_BACKEND,
-        $tolerateMissing = false, ParamBag $params = null
+use function count;
+
+class Loader extends \VuFind\Record\Loader
+{
+    public function load(
+        $id,
+        $source = DEFAULT_SEARCH_BACKEND,
+        $tolerateMissing = false,
+        ?ParamBag $params = null
     ) {
         if (null !== $id && '' !== $id) {
             $results = [];
-            if (null !== $this->recordCache
-            && $this->recordCache->isPrimary($source)
+            if (
+                null !== $this->recordCache
+                && $this->recordCache->isPrimary($source)
             ) {
                 $results = $this->recordCache->lookup($id, $source);
             }
             if (empty($results)) {
                 try {
                     $command = new RetrieveCommand($source, $id, $params);
-                    $results = $this->searchService->invoke($command)->getResult()->getRecords();
-                } catch (BackendException $e){
-                    if(!$tolerateMissing){
+                    $results = $this->searchService->invoke($command)
+                        ->getResult()->getRecords();
+                } catch (BackendException $e) {
+                    if (!$tolerateMissing) {
                         throw $e;
                     }
                 }
@@ -32,28 +41,38 @@ class Loader extends \VuFind\Record\Loader {
             // fallback: search for record by ID with ISIL prefix, e.g. "(DE-599)ZDB2985306-0"
             // Note: The strpos call in the following line is just for performance reasons
             //       to avoid a Solr query in case the ID does not fit the case
-            if (empty($results) && strpos($id, '(') === 0) {
+            if (empty($results) && str_starts_with($id, '(')) {
                 $query = new Query('ctrlnum:"' . $id . '"', null, 'Allfields');
                 $command = new SearchCommand($source, $query);
                 $results = $this->searchService->invoke($command)->getResult()->getRecords();
             }
-            if (empty($results) && null !== $this->recordCache
-            && $this->recordCache->isFallback($source)
+            if (
+                empty($results) && null !== $this->recordCache
+                && $this->recordCache->isFallback($source)
             ) {
                 $results = $this->recordCache->lookup($id, $source);
+                if (!empty($results)) {
+                    $results[0]->setExtraDetail('cached_record', true);
+                }
             }
 
-            if (count($results) == 1) {
+            if (!empty($results)) {
                 return $results[0];
             }
 
-            // TueFind: use fallback like in parent's "loadBatchForSource" function
-            // (this change might also be sent to vufind.org for future versions)
-            if ($this->fallbackLoader
+            if (
+                $this->fallbackLoader
                 && $this->fallbackLoader->has($source)
             ) {
-                $fallbackRecords = $this->fallbackLoader->get($source)
+                try {
+                    $fallbackRecords = $this->fallbackLoader->get($source)
                     ->load([$id]);
+                } catch (BackendException $e) {
+                    if (!$tolerateMissing) {
+                        throw $e;
+                    }
+                    $fallbackRecords = [];
+                }
 
                 if (count($fallbackRecords) == 1) {
                     return $fallbackRecords[0];
@@ -63,7 +82,7 @@ class Loader extends \VuFind\Record\Loader {
         if ($tolerateMissing) {
             $record = $this->recordFactory->get('Missing');
             $record->setRawData(['id' => $id]);
-            $record->setSourceIdentifier($source);
+            $record->setSourceIdentifiers($source);
             return $record;
         }
         throw new RecordMissingException(
@@ -71,7 +90,8 @@ class Loader extends \VuFind\Record\Loader {
         );
     }
 
-    public function loadAuthorityRecordByGNDNumber($gndNumber) {
+    public function loadAuthorityRecordByGNDNumber($gndNumber)
+    {
         $source = 'SolrAuth';
 
         if (null !== $gndNumber && '' !== $gndNumber) {
@@ -80,28 +100,19 @@ class Loader extends \VuFind\Record\Loader {
             // no primary cache
 
             // use search instead of lookup logic
-            if (empty($results)) {
-
-                try {
-                    $query = new Query('gnd:' . $gndNumber);
-                    $command = new SearchCommand($source, $query);
-                    $results = $this->searchService->invoke($command)->getResult()->getRecords();
-                    if ($results->first() !== null)
-                        return $results->first();
-                    $results = [];
-                } catch (BackendException $e){
-                    if(!$tolerateMissing){
-                        throw $e;
-                    }
+            try {
+                $query = new Query('gnd:' . $gndNumber);
+                $command = new SearchCommand($source, $query);
+                $results = $this->searchService->invoke($command)->getResult()->getRecords();
+                if ($results->first() !== null) {
+                    return $results->first();
                 }
-
+                $results = [];
+            } catch (BackendException $e) {
+                throw $e;
             }
 
             // no fallback cache
-
-            if (!empty($results)) {
-                return $results[0];
-            }
 
             // no fallback loader
         }
