@@ -6,8 +6,6 @@ use function count;
 
 class AuthorityController extends \VuFind\Controller\AuthorityController
 {
-    use TabsTrait;
-
     /**
      * This action needs to be overwritten because it is meant to be a redirect
      * to the recordAction under certain circumstances (especially tabs).
