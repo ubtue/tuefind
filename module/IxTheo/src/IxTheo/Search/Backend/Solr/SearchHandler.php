@@ -2,19 +2,23 @@
 
 namespace IxTheo\Search\Backend\Solr;
 
-define("_BIB_REF_MAPS_PATH_", '/usr/local/var/lib/tuelib/bibleRef/'); // Must end with backslash!
-define("_BIB_REF_CMD_PARAMS_", implode(' ', [_BIB_REF_MAPS_PATH_ . 'bible_aliases.map',
+use function define;
+
+define('_BIB_REF_MAPS_PATH_', \TueFind\Utility::TUELIB_DIR . '/bibleRef/'); // Must end with backslash!
+define('_BIB_REF_CMD_PARAMS_', implode(' ', [_BIB_REF_MAPS_PATH_ . 'bible_aliases.map',
        _BIB_REF_MAPS_PATH_ . 'books_of_the_bible_to_code.map', _BIB_REF_MAPS_PATH_ . 'books_of_the_bible_to_canonical_form.map',
        _BIB_REF_MAPS_PATH_ . 'pericopes_to_codes.map']));
 
-class SearchHandler extends \TueFindSearch\Backend\Solr\SearchHandler {
-    const BIBLE_RANGE_PARSER = 'bibleRangeParser';
-    const BIBLE_REFERENCE_COMMAND = '/usr/local/bin/bib_ref_to_codes_tool';
-    const BIBLE_REFERENCE_COMMAND_PARAMETERS = _BIB_REF_CMD_PARAMS_;
-    const CANONES_RANGE_PARSER = 'canonesRangeParser';
-    const CANONES_REFERENCE_COMMAND = '/usr/local/bin/canon_law_ref_to_codes_tool';
+class SearchHandler extends \TueFindSearch\Backend\Solr\SearchHandler
+{
+    public const BIBLE_RANGE_PARSER = 'bibleRangeParser';
+    public const BIBLE_REFERENCE_COMMAND = \TueFind\Utility::BIN_DIR . '/bib_ref_to_codes_tool';
+    public const BIBLE_REFERENCE_COMMAND_PARAMETERS = _BIB_REF_CMD_PARAMS_;
+    public const CANONES_RANGE_PARSER = 'canonesRangeParser';
+    public const CANONES_REFERENCE_COMMAND = \TueFind\Utility::BIN_DIR . '/canon_law_ref_to_codes_tool';
 
-    protected function createQueryString($search, $advanced = false) {
+    protected function createQueryString($search, $advanced = false)
+    {
         switch ($this->specs['RangeType']) {
             case QueryBuilder::BIBLE_RANGE_HANDLER:
                 $rangeReferences = $this->parseBibleReference($search);
@@ -29,20 +33,21 @@ class SearchHandler extends \TueFindSearch\Backend\Solr\SearchHandler {
 
     protected function getBibleReferenceCommand($search)
     {
-        setlocale(LC_CTYPE, "de_DE.UTF-8");
+        setlocale(LC_CTYPE, 'de_DE.UTF-8');
         return implode(' ', [
             self::BIBLE_REFERENCE_COMMAND,
-            "--query",
+            '--query',
             escapeshellarg($search),
-            self::BIBLE_REFERENCE_COMMAND_PARAMETERS
+            self::BIBLE_REFERENCE_COMMAND_PARAMETERS,
         ]);
     }
 
-    protected function getCanonesReferenceCommand($search) {
+    protected function getCanonesReferenceCommand($search)
+    {
         return implode(' ', [
             self::CANONES_REFERENCE_COMMAND,
-            "--query",
-            escapeshellarg($search)
+            '--query',
+            escapeshellarg($search),
         ]);
     }
 

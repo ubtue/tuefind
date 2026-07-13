@@ -1,0 +1,1 @@
+../../../../../VuFind/sql/migrations/mysql/11.0/005-add-audit-event-table.sql

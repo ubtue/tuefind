@@ -17,8 +17,8 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * along with this program; if not, see
+ * <https://www.gnu.org/licenses/>.
  *
  * @category VuFind
  * @package  VuFind\Auth
@@ -33,10 +33,11 @@ declare(strict_types=1);
 namespace VuFind\Auth;
 
 use BrowscapPHP\BrowscapInterface;
-use Laminas\Config\Config;
-use Laminas\Log\LoggerAwareInterface;
 use Laminas\Session\SessionManager;
 use Laminas\View\Renderer\RendererInterface;
+use Psr\Log\LoggerAwareInterface;
+use VuFind\Config\Config;
+use VuFind\Config\Feature\EmailSettingsTrait;
 use VuFind\Cookie\CookieManager;
 use VuFind\Db\Entity\UserEntityInterface;
 use VuFind\Db\Service\LoginTokenServiceInterface;
@@ -60,6 +61,7 @@ use VuFind\Mailer\Mailer;
  */
 class LoginTokenManager implements LoggerAwareInterface, TranslatorAwareInterface
 {
+    use EmailSettingsTrait;
     use LoggerAwareTrait;
     use TranslatorAwareTrait;
 
@@ -377,7 +379,7 @@ class LoginTokenManager implements LoggerAwareInterface, TranslatorAwareInterfac
             try {
                 $this->mailer->send(
                     $toAddr,
-                    $this->config->Mail->default_from ?? $this->config->Site->email,
+                    $this->getEmailSenderAddress($this->config),
                     $this->translate($subject, ['%%title%%' => $title]),
                     $message
                 );

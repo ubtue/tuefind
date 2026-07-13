@@ -96,7 +96,7 @@ $(document).ready(function(){
 
     $slider.slick({
         dots: true,
-        autoplay: true,
+        autoplay: true,       // default stop autorotation
         infinite: true,
         speed: 1000,
         fade: true,
@@ -104,6 +104,17 @@ $(document).ready(function(){
         arrows: true
     });
 
+/*  for test
+    // run slider rotation if mouse hover
+    $slider.on('mouseenter', function () {
+        $slider.slick('slickPlay');
+    });
+
+    // stop slider rotation
+    $slider.on('mouseleave', function () {
+        $slider.slick('slickPause');
+    });
+*/
 });
 EOD;?>
 <?=$this->assetManager()->outputInlineScriptString($jsSnippet)?>

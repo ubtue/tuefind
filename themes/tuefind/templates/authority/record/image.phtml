@@ -24,4 +24,4 @@
 ?>
 <!-- onload didn't work, so we use a separate script snippet -->
 <div class="tf-wikidata-image" data-url="<?=htmlspecialchars($imgUrl)?>" align="center"></div>
-<?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, 'TueFind.GetImagesFromWikidata();', 'SET')?>
+<?=$this->assetManager()->outputInlineScriptString('TueFind.GetImagesFromWikidata();')?>

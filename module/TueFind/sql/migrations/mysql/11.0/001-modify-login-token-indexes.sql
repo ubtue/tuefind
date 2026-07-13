@@ -1,0 +1,1 @@
+../../../../../VuFind/sql/migrations/mysql/11.0/001-modify-login-token-indexes.sql

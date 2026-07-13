@@ -18,10 +18,15 @@ CREATE TABLE tuefind_publications (
 
 
 CREATE TABLE tuefind_redirect (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
     url VARCHAR(1000) NOT NULL,
     group_name VARCHAR(1000) DEFAULT NULL,
-    timestamp TIMESTAMP DEFAULT NOW() NOT NULL
-) DEFAULT CHARSET=utf8;
+    timestamp TIMESTAMP DEFAULT NOW() NOT NULL,
+    PRIMARY KEY (id),
+    INDEX tuefind_redirect_url_index (url(768)),
+    INDEX tuefind_redirect_group_name_index (group_name(768)),
+    INDEX tuefind_redirect_timestamp_index (timestamp)
+) DEFAULT CHARSET=utf8mb4;
 
 
 CREATE TABLE tuefind_rss_feeds (
@@ -98,8 +103,8 @@ CREATE TABLE tuefind_user_authorities_history (
     FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;
 
-ALTER TABLE vufind.user ADD COLUMN tuefind_country VARCHAR(255) DEFAULT NULL;
-ALTER TABLE vufind.user ADD tuefind_institution VARCHAR(255) DEFAULT NULL;
+ALTER TABLE user ADD COLUMN tuefind_country VARCHAR(255) DEFAULT NULL;
+ALTER TABLE user ADD tuefind_institution VARCHAR(255) DEFAULT NULL;
 
 ALTER TABLE user ADD tuefind_uuid CHAR(36) NOT NULL;
 ALTER TABLE user ADD CONSTRAINT tuefind_user_uuid UNIQUE (tuefind_uuid);
@@ -111,4 +116,4 @@ ALTER TABLE user ADD tuefind_rss_feed_send_emails BOOLEAN NOT NULL DEFAULT FALSE
 CREATE INDEX tuefind_rss_feed_send_emails_index ON user (tuefind_rss_feed_send_emails);
 ALTER TABLE user ADD tuefind_rss_feed_last_notification TIMESTAMP DEFAULT NOW();
 
-ALTER TABLE user ADD tuefind_rights SET('admin', 'user_authorities') DEFAULT NULL;
+ALTER TABLE user ADD tuefind_rights SET('admin', 'user_authorities', 'cms') DEFAULT NULL;

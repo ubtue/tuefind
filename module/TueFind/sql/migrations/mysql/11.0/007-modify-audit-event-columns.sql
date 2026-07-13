@@ -1,0 +1,1 @@
+../../../../../VuFind/sql/migrations/mysql/11.0/007-modify-audit-event-columns.sql

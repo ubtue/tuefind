@@ -1,9 +1,9 @@
 <!-- TueFind extension template -->
 <!-- About -->
-<li class="dropdown">
-    <a class="dropdown-toggle" data-toggle="dropdown"  href="#" role="button" aria-haspopup="true" aria-expanded="false">
+<li class="nav-item dropdown">
+    <a class="header-link dropdown-toggle" data-bs-toggle="dropdown"  href="#" role="button" aria-haspopup="true" aria-expanded="false">
         <i class="fa fa-info-circle"> </i>
-        <?=$this->transEsc('About');?> <span class="caret"></span>
+        <span class="mobile-hide"><?=$this->transEsc('About');?></span> <span class="caret"></span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
         <li><a class="dropdown-item" href="<?=$this->url('content-page', ['page' => 'about_relbib']) ?>"><?=$this->transEsc('about_relbib')?></a></li>
@@ -12,8 +12,8 @@
     </ul>
 </li>
 <!-- A-Z -->
-<li>
-    <a href="<?=$this->url('content-page', ['page' => 'A-Z']) ?>">
-        <i class="fa fa-list"> </i> RelBib A-Z
+<li class="nav-item">
+    <a class="header-link" href="<?=$this->url('content-page', ['page' => 'A-Z']) ?>">
+        <i class="fa fa-list"> </i> <span class="mobile-hide">RelBib A-Z</span>
     </a>
 </li>

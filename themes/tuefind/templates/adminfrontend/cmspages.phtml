@@ -1,0 +1,74 @@
+<?php
+$this->breadcrumbs()->set($this->translate('Admins'), $this->url('myresearch-home'))
+      ->add($this->translate('CMS Pages'), active: true);
+?>
+
+<div class="<?=$this->layoutClass('mainbody')?>">
+  <h1><?=$this->transEsc('All CMS pages')?></h1>
+  <?=$this->flashmessages()?>
+
+  <table class="table dataTable table-striped content-list custom-link-list">
+    <thead>
+      <tr>
+        <th><?=$this->transEsc('ID')?></th>
+        <th><?=$this->transEsc('Page System ID')?></th>
+        <th><?=$this->transEsc('History')?></th>
+        <th><?=$this->transEsc('Created')?></th>
+        <th><?=$this->transEsc('Updated')?></th>
+        <th class="content-list-edit-col"><?=$this->transEsc('Edit')?></th>
+      </tr>
+    </thead>
+    <tbody>
+      <?php foreach ($this->cmsPages as $page): ?>
+        <tr class="custom-link-row" data-custom-link-id="<?=$this->escapeHtmlAttr($page->getId())?>">
+          <td>
+            <?=$page->getId()?>
+          </td>
+          <td>
+            <?=$page->getPageSystemId()?>
+          </td>
+          <td>
+            <a href="<?=$this->url('adminfrontend-cmspageshistory', ['cms_page_id' => $page->getId()])?>"><?=$this->transEsc('history')?></a>
+          </td>
+          <td>
+            <?=$page->getCreateDate()->format('d.m.Y H:i')?>
+          </td>
+          <td>
+            <?=$page->getChangeDate()->format('d.m.Y H:i')?>
+          </td>
+          <td class="content-edit-cell">
+            <a class="content-edit-button" href="<?=$this->url('content-page', ['page' => $page->getPageSystemId()])?>" title="<?=$this->transEsc('Show')?>"><?=$this->icon('link')?></a>&nbsp;
+            <a class="content-edit-button" href="<?=$this->url('adminfrontend-updatecmspage', ['cms_page_id' => $page->getId()])?>" title="<?=$this->transEsc('Edit')?>"><?=$this->icon('edit')?></a>&nbsp;
+            <a class="content-edit-button" href="<?=$this->url('adminfrontend-deletecmspage', ['cms_page_id' => $page->getId()])?>" title="<?=$this->transEsc('Delete')?>"><?=$this->icon('trash')?></a>
+          </td>
+        </tr>
+      <?php endforeach; ?>
+    </tbody>
+  </table>
+
+  <?php // restrict adding new pages to admins only!!! ?>
+  <?php if (in_array('admin', $this->user->getTueFindRights())): ?>
+    <a href="<?=$this->url('adminfrontend-addcmspage')?>">Admin only: <?=$this->transEsc('Add New CMS page')?></a>
+  <?php endif;?>
+
+  <?php if ($this->cmsSync->isEnabled()): ?>
+  <div class="cms-sync-container" style="margin: 20px 0;">
+    <h3>CMS Repository Synchronization</h3>
+    <button id="git-pull-btn" class="btn btn-primary">Git pull</button>
+    <button id="git-push-btn" class="btn btn-danger">Git push</button>
+
+    <span id="sync-spinner" style="display: none; margin-left: 10px;">
+        <i class="fa fa-spinner fa-spin"></i> Processing...
+    </span>
+
+    <div id="sync-log-console" style="margin-top: 15px; padding: 10px; background: #222; color: #fff; font-family: monospace; border-radius: 4px; min-height: 100px; max-height: 300px; overflow-y: auto;">
+        [Console] Ready. Press "Start Full Sync".
+    </div>
+</div>
+  <?php endif; ?>
+</div>
+
+<div class="<?=$this->layoutClass('sidebar')?>" id="myresearch-sidebar" role="navigation" aria-label="<?=$this->transEsc('account_menu_label')?>">
+  <?=$this->accountMenu()->render('cmspages')?>
+</div>
+

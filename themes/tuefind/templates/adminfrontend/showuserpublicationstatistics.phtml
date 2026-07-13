@@ -15,14 +15,14 @@ $this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') 
       <thead>
         <tr>
             <th><?=$this->transEsc('Year')?></th>
-            <th><?=$this->transEsc('Publication Count')?></th>
+            <th><?=$this->transEsc('title_count')?></th>
         </tr>
       </thead>
       <tbody>
         <?php foreach ($this->publications as $one): ?>
           <tr>
             <td><?=$one['year']?></td>
-            <td><?=$one['publication_count']?></td>
+            <td><?=$one['count']?></td>
           </tr>
         <?php endforeach; ?>
       </tbody>

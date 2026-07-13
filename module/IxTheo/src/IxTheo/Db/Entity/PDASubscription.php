@@ -1,0 +1,106 @@
+<?php
+
+namespace IxTheo\Db\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+#[ORM\Entity]
+#[ORM\Table(name: '`ixtheo_pda_subscriptions`')]
+class PDASubscription implements PDASubscriptionEntityInterface
+{
+    // Careful!! This needs to be changed to an auto incemrent id, right now it references the user table!
+    #[ORM\Column(name: 'id', type: 'integer', nullable: false)]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
+    protected int $id;
+
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: UserEntityInterface::class)]
+    protected UserEntityInterface $user;
+
+    #[ORM\Column(name: 'book_title', type: 'string', nullable: false, options: ['lengths' => [256]])]
+    protected string $bookTitle;
+
+    #[ORM\Column(name: 'book_author', type: 'string', nullable: false, options: ['lengths' => [256]])]
+    protected string $bookAuthor;
+
+    #[ORM\Column(name: 'book_year', type: 'string', nullable: false, options: ['lengths' => [32]])]
+    protected string $bookYear;
+
+    #[ORM\Column(name: 'book_ppn', type: 'string', nullable: false, options: ['lengths' => [10]])]
+    protected string $bookPpn;
+
+    #[ORM\Column(name: 'book_isbn', type: 'string', nullable: false, options: ['lengths' => [13]])]
+    protected string $bookIsbn;
+
+    public function getId(): ?int
+    {
+        return $this->id ?? null;
+    }
+
+    public function getUser(): UserEntityInterface
+    {
+        return $this->user;
+    }
+
+    public function setUser(UserEntityInterface $user): static
+    {
+        $this->user = $user;
+        return $this;
+    }
+
+    public function getBookTitle(): string
+    {
+        return $this->bookTitle;
+    }
+
+    public function setBookTitle(string $title): static
+    {
+        $this->bookTitle = $title;
+        return $this;
+    }
+
+    public function getBookAuthor(): string
+    {
+        return $this->bookAuthor;
+    }
+
+    public function setBookAuthor(string $author): static
+    {
+        $this->bookAuthor = $author;
+        return $this;
+    }
+
+    public function getBookYear(): string
+    {
+        return $this->bookYear;
+    }
+
+    public function setBookYear(string $year): static
+    {
+        $this->bookYear = $year;
+        return $this;
+    }
+
+    public function getBookPpn(): string
+    {
+        return $this->bookPpn;
+    }
+
+    public function setBookPpn(string $ppn): static
+    {
+        $this->bookPpn = $ppn;
+        return $this;
+    }
+
+    public function getBookIsbn(): string
+    {
+        return $this->bookIsbn;
+    }
+
+    public function setBookIsbn(string $isbn): static
+    {
+        $this->bookIsbn = $isbn;
+        return $this;
+    }
+}

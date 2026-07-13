@@ -2,14 +2,17 @@
 
 namespace TueFind\Controller;
 
+use function count;
+use function in_array;
+
 class MyResearchController extends \VuFind\Controller\MyResearchController
 {
-    protected function getUserAuthoritiesAndRecords($user, $onlyGranted=false, $exceptionIfEmpty=false): array
+    protected function getUserAuthoritiesAndRecords($user, $onlyGranted = false, $exceptionIfEmpty = false): array
     {
-        $table = $this->getTable('user_authority');
+        $table = $this->getDbService(\TueFind\Db\Service\UserAuthorityServiceInterface::class);
 
         $accessState = $onlyGranted ? 'granted' : null;
-        $userAuthorities = $table->getByUserId($user->id, $accessState);
+        $userAuthorities = $table->getByUser($user, $accessState);
 
         if ($exceptionIfEmpty && count($userAuthorities) == 0) {
             throw new \Exception('No authority linked to this user!');
@@ -17,8 +20,8 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
 
         $authorityRecords = [];
         foreach ($userAuthorities as $userAuthority) {
-            $authorityRecords[$userAuthority['authority_id']] = $this->getRecordLoader()
-                ->load($userAuthority['authority_id'], 'SolrAuth');
+            $authorityRecords[$userAuthority->getAuthorityControlNumber()] = $this->getRecordLoader()
+                ->load($userAuthority->getAuthorityControlNumber(), 'SolrAuth');
         }
 
         return ['userAuthorities' => $userAuthorities, 'authorityRecords' => $authorityRecords];
@@ -32,10 +35,10 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
     protected function getProfileParams()
     {
         return [
-            'firstname' => '',
-            'lastname' => '',
-            'tuefind_institution' => '',
-            'tuefind_country' => ''
+            'firstname' => ['default' => '', 'getter' => 'getFirstname', 'setter' => 'setFirstname'],
+            'lastname' => ['default' => '', 'getter' => 'getLastname', 'setter' => 'setLastname'],
+            'tuefind_institution' => ['default' => '', 'getter' => 'getInstitution', 'setter' => 'setInstitution'],
+            'tuefind_country' => ['default' => '', 'getter' => 'getCountry', 'setter' => 'setCountry'],
         ];
     }
 
@@ -55,23 +58,26 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
         }
 
         $profileParams = $this->getProfileParams();
-        if ($this->getRequest()->getPost("submit")) {
+        if ($this->getRequest()->getPost('submit')) {
             // email may no longer be updated here, the separate action (+button) should be used
             // so that the verify_email functionality actually has an effect.
             $request = $this->getRequest();
 
-            foreach ($profileParams as $param => $default) {
-                $user->$param = $request->getPost()->get($param, $default);
+            foreach ($profileParams as $param => $paramSettings) {
+                $user->{$paramSettings['setter']}($request->getPost()->get($param, $paramSettings['default']));
             }
-            $user->save();
+
+            $service = $this->getDbService(\TueFind\Db\Service\UserServiceInterface::class);
+            $service->persistEntity($user);
+
             $this->getAuthManager()->updateSession($user);
         }
 
         $view = parent::profileAction();
         $post = $this->getRequest()->getPost();
-        foreach ($profileParams as $param => $default) {
+        foreach ($profileParams as $param => $paramSettings) {
             if (!$post->$param) {
-                $post->$param = $user->$param;
+                $post->$param = $user->{$paramSettings['getter']}();
             }
         }
         $view->request = $post;
@@ -93,22 +99,22 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
         $dspaceServer = $config->Publication->dspace_url_base;
         $dspaceVersion = $config->Publication->dspace_version;
 
-        $authorityUsers = $this->getTable('user_authority')->getByUserId($user->id);
+        $authorityUsers = $this->getDbService(\TueFind\Db\Service\UserAuthorityServiceInterface::class)->getByUser($user);
         $authorityUsersArray = [];
-        foreach($authorityUsers as $authorityUser) {
-            $authorityUserLoader = $this->serviceLocator->get(\VuFind\Record\Loader::class)->load($authorityUser->authority_id, 'SolrAuth');
+        foreach ($authorityUsers as $authorityUser) {
+            $authorityUserLoader = $this->serviceLocator->get(\VuFind\Record\Loader::class)->load($authorityUser->getAuthorityControlNumber(), 'SolrAuth');
             $authorityUsersArray[] = [
-                'id'=>$authorityUser->authority_id,
-                'access_state'=>$authorityUser->access_state,
-                'title'=>$authorityUserLoader->getTitle()
+                'id' => $authorityUser->getAuthorityControlNumber(),
+                'access_state' => $authorityUser->getAccessState(),
+                'title' => $authorityUserLoader->getTitle(),
             ];
         }
         $publications = [];
-        $dbPublications = $this->getTable('publication')->getByUserId($user->id);
+        $dbPublications = $this->getDbService(\TueFind\Db\Service\PublicationServiceInterface::class)->getByUser($user);
         foreach ($dbPublications as $dbPublication) {
-            $existingRecord = $this->getRecordLoader()->load($dbPublication->control_number, 'Solr', /*tolerate_missing=*/true);
-            $dbPublication['title'] = $existingRecord->getTitle();
-            $publications[] = $dbPublication;
+            $existingRecord = $this->getRecordLoader()->load($dbPublication->getControlNumber(), 'Solr', /*tolerate_missing=*/true);
+            $publication = ['db' => $dbPublication, 'record' => $existingRecord];
+            $publications[] = $publication;
         }
 
         $viewParams = $this->getUserAuthoritiesAndRecords($user, /* $onlyGranted = */ true);
@@ -119,7 +125,8 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
         return $this->createViewModel($viewParams);
     }
 
-    public function selfarchivingAction() {
+    public function selfarchivingAction()
+    {
 
         $user = $this->getUser();
         if ($user == false) {
@@ -128,9 +135,8 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
 
         return $this->forward()->dispatch('Content', [
             'action' => 'content',
-            'page' => 'SelfArchivingGuide'
+            'page' => 'SelfArchivingGuide',
         ]);
-
     }
 
     public function publishAction()
@@ -157,12 +163,11 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
         }
         $existingRecord = $this->getRecordLoader()->load($existingRecordId);
 
-        $dbPublications = $this->getTable('publication')->getByControlNumber($existingRecordId);
+        $dbPublications = $this->getDbService(\TueFind\Db\Service\PublicationServiceInterface::class)->getByControlNumber($existingRecordId);
         if (!empty($dbPublications->external_document_id)) {
+            $publicationURL = ($dspaceVersion == 6) ? $dspaceServer . '/xmlui/handle/' . $dbPublications->external_document_id : $dspaceServer . '/handle/' . $dbPublications->handle;
 
-            $publicationURL = ($dspaceVersion == 6) ? $dspaceServer."/xmlui/handle/".$dbPublications->external_document_id : $dspaceServer."/handle/".$item->handle;
-
-            $this->flashMessenger()->addMessage(['msg' => $this->translate('publication_already_exists').": <a href='".$publicationURL."' target='_blank'>".$this->translate('click_here_to_go_to_file')."</a>", 'html' => true], 'error');
+            $this->flashMessenger()->addMessage(['msg' => $this->translate('publication_already_exists') . ": <a href='" . $publicationURL . "' target='_blank'>" . $this->translate('click_here_to_go_to_file') . '</a>', 'html' => true], 'error');
             $uploadError = true;
             $showForm = false;
         }
@@ -191,8 +196,9 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
 
             if (!$uploadError) {
                 $tmpdir = sys_get_temp_dir() . '/' . uniqid('publication_');
-                if (!is_dir($tmpdir))
+                if (!is_dir($tmpdir)) {
                     mkdir($tmpdir);
+                }
                 $tmpfile = $tmpdir . '/' . $uploadedFile['name'];
 
                 if (is_file($tmpfile)) {
@@ -202,32 +208,35 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
                     throw new \Exception('Uploaded file could not be moved to tmp directory!');
                 }
 
-                if($dspaceVersion == 6) {
+                $dbPublicationService = $this->getDbService(\TueFind\Db\Service\PublicationServiceInterface::class);
+                $metadataVocabularyPluginManager = $this->serviceLocator->get(\VuFind\MetadataVocabulary\PluginManager::class);
+
+                if ($dspaceVersion == 6) {
                     $dspace = $this->serviceLocator->get(\TueFind\Service\DSpace6::class);
                     $dspace->login();
                     $collectionName = $config->Publication->collection_name;
                     $collection = $dspace->getCollectionByName($collectionName);
-                    $dspaceMetadata = $this->serviceLocator->get(\VuFind\MetadataVocabulary\PluginManager::class)->get('DSpace6')->getMappedData($existingRecord);
+                    $dspaceMetadata = $metadataVocabularyPluginManager->get('DSpace6')->getMappedData($existingRecord);
                     $item = $dspace->addItem($collection->uuid, $dspaceMetadata);
                     $bitstream = $dspace->addBitstream($item->uuid, basename($tmpfile), $tmpfile);
                     // Store information in database
-                    $dbPublications = $this->getTable('publication')->addPublication($user->id, $existingRecordId, $item->handle, $item->uuid, $termFileData['termDate']);
-                    $publicationURL = $dspaceServer."/xmlui/handle/".$item->handle;
-                }else{
+                    $dbPublication = $dbPublicationService->createPublication($user, $existingRecordId, $item->handle, $item->uuid, $termFileData['termDate']);
+                    $publicationURL = $dspaceServer . '/xmlui/handle/' . $item->handle;
+                } else {
                     $dspace = $this->serviceLocator->get(\TueFind\Service\DSpace7::class);
                     $dspace->login();
                     $configCollectionName = $config->Publication->collection_name;
                     $configCollectionName = 'UOJ 12'; //test collection name from DEMO
                     $collection = $dspace->getCollectionByName($configCollectionName);
-                    $dspaceMetadata = $this->serviceLocator->get(\VuFind\MetadataVocabulary\PluginManager::class)->get('DSpace7')->getMappedData($existingRecord);
-                    $item = $dspace->addWorkspaceItem($tmpfile,$collection->uuid);
+                    $dspaceMetadata = $metadataVocabularyPluginManager->get('DSpace7')->getMappedData($existingRecord);
+                    $item = $dspace->addWorkspaceItem($tmpfile, $collection->uuid);
                     //$workflowItem = $dspace->addWorkflowItem($item->id); // not work
-                    $updateData = $dspace->updateWorkspaceItem($item->id,$dspaceMetadata);
+                    $updateData = $dspace->updateWorkspaceItem($item->id, $dspaceMetadata);
                     // Store information in database
-                    $dbPublications = $this->getTable('publication')->addPublication($user->id, $existingRecordId, $item->id, $item->sections->upload->files[0]->uuid, $termFileData['termDate']);
-                    $publicationURL = $dspaceServer."/workspaceitems/".$item->id."/view";
+                    $dbPublication = $dbPublicationService->createPublication($user, $existingRecordId, $item->id, $item->sections->upload->files[0]->uuid, $termFileData['termDate']);
+                    $publicationURL = $dspaceServer . '/workspaceitems/' . $item->id . '/view';
                 }
-                $this->flashMessenger()->addMessage(['msg' => $this->translate('publication_successfully_created').": <a href='".$publicationURL."' target='_blank'>".$this->translate('click_here_to_go_to_file')."</a>", 'html' => true], 'success');
+                $this->flashMessenger()->addMessage(['msg' => $this->translate('publication_successfully_created') . ": <a href='" . $publicationURL . "' target='_blank'>" . $this->translate('click_here_to_go_to_file') . '</a>', 'html' => true], 'success');
                 $showForm = false;
             }
         }
@@ -238,7 +247,7 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
         $userAuthorities = [];
         foreach ($view->userAuthorities as $userAuthority) {
             $selected = false;
-            $authorityRecord = $view->authorityRecords[$userAuthority['authority_id']];
+            $authorityRecord = $view->authorityRecords[$userAuthority->getAuthorityControlNumber()];
             $GNDNumber = $authorityRecord->getGNDNumber();
             $authorityTitle = htmlspecialchars($authorityRecord->getTitle());
             foreach ($dublinCore['DC.creator'] as $creator) {
@@ -247,11 +256,11 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
                 }
             }
             $userAuthorities[] = [
-                'authority_id' => $userAuthority['authority_id'],
+                'authority_id' => $userAuthority->getAuthorityControlNumber(),
                 'authority_title' => $authorityTitle,
                 'authority_GNDNumber' => $GNDNumber,
-                'select_title' => $authorityTitle . ' (GND: ' .  $GNDNumber . ')',
-                'selected' => $selected
+                'select_title' => $authorityTitle . ' (GND: ' . $GNDNumber . ')',
+                'selected' => $selected,
             ];
         }
 
@@ -272,23 +281,27 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
             return $this->forceLogin();
         }
 
-        $dbTablePluginManager = $this->serviceLocator->get(\VuFind\Db\Table\PluginManager::class);
-        $rssSubscriptionsTable = $dbTablePluginManager->get('rss_subscription');
-        $rssFeedsTable = $dbTablePluginManager->get('rss_feed');
         $action = $this->getRequest()->getPost('action', '');
         $feedId = $this->getRequest()->getPost('id', '');
+
+        $userService = $this->getDbService(\TueFind\Db\Service\UserServiceInterface::class);
+        $rssSubscriptionsService = $this->getDbService(\TueFind\Db\Service\RssSubscriptionServiceInterface::class);
+        $rssFeedsService = $this->getDbService(\TueFind\Db\Service\RssFeedServiceInterface::class);
+        $feed = $rssFeedsService->getEntityById(\TueFind\Db\Entity\RssFeedEntityInterface::class, $feedId);
         if ($action == 'add') {
-            $rssSubscriptionsTable->addSubscription($user->id, $feedId);
+            $rssSubscriptionsService->addSubscription($user, $feed);
         } elseif ($action == 'remove') {
-            $rssSubscriptionsTable->removeSubscription($user->id, $feedId);
+            $rssSubscriptionsService->removeSubscription($user, $feed);
         } elseif ($action == 'subscribe_email') {
             $user->setRssFeedSendEmails(true);
+            $userService->persistEntity($user);
         } elseif ($action == 'unsubscribe_email') {
             $user->setRssFeedSendEmails(false);
+            $userService->persistEntity($user);
         }
 
-        return $this->createViewModel(['rssFeeds' => $rssFeedsTable->getFeedsSortedByName(),
-                                       'rssSubscriptions' => $rssSubscriptionsTable->getSubscriptionsForUserSortedByName($user->id),
+        return $this->createViewModel(['rssFeeds' => $rssFeedsService->getFeedsSortedByName(),
+                                       'rssSubscriptions' => $rssSubscriptionsService->getSubscriptionsForUserSortedByName($user->getId()),
                                        'user' => $user]);
     }
 
@@ -299,8 +312,7 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
             return $this->forceLogin();
         }
 
-        $rssTable = $this->serviceLocator->get(\VuFind\Db\Table\PluginManager::class)->get('rss_item');
-        $rssItems = $rssTable->getItemsForUserSortedByPubDate($user->id);
+        $rssItems = $this->getDbService(\TueFind\Db\Service\RssItemServiceInterface::class)->getItemsForUserSortedByPubDate($user->getId());
         return $this->createViewModel(['user' => $user,
                                        'rssItems' => $rssItems,
                                        'page' => $this->params()->fromQuery('page') ?? 1]);
@@ -316,9 +328,9 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
     public function rssFeedRawAction()
     {
         $userUuid = $this->params()->fromRoute('user_uuid');
-        $user = $this->serviceLocator->get(\VuFind\Db\Table\PluginManager::class)->get('user')->getByUuid($userUuid);
+        $user = $this->getDbService(\TueFind\Db\Service\UserServiceInterface::class)->getByUuid($userUuid);
         $instance = $this->serviceLocator->get('ViewHelperManager')->get('tuefind')->getTueFindInstance();
-        $cmd = '/usr/local/bin/rss_subset_aggregator --mode=rss_xml ' . escapeshellarg($user->id) . ' ' . escapeshellarg($instance);
+        $cmd = \TueFind\Utility::BIN_DIR . '/rss_subset_aggregator --mode=rss_xml ' . escapeshellarg($user->getId()) . ' ' . escapeshellarg($instance);
 
         // We need to explicitly pass through VUFIND_HOME, or database.conf cannot be found
         putenv('VUFIND_HOME=' . getenv('VUFIND_HOME'));
@@ -331,27 +343,25 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
         return $response;
     }
 
-    private function getLatestTermFile(): array
+    protected function getLatestTermFile(): array
     {
         $termsDir =  $_SERVER['CONTEXT_DOCUMENT_ROOT'] . '/publication_terms/';
         $files = scandir($termsDir);
         $latestTermData = [];
         foreach ($files as $file) {
             if (preg_match('/(\d{4})(\d{2})(\d{2})/', $file, $matches)) {
-                $formatedDate = $matches[1] . "-" . $matches[2] . "-" . $matches[3];
-                $timeStamp = strtotime($formatedDate);
+                $formattedDate = $matches[1] . '-' . $matches[2] . '-' . $matches[3];
                 $latestTermData[] = [
-                    "milliseconds"=>$timeStamp,
-                    "termDate"=>$formatedDate,
-                    "fileName"=>$file
+                    'termDate' => new \DateTime($formattedDate),
+                    'fileName' => $file,
                 ];
             }
         }
         if (empty($latestTermData)) {
             throw new \Exception('Latest term file not found in: ' . $termsDir);
         }
-        usort($latestTermData, function($a, $b){
-            return ($b['milliseconds'] - $a['milliseconds']);
+        usort($latestTermData, function ($a, $b) {
+            return $b['termDate']->getTimestamp() - $a['termDate']->getTimestamp();
         });
         return $latestTermData[0];
     }

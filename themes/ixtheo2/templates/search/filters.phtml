@@ -1,4 +1,6 @@
 <?php
+  $tuefind = $this->tuefind();
+  $routeParams = $tuefind->getRouteParams();
   if (!isset($this->params)) {
     // No current search, use last search in memory
     $params = $this->searchMemory()->getLastSearchParams($this->searchClassId);
@@ -34,15 +36,15 @@
         $removeLink = isset($urlQuery) && !$fromSearchMemory
             ? $urlQuery->removeFilter($filter['filter'])
             : $this->searchMemory()->getEditLink(
-              $this->searchClassId, 
-              'removeFilter', 
-              $filter['filter']
+                $this->searchClassId,
+                'removeFilter',
+                $filter['filter']
             );
           $desc = $this->translate($filter['desc']);
           $ariaLabel = $this->translate('Remove filter') . ' ' . $this->escapeHtmlAttr($desc);
         ?>
         <?=$desc?>
-        <?php if($removeLink): ?>
+        <?php if ($removeLink): ?>
           <a class="search-filter-remove" aria-label="<?=$ariaLabel?>" href="<?=$removeLink?>"><!--icon from css --></a>
         <?php endif; ?>
       </span>
@@ -56,7 +58,7 @@
         <div class="search-filter-dropdown dropdown">
           <?php $dropdown = true; ?>
           <?php $safeId = preg_replace('/[^a-zA-Z0-9]/', '', $field); ?>
-          <button id="dropdown-toggle-<?=$safeId?>" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+          <button id="dropdown-toggle-<?=$safeId?>" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown">
             <?=$this->transEsc('filter_toggle_entries', ['%%count%%' => count($data)])?>
           </button>
           <ul class="dropdown-menu" role="menu" aria-labelledby="dropdown-toggle-<?=$safeId?>">
@@ -122,35 +124,37 @@
         : $this->searchMemory()->getEditLink($this->searchClassId, 'removeAllFilters', 1);
     }
   ?>
-  <?php // Normal view ?>
-  <div class="active-filters hidden-xs">
-    <span class="sr-only"><?=$this->transEsc('page_reload_on_deselect_hint') ?></span>
-    <?php if ($resetLink && $options->shouldDisplayResetFilters()): ?>
-        <a class="reset-filters-btn" href="<?=$resetLink?>"><?=$this->transEsc('reset_filters_button')?></a>
-    <?php elseif ($advancedSearch): ?>
-      <p class="adv_search_filters"><?=$this->transEsc('adv_search_filters')?>:</p>
-      <?php endif; ?>
-    <div class="filters">
-      <span class="sr-only"><?=$this->transEsc('applied_filters') ?></span>
-      <?=$filters ?>
-    </div>
-    <div class="clearfix"></div>
-  </div>
-  <?php // Narrow view ?>
-  <div class="active-filters visible-xs">
-    <span class="sr-only"><?=$this->transEsc('page_reload_on_deselect_hint') ?></span>
-    <div class="filters-toggle-bar">
+  <?php if ($routeParams['controller'] == 'Search'): //show filters only on search page?>
+    <?php // Normal view ?>
+    <div class="active-filters active-filters--uncollapsible">
+      <span class="visually-hidden"><?=$this->transEsc('page_reload_on_deselect_hint') ?></span>
       <?php if ($resetLink && $options->shouldDisplayResetFilters()): ?>
         <a class="reset-filters-btn" href="<?=$resetLink?>"><?=$this->transEsc('reset_filters_button')?></a>
-<?php endif; ?>
-      <div class="filters-toggle collapsed" data-toggle="collapse" data-target="#active-filters-mobile">
-        <?=$this->transEsc('show_filters_html', ['%%count%%' => $filterCount])?>
+      <?php elseif ($advancedSearch): ?>
+        <p class="adv_search_filters"><?=$this->transEsc('adv_search_filters')?>:</p>
+      <?php endif; ?>
+      <div class="filters">
+        <span class="visually-hidden"><?=$this->transEsc('applied_filters') ?></span>
+        <?=$filters ?>
       </div>
       <div class="clearfix"></div>
     </div>
-    <div id="active-filters-mobile" class="filters filters-bar collapse">
-      <?=$filters ?>
+    <?php // Narrow view ?>
+    <div class="active-filters active-filters--collapsible">
+      <span class="visually-hidden"><?=$this->transEsc('page_reload_on_deselect_hint') ?></span>
+      <div class="filters-toggle-bar">
+        <?php if ($resetLink && $options->shouldDisplayResetFilters()): ?>
+          <a class="reset-filters-btn" href="<?=$resetLink?>"><?=$this->transEsc('reset_filters_button')?></a>
+        <?php endif; ?>
+        <div class="filters-toggle collapsed" data-bs-toggle="collapse" data-bs-target="#active-filters-mobile">
+          <?=$this->transEsc('show_filters_html', ['%%count%%' => $filterCount])?>
+        </div>
+        <div class="clearfix"></div>
+      </div>
+      <div id="active-filters-mobile" class="filters filters-bar collapse">
+        <?=$filters ?>
+      </div>
+      <div class="clearfix"></div>
     </div>
-    <div class="clearfix"></div>
-  </div>
+  <?php endif; ?>
 <?php endif; ?>

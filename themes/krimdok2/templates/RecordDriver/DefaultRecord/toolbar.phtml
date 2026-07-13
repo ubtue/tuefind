@@ -1,9 +1,3 @@
-<?php
-  $addThis = $this->addThis();
-  if (!empty($addThis)) {
-    $this->headScript()->appendFile('https://s7.addthis.com/js/250/addthis_widget.js?pub=' . urlencode($addThis));
-  }
-?>
 <nav class="record-nav">
   <ul class="action-toolbar" aria-label="<?=$this->transEscAttr('ajaxview_label_tools'); ?>">
     <?php if (count($this->driver->getCitationFormats()) > 0): ?>
@@ -38,7 +32,7 @@
     <?php $exportFormats = $this->export()->getFormatsForRecord($this->driver); ?>
     <?php if(count($exportFormats) > 0): ?>
       <li role="none" class="dropdown">
-        <a class="export-toggle toolbar-btn btn-type-export dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" href="<?=$this->recordLinker()->getActionUrl($this->driver, 'Export')?>" rel="nofollow" aria-expanded="false" aria-controls="export-options">
+        <a class="export-toggle toolbar-btn btn-type-export dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" href="<?=$this->recordLinker()->getActionUrl($this->driver, 'Export')?>" rel="nofollow" aria-expanded="false" aria-controls="export-options">
           <span class="icon icon--font fa fa-external-link" role="img" aria-hidden="true"></span>
           <?=$this->transEsc('Export Record') ?>
         </a>

@@ -1,0 +1,13 @@
+@use "../../tuefind/scss/compiled" as compiled;
+
+// glyphicons import is necessary because bootstrap3 no longer auto-includes it
+//@use "../../bootstrap3/scss/vendor/bootstrap/glyphicons";
+
+// vendor / social media buttons
+//@import "vendor/sharingbuttons.io/buttons.scss";
+//@import "vendor/sharingbuttons.io/overrides-tuefind.scss";
+
+// tuefind2-specific
+@forward "variables";
+@forward "overrides";
+@forward "overrides-media";

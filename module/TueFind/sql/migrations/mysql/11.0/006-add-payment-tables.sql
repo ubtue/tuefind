@@ -1,0 +1,1 @@
+../../../../../VuFind/sql/migrations/mysql/11.0/006-add-payment-tables.sql

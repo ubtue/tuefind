@@ -1,7 +1,7 @@
 <?php
     $this->headTitle($this->translate('Item Fulltext Search') . ': ' . $this->driver->getBreadcrumb())
 ?>
-<?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, 'TueFind.ItemFullTextSearch("'.$this->url('home').'", "'.$this->driver->getUniqueID().'", "' . implode(",", $this->driver->getFulltextTypes()) . '");')?>
+<?=$this->assetManager()->outputInlineScriptString('TueFind.ItemFullTextSearch("'.$this->url('home').'", "'.$this->driver->getUniqueID().'", "' . implode(",", $this->driver->getFulltextTypes()) . '");')?>
 <span>
   <select id="itemFTTextTypeScope" class="selectpicker">
 <?php $fulltext_types = $this->driver->getFulltextTypes();

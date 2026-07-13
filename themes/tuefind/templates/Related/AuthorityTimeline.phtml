@@ -18,7 +18,8 @@
   </div>
 </div>
 <?php
-$this->headScript()->appendFile("vendor/chart-JS.js");
+
+$this->assetManager()->appendScriptLink("vendor/chart-JS.js");
 
 $currentSystem = $this->tuefind()->getTueFindSubsystem();
 
@@ -158,5 +159,5 @@ $(function () {
 });
 EOD;
 ?>
-<?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $jsSnippet2, 'SET')?>
+<?=$this->assetManager()->outputInlineScriptString($jsSnippet2)?>
 <?php endif;?>

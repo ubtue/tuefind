@@ -1,7 +1,9 @@
 <?php
+
 namespace TueFind;
-use Laminas\ModuleManager\ModuleManager,
-    Laminas\Mvc\MvcEvent;
+
+use Laminas\ModuleManager\ModuleManager;
+use Laminas\Mvc\MvcEvent;
 
 class Module
 {
@@ -13,22 +15,6 @@ class Module
     public function getConfig()
     {
         return include __DIR__ . '/config/module.config.php';
-    }
-
-    /**
-     * Get autoloader configuration
-     *
-     * @return array
-     */
-    public function getAutoloaderConfig()
-    {
-        return [
-            'Laminas\Loader\StandardAutoloader' => [
-                'namespaces' => array(
-                    __NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__,
-                ),
-            ],
-        ];
     }
 
     /**
@@ -52,7 +38,7 @@ class Module
      *
      * @param ModuleManager $m Module manager
      *
-     * @return void
+     * @return                                        void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function init(ModuleManager $m)
@@ -64,7 +50,7 @@ class Module
      *
      * @param MvcEvent $e Event
      *
-     * @return void
+     * @return                                        void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function onBootstrap(MvcEvent $e)
@@ -72,10 +58,8 @@ class Module
         $bootstrapper = new Bootstrapper($e);
         $bootstrapper->bootstrap();
 
-        BotProtect::ProcessRequest($e);
-
         $eventManager = $e->getApplication()->getEventManager();
-        $eventManager->attach(MvcEvent::EVENT_FINISH, array($this, 'onFinish'), 1000);
+        $eventManager->attach(MvcEvent::EVENT_FINISH, [$this, 'onFinish'], 1000);
 
         // Set referrer policy for certain sub-pages, see Issue #3611 (OpenStreetMap)
         // This did NOT work in other locations
@@ -121,8 +105,7 @@ class Module
         });
     }
 
-
-    public function onFinish(MvcEvent $e) {
-        BotProtect::ProcessResponse($e);
+    public function onFinish(MvcEvent $e)
+    {
     }
 }

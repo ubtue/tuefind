@@ -1,0 +1,153 @@
+<?php
+$this->breadcrumbs()->set($this->translate('Admins'), $this->url('myresearch-home'))
+      ->add($this->translate('CMS Pages Docs'), active: true);
+?>
+
+<div class="<?=$this->layoutClass('mainbody')?>">
+  <div class="ajax-loader-container ajax-info d-none">
+    <div class="alert alert-success" role="alert">
+      <?=$this->translate('od_code_contentnotavail')?>
+    </div>
+  </div>
+  <h1><?=$this->transEsc('CMS Files')?></h1>
+  <?=$this->flashmessages()?>
+
+  <div class="container-md">
+    <div class="row gy-3 mb-3">
+      <div class="col-12">
+        <div class="input-group mb-3">
+          <input type="file" class="form-control form-control-lg fileUploadInput" placeholder="Add Image" aria-label="Add Image" aria-describedby="button-addon2">
+          <button class="btn btn-outline-primary uploadBtn" type="button" id="button-addon2"><?=$this->icon('upload')?></button>
+        </div>
+      </div>
+    </div>
+    <div class="row gy-3">
+        <table class="table dataTable">
+            <thead>
+                <tr>
+                    <th>File Name</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+  </div>
+</div>
+
+<div class="<?=$this->layoutClass('sidebar')?>" id="myresearch-sidebar" role="navigation" aria-label="<?=$this->transEsc('account_menu_label')?>">
+  <?=$this->accountMenu()->render('cmspagesdocs')?>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      
+      <div class="modal-header">
+        <h5 class="modal-title" id="confirmDeleteLabel">Confirm deletion</h5>
+        <i class="fas fa-times btn-close" type="button" data-bs-dismiss="modal"></i>
+      </div>
+
+      <div class="modal-body">
+        Are you sure you want to delete <span class="sureDeleteName text-danger"></span>?
+      </div>
+      <div class="file-path d-none"></div>
+      <div class="ajax-response d-none"></div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Cancel
+        </button>
+        <button type="button" class="btn btn-danger" id="confirmDeleteBtn">
+          Delete
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<?php
+    $script = <<<JS
+
+        TueFind.getCMSDocs();
+
+        $('.uploadBtn').on('click', function () {
+            let fileInput = $('.fileUploadInput')[0];
+            if (!fileInput.files.length) {
+                alert('Select file');
+                return;
+            }
+            let formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+            $.ajax({
+                url: '/AJAX/JSON?method=CmsDocs&action=uploadDocument', // VuFind endpoint
+                method: 'POST', // Use GET as per the original code, but consider changing to POST for file uploads
+                data: formData,
+                body: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    console.log(response);
+                    if (response.data.status === 'success') {
+                        $('.ajax-info').removeClass('d-none').find('.alert').text(response.data.message);
+                        setTimeout(() => {
+                            $('.ajax-info').addClass('d-none');
+                        }, 2000);
+                        $('.fileUploadInput').val(''); // Clear the file input
+                        $('.dataTable').DataTable().ajax.reload(); // Reload the table to show the new file
+                    } else {
+                        alert(response.data.message);
+                    }
+                },
+                error: function(xhr, ajaxOptions, thrownError) {
+                    if (window.console && window.console.log) {
+                    console.log("Status: " + xhr.status + ", Error: " + thrownError);
+                    }
+                }
+            });
+        });
+
+        $(document).on('click', '.delete-btn', function(thisEvent) {
+            let fileURL = $(this).attr('href');
+            let fileName = fileURL.split('/').pop();
+            $('#confirmDeleteModal .sureDeleteName').text(fileName);
+            $('#confirmDeleteModal .file-path').html(fileURL);
+        });    
+
+        $('#confirmDeleteBtn').click(function() {
+            let THIS = $(this);
+            let parentModal = THIS.parents('.modal-content');
+            let filePATH = parentModal.find('.file-path').html();
+
+            //for now we just close the modal, but here we would send an AJAX request to delete the image and then refresh the page or remove the card from the DOM
+            $.ajax({
+                url: VuFind.path + '/AJAX/JSON',
+                method: 'GET',
+                data: {
+                    method: 'CmsDocs',
+                    action: 'deleteFile',
+                    failPATH: filePATH
+                },
+                dataType: 'json',
+                success: function displaySubscriptionItems(items) {
+
+                    $('#confirmDeleteModal').modal('hide');
+
+                    $('.ajax-info').removeClass('d-none').find('.alert').text(items.data.data);
+                        setTimeout(() => {
+                            $('.ajax-info').addClass('d-none');
+                    }, 2000);
+
+                    $('.dataTable').DataTable().ajax.reload();
+                },
+                error: function(xhr, ajaxOptions, thrownError) {
+                    if (window.console && window.console.log) {
+                        console.log("Status: " + xhr.status + ", Error: " + thrownError);
+                    }
+                }
+            });
+        });
+    JS;
+?>
+<?=$this->assetManager()->outputInlineScriptString($script) ?>

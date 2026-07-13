@@ -2,24 +2,28 @@
 
 namespace IxTheo\Controller;
 
-use VuFind\Search\RecommendListener,
-    VuFind\Exception\ListPermission as ListPermissionException;
+use VuFind\Exception\ListPermission as ListPermissionException;
+use VuFind\Search\RecommendListener;
 
+/**
+ * @method Plugin\PDASubscriptions PDASubscriptions() PDASubscriptions plugin
+ */
 class MyResearchController extends \TueFind\Controller\MyResearchController
 {
-    public function changeEmailAction() {
+    public function changeEmailAction()
+    {
         $view = parent::changeEmailAction();
 
         $user = $this->getUser();
 
         // Update the TAD access flag:
-        exec("/usr/local/bin/set_tad_access_flag.sh " . $user->id);
+        exec(\TueFind\Utility::BIN_DIR . '/set_tad_access_flag.sh ' . $user->getId());
 
         return $view;
     }
 
-
-    public function pdasubscriptionsAction() {
+    public function pdasubscriptionsAction()
+    {
 
         $user = $this->getUser();
         if ($user == false) {
@@ -29,31 +33,6 @@ class MyResearchController extends \TueFind\Controller\MyResearchController
         // Fail if lists are disabled:
         if (!$this->listsEnabled()) {
             throw new \Exception('Lists disabled');
-        }
-
-        // Check for "delete item" request; parameter may be in GET or POST depending
-        // on calling context.
-        $deleteId = $this->params()->fromPost(
-            'delete', $this->params()->fromQuery('delete')
-        );
-        if ($deleteId) {
-            $deleteSource = $this->params()->fromPost(
-                'source',
-                $this->params()->fromQuery('source', DEFAULT_SEARCH_BACKEND)
-            );
-            // If the user already confirmed the operation, perform the delete now;
-            // otherwise prompt for confirmation:
-            $confirm = $this->params()->fromPost(
-                'confirm', $this->params()->fromQuery('confirm')
-            );
-            if ($confirm) {
-                $success = $this->performDeletePDASubscription($deleteId, $deleteSource);
-                if ($success !== true) {
-                    return $success;
-                }
-            } else {
-                return $this->confirmDeletePDASubscription($deleteId, $deleteSource);
-            }
         }
 
         // If we got this far, we just need to display the subscriptions:
@@ -88,7 +67,8 @@ class MyResearchController extends \TueFind\Controller\MyResearchController
         }
     }
 
-    public function subscriptionsAction() {
+    public function subscriptionsAction()
+    {
 
         $user = $this->getUser();
         if ($user == false) {
@@ -98,31 +78,6 @@ class MyResearchController extends \TueFind\Controller\MyResearchController
         // Fail if lists are disabled:
         if (!$this->listsEnabled()) {
             throw new \Exception('Lists disabled');
-        }
-
-        // Check for "delete item" request; parameter may be in GET or POST depending
-        // on calling context.
-        $deleteId = $this->params()->fromPost(
-            'delete', $this->params()->fromQuery('delete')
-        );
-        if ($deleteId) {
-            $deleteSource = $this->params()->fromPost(
-                'source',
-                $this->params()->fromQuery('source', DEFAULT_SEARCH_BACKEND)
-            );
-            // If the user already confirmed the operation, perform the delete now;
-            // otherwise prompt for confirmation:
-            $confirm = $this->params()->fromPost(
-                'confirm', $this->params()->fromQuery('confirm')
-            );
-            if ($confirm) {
-                $success = $this->performDeleteSubscription($deleteId, $deleteSource);
-                if ($success !== true) {
-                    return $success;
-                }
-            } else {
-                return $this->confirmDeleteSubscription($deleteId, $deleteSource);
-            }
         }
 
         // If we got this far, we just need to display the subscriptions:
@@ -157,7 +112,8 @@ class MyResearchController extends \TueFind\Controller\MyResearchController
         }
     }
 
-    public function performDeleteSubscription($id, $deleteSource) {
+    public function performDeleteSubscription($id, $deleteSource)
+    {
         // Force login:
         $user = $this->getUser();
         if (!$user) {
@@ -169,12 +125,13 @@ class MyResearchController extends \TueFind\Controller\MyResearchController
             throw new \Exception('Cannot delete empty ID!');
         }
 
-        $table = $this->getTable('Subscription');
-        $table->unsubscribe($user->id, $id);
+        $service = $this->getDbService(\IxTheo\Db\Service\SubscriptionServiceInterface::class);
+        $service->unsubscribe($user, $id);
         return true;
     }
 
-    public function performDeletePDASubscription($id, $deleteSource) {
+    public function performDeletePDASubscription($id, $deleteSource)
+    {
         // Force login:
         $user = $this->getUser();
         if (!$user) {
@@ -186,8 +143,8 @@ class MyResearchController extends \TueFind\Controller\MyResearchController
             throw new \Exception('Cannot delete empty ID!');
         }
 
-        $table = $this->getTable('PDASubscription');
-        $table->unsubscribe($user->id, $id);
+        $service = $this->getDbService(\IxTheo\Db\Service\PDASubscriptionServiceInterface::class);
+        $service->unsubscribe($user, $id);
         $notifier = $this->PDASubscriptions();
         $notifier->sendPDAUnsubscribeEmail($user, $id);
         $notifier->sendPDAUserUnsubscribeEmail($user, $id);
@@ -197,8 +154,8 @@ class MyResearchController extends \TueFind\Controller\MyResearchController
     protected function getProfileParams()
     {
         $params = [
-            'ixtheo_title' => '',
-            'ixtheo_appellation' => ''
+            'ixtheo_title' => ['default' => '', 'getter' => 'getTitle', 'setter' => 'setTitle'],
+            'ixtheo_appellation' => ['default' => '', 'getter' => 'getAppellation', 'setter' => 'setAppellation'],
         ];
         return array_merge(parent::getProfileParams(), $params);
     }
@@ -219,9 +176,9 @@ class MyResearchController extends \TueFind\Controller\MyResearchController
      *
      * @return mixed
      */
-
-    protected function isMyResearchTarget($target) {
-        $targetBase = substr($target, 0, strrpos( $target, '/'));
+    protected function isMyResearchTarget($target)
+    {
+        $targetBase = substr($target, 0, strrpos($target, '/'));
         $myResearchHome = $this->getServerUrl('myresearch-home');
         $myResearchBase = substr($myResearchHome, 0, strrpos($myResearchHome, '/'));
         return $targetBase == $myResearchBase;
@@ -232,7 +189,8 @@ class MyResearchController extends \TueFind\Controller\MyResearchController
      *
      * @return mixed
      */
-    public function logoutAction() {
+    public function logoutAction()
+    {
         $config = $this->getConfig();
         if (isset($config->Site->logOutRoute)) {
             $logoutTarget = $this->getServerUrl($config->Site->logOutRoute);
@@ -247,7 +205,9 @@ class MyResearchController extends \TueFind\Controller\MyResearchController
             // logging out and getting logged back in when using environment-based
             // authentication methods like Shibboleth.
             $logoutTarget = preg_replace(
-                '/([?&])auth_method=[^&]*&?/', '$1', $logoutTarget
+                '/([?&])auth_method=[^&]*&?/',
+                '$1',
+                $logoutTarget
             );
             $logoutTarget = rtrim($logoutTarget, '?');
 

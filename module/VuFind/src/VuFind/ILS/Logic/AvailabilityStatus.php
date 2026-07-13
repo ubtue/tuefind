@@ -17,8 +17,8 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * along with this program; if not, see
+ * <https://www.gnu.org/licenses/>.
  *
  * @category VuFind
  * @package  ILS_Logic
@@ -190,9 +190,9 @@ class AvailabilityStatus implements AvailabilityStatusInterface
     {
         switch ($this->availability) {
             case AvailabilityStatusInterface::STATUS_UNAVAILABLE:
-                return 'false';
+                return 'unavailable';
             case AvailabilityStatusInterface::STATUS_AVAILABLE:
-                return 'true';
+                return 'available';
             case AvailabilityStatusInterface::STATUS_UNKNOWN:
                 return 'unknown';
             default:

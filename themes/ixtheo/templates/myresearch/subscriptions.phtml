@@ -11,7 +11,7 @@ $recordTotal = isset($this->results) ? $this->results->getResultTotal() : 0;
 
 // Convenience variable:
 $account = $this->auth()->getManager();
-$user = $this->auth()->isLoggedIn();
+$user = $this->auth()->getUserObject();
 ?>
 
 <div class="<?=$this->layoutClass('mainbody')?>">
@@ -31,7 +31,7 @@ $user = $this->auth()->isLoggedIn();
                 <?=$this->record($current)->getSubscriptionListEntry($list, $user)?>
             <?php endforeach; ?>
         </form>
-        <?=$this->paginationControl($this->results->getPaginator(), 'Sliding', 'search/pagination.phtml', array('results' => $this->results))?>
+        <?=$this->paginationControl($this->results->getPaginator(), 'Sliding', 'Helpers/pagination.phtml', array('results' => $this->results))?>
     <?php else: ?>
         <p><?=$this->transEsc('You do not have any alerts yet')?></p>
     <?php endif; ?>

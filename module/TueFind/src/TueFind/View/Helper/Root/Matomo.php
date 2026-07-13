@@ -17,7 +17,7 @@ class Matomo extends \VuFind\View\Helper\Root\Matomo {
      * @param \VuFind\Auth\Manager                 $auth    VuFind Auth Manager
      */
     public function __construct(
-        \Laminas\Config\Config $config,
+        \VuFind\Config\Config $config,
         \Laminas\Router\Http\TreeRouteStack $router,
         \Laminas\Http\PhpEnvironment\Request $request,
         \VuFind\Auth\Manager $auth

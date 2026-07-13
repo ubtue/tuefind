@@ -2,8 +2,8 @@
 <?php if(!empty($responseTopicsDataAndSettings[0])): ?>
   <?php
 
-    $this->headLink()->appendStylesheet('vendor/jqcloud.css');
-    $this->headScript()->appendFile("vendor/jqcloud-2.0.3.min.js");
+    $this->assetManager()->appendStyleLink("vendor/jqcloud.css");
+    $this->assetManager()->appendScriptLink("vendor/jqcloud-2.0.3.min.js");
 
     $responseTopicsData = $responseTopicsDataAndSettings[0];
     $responseTopicsSettings = $responseTopicsDataAndSettings[1];
@@ -47,16 +47,16 @@
     });
 EOD;
   ?>
-  <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $jsSnippetTags, 'SET')?>
+  <?=$this->assetManager()->outputInlineScriptString($jsSnippetTags)?>
 
   <div class="col-md-12 tf-cloud-block">
     <h4><?=$this->transEsc('Suggested Topics')?></h4>
     <div>
       <!-- Nav tabs -->
       <ul class="nav nav-tabs" role="tablist">
-        <li role="presentation" class="active"><a href="#authorityCloudFirst" aria-controls="home" role="tab" data-toggle="tab">Cloud</a></li>
-        <li role="presentation"><a href="#authorityCloudSecond" aria-controls="profile" role="tab" data-toggle="tab"><?=$this->transEsc('By Alphabetical')?></a></li>
-        <li role="presentation"><a href="#authorityCloudThird" aria-controls="messages" role="tab" data-toggle="tab"><?=$this->transEsc('By Popularity')?></a></li>
+        <li role="presentation" class="nav-item"><a class="nav-link active" href="#authorityCloudFirst" aria-controls="home" role="tab" data-bs-toggle="tab">Cloud</a></li>
+        <li role="presentation" class="nav-item"><a class="nav-link" href="#authorityCloudSecond" aria-controls="profile" role="tab" data-bs-toggle="tab"><?=$this->transEsc('By Alphabetical')?></a></li>
+        <li role="presentation" class="nav-item"><a class="nav-link" href="#authorityCloudThird" aria-controls="messages" role="tab" data-bs-toggle="tab"><?=$this->transEsc('By Popularity')?></a></li>
       </ul>
       <!-- Tab panes -->
       <div class="tab-content tf-p-0">

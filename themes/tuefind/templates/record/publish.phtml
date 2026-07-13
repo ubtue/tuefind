@@ -8,7 +8,7 @@ $(function () {
 });
 EOD;
 ?>
-<?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $jsSnippet, 'SET')?>
+<?=$this->assetManager()->outputInlineScriptString($jsSnippet)?>
 
 <?php if (!$this->authority()->userHasRightsOnRecord($this->user, $this->driver)): ?>
   <p>You do not have access rights on this record!</p>

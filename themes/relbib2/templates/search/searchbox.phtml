@@ -20,7 +20,7 @@
       $params = null;
     }
 
-    $isNewItemActiveClass = $tuefind->isNewItem($this->searchClassId) ? 'isNewItemActiveClass': '';
+    $isNewItemActiveClass = $tuefind->isNewItem($this->searchClassId) ? 'isNewItemActiveClass' : '';
 
     // Load search actions and settings (if any):
     $handlers = $this->searchbox()->getHandlers(
@@ -46,15 +46,16 @@
 <?php $tabConfig = $this->searchTabs()->getTabConfig($this->searchClassId, $this->lookfor, $this->searchIndex, $this->searchType, $hiddenFilters); ?>
 <?php $resetNewItemsURL = (isset($tabConfig['tabs'][0])) ? $tabConfig['tabs'][0]['url'] : ''; ?>
 
-<div class="row tf-row-home">
+<div class="tf-row-home">
     <!--  Begin section searchbar -->
     <section class="section-home">
         <div class="panel-home">
 
-            <?php $routeParams = $tuefind->getRouteParams(); if($routeParams['controller'] == "Search" && $routeParams['action'] == "Home") { ?>
-                <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, 'TueFind2.ChangeSearchboxHeightRelbib();', 'SET')?>
+            <?php $routeParams = $tuefind->getRouteParams();
+            if ($routeParams['controller'] == 'Search' && $routeParams['action'] == 'Home') { ?>
+                <?=$this->assetManager()->outputInlineScriptString('TueFind2.ChangeSearchboxHeightRelbib();')?>
             <?php } else { ?>
-                <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, 'TueFind2.ChangeSearchboxHeight();', 'SET')?>
+                <?=$this->assetManager()->outputInlineScriptString('TueFind2.ChangeSearchboxHeight();')?>
             <?php } ?>
 
             <div class="searchbox col-12 mx-auto">
@@ -62,7 +63,7 @@
                 <?=$this->render('search/searchbox/title');?>
 
                 <!-- Begin warnings -->
-                <?php if ($this->ils()->getOfflineMode() == "ils-offline"): ?>
+                <?php if ($this->ils()->getOfflineMode() == 'ils-offline'): ?>
                     <div class="alert alert-warning">
                         <h2><?= $this->transEsc('ils_offline_title') ?></h2>
 
@@ -80,11 +81,11 @@
                         <div class="searchForm navbar-form navbar-left flip">
                             <?php $tabs = $this->context($this)->renderInContext('search/searchTabs', ['searchTabs' => $tabConfig['tabs']]); ?>
                             <?php if (!empty($tabs)): ?><?=$tabs ?><div class="tab-content clearfix"><?php endif; ?>
-                              <p class="adv_search_terms"><?=$this->transEsc("Your search terms")?>: "<strong><?=$this->escapeHtml($this->lookfor)?></strong>"</p>
+                              <p class="adv_search_terms"><?=$this->transEsc('Your search terms')?>: "<strong><?=$this->escapeHtml($this->lookfor)?></strong>"</p>
                                 <p class="adv_search_links">
-                                    <a href="<?=$this->url($advSearch)?>?edit=<?=$this->escapeHtmlAttr($this->searchId)?>"><?=$this->transEsc("Edit this Advanced Search")?></a> |
-                                    <a href="<?=$this->url($advSearch, [], ['query' => $hiddenFilters])?>"><?=$this->transEsc("Start a new Advanced Search")?></a> |
-                                    <a href="<?=$this->url($searchHome, [], ['query' => $hiddenFilters])?>"><?=$this->transEsc("Start a new Basic Search")?></a>
+                                    <a href="<?=$this->url($advSearch)?>?edit=<?=$this->escapeHtmlAttr($this->searchId)?>"><?=$this->transEsc('Edit this Advanced Search')?></a> |
+                                    <a href="<?=$this->url($advSearch, [], ['query' => $hiddenFilters])?>"><?=$this->transEsc('Start a new Advanced Search')?></a> |
+                                    <a href="<?=$this->url($searchHome, [], ['query' => $hiddenFilters])?>"><?=$this->transEsc('Start a new Basic Search')?></a>
                                 </p>
                             <?=
                               $this->context($this)->renderInContext(
@@ -97,30 +98,30 @@
                                     'searchClassId' => $this->searchClassId,
                                     'searchType' => $this->searchType,
                                   ]
-                                );
+                              );
                             ?>
                             <?php if (!empty($tabs)): ?></div><?php endif; ?>
                         </div>
                     <?php else: ?>
-                        <form id="searchForm" class="searchForm tuefind-event-searchForm-on-submit <?=$tuefind->getTueFindSubsystem()."-searchForm";?> <?=$isNewItemActiveClass?>" method="get" action="<?=$this->url($basicSearch)?>" name="searchForm" autocomplete="off">
+                        <form id="searchForm" class="searchForm tuefind-event-searchForm-on-submit <?=$tuefind->getTueFindSubsystem() . '-searchForm';?> <?=$isNewItemActiveClass?>" method="get" action="<?=$this->url($basicSearch)?>" name="searchForm" autocomplete="off">
                             <?=$this->context($this)->renderInContext('search/searchTabs', ['searchTabs' => $tabConfig['tabs']]); ?>
                             <?php $placeholder = $this->searchbox()->getPlaceholderText($tabConfig['selected']['id'] ?? null); ?>
-                            <?php if(!empty($isNewItemActiveClass)) { $placeholder = 'Search in New items'; } ?>
+                            <?php if (!empty($isNewItemActiveClass)) {
+                            $placeholder = 'Search in New items';
+                            } ?>
 
                             <div class="form-group row">
                                 <!-- Begin search input field -->
                                 <div class="col-xs-12 col-sm-7 col-lg-8">
-                                    <div class="input-group searchbar">
+                                    <div class="input-group searchbar flex-nowrap w-100">
                                         <input id="searchForm_lookfor"
                                                class="form-control form-control-lg searchForm_lookfor form-control search-query<?php if ($this->searchbox()->autocompleteEnabled($this->searchClassId)): ?> autocomplete searcher:<?= $this->escapeHtmlAttr($this->searchClassId) ?><?php endif ?>"
                                                type="text" name="lookfor"
                                                value="<?= $this->escapeHtmlAttr($this->lookfor) ?>"
-                                               <?php if ($placeholder): ?> placeholder="<?=$this->transEsc($placeholder) ?>"<?php endif ?>/>
+                                               <?php if ($placeholder): ?> placeholder="<?=$this->transEsc($placeholder) ?>"<?php endif ?> aria-describedby="basic-addon2"/>
                                         <?php $subSystem = $tuefind->getTueFindSubsystem();?>
                                         <span class="tf-clear-search-input-span <?=$subSystem;?>-form" data-x-position="-5"><svg focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg></span>
-                                        <span class="input-group-addon">
-                                            <i class="fa fa-search"></i>
-                                        </span>
+                                        <span class="input-group-text" id="basic-addon2"><i class="fa fa-search"></i></span>
                                     </div>
                                 </div>
                                 <!-- End search input field -->
@@ -128,7 +129,7 @@
                                 <!-- Begin search select -->
                                 <div class="col-xs-12 col-sm-3 col-lg-2 searchForm_select">
                                     <?php if ($handlerCount > 1): ?>
-                                        <select id="searchForm_type" class="searchForm_type form-control" name="type" data-native-menu="false" aria-label="<?=$this->transEsc("Search type")?>">
+                                        <select id="searchForm_type" class="searchForm_type form-control" name="type" data-native-menu="false" aria-label="<?=$this->transEsc('Search type')?>">
                                             <?php $currentGroup = $insideGroup = false; ?>
                                             <?php foreach ($handlers as $handler): ?>
                                                 <?php
@@ -157,8 +158,8 @@
                                 </div>
 
                                 <!-- Begin search button -->
-                                <div class="col-xs-12 col-sm-2">
-                                    <button type="submit" class="btn btn-primary search-button"><i class="fa fa-search" aria-hidden="true"></i> <?= $this->transEsc("Find") ?></button>
+                                <div class="col-xs-12 col-sm-2 col-lg-auto col-search-button">
+                                    <button type="submit" class="btn btn-primary search-button"><i class="fa fa-search" aria-hidden="true"></i> <?= $this->transEsc('Find') ?></button>
                                 </div>
                             </div>
 
@@ -167,13 +168,14 @@
                                   $advSearchQuery = $results ? ['edit' => $results->getSearchId()] : $hiddenFilters;
                                   $advSearchLink = $this->url($advSearch, [], ['query' => $advSearchQuery]);
                                 ?>
-                                <?=$this->context($this)->renderInContext('search/searchbox/pills.phtml', ['advSearchLink' => $advSearchLink, 'isNewItemActiveClass' => $isNewItemActiveClass, 'resetNewItemsURL' => $resetNewItemsURL] )?>
+                                <?=$this->context($this)->renderInContext('search/searchbox/pills.phtml', ['advSearchLink' => $advSearchLink, 'isNewItemActiveClass' => $isNewItemActiveClass, 'resetNewItemsURL' => $resetNewItemsURL])?>
                             <?php endif; ?>
                             <?php if ($geoUrl = $this->geocoords()->getSearchUrl($options)) : ?>
                                 <a href="<?=$geoUrl ?>" class="btn btn-link"><?=$this->transEsc('Geographic Search')?></a>
                             <?php endif; ?>
 
-                            <?php $shards = $options->getShards(); if ($options->showShardCheckboxes() && !empty($shards)): ?>
+                            <?php $shards = $options->getShards();
+                            if ($options->showShardCheckboxes() && !empty($shards)): ?>
                                 <?php
                                   $selectedShards = $this->selectedShards ?? $options->getDefaultSelectedShards();
                                 ?>
@@ -212,8 +214,8 @@
                             }
                             ?>
                             <?=$this->context($this)->renderInContext(
-                              'search/filters.phtml',
-                              [
+                                'search/filters.phtml',
+                                [
                                 'params' => $params ?? null,
                                 'urlQuery' => isset($results) ? $results->getUrlQuery() : null,
                                 'filterList' => $showFilters ? $filterList : [],
@@ -223,7 +225,7 @@
                               ]
                             );?>
                         </form>
-                        <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, 'TueFind.MoveCursorToEnd();', 'SET')?>
+                        <?=$this->assetManager()->outputInlineScriptString('TueFind.MoveCursorToEnd();')?>
 
                         <?php //optional extension template, e.g. for RelBib ?>
                         <?=$this->render('search/searchbox/extensions');?>
@@ -234,7 +236,7 @@
             </div><!-- close container -->
             <!--
             <div class="scroll-down" id="scroll-down">
-                <a href="" id="scroll-down-button"><span></span><?php $this->transEsc("Scroll"); ?></a>
+                <a href="" id="scroll-down-button"><span></span><?php $this->transEsc('Scroll'); ?></a>
             </div>
             -->
         </div><!-- close panel-home -->

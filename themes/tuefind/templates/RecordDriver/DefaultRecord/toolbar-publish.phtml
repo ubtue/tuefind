@@ -1,4 +1,5 @@
-<?php if ($this->accountCapabilities()->getPublicationSetting() === 'enabled'):
+<?php if ($this->accountCapabilities()->getPublicationSetting() === 'enabled'): ?>
+<?php
   $routeParams = $this->tuefind()->getRouteParams();
   $recordId = $routeParams['id'];
   $config = $this->tuefind()->getConfig('tuefind');
@@ -15,13 +16,13 @@
   if (isset($publication)) {
     $showPublicationLink = true;
     $dspaceServer = $config->Publication->dspace_url_base;
-    if(!strpos($publication->external_document_id, '/')) {
-      $dspaceLink = $dspaceServer."/items/".$publication->external_document_guid;
-    }else{
-      $dspaceLink = $dspaceServer."/xmlui/handle/".$publication->external_document_id;
+    if (!strpos($publication->getExternalDocumentId(), '/')) {
+      $dspaceLink = $dspaceServer."/items/".$publication->getExternalDocumentGuid();
+    } else {
+      $dspaceLink = $dspaceServer."/xmlui/handle/".$publication->getExternalDocumentId();
     }
-  }?>
-
+  }
+?>
   <li>
     <?php if($showPublicationLink):?>
       <a class="toolbar-btn" target="_blank" href="<?=$dspaceLink;?>">

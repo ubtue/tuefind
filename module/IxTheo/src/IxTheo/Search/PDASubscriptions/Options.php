@@ -1,5 +1,8 @@
 <?php
+
 namespace IxTheo\Search\PDASubscriptions;
+
+use VuFind\Config\ConfigManagerInterface;
 
 class Options extends \VuFind\Search\Base\Options
 {
@@ -8,9 +11,9 @@ class Options extends \VuFind\Search\Base\Options
      *
      * @param \VuFind\Config\PluginManager $configLoader Config loader
      */
-    public function __construct(\VuFind\Config\PluginManager $configLoader)
+    public function __construct(ConfigManagerInterface $configManager)
     {
-        parent::__construct($configLoader);
+        parent::__construct($configManager);
 
         $this->defaultSort = 'book_title';
         $this->sortOptions = [

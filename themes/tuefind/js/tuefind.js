@@ -96,7 +96,7 @@ var TueFind = {
         return '<div id="snippets_' + doc_id + '" class="alert alert-danger">' +  VuFind.translate('Proxy Error') + '</div>';
     },
 
-    GetFulltextSnippets: function(url, doc_id, query, verbose = false, synonyms = "", fulltext_types = "") {
+    GetFulltextSnippetItem: function(url, doc_id, query, verbose = false, synonyms = "", fulltext_types = "") {
         var valid_synonym_terms = new RegExp('lang|all');
         synonyms = synonyms.match(valid_synonym_terms) ? synonyms : false;
         $.ajax({
@@ -116,7 +116,16 @@ var TueFind = {
                         });
                         return;
                     }
-                    var snippets = json['snippets'];
+                    var snippets = [];
+                    if (
+                            json &&
+                            json.snippets_collection &&
+                            json.snippets_collection[doc_id] &&
+                            json.snippets_collection[doc_id].snippets
+                        ) {
+                            snippets = json.snippets_collection[doc_id].snippets;
+                        } 
+                    
                     $("#snippet_place_holder_" + doc_id).each(function () {
                         if (snippets)
                             $(this).replaceWith('<div id="snippets_' + doc_id + '" class="snippet-div">' + snippets.join('<br/>') + '<br/></div>');
@@ -155,6 +164,117 @@ var TueFind = {
             error: function (xhr, ajaxOptions, thrownError) {
                 $("#snippet_place_holder").each(function () {
                     $(this).replaceWith('Invalid server response!!!!!');
+                })
+            }
+        });
+    },
+
+    GetFulltextSnippets: function (url, doc_id, query, verbose = false, synonyms = "", fulltext_types = "") {
+        
+        // Only run on Search2 results pages (fulltext)
+        if (!window.location.pathname.startsWith('/Search2/Results')) {
+            return;
+        }
+
+        let url_api = "";
+        let snippets_data = [];
+        if (doc_id === undefined) {
+            $('.snippet_place_holder').each(function () {
+                snippets_data.push({
+                    id: $(this).data('id'),
+                    home_url: $(this).data('home-url'),
+                    query: $(this).data('query'),
+                    synonym_type: $(this).data('synonym-type'),
+                    verbose: $(this).data('verbose'),
+                    fulltext_type_filters: $(this).data('fulltext-type-filters'),
+                    fulltext_types: $(this).data('fulltext-types')
+                });
+            });
+            url_api = VuFind.path + "/fulltextsnippetproxy/load?docs=" + JSON.stringify(snippets_data);
+
+        } else {
+            url_api = VuFind.path + "/fulltextsnippetproxy/load?search_query=" + query + "&doc_id=" + JSON.stringify(doc_id) + (verbose ? "&verbose=1" : "")
+                + (synonyms ? "&synonyms=" + synonyms : "")
+                + (fulltext_types ? "&fulltext_types=" + fulltext_types : "")
+
+            snippets_data.push({
+                id: doc_id,
+                home_url: url,
+                query: query,
+                synonym_type: $(this).data('synonym-type'),
+                verbose: verbose,
+                fulltext_types: fulltext_types
+            });
+        }
+
+        var valid_synonym_terms = new RegExp('lang|all');
+        $.ajax({
+            type: "GET",
+            url: url_api,
+            dataType: "json",
+            success: function (json) {
+                $(document).ready(function () {
+                    snippets_data.forEach(element => {
+                        let snippets = json['snippets_collection'][element['id']]['snippets'];
+                        const status = json['snippets_collection'][element['id']]['status'];
+                        const doc_id = element['id'];
+                        const verbose = element['verbose'];
+                        const fulltext_types = (element['fulltext_type_filters'] !== "") ? element['fulltext_type_filters'] : element['fulltext_types'];
+                        const query = element['query'];
+                        let valid_synonym_terms = new RegExp('lang|all');
+                        const synonyms = element['synonym_type'].match(valid_synonym_terms) ? element['synonym_type'] : false;
+
+                        if (status === 'PROXY_ERROR') {
+                            if (verbose) {
+                                $("#snippets_" + doc_id).replaceWith(TueFind.GetProxyErrorMessage(doc_id));
+                            }
+                            $("#snippet_place_holder_" + doc_id).each(function () {
+                                $(this).replaceWith(TueFind.GetProxyErrorMessage(doc_id));
+                            });
+                            return;
+                        }
+
+                        $("#snippet_place_holder_" + doc_id).each(function () {
+                            if (snippets)
+                                $(this).replaceWith('<div id="snippets_' + doc_id + '" class="snippet-div">' + snippets.join('<br/>') + '<br/></div>');
+                            else if (verbose)
+                                $(this).replaceWith(TueFind.GetNoMatchesMessage(doc_id));
+                            else
+                                $(this).replaceWith();
+                        });
+                        if (snippets)
+                            $(this).removeAttr('style');
+                        $("#snippets_" + doc_id).each(function () {
+                            if (snippets) {
+                                let styles = snippets.map(a => (a.hasOwnProperty('style') ? a.style : null)).filter(Boolean).join();
+                                $(styles).appendTo("head");
+                                let snippets_and_pages = snippets.map(a => a.snippet +
+                                    (a.hasOwnProperty('page') ? '<br/>' + TueFind.FormatPageInformation(a.page) : '') +
+                                    TueFind.FormatTextType(a.text_type, verbose, fulltext_types));
+                                $(this).html(snippets_and_pages.join('<hr class="snippet-separator"/>'));
+                            } else if (verbose)
+                                $(this).replaceWith(TueFind.GetNoMatchesMessage(doc_id));
+                            else
+                                $(this).html("");
+                        });
+                        $("[id^=snippets_] > p").each(function () {
+                            this.style.transform = "none";
+                            // Try to fix erroneous snippets with huge font-sizes (c.f. tuefind/issues/3072)
+                            let currentFontValue = $(this).css('font-size');
+                            const [full, currentFontSize, unit] = currentFontValue.match(/(\d+(?:\.\d+)?)(.*)/);
+                            if (unit == 'px' && currentFontSize >= 50)
+                                $(this).css('font-size', '14px');
+                        });
+                        if (!verbose && snippets)
+                            $("#snippets_" + doc_id).after(TueFind.ItemFulltextLink(doc_id, query, synonyms));
+
+
+                    });
+                });
+            }, // end success
+            error: function (xhr, ajaxOptions, thrownError) {
+                $("#snippet_place_holder").each(function () {
+                    $(this).replaceWith(VuFind.translate('Invalid server response'));
                 })
             }
         });
@@ -486,7 +606,7 @@ var TueFind = {
         $(document).ready(function(){
             TueFind.HandlePassedFulltextQuery();
             $("#ItemFulltextSearchForm").submit(function(){
-                TueFind.GetFulltextSnippets(home_url,
+                TueFind.GetFulltextSnippetItem(home_url,
                                             record_id,
                                             $("#searchForm_fulltext").val(),
                                             true,
@@ -678,6 +798,143 @@ var TueFind = {
                 input.setSelectionRange(length, length);
             }
         }
+    },
+
+    getCMSDocs: function() {
+        let table = $('.dataTable').DataTable({
+            destroy: true, // if the table already exists, destroy it before reinitializing
+            processing: true,
+            serverSide: false, // later change to true if needed
+            ajax: {
+                url: '/AJAX/JSON?method=CmsDocs&action=listFiles',
+                method: 'GET',
+                dataSrc: 'data'
+            },
+            columns: [
+                {
+                    data: 'name',
+                    render: function (data, type, row) {
+                        return `<a href="${row.url}" target="_blank">${data}</a>`;
+                    }
+                },
+                {
+                    data: null,
+                    orderable: false,
+                    render: function (data, type, row) {
+                        return `
+                            <a href="${row.url}" class="me-3" target="_blank">👁</a>
+                            <a href="${row.url}" class="text-center text-danger col-6 delete-btn" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        `;
+                    }
+                }
+            ]
+        });
+    },
+
+    getCMSImages: function() {
+        $.ajax({
+            type: "GET",
+            url: '/AJAX/JSON?method=CmsDocs&action=listImages',
+            dataType: "json",
+            success: function (data) {
+                let file = data.data;
+                let HTMlData = '';
+                for (let i = 0; i < file.length; i++) {
+                    let oneBlock = `
+                        <div class="col-3">
+                            <div class="card h-100 smc-card">
+                                <div class="card-header">
+                                    ${file[i]['name']}
+                                </div>
+                                <div class="card-body">
+                                    <img src="${file[i]['url']}" class="card-img-top" alt="${file[i]['name']}">
+                                </div>
+                                <div class="card-footer text-muted row gx-0">
+                                    <a href="#" class="text-center d-block text-default cms_preview col-6" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a href="${file[i]['url']}" class="text-center d-block text-danger col-6 delete-btn" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>`;
+                    HTMlData += oneBlock;
+                }
+                $('.ajax-content-images-container').html(HTMlData);
+            }
+        }); // end ajax
+    },
+
+    // helper function to run a single git stage (pull, import, push) and log the result to the console
+    _runGitStage: async function(action, stepText, failText, logFn) {
+        logFn(stepText, 'info');
+        try {
+            let response = await fetch(`/AJAX/JSON?method=Cms&action=${action}`);
+            if (!response.ok) throw new Error(`HTTP Error ${response.status}`);
+            
+            let result = await response.json();
+            let payload = result?.data;
+            if (!payload) throw new Error('Server returned empty data object');
+            if (!payload.success) throw new Error(payload.message || `Unknown error during ${action}`);
+            
+            logFn('Success: ' + payload.message, 'success');
+            return payload;
+        } catch (error) {
+            throw new Error(`${failText}: ${error.message}`);
+        }
+    },
+
+    // (button, spinner, console log) => execute all stages in order, logging to console and handling errors
+    _executeSyncProcess: async function(btn, stagesRunner) {
+        const $spinner = $('#sync-spinner');
+        const $consoleLog = $('#sync-log-console');
+        
+        btn.disabled = true;
+        $spinner.css('display', 'inline-block');
+        $consoleLog.empty();
+
+        function logToConsole(text, type = 'info') {
+            const color = type === 'error' ? '#ff6b6b' : (type === 'success' ? '#51cf66' : '#fff');
+            const time = new Date().toLocaleTimeString();
+            $consoleLog.append(`<div style="color: ${color}">[${time}] ${text}</div>`);
+            $consoleLog.scrollTop($consoleLog[0].scrollHeight);
+        }
+
+        try {
+            await stagesRunner(logToConsole);
+        } catch (error) {
+            logToConsole(error.message, 'error');
+            logToConsole('=== SYNC PROCESS ABORTED ===', 'error');
+        } finally {
+            btn.disabled = false;
+            $spinner.hide();
+        }
+    },
+
+    // button pull:
+    handleCmsGitPull: async function() {
+        await this._executeSyncProcess(this, async (log) => {
+            // Step 1: Pull
+            await this._runGitStage('gitPull', 'Step 1/3: Requesting git pull from remote repository...', 'PULL STAGE FAILED', log);
+            
+            // Step 2: Import
+            await this._runGitStage('gitImport', 'Step 2/3: Scanning JSON files and updating database...', 'IMPORT STAGE FAILED', log);
+            
+            // Step 3: Push
+            await this._runGitStage('gitPush', 'Step 3/3: Committing local changes and pushing to Git...', 'PUSH STAGE FAILED', log);
+            
+            log('=== ALL SYNC STAGES COMPLETED SUCCESSFULLY ===', 'success');
+        });
+    },
+
+    handleCmsGitPush: async function() {
+        await this._executeSyncProcess(this, async (log) => {
+            await this._runGitStage('gitPush', 'Step 1/1: Committing local changes and pushing to Git...', 'PUSH STAGE FAILED', log);
+            log('=== PUSH COMPLETED SUCCESSFULLY ===', 'success');
+        });
     }
 };
 
@@ -731,9 +988,26 @@ $(document).ready(function () {
         $('#searchForm_lookfor').val("");
         $("#searchForm").submit();
     });
+    TueFind.GetFulltextSnippets();
 
+    var resultList = document.querySelector('ol.record-list, .js-result-list');
+
+    if (resultList && resultList.parentNode) {
+        var stableParent = resultList.parentNode;
+
+        // Observe changes in the search result list and update fulltext snippets accordingly.
+        new MutationObserver(function () {
+            TueFind.GetFulltextSnippets();
+        }).observe(stableParent, { childList: true });
+    }
+    /* disabled for now, as it causes problems with the CMS docs table, which is currently the only table in the frontend
     new DataTable('.dataTable',{
         scrollX: true
     });
+    */
+
+    // ajax git pull test for CMS
+    $('#git-pull-btn').on('click', (e) => TueFind.handleCmsGitPull(e.currentTarget));
+    $('#git-push-btn').on('click', (e) => TueFind.handleCmsGitPush(e.currentTarget));
 
 });

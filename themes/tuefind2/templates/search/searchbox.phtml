@@ -12,10 +12,11 @@
       if (!isset($this->searchClassId)) {
         $config = $this->config()->get('config');
         $this->searchClassId = $config->Site->defaultSearchBackend ?? 'Solr';
-        if (preg_match('"/Authority"i', $this->serverUrl(true)))
+        if (preg_match('"/Authority"i', $this->serverUrl(true))) {
           $this->searchClassId = 'SolrAuth';
+        }
       }
-      
+
       $params = null;
       $hiddenFilters = $this->searchTabs()->getHiddenFilters($this->searchClassId, true, $this->ignoreHiddenFiltersInRequest ?? false);
       $lastSort = $this->searchMemory()->getLastSort($this->searchClassId);
@@ -53,17 +54,17 @@
 ?>
 <?php $tabConfig = $this->searchTabs()->getTabConfig($this->searchClassId, $this->lookfor, $this->searchIndex, $this->searchType, $hiddenFilters); ?>
 
-<div class="row tf-row-home">
+<div class="tf-row-home">
     <!--  Begin section searchbar -->
     <section class="section-home">
         <div class="panel-home">
-            <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, 'TueFind2.ChangeSearchboxHeight();', 'SET')?>
+            <?=$this->assetManager()->outputInlineScriptString('TueFind2.ChangeSearchboxHeight();')?>
             <div class="searchbox col-12 mx-auto">
 
                 <?=$this->render('search/searchbox/title');?>
 
                 <!-- Begin warnings -->
-                <?php if ($this->ils()->getOfflineMode() == "ils-offline"): ?>
+                <?php if ($this->ils()->getOfflineMode() == 'ils-offline'): ?>
                     <div class="alert alert-warning">
                         <h2><?= $this->transEsc('ils_offline_title') ?></h2>
 
@@ -89,8 +90,8 @@
                         </p>
                             <?=
                               $this->context($this)->renderInContext(
-                              'search/filters.phtml',
-                              [
+                                  'search/filters.phtml',
+                                  [
                                 'params' => $params ?? null,
                                 'urlQuery' => isset($results) ? $results->getUrlQuery() : null,
                                 'filterList' => $showFilters ? $filterList : [],
@@ -99,7 +100,7 @@
                                 'searchType' => $this->searchType,
               'fromSearchMemory' => $fromSearchMemory,
                               ]
-                                );
+                              );
                             ?>
                             <?php if (!empty($tabs)): ?></div><?php endif; ?>
                       </div>
@@ -129,7 +130,7 @@
                                 <!-- Begin search select -->
                                 <div class="col-xs-12 col-sm-3 col-lg-2 searchForm_select">
                                     <?php if ($handlerCount > 1): ?>
-                                        <select id="searchForm_type" class="searchForm_type form-control" name="type" data-native-menu="false" aria-label="<?=$this->transEsc("Search type")?>">
+                                        <select id="searchForm_type" class="searchForm_type form-control" name="type" data-native-menu="false" aria-label="<?=$this->transEsc('Search type')?>">
                                             <?php $currentGroup = $insideGroup = false; ?>
                                             <?php foreach ($handlers as $handler): ?>
                                                 <?php
@@ -159,7 +160,7 @@
 
                                 <!-- Begin search button -->
                                 <div class="col-xs-12 col-sm-2">
-                                    <button type="submit" class="btn btn-primary search-button"><i class="fa fa-search" aria-hidden="true"></i> <?= $this->transEsc("Find") ?></button>
+                                    <button type="submit" class="btn btn-primary search-button"><i class="fa fa-search" aria-hidden="true"></i> <?= $this->transEsc('Find') ?></button>
                                 </div>
                             </div>
 
@@ -214,8 +215,8 @@
                             }
                             ?>
                             <?=$this->context($this)->renderInContext(
-                              'search/filters.phtml',
-                              [
+                                'search/filters.phtml',
+                                [
                                 'params' => $params ?? null,
                                 'urlQuery' => isset($results) ? $results->getUrlQuery() : null,
                                 'filterList' => $showFilters ? $filterList : [],
@@ -226,7 +227,7 @@
                               ]
                             );?>
                         </form>
-                        <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, 'TueFind.MoveCursorToEnd();', 'SET')?>
+                        <?=$this->assetManager()->outputInlineScriptString('TueFind.MoveCursorToEnd();')?>
 
                         <?php //optional extension template, e.g. for RelBib ?>
                         <?=$this->render('search/searchbox/extensions');?>
@@ -237,7 +238,7 @@
             </div><!-- close container -->
             <!--
             <div class="scroll-down" id="scroll-down">
-                <a href="" id="scroll-down-button"><span></span><?php $this->transEsc("Scroll"); ?></a>
+                <a href="" id="scroll-down-button"><span></span><?php $this->transEsc('Scroll'); ?></a>
             </div>
             -->
         </div><!-- close panel-home -->

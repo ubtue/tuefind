@@ -37,13 +37,13 @@ $this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') 
           <th><?=$this->transEsc('publication_terms')?></th>
         </tr>
         <?php foreach ($this->publications as $publication):
-          $publicationURL = ($dspaceVersion == 6) ? $this->dspaceServer."/xmlui/handle/".$publication['external_document_id'] : $this->dspaceServer."/items/".$publication['external_document_guid'];?>
+          $publicationURL = ($dspaceVersion == 6) ? $this->dspaceServer."/xmlui/handle/".$publication['db']->getExternalDocumentId() : $this->dspaceServer."/items/".$publication['db']->getExternalDocumentGuid();?>
           <tr>
-            <td><?=$publication['external_document_id']?></td>
-            <td><a href="<?=$this->recordLinker()->getUrl($publication['control_number'])?>"><?=$publication['title'];?></a></td>
+            <td><?=$publication['db']->getExternalDocumentGuid()?></td>
+            <td><a href="<?=$this->recordLinker()->getUrl($publication['db']->getControlNumber())?>"><?=$publication['record']->getTitle();?></a></td>
             <td><a href="<?=$publicationURL;?>" target="_blank"><i class="fa fa-external-link"></i> <?=$this->transEsc('publication_file_button')?></a></td>
-            <td><?=date("d.m.Y H:i:s",strtotime($publication['publication_datetime']));?></td>
-            <td><a href="/publication_terms/terms_<?=date("Ymd",strtotime($publication['terms_date']));?>.pdf" target="_blank"><?=date("d.m.Y",strtotime($publication['terms_date']));?></a></td>
+            <td><?=$publication['db']->getPublicationDateTime()->format($this->config()->dateTimeFormat())?></td>
+            <td><a href="/publication_terms/terms_<?=$publication['db']->getTermsDate()->format('Ymd')?>.pdf" target="_blank"><?=$publication['db']->getTermsDate()->format('d.m.Y')?></a></td>
           </tr>
         <?php endforeach; ?>
       </table>

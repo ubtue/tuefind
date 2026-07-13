@@ -3,7 +3,7 @@
 namespace IxTheo\Search\KeywordChainSearch;
 
 class Options extends \VuFind\Search\Solr\Options {
-    public function __construct (\VuFind\Config\PluginManager $configLoader){
+    public function __construct (\VuFind\Config\ConfigManagerInterface $configLoader){
         parent::__construct($configLoader);
     }
 

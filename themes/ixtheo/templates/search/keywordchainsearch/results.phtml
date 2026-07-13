@@ -14,7 +14,7 @@ if (isset($this->results)) {
 
 <?= $this->render('search/keywordchainsearch/result-list.phtml') ?>
 <?= $this->context($this)->renderInContext('search/bulk-action-buttons.phtml', array('idPrefix' => 'bottom_')) ?>
-<?= $this->paginationControl($this->results->getPaginator(), 'Sliding', 'search/pagination.phtml', array('results' => $this->results)) ?>
+<?= $this->paginationControl($this->results->getPaginator(), 'Sliding', 'Helpers/pagination.phtml', array('results' => $this->results)) ?>
 
 
 

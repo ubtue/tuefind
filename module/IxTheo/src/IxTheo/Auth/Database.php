@@ -1,12 +1,16 @@
 <?php
 
 namespace IxTheo\Auth;
-use VuFind\Exception\Auth as AuthException, Laminas\Crypt\Password\Bcrypt;
+
+use VuFind\Exception\Auth as AuthException;
+
+use function in_array;
 
 class Database extends \TueFind\Auth\Database
 {
-    public static $appellations = ["", "Mr", "Ms"];
-    public static $titles = ["", "B.A.", "M.A.", "M.Div.", "Dipl. Theol.", "Dr.", "Ph.D.", "Th.D.", "Prof.", "Lic. theol.", "Lic. iur. can.", "Student", "Other"];
+    public static $appellations = ['', 'Mr', 'Ms'];
+
+    public static $titles = ['', 'B.A.', 'M.A.', 'M.Div.', 'Dipl. Theol.', 'Dr.', 'Ph.D.', 'Th.D.', 'Prof.', 'Lic. theol.', 'Lic. iur. can.', 'Student', 'Other'];
 
     /**
      * Collect parameters from request and populate them.
@@ -21,7 +25,7 @@ class Database extends \TueFind\Auth\Database
 
         $additionalParams = [
             'ixtheo_title' => '',
-            'ixtheo_appellation' => ''
+            'ixtheo_appellation' => '',
         ];
         foreach ($additionalParams as $param => $default) {
             $params[$param] = $request->getPost()->get($param, $default);
@@ -40,13 +44,22 @@ class Database extends \TueFind\Auth\Database
     protected function createUserFromParams($params, $table)
     {
         $user = parent::createUserFromParams($params, $table);
-        $user->ixtheo_appellation = in_array($params['ixtheo_appellation'], Database::$appellations) ? $params['ixtheo_appellation'] : $user->ixtheo_appellation;
-        $user->ixtheo_title = in_array($params['ixtheo_title'], Database::$titles) ? $params['ixtheo_title'] : $user->ixtheo_title;
-        $user->ixtheo_user_type = \IxTheo\Utility::getUserTypeFromUsedEnvironment();
-        $user->save();
+        $user->setAppellation(in_array($params['ixtheo_appellation'], Database::$appellations) ? $params['ixtheo_appellation'] : $user->getAppellation());
+        $user->setTitle(in_array($params['ixtheo_title'], Database::$titles) ? $params['ixtheo_title'] : $user->getTitle());
+        $user->setUserType(\IxTheo\Utility::getUserTypeFromUsedEnvironment());
 
-        // Update the TAD access flag:
-        exec("/usr/local/bin/set_tad_access_flag.sh " . $user->id);
+        return $user;
+    }
+
+    public function create($request)
+    {
+        $user = parent::create($request);
+
+        // Update the TAD access flag
+        // This cannot be executed in "createUserFromParams"
+        // since the ID will be generated afterwards in the parent
+        // after persist() is called on the entity manager.
+        exec(\TueFind\Utility::BIN_DIR . '/set_tad_access_flag.sh ' . $user->getId());
 
         return $user;
     }
@@ -54,21 +67,23 @@ class Database extends \TueFind\Auth\Database
     public function authenticate($request)
     {
         $user = parent::authenticate($request);
-        $userSystem = $user->ixtheo_user_type;
+        $userSystem = $user->getUserType();
         $currentSystem = \IxTheo\Utility::getUserTypeFromUsedEnvironment();
 
         // Write an additional log file to detect which ixtheo-users are actually used to log into bibstudies+churchlaw.
         // This is technically allowed right now and might lead to problems, so we would like to keep track of the users
         // to see if we can easily prevent them from switching instances at a later point.
-        $logEntry = '[' . date('Y-m-d H:i:s') . '] User "' . $user->username . '" with type "' . $userSystem . '" logging into instance "' . basename(getenv('VUFIND_LOCAL_DIR')) . '"' . PHP_EOL;
-        file_put_contents('/usr/local/var/log/tuefind/vufind_auth.log', $logEntry, FILE_APPEND);
+        $logEntry = '[' . date('Y-m-d H:i:s') . '] User "' . $user->getUsername() . '" with type "' . $userSystem . '" logging into instance "' . basename(getenv('VUFIND_LOCAL_DIR')) . '"' . PHP_EOL;
+        file_put_contents(\TueFind\Utility::LOG_DIR . '/vufind_auth.log', $logEntry, FILE_APPEND);
 
-        if ($userSystem != $currentSystem)
-            throw new AuthException($this->translate('authentication_error_wrong_system',
-                                    ['%%currentSystem%%' => $currentSystem,
-                                     '%%userSystem%%' => $userSystem]));
+        if ($userSystem != $currentSystem) {
+            throw new AuthException($this->translate(
+                'authentication_error_wrong_system',
+                ['%%currentSystem%%' => $currentSystem,
+                '%%userSystem%%' => $userSystem]
+            ));
+        }
 
         return $user;
     }
-
 }

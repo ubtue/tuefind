@@ -18,8 +18,8 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * along with this program; if not, see
+ * <https://www.gnu.org/licenses/>.
  *
  * @category VuFind
  * @package  Search
@@ -57,7 +57,7 @@ use function strlen;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org
  */
-class RestConnector implements ConnectorInterface, \Laminas\Log\LoggerAwareInterface
+class RestConnector implements ConnectorInterface, \Psr\Log\LoggerAwareInterface
 {
     use \VuFind\Log\LoggerAwareTrait;
     use \VuFindSearch\Backend\Feature\ConnectorCacheTrait;
@@ -361,8 +361,12 @@ class RestConnector implements ConnectorInterface, \Laminas\Log\LoggerAwareInter
         // By setting this value to true, also matches, which
         // are NOT available via Holdingsfile are returned
         // (yes, right, set this to true - that's ExLibris Logic)
-        if ($args['pcAvailability']) {
-            $qs['pcAvailability'] = 'true';
+        if (null !== ($pc = $args['pcAvailability'] ?? null)) {
+            $qs['pcAvailability'] = $pc ? 'true' : 'false';
+        }
+
+        if (null !== ($ft = $args['cdiFulltext'] ?? null)) {
+            $qs['searchInFulltextUserSelection'] = $ft ? 'true' : 'false';
         }
 
         // QUERYSTRING: offset and limit
@@ -511,6 +515,7 @@ class RestConnector implements ConnectorInterface, \Laminas\Log\LoggerAwareInter
             $item['issn'] = $search->issn ?? [];
             $item['publisher'] = $display->publisher ?? [];
             $item['peer_reviewed'] = ($display->lds50[0] ?? '') === 'peer_reviewed';
+            $item['attributes'] = (array)($display->attribute ?? []);
             $openurl = $pnx->links->openurl[0] ?? '';
             $item['url'] = $openurl && !str_starts_with($openurl, '$')
                 ? $openurl
@@ -616,7 +621,7 @@ class RestConnector implements ConnectorInterface, \Laminas\Log\LoggerAwareInter
      *
      * @return void
      */
-    protected function processHighlighting(array &$record, array $params, \StdClass $highlight): void
+    protected function processHighlighting(array &$record, array $params, \stdClass $highlight): void
     {
         if (empty($params['highlight'])) {
             return;

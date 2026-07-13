@@ -27,24 +27,25 @@
 <!--
 Fixed Navigation
 ==================================== -->
+
+
 <header class="navigation fixed-top">
   <div class="container">
     <!-- main nav -->
 
-    <nav class="navbar container-fluid navbar-expand-lg navbar-light px-0">
+    <nav class="navbar container-fluid navbar-expand-lg navbar-expand-md navbar-expand-sm navbar-expand-xsm navbar-light px-0">
       <!-- logo -->
-      <a class="navbar-brand logo"  href="/">
-        <?php /* ?><img loading="lazy" class="logo-default" src="<?=$this->imageLink('logo.png');?>" alt="logo" />
-        <img loading="lazy" class="logo-white" src="<?=$this->imageLink('logo.png');?>" alt="logo" /> <?php */?>
+      <a class="navbar-brand logo" href="/">
         <img class="main-logo" src="<?=$this->imageLink('/logos/Logo-IxTheo-ai-rgb_black.png');?>" alt="logo" />
       </a>
       <!-- /logo -->
+      <div class="collapse navbar-collapse"></div>  
 
-      <ul class="navbar-nav navbar-right text-center" style="margin-top: 8px;">
+      <ul class="navbar-nav navbar-right text-center d-flex">
 
         <!-- s-media -->
-        <li class="nav-item social-media tf-cursor-pointer">
-            <span class="dropdown-toggle nav-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-share-alt" aria-hidden="true"></i> <span class="cw-hide-for-xsmoll"><?=$this->transEsc("Social media")?></span><b class="caret"></b></span>
+        <li class="nav-item social-media tf-cursor-pointer dropdown">
+            <span class="dropdown-toggle nav-link" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-share-alt" aria-hidden="true"></i> <span class="cw-hide-for-xsmoll"><?=$this->transEsc("Social media")?></span> <?=$this->icon('dropdown-caret') ?></span>
             <ul class="dropdown-menu">
               <li class="sub-menu"><a target="blank" href="//bsky.app/profile/ixtheo.bsky.social"><img src="<?=$this->imageLink('bluesky.svg')?>" height="16" alt="Bluesky"> Bluesky</a></li>
               <li class="sub-menu"><a target="blank" href="//hcommons.social/@ixtheo"><img src="<?=$this->imageLink('mastodon.svg')?>" height="16" alt="Mastodon"> Mastodon</a></li>
@@ -55,7 +56,7 @@ Fixed Navigation
       
         <?php if (isset($this->layout()->themeOptions) && count($this->layout()->themeOptions) > 1): ?>
           <li class="theme dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?=$this->transEsc("Theme")?> <b class="caret"></b></a>
+            <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown"><?=$this->transEsc("Theme")?> <?=$this->icon('dropdown-caret') ?></a>
             <ul class="dropdown-menu">
               <?php foreach ($this->layout()->themeOptions as $current): ?>
                 <li<?=$current['selected'] ? ' class="active"' : ''?>>
@@ -69,8 +70,8 @@ Fixed Navigation
         <?php endif; ?>
 
         <?php if (isset($this->layout()->allLangs) && count($this->layout()->allLangs) > 1): ?>
-          <li class="nav-item language tf-cursor-pointer">
-            <span class="dropdown-toggle nav-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class='fa fa-globe' ></i> <span class="cw-hide-for-xsmoll"><?=$this->transEsc("Language")?></span><b class="caret"></b></span>
+          <li class="nav-item language tf-cursor-pointer dropdown">
+            <span class="dropdown-toggle nav-link" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class='fa fa-globe' ></i> <span class="cw-hide-for-xsmoll"><?=$this->transEsc("Language")?></span> <?=$this->icon('dropdown-caret') ?></span>
             <ul class="dropdown-menu">
               <?php
                 //TueFind: Basic VuFind functionality changed, removed author ID from URL
@@ -90,12 +91,35 @@ Fixed Navigation
           </li>
         <?php endif; ?>
 
-        <?=$this->render('header/menu');?>
+        <!-- TueFind extension template -->
+        <!-- About -->
+        <li class="nav-item tf-cursor-pointer about-icon dropdown">
+            <span class="dropdown-toggle black-icon nav-link" data-bs-toggle="dropdown"  aria-haspopup="true" aria-expanded="false">
+              <i class='fa fa-navicon' ></i> <?=$this->icon('dropdown-caret') ?>
+            </span>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="<?=$this->url('content-page', ['page' => 'AboutUs']) ?>"><?=$this->transEsc('Index Theologicus')?></a></li>
+                <li class="sub-menu"><a class="dropdown-item" href="<?=$this->url('content-page', ['page' => 'AboutUs']) ?>#ixtheo_inhalt"><?=$this->transEsc('Contents')?></a></li>
+                <li class="sub-menu"><a class="dropdown-item" href="<?=$this->url('content-page', ['page' => 'AboutUs']) ?>#ixtheo_geschichte"><?=$this->transEsc('History')?></a></li>
+                <li class="sub-menu"><a class="dropdown-item" href="<?=$this->url('content-page', ['page' => 'AboutUs']) ?>#ixtheo_publications"><?=$this->transEsc('Further Reading')?></a></li>
+                <li role="separator" class="divider"></li>
+                <li><a class="dropdown-item" href="<?=$this->url('content-page', ['page' => 'FidTheologie']) ?>"><?=$this->transEsc('Fachinformationsdienst Theologie')?></a></li>
+                <li class="sub-menu"><a class="dropdown-item" href="<?=$this->url('content-page', ['page' => 'FidTheologie']) ?>#ixtheo_aufgaben"><?=$this->transEsc('Tasks')?></a></li>
+                <li class="sub-menu"><a class="dropdown-item" href="<?=$this->url('content-page', ['page' => 'FidTheologie']) ?>#ixtheo_beirat"><?=$this->transEsc('Scholarly Advisory Board')?></a></li>
+                <li role="separator" class="divider"></li>
+                <li><a class="dropdown-item" href="<?=$this->url('content-page', ['page' => 'ContactPersons']) ?>"><?=$this->transEsc('Contact Persons')?></a></li>
+                <li role="separator" class="divider"></li>
+                <li><a class="dropdown-item" href="<?=$this->url('content-page', ['page' => 'A_Z']) ?>"><?=$this->transEsc('IxTheo A to Z')?></a></li>
+                <li role="separator" class="divider"></li>
+                <li><a class="dropdown-item" href="<?=$this->url('content-page', ['page' => 'Impressum']) ?>"><?=$this->transEsc('About this site')?></a></li>
+                <li><a class="dropdown-item" href="<?=$this->url('content-page', ['page' => 'Privacy']) ?>"><?=$this->transEsc('Privacy Policy')?></a></li>
+            </ul>
+        </li>
 
         <!-- End section Main Menu -->
       </ul>
     </nav>
-    
+
     <!-- /main nav -->
   </div>
 </header>
@@ -123,7 +147,7 @@ Welcome Slider
 </div>
 
 <?php if($homePage):?>
-  <span class="ix-copyright logo-tooltip" title="test" >© <span class="ix-copyright-name"><img src="<?=$this->imageLink('Seezeichen.jpg');?>" width="600" />Seezeichen, © Marco Varenkamp</span></span>
+  <span class="ix-copyright logo-tooltip" title="" >© <span class="ix-copyright-name "><img src="<?=$this->imageLink('Seezeichen.jpg');?>" width="600" /><p class="mb-0">Seezeichen, © Marco Varenkamp</p></span></span>
 <?php endif;?>
 
 <?php if (isset($this->layout()->srmessage)): // message for benefit of screen-reader users ?>

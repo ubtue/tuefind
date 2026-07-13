@@ -20,7 +20,7 @@
 ?>
 <div class="form-group">
   <label class="control-label" for="account_username"><?=$this->transEsc('Username')?>:</label>
-  <input id="account_username" type="text" name="username" required aria-required="true" value="<?=$this->profile ? $this->escapeHtmlAttr($this->user->username) : $this->escapeHtmlAttr($this->request->get('username'))?>" class="form-control" <?=$this->profile ? 'disabled' : ''?>/>
+  <input id="account_username" type="text" name="username" required aria-required="true" value="<?=$this->profile ? $this->escapeHtmlAttr($this->user->getUsername()) : $this->escapeHtmlAttr($this->request->get('username'))?>" class="form-control" <?=$this->profile ? 'disabled' : ''?>/>
   <?php if (!$this->profile && $this->usernamePolicy['hint']): ?>
     <div class="help-block"><?=$this->transEsc($this->usernamePolicy['hint']) ?></div>
   <?php endif; ?>
@@ -28,7 +28,7 @@
 </div>
 <div class="form-group">
   <label class="control-label" for="account_email"><?=$this->transEsc('Email Address')?>:</label>
-  <input id="account_email" type="email" name="email" required aria-required="true" value="<?=$this->profile ? $this->escapeHtmlAttr($this->user->email) : $this->escapeHtmlAttr($this->request->get('email'))?>" class="form-control" <?=$this->profile ? 'disabled' : ''?>/>
+  <input id="account_email" type="email" name="email" required aria-required="true" value="<?=$this->profile ? $this->escapeHtmlAttr($this->user->getEmail()) : $this->escapeHtmlAttr($this->request->get('email'))?>" class="form-control" <?=$this->profile ? 'disabled' : ''?>/>
   <div class="help-block with-errors"></div>
 </div>
 <?php if (!$this->profile): ?>

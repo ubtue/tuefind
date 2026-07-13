@@ -199,6 +199,8 @@ forms:
     primaryHandler: email
     senderInfoRequired: true
 
+    recipientLocalOverridesKey: acquisition_request_receivers
+
     #recipient:
     #  name: Your Library
     #  email: feedback@myuniversity.edu
@@ -220,9 +222,9 @@ forms:
   # Example for an Digitisation on Demand form
   DoD:
     enabled: true
-    title: Digitisation on Demand (DoD)
+    title: Digitisation on Demand
     onlyForLoggedUsers: false
-    emailSubject: Digitisation on Demand (DoD)
+    emailSubject: Digitisation on Demand
     response: dod_thank_you
     primaryHandler: email
     senderInfoRequired: true

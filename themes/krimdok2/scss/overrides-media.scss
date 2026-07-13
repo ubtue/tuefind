@@ -1,0 +1,142 @@
+/* ==========================================================================
+  media queries for responsive design
+   ========================================================================== */
+
+/* big screens (1350px - 1500px) */
+@media (min-width: 1350px) and (max-width: 1500px) {
+    .panel-home { width: 80%; }
+    .mobile-hide { display: none; }
+}
+
+/* medium screens (1210px - 1349px) */
+@media (min-width: 1210px) and (max-width: 1349px) {
+    .panel-home { width: 90%; }
+    .mobile-hide { display: none; }
+}
+
+/* special (1000px - 1209px) */
+@media (min-width: 1000px) and (max-width: 1209px) {
+    .panel-home { width: 90%; }
+
+    /* declutter header: stack blocks vertically, center them, and hide the left block */
+    #header-collapse .row {
+        flex-direction: column !important;
+        align-items: center !important;
+    }
+
+    /* left block */
+    #header-collapse .header-block-left {
+        display: none !important;
+    }
+
+    /* center and right blocks take 100% and stack vertically */
+    #header-collapse .header-block-center,
+    #header-collapse .header-block-right {
+        flex: none !important;
+        width: 100% !important;
+        justify-content: center !important;
+        text-align: center !important;
+        margin-bottom: 15px;
+    }
+
+    /* center */
+    #header-collapse .header-block-right ul {
+        /* display: flex !important; */
+        justify-content: center !important;
+    }
+}
+
+/* Tablet (680px - 999px) */
+@media (min-width: 680px) and (max-width: 999px) {
+    .panel-home { width: 90%; }
+    #header-collapse .header-block-left { display: none; }
+
+    #header-collapse .row {
+        flex-direction: column;
+    }
+    #header-collapse .header-block-center,
+    #header-collapse .header-block-right {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+    #header-collapse .header-block-right ul {
+        /* display: flex; */
+        justify-content: center;
+    }
+
+    /* Styles for content panels */
+    .tf-background-body #content div.row div.panel { width: 50%; }
+    .tf-background-body #content div.row div.panel:last-child { width: 100%; }
+}
+
+/* Small tablets / large phones (570px - 679px) */
+@media (min-width: 570px) and (max-width: 679px) {
+    .panel-home { width: 90%; }
+    .mobile-hide { display: none; }
+    #header-collapse .header-block-left { display: none; }
+
+    #header-collapse .row { flex-direction: column; }
+    #header-collapse .header-block-center,
+    #header-collapse .header-block-right {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+    #header-collapse .header-block-right ul {
+        /* display: flex; */
+        justify-content: center;
+    }
+
+    .tf-background-body #content div.row div.panel:last-child { width: 100%; }
+}
+
+/* Smartphones (up to 569px) */
+@media (max-width: 569px) {
+    .panel-home { width: 90%; }
+    .mobile-hide { display: none; }
+    #header-collapse .header-block-left { display: none; }
+
+    #header-collapse .row { flex-direction: column; }
+    #header-collapse .header-block-center,
+    #header-collapse .header-block-right {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+    #header-collapse .header-block-right ul {
+        /* display: flex; */
+        justify-content: center;
+    }
+    .tf-background-body #content div.row div.panel {
+        width: 100%;
+    }
+    .rb-panel-home.panel-home {
+        padding-top: 0;
+    }
+    #footer-bottom .col-xs-12 {
+        text-align: center;
+    }
+    #footer-bottom .copyright {
+        margin-bottom: 10px;
+    }
+
+    #footer-bottom .footer-menu {
+        margin-top: 6px;
+    }
+
+    #footer-bottom .col-md-8 {
+        padding: 0;
+    }
+
+    #footer-bottom .footer-menu li{
+        display: block;
+        float: left;
+        width: 100%;
+        text-align: center;
+        margin: 0;
+    }
+}

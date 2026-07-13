@@ -4,4 +4,4 @@
   <a href="http://openurlgw.hbz-nrw.de/gw?title=<?=urlencode($this->driver->getUnmergedPrintTitle())?>" target="_blank" ><i class="fa fa-external-link"></i> HBZ Gateway</a>
 <?php endif; ?>
 <?php $jsSnippet = 'TueFind.RemoveHBZIfJOPPresent();'; ?>
-<?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $jsSnippet, 'SET')?>
+<?=$this->assetManager()->outputInlineScriptString($jsSnippet)?>

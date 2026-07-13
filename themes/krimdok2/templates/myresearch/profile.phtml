@@ -9,7 +9,7 @@
     $arrTemplate = '<tr><th>%%LABEL%%:</th><td> %%VALUE%%</td></tr>';
 ?>
 
-<a class="search-filter-toggle visible-xs" href="#myresearch-sidebar" data-toggle="offcanvas" title="Expand Sidebar">
+<a class="search-filter-toggle visible-xs" href="#myresearch-sidebar" data-bs-toggle="offcanvas" title="Expand Sidebar">
   <?=$this->transEsc('Your Account') ?>
 </a>
 
@@ -17,7 +17,7 @@
   <h2><?=$this->transEsc('Your Profile')?></h2>
   <?=$this->flashmessages();?>
 
-  <form method="post" name="accountForm" id="accountForm" class="form-horizontal" data-toggle="validator" role="form">
+  <form method="post" name="accountForm" id="accountForm" class="form-horizontal" data-bs-toggle="validator" role="form">
     <?=$this->context($this)->renderInContext('Auth/Database/create.phtml', ['profile' => true]);?>
 
     <div id="account-actions">

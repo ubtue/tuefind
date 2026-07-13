@@ -17,8 +17,8 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * along with this program; if not, see
+ * <https://www.gnu.org/licenses/>.
  *
  * @category VuFind
  * @package  Search
@@ -599,7 +599,7 @@ class QueryBuilderTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'Single value, no extra params' => [
-                null,
+                'globalExtraParams' => null,
                 'expected1' => [
                     'bf' => ['a:filter'],
                     'bq' => null,
@@ -774,9 +774,8 @@ class QueryBuilderTest extends \PHPUnit\Framework\TestCase
      * @param array $expected2         Second set of expected fields
      *
      * @return void
-     *
-     * @dataProvider globalExtraParamsIndividualQueryDataProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('globalExtraParamsIndividualQueryDataProvider')]
     public function testIndividualQueryHandlerWithGlobalExtraParams(
         $globalExtraParams,
         $expected1,
@@ -902,9 +901,8 @@ class QueryBuilderTest extends \PHPUnit\Framework\TestCase
      * @param array $expectedFields    Expected fields
      *
      * @return void
-     *
-     * @dataProvider globalExtraParamsGroupedQueryDataProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('globalExtraParamsGroupedQueryDataProvider')]
     public function testGroupedQueryHandlerWithGlobalExtraParams(
         $globalExtraParams,
         $expectedFields
@@ -1019,5 +1017,31 @@ class QueryBuilderTest extends \PHPUnit\Framework\TestCase
             $processedQ = $response->get('q');
             $this->assertEquals($output, $processedQ[0]);
         }
+    }
+
+    /**
+     * Test that dismax munge is only applied once in query group.
+     *
+     * @return void
+     */
+    public function testDismaxMungeQueryGroupOnlyOnce()
+    {
+        $specs = [
+            'test' => [
+                'DismaxFields' => ['foo'],
+                'DismaxMunge' => [
+                    ['preg_replace', '/^(.*)$/', '22@$1'],
+                ],
+            ],
+        ];
+        $qb = new QueryBuilder($specs);
+        $query = new QueryGroup(
+            'AND',
+            [ new Query('some-coded-value', 'test') ]
+        );
+        $response = $qb->build($query);
+        $processedQ = $response->get('q');
+        $this->assertEquals(1, preg_match('/\}22@some-coded-value"/', $processedQ[0]));
+        $this->assertEquals(0, preg_match('/\}22@22@some-coded-value"/', $processedQ[0]));
     }
 }

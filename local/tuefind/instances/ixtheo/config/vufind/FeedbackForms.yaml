@@ -199,6 +199,8 @@ forms:
     response: Thank you for suggesting a title.
     senderInfoRequired: true
 
+    recipientLocalOverridesKey: acquisition_request_receivers
+
     #recipient:
     #  name: Your Library
     #  email: feedback@myuniversity.edu
@@ -347,33 +349,33 @@ forms:
 
   SelfArchivingRegisterLink:
     enabled: true
-    onlyForLoggedUsers: true
-    title: "Link zu einer vorhandenen Zweitveröffentlichung ergänzen"
+    onlyForLoggedUsers: false
+    title: SA_register_link_title
+    recipientLocalOverridesKey: register_link_receivers
+    useCaptcha: false
+    response: SA_register_link_response
+    emailSubject: "Linkmeldung %%ppn%%"
 
     help:
-      pre: "Hier können Sie den Link zu einer bereits vorhandenen Open-Access-Zweitveröffentlichung Ihrer Publikation eintragen. Bitte verwenden Sie dauerhafte Links (doi, handle oder urn)."
+      pre: SA_register_link_help_pre
 
     fields:
       - name: ppn
         type: text
         label: "PPN"
-
-      - name: title
-        type: text
-        label: "Title"
-
-      - name: author
-        type: text
-        label: "Autor"
+        required: true
 
       - name: link
         type: text
         label: "Link"
+        required: true
+
+      - name: comments
+        label: Comments
+        type: textarea
 
     prefillFields:
       - ppn
-      - title
-      - author
 
   SelfArchivingLexikonartikel:
     enabled: true
@@ -847,3 +849,36 @@ forms:
         label: SA_comment
         type: text
 
+# Example for an Digitisation on Demand form
+  DoD:
+    enabled: true
+    title: Digitisation on Demand
+    onlyForLoggedUsers: false
+    emailSubject: Digitisation on Demand
+    response: dod_thank_you
+    primaryHandler: email
+    senderInfoRequired: true
+
+    recipient:
+      name: Digitisation on Demand (DoD) Form
+      email: ixtheo-self-archiving@ub.uni-tuebingen.de
+
+    fields:
+      - name: title
+        type: text
+        label: Title Request
+        required: true
+
+      - name: author
+        type: text
+        label: Author
+        required: true
+
+      - name: year_of_publication
+        type: text
+        label: Year of Publication
+        required: true
+
+      - name: message
+        type: textarea
+        label: dod_comments

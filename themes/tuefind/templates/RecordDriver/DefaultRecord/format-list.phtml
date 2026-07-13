@@ -1,20 +1,20 @@
 <?php
-$i=0;
+$i = 0;
 $formats = $this->driver->getFormats();
 $media_types = $this->driver->tryMethod('getMediaTypes', [], []);
-$is_hybrid = $this->driver->tryMethod('isHybrid') || (in_array("Electronic", $media_types) && in_array("Non-Electronic", $media_types));
+$is_hybrid = $this->driver->tryMethod('isHybrid') || (in_array('Electronic', $media_types) && in_array('Non-Electronic', $media_types));
 if (isset($media_types)) {
   if ($is_hybrid):
-    $formats = array_merge(["Electronic/Print"], $formats);
-  elseif (in_array("Electronic", $media_types)):
-    $formats = array_merge(["Electronic"], $formats);
-  elseif (!in_array("Literary Remains", $formats) && !in_array("Subscription Bundle", $formats)):
-    $formats = array_merge(["print"], $formats);
+    $formats = array_merge(['Electronic/Print'], $formats);
+    elseif (in_array('Electronic', $media_types)):
+    $formats = array_merge(['Electronic'], $formats);
+    elseif (!in_array('Literary Remains', $formats) && !in_array('Subscription Bundle', $formats)):
+    $formats = array_merge(['print'], $formats);
   endif;
   $i = 0;
   foreach ($formats as $format): ?>
     <?php if ($translated = $this->transEsc($format)): ?>
-    <span class="format iconlabel <?=$this->record($this->driver)->getFormatClass($format); ?>"><?=$translated;?></span>
+    <span class="label label-info format iconlabel <?=$this->record($this->driver)->getFormatClass($format) ?>"><?=$translated ?></span>
     <?php endif; ?>
   <?php endforeach; ?>
 <?php }?>

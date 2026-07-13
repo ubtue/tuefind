@@ -1,0 +1,1 @@
+../../../../../VuFind/sql/migrations/mysql/11.0/011-add-type-column-to-user-list.sql

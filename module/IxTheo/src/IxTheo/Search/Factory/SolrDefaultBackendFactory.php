@@ -29,7 +29,7 @@ class SolrDefaultBackendFactory extends \TueFind\Search\Factory\SolrDefaultBacke
             $backend->setLogger($this->logger);
         }
         $manager = $this->serviceLocator->get(\VuFind\RecordDriver\PluginManager::class);
-        $factory = new RecordCollectionFactory([$manager, 'getSolrRecord']);
+        $factory = new RecordCollectionFactory([$manager, 'getSolrRecord'], $this->serviceLocator);
         $backend->setRecordCollectionFactory($factory);
         return $backend;
     }
@@ -44,7 +44,6 @@ class SolrDefaultBackendFactory extends \TueFind\Search\Factory\SolrDefaultBacke
     protected function createConnector()
     {
         $timeout = $this->getIndexConfig('timeout', 30);
-        $config = $this->config->get($this->mainConfig);
         $this->setTranslator($this->serviceLocator->get(\Laminas\Mvc\I18n\Translator::class));
         $current_lang = $this->getTranslatorLocale();
 
@@ -118,13 +117,13 @@ class SolrDefaultBackendFactory extends \TueFind\Search\Factory\SolrDefaultBacke
     protected function createQueryBuilder()
     {
         $specs   = $this->loadSpecs();
-        $config = $this->config->get($this->mainConfig);
+        $config = $this->configManager->getConfigObject($this->mainConfig);
         $defaultDismax = isset($config->Index->default_dismax_handler)
                          ? $config->Index->default_dismax_handler : 'dismax';
         $builder = new QueryBuilder($specs, $defaultDismax);
 
         // Configure builder:
-        $search = $this->config->get($this->searchConfig);
+        $search = $this->configManager->getConfigObject($this->searchConfig);
         $caseSensitiveBooleans = isset($search->General->case_sensitive_bools)
                                  ? $search->General->case_sensitive_bools : true;
         $caseSensitiveRanges = isset($search->General->case_sensitive_ranges)

@@ -1,0 +1,134 @@
+<?php
+
+namespace TueFind\Db\Entity;
+
+use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
+
+#[ORM\Entity]
+class User extends \VuFind\Db\Entity\User implements UserEntityInterface
+{
+    // This is set to nullable here, but will in fact be generated on insert via a MySQL Hook
+    // That's also why no setter is provided
+    #[ORM\Column(name: 'tuefind_uuid', type: 'string', nullable: true, options: ['lengths' => [32]])]
+    protected ?string $tuefindUuid = null;
+
+    #[ORM\Column(name: 'tuefind_license_access_locked', type: 'boolean', nullable: false, options: ['default' => false])]
+    protected bool $tuefindLicenseAccessLocked = false;
+
+    #[ORM\Column(name: 'tuefind_institution', type: 'string', nullable: true, options: ['lengths' => [255]])]
+    protected ?string $tuefindInstitution = null;
+
+    #[ORM\Column(name: 'tuefind_country', type: 'string', nullable: true, options: ['lengths' => [255]])]
+    protected ?string $tuefindCountry = null;
+
+    #[ORM\Column(name: 'tuefind_rss_feed_send_emails', type: 'boolean', nullable: false, options: ['default' => false])]
+    protected bool $tuefindRssFeedSendEmails = false;
+
+    #[ORM\Column(name: 'tuefind_rss_feed_last_notification', type: 'datetime', nullable: true)]
+    protected ?DateTime $tuefindRssFeedLastNotification = null;
+
+    // Careful, this is type SET in the database
+    #[ORM\Column(name: 'tuefind_rights', type: 'string', nullable: true)]
+    protected ?string $tuefindRights = null;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: CmsPagesHistory::class)]
+    protected Collection $cmsHistories;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: CmsPages::class)]
+    protected Collection $cmsPages;
+
+    #[ORM\ManyToMany(mappedBy: 'adminUser', targetEntity: CmsPages::class)]
+    protected Collection $adminCmsPages;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->cmsHistories = new ArrayCollection();
+        $this->cmsPages = new ArrayCollection();
+        $this->tuefindRssFeedLastNotification = new DateTime();
+    }
+
+    public function getCmsHistories(): Collection
+    {
+        return $this->cmsHistories;
+    }
+
+    public function getCmsPages(): Collection
+    {
+        return $this->cmsPages;
+    }
+
+    public function getUuid(): string
+    {
+        return $this->tuefindUuid;
+    }
+
+    public function isLicenseAccessLocked(): bool
+    {
+        // No setter here, since this will only be set by an admin directly in the database if necessary
+        return $this->tuefindLicenseAccessLocked;
+    }
+
+    public function getInstitution(): ?string
+    {
+        return $this->tuefindInstitution;
+    }
+
+    public function setInstitution($institution): static
+    {
+        $this->tuefindInstitution = $institution;
+        return $this;
+    }
+
+    public function getCountry(): ?string
+    {
+        return $this->tuefindCountry;
+    }
+
+    public function setCountry($tuefindCountry): static
+    {
+        $this->tuefindCountry = $tuefindCountry;
+        return $this;
+    }
+
+    public function getRssFeedSendEmails(): bool
+    {
+        return $this->tuefindRssFeedSendEmails;
+    }
+
+    public function setRssFeedSendEmails(bool $value): static
+    {
+        $this->tuefindRssFeedSendEmails = $value;
+        if ($value == true) {
+            $this->setRssFeedLastNotification(new DateTime());
+        }
+        return $this;
+    }
+
+    public function getRssFeedLastNotification(): ?DateTime
+    {
+        return $this->tuefindRssFeedLastNotification;
+    }
+
+    public function setRssFeedLastNotification(DateTime $dateTime): static
+    {
+        $this->tuefindRssFeedLastNotification = $dateTime;
+        return $this;
+    }
+
+    public function getTueFindRights(): array
+    {
+        if ($this->tuefindRights == null) {
+            return [];
+        }
+        return explode(',', $this->tuefindRights);
+    }
+
+    public function cmsPagesHistory(): Collection
+    {
+        return $this->cmsHistories;
+    }
+}

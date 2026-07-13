@@ -19,13 +19,13 @@ class SolrAuthBackendFactory extends \VuFind\Search\Factory\SolrAuthBackendFacto
     protected function createQueryBuilder()
     {
         $specs   = $this->loadSpecs();
-        $config = $this->config->get($this->mainConfig);
+        $config = $this->configManager->get($this->mainConfig);
         $defaultDismax = isset($config->Index->default_dismax_handler)
             ? $config->Index->default_dismax_handler : 'dismax';
         $builder = new QueryBuilder($specs, $defaultDismax);
 
         // Configure builder:
-        $search = $this->config->get($this->searchConfig);
+        $search = $this->configManager->get($this->searchConfig);
         $caseSensitiveBooleans
             = isset($search->General->case_sensitive_bools)
             ? $search->General->case_sensitive_bools : true;
@@ -43,7 +43,7 @@ class SolrAuthBackendFactory extends \VuFind\Search\Factory\SolrAuthBackendFacto
 
     protected function createConnector()
     {
-        $config = $this->config->get($this->mainConfig);
+        $config = $this->configManager->get($this->mainConfig);
         $this->setTranslator($this->serviceLocator->get(\Laminas\Mvc\I18n\Translator::class));
         $current_lang = $this->getTranslatorLocale();
 
@@ -52,7 +52,7 @@ class SolrAuthBackendFactory extends \VuFind\Search\Factory\SolrAuthBackendFacto
         $chinese_lang_map = [ "zh" => "hant", "zh-cn" => "hans"];
         if (array_key_exists($current_lang, $chinese_lang_map))
             $current_lang = $chinese_lang_map[$current_lang];
-            
+
         $defaultFields = $searchConfig->General->default_record_fields ?? '*';
 
         $handlers = [
@@ -75,14 +75,14 @@ class SolrAuthBackendFactory extends \VuFind\Search\Factory\SolrAuthBackendFacto
         $client =  function (string $url) use ($config) {
             return $this->createHttpClient($config->Index->timeout ?? 30, $this->getHttpOptions($url), $url);
         };
-        
+
         $connector = new $this->connectorClass(
             $this->getSolrUrl(),
             new HandlerMap($handlers),
             $client,
             $this->uniqueKey
         );
-        
+
         if ($this->logger) {
             $connector->setLogger($this->logger);
         }

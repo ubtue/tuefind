@@ -1,0 +1,766 @@
+@use "variables" as *;
+a {
+    color: $link-color;
+}
+
+#rb-navbar-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.rb-navbar-part {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.tf-row-home {
+    /* stoneroad */
+    background: transparent url(/themes/relbib2/images/background_1280.jpg) no-repeat;
+    background-position: center center;
+    background-size: cover;
+    padding-top: 40px;
+}
+
+.nav-link {
+    font-size: 16px;
+}
+
+.panel-home {
+
+    display: block;
+    min-height: 600px;
+
+    h1 {
+        a {
+            color: black;
+        }
+    }
+
+    .control-label {
+        color: white;
+    }
+
+    ul.nav-pills > li {
+        background-color: #495057;
+    }
+
+    #searchbox_news {
+        padding: 10px; padding-top: 1px;
+        color: $brand-primary;
+        font-size: 130%;
+
+        a {
+            color: $brand-primary;
+            text-decoration: underline;
+        }
+    }
+
+    .searchbox {
+        background-color: rgba(255, 255, 255, 0.8);
+        padding: 0px 20px 15px 20px;
+
+        .title {
+            display: block;
+            padding-bottom: 20px;
+        }
+    }
+}
+
+
+#rb-title-table {
+    display: flex;
+
+    div {
+        padding: 5px 20px 5px 20px;
+    }
+
+    a:hover {
+        text-decoration: none;
+    }
+}
+
+#rb-title-table-left {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-right: 2px solid black;
+    font-size: 400%;
+}
+
+#rb-title-table-right {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-size: 3vw;
+    line-height: 1.2;
+}
+
+#rb-logo-left {
+    color: $brand-secondary; /* intentionally brighter than $brand-primary */
+}
+
+#rb-logo-right {
+    color: black;
+}
+
+.panel-default, .panel-inverse, .panel-buttons {
+   border: 5px solid $brand-primary;
+   -webkit-box-shadow: none;
+}
+
+.panel-inverse {
+
+    .panel-content {
+        h4 {
+            text-transform: initial;
+        }
+    }
+
+    ul {
+        a {
+            color: white;
+            text-decoration: underline;
+        }
+    }
+}
+
+.panel-button a {
+    font-size: 1.3em;
+}
+
+.rb-news-date {
+    font-weight: bold;
+}
+
+.rb-footer-supporter {
+    padding-bottom: 15px;
+}
+
+.rb-survey-results-col1 {
+    &:extend(.tf-col-md-6){}
+}
+
+.rb-survey-results-col2 {
+    &:extend(.tf-col-md-6){
+    padding-left: 14px;
+    padding-right: 14px;
+    padding-top: 14px;
+}}
+
+.rb-news-list {
+    list-style: none;
+    list-style-image: url('/themes/relbib2/images/relbib-newsicon.ico');
+}
+
+.rb-news-list ul, .rb-news-list ol {
+    list-style: circle;
+    list-style-image: initial;
+}
+
+/* jqcloud */
+div.jqcloud { color: #09f; }
+div.jqcloud a { color: inherit; }
+div.jqcloud a:hover { color: $brand-secondary; }
+div.jqcloud span.w10 { color: #FF9DB6; }
+div.jqcloud span.w9 { color: #F26B84; }
+div.jqcloud span.w8 { color: #BF3851; }
+div.jqcloud span.w7 { color: #FF9DB6; }
+div.jqcloud span.w6 { color: #F26B84; }
+div.jqcloud span.w5 { color: #BF3851; }
+div.jqcloud span.w4 { color: #FF9DB6; }
+div.jqcloud span.w3 { color: #F26B84; }
+div.jqcloud span.w2 { color: #BF3851; }
+div.jqcloud span.w1 { color: #720004; }
+
+.rb-plr-15 {
+    padding: 0 15px;
+}
+
+.rb-logo-left{
+    color:$brand-secondary;
+}
+
+.rb-news-list-style-none {
+    list-style: none;
+    padding-left: 20px;
+}
+
+.rb-footer-partners-logos > div {
+    min-height: 150px;
+    text-align: center;
+    display: table;
+}
+.rb-footer-partners-logos > div > a {
+    display: table-cell;
+    vertical-align: middle;
+}
+.rb-footer-partners-logos img {
+    max-width: 190px;
+    max-height: 80px;
+}
+
+.rb-panel-home.panel-home {
+    min-height: auto;
+}
+
+.autocomplete-results {
+    max-width: 80% !important;
+}
+
+body {
+        font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+}
+#searchForm .nav-tabs {
+    margin: 0;
+}
+
+#searchForm .nav-pills {
+    padding-bottom: 10px;
+}
+
+#searchForm .nav-pills li a{
+    border-radius: 0;
+    background: #495057;
+}
+
+#searchForm .nav-pills li a{
+    //background: #7b7d84;
+}
+
+#searchForm .nav-pills li a:hover{
+    background: #fff;
+    color: $brand-primary;
+    border-radius: 0;
+}
+/*
+#searchForm  .nav-tabs>li>a {
+    margin-right: 2px;
+    line-height: 1.5;
+    font-size: 16px;
+    color: #333;
+    padding: 10px 15px;
+}
+*/
+
+#searchForm .input-group>.form-control,.input-group>.form-select,.input-group>.form-floating {
+    width: 100%;
+    min-width: 100%;
+}
+#searchForm .form-control {
+    border-radius: 0;
+    height: 38px;
+    //box-shadow: 2px 2px 4px #323232;
+    font-size: 16px;
+    line-height: 1.5;
+}
+#searchForm .search-button {
+    height: 38px;
+    padding: 0 16px;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+#searchForm .tuefind-event-resetsearchhandlers a {
+    color: $brand-primary;
+    padding: 8px 12px;
+}
+
+#searchForm .tuefind-event-resetsearchhandlers a.active {
+    color:#555;
+}
+
+#header-collapse .nav-link {
+    padding:10px 10px;
+}
+#header-collapse .nav-item .header-link {
+    color: $brand-primary;
+    padding:15px 13px;
+    line-height: 1.4;
+    font-size: 14px;
+}
+
+#header-collapse .nav-item .header-link i{
+    font-size: 12px;
+}
+
+.dropdown-toggle::after {
+    display: inline-block !important;
+    margin-left: .255em;
+    vertical-align: .255em;
+    content: "";
+    border-top: .3em solid;
+    border-right: .3em solid transparent;
+    border-left: .3em solid transparent;
+}
+.input-group.searchbar #searchForm_lookfor, #searchForm #searchForm_type {
+    z-index: 1;
+    box-shadow: 2px 2px 4px #323232;
+}
+
+.input-group.searchbar #searchForm_lookfor, #searchForm #searchForm_type::placeholder {
+    color: #888;
+}
+
+.input-group.searchbar .input-group-text {
+    margin-left: -37px !important;
+    z-index: 2;
+    border-radius: 0;
+}
+.panel-home .btn-primary {
+    border-color: #CCC;
+}
+.btn-primary, .result-formats .format, .label, .result .format, .sidebar .format {
+    background: $brand-primary !important;
+}
+.search-button {
+    box-shadow: 2px 2px 10px #323232;
+    border: 1px solid #ddd;
+    min-width: 85px;
+}
+.tf-background-body {
+    background: $brand-primary;
+}
+
+#tf-button-footer-back-to-top {
+    position: fixed;
+    bottom: 20px;
+    z-index: 99;
+    outline: none;
+    cursor: pointer;
+    padding: 10px 15px;
+    right: 20px !important;
+    background-color: #e2e5e8;
+    border: none;
+    margin: 0;
+    color: $brand-primary;
+}
+
+#tf-button-footer-feedback {
+    position: fixed;
+    bottom: 20px;
+    z-index: 99;
+    outline: none;
+    cursor: pointer;
+    padding: 15px;
+    left:20px;
+    border: none;
+    background-color: #e2e5e8;
+    color: $brand-primary;
+}
+
+#searchForm .nav.nav-pills .dropdown-menu.show li a{
+    background-color: #7b7d84;
+    color: #fff;
+}
+
+#searchForm .nav.nav-pills .dropdown-menu.show li a:hover{
+    background-color: #fff;
+    color: #323232;
+}
+
+form.dynamic-form.DoD div.form-group .form-control, form.dynamic-form.AcquisitionRequest div.form-group .form-control {
+    min-width: 100%;
+}
+/*
+.bulkActionButtons a {
+    display: block;
+    width: 25px;
+    height: 25px;
+    float: left;
+}
+
+.bulkActionButtons a > div{
+    width: 25px;
+    height: 25px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0;
+}
+*/
+.resp-sharing-button__link,.resp-sharing-button__icon {
+    display: inline-block
+}
+
+.resp-sharing-button__link {
+    text-decoration: none;
+    color: #fff;
+    margin: .5em
+}
+
+.resp-sharing-button {
+    border-radius: 5px;
+    transition: 25ms ease-out;
+    padding: .5em .75em;
+    font-family: Helvetica Neue,Helvetica,Arial,sans-serif
+}
+
+.resp-sharing-button__icon svg {
+    width: 1em;
+    height: 1em;
+    margin-right: .4em;
+    vertical-align: top
+}
+
+.resp-sharing-button--small svg {
+    margin: 0;
+    vertical-align: middle
+}
+
+.resp-sharing-button__icon {
+    stroke: #fff;
+    fill: none
+}
+
+.resp-sharing-button__icon--solid,.resp-sharing-button__icon--solidcircle {
+    fill: #fff;
+    stroke: none
+}
+
+.resp-sharing-button--twitter {
+    background-color: #55acee
+}
+
+.resp-sharing-button--twitter:hover {
+    background-color: #2795e9
+}
+
+.resp-sharing-button--pinterest {
+    background-color: #bd081c
+}
+
+.resp-sharing-button--pinterest:hover {
+    background-color: #8c0615
+}
+
+.resp-sharing-button--facebook {
+    background-color: #3b5998
+}
+
+.resp-sharing-button--facebook:hover {
+    background-color: #2d4373
+}
+
+.resp-sharing-button--tumblr {
+    background-color: #35465C
+}
+
+.resp-sharing-button--tumblr:hover {
+    background-color: #222d3c
+}
+
+.resp-sharing-button--reddit {
+    background-color: #5f99cf
+}
+
+.resp-sharing-button--reddit:hover {
+    background-color: #3a80c1
+}
+
+.resp-sharing-button--google {
+    background-color: #dd4b39
+}
+
+.resp-sharing-button--google:hover {
+    background-color: #c23321
+}
+
+.resp-sharing-button--linkedin {
+    background-color: #0077b5
+}
+
+.resp-sharing-button--linkedin:hover {
+    background-color: #046293
+}
+
+.resp-sharing-button--email {
+    background-color: #777
+}
+
+.resp-sharing-button--email:hover {
+    background-color: #5e5e5e
+}
+
+.resp-sharing-button--xing {
+    background-color: #1a7576
+}
+
+.resp-sharing-button--xing:hover {
+    background-color: #114c4c
+}
+
+.resp-sharing-button--whatsapp {
+    background-color: #25D366
+}
+
+.resp-sharing-button--whatsapp:hover {
+    background-color: #1da851
+}
+
+.resp-sharing-button--hackernews {
+    background-color: #F60
+}
+
+.resp-sharing-button--hackernews:hover,.resp-sharing-button--hackernews:focus {
+    background-color: #FB6200
+}
+
+.resp-sharing-button--vk {
+    background-color: #507299
+}
+
+.resp-sharing-button--vk:hover {
+    background-color: #43648c
+}
+
+.resp-sharing-button--facebook {
+    background-color: #3b5998;
+    border-color: #3b5998
+}
+
+.resp-sharing-button--facebook:hover,.resp-sharing-button--facebook:active {
+    background-color: #2d4373;
+    border-color: #2d4373
+}
+
+.resp-sharing-button--twitter {
+    background-color: #55acee;
+    border-color: #55acee
+}
+
+.resp-sharing-button--twitter:hover,.resp-sharing-button--twitter:active {
+    background-color: #2795e9;
+    border-color: #2795e9
+}
+
+.resp-sharing-button--whatsapp {
+    background-color: #25D366;
+    border-color: #25D366
+}
+
+.resp-sharing-button--whatsapp:hover,.resp-sharing-button--whatsapp:active {
+    background-color: #1DA851;
+    border-color: #1DA851
+}
+
+.resp-sharing-button__link:hover {
+    color: #fff
+}
+.pagination>li>a,.pagination>li>span {
+    position: relative;
+    float: left;
+    padding: 6px 12px;
+    margin-left: -1px;
+    line-height: 1.42857143;
+    color: $brand-primary;
+    text-decoration: none;
+    background-color: #fff;
+    border: 1px solid #ddd;
+}
+
+.pagination>li>a:hover,.pagination>li>span:hover,.pagination>li>a:focus,.pagination>li>span:focus {
+    z-index: 2;
+    color: #55111f;
+    background-color: #e9ecef;
+    border-color: #ddd
+}
+
+.pagination>li:first-child>a,.pagination>li:first-child>span {
+    margin-left: 0;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px
+}
+
+.pagination>li:last-child>a,.pagination>li:last-child>span {
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px
+}
+
+.pagination>.active>a,.pagination>.active>span,.pagination>.active>a:hover,.pagination>.active>span:hover,.pagination>.active>a:focus,.pagination>.active>span:focus {
+    z-index: 3;
+    color: #fff;
+    cursor: default;
+    background-color: $brand-primary;
+    border-color: $brand-primary
+}
+
+.facet-group .facet.active, .active-filters .facet {
+    background-color: $brand-primary;
+}
+
+a {
+    color: $brand-primary;
+    text-decoration: none;
+}
+
+.breadcrumb-item a {
+    color: #7b7d84;
+}
+
+.breadcrumb-item a:first-child {
+    color: $brand-primary;
+}
+
+.record-tabs .nav-link {
+    color: $brand-primary;
+}
+
+#mltmore {
+    color: $brand-primary !important;
+}
+
+.header-block-center > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100%;
+}
+
+.tf-clear-search-input-span {
+    width: 32px;
+    color: #70757a;
+    vertical-align: middle;
+    cursor: pointer;
+    border: 0;
+    background: #fff0;
+    position: absolute;
+    right: 38px !important;
+    left: auto !important;
+    top: 16px;
+    transform: translateY(-50%);
+    z-index: 999;
+}
+
+#searchForm.relbib-searchForm.isNewItemActiveClass #searchForm_lookfor {
+    background-color: $brand-primary;
+    color: #fff !important;
+}
+
+#searchForm_lookfor::placeholder {
+    color: #6c757d !important;
+    opacity: 1;
+}
+
+#searchForm_lookfor:-ms-input-placeholder {
+    color: #6c757d !important;
+}
+
+#searchForm_lookfor::-ms-input-placeholder {
+    color: #6c757d !important;
+}
+
+.btn-primary.isNewItemActiveClass {
+    min-height: 100%;
+}
+
+.active-filters.active-filters--uncollapsible {
+    justify-content: flex-start;
+}
+//new item search form buttons
+.form-search-newitem .btn {
+    background-color: $brand-primary;
+    color: #fff;
+    border: 1px solid #32414b;
+}
+
+.form-search-newitem .btn:hover {
+    background-color: #000;
+    color: #fff;
+}
+
+.form-search-newitem .btn-check:checked+.btn {
+    background-color: #fff;
+    color: #32414b;
+}
+
+.form-search-newitem .btn-check:checked+.btn:hover {
+    background-color: #32414b;
+    color: #fff;
+}
+
+.slider-container .noUi-horizontal .noUi-handle {
+    background: $brand-primary;
+    border: 1px solid $brand-primary;
+    width: 20px;
+    height: 20px;
+    box-shadow: none;
+    right: -10px;
+}
+
+.fa-plus-circle {
+    color: $brand-primary;
+}
+
+.breadcrumb a {
+    color: $brand-primary;
+}
+
+.browse-item.active {
+    background-color: $brand-primary;
+}
+
+.browse-item.active:hover {
+    background-color: $brand-secondary;
+}
+
+.alphabrowse tr.browse-match td {
+    border-top: .2rem solid $brand-primary;
+    border-bottom: .2rem solid $brand-primary;
+}
+
+.alphabrowse tr.browse-match td:first-child {
+    border-left: .2em solid $brand-primary;
+}
+
+.alphabrowse tr.browse-match td:last-child {
+    border-right: .2em solid $brand-primary;
+}
+
+.tf-cloud-block .nav-tabs .nav-link {
+    color: $brand-primary;
+}
+
+.tf-cloud-block .nav-tabs .nav-link.active {
+    color: black;
+}
+
+.myresearch-menu a.active {
+    background-color: $brand-primary;
+}
+
+.myresearch-menu a.active:hover {
+    background-color: $brand-secondary;
+}
+
+.back-to-login {
+    color: $brand-primary;
+}
+
+.form-cart-email .form-label, .form-cart-email .checkbox {
+    font-weight: bold;
+}
+
+// workaround: Copy/paste section here due to problem with color inheritance, see #3801
+.search-collapse-expand {
+    .collapse-expand-switch {
+        border-color: $brand-primary;
+        background-image: radial-gradient(
+          circle,
+          $brand-primary 0,
+          $brand-primary 45%,
+          transparent 48%
+        );
+
+        &:checked {
+          background-color: $brand-primary;
+          border-color: $brand-primary;
+        }
+
+        &:focus {
+          border-color: $brand-primary;
+          box-shadow: 0 0 0 .25rem rgba($brand-secondary, .25);
+        }
+    }
+}

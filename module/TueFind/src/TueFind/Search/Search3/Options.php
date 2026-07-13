@@ -2,12 +2,14 @@
 
 namespace TueFind\Search\Search3;
 
+use VuFind\Config\ConfigManagerInterface;
+
 class Options extends \VuFind\Search\Solr\Options
 {
-    public function __construct(\VuFind\Config\PluginManager $configLoader)
+    public function __construct(ConfigManagerInterface $configManager)
     {
         $this->mainIni = $this->searchIni = $this->facetsIni = 'Search3';
-        parent::__construct($configLoader);
+        parent::__construct($configManager);
     }
 
 

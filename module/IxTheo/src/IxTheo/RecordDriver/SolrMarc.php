@@ -1,40 +1,27 @@
 <?php
 
 namespace IxTheo\RecordDriver;
-use VuFindSearch\Query\Query;
+
 use VuFindSearch\Command\SearchCommand;
+use VuFindSearch\Query\Query;
 
 class SolrMarc extends SolrDefault
 {
-    const SUBITO_BROKER_ID = 'IXTHEO';
+    public const SUBITO_BROKER_ID = 'IXTHEO';
 
     // ISIL to e.g. determine the correct default local data block. Should be overridden in child classes.
-    const ISIL_DEFAULT = 'DE-Tue135'; // Index theologicus der Universitätsbibliothek Tübingen
-
-    public function canUseTAD($userId)
-    {
-        $formats_tad_allowed = array('Article');
-        $user_allowed = $this->getDbTable('user')->canUseTAD($userId);
-        if(!$user_allowed) {
-            return false;
-        }
-
-        $formats = $this->getFormats();
-        $intersection = array_intersect($formats_tad_allowed, $this->getFormats());
-        $tad_formats_allowed = !empty($intersection);
-
-        return $tad_formats_allowed;
-    }
+    public const ISIL_DEFAULT = 'DE-Tue135'; // Index theologicus der Universitätsbibliothek Tübingen
 
     /**
-     * @param array $properties  associative array with name => value
+     * @param  array $properties associative array with name => value
      * @return int
      */
     public function getChildRecordCountWithProperties($properties)
     {
         // Shortcut: if this record is not the top record, let's not find out the
         // count. This assumes that contained records cannot contain more records.
-        if (!$this->containerLinking
+        if (
+            !$this->containerLinking
             || empty($this->fields['is_hierarchy_id'])
             || null === $this->searchService
         ) {
@@ -44,7 +31,7 @@ class SolrMarc extends SolrDefault
         $safeId         = addcslashes($this->fields['is_hierarchy_id'], '"');
 
         $query_string   = 'hierarchy_parent_id:"' . $safeId . '"';
-        foreach($properties as $key => $value) {
+        foreach ($properties as $key => $value) {
             $query_string .= ' AND ' . $key . ':"' . addcslashes($value, '"') . '"';
         }
 
@@ -63,8 +50,9 @@ class SolrMarc extends SolrDefault
             foreach ($this->getMarcReader()->getSubfields($field) as $subfield) {
                 $subfield_code = $subfield;
                 if ($subfield_code == $first_subfield_code) {
-                    if ($first_subfield_contents != null)
+                    if ($first_subfield_contents != null) {
                         $matches[] = $first_subfield_contents . '|';
+                    }
                     $first_subfield_contents = $subfield;
                 } elseif ($subfield_code == $second_subfield_code) {
                     if ($first_subfield_contents != null) {
@@ -73,8 +61,9 @@ class SolrMarc extends SolrDefault
                     }
                 }
             }
-            if ($first_subfield_contents != null)
+            if ($first_subfield_contents != null) {
                 $matches[] = $first_subfield_contents . '|';
+            }
         }
 
         return $matches;
@@ -82,7 +71,7 @@ class SolrMarc extends SolrDefault
 
     public function getEnclosedTitlesWithAuthors()
     {
-        return array_merge($this->getSubfieldPairs('249', 'a', 'v'), $this->getSubfieldPairs('505', 't','r'));
+        return array_merge($this->getSubfieldPairs('249', 'a', 'v'), $this->getSubfieldPairs('505', 't', 'r'));
     }
 
     public function getKeyWordChains()
@@ -99,9 +88,8 @@ class SolrMarc extends SolrDefault
             $keywordchains = preg_replace('/\sgnd\s/', '', $keywordchains);
             $keywordchains = preg_replace('/\(\w{2}-\d{3}\)[\dX-]+\s*/', '', $keywordchains);
             return $keywordchains;
-        }
-        else {
-          return '';
+        } else {
+            return '';
         }
     }
 
@@ -116,16 +104,17 @@ class SolrMarc extends SolrDefault
      */
     public function getTypesAndPersistentIdentifiers()
     {
-        $result  = array();
-        $rawdata = isset($this->fields['types_and_persistent_identifiers']) ? $this->fields['types_and_persistent_identifiers'] : array();
+        $result  = [];
+        $rawdata = $this->fields['types_and_persistent_identifiers'] ?? [];
 
         foreach ($rawdata as $entry) {
             $entry_splitted = explode(':', $entry, 2);
             $result_type    = $entry_splitted[0];
             $result_value   = $entry_splitted[1];
 
-            if (!isset($result[$result_type]))
-                $result[$result_type] = array();
+            if (!isset($result[$result_type])) {
+                $result[$result_type] = [];
+            }
             $result[$result_type][] = $result_value;
         }
 
@@ -142,13 +131,15 @@ class SolrMarc extends SolrDefault
 
             foreach ($lokField['subfields'] as $subfield) {
                 if ($subfield['code'] == '0') {
-                    if ($subfield['data'] == '866  ')
+                    if ($subfield['data'] == '866  ') {
                         $is866 = true;
-                } elseif ($subfield['code'] == 'x')
+                    }
+                } elseif ($subfield['code'] == 'x') {
                     $x = $subfield['data'];
+                }
             }
 
-            if ($is866 && $x != null && strpos($x, 'SPQUE') !== false) {
+            if ($is866 && $x != null && str_contains($x, 'SPQUE')) {
                 $markers = ['SPQUE', 'SPSAM', 'SPUSM', 'SPSYS'];
                 $parts = explode('#', $x);
                 $relevantParts = array_values(array_diff($parts, $markers));

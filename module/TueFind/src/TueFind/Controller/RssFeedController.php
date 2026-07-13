@@ -18,8 +18,8 @@ class RssFeedController extends \VuFind\Controller\AbstractBase {
     {
         $view = new ViewModel();
         $view->page = $this->params()->fromQuery('page') ?? 1;
-        $rssTable = $this->serviceLocator->get(\VuFind\Db\Table\PluginManager::class)->get('rss_feed');
-        $view->rssFeeds = $rssTable->getFeedsSortedByName();
+        $rssService = $this->getDbService(\TueFind\Db\Service\RssFeedServiceInterface::class);
+        $view->rssFeeds = $rssService->getFeedsSortedByName();
         $view->rssItems = $this->serviceLocator->get('ViewHelperManager')->get('tuefind')->getRssNewsEntries();
         return $view;
     }

@@ -2,11 +2,13 @@
 
 namespace KrimDok\RecordDriver;
 
-class SolrDefault extends \TueFind\RecordDriver\SolrMarc {
+use function is_array;
 
+class SolrDefault extends \TueFind\RecordDriver\SolrMarc
+{
     public function getGenres()
     {
-        return isset($this->fields['genre']) ? $this->fields['genre'] : array();
+        return $this->fields['genre'] ?? [];
     }
 
     /**
@@ -17,7 +19,7 @@ class SolrDefault extends \TueFind\RecordDriver\SolrMarc {
         if (isset($this->fields['instituts_systematik2']) && !empty($this->fields['instituts_systematik2'])) {
             return $this->fields['instituts_systematik2'];
         } else {
-            return array();
+            return [];
         }
     }
 
@@ -28,7 +30,7 @@ class SolrDefault extends \TueFind\RecordDriver\SolrMarc {
      */
     public function getIsils()
     {
-        return isset($this->fields['isil']) ? $this->fields['isil'] : [];
+        return $this->fields['isil'] ?? [];
     }
 
     /**
@@ -50,18 +52,17 @@ class SolrDefault extends \TueFind\RecordDriver\SolrMarc {
      */
     public function getPageCount()
     {
-        return isset($this->fields['page_count'])
-            ? $this->fields['page_count'] : '';
+        return $this->fields['page_count'] ?? '';
     }
 
     public function isAvailableForPDA()
     {
-        return isset($this->fields['available_for_pda']) ? $this->fields['available_for_pda'] : false;
+        return $this->fields['available_for_pda'] ?? false;
     }
 
     public function isAvailableInTuebingen()
     {
-        return ($this->getLocalSignatures() != []);
+        return $this->getLocalSignatures() != [];
     }
 
     public function showAvailabilityInTuebingen()

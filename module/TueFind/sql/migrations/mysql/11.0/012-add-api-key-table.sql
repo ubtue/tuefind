@@ -1,0 +1,1 @@
+../../../../../VuFind/sql/migrations/mysql/11.0/012-add-api-key-table.sql

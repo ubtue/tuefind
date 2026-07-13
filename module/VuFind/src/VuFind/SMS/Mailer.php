@@ -17,8 +17,8 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * along with this program; if not, see
+ * <https://www.gnu.org/licenses/>.
  *
  * @category VuFind
  * @package  SMS
@@ -74,11 +74,11 @@ class Mailer extends AbstractBase
     /**
      * Constructor
      *
-     * @param \Laminas\Config\Config $config  SMS configuration
-     * @param array                  $options Additional options: defaultFrom
+     * @param \VuFind\Config\Config $config  SMS configuration
+     * @param array                 $options Additional options: defaultFrom
      * (optional) and mailer (must be a \VuFind\Mailer\Mailer object)
      */
-    public function __construct(\Laminas\Config\Config $config, $options = [])
+    public function __construct(\VuFind\Config\Config $config, $options = [])
     {
         // Set up parent object first:
         parent::__construct($config);

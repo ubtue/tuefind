@@ -1,0 +1,1 @@
+../../../../../VuFind/sql/migrations/mysql/11.0/003-add-user-foreign-key-on-search.sql

@@ -62,6 +62,7 @@ var IxTheo2 = {
             }
         }
     },
+
     ChangeHandlerMenuSearchForm: function() {
         $('.handlers-menu a').click(function() {
             $('#searchForm_typeCaption').html($(this).html());
@@ -205,6 +206,25 @@ var IxTheo2 = {
         var target = L.latLng(targetCoordinates['lat'], targetCoordinates['lon']);
 
         cmap.setView(target, zoom);
+    },
+
+    async loadMap (group = 'all') {
+        try {
+
+            let lang = document.documentElement.getAttribute('lang');
+
+            const response = await fetch(`/AJAX/JSON?method=Mapping&action=getPartners&group=${group}&lang=${lang}`);
+            const data = await response.json();
+
+            if (typeof cmap !== 'undefined') {
+                cmap.remove();
+            }
+
+            IxTheo2.DrawMap(group, data.data);
+
+        } catch (error) {
+            console.error('Error loading data:', error);
+        }
     }
 
 }; //end Ixtheo2
@@ -225,23 +245,10 @@ $(function () {
 
     IxTheo2.IxTheoSimpleGalley(true, 'a.thumbnail');
 
-    $('.logo-tooltip').tooltip({
-        position: {
-          my: "center bottom-5",
-          at: "center top",
-          using: function( position, feedback ) {
-            $( this ).css( position );
-            $( "<div>" )
-              .addClass( "arrow" )
-              .addClass( feedback.vertical )
-              .addClass( feedback.horizontal )
-              .appendTo( this );
-          }
-        },
-        content: function() {
-          var element = $( this );
-            return element.find('.ix-copyright-name').html();
-        }
+    $('.logo-tooltip').hover(function() {
+        $(this).find('.ix-copyright-name').fadeIn(200);
+    }, function() {
+        $(this).find('.ix-copyright-name').fadeOut(200);
     });
 
     /* ========================================================================= */
@@ -289,6 +296,4 @@ $(function () {
       if($('.ix2-searchForm .searchForm_type').val() == 'BibleRangeSearch') {
         $('.ix2-search-form-bottom-nav .bibel-button').parent().addClass('active');
       }
-
-
 });

@@ -1,6 +1,17 @@
 {
     "require": {
-        "elasticsearch/elasticsearch": "8.14.0",
-        "symfony/intl": "^5.4"
+        "elasticsearch/elasticsearch": "8.19.0",
+        "gitonomy/gitlib": "^1.6",
+        "symfony/intl": "^6.4",
+        "ubtue/vufind-collapse-expand": "dev-release-11.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "TueFind\\": ["module/TueFind/src/TueFind", "module/TueFind"],
+            "TueFindApi\\": ["module/TueFindApi/src/TueFindApi", "module/TueFindApi"],
+            "TueFindSearch\\": ["module/TueFindSearch/src/TueFindSearch", "module/TueFindSearch"],
+            "IxTheo\\": ["module/IxTheo/src/IxTheo", "module/IxTheo"],
+            "KrimDok\\": ["module/KrimDok/src/KrimDok", "module/KrimDok"]
+        }
     }
 }
