@@ -663,7 +663,7 @@ class Authority extends \Laminas\View\Helper\AbstractHelper implements \VuFind\I
         $cacheKey = $driver->getUniqueID();
         $cache = $this->getCache('chart-data');
 
-        if (($chartData = $cache->getItem($cacheKey)) != null) {
+        if (isset($cache) && ($chartData = $cache->getItem($cacheKey)) != null) {
             return $chartData;
         } else {
             $query = new \VuFindSearch\Query\Query($this->getTitlesByQueryParams($driver), 'AllFields');
@@ -715,7 +715,9 @@ class Authority extends \Laminas\View\Helper\AbstractHelper implements \VuFind\I
                 }
             }
 
-            $cache->setItem($cacheKey, $chartData);
+            if (isset($cache)) {
+                $cache->setItem($cacheKey, $chartData);
+            }
             return $chartData;
         }
     }
@@ -763,7 +765,7 @@ class Authority extends \Laminas\View\Helper\AbstractHelper implements \VuFind\I
 
         $cacheKey = $driver->getUniqueID();
         $cache = $this->getCache('topics-data');
-        if (($topicsData = $cache->getItem($cacheKey)) != null) {
+        if (isset($cache) && ($topicsData = $cache->getItem($cacheKey)) != null) {
             return $topicsData;
         } else {
             $query = new \VuFindSearch\Query\Query($this->getTitlesByQueryParams($driver), null, $settings['searchType']);
@@ -840,7 +842,9 @@ class Authority extends \Laminas\View\Helper\AbstractHelper implements \VuFind\I
                 $mainTopicsArray[0]['topicNumber'] = $settings['maxNumber'];
             }
             $topicsData = [$mainTopicsArray, $settings];
-            $cache->setItem($cacheKey, $topicsData);
+            if (isset($cache)) {
+                $cache->setItem($cacheKey, $topicsData);
+            }
             return $topicsData;
         }
     }
