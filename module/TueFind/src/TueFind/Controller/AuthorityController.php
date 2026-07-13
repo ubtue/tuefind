@@ -46,17 +46,6 @@ class AuthorityController extends \VuFind\Controller\AuthorityController
         return $driver;
     }
 
-    public function recordAction()
-    {
-        $driver = $this->loadRecord();
-        $user = $this->getUser();
-        $request = $this->getRequest();
-        $view = $this->showTab($this->params()->fromQuery('tab', $this->getDefaultTab()));
-        $view->driver = $driver;
-        $view->user = $user;
-        return $view;
-    }
-
     public function requestAccessAction()
     {
         $authorityId = $this->params()->fromRoute('authority_id');
