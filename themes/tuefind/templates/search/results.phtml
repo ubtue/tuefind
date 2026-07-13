@@ -57,28 +57,7 @@
       <h3 class="facet-title">
         <div class="title">
           <span class="facet-title"><?=$this->transEsc('collapse results') ?></span>
-        </div>
-      </h3>
-      <div class="collapse show">
-        <form
-          class="search-collapse-expand"
-          action="<?= $this->currentPath() ?>"
-          method="POST"
-          id="collapse-expand-form"
-        >
-          <div class="d-flex align-items-center justify-content-between gap-3 p-3">
-              <label
-                  for="collapse-expand-checkbox"
-                  class="h3 facet-title"
-              >
-                  <?php if ($this->collapseExpandConfig->isActive()): ?>
-                  <?= $this->transEsc('Deactivate') ?>
-                  <?php else: ?>
-                  <?= $this->transEsc('Activate') ?>
-                  <?php endif; ?>
-              </label>
-
-              <div class="form-check form-switch m-0">
+          <div class="form-check form-switch m-0">
                   <input
                       class="form-check-input fs-4 collapse-expand-switch"
                       type="checkbox"
@@ -90,8 +69,7 @@
                       <?php if ($this->collapseExpandConfig->isActive()): ?>checked<?php endif; ?>
                   >
               </div>
-          </div>
-
+        </div>
           <noscript>
               <div class="mt-2">
                   <p class="text-muted mb-2">Please enable JavaScript, or use the button below.</p>
@@ -100,8 +78,7 @@
                   </button>
               </div>
           </noscript>
-        </form>
-      </div>
+      </h3>
     </div>
     <?php
     $this->sideFacetExtraControls = ($this->sideFacetExtraControls ?? '') . ob_get_clean();

@@ -670,3 +670,26 @@ a:hover {
 .template-name-cmspage .container a {
     color: #a51e37;
 }
+
+// workaround: Copy/paste section here due to problem with color inheritance, see #3801
+.search-collapse-expand {
+    .collapse-expand-switch {
+        border-color: krimdok_v.$brand-primary;
+        background-image: radial-gradient(
+          circle,
+          krimdok_v.$brand-primary 0,
+          krimdok_v.$brand-primary 45%,
+          transparent 48%
+        );
+
+        &:checked {
+          background-color: krimdok_v.$brand-primary;
+          border-color: krimdok_v.$brand-primary;
+        }
+
+        &:focus {
+          border-color: krimdok_v.$brand-primary;
+          box-shadow: 0 0 0 .25rem rgba(krimdok_v.$brand-secondary, .25);
+        }
+    }
+}
