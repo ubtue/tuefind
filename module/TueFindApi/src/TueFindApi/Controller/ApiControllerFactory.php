@@ -35,7 +35,6 @@ class ApiControllerFactory implements FactoryInterface
         $controller = new $requestedName($container);
         $controllerManager = $container->get('ControllerManager');
         foreach ($this->getApiControllersToRegister($container) as $apiName) {
-            error_log('XXXXX: ' . $apiName, 3, '/tmp/myerror.log');
             $controller->addApi($controllerManager->get($apiName));
         }
         return $controller;
