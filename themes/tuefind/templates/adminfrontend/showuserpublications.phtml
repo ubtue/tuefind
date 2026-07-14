@@ -2,11 +2,11 @@
 // Set up page title:
 $this->headTitle($this->translate('User Authorities'));
 
-$subSystemType=$this->tuefind()->getTueFindFlavour();
+$subSystemType = $this->tuefind()->getTueFindFlavour();
 $isIxTheo = ($subSystemType == 'ixtheo') ? true : false;
 
 // Set up breadcrumbs:
-$this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') . '">' . $this->transEsc('Your Account') . '</a></li> <li class="active">' . $this->transEsc('User Publications') . '</li>';
+$this->layout()->breadcrumbs = '<li><a href="' . $this->url('myresearch-home') . '">' . $this->transEsc('Your Account') . '</a></li> <li class="active">' . $this->transEsc('User Publications') . '</li>';
 ?>
 
 <div class="<?=$this->layoutClass('mainbody')?>">
@@ -14,7 +14,6 @@ $this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') 
   <?php if (count($this->publications) == 0): ?>
     <p>No publications have been added so far.</p>
   <?php else: ?>
-
     <table class="table dataTable display compact table-striped table-bordered table-condensed" data-order="[[ 6, &quot;desc&quot; ]]">
       <thead>
         <tr>
@@ -42,7 +41,7 @@ $this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') 
         <?php endforeach; ?>
       </tbody>
     </table>
-
+    <?=$this->assetManager()->outputInlineScriptString('TueFind.RenderDataTable();') ?>
   <?php  endif; ?>
 
 </div>
