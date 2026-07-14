@@ -12,6 +12,16 @@ $config = [
             'Api' => 'TueFindApi\Controller\ApiController'
         ],
      ],
+      'service_manager' => [
+        'factories' => [
+            'VuFindApi\Formatter\WebRecordFormatter' => 'VuFindApi\Formatter\WebRecordFormatterFactory',
+        ],
+    ],
+    'vufind_api' => [
+        'register_controllers' => [
+            \TueFindApi\Controller\MltApiController::class,
+        ],
+    ],
      'router' => [
          'routes' => [
              'mltApiv1' => [
