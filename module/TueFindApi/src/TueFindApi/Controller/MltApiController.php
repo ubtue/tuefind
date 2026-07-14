@@ -1,16 +1,19 @@
 <?php
+
 namespace TueFindApi\Controller;
 
-use Laminas\ServiceManager\ServiceLocatorInterface;
-use VuFindApi\Formatter\FacetFormatter;
-use VuFindApi\Formatter\RecordFormatter;
+use VuFindSearch\Command\SimilarCommand;
+
+use function count;
+use function is_array;
 
 class MltApiController extends \VuFindApi\Controller\SearchApiController
 {
     protected $mltRoute = 'mlt';
 
-    public function similarAction() {
-         // Disable session writes
+    public function similarAction()
+    {
+        // Disable session writes
         $this->disableSessionWrites();
 
         $this->determineOutputMode();
@@ -35,23 +38,28 @@ class MltApiController extends \VuFindApi\Controller\SearchApiController
             $results[] = $loader->load($request['id'], $this->searchClassId);
         } catch (\Exception $e) {
             return $this->output(
-                [], self::STATUS_ERROR, 400,
+                [],
+                self::STATUS_ERROR,
+                400,
                 'Error loading record ' . $request['id']
             );
         }
 
         $searchService = $this->serviceLocator->get(\VuFindSearch\Service::class);
         try {
-            $results = $searchService->similar($this->searchClassId, $request['id'])->getRecords();
+            $command = new SimilarCommand($this->searchClassId, $request['id']);
+            $results = $searchService->invoke($command)->getResult();
         } catch (\Exception $e) {
             return $this->output(
-                [], self::STATUS_ERROR, 400,
+                [],
+                self::STATUS_ERROR,
+                400,
                 'Error determining similar records'
             );
         }
 
         $response = [
-            'resultCount' => count($results)
+            'resultCount' => count($results),
         ];
         $requestedFields = $this->getFieldList($request);
         if ($records = $this->recordFormatter->format($results, $requestedFields)) {
@@ -61,16 +69,14 @@ class MltApiController extends \VuFindApi\Controller\SearchApiController
         return $this->output($response, self::STATUS_OK);
     }
 
-
-
-    public function getSwaggerSpecFragment()
+    public function getApiSpecFragment()
     {
         $config = $this->getConfig();
         $results = $this->getResultsManager()->get($this->searchClassId);
         $options = $results->getOptions();
         $params = $results->getParams();
 
-        error_log("SWAGGER CALLED");
+        error_log('SWAGGER CALLED');
         $viewParams = [
             'config' => $config,
             'version' => \VuFind\Config\Version::getBuildVersion(),
@@ -90,10 +96,9 @@ class MltApiController extends \VuFindApi\Controller\SearchApiController
             'maxLimit' => $this->maxLimit,
         ];
         $json = $this->getViewRenderer()->render(
-            'mltapi/swagger', $viewParams
+            'mltapi/swagger',
+            $viewParams
         );
         return $json;
     }
-
 }
-?>
