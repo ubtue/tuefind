@@ -236,23 +236,26 @@
 
       <?php endif; ?>
 
-      <?php $bibleRangesString = $this->driver->tryMethod('getBibleRangesString');
-        if (!empty($bibleRangesString)) {
-          echo '<div>' . $this->transEsc($bibleRangesString) . '</div>';
-        }
-      ?>
-
-      <?php $canonLawRangesStrings = $this->driver->tryMethod('getCanonLawRangesStrings');
-        if (!empty($canonLawRangesStrings) && count($canonLawRangesStrings) > 0) {
-          echo '<div>' . implode('; ', array_unique($canonLawRangesStrings)) . '</div>';
-        }
-      ?>
-
-      <?php $timeRangesString = $this->driver->tryMethod('getTimeRangesString');
-        if (!empty($timeRangesString)) {
-          echo '<div>' . $this->transEsc($timeRangesString) . '</div>';
-        }
-      ?>
+      <?php $searchHandler = $this->params->getSearchHandler(); ?>
+      <?php if ($searchHandler == 'BibleRangeSearch'): ?>
+        <?php $bibleRangesString = $this->driver->tryMethod('getBibleRangesString');
+          if (!empty($bibleRangesString)) {
+            echo '<div>' . $this->transEsc($bibleRangesString) . '</div>';
+          }
+        ?>
+      <?php elseif ($searchHandler == 'CanonesRangeSearch'): ?>
+        <?php $canonLawRangesStrings = $this->driver->tryMethod('getCanonLawRangesStrings');
+          if (!empty($canonLawRangesStrings) && count($canonLawRangesStrings) > 0) {
+            echo '<div>' . implode('; ', array_unique($canonLawRangesStrings)) . '</div>';
+          }
+        ?>
+      <?php elseif ($searchHandler == 'TimeRangeBBox'): ?>
+        <?php $timeRangesString = $this->driver->tryMethod('getTimeRangesString');
+          if (!empty($timeRangesString)) {
+            echo '<div>' . $this->transEsc($timeRangesString) . '</div>';
+          }
+        ?>
+      <?php endif; ?>
 
       <?php /* BEGIN Show extended records */ ?>
       <?=$this->render('RecordDriver/DefaultRecord/result-list-snippet.phtml')?>
