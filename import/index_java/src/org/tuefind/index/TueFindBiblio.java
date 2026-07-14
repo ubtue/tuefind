@@ -27,6 +27,7 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.util.EntityUtils;
 import org.apache.http.HttpEntity;
+import org.ini4j.Ini;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -3454,18 +3455,48 @@ public class TueFindBiblio extends TueFind {
         return results;
     }
 
-    public String getCollapseExpand(final Record record,
-                                       final String authorTagList, final String authorAcceptWithoutRelator, final String authorRelatorConfig)
+    final static String COLLAPSE_EXPAND_CONFIG_PATH = "/usr/local/vufind/import/collapse_expand.ini";
+
+    protected static volatile Ini collapseExpandConfig = null;
+
+    protected Ini getCollapseExpandConfig() throws FileNotFoundException, IOException
     {
+        // Use Ini4j similar to vufind.ConfigManager
+        if (collapseExpandConfig == null) {
+            synchronized (TueFindBiblio.class) {
+                File configFile = new File(COLLAPSE_EXPAND_CONFIG_PATH);
+                collapseExpandConfig = new Ini();
+                collapseExpandConfig.load(new FileReader(configFile));
+            }
+        }
+        return collapseExpandConfig;
+    }
+
+    public String getCollapseExpand(final Record record,
+                                       final String authorTagList, final String authorAcceptWithoutRelator, final String authorRelatorConfig) throws FileNotFoundException, IOException
+    {
+        Ini config = getCollapseExpandConfig();
+        var blacklist = config.get("Blacklist");
+
         // If this is just a single field as base, we could also generate this on the C++ side in the long term.
         Set<String> dois = getDOIs(record);
         if (!dois.isEmpty()) {
+            var blacklistDOI = blacklist.getAll("doi[]");
+            if (dois.stream().anyMatch(blacklistDOI::contains)) {
+                logger.warning("Skip collapse & expand for " + record.getControlNumber() + ": At least one DOI is blacklisted");
+                return null;
+            }
             return "DOI:" + String.join("#", dois);
         }
 
         // This is just a first implementation => other fields must also be considered (e.g. 024a depending on indicators)
         Set<String> lccns = SolrIndexer.instance().getFieldList(record, "010a");
         if (!lccns.isEmpty()) {
+            var blacklistLCCN = blacklist.getAll("lccn[]");
+            if (lccns.stream().anyMatch(blacklistLCCN::contains)) {
+                logger.warning("Skip collapse & expand for " + record.getControlNumber() + ": At least one LCCN is blacklisted");
+                return null;
+            }
             return "LCCN:" + String.join("#", lccns);
         } else {
             String result = "";
