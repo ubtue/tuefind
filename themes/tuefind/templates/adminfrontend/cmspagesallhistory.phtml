@@ -31,6 +31,7 @@ $this->breadcrumbs()->set($this->translate('Admins'), $this->url('adminfrontend-
       <?php endforeach; ?>
     </tbody>
   </table>
+  <?=$this->assetManager()->outputInlineScriptString('TueFind.RenderDataTable();') ?>
 </div>
 
 <div class="<?=$this->layoutClass('sidebar')?>" id="myresearch-sidebar" role="navigation" aria-label="<?=$this->transEsc('account_menu_label')?>">

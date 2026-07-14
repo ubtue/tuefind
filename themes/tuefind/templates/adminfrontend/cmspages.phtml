@@ -45,6 +45,7 @@ $this->breadcrumbs()->set($this->translate('Admins'), $this->url('myresearch-hom
       <?php endforeach; ?>
     </tbody>
   </table>
+  <?=$this->assetManager()->outputInlineScriptString('TueFind.RenderDataTable();') ?>
 
   <?php // restrict adding new pages to admins only!!! ?>
   <?php if (in_array('admin', $this->user->getTueFindRights())): ?>

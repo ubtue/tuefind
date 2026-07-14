@@ -124,8 +124,8 @@ var TueFind = {
                             json.snippets_collection[doc_id].snippets
                         ) {
                             snippets = json.snippets_collection[doc_id].snippets;
-                        } 
-                    
+                        }
+
                     $("#snippet_place_holder_" + doc_id).each(function () {
                         if (snippets)
                             $(this).replaceWith('<div id="snippets_' + doc_id + '" class="snippet-div">' + snippets.join('<br/>') + '<br/></div>');
@@ -170,7 +170,7 @@ var TueFind = {
     },
 
     GetFulltextSnippets: function (url, doc_id, query, verbose = false, synonyms = "", fulltext_types = "") {
-        
+
         // Only run on Search2 results pages (fulltext)
         if (!window.location.pathname.startsWith('/Search2/Results')) {
             return;
@@ -874,12 +874,12 @@ var TueFind = {
         try {
             let response = await fetch(`/AJAX/JSON?method=Cms&action=${action}`);
             if (!response.ok) throw new Error(`HTTP Error ${response.status}`);
-            
+
             let result = await response.json();
             let payload = result?.data;
             if (!payload) throw new Error('Server returned empty data object');
             if (!payload.success) throw new Error(payload.message || `Unknown error during ${action}`);
-            
+
             logFn('Success: ' + payload.message, 'success');
             return payload;
         } catch (error) {
@@ -891,7 +891,7 @@ var TueFind = {
     _executeSyncProcess: async function(btn, stagesRunner) {
         const $spinner = $('#sync-spinner');
         const $consoleLog = $('#sync-log-console');
-        
+
         btn.disabled = true;
         $spinner.css('display', 'inline-block');
         $consoleLog.empty();
@@ -919,13 +919,13 @@ var TueFind = {
         await this._executeSyncProcess(this, async (log) => {
             // Step 1: Pull
             await this._runGitStage('gitPull', 'Step 1/3: Requesting git pull from remote repository...', 'PULL STAGE FAILED', log);
-            
+
             // Step 2: Import
             await this._runGitStage('gitImport', 'Step 2/3: Scanning JSON files and updating database...', 'IMPORT STAGE FAILED', log);
-            
+
             // Step 3: Push
             await this._runGitStage('gitPush', 'Step 3/3: Committing local changes and pushing to Git...', 'PUSH STAGE FAILED', log);
-            
+
             log('=== ALL SYNC STAGES COMPLETED SUCCESSFULLY ===', 'success');
         });
     },
@@ -934,6 +934,12 @@ var TueFind = {
         await this._executeSyncProcess(this, async (log) => {
             await this._runGitStage('gitPush', 'Step 1/1: Committing local changes and pushing to Git...', 'PUSH STAGE FAILED', log);
             log('=== PUSH COMPLETED SUCCESSFULLY ===', 'success');
+        });
+    },
+
+    RenderDataTable: function() {
+        new DataTable('.dataTable',{
+            scrollX: true
         });
     }
 };
@@ -1001,9 +1007,7 @@ $(document).ready(function () {
         }).observe(stableParent, { childList: true });
     }
     /* disabled for now, as it causes problems with the CMS docs table, which is currently the only table in the frontend
-    new DataTable('.dataTable',{
-        scrollX: true
-    });
+
     */
 
     // ajax git pull test for CMS

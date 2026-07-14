@@ -3,7 +3,7 @@
 $this->headTitle($this->translate('User Authorities'));
 
 // Set up breadcrumbs:
-$this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') . '">' . $this->transEsc('Your Account') . '</a></li> <li class="active">' . $this->transEsc('User Authorities') . '</li>';
+$this->layout()->breadcrumbs = '<li><a href="' . $this->url('myresearch-home') . '">' . $this->transEsc('Your Account') . '</a></li> <li class="active">' . $this->transEsc('User Authorities') . '</li>';
 ?>
 
 <div class="<?=$this->layoutClass('mainbody')?>">
@@ -48,6 +48,7 @@ $this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') 
         <?php endforeach; ?>
       </tbody>
     </table>
+    <?=$this->assetManager()->outputInlineScriptString('TueFind.RenderDataTable();') ?>
   <?php endif; ?>
 </div>
 
