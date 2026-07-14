@@ -52,20 +52,22 @@
 <?php endif ?>
 
 <!-- TueFind: Add Admin section -->
-<?php $cmsSectionsNames = ['cmspages','cmspageshistory','cmspagesdocs']; ?>
-<?php if (!empty($userTueFindRights) && array_intersect(['admin', 'cms'], $userTueFindRights)): ?>
+<?php
+// check whether admin section must be rendered
+$showAdminSection = false;
+foreach ($this->items as $item) {
+    if (isset($item['section']) && $item['section'] == 'admin') {
+        $showAdminSection = true;
+    }
+}
+
+?>
+<?php if ($showAdminSection): ?>
   <h3 id="<?=$this->idPrefix ?? ''?>acc-menu-acc-header"><?=$this->transEsc('Admin')?></h3>
   <nav class="myresearch-menu" aria-labelledby="<?=$this->idPrefix ?? ''?>acc-menu-acc-header">
     <ul class="account-menu">
       <?php foreach ($this->items as $item): ?>
         <?php if (isset($item['section']) && $item['section'] == 'admin'): ?>
-          <?php
-          // Check if the item is a CMS section and if CMS sync is disabled, skip it
-          $cmsEnabled = $this->tuefind()->getConfig()->CMS->enabled ?? false;
-          if (in_array($item['name'], $cmsSectionsNames) && !$cmsEnabled) {
-              continue;
-          }
-          ?>
           <?=$this->render('myresearch/menu-item.phtml', ['active' => $this->active, ...$item])?>
         <?php endif; ?>
       <?php endforeach; ?>

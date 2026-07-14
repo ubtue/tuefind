@@ -2,7 +2,6 @@
 
 namespace TueFind\Config;
 
-use VuFind\Auth\Manager as AuthManager;
 use VuFind\Config\Config;
 
 class AccountCapabilities extends \VuFind\Config\AccountCapabilities
@@ -72,6 +71,19 @@ class AccountCapabilities extends \VuFind\Config\AccountCapabilities
     {
         return isset($this->tuefindConfig->General->subscriptions)
             && $this->tuefindConfig->General->subscriptions === 'enabled'
+            ? 'enabled' : 'disabled';
+    }
+
+    /**
+     * Is CMS enabled?
+     */
+    public function getCmsSetting(): string
+    {
+        // Note: While other settings use "enabled" as string, this setting in the config
+        //       just uses true/false which is normalized to '1' by the config parser
+        //       (maybe change / normalize when time permits)
+        return isset($this->tuefindConfig->CMS->enabled)
+            && ($this->tuefindConfig->CMS->enabled === 'enabled' || $this->tuefindConfig->CMS->enabled === '1')
             ? 'enabled' : 'disabled';
     }
 }

@@ -32,12 +32,20 @@ class AccountMenu extends \VuFind\Navigation\AccountMenu
 
     public function checkUserAuthorities(): bool
     {
-        return $this->checkAdmins() && $this->accountCapabilities->getRequestAuthorityRightsSetting() === 'enabled';
+        $user = $this->getUser();
+        if ($this->accountCapabilities->getRequestAuthorityRightsSetting() === 'enabled') {
+            return $user && array_intersect(['admin','user_authorities'], $user->getTueFindRights());
+        }
+        return false;
     }
 
     public function checkUserPublications(): bool
     {
-        return $this->checkAdmins() && $this->accountCapabilities->getPublicationSetting() === 'enabled';
+        $user = $this->getUser();
+        if ($this->accountCapabilities->getPublicationSetting() === 'enabled') {
+            return $user && array_intersect(['admin','user_authorities'], $user->getTueFindRights());
+        }
+        return false;
     }
 
     public function checkPda(): bool
@@ -50,30 +58,29 @@ class AccountMenu extends \VuFind\Navigation\AccountMenu
         return $this->accountCapabilities->getSubscriptionSetting() === 'enabled';
     }
 
-    public function checkCMS(): bool
+    protected function showCMS(): bool
     {
-        $user = $this->getUser();
-        if ($user && array_intersect(['admin','cms'], $user->getTueFindRights())) {
-            return true;
+        if ($this->accountCapabilities->getCmsSetting() === 'enabled') {
+            $user = $this->getUser();
+            if ($user && array_intersect(['admin','cms'], $user->getTueFindRights())) {
+                return true;
+            }
         }
         return false;
+    }
+
+    public function checkCMS(): bool
+    {
+        return $this->showCMS();
     }
 
     public function checkAllCMSHistory(): bool
     {
-        $user = $this->getUser();
-        if ($user && array_intersect(['admin','cms'], $user->getTueFindRights())) {
-            return true;
-        }
-        return false;
+        return $this->showCMS();
     }
 
     public function checkCMSDocs(): bool
     {
-        $user = $this->getUser();
-        if ($user && array_intersect(['admin','cms'], $user->getTueFindRights())) {
-            return true;
-        }
-        return false;
+        return $this->showCMS();
     }
 }
