@@ -21,6 +21,7 @@
   $this->headTitle($this->translate('facet_list_for', ['%%field%%' => $this->facetLabel]));
   $this->assetManager()->appendScriptString('var multiFacetsSelection = "' . $this->multiFacetsSelection . '";');
   $this->assetManager()->appendScriptLink('facets.js');
+  $localizedFacetFilter = in_array($this->facet, ['callnumber-first', 'dewey-hundreds'], true);
 ?>
 <h2><?=$this->transEsc($this->facetLabel) ?></h2>
 
@@ -38,10 +39,10 @@
     <?php endif; ?>
 
     <div class="facet-lightbox-filter form-group hidden" role="group" aria-labelledby="facet-lightbox-filter-label">
-      <?php if ($this->results->getParams()->supportsFacetFiltering($this->facet) === true): ?>
+      <?php if ($localizedFacetFilter || $this->results->getParams()->supportsFacetFiltering($this->facet) === true): ?>
         <label id="facet-lightbox-filter-label" class="form-label" for="input-contains"><?=$this->transEsc('Filter') ?></label>
-        <input id="input-contains" class="ajax_param form-control" data-name="contains" type="text" value="<?=htmlspecialchars($this->contains)?>" aria-label="<?=$this->transEscAttr('search_terms')?>">
-        <button id="btn-reset-contains" class="btn btn-default <?=strlen($this->contains) < 1 ? 'hidden' : ''?>" type="reset" aria-label="<?=$this->transEsc('searchform_reset_button')?>"><?=$this->icon('ui-reset-search')?></button>
+        <input id="input-contains" class="<?=$localizedFacetFilter ? '' : 'ajax_param '?>form-control" data-name="contains"<?=$localizedFacetFilter ? ' data-localized-facet-filter' : ''?> type="text" value="<?=htmlspecialchars($this->contains)?>" aria-label="<?=$this->transEscAttr('search_terms')?>">
+        <button id="<?=$localizedFacetFilter ? 'btn-reset-localized-contains' : 'btn-reset-contains'?>" class="btn btn-default <?=strlen($this->contains) < 1 ? 'hidden' : ''?>" type="reset" aria-label="<?=$this->transEsc('searchform_reset_button')?>"><?=$this->icon('ui-reset-search')?></button>
 <?php endif; ?>
 
       <?php $ajaxParams = ['facet' => $this->facet, 'facetexclude' => $this->exclude, 'facetop' => $this->operator, 'facetpage' => $this->page, 'facetsort' => $this->sort, 'urlBase' => $urlBase, 'searchAction' => $searchAction]; ?>
@@ -69,6 +70,40 @@
 </div>
 
 <?=$this->assetManager()->outputInlineScriptString('VuFind.facetList.setup();')?>
+<?php if ($localizedFacetFilter): ?>
+  <?=$this->assetManager()->outputInlineScriptString(<<<'JS'
+      (() => {
+        const input = document.querySelector('[data-localized-facet-filter]');
+        const result = document.getElementById('facet-info-result');
+        const reset = document.getElementById('btn-reset-localized-contains');
+        if (!input || !result || !reset) {
+          return;
+        }
+
+        const locale = document.documentElement.lang || undefined;
+        const applyFilter = () => {
+          const needle = input.value.trim().toLocaleLowerCase(locale);
+          result.querySelectorAll('.facet__list__item').forEach((item) => {
+            const label = item.querySelector('.text') || item;
+            const value = label.textContent.trim().toLocaleLowerCase(locale);
+            item.classList.toggle('hidden', needle !== '' && !value.includes(needle));
+          });
+          reset.classList.toggle('hidden', needle === '');
+        };
+
+        input.addEventListener('input', applyFilter);
+        reset.addEventListener('click', (event) => {
+          event.preventDefault();
+          input.value = '';
+          applyFilter();
+          input.focus();
+        });
+        new MutationObserver(applyFilter).observe(result, {childList: true, subtree: true});
+        applyFilter();
+      })();
+      JS
+  )?>
+<?php endif; ?>
 <?php if ($this->inLightbox): ?>
   <?=$this->assetManager()->outputInlineScriptString('VuFind.lightbox_facets.setup();')?>
 <?php endif; ?>
