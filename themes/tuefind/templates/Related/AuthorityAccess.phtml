@@ -1,45 +1,77 @@
-<?php $userAccess = $this->tuefind()->getUserAccessState($this->driver->getUniqueId(), $this->user ?? null);?>
-<div class="action-toolbar">
-  <?php if ($this->user != false):
-    $userAlreadyMadeAuthorityRequest = $this->tuefind()->userAlreadyMadeAuthorityRequest($this->user->id);?>
-    <?php if ($userAccess['availability'] == 'free'): ?>
-      <?php if($userAlreadyMadeAuthorityRequest): ?>
-        <?=$this->translate('authority_access_state_exists_other', ['%%email%%' => '<a href="mailto:' . ($this->tuefind()->getConfig()->Publication->email ?? $this->tuefind()->getConfig('config')->Site->email) . '">' . ($this->tuefind()->getConfig()->Publication->email ?? $this->tuefind()->getConfig('config')->Site->email) . '</a>'])?>
-      <?php else: ?>
-        <a class="save-record toolbar-btn btn-type-save" rel="nofollow" href="<?=$this->url('authority-request-access', ['authority_id' => $this->driver->getUniqueId()])?>" data-lightbox="">
-          <span class="icon icon--font fa fa-star" role="img" aria-hidden="true"></span>
-          <span><?=$this->transEsc('authority_access_request_button')?></span>
-        </a>
-      <?php endif;?>
-    <?php elseif ($userAccess['availability'] == 'mine'): ?>
-      <?php if ($userAccess['access_state'] == 'requested'): ?>
-        <?=$this->transEsc('authority_access_state_requested')?>
-      <?php elseif ($userAccess['access_state'] == 'granted'): ?>
-        <a href="<?=$this->url('myresearch-publications')?>"><?=$this->transEsc('authority_access_state_granted')?></a>
-        <?php if($this->accountCapabilities()->getPublicationSetting() === 'enabled'): ?>
-          <br><a class="help-link" data-lightbox href="<?=$this->url('help-home')?>?topic=publicationStart&amp;_=<?=time()?>"><?=$this->transEsc('publication_request_link')?></a>
-        <?php endif;?>
-      <?php endif;?>
-    <?php elseif ($userAccess['availability'] == 'other'): ?>
-      <?php if($this->accountCapabilities()->getPublicationSetting() === 'enabled'): ?>
-        <span class="save-record toolbar-btn btn-type-save">
-          <span class="icon icon--font fa fa-star" role="img" aria-hidden="true"></span>
-          <span><?=$this->transEsc('authority_access_state_unavailable')?></span>
-        </span>
+<?php
+/* PART 1:  Group up all texts and buttons to render proper sections if necessary */
+$texts = [];
+$buttons = [];
+$userAccess = $this->tuefind()->getUserAccessState($this->driver->getUniqueId(), $this->user ?? null);
+?>
+<?php if ($this->user != false):
+  $userAlreadyMadeAuthorityRequest = $this->tuefind()->userAlreadyMadeAuthorityRequest($this->user);?>
+  <?php if ($userAccess['availability'] == 'free'): ?>
+    <?php if ($userAlreadyMadeAuthorityRequest): ?>
+      <?php $texts[] = $this->translate('authority_access_state_exists_other', ['%%email%%' => '<a href="mailto:' . ($this->tuefind()->getConfig()->Publication->email ?? $this->tuefind()->getConfig('config')->Site->email) . '">' . ($this->tuefind()->getConfig()->Publication->email ?? $this->tuefind()->getConfig('config')->Site->email) . '</a>'])?>
+    <?php else: ?>
+      <?php
+        $buttons[] = '
+          <a class="save-record toolbar-btn btn-type-save" rel="nofollow" href="' . $this->url('authority-request-access', ['authority_id' => $this->driver->getUniqueId()]) . '" data-lightbox="">
+            <span class="icon icon--font fa fa-star" role="img" aria-hidden="true"></span>
+            <span>' . $this->transEsc('authority_access_request_button') . '</span>
+          </a>';
+      ?>
+    <?php endif;?>
+  <?php elseif ($userAccess['availability'] == 'mine'): ?>
+    <?php if ($userAccess['access_state'] == 'requested'): ?>
+      <?php $texts[] = $this->transEsc('authority_access_state_requested')?>
+    <?php elseif ($userAccess['access_state'] == 'granted'): ?>
+      <?php $texts[] = '<a href="' . $this->url('myresearch-publications') . '">' . $this->transEsc('authority_access_state_granted') . '</a>'; ?>
+      <?php if ($this->accountCapabilities()->getPublicationSetting() === 'enabled'): ?>
+        <?php $texts[] = '<a class="help-link" data-lightbox href="' . $this->url('help-home') . '?topic=publicationStart&amp;_=' . time() . '">' . $this->transEsc('publication_request_link') . '</a>';?>
       <?php endif;?>
     <?php endif;?>
-  <?php else:?>
-    <a class="save-record toolbar-btn btn-type-save" rel="nofollow" href="<?=$this->url('authority-request-access', ['authority_id' => $this->driver->getUniqueId()])?>" data-lightbox="">
-      <span class="icon icon--font fa fa-star" role="img" aria-hidden="true"></span>
-      <span><?=$this->transEsc('authority_access_request_button')?></span>
-    </a>
+  <?php elseif ($userAccess['availability'] == 'other'): ?>
+    <?php if ($this->accountCapabilities()->getPublicationSetting() === 'enabled'): ?>
+      <?php
+        $buttons[] = '
+          <span class="save-record toolbar-btn btn-type-save">
+            <span class="icon icon--font fa fa-star" role="img" aria-hidden="true"></span>
+            <span>' . $this->transEsc('authority_access_state_unavailable') . '</span>
+          </span>';
+      ?>
+    <?php endif;?>
   <?php endif;?>
+<?php else:?>
+  <?php
+    $buttons[] = '
+      <a class="save-record toolbar-btn btn-type-save" rel="nofollow" href="' . $this->url('authority-request-access', ['authority_id' => $this->driver->getUniqueId()]) . '" data-lightbox="">
+        <span class="icon icon--font fa fa-star" role="img" aria-hidden="true"></span>
+        <span>' . $this->transEsc('authority_access_request_button') . '</span>
+      </a>';
+  ?>
+<?php endif;?>
 
-  <?php if($this->tuefind()->getConfig()->General->SelfArchiving == 'enabled'): ?>
-  <!-- TueFind: SelfArchiving button -->
-  <a class="toolbar-btn" href="<?=$this->url('myresearch-selfarchiving')?>">
-    <?=$this->icon('addthis-bookmark') ?>
-    <?=$this->transEsc('SelfArchiving_menu_label')?>
-  </a>
-  <?php endif;?>
-</div>
+<?php if ($this->tuefind()->getConfig()->General->SelfArchiving == 'enabled'): ?>
+  <?php /* TueFind: SelfArchiving button */ ?>
+  <?php
+    $buttons[] = '
+      <a class="toolbar-btn" href="' . $this->url('myresearch-selfarchiving') . '">' .
+        $this->icon('addthis-bookmark') .
+        $this->transEsc('SelfArchiving_menu_label') .
+      '</a>';
+  ?>
+<?php endif;?>
+
+<?php /* PART 2: Render texts and buttons including section wrapper, if any */ ?>
+<?php if (!empty($texts)): ?>
+  <p class="info-texts">
+   <?php foreach ($texts as $text): ?>
+      <?=$text?><br>
+   <?php endforeach; ?>
+  </p>
+<?php endif; ?>
+
+<?php if (!empty($buttons)): ?>
+  <div class="action-toolbar">
+    <?php foreach ($buttons as $button): ?>
+      <?=$button?>
+    <?php endforeach; ?>
+  </div>
+<?php endif; ?>
