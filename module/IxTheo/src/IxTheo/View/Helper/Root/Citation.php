@@ -124,8 +124,10 @@ class Citation extends \VuFind\View\Helper\Root\Citation implements \VuFind\I18n
         if ($doiPrefix == false)
             $doiPrefix = 'doi: ';
 
+        $isEnglishTitle = $this->isEnglishTitle();
+
         $mla = [
-            'title' => $this->getMLATitle(),
+            'title' => $isEnglishTitle ? $this->getMLATitle() : $this->getAPATitle(),
             'authors' => $this->getMLAAuthors($etAlThreshold),
             'labelPageRange' => $labelPageRange,
             'pageNumberSeparator' => $pageNoSeparator,
@@ -147,7 +149,7 @@ class Citation extends \VuFind\View\Helper\Root\Citation implements \VuFind\I18n
         // If we got this far, we should add other journal-specific details:
         $mla['doiArticleComma'] = $doiArticleComma;
         $mla['pageRange'] = $this->getPageRange();
-        $mla['journal'] = $this->capitalizeTitle($this->details['journal']);
+        $mla['journal'] = $isEnglishTitle ? $this->capitalizeTitle($this->details['journal']) : $this->details['journal'];
         $mla['numberAndDate'] = $numPrefix . $this->getMLANumberAndDate(
             $volNumSeparator,
             $volPrefix,
@@ -178,6 +180,12 @@ class Citation extends \VuFind\View\Helper\Root\Citation implements \VuFind\I18n
          return $this->driver->getPages();
     }
 
+
+    protected function isEnglishTitle()
+    {
+          $languages = $this->driver->getLanguages();
+          return in_array('English', $languages);
+    }
 
 
     /**
@@ -213,7 +221,7 @@ class Citation extends \VuFind\View\Helper\Root\Citation implements \VuFind\I18n
         if (!empty($vol) || !empty($num)) {
             // If only the number is non-empty, move the value to the volume to
             // simplify template behavior:
-            if (empty($vol) && !empty($num)) {
+            if (empty($vol) && isset($num) && $num !== '') {
                 $vol = $num;
                 $num = '';
             }
