@@ -3486,7 +3486,19 @@ public class TueFindBiblio extends TueFind {
                 logger.warning("Skip collapse & expand for " + record.getControlNumber() + ": At least one DOI is blacklisted");
                 return null;
             }
-            return "DOI:" + String.join("#", dois);
+
+            String collapseExpandString = "DOI:" + String.join("#", dois);
+
+            // DOI alone can be misleading, unfortunately many data suppliers set the same doi for all articles of the same superior work.
+            // We try to get the first 3 words from the title.
+            String title = getMainTitle(record);
+            Pattern pattern = Pattern.compile("^\\w+(\\W+\\w+){2}");
+            Matcher matcher = pattern.matcher(title);
+            if (matcher.find()) {
+                collapseExpandString += matcher.group();
+            }
+
+            return collapseExpandString;
         }
 
         // This is just a first implementation => other fields must also be considered (e.g. 024a depending on indicators)
