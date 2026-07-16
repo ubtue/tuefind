@@ -1,2 +1,2 @@
 <h2><?=$this->escapeHtml($this->cmsPagesTranslation->getTitle())?></h2>
-<?=$this->cmsPagesTranslation->getContent()?>
+<?=$this->tuefind()->transformCmsPageContent($this->cmsPagesTranslation)?>
