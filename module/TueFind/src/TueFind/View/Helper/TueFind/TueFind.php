@@ -802,10 +802,10 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper implements
 
         $viewHelperManager = $this->container->get('ViewHelperManager');
 
-        // Detect special commands, which should all have the same pattern: ##<commandId> <commandParam1> <CommandParam2> <CommandParamN>##
+        // Detect special commands, which should all have the same pattern: {{<commandId> <commandParam1> <CommandParam2> <CommandParamN>}}
         // If a param is wrapped by [], it is treated as an array, elements will be split by a delimiter ','
         $content = preg_replace_callback(
-            '/##(([a-zA-Z0-9_]+)(\s+([^%]+?)))##/',
+            '/\{\{(([a-zA-Z0-9_]+)(\s+([^%]+?)))\}\}/',
             function (array $matches) use ($viewHelperManager) {
                 $args = preg_split('/\s+/', $matches[1]);
                 $helperId = $args[0];
