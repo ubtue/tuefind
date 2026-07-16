@@ -796,9 +796,15 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper implements
         return $navActive;
     }
 
-    public function transformCmsPageContent(\TueFind\Db\Entity\CmsPagesTranslation $cmsPageTranslation): string
+    public function transformCmsPageContent(mixed $input): string
     {
-        $content = $cmsPageTranslation->getContent() ?? '';
+        // This can either be called in the backend context, then typically a CmsPagesTranslation object is given,
+        // Or be called via AjaxHandler, then we might only have a string
+        if ($input instanceof \TueFind\Db\Entity\CmsPagesTranslation) {
+            $content = $input->getContent() ?? '';
+        } else {
+            $content = $input;
+        }
 
         $viewHelperManager = $this->container->get('ViewHelperManager');
 
