@@ -640,7 +640,7 @@ border-radius: 0.4rem;
 background-color: #00000085;
 }
 #image-gallery .modal-dialog {
-  width: 1000px; 
+  width: 1000px;
   margin-top:200px;
 }
 /* center align svg elements */
@@ -1429,6 +1429,16 @@ a {
 
 .digiTabs .nav.nav-tabs .nav-link {
   cursor: pointer;
+}
+
+.digiTabs .nav-tabs > li > a {
+  font-size: 11px;
+}
+.digiTabs .tab-content {
+  padding: 10px;
+}
+.digiTabs .nav-tabs > li > a {
+  font-size: 16px;
 }
 
 .ix2-search-form-bottom-nav ul >li.nav-item {
