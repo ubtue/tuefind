@@ -3457,6 +3457,8 @@ public class TueFindBiblio extends TueFind {
 
     final static String COLLAPSE_EXPAND_CONFIG_PATH = "/usr/local/vufind/import/collapse_expand.ini";
 
+    final static Pattern COLLAPSE_EXPAND_DOI_TITLE_PATTERN = Pattern.compile("^\\s+(\\S+\\s+){2}");
+
     protected static volatile Ini collapseExpandConfig = null;
 
     protected Ini getCollapseExpandConfig() throws FileNotFoundException, IOException
@@ -3492,8 +3494,7 @@ public class TueFindBiblio extends TueFind {
             // DOI alone can be misleading, unfortunately many data suppliers set the same doi for all articles of the same superior work.
             // We try to get the first 3 words from the title.
             String title = getMainTitle(record);
-            Pattern pattern = Pattern.compile("^\\w+(\\W+\\w+){2}");
-            Matcher matcher = pattern.matcher(title);
+            Matcher matcher = COLLAPSE_EXPAND_DOI_TITLE_PATTERN.matcher(title);
             if (matcher.find()) {
                 collapseExpandString += matcher.group();
             }
