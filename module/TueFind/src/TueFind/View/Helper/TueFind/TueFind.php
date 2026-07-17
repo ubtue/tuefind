@@ -924,8 +924,6 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper implements
             $content = $input;
         }
 
-        $this->parseCommandTest();
-
         $viewHelperManager = $this->container->get('ViewHelperManager');
 
         // Detect special commands, which should all have the same pattern: {{<commandId> <commandParam1> <CommandParam2> <CommandParamN>}}
