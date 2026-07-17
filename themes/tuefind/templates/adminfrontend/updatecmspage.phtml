@@ -99,6 +99,7 @@
 
 <?php
   $script = <<<JS
+        // Function for calling AjaxHandler to replace palceholders (display texts, images, ...)
         function transformPageContent(pageContent) {
             // Use POST instead of GET due URL size limitation
             const postData = { content: pageContent };

@@ -796,6 +796,124 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper implements
         return $navActive;
     }
 
+    /**
+     * Parse command string
+     * - removing start/end delimiter {{ and }} as well as html_decode should be done BEFORE calling this!
+     * - see parseCommandTest() function for examples
+     */
+    protected function parseCommand(string $command): array
+    {
+        //..Abandon All Hope, Ye Who Enter Here (to debug this).
+        $result = [];
+
+        $inArray = false;
+        $inQuote = false;
+
+        $bufferArray = [];
+        $bufferWord = [];
+        for ($i = 0; $i <= mb_strlen($command); $i++) {
+            $token = mb_substr($command, $i, 1);
+
+            switch ($token) {
+                case ' ':
+                    if (!$inQuote) {
+                        if ($inArray) {
+                            $bufferArray[] = implode('', $bufferWord);
+                        } else {
+                            $result[] = implode('', $bufferWord);
+                        }
+                        $bufferWord = [];
+                    } else {
+                        $bufferWord[] = $token;
+                    }
+                    break;
+                case '[':
+                    if ($inQuote) {
+                        $bufferWord[] = $token;
+                    } else {
+                        $inArray = true;
+                        $bufferArray = [];
+                        $bufferWord = [];
+                    }
+                    break;
+                case ']':
+                    if ($inQuote) {
+                        $bufferWord[] = $token;
+                    } else {
+                        $inArray = false;
+                        $bufferArray[] = implode('', $bufferWord);
+
+                        // Special handling for assoc arrays
+                        $toAdd = [];
+                        for ($j = 0; $j < count($bufferArray); $j++) {
+                            if ($bufferArray[$j] == '=>') {
+                                $key = array_shift($toAdd);
+                                $j++;
+                                $value = $bufferArray[$j];
+                                $toAdd[$key] = $value;
+                            } else {
+                                $toAdd[] = $bufferArray[$j];
+                            }
+                        }
+
+                        $result[] = $toAdd;
+                        $bufferWord = [];
+                        $bufferArray = [];
+                    }
+                    break;
+                case ',':
+                    if ($inArray) {
+                        if ($inQuote) {
+                            $bufferWord[] = $token;
+                        } else {
+                            $bufferArray[] = implode('', $bufferWord);
+                            $bufferWord = [];
+                        }
+                    }
+                    break;
+                case "'":
+                    $inQuote = !$inQuote;
+                    break;
+                default:
+                    $bufferWord[] = $token;
+                    break;
+            }
+
+            /*
+            print '<font color="blue">TOKEN: "' . $token . '" quote ' . intval($inQuote) . ' in_array ' . intval($inArray) .  '</font><br>';
+            print 'word: ' .print_r($bufferWord,true);print '<br>';
+            print 'array:' . print_r($bufferArray,true);print '<br>';
+            print 'result: ' . print_r($result,true); print '<br>';
+            */
+        }
+        if (!empty($bufferWord)) {
+            $end = trim(implode('', $bufferWord));
+            if ($end != '') {
+                $result[] = implode('', $bufferWord);
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * Test the "parseCommand" function and report if there are irregularities
+     */
+    public function parseCommandTest()
+    {
+        $tests = [];
+        $tests['1a'] = ['command' => 'transEsc wikidata_link', 'result' => ['transEsc', 'wikidata_link']];
+        $tests['1b'] = ['command' => 'transEsc \'Scholarly Advisory Board\'', 'result' => ['transEsc', 'Scholarly Advisory Board']];
+        $tests['2a'] = ['command' => 'url content-page [page => TheologicalCommunity]', 'result' => ['url', 'content-page', ['page' => 'TheologicalCommunity']]];
+        $tests['2b'] = ['command' => 'url content-page [page => \'TheologicalCommunity\']', 'result' => ['url', 'content-page', ['page' => 'TheologicalCommunity']]];
+
+        foreach ($tests as $testName => $test) {
+            $result = $this->parseCommand($test['command']);
+            if ($result != $test['result']) {
+                throw new \Exception('parseCommandTest ' . $testName . ' failed!!! Should be: ' . print_r($test['result'], true) . ' but is in fact: ' . print_r($result, true));
+            }
+        }
+    }
+
     public function transformCmsPageContent(mixed $input): string
     {
         // This can either be called in the backend context, then typically a CmsPagesTranslation object is given,
@@ -806,29 +924,19 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper implements
             $content = $input;
         }
 
+        $this->parseCommandTest();
+
         $viewHelperManager = $this->container->get('ViewHelperManager');
 
         // Detect special commands, which should all have the same pattern: {{<commandId> <commandParam1> <CommandParam2> <CommandParamN>}}
-        // If a param is wrapped by [], it is treated as an array, elements will be split by a delimiter ','
+        // If a param is wrapped by [], it is treated as an array, elements will be split by a delimiter ',' and also '=>' will be parsed as assoc key/value pairs
         $content = preg_replace_callback(
             '/\{\{(([a-zA-Z0-9_]+)(\s+([^%]+?)))\}\}/',
             function (array $matches) use ($viewHelperManager) {
-                // Use str_getcsv to parse command args, this way we can use single quotes as enclosure for e.g. translatable display texts with whitespaces
-                $args = str_getcsv($matches[1], ' ', "'");
-                $helperId = $args[0];
-                $helperArgs = array_slice($args, 1);
-
-                foreach ($helperArgs as $i => $helperArg) {
-                    // transform single comma-separated arg into array
-                    if (preg_match('/^\[[^\]]+\]$/', $helperArg)) {
-                        $helperArg = ltrim($helperArg, '[');
-                        $helperArg = rtrim($helperArg, ']');
-                        $helperArgArray = preg_split('/' . preg_quote(',', '/') . '/', $helperArg);
-
-                        $helperArgs[$i] = [$helperArgArray];
-                    }
-                    // later we could also add a logic for associative arrays if necessary
-                }
+                // examples, see $this->parseCommandTest()
+                $command = $this->parseCommand(html_entity_decode($matches[1]));
+                $helperId = $command[0];
+                $helperArgs = array_slice($command, 1);
 
                 $helper = $viewHelperManager->get($helperId);
                 return $helper(...$helperArgs);
