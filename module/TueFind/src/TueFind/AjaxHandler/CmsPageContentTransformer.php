@@ -20,6 +20,14 @@ class CmsPageContentTransformer extends \VuFind\AjaxHandler\AbstractBase
     public function handleRequest(Params $params)
     {
         $content = $params->fromPost('content', $params->fromQuery('content'));
+
+        if (empty($content)) {
+            return $this->formatResponse(
+                'content parameter missing or empty',
+                self::STATUS_HTTP_BAD_REQUEST
+            );
+        }
+
         $transformedContent = $this->viewHelper->transformCmsPageContent($content);
         $response = ['content' => $transformedContent];
         return $this->formatResponse($response);
