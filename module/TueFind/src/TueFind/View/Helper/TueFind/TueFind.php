@@ -813,7 +813,8 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper implements
         $content = preg_replace_callback(
             '/\{\{(([a-zA-Z0-9_]+)(\s+([^%]+?)))\}\}/',
             function (array $matches) use ($viewHelperManager) {
-                $args = preg_split('/\s+/', $matches[1]);
+                // Use str_getcsv to parse command args, this way we can use single quotes as enclosure for e.g. translatable display texts with whitespaces
+                $args = str_getcsv($matches[1], ' ', "'");
                 $helperId = $args[0];
                 $helperArgs = array_slice($args, 1);
 
