@@ -8,6 +8,35 @@ class Params extends \TueFind\Search\Solr\Params implements \VuFind\I18n\Transla
 {
     use \VuFind\I18n\Translator\TranslatorAwareTrait;
 
+    protected ?string $localizedFacetContains = null;
+
+    public function setFacetContains($value)
+    {
+        $this->localizedFacetContains = $value;
+        parent::setFacetContains($value);
+    }
+
+    public function getLocalizedFacetContains(): ?string
+    {
+        return $this->localizedFacetContains;
+    }
+
+    public function getFacetSettings()
+    {
+        $settings = parent::getFacetSettings();
+        $localizedFacets = $this->getOptions()->getLocalizedFacetFilters();
+        if (array_intersect(array_keys($this->facetConfig), $localizedFacets)) {
+            unset($settings['contains'], $settings['contains.ignoreCase']);
+        }
+        return $settings;
+    }
+
+    public function supportsFacetFiltering($facet)
+    {
+        return in_array($facet, $this->getOptions()->getLocalizedFacetFilters())
+            || parent::supportsFacetFiltering($facet);
+    }
+
     /**
      * Overwrite sort for BibleRangeSearch
      *

@@ -27,15 +27,17 @@
              <div class="mb-3">
                 <nav>
                   <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                    <?php $iLang=0; foreach ($this->langs as $oneLang=>$name): ?>
-                      <button class="nav-link <?=($iLang == 0)? 'active': ''?>" id="<?=$oneLang;?>-tab" data-bs-toggle="tab" data-bs-target="#<?=$oneLang;?>" type="button" role="tab" aria-controls="<?=$oneLang;?>" aria-selected="true"><?=$oneLang;?></button>
+                    <?php $iLang = 0;
+                    foreach ($this->langs as $oneLang => $name): ?>
+                      <button class="nav-link <?=($iLang == 0) ? 'active' : ''?>" id="<?=$oneLang;?>-tab" data-bs-toggle="tab" data-bs-target="#<?=$oneLang;?>" type="button" role="tab" aria-controls="<?=$oneLang;?>" aria-selected="true"><?=$oneLang;?></button>
                     <?php $iLang++; endforeach; ?>
                   </div>
                 </nav>
                 <div class="tab-content" id="nav-tabContent">
-                  <?php $iLang2=0; foreach ($this->langs as $oneLang2=>$name): ?>
+                  <?php $iLang2 = 0;
+                  foreach ($this->langs as $oneLang2 => $name): ?>
                     <?php $translation = $this->cmsPage->getTranslation($oneLang2); ?>
-                    <div class="tab-pane fade <?=($iLang2 == 0)? ' show active': ''?>" id="<?=$oneLang2;?>" role="tabpanel" aria-labelledby="<?=$oneLang2;?>-tab">
+                    <div class="tab-pane fade <?=($iLang2 == 0) ? ' show active' : ''?>" id="<?=$oneLang2;?>" role="tabpanel" aria-labelledby="<?=$oneLang2;?>-tab">
                       <div class="mb-3">
                           <label class="form-label">Title</label>
                           <input type="text" name="page_title[]" value="<?=$translation ? $this->escapeHtmlAttr($translation->getTitle()) : ''?>" class="form-control page_title" placeholder="Enter title to create, clear title to delete">
@@ -51,7 +53,7 @@
 
               <!-- Update -->
               <div class="">
-                <button type="submit" class="btn btn-primary" name="action" value="update"><?=$this->transEsc('Update')?></button>
+                <button type="submit" class="btn btn-primary cms_update" name="action" value="update"><?=$this->transEsc('Update')?></button>
                 <span class="btn btn-secondary cms_preview" data-bs-toggle="modal" data-bs-target="#exampleModal"><?=$this->transEsc('Preview')?></span>
               </div>
 
@@ -97,6 +99,26 @@
 
 <?php
   $script = <<<JS
+        // Function for calling AjaxHandler to replace palceholders (display texts, images, ...)
+        function transformPageContent(pageContent) {
+            // Use POST instead of GET due URL size limitation
+            const postData = { content: pageContent };
+            const url = VuFind.path + '/AJAX/JSON?method=CmsPageContentTransformer';
+
+            return fetch(url, {
+                method: 'POST',
+                headers: {'Accept': 'application/json'},
+                body: new URLSearchParams(postData)
+            })
+            .then(response => response.text())
+            .then((data) => {
+                const jsonObject = JSON.parse(data);
+                return jsonObject.data.content;
+            });
+        }
+
+        // Summernote API Documentation:
+        // https://summernote.org/deep-dive/
         $('.editor').summernote({
             placeholder: '',
             tabsize: 2,
@@ -107,9 +129,18 @@
                 ['color', ['color']],
                 ['para', ['ul', 'ol', 'paragraph']],
                 ['table', ['table']],
-                ['insert', ['link', 'picture', 'video']],
+                ['insert', ['link', 'picture']],
                 ['view', ['fullscreen', 'codeview', 'help']]
             ]
+        });
+
+        // callbacks are unfortunately not working as expected.
+        // we need to make sure that when saving, the "Code View" is no longer active,
+        // else changes will not be saved.
+        $('.cms_update').click(function (thisEvent) {
+            if ($('.btn-codeview').hasClass('active')) {
+                $('.btn-codeview').trigger('click');
+            }
         });
 
         $('.cms_preview').click(function(thisEvent){
@@ -117,7 +148,9 @@
             let pagetitle = activeTab.find('.page_title').val();
             let pageContent = activeTab.find('.editor').summernote('code');
             $('#exampleModal .preview_title').html(pagetitle);
-            $('#exampleModal .preview_body').html(pageContent);
+            transformPageContent(pageContent).then(transformedContent => {
+                $('#exampleModal .preview_body').html(transformedContent);
+            });
         });
       JS;
 ?>

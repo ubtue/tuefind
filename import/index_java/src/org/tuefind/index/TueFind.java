@@ -35,6 +35,8 @@ public class TueFind extends SolrIndexerMixin {
 
     protected static final Pattern SORTABLE_STRING_REMOVE_PATTERN = Pattern.compile("[^\\p{Lu}\\p{Ll}\\p{Lt}\\p{Lo}\\p{N}]+");
 
+    protected static final Pattern SORTABLE_STRING_REMOVE_PATTERN_KEEP_SPACES = Pattern.compile("[^\\p{Lu}\\p{Ll}\\p{Lt}\\p{Lo}\\p{N}\\p{Zs}]+");
+
     protected static Set<String> getAllSubfieldsBut(final Record record, final String fieldSpecList, final String excludeSubfields) {
         final Set<String> extractedValues = new LinkedHashSet<>();
         final String[] fieldSpecs = fieldSpecList.split(":");
@@ -210,13 +212,22 @@ public class TueFind extends SolrIndexerMixin {
         return results;
     }
 
-    protected String normalizeSortableString(String string) {
+    protected String normalizeSortableString(String string, boolean keepSpaces) {
         // Only keep letters & numbers. For unicode character classes, see:
         // https://en.wikipedia.org/wiki/Template:General_Category_(Unicode)
         if (string == null)
             return null;
+
+        Pattern pattern = SORTABLE_STRING_REMOVE_PATTERN;
+        if (keepSpaces)
+            pattern = SORTABLE_STRING_REMOVE_PATTERN_KEEP_SPACES;
+
         //c.f. https://stackoverflow.com/questions/1466959/string-replaceall-vs-matcher-replaceall-performance-differences (21/03/16)
-        return SORTABLE_STRING_REMOVE_PATTERN.matcher(string).replaceAll("").trim();
+        return pattern.matcher(string).replaceAll("").trim();
+    }
+
+    protected String normalizeSortableString(String string) {
+        return normalizeSortableString(string, false);
     }
 
     protected String normalizeSortableYear(final String strYear){
