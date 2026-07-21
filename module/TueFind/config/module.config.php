@@ -415,6 +415,7 @@ $config = [
             'TueFind\Service\KfL' => 'TueFind\Service\KfLFactory',
             'TueFindSearch\Service' => 'VuFind\Service\SearchServiceFactory',
             'Laminas\Session\SessionManager' => 'TueFind\Session\ManagerFactory',
+            'VuFind\Db\Service\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory'
         ],
         'initializers' => [
             'TueFind\ServiceManager\ServiceInitializer',
@@ -435,6 +436,7 @@ $config = [
             'VuFind\Search' => 'TueFindSearch\Service',
             'VuFind\Sitemap\Generator' => 'TueFind\Sitemap\Generator',
             'VuFindSearch\Service' => 'TueFindSearch\Service',
+            'TueFind\Db\Service\PluginManager' => 'VuFind\Db\Service\PluginManager',
         ],
     ],
     'doctrine' => [
@@ -463,12 +465,14 @@ $config = [
                     'TueFind\AjaxHandler\GetSubscriptionBundleEntries' => 'TueFind\AjaxHandler\GetSubscriptionBundleEntriesFactory',
                     'TueFind\AjaxHandler\CmsEntries' => 'TueFind\AjaxHandler\CmsEntriesFactory',
                     'TueFind\AjaxHandler\CmsDocsEntries' => 'TueFind\AjaxHandler\CmsDocsEntriesFactory',
+                    'TueFind\AjaxHandler\CmsPageContentTransformer' => 'TueFind\AjaxHandler\CmsPageContentTransformerFactory',
                     'TueFind\AjaxHandler\MappingEntries' => 'TueFind\AjaxHandler\MappingEntriesFactory',
                 ],
                 'aliases' => [
                     'getSubscriptionBundleEntries' => 'TueFind\AjaxHandler\GetSubscriptionBundleEntries',
                     'Cms' => 'TueFind\AjaxHandler\CmsEntries',
                     'CmsDocs' => 'TueFind\AjaxHandler\CmsDocsEntries',
+                    'CmsPageContentTransformer' => 'TueFind\AjaxHandler\CmsPageContentTransformer',
                     'Mapping' => 'TueFind\AjaxHandler\MappingEntries',
                 ],
             ],
