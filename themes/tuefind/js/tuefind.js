@@ -941,7 +941,36 @@ var TueFind = {
         new DataTable('.dataTable',{
             scrollX: true
         });
+    },
+
+    getAJAXCMSDocs: function(ajaxCmsDocsBlockClass='',modeType='') {
+        const className = ajaxCmsDocsBlockClass.trim() || 'AJAXCMSDocsBlock';
+        const $block = $(`.${className}`);
+        $block.html('<div class="tf_themes_block">Loading...</div>');
+        $.ajax({
+            url: '/AJAX/JSON',
+            type: 'GET',
+            data: {
+                method: 'CmsDocs',
+                action: 'getThemeURLs',
+                block: className,
+                modetype: modeType
+            },
+            dataType: 'json'
+        })
+        .done(response => {
+            if (response && response.data && response.data.length > 0) {
+                $block.html(response.data);
+            } else {
+                $block.html('Themes not finded.');
+            }
+        })
+        .fail((xhr, status, error) => {
+            console.error('AJAX Error:', error);
+            $block.html('html not loated.');
+        });
     }
+
 };
 
 
@@ -1013,5 +1042,58 @@ $(document).ready(function () {
     // ajax git pull test for CMS
     $('#git-pull-btn').on('click', (e) => TueFind.handleCmsGitPull(e.currentTarget));
     $('#git-push-btn').on('click', (e) => TueFind.handleCmsGitPush(e.currentTarget));
+
+    $('.note-btn-group.note-insert').on('click', function() {
+        let noteType = $(this).data('note-type');
+        let noteContent = $(this).data('note-content');
+        let noteTarget = $(this).data('note-target');
+        let noteTargetElement = $('#' + noteTarget);
+
+        console.log('clicked note button: type=' + noteType + ', content=' + noteContent + ', target=' + noteTarget);
+        let noteForm = $('.note-modal-body .form-group.note-form-group.note-group-select-from-files');
+        $('.AJAXCMSDocsBlock').remove();
+        $('<div class="AJAXCMSDocsBlock">Loading...</div>').insertAfter(noteForm);
+        TueFind.getAJAXCMSDocs('AJAXCMSDocsBlock','plagin');
+
+    });
+
+    $(document).on('click', '.tf-theme-btn', function() {
+        // Get attr data-theme
+        let serverPath = $(this).data('server-path');
+        let themeName = $(this).data('theme');
+        let fullPath = $(this).data('full-path');
+        let block = $(this).data('block');
+        let modetype = $(this).data('modetype');
+        console.log('Theme selected:', themeName);
+
+        let uploadBlock = $("." + block);
+
+        $.ajax({
+            url: '/AJAX/JSON?method=CmsDocs&action=getThemeContent&server-path=' + serverPath+ '&path=' + themeName+ '&full-path=' + fullPath+ '&block=' + block+ '&modetype=' + modetype,
+            type: 'GET',
+            beforeSend: function() {
+                // show a loading spinner or message here if needed
+                uploadBlock.html('Loading...');
+            },
+            success: function(response) {
+
+                console.log('Server response:', response);
+
+                if (response && response.status === 'OK' && response.data) {
+
+                    uploadBlock.html(response.data);
+                } else if (response && response.data) {
+
+                    uploadBlock.html(response.data);
+                } else {
+                    uploadBlock.html("<span class='text-danger'>Theme not found or empty</span>");
+                }
+            },
+            error: function(xhr, status, error) {
+                uploadBlock.removeClass('disabled').text(themeName);
+                console.error('Error:', error);
+            }
+        });
+    });
 
 });

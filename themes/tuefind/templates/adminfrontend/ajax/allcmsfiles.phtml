@@ -1,0 +1,389 @@
+<?php
+    $baseSyncPath = $this->serverPath;
+    $relativePath = ltrim(str_replace($baseSyncPath, '', $this->fullPath), '/');
+    $pathParts = array_filter(explode('/', $relativePath));
+    $serverFolderArray = explode('/', $this->serverPath);
+    $parentFullPath = dirname($this->fullPath);
+    if (strlen($parentFullPath) < strlen($baseSyncPath)) {
+        $parentFullPath = $baseSyncPath;
+    }
+    $parentTheme = ltrim(str_replace($baseSyncPath, '', $parentFullPath), '/');
+    $modeType = $this->modetype;
+?>
+
+<div class="cms-sync-container">
+    <!-- Breadcrumbs -->
+    <div class="cms-breadcrumbs mb-3">
+        <div class="cms-actions-panel-left mb-3 gap-2 text-end hideInPlagin row">
+            <div class="input-group mb-3 w-50 col">
+                <button type="button" 
+                    class="btn btn-primary" 
+                    id="createFolderBtn" 
+                    data-bs-toggle="modal" 
+                    data-bs-target="#createFolderModal"
+                    data-theme="<?= $this->escapeHtml($parentTheme) ?>" 
+                    data-full-path="<?= $this->escapeHtml($parentFullPath) ?>"
+                    data-server-path="<?= $this->escapeHtml($this->serverPath) ?>"> 
+                    <i class="fas fa-folder-plus me-2"></i>Create Folder
+                </button>
+            </div>
+            <div class="input-group mb-3 w-50 col">
+                <input type="file" class="form-control form-control-lg fileUploadInput" placeholder="Add Image" aria-label="Add Image" aria-describedby="button-addon2">
+                <button class="btn btn-outline-primary uploadBtn" type="button" id="button-addon2" ><?=$this->icon('upload')?></button>
+            </div>
+        </div>  
+        <div class="cms-actions-panel-right">
+            <?php if (!empty($pathParts)): ?>
+                <span class="btn btn-secondary tf-theme-btn me-1"
+                    data-theme="<?= $this->escapeHtml($parentTheme) ?>" 
+                    data-full-path="<?= $this->escapeHtml($parentFullPath) ?>" 
+                    data-block="AJAXCMSDocsBlock" 
+                    data-modetype="<?= $this->escapeHtml($modeType) ?>" 
+                    data-server-path="<?= $this->escapeHtml($this->serverPath) ?>">
+                    <i class="fas fa-arrow-left me-1"></i> ..
+                </span>
+            <?php endif; ?>
+
+            <?php $accumulatedPath = '';
+            foreach ($pathParts as $folder):
+                $accumulatedPath .= ($accumulatedPath === '' ? '' : '/') . $folder;
+                $stepFullPath = $baseSyncPath . '/' . $accumulatedPath;
+                if (!in_array($folder, $serverFolderArray)) : ?>
+                    <span class="btn btn-secondary tf-theme-btn me-1" 
+                        data-theme="<?= $this->escapeHtml($accumulatedPath) ?>" 
+                        data-full-path="<?= $this->escapeHtml($stepFullPath) ?>" 
+                        data-block="AJAXCMSDocsBlock" 
+                        data-modetype="<?= $this->escapeHtml($modeType) ?>"
+                        data-server-path="<?= $this->escapeHtml($this->serverPath) ?>">
+                        <i class="fas fa-folder text-warning me-1"></i>
+                        <?= $this->escapeHtml($folder) ?>
+                    </span>
+                <?php endif; ?>
+            <?php endforeach; ?>
+        </div>
+    </div>
+
+    <div class="row mainCMSDocsBlock">
+        <div class="col-md-12">
+            <?php if (empty($this->folders)): ?>
+                <!--<p class="text-muted">Folders not found</p>-->
+            <?php else: ?>
+                <div class="show-cms-files-block">
+                    <?php foreach ($this->folders as $folder): ?>
+                        <span class="btn btn-folder tf-theme-btn" data-theme="<?= $this->escapeHtml($folder['name']) ?>" data-full-path="<?= $this->escapeHtml($this->fullPath . '/' . $folder['name']) ?>" data-server-path="<?= $this->escapeHtml($this->serverPath) ?>" data-block="AJAXCMSDocsBlock" data-modetype="<?= $this->escapeHtml($modeType) ?>">
+                            <i class="fas fa-folder me-2 text-warning"></i>
+                            <span><?= $this->escapeHtml($folder['name']) ?></span>
+                        </span>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
+        </div>
+        <p class="delimiter">&nbsp;</p>
+        <div class="col-md-12">
+            <?php if (empty($this->files)): ?>
+                <!--<p class="text-muted">No files with allowed extensions found</p>-->
+            <?php else: ?>
+                <div class="show-cms-files-block">
+                    <?php foreach ($this->files as $file): ?>
+                        <?= $this->context($this)->renderInContext('adminfrontend/ajax/node.phtml', ['file' => $file, 'modetype' => $modeType ]) ?>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="min-width: 1200px;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title preview_title" id="exampleModalLabel"></h5>
+      </div>
+      <div class="modal-body">
+        <div class="container " id="container">
+          <div class="cw-row">
+            <div class="col-12">
+              <div class="">
+                <div class="preview_body text-center"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      
+      <div class="modal-header">
+        <h5 class="modal-title" id="confirmDeleteLabel">Confirm deletion</h5>
+        <i class="fas fa-times btn-close" type="button" data-bs-dismiss="modal"></i>
+      </div>
+
+      <div class="modal-body">
+        Are you sure you want to delete <span class="sureDeleteName text-danger"></span>?
+      </div>
+      <div class="file-path d-none"></div>
+      <div class="ajax-response d-none"></div>
+      <div class="file_or_image d-none"></div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Cancel
+        </button>
+        <button type="button" class="btn btn-danger" id="confirmDeleteBtn">
+          Delete
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Modal create Folder -->
+<div class="modal fade" id="createFolderModal" tabindex="-1" aria-labelledby="createFolderLabel" aria-hidden="true">
+  <div class="modal-dialog" style="min-width: 1000px;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="createFolderLabel">Create new Folder</h5>
+      </div>
+      <div class="modal-body">
+        <div class="container">
+          <div class="cw-row">
+            <div class="col-12">
+              <div class="">
+                <div class="row g-3">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text createFolderPATH" id="basic-addon3"></span>
+                        <input type="text" class="form-control folderNameInput" id="folderName" aria-describedby="basic-addon3" placeholder="name">
+                        <button type="submit" class="btn btn-primary modalCreateFolderBtn">Create</button>
+                    </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+    .show-cms-files-block .btn-folder, .show-cms-files-block .btn-file {
+        font-size: 18px;
+    }
+    .delimiter {
+        border-top: 1px solid #ccc;
+        margin: 20px 0;
+    }
+    .smc-card {
+        width: 200px;
+        float: left;
+        margin: 10px;
+        width: 200px;
+        height: 250px;
+    }
+    .smc-card img {
+        max-height: 126px;
+        object-fit: contain;
+        cursor: pointer;
+    }
+    .preview_body img {
+        max-height: 500px;
+        object-fit: contain;
+    }
+    .cursor-pointer {
+        cursor: pointer !important;
+    }
+</style>
+
+<?php
+  $script = <<<JS
+
+        $('.modalCreateFolderBtn').off('click').on('click', function() {
+            let THIS = $(this);
+            let parentModal = THIS.closest('.modal-content');
+            let folderNameInput = parentModal.find('.folderNameInput').val();
+            let currentBreadcrumbs = parentModal.find('.createFolderPATH').text().trim();
+            let serverPATH = $('#createFolderBtn').data('server-path').trim();
+            let cleanPath = serverPATH.replace(/\/$/, "");
+            let parentPath = cleanPath + currentBreadcrumbs;
+            console.log([folderNameInput,currentBreadcrumbs,serverPATH]);
+
+            $.ajax({
+                url: VuFind.path + '/AJAX/JSON',
+                method: 'GET',
+                data: {
+                    method: 'CmsDocs',
+                    action: 'createFolder',
+                    'parentPath': parentPath,
+                    'folderName': folderNameInput
+                },
+                dataType: 'json',
+                success: function(response) {
+                    $('#createFolderModal').modal('hide');
+
+                    let message = response.data && response.data.data ? response.data.data : 'Folder not created';
+                    $('.ajax-info').removeClass('d-none').find('.alert').text(message);
+                    
+                    setTimeout(() => {
+                        $('.ajax-info').addClass('d-none');
+                    }, 2000);
+
+                   $('.cms-breadcrumbs .btn-secondary.tf-theme-btn').last().click(); //reload 
+
+                },
+                error: function(xhr, ajaxOptions, thrownError) {
+                    if (window.console && window.console.log) {
+                        console.log("Status: " + xhr.status + ", Error: " + thrownError);
+                    }
+                }
+            }); //end AJAX
+        });                    
+
+        $('#createFolderModal').on('show.bs.modal', function (event) {
+            let currentBreadcrumbs = $('.cms-breadcrumbs .cms-actions-panel-right');
+            let oneBread = [];
+            currentBreadcrumbs.find('.btn').each(function() {
+                let btnText = $(this).text().trim(); 
+                if (btnText.length > 0 && btnText != "..") {
+                    oneBread.push(btnText);
+                }
+            });
+            
+            let fullPath = (oneBread.length > 0) ? "/" + oneBread.join('/') + "/" : "/";
+            
+            $('.createFolderPATH').text(fullPath);
+        });
+
+        $(document).on('click', '.cms_preview, .card-img-top', function(thisEvent) {
+            thisEvent.preventDefault();
+            thisEvent.stopPropagation();
+
+            let card = $(thisEvent.currentTarget).closest('.card');
+            let image = card.find('.card-img-top');
+            
+            let cardHeaderTitle = card.find('.card-header').attr('title') || card.find('.card-header').text().trim();
+            
+            $('#exampleModal .preview_title').html(cardHeaderTitle);
+            
+            if (image.length) {
+                let clonedImg = image.clone().removeClass('card-img-top img-fluid');
+                $('#exampleModal .preview_body').html(clonedImg);
+            } else {
+                let iconClone = card.find('.card-body').html();
+                $('#exampleModal .preview_body').html(iconClone);
+            }
+        });
+
+        $(document).on('click', '.delete-btn', function(thisEvent) {
+            thisEvent.preventDefault();
+            
+            let btn = $(this);
+            let cardParent = btn.closest('.smc-card');
+
+            $('.smc-card').removeClass('pre-delete');
+            cardParent.addClass('pre-delete');
+        
+            let fileName = cardParent.find('.card-header').text().trim();
+            let fullPath = btn.attr('data-full-path');
+            let isImage = '';
+            if (cardParent.find('.card-img-top').length > 0) {
+                isImage = 'image';
+            }
+            $('#confirmDeleteModal .sureDeleteName').text(fileName);
+            $('#confirmDeleteModal .file-path').text(fullPath);
+            $('#confirmDeleteModal .file_or_image').text(isImage);
+        });    
+
+        $('#confirmDeleteBtn').off('click').on('click', function() {
+            let THIS = $(this);
+            let parentModal = THIS.closest('.modal-content');
+            let filePATH = parentModal.find('.file-path').text().trim();
+            let fileORImage = parentModal.find('.file_or_image').text().trim();    
+
+            $.ajax({
+                url: VuFind.path + '/AJAX/JSON',
+                method: 'GET',
+                data: {
+                    method: 'CmsDocs',
+                    action: (fileORImage.length > 0) ? 'deleteImage' : 'deleteFile',
+                    'full-path': filePATH
+                },
+                dataType: 'json',
+                success: function(response) {
+                    $('#confirmDeleteModal').modal('hide');
+
+                    let message = response.data && response.data.data ? response.data.data : 'File removed success';
+                    $('.ajax-info').removeClass('d-none').find('.alert').text(message);
+                    
+                    setTimeout(() => {
+                        $('.ajax-info').addClass('d-none');
+                    }, 2000);
+
+                   $('.cms-breadcrumbs .btn-secondary.tf-theme-btn').last().click(); //reload 
+
+                },
+                error: function(xhr, ajaxOptions, thrownError) {
+                    if (window.console && window.console.log) {
+                        console.log("Status: " + xhr.status + ", Error: " + thrownError);
+                    }
+                }
+            });
+        });
+
+        $(document).off('click', '.uploadBtn').on('click', '.uploadBtn', function (e) {
+            e.preventDefault();                
+
+            let fileInput = $('.fileUploadInput')[0];
+            if (!fileInput || !fileInput.files.length) {
+                alert('Select file');
+                return;
+            }
+            let formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+            
+            let theme = $('.cms-breadcrumbs .btn-secondary.tf-theme-btn').last().data('theme');
+
+            $.ajax({
+                url: '/AJAX/JSON?method=CmsDocs&action=uploadFiles&theme='+theme,
+                method: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    if (response.data && response.data.status === 'success') {
+                        $('.ajax-info').removeClass('d-none').find('.alert').text(response.data.message);
+                        setTimeout(() => {
+                            $('.ajax-info').addClass('d-none');
+                        }, 2000);
+                        $('.fileUploadInput').val('');
+
+                        $('.cms-breadcrumbs .btn-secondary.tf-theme-btn').last().trigger('click');
+                    } else {
+                        let errMsg = response.data && response.data.message ? response.data.message : 'error upload';
+                        console.log(errMsg);
+                    }
+                },
+                error: function(xhr, ajaxOptions, thrownError) {
+                    if (window.console && window.console.log) {
+                        console.log("Status: " + xhr.status + ", Error: " + thrownError);
+                    }
+                }
+            });
+        });
+      JS;
+?>
+<?=$this->assetManager()->outputInlineScriptString($script); ?>

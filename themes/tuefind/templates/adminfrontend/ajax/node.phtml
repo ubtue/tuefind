@@ -1,0 +1,109 @@
+<?php
+// Array of allowed image extensions
+$imageExtensions = ['png', 'jpg', 'jpeg', 'gif', 'svg', 'webp'];
+$isImage = in_array(strtolower($this->file['extension']), $imageExtensions);
+
+// Form a safe web URL for images through your AJAX controller
+// Pass the fullPath so the backend knows which file to read
+$imageUrl = '/AJAX/JSON?method=CmsDocs&action=getImageContent&full-path=' . urlencode($this->file['fullPath']);
+
+?>
+
+<div class="card h-100 smc-card">
+    <div class="card-header text-truncate" title="<?= $this->escapeHtml($this->file['name']) ?>">
+        <?= $this->escapeHtml($this->file['name']) ?>
+    </div>
+    <?php if ($isImage): ?>
+        <div class="card-body d-flex align-items-center justify-content-center">
+            <!-- If this is an image, load it through the controller -->
+            <?php if ($this->modetype === 'plagin'): ?>
+                <img src="<?= $imageUrl ?>" 
+                    class="img-fluid copyImageURL" 
+                    data-full-path="<?= $this->escapeHtml($this->file['fullPath']) ?>"
+                    data-isimage="image"
+                    alt="<?= $this->escapeHtml($this->file['name']) ?>">
+            <?php else: ?>
+                <img src="<?= $imageUrl ?>" 
+                    class="img-fluid card-img-top" 
+                    data-bs-toggle="modal" 
+                    data-bs-target="#exampleModal" 
+                    data-full-path="<?= $this->escapeHtml($this->file['fullPath']) ?>"
+                    data-isimage="image"
+                    alt="<?= $this->escapeHtml($this->file['name']) ?>">
+            <?php endif; ?>
+        </div>
+        <div class="card-footer text-muted row gx-0">
+            <?php if ($this->modetype === 'plagin'): ?>
+                <span class="text-center d-block text-default copyImageURL col-12 cursor-pointer" 
+                    data-full-path="<?= $this->escapeHtml($this->file['fullPath']) ?>">
+                    <i class="fa fa-link"></i>
+                </span>
+            <?php else: ?>
+                <span class="text-center d-block text-default cms_preview col-6 cursor-pointer" 
+                    data-bs-toggle="modal" 
+                    data-bs-target="#exampleModal" 
+                    data-full-path="<?= $this->escapeHtml($this->file['fullPath']) ?>">
+                        <i class="fas fa-eye"></i>
+                </span>
+                <span class="text-center d-block text-danger col-6 delete-btn cursor-pointer" 
+                data-bs-toggle="modal" 
+                data-bs-target="#confirmDeleteModal"
+                data-full-path="<?= $this->escapeHtml($this->file['fullPath']) ?>">
+                    <i class="fas fa-trash"></i>
+                </span>
+            <?php endif;?>    
+        </div>
+    <?php else: ?>
+        <div class="card-body d-flex align-items-center justify-content-center">
+            <!-- If this is a document (PDF, TXT, etc.), show a large icon -->
+            <?php if ($this->modetype === 'plagin'): ?> 
+                <div class="text-center cursor-pointer copyDocumentURL" 
+                    data-full-path="<?= $this->escapeHtml($this->file['fullPath']) ?>" 
+                    data-file-name="<?= $this->escapeHtml($this->file['name']) ?>">
+
+                    <?php if ($this->file['extension'] === 'pdf'): ?>
+                        <i class="fas fa-file-pdf text-danger" style="font-size: 4rem;"></i>
+                    <?php elseif ($this->file['extension'] === 'txt'): ?>
+                        <i class="fas fa-file-alt text-secondary" style="font-size: 4rem;"></i>
+                    <?php else: ?>
+                        <i class="fas fa-file text-primary" style="font-size: 4rem;"></i>
+                    <?php endif; ?>
+                    <div class="mt-2 text-muted text-uppercase"><small><?= $this->escapeHtml($this->file['extension']) ?></small></div>
+                </div>
+            <?php else: ?>
+                <div class="text-center">
+                    <?php if ($this->file['extension'] === 'pdf'): ?>
+                        <i class="fas fa-file-pdf text-danger" style="font-size: 4rem;"></i>
+                    <?php elseif ($this->file['extension'] === 'txt'): ?>
+                        <i class="fas fa-file-alt text-secondary" style="font-size: 4rem;"></i>
+                    <?php else: ?>
+                        <i class="fas fa-file text-primary" style="font-size: 4rem;"></i>
+                    <?php endif; ?>
+                    <div class="mt-2 text-muted text-uppercase"><small><?= $this->escapeHtml($this->file['extension']) ?></small></div>
+                </div>
+            <?php endif;?> 
+        </div>
+        <div class="card-footer text-muted row gx-0">
+            <?php if ($this->modetype === 'plagin'): ?>
+                <span class="text-center d-block text-default copyDocumentURL col-12 cursor-pointer" 
+                    data-full-path="<?= $this->escapeHtml($this->file['fullPath']) ?>"
+                    data-file-name="<?= $this->escapeHtml($this->file['name']) ?>">
+                    <i class="fa fa-link"></i>
+                </span>
+            <?php else: ?>
+                <span class="text-center d-block text-default cms_preview col-6 cursor-pointer" 
+                    data-bs-toggle="modal" 
+                    data-bs-target="#exampleModal" 
+                    data-full-path="<?= $this->escapeHtml($this->file['fullPath']) ?>">
+                        <i class="fas fa-eye"></i>
+                </span>
+                <span class="text-center d-block text-danger col-6 delete-btn cursor-pointer" 
+                data-bs-toggle="modal" 
+                data-bs-target="#confirmDeleteModal"
+                data-full-path="<?= $this->escapeHtml($this->file['fullPath']) ?>">
+                    <i class="fas fa-trash"></i>
+                </span>
+            <?php endif;?>    
+        </div>
+    <?php endif; ?>
+</div>
