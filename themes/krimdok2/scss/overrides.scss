@@ -693,3 +693,17 @@ a:hover {
         }
     }
 }
+
+.list-group-item.section-home {
+    border-radius: 5px;
+}
+ 
+.tf-media-left-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tf-media-left-center .tf-thumbnail-center {
+    margin: auto;
+}
