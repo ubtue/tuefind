@@ -8,7 +8,8 @@ $this->breadcrumbs()->set($this->translate('Admins'), $this->url('myresearch-hom
   <?=$this->flashmessages()?>
 
   <div class="container-md">
-    <div class="row gy-3 mt-4" style="min-height: 150px;">
+    <div class="row gy-3 mt-4 AJAXCMSDocsBlock" style="min-height: 150px;">
+      <!-- for now disabled, as we don't have a page for this yet
       <div class="col-1"></div>
       <a href="<?=$this->url('adminfrontend-cmspagesfiles')?>" class="col-4 card" style="background-color: #868E96;">
           <div class="card-body d-flex flex-column justify-content-center align-items-center">
@@ -23,6 +24,7 @@ $this->breadcrumbs()->set($this->translate('Admins'), $this->url('myresearch-hom
           </div>
       </a>
       <div class="col-1"></div>
+      -->
     </div>
   </div>
 </div>
@@ -31,3 +33,9 @@ $this->breadcrumbs()->set($this->translate('Admins'), $this->url('myresearch-hom
   <?=$this->accountMenu()->render('cmspagesdocs')?>
 </div>
 
+<?php
+  $script = <<<JS
+        TueFind.getAJAXCMSDocs('AJAXCMSDocsBlock');
+      JS;
+?>
+<?=$this->assetManager()->outputInlineScriptString($script) ?>

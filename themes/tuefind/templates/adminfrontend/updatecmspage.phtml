@@ -97,6 +97,25 @@
   <?=$this->accountMenu()->render('showcmsmain')?>
 </div>
 
+<style>
+  .note-modal-content {
+    min-width: 1300px;
+  }
+  .hideInPlagin {
+    display: none;
+  }
+  .hideInAdmin {
+    display: block !important;
+  }
+  .mainCMSDocsBlock {
+    overflow: auto;
+    max-height: 500px;
+  }
+  .note-group-image-url, .note-image-btn {
+    display: none;
+  }
+</style>
+
 <?php
   $script = <<<JS
         // Function for calling AjaxHandler to replace palceholders (display texts, images, ...)
@@ -131,7 +150,12 @@
                 ['table', ['table']],
                 ['insert', ['link', 'picture']],
                 ['view', ['fullscreen', 'codeview', 'help']]
-            ]
+            ],
+            callbacks: {
+              onBlur: function() {
+                lastRange = $('.editor').summernote('createRange');
+              }
+            }
         });
 
         // callbacks are unfortunately not working as expected.
@@ -152,6 +176,37 @@
                 $('#exampleModal .preview_body').html(transformedContent);
             });
         });
+
+         $(document).on('click', '.copyImageURL', function(thisEvent) {
+          let fullPATH = $(this).data('full-path');
+          let ajaxImagePreURL = '/AJAX/JSON?method=CmsDocs&action=getImageContent&full-path='+fullPATH;
+          $('.note-image-url').val(ajaxImagePreURL);
+          $('.note-image-btn').click();
+        })
+
+        $(document).on('click', '.copyDocumentURL', function(thisEvent) {
+          thisEvent.preventDefault();
+
+          let fullPATH = $(this).data('full-path');
+          let ajaxFilePreURL = '/AJAX/JSON?method=CmsDocs&action=getFileContent&full-path='+fullPATH;
+          let fileName = $(this).data('file-name');
+          let linkHTML = '<a target="_blank" href="'+ajaxFilePreURL+'">'+fileName+'</a>';
+
+          if (lastRange) {
+              lastRange.select();
+          }
+
+          $('.editor').summernote('pasteHTML', linkHTML);
+
+          var modal = $('.note-modal.open');
+          modal.removeClass('open')
+                .attr('aria-hidden', 'true')
+                .hide();
+
+          $('.note-modal-backdrop').remove();
+          $('body').removeClass('modal-open').css('overflow', '');
+      });
+
       JS;
 ?>
 <?=$this->assetManager()->outputInlineScriptString($script) ?>
