@@ -3,6 +3,7 @@
 namespace TueFind\Form\Handler;
 
 use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Part\DataPart as DataPart;
 use VuFind\Db\Entity\UserEntityInterface;
 use VuFind\Exception\Mail as MailException;
 
@@ -41,50 +42,55 @@ class Email extends \VuFind\Form\Handler\Email
             return $emailMessage;
         }
 
-        $body_ = '';
-        $title_ = '';
-        $sub_title_ = '';
+        $body = '';
+        $title = '';
+        $subTitle = '';
 
         foreach ($fields as $data) {
-            if ($data['name'] == 'title') {
-                $title_ = trim($data['value']);
+            if ($data['name'] === 'title') {
+                $title = trim($data['value']);
             }
-            if ($data['name'] == 'untertitel') {
-                $sub_title_ = trim($data['value']);
+
+            if ($data['name'] === 'untertitel') {
+                $subTitle = trim($data['value']);
             }
-            if ($data['name'] == 'name' && trim($data['value']) != '') {
-                $body_ .= ('Sender: ' . trim($data['value']) . PHP_EOL);
+
+            if ($data['name'] === 'name' && trim($data['value']) !== '') {
+                $body .= 'Sender: ' . trim($data['value']) . PHP_EOL;
             }
-            if ($data['name'] == 'email' && trim($data['value']) != '') {
-                $body_ .= ('email: ' . trim($data['value']) . PHP_EOL);
+
+            if ($data['name'] === 'email' && trim($data['value']) !== '') {
+                $body .= 'email: ' . trim($data['value']) . PHP_EOL;
             }
-            if ($data['name'] == 'comment' && trim($data['value']) != '') {
-                $body_ .= ('comment: ' . trim($data['value']) . PHP_EOL);
+
+            if ($data['name'] === 'comment' && trim($data['value']) !== '') {
+                $body .= 'comment: ' . trim($data['value']) . PHP_EOL;
             }
         }
 
-        $attachment_name = $this->getAttachmentName($formId, $fields);
+        $attachmentName = $this->getAttachmentName($formId, $fields) . '.txt';
+
         $attachmentContent = $this->viewRenderer->render(
             'Email/form-feedback-self-archiving.phtml',
             compact('fields')
         );
 
-        $boundary = md5((string)time());
+        // Build a proper Symfony Email object instead of hand-crafting MIME
+        $email = $this->mailer->getNewMessage();
 
-        $multipartMessage = 'Content-Type: multipart/mixed; boundary="' . $boundary . '"' . PHP_EOL . PHP_EOL;
-        $multipartMessage .= '--' . $boundary . PHP_EOL;
-        $multipartMessage .= 'Content-Type: text/plain; charset=utf-8' . PHP_EOL;
-        $multipartMessage .= 'Content-Transfer-Encoding: 8bit' . PHP_EOL . PHP_EOL;
-        $multipartMessage .= $body_ . PHP_EOL . PHP_EOL;
+        // Body of the message
+        $email->text($body);
 
-        $multipartMessage .= '--' . $boundary . PHP_EOL;
-        $multipartMessage .= 'Content-Type: text/plain; name="' . $attachment_name . '.txt"' . PHP_EOL;
-        $multipartMessage .= 'Content-Transfer-Encoding: 8bit' . PHP_EOL;
-        $multipartMessage .= 'Content-Disposition: attachment; filename="' . $attachment_name . '.txt"' . PHP_EOL . PHP_EOL;
-        $multipartMessage .= $attachmentContent . PHP_EOL . PHP_EOL;
-        $multipartMessage .= '--' . $boundary . '--';
+        // Text file attachment
+        $email->addPart(
+            new DataPart(
+                $attachmentContent,
+                $attachmentName,
+                'text/plain'
+            )
+        );
 
-        return $multipartMessage;
+        return $email;
     }
 
     public function handle(
