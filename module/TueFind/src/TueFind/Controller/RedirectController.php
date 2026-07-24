@@ -2,8 +2,7 @@
 
 namespace TueFind\Controller;
 
-use VuFindSearch\Command\SearchCommand;
-use VuFindSearch\Query\Query;
+use function in_array;
 
 /**
  * This controller is used to redirect to a given URL and save it with a timestamp.
@@ -16,16 +15,18 @@ class RedirectController extends \VuFind\Controller\AbstractBase implements \VuF
     /**
      * Allowed Group IDs in Redirects
      */
-    const GROUPS_ALLOWED = ["ixtheo-rss-short", "relbib-rss-short", "ixtheo-rss-full", "relbib-rss-full"];
+    public const GROUPS_ALLOWED = ['ixtheo-rss-short', 'relbib-rss-short', 'ixtheo-rss-full', 'relbib-rss-full'];
 
     /**
      * Decoder for URL in GET params
+     *
      * @var \TueFind\View\Helper\TueFind\TueFind
      */
     protected $decoder;
 
     /**
      * KfL service for license redirects
+     *
      * @var \TueFind\Service\KfL
      */
     protected $kfl;
@@ -138,7 +139,7 @@ class RedirectController extends \VuFind\Controller\AbstractBase implements \VuF
                 // Check country restriction
                 $viewParams['countryMode'] = $this->kfl->getCountryModeByDriver($viewParams['driver']);
                 if ($viewParams['countryMode'] == 'DACH') {
-                    $viewParams['countryAllowed'] = in_array($user->tuefind_country, ['DE', 'AT', 'CH']);
+                    $viewParams['countryAllowed'] = in_array($user->getCountry(), ['DE', 'AT', 'CH']);
                 } else {
                     $viewParams['countryAllowed'] = true;
                 }
