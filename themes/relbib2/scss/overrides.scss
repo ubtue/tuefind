@@ -69,6 +69,10 @@ a {
     }
 }
 
+.panel-home.Browse, .panel-home.Alphabrowse {
+    min-height: 300px;
+    margin-bottom: 20px;
+}
 
 #rb-title-table {
     display: flex;
