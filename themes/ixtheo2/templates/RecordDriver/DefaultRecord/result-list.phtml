@@ -88,7 +88,7 @@
               <?php if (!empty($superior_ppn)): ?>
                 <?=$this->transEsc('in')?>:
                 <?php $journal_issue_display = preg_replace('/(\d+)(\()/', '$1 $2', implode(', ', $journal_issue)) ?>
-                <?php if (preg_match('/^\d{9}[\dX]$/i', $superior_ppn)): ?>
+                <?php if (preg_match('/^\d{7,9}[\dX]$/i', $superior_ppn)): ?>
                   <a href="<?=$this->url('record', ['id' => $superior_ppn]) ?>"><?=$journal_issue_display ?></a>
                 <?php else: ?>
                   <?php echo implode(' ', $journal_issue_full) ?>
