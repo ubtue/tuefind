@@ -34,7 +34,7 @@ CREATE TABLE ixtheo_pda_subscriptions (
     CONSTRAINT `user_id_pda_subscription` FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
 ) DEFAULT CHARSET=utf8;
 
-ALTER TABLE user ADD COLUMN ixtheo_user_type ENUM('ixtheo', 'relbib', 'bibstudies', 'churchlaw') NOT NULL DEFAULT 'ixtheo';
+ALTER TABLE user ADD COLUMN ixtheo_user_type ENUM('ixtheo', 'relbib', 'bibstudies', 'churchlaw', 'augustine') NOT NULL DEFAULT 'ixtheo';
 ALTER TABLE user ADD COLUMN ixtheo_appellation VARCHAR(64) DEFAULT NULL;
 ALTER TABLE user ADD COLUMN ixtheo_title VARCHAR(64) DEFAULT NULL;
 ALTER TABLE user ADD COLUMN ixtheo_can_use_tad BOOLEAN DEFAULT FALSE;
@@ -46,8 +46,9 @@ CREATE UNIQUE INDEX `subsystem_username` ON user (`ixtheo_user_type`, `username`
 CREATE UNIQUE INDEX `subsystem_email` ON user (`ixtheo_user_type`, `email`);
 
 INSERT INTO tuefind_subsystems (subsystem)
-VALUES 
+VALUES
   ('ixtheo'),
   ('relbib'),
   ('bibstudies'),
-  ('churchlaw');
+  ('churchlaw'),
+  ('augustine');
