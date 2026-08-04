@@ -76,7 +76,8 @@
             <?php endif; ?>
           <?php endif; ?>
           <?php // Handle superior data according to Issue 131 / Rule 5 ?>
-          <?php $journal_issue = $this->driver->tryMethod('getJournalIssue'); ?>
+          <?php $journal_issue = $this->driver->tryMethod('getJournalIssue');
+          $journal_issue_full = $journal_issue; ?>
           <?php if (is_array($journal_issue) && count($journal_issue) > 1): ?>
             <?php $superior_ppn_index = !empty($journal_issue[2]) ? 2 : 1; ?>
             <?php if (isset($journal_issue[$superior_ppn_index])): ?>
@@ -87,9 +88,13 @@
               <?php if (!empty($superior_ppn)): ?>
                 <?=$this->transEsc('in')?>:
                 <?php $journal_issue_display = preg_replace('/(\d+)(\()/', '$1 $2', implode(', ', $journal_issue)) ?>
-                <a href="<?=$this->url('record', ['id' => $superior_ppn]) ?>"><?=$journal_issue_display ?></a>
+                <?php if (preg_match('/^\d{7,9}[\dX]$/i', $superior_ppn)): ?>
+                  <a href="<?=$this->url('record', ['id' => $superior_ppn]) ?>"><?=$journal_issue_display ?></a>
+                <?php else: ?>
+                  <?php echo implode(' ', $journal_issue_full) ?>
+                <?php endif; ?>
               <?php else: ?>
-                <?php implode(' ', $journal_issue) ?>
+                <?php echo implode(' ', $journal_issue) ?>
               <?php endif; ?>
             </div>
           <?php else: ?>

@@ -1,5 +1,6 @@
 <?php
     $tuefind = $this->tuefind();
+    $routeParams = $tuefind->getRouteParams();
     // Initialize from current search (if available) or defaults:
     if ($results = ($this->results ?? $this->searchMemory()->getCurrentSearch())) {
       $params = $results->getParams();
@@ -49,10 +50,9 @@
 <div class="tf-row-home">
     <!--  Begin section searchbar -->
     <section class="section-home">
-        <div class="panel-home">
+        <div class="panel-home <?=$routeParams['controller'];?>">
 
-            <?php $routeParams = $tuefind->getRouteParams();
-            if ($routeParams['controller'] == 'Search' && $routeParams['action'] == 'Home') { ?>
+            <?php if ($routeParams['controller'] == 'Search' && $routeParams['action'] == 'Home') { ?>
                 <?=$this->assetManager()->outputInlineScriptString('TueFind2.ChangeSearchboxHeightRelbib();')?>
             <?php } else { ?>
                 <?=$this->assetManager()->outputInlineScriptString('TueFind2.ChangeSearchboxHeight();')?>
