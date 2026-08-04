@@ -1,4 +1,5 @@
 <?php
+$isAdmin = $this->tuefind()->isAdmin();
 $this->breadcrumbs()->set($this->translate('Admins'), $this->url('myresearch-home'))
       ->add($this->translate('CMS Pages'), active: true);
 ?>
@@ -48,7 +49,7 @@ $this->breadcrumbs()->set($this->translate('Admins'), $this->url('myresearch-hom
   <?=$this->assetManager()->outputInlineScriptString('TueFind.RenderDataTable();') ?>
 
   <?php // restrict adding new pages to admins only!!! ?>
-  <?php if (in_array('admin', $this->user->getTueFindRights())): ?>
+  <?php if ($isAdmin): ?>
     <a href="<?=$this->url('adminfrontend-addcmspage')?>">Admin only: <?=$this->transEsc('Add New CMS page')?></a>
   <?php endif;?>
 

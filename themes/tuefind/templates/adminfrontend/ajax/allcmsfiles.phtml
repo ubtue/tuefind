@@ -1,4 +1,5 @@
 <?php
+    $tuefind = $this->tuefind();
     $baseSyncPath = $this->serverPath;
     $relativePath = ltrim(str_replace($baseSyncPath, '', $this->fullPath), '/');
     $pathParts = array_filter(explode('/', $relativePath));
@@ -16,16 +17,18 @@
     <div class="cms-breadcrumbs mb-3">
         <div class="cms-actions-panel-left mb-3 gap-2 text-end hideInPlagin row">
             <div class="input-group mb-3 w-50 col">
-                <button type="button" 
-                    class="btn btn-primary" 
-                    id="createFolderBtn" 
-                    data-bs-toggle="modal" 
-                    data-bs-target="#createFolderModal"
-                    data-theme="<?= $this->escapeHtml($parentTheme) ?>" 
-                    data-full-path="<?= $this->escapeHtml($parentFullPath) ?>"
-                    data-server-path="<?= $this->escapeHtml($this->serverPath) ?>"> 
-                    <i class="fas fa-folder-plus me-2"></i>Create Folder
-                </button>
+                <?php if ($tuefind->isAdmin()): ?>
+                    <button type="button" 
+                        class="btn btn-primary" 
+                        id="createFolderBtn" 
+                        data-bs-toggle="modal" 
+                        data-bs-target="#createFolderModal"
+                        data-theme="<?= $this->escapeHtml($parentTheme) ?>" 
+                        data-full-path="<?= $this->escapeHtml($parentFullPath) ?>"
+                        data-server-path="<?= $this->escapeHtml($this->serverPath) ?>"> 
+                        <i class="fas fa-folder-plus me-2"></i>Create Folder
+                    </button>
+                <?php endif; ?>
             </div>
             <div class="input-group mb-3 w-50 col">
                 <input type="file" class="form-control form-control-lg fileUploadInput" placeholder="Add Image" aria-label="Add Image" aria-describedby="button-addon2">
@@ -65,24 +68,41 @@
 
     <div class="row mainCMSDocsBlock">
         <div class="col-md-12">
-            <?php if (empty($this->folders)): ?>
-                <!--<p class="text-muted">Folders not found</p>-->
-            <?php else: ?>
-                <div class="show-cms-files-block">
-                    <?php foreach ($this->folders as $folder): ?>
-                        <span class="btn btn-folder tf-theme-btn" data-theme="<?= $this->escapeHtml($folder['name']) ?>" data-full-path="<?= $this->escapeHtml($this->fullPath . '/' . $folder['name']) ?>" data-server-path="<?= $this->escapeHtml($this->serverPath) ?>" data-block="AJAXCMSDocsBlock" data-modetype="<?= $this->escapeHtml($modeType) ?>">
-                            <i class="fas fa-folder me-2 text-warning"></i>
-                            <span><?= $this->escapeHtml($folder['name']) ?></span>
-                        </span>
-                    <?php endforeach; ?>
-                </div>
+            <?php if ($this->serverPath == $this->fullPath): // if home directory ?>
+                <?php if (!$tuefind->isAdmin()) {
+                    $userType = $tuefind->getIxtheoUserType();
+                    foreach ($this->folders as $folder) {
+                        if ($folder['name'] === $userType) {
+                            $this->folders = [$folder]; // Keep only the folder that matches the user type
+                        }
+                    }
+                } ?>  
+                <?php if (!empty($this->folders)): ?>
+                    <div class="show-cms-files-block">
+                        <?php foreach ($this->folders as $folder): ?>
+                            <span class="btn btn-folder tf-theme-btn" data-theme="<?= $this->escapeHtml($folder['name']) ?>" data-full-path="<?= $this->escapeHtml($this->fullPath . '/' . $folder['name']) ?>" data-server-path="<?= $this->escapeHtml($this->serverPath) ?>" data-block="AJAXCMSDocsBlock" data-modetype="<?= $this->escapeHtml($modeType) ?>">
+                                <i class="fas fa-folder me-2 text-warning"></i>
+                                <span><?= $this->escapeHtml($folder['name']) ?></span>
+                            </span>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
+            <?php else:?>    
+                <?php if (!empty($this->folders)): ?>
+                    <div class="show-cms-files-block">
+                        <?php foreach ($this->folders as $folder): ?>
+                            <span class="btn btn-folder tf-theme-btn" data-theme="<?= $this->escapeHtml($folder['name']) ?>" data-full-path="<?= $this->escapeHtml($this->fullPath . '/' . $folder['name']) ?>" data-server-path="<?= $this->escapeHtml($this->serverPath) ?>" data-block="AJAXCMSDocsBlock" data-modetype="<?= $this->escapeHtml($modeType) ?>">
+                                <i class="fas fa-folder me-2 text-warning"></i>
+                                <span><?= $this->escapeHtml($folder['name']) ?></span>
+                            </span>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
             <?php endif; ?>
         </div>
         <p class="delimiter">&nbsp;</p>
         <div class="col-md-12">
-            <?php if (empty($this->files)): ?>
-                <!--<p class="text-muted">No files with allowed extensions found</p>-->
-            <?php else: ?>
+            <?php if (!empty($this->files)): ?>
                 <div class="show-cms-files-block">
                     <?php foreach ($this->files as $file): ?>
                         <?= $this->context($this)->renderInContext('adminfrontend/ajax/node.phtml', ['file' => $file, 'modetype' => $modeType ]) ?>
