@@ -218,7 +218,7 @@ class IxTheo extends \Laminas\View\Helper\AbstractHelper
         }
     }
 
-    public function getIxtheoUserType(): string
+    public function getUserType(): string
     {
         $user = $this->tuefind->getAUTHUserObject();
         return $user ? $user->getUserType() : '';
