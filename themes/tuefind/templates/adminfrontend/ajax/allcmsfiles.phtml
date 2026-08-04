@@ -1,5 +1,6 @@
 <?php
     $tuefind = $this->tuefind();
+    $ixtheo = $this->ixtheo();
     $baseSyncPath = $this->serverPath;
     $relativePath = ltrim(str_replace($baseSyncPath, '', $this->fullPath), '/');
     $pathParts = array_filter(explode('/', $relativePath));
@@ -70,7 +71,7 @@
         <div class="col-md-12">
             <?php if ($this->serverPath == $this->fullPath): // if home directory ?>
                 <?php if (!$tuefind->isAdmin()) {
-                    $userType = $tuefind->getIxtheoUserType();
+                    $userType = $ixtheo->getIxtheoUserType();
                     foreach ($this->folders as $folder) {
                         if ($folder['name'] === $userType) {
                             $this->folders = [$folder]; // Keep only the folder that matches the user type

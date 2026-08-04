@@ -945,19 +945,16 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper implements
         return $content;
     }
 
-    public function isAdmin(): bool
+    public function getAUTHUserObject()
     {
         $auth = $this->container->get('ViewHelperManager')->get('auth');
         $manager = $auth->getManager();
-        $user = $manager->getUserObject();
-        return in_array('admin', $user->getTueFindRights()) ? true : false;
+        return $manager->getUserObject();
     }
 
-    public function getIxtheoUserType(): string
+    public function isAdmin(): bool
     {
-        $auth = $this->container->get('ViewHelperManager')->get('auth');
-        $manager = $auth->getManager();
-        $user = $manager->getUserObject();
-        return $user->getUserType();
+        $user = $this->getAUTHUserObject();
+        return $user ? in_array('admin', $user->getTueFindRights()) : false;
     }
 }

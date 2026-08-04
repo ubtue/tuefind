@@ -217,4 +217,10 @@ class IxTheo extends \Laminas\View\Helper\AbstractHelper
                 return 'ixtheo-beacon.txt';
         }
     }
+
+    public function getIxtheoUserType(): string
+    {
+        $user = $this->tuefind->getAUTHUserObject();
+        return $user ? $user->getUserType() : '';
+    }
 }
