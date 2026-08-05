@@ -171,6 +171,10 @@ public class IxTheoBiblio extends TueFindBiblio {
         return translated_topics;
     }
 
+    public String getIsAugustine(final Record record) {
+        return record.getVariableFields("AUG").isEmpty() ? "false" : "true";
+    }
+
     public String getIsCanonLaw(final Record record) {
         return record.getVariableFields("CAN").isEmpty() ? "false" : "true";
     }
