@@ -213,6 +213,8 @@ class IxTheo extends \Laminas\View\Helper\AbstractHelper
                 return 'bibstudies-beacon.txt';
             case 'churchlaw':
                 return 'canonlaw-beacon.txt';
+            case 'augustine':
+                return 'augustine-beacon.txt';
             default:
                 return 'ixtheo-beacon.txt';
         }
