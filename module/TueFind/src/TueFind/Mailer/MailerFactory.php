@@ -4,7 +4,7 @@ namespace TueFind\Mailer;
 
 use Psr\Container\ContainerInterface;
 
-class Factory extends \VuFind\Mailer\Factory
+class MailerFactory extends \VuFind\Mailer\MailerFactory
 {
     protected function getDSN(array $config): string
     {
