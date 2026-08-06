@@ -627,7 +627,9 @@ $config = [
                     'TueFind\RecordDriver\SolrMarc' => 'TueFind\RecordDriver\SolrMarcFactory',
                 ],
                 'delegators' => [
-                    'TueFind\RecordDriver\SolrMarc' => 'VuFind\RecordDriver\IlsAwareDelegatorFactory',
+                    'TueFind\RecordDriver\SolrMarc' => [
+                        'VuFind\RecordDriver\IlsAwareDelegatorFactory',
+                    ],
                 ],
                 'aliases' => [
                     'solrauth' => 'TueFind\RecordDriver\SolrAuthMarc',
