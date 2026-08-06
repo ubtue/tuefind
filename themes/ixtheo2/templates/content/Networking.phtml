@@ -1,39 +1,36 @@
 <?php
-
 // Note: OpenStreetMap requires a special Referrer policy. See TueFind Module Bootstrapper / Issue #3611
-
-$this->assetManager()->appendStyleLink('vendor/fontawesome-free-6/awesome.css');
-$this->assetManager()->appendStyleLink('vendor/fontawesome-free-6/solid.css'); ?>
+?>
 
 <section class="cw-p-2">
 <div id="map" class="map" title="<?=$this->transEscAttr('symbolic_image_table');?>."></div>
 <?php $jsSnippet = <<<'EOD'
 
-    document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', () => {
 
-        // first load with all data
-        IxTheo2.loadMap('all');
+            // first load with all data
+            IxTheo2.loadMap('all');
 
-        document.querySelectorAll('.high-light-marker-group')
-            .forEach(el => {
-                el.addEventListener('click', function () {
+            document.querySelectorAll('.high-light-marker-group')
+                .forEach(el => {
+                    el.addEventListener('click', function () {
 
-                    const group = this.dataset.group;
+                        const group = this.dataset.group;
 
-                    document.querySelectorAll('.map-navigation button')
-                        .forEach(btn => btn.classList.remove('btn-primary'));
+                        document.querySelectorAll('.map-navigation button')
+                            .forEach(btn => btn.classList.remove('btn-primary'));
 
-                    const btn = this.querySelector('button');
-                    btn.classList.add('btn-primary');
-                    btn.blur();
+                        const btn = this.querySelector('button');
+                        btn.classList.add('btn-primary');
+                        btn.blur();
 
-                    IxTheo2.loadMap(group);
+                        IxTheo2.loadMap(group);
+                    });
                 });
-            });
-    
-    });
+        
+        });
 
-EOD;
+    EOD;
 ?>
 <?=$this->assetManager()->outputInlineScriptString($jsSnippet)?>
     <div class="cw-py-1 cw map-navigation">
