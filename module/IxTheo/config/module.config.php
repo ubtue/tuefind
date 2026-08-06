@@ -142,14 +142,6 @@ $config = [
                     'IxTheo\Db\Service\UserAuthorityHistoryServiceInterface' => 'IxTheo\Db\Service\UserAuthorityHistoryService',
                 ],
             ],
-            'navigation' => [
-                'factories' => [
-                    'IxTheo\Navigation\AccountMenu' => 'VuFind\Navigation\AccountMenuFactory',
-                ],
-                'aliases' => [
-                    'VuFind\Navigation\AccountMenu' => 'IxTheo\Navigation\AccountMenu',
-                ],
-            ],
             'recommend' => [
                 'factories' => [
                     'IxTheo\Recommend\BibleRanges' => 'Laminas\ServiceManager\Factory\InvokableFactory',
@@ -230,6 +222,14 @@ $config = [
                     'keywordchainsearch' => 'IxTheo\Search\KeywordChainSearch\Results',
                     'Subscriptions' => 'IxTheo\Search\Subscriptions\Results',
                     'pdasubscriptions' => 'IxTheo\Search\PDASubscriptions\Results',
+                ],
+            ],
+            'section_plugin' => [
+                'factories' => [
+                    'IxTheo\Navigation\AccountMenu' => 'VuFind\Navigation\AccountMenuFactory',
+                ],
+                'aliases' => [
+                    'accountMenu' => 'IxTheo\Navigation\AccountMenu',
                 ],
             ],
         ],

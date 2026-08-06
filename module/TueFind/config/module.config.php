@@ -584,14 +584,6 @@ $config = [
                     'VuFind\MetadataVocabulary\HighwirePress' => 'TueFind\MetadataVocabulary\HighwirePress',
                 ],
             ],
-            'navigation' => [
-                'factories' => [
-                    'TueFind\Navigation\AccountMenu' => 'VuFind\Navigation\AccountMenuFactory',
-                ],
-                'aliases' => [
-                    'VuFind\Navigation\AccountMenu' => 'TueFind\Navigation\AccountMenu',
-                ],
-            ],
             'recommend' => [
                 'factories' => [
                     'TueFind\Recommend\Ids' => 'Laminas\ServiceManager\Factory\InvokableFactory',
@@ -691,6 +683,14 @@ $config = [
                     'solr' => 'TueFind\Search\Solr\Results',
                     'solrauth' => 'TueFind\Search\SolrAuth\Results',
                     'solrauthorfacets' => 'TueFind\Search\SolrAuthorFacets\Results',
+                ],
+            ],
+            'section_plugin' => [
+                'factories' => [
+                    'IxTheo\Navigation\AccountMenu' => 'VuFind\Navigation\AccountMenuFactory',
+                ],
+                'aliases' => [
+                    'accountMenu' => 'IxTheo\Navigation\AccountMenu',
                 ],
             ],
             'sitemap' => [
