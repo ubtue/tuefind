@@ -179,6 +179,10 @@ public class IxTheoBiblio extends TueFindBiblio {
         return record.getVariableFields("CAN").isEmpty() ? "false" : "true";
     }
 
+    public String getIsAugustine(final Record record) {
+        return record.getVariableFields("AUG").isEmpty() ? "false" : "true";
+    }
+
     // For subfields specified by "fieldSpecs" matches found in "bce_replacement_map" will be substituted w/ their replacements.
     // Non-matching subfields contents will be returned unaltered.
     public Set<String> getBCENormalizedContents(final Record record, final String fieldSpecs) {
