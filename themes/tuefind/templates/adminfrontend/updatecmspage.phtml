@@ -163,6 +163,14 @@
             callbacks: {
               onBlur: function() {
                 lastRange = $('.editor').summernote('createRange');
+              },
+              // Added a callback to clean up the content when the user pastes or types in the editor
+              onChange: function(contents, editable) {
+                  if (contents.includes('&gt;')) {
+                      const cleaned = contents.replace(/&gt;/g, '>');
+                      // replace the content in the editor with the cleaned version
+                      $('.editor').summernote('code', cleaned);
+                  }
               }
             }
         });
