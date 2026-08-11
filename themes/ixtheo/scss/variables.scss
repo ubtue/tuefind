@@ -16,12 +16,12 @@ $gray:                   color.scale($gray-base, $lightness: 33.5%); // #555
 $gray-light:             color.scale($gray-base, $lightness: 46.7%); // #777
 $gray-lighter:           color.scale($gray-base, $lightness: 93.5%); // #eee
 
-$brand-primary:         #265680; // #337ab7
-$brand-secondary:       #089DE3;
-$brand-success:         #5cb85c;
-$brand-info:            #1C5F74;
-$brand-warning:         #f0ad4e;
-$brand-danger:          #d9534f;
+$brand-primary:         #265680 !default; // #337ab7
+$brand-secondary:       #089DE3 !default;
+$brand-success:         #5cb85c !default;
+$brand-info:            #1C5F74 !default;
+$brand-warning:         #f0ad4e !default;
+$brand-danger:          #d9534f !default;
 
 
 //== Scaffolding
