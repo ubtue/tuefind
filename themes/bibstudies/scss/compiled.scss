@@ -1,5 +1,5 @@
 @use "../../ixtheo/scss/compiled";
-@use "variables";
+@import "variables";
 
 /* jqcloud */
 div.jqcloud { color: #09f; }

@@ -1,13 +1,13 @@
 @use "../../tuefind/scss/compiled";
-@use "variables";
+@import "variables";
 
 mark {
   background-color: lighten(#ffff66, 20%);
-  border-radius: variables.$border-radius-small;
+  border-radius: $border-radius-small;
 }
 
 .background {
-  background-color: variables.$brand-secondary;
+  background-color: $brand-secondary;
   position: absolute;
   z-index: -1000;
   display: block;
@@ -16,7 +16,7 @@ mark {
 
   .background-stripe {
     width: 100%;
-    background-color: variables.$brand-primary;
+    background-color: $brand-primary;
     height: 52px;
   }
 }
@@ -26,7 +26,7 @@ mark {
 }
 
 .background-footer:extend(.background) {
-  background-color: variables.$brand-primary;
+  background-color: $brand-primary;
   height: 1000px;
   left: 0;
   margin-top: -20px;
@@ -34,7 +34,7 @@ mark {
 
   .background-stripe {
     width: 100%;
-    background-color: variables.$brand-secondary;
+    background-color: $brand-secondary;
     height: 52px;
   }
 }
@@ -53,8 +53,8 @@ nav#ix-nav-header > .nav > li > a {
 
 .nav > li > a:focus,
 .nav > li > a:hover {
-  color: variables.$brand-primary;
-  background-color: variables.$dropdown-link-hover-bg;
+  color: $brand-primary;
+  background-color: $dropdown-link-hover-bg;
 }
 
 .blog {
@@ -67,9 +67,9 @@ nav#ix-nav-header > .nav > li > a {
 
 .badge {
   background-color: #FFF;
-  color: variables.$gray-light;
+  color: $gray-light;
   font-weight: normal;
-  border: 1px solid variables.$table-border-color;
+  border: 1px solid $table-border-color;
 }
 
 .browse-item:hover {
@@ -77,7 +77,7 @@ nav#ix-nav-header > .nav > li > a {
 }
 
 .browse-item.active:hover {
-  background-color: variables.$brand-primary;
+  background-color: $brand-primary;
 }
 
 .ix-recommend-link {
@@ -104,7 +104,7 @@ section.section-home {
 
   h1 {
     text-align: center;
-    padding: 0 variables.$padding-base-horizontal;
+    padding: 0 $padding-base-horizontal;
     margin: 0 auto;
     font-size: 400%;
 
@@ -136,18 +136,18 @@ section.section-home {
 }
 
 .input-group .searchForm_lookfor:not(:first-child):not(:last-child) {
-  border-radius: variables.$input-border-radius 0 0 variables.$input-border-radius;
+  border-radius: $input-border-radius 0 0 $input-border-radius;
 }
 
 .adv-group {
-    background: variables.$gray-lighter;
-    border-radius: variables.$border-radius-base;
-    border: 1px solid variables.$input-border;
-    margin-bottom: variables.$form-group-margin-bottom;
+    background: $gray-lighter;
+    border-radius: $border-radius-base;
+    border: 1px solid $input-border;
+    margin-bottom: $form-group-margin-bottom;
 }
 
 .search-button {
-  border: 1px solid variables.$table-border-color;
+  border: 1px solid $table-border-color;
 }
 
 .twitter-typeahead .tt-dropdown-menu {
@@ -173,10 +173,10 @@ section.section-home {
 .panel-gray {
   @extend .panel-body;
   background: #F5F5F5;
-  border-radius: variables.$border-radius-base;
+  border-radius: $border-radius-base;
 }
 
-@media (max-width: variables.$screen-md-max) {
+@media (max-width: $screen-md-max) {
   .panel-home {
     width: 90%;
   }
@@ -186,14 +186,14 @@ section.section-home {
   }
 }
 
-@media (max-width: variables.$screen-sm-max) {
+@media (max-width: $screen-sm-max) {
   header .container.navbar {margin-bottom: 20px;}
 }
 
-@media (max-width: variables.$screen-xs-max) {
+@media (max-width: $screen-xs-max) {
   header .container.navbar {margin-bottom: 0px;}
   .panel-home h1 {
-    padding: 0 variables.$padding-base-horizontal;
+    padding: 0 $padding-base-horizontal;
     margin: 20px auto;
     width: 100%;
   }
@@ -208,7 +208,7 @@ section.section-home {
       display: block;
 
       input {
-        border-radius: variables.$input-border-radius variables.$input-border-radius 0 0 !important;
+        border-radius: $input-border-radius $input-border-radius 0 0 !important;
       }
 
       .input-group-btn {
@@ -225,7 +225,7 @@ section.section-home {
         .search-button {
           margin-left: 0px;
           margin-top: -1px;
-          border-radius: 0 0 variables.$input-border-radius variables.$input-border-radius !important;
+          border-radius: 0 0 $input-border-radius $input-border-radius !important;
           width: 100%;
         }
       }
@@ -237,7 +237,7 @@ section.section-home {
   }
 }
 
-@media (min-width: variables.$screen-sm-min) {
+@media (min-width: $screen-sm-min) {
   .form-control {
     max-width: 100%;
   }
