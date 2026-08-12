@@ -1,17 +1,12 @@
-<?php
-    $this->assetManager()->appendStyleLink('vendor/fontawesome-free-6/awesome.css');
-    $this->assetManager()->appendStyleLink('vendor/fontawesome-free-6/solid.css');
-?>
-
 <section class="cw-p-2">
-<div id="map" class="map"></div>
-<?php $jsSnippet = <<<EOD
-$(function () {
-    IxTheo2.loadMap('comm');
-});
-EOD;
-?>
-<?=$this->assetManager()->outputInlineScriptString($jsSnippet)?>
+    <div id="map" class="map"></div>
+    <?php $jsSnippet = <<<EOD
+    $(function () {
+        IxTheo2.loadMap('comm');
+    });
+    EOD;
+    ?>
+    <?=$this->assetManager()->outputInlineScriptString($jsSnippet)?>
 </section>
 
 <div class="cw-row">
