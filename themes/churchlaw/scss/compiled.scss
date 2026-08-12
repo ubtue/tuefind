@@ -1,7 +1,6 @@
-@use "sass:color";
 @use "../../ixtheo/scss/compiled";
-@use "overrides";
-@use "variables" as *;
+@use "sass:color";
+@import "variables";
 
 /* jqcloud */
 div.jqcloud { color: #09f; }

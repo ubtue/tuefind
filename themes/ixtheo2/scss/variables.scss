@@ -1,9 +1,8 @@
 
+$brand-primary:               #2f78a0 !default;
+$brand-default:               #555 !default;
+$brand-breadcrumb:            #7b7d84 !default;
 
-$template-primary:               #2f78a0;
-$template-default:               #555;
-$template-breadcrumb:            #7b7d84;
+@import "../../tuefind2/scss/variables";
 
-//** Global textual link color.
-$link-color:                     darken($template-primary, 3%);
-
+$link-color: darken($brand-primary, 3%);

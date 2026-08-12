@@ -34,12 +34,11 @@
         ?>
         <ol class="record-list collapse" id="<?=$pgid?>">
             <?php foreach ($subRecords as $count => $sub): ?>
-                <?php /* adds .single-grouped-record selector for displaying containing favorite-list via JS (check_save_statuses.js) */ ?>
                 <?php /* adds .ajaxItem selector for displaying item status via JS (check_item_statuses.js) */ ?>
-                <li id="<?=$pid . $count?>" class="result ajaxItem"> 
+                <li id="<?=$pid . $count?>" class="result<?php if ($this->driver->supportsAjaxStatus()): ?> ajaxItem<?php endif ?>">
                     <?php /* reuses logic from search/list-list.phtml */ ?>
                     <?php if ($showCheckboxes): ?>
-                        <?=$this->record($sub)->getCheckbox('', 'search-cart-form', $count+1)?>
+                        <?=$this->record($sub)->getCheckbox('', 'search-cart-form', $count + 1)?>
                     <?php endif; ?>
                     <?=$this->record($sub)->getSearchResult('list')?>
                     <?php /* reuses logic from search/list-list.phtml -- END */ ?>
