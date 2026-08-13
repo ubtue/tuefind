@@ -205,7 +205,7 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase
         return $view;
     }
 
-    private function replaceSpecialCharsForSummernote($content)
+    protected function replaceSpecialCharsForSummernote($content)
     {
         return preg_replace_callback('/\{\{[\s\S]*?\}\}/s', function ($matches) {
             // replace &gt; with > inside the matched content
