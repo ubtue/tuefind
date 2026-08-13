@@ -11,7 +11,7 @@ use function count;
  */
 class AdminFrontendController extends \VuFind\Controller\AbstractBase
 {
-    use TueFind\Controller\Feature\CmsTrait;
+    use Feature\CmsTrait;
 
     protected function forceAdminLogin()
     {

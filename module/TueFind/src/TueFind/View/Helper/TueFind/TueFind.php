@@ -816,6 +816,8 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper implements
      * Parse command string
      * - removing start/end delimiter {{ and }} as well as html_decode should be done BEFORE calling this!
      * - see parseCommandTest() function for examples
+     * - Note: This must be in sync with special character handling in updatecmspage.phtml (when switching into / out of editor code view)
+     *         as well as the CmsTrait which processes special HTML characters like '&gt;' => '>' before saving.
      */
     protected function parseCommand(string $command, bool $debug = false): array
     {

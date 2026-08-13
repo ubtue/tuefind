@@ -210,6 +210,8 @@ trait CmsTrait
 
     protected function replaceSpecialCharsForSummernote($content)
     {
+        // Note: This must be in sync with changes done within the JS callback when switching out of the editor preview, see updatecmspage.phtml,
+        //       as well as the command parser in the TueFind View helper.
         return preg_replace_callback('/\{\{[\s\S]*?\}\}/s', function ($matches) {
             // replace &gt; with > inside the matched content
             return str_replace('&gt;', '>', $matches[0]);
