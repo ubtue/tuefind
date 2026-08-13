@@ -163,16 +163,23 @@
             callbacks: {
               onBlur: function() {
                 lastRange = $('.editor').summernote('createRange');
-              },
-              // Added a callback to clean up the content when the user pastes or types in the editor
-              onChange: function(contents, editable) {
-                  if (contents.includes('&gt;')) {
-                      const cleaned = contents.replace(/&gt;/g, '>');
-                      // replace the content in the editor with the cleaned version
-                      $('.editor').summernote('code', cleaned);
-                  }
               }
             }
+        });
+
+        $('.btn-codeview').click(function() {
+            if (this.classList.contains('active')) {
+                // Codeview is being deactivated, clean up the content
+                let editor = $('.editor');
+                let content = editor.summernote('code');
+                
+                const cleaned = content.replace(/\{\{[\s\S]*?\}\}/g, (match) => {
+                    return match.replace(/&gt;/g, '>');
+                });
+
+                // Write the cleaned content back to the editor
+                editor.summernote('code', cleaned);
+            }    
         });
 
         $('.cms_preview').click(function(thisEvent){
