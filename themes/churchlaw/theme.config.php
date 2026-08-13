@@ -1,7 +1,8 @@
 <?php
+
 return [
     'extends' => 'ixtheo',
-    'css' => array(
-        'compiled.css'
-    ),
+    'css' => [
+        'compiled.css',
+    ],
 ];

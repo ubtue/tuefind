@@ -849,7 +849,6 @@ forms:
         label: SA_comment
         type: text
 
-# Example for an Digitisation on Demand form
   DoD:
     enabled: true
     title: Digitisation on Demand
@@ -861,7 +860,7 @@ forms:
 
     recipient:
       name: Digitisation on Demand (DoD) Form
-      email: ixtheo-self-archiving@ub.uni-tuebingen.de
+      email: theologie@ub.uni-tuebingen.de
 
     fields:
       - name: title

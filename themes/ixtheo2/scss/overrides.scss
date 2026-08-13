@@ -1125,7 +1125,7 @@ a.black-icon {
   min-height: 200px;
 }
 .active-filters .facet,.facet-group .active {
-  background-color: ixtheo2variables.$template-primary;
+  background-color: ixtheo2variables.$brand-primary;
 }
 .ix2-searchForm .active-filters {
   display: block;
@@ -1143,7 +1143,7 @@ a.black-icon {
   outline: dotted 1px #000;
 }
 .myresearch-menu a.active {
-  background-color: ixtheo2variables.$template-primary;
+  background-color: ixtheo2variables.$brand-primary;
 }
 .btn.btn-primary.active {
   color: #000;
@@ -1156,7 +1156,7 @@ a.black-icon {
 }
 
 .browse-item.active {
-  background-color: ixtheo2variables.$template-primary;
+  background-color: ixtheo2variables.$brand-primary;
 }
 
 .ix2-collection .innovativ-image-default-bg {
@@ -1329,11 +1329,11 @@ body {
 
 .breadcrumb-wrapper {
     border-bottom: 1px solid #ddd;
-    color: ixtheo2variables.$template-breadcrumb;
+    color: ixtheo2variables.$brand-breadcrumb;
 }
 
 .breadcrumb-item a {
-    color: ixtheo2variables.$template-breadcrumb;
+    color: ixtheo2variables.$brand-breadcrumb;
 }
 
 .breadcrumb-item a:first-child {
@@ -1349,7 +1349,7 @@ body {
     color: ixtheo2variables.$link-color;
 }
 .tuefind-event-resetsearchhandlers > li.nav-item > a.nav-link.active {
-    color: ixtheo2variables.$template-default;
+    color: ixtheo2variables.$brand-default;
 }
 a {
   color: ixtheo2variables.$link-color;
