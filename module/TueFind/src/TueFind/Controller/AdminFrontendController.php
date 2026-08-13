@@ -190,7 +190,7 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase
                         $cmsPageId,
                         $key,
                         $pageTitle[$iLang],
-                        $pageContent[$iLang]
+                        $this->replaceSpecialCharsForSummernote($pageContent[$iLang])
                     );
                 }
                 $iLang++;
@@ -203,6 +203,14 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase
         $view = $this->createViewModel();
         $view->langs = $langs;
         return $view;
+    }
+
+    private function replaceSpecialCharsForSummernote($content)
+    {
+        return preg_replace_callback('/\{\{[\s\S]*?\}\}/s', function ($matches) {
+            // replace &gt; with > inside the matched content
+            return str_replace('&gt;', '>', $matches[0]);
+        }, $content);
     }
 
     public function updateCMSPageAction()
@@ -227,7 +235,7 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase
             $iLang = 0;
             foreach ($langs as $key => $name) {
                 $pageTitle = $pageTitles[$iLang];
-                $pageContent = $pageContents[$iLang];
+                $pageContent = $this->replaceSpecialCharsForSummernote($pageContents[$iLang]);
                 $existingTranslation = $cmsPage->getTranslation($key);
                 if ($existingTranslation == null && $pageTitle != '') {
                     // add
