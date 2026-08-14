@@ -5,6 +5,7 @@
 
 <div class="<?=$this->layoutClass('mainbody')?>">
   <h1><?=$this->transEsc('update CMS page')?></h1>
+
   <?=$this->flashmessages()?>
 
   <div>
@@ -172,14 +173,16 @@
                 // Codeview is being deactivated, clean up the content
                 let editor = $('.editor');
                 let content = editor.summernote('code');
-                
+
+                // Note: This must be in sync with the code in Controller\Feature\CmsTrait which is executed when saving the page,
+                // as well as the command parser in the TueFind View Helper.
                 const cleaned = content.replace(/\{\{[\s\S]*?\}\}/g, (match) => {
                     return match.replace(/&gt;/g, '>');
                 });
 
                 // Write the cleaned content back to the editor
                 editor.summernote('code', cleaned);
-            }    
+            }
         });
 
         $('.cms_preview').click(function(thisEvent){
