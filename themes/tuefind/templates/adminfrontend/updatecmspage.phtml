@@ -103,7 +103,7 @@
   .note-modal-content {
     min-width: 1300px;
   }
-  .hideInPlagin {
+  .hideInPlugin {
     display: none;
   }
   .hideInAdmin {
@@ -119,4 +119,4 @@
 </style>
 
 <?php $this->assetManager()->appendScriptLink('cms.js'); ?>
-<?=$this->assetManager()->outputInlineScriptString('CMS.InitEditor();') ?>
+<?=$this->assetManager()->outputInlineScriptString('CMS.Editor.Init();') ?>

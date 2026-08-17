@@ -16,9 +16,5 @@ $this->breadcrumbs()->set($this->translate('Admins'), $this->url('myresearch-hom
   <?=$this->accountMenu()->render('cmspagesdocs')?>
 </div>
 
-<?php
-  $script = <<<JS
-        TueFind.getAJAXCMSDocs('AJAXCMSDocsBlock');
-      JS;
-?>
-<?=$this->assetManager()->outputInlineScriptString($script) ?>
+<?php $this->assetManager()->appendScriptLink('cms.js'); ?>
+<?=$this->assetManager()->outputInlineScriptString('CMS.GetAJAXDocs(\'AJAXCMSDocsBlock\');') ?>

@@ -241,7 +241,7 @@ class CmsDocsEntries extends \VuFind\AjaxHandler\AbstractBase
             if ($realTargetDir === false || !str_starts_with($realTargetDir, $realBaseDir)) {
                 return $this->formatResponse([
                     'status' => 'ERROR',
-                    'message' => 'Invalid or non-existent path',
+                    'message' => 'Invalid or non-existent path: ' . $targetDir,
                 ]);
             }
 

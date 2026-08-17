@@ -16,49 +16,49 @@ $imageUrl = '/AJAX/JSON?method=CmsDocs&action=getImageContent&full-path=' . urle
     <?php if ($isImage): ?>
         <div class="card-body d-flex align-items-center justify-content-center">
             <!-- If this is an image, load it through the controller -->
-            <?php if ($this->modetype === 'plagin'): ?>
-                <img src="<?= $imageUrl ?>" 
-                    class="img-fluid copyImageURL" 
+            <?php if ($this->modetype === 'plugin'): ?>
+                <img src="<?= $imageUrl ?>"
+                    class="img-fluid copyImageURL"
                     data-full-path="<?= $this->escapeHtml($this->file['fullPath']) ?>"
                     data-isimage="image"
                     alt="<?= $this->escapeHtml($this->file['name']) ?>">
             <?php else: ?>
-                <img src="<?= $imageUrl ?>" 
-                    class="img-fluid card-img-top" 
-                    data-bs-toggle="modal" 
-                    data-bs-target="#exampleModal" 
+                <img src="<?= $imageUrl ?>"
+                    class="img-fluid card-img-top"
+                    data-bs-toggle="modal"
+                    data-bs-target="#exampleModal"
                     data-full-path="<?= $this->escapeHtml($this->file['fullPath']) ?>"
                     data-isimage="image"
                     alt="<?= $this->escapeHtml($this->file['name']) ?>">
             <?php endif; ?>
         </div>
         <div class="card-footer text-muted row gx-0">
-            <?php if ($this->modetype === 'plagin'): ?>
-                <span class="text-center d-block text-default copyImageURL col-12 cursor-pointer" 
+            <?php if ($this->modetype === 'plugin'): ?>
+                <span class="text-center d-block text-default copyImageURL col-12 cursor-pointer"
                     data-full-path="<?= $this->escapeHtml($this->file['fullPath']) ?>">
                     <i class="fa fa-link"></i>
                 </span>
             <?php else: ?>
-                <span class="text-center d-block text-default cms_preview col-6 cursor-pointer" 
-                    data-bs-toggle="modal" 
-                    data-bs-target="#exampleModal" 
+                <span class="text-center d-block text-default cms_preview col-6 cursor-pointer"
+                    data-bs-toggle="modal"
+                    data-bs-target="#exampleModal"
                     data-full-path="<?= $this->escapeHtml($this->file['fullPath']) ?>">
                         <i class="fas fa-eye"></i>
                 </span>
-                <span class="text-center d-block text-danger col-6 delete-btn cursor-pointer" 
-                data-bs-toggle="modal" 
+                <span class="text-center d-block text-danger col-6 delete-btn cursor-pointer"
+                data-bs-toggle="modal"
                 data-bs-target="#confirmDeleteModal"
                 data-full-path="<?= $this->escapeHtml($this->file['fullPath']) ?>">
                     <i class="fas fa-trash"></i>
                 </span>
-            <?php endif;?>    
+            <?php endif;?>
         </div>
     <?php else: ?>
         <div class="card-body d-flex align-items-center justify-content-center">
             <!-- If this is a document (PDF, TXT, etc.), show a large icon -->
-            <?php if ($this->modetype === 'plagin'): ?> 
-                <div class="text-center cursor-pointer copyDocumentURL" 
-                    data-full-path="<?= $this->escapeHtml($this->file['fullPath']) ?>" 
+            <?php if ($this->modetype === 'plugin'): ?>
+                <div class="text-center cursor-pointer copyDocumentURL"
+                    data-full-path="<?= $this->escapeHtml($this->file['fullPath']) ?>"
                     data-file-name="<?= $this->escapeHtml($this->file['name']) ?>">
 
                     <?php if ($this->file['extension'] === 'pdf'): ?>
@@ -81,29 +81,29 @@ $imageUrl = '/AJAX/JSON?method=CmsDocs&action=getImageContent&full-path=' . urle
                     <?php endif; ?>
                     <div class="mt-2 text-muted text-uppercase"><small><?= $this->escapeHtml($this->file['extension']) ?></small></div>
                 </div>
-            <?php endif;?> 
+            <?php endif;?>
         </div>
         <div class="card-footer text-muted row gx-0">
-            <?php if ($this->modetype === 'plagin'): ?>
-                <span class="text-center d-block text-default copyDocumentURL col-12 cursor-pointer" 
+            <?php if ($this->modetype === 'plugin'): ?>
+                <span class="text-center d-block text-default copyDocumentURL col-12 cursor-pointer"
                     data-full-path="<?= $this->escapeHtml($this->file['fullPath']) ?>"
                     data-file-name="<?= $this->escapeHtml($this->file['name']) ?>">
                     <i class="fa fa-link"></i>
                 </span>
             <?php else: ?>
-                <span class="text-center d-block text-default cms_preview col-6 cursor-pointer" 
-                    data-bs-toggle="modal" 
-                    data-bs-target="#exampleModal" 
+                <span class="text-center d-block text-default cms_preview col-6 cursor-pointer"
+                    data-bs-toggle="modal"
+                    data-bs-target="#exampleModal"
                     data-full-path="<?= $this->escapeHtml($this->file['fullPath']) ?>">
                         <i class="fas fa-eye"></i>
                 </span>
-                <span class="text-center d-block text-danger col-6 delete-btn cursor-pointer" 
-                data-bs-toggle="modal" 
+                <span class="text-center d-block text-danger col-6 delete-btn cursor-pointer"
+                data-bs-toggle="modal"
                 data-bs-target="#confirmDeleteModal"
                 data-full-path="<?= $this->escapeHtml($this->file['fullPath']) ?>">
                     <i class="fas fa-trash"></i>
                 </span>
-            <?php endif;?>    
+            <?php endif;?>
         </div>
     <?php endif; ?>
 </div>
