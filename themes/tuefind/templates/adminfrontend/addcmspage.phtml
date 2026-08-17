@@ -5,6 +5,8 @@
 
 <div class="<?=$this->layoutClass('mainbody')?>">
   <h1><?=$this->transEsc('Add new CMS page')?></h1>
+  <p>Note: Additional documentation of this feature can be found within our <a href="https://github.com/ubtue/tuefind/wiki/CMS">Wiki page</a>.</p>
+
   <?=$this->flashmessages()?>
 
   <div>
@@ -28,14 +30,16 @@
               <div class="mb-3">
                 <nav>
                   <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                    <?php $iLang=0; foreach ($this->langs as $oneLang=>$name): ?>
-                      <button class="nav-link <?=($iLang == 0)? 'active': ''?>" id="<?=$oneLang;?>-tab" data-bs-toggle="tab" data-bs-target="#<?=$oneLang;?>" type="button" role="tab" aria-controls="<?=$oneLang;?>" aria-selected="true"><?=$oneLang;?></button>
+                    <?php $iLang = 0;
+                    foreach ($this->langs as $oneLang => $name): ?>
+                      <button class="nav-link <?=($iLang == 0) ? 'active' : ''?>" id="<?=$oneLang;?>-tab" data-bs-toggle="tab" data-bs-target="#<?=$oneLang;?>" type="button" role="tab" aria-controls="<?=$oneLang;?>" aria-selected="true"><?=$oneLang;?></button>
                     <?php $iLang++; endforeach; ?>
                   </div>
                 </nav>
                 <div class="tab-content" id="nav-tabContent">
-                  <?php $iLang2=0; foreach ($this->langs as $oneLang2=>$name): ?>
-                    <div class="tab-pane fade <?=($iLang2 == 0)? ' show active': ''?>" id="<?=$oneLang2;?>" role="tabpanel" aria-labelledby="<?=$oneLang2;?>-tab">
+                  <?php $iLang2 = 0;
+                  foreach ($this->langs as $oneLang2 => $name): ?>
+                    <div class="tab-pane fade <?=($iLang2 == 0) ? ' show active' : ''?>" id="<?=$oneLang2;?>" role="tabpanel" aria-labelledby="<?=$oneLang2;?>-tab">
                       <div class="mb-3">
                           <label class="form-label">Title</label>
                           <input type="text" name="page_title[]" value="" class="form-control" placeholder="enter title (only languages with a title will be created)">
@@ -68,22 +72,5 @@
   <?=$this->accountMenu()->render('showcmsmain')?>
 </div>
 
-<?php
-  $script = <<<JS
-        $('.editor').summernote({
-            placeholder: '',
-            tabsize: 2,
-            height: 600,
-            toolbar: [
-                ['style', ['style']],
-                ['font', ['bold', 'underline', 'clear']],
-                ['color', ['color']],
-                ['para', ['ul', 'ol', 'paragraph']],
-                ['table', ['table']],
-                ['insert', ['link', 'picture', 'video']],
-                ['view', ['fullscreen', 'codeview', 'help']]
-            ]
-        });
-      JS;
-?>
-<?=$this->assetManager()->outputInlineScriptString($script) ?>
+<?php $this->assetManager()->appendScriptLink('cms.js'); ?>
+<?=$this->assetManager()->outputInlineScriptString('CMS.InitEditor();') ?>
