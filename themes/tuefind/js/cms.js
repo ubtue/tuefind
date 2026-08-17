@@ -91,8 +91,8 @@ var CMS = {
             });
 
              $(document).on('click', '.copyImageURL', function(thisEvent) {
-                let fullPATH = $(this).data('full-path');
-                let ajaxImagePreURL = VuFind.path + '/AJAX/JSON?method=CmsDocs&action=getImageContent&full-path='+fullPATH;
+                let path = $(this).data('relative-path');
+                let ajaxImagePreURL = VuFind.path + '/AJAX/JSON?method=CmsDocs&action=getImageContent&relative-path=' + path;
                 $('.note-image-url').val(ajaxImagePreURL);
                 $('.note-image-btn').click();
             });
@@ -100,8 +100,8 @@ var CMS = {
             $(document).on('click', '.copyDocumentURL', function(thisEvent) {
                 thisEvent.preventDefault();
 
-                let fullPATH = $(this).data('full-path');
-                let ajaxFilePreURL = VuFind.path + '/AJAX/JSON?method=CmsDocs&action=getFileContent&full-path='+fullPATH;
+                let path = $(this).data('relative-path');
+                let ajaxFilePreURL = VuFind.path + '/AJAX/JSON?method=CmsDocs&action=getFileContent&relative-path=' + path;
                 let fileName = $(this).data('file-name');
                 let linkHTML = '<a target="_blank" href="'+ajaxFilePreURL+'">'+fileName+'</a>';
 

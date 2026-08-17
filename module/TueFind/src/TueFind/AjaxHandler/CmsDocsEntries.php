@@ -374,6 +374,7 @@ class CmsDocsEntries extends \VuFind\AjaxHandler\AbstractBase
                                 'size' => filesize($itemFullPath),
                                 'fullPath' => $cleanFullPath,
                                 'serverPath' => $serverPath,
+                                'relativePath' => str_replace($serverPath, '', $cleanFullPath),
                             ];
                         }
                     }
@@ -387,6 +388,8 @@ class CmsDocsEntries extends \VuFind\AjaxHandler\AbstractBase
                 'modetype' => $modetype,
                 'folders' => $folders,
                 'files' => $files,
+                // TODO: The serverPath is known by configuration
+                //       it does not make sense to put it to html and send it via AJAX to to the server again
                 'serverPath' => $serverPath,
             ];
 

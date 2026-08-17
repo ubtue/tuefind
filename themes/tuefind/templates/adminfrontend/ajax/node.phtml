@@ -5,7 +5,7 @@ $isImage = in_array(strtolower($this->file['extension']), $imageExtensions);
 
 // Form a safe web URL for images through your AJAX controller
 // Pass the fullPath so the backend knows which file to read
-$imageUrl = '/AJAX/JSON?method=CmsDocs&action=getImageContent&full-path=' . urlencode($this->file['fullPath']);
+$imageUrl = '/AJAX/JSON?method=CmsDocs&action=getImageContent&full-path=' . urlencode($this->file['relativePath']);
 
 ?>
 
@@ -19,7 +19,7 @@ $imageUrl = '/AJAX/JSON?method=CmsDocs&action=getImageContent&full-path=' . urle
             <?php if ($this->modetype === 'plugin'): ?>
                 <img src="<?= $imageUrl ?>"
                     class="img-fluid copyImageURL"
-                    data-full-path="<?= $this->escapeHtml($this->file['fullPath']) ?>"
+                    data-relative-path="<?= $this->escapeHtml($this->file['relativePath']) ?>"
                     data-isimage="image"
                     alt="<?= $this->escapeHtml($this->file['name']) ?>">
             <?php else: ?>
@@ -27,7 +27,7 @@ $imageUrl = '/AJAX/JSON?method=CmsDocs&action=getImageContent&full-path=' . urle
                     class="img-fluid card-img-top"
                     data-bs-toggle="modal"
                     data-bs-target="#exampleModal"
-                    data-full-path="<?= $this->escapeHtml($this->file['fullPath']) ?>"
+                    data-relative-path="<?= $this->escapeHtml($this->file['relativePath']) ?>"
                     data-isimage="image"
                     alt="<?= $this->escapeHtml($this->file['name']) ?>">
             <?php endif; ?>
@@ -35,20 +35,20 @@ $imageUrl = '/AJAX/JSON?method=CmsDocs&action=getImageContent&full-path=' . urle
         <div class="card-footer text-muted row gx-0">
             <?php if ($this->modetype === 'plugin'): ?>
                 <span class="text-center d-block text-default copyImageURL col-12 cursor-pointer"
-                    data-full-path="<?= $this->escapeHtml($this->file['fullPath']) ?>">
+                    data-relative-path="<?= $this->escapeHtml($this->file['relativePath']) ?>">
                     <i class="fa fa-link"></i>
                 </span>
             <?php else: ?>
                 <span class="text-center d-block text-default cms_preview col-6 cursor-pointer"
                     data-bs-toggle="modal"
                     data-bs-target="#exampleModal"
-                    data-full-path="<?= $this->escapeHtml($this->file['fullPath']) ?>">
+                    data-relative-path="<?= $this->escapeHtml($this->file['relativePath']) ?>">
                         <i class="fas fa-eye"></i>
                 </span>
                 <span class="text-center d-block text-danger col-6 delete-btn cursor-pointer"
                 data-bs-toggle="modal"
                 data-bs-target="#confirmDeleteModal"
-                data-full-path="<?= $this->escapeHtml($this->file['fullPath']) ?>">
+                data-relative-path="<?= $this->escapeHtml($this->file['relativePath']) ?>">
                     <i class="fas fa-trash"></i>
                 </span>
             <?php endif;?>
@@ -58,7 +58,7 @@ $imageUrl = '/AJAX/JSON?method=CmsDocs&action=getImageContent&full-path=' . urle
             <!-- If this is a document (PDF, TXT, etc.), show a large icon -->
             <?php if ($this->modetype === 'plugin'): ?>
                 <div class="text-center cursor-pointer copyDocumentURL"
-                    data-full-path="<?= $this->escapeHtml($this->file['fullPath']) ?>"
+                    data-relative-path="<?= $this->escapeHtml($this->file['relativePath']) ?>"
                     data-file-name="<?= $this->escapeHtml($this->file['name']) ?>">
 
                     <?php if ($this->file['extension'] === 'pdf'): ?>
@@ -86,7 +86,7 @@ $imageUrl = '/AJAX/JSON?method=CmsDocs&action=getImageContent&full-path=' . urle
         <div class="card-footer text-muted row gx-0">
             <?php if ($this->modetype === 'plugin'): ?>
                 <span class="text-center d-block text-default copyDocumentURL col-12 cursor-pointer"
-                    data-full-path="<?= $this->escapeHtml($this->file['fullPath']) ?>"
+                    data-relative-path="<?= $this->escapeHtml($this->file['relativePath']) ?>"
                     data-file-name="<?= $this->escapeHtml($this->file['name']) ?>">
                     <i class="fa fa-link"></i>
                 </span>
@@ -94,13 +94,13 @@ $imageUrl = '/AJAX/JSON?method=CmsDocs&action=getImageContent&full-path=' . urle
                 <span class="text-center d-block text-default cms_preview col-6 cursor-pointer"
                     data-bs-toggle="modal"
                     data-bs-target="#exampleModal"
-                    data-full-path="<?= $this->escapeHtml($this->file['fullPath']) ?>">
+                    data-relative-path="<?= $this->escapeHtml($this->file['relativePath']) ?>">
                         <i class="fas fa-eye"></i>
                 </span>
                 <span class="text-center d-block text-danger col-6 delete-btn cursor-pointer"
                 data-bs-toggle="modal"
                 data-bs-target="#confirmDeleteModal"
-                data-full-path="<?= $this->escapeHtml($this->file['fullPath']) ?>">
+                data-relative-path="<?= $this->escapeHtml($this->file['relativePath']) ?>">
                     <i class="fas fa-trash"></i>
                 </span>
             <?php endif;?>
