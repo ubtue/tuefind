@@ -5,7 +5,7 @@ $isImage = in_array(strtolower($this->file['extension']), $imageExtensions);
 
 // Form a safe web URL for images through your AJAX controller
 // Pass the fullPath so the backend knows which file to read
-$imageUrl = '/AJAX/JSON?method=CmsDocs&action=getImageContent&full-path=' . urlencode($this->file['relativePath']);
+$imageUrl = '/cms/assets/' . $this->file['relativePath'];
 
 ?>
 

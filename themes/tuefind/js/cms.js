@@ -39,6 +39,8 @@ var CMS = {
                 }
             });
 
+            CMS.Editor.InitPluginForPlaceholders();
+
             // Summernote API Documentation:
             // https://summernote.org/deep-dive/
             $('.editor').summernote({
@@ -52,6 +54,9 @@ var CMS = {
                     ['para', ['ul', 'ol', 'paragraph']],
                     ['table', ['table']],
                     ['insert', ['link', 'picture']],
+
+                    // Note: Placeholders plugin is still experimental, works but will lead to hanging window during preview
+                    //['insert', ['link', 'picture', 'tuefindPlaceholders']],
                     ['view', ['codeview', 'help']]
 
                     // Note: 'fullscreen' removed due to severe display problems
@@ -92,7 +97,7 @@ var CMS = {
 
              $(document).on('click', '.copyImageURL', function(thisEvent) {
                 let path = $(this).data('relative-path');
-                let ajaxImagePreURL = VuFind.path + '/AJAX/JSON?method=CmsDocs&action=getImageContent&relative-path=' + path;
+                let ajaxImagePreURL = VuFind.path + '/cms/assets/' + path;
                 $('.note-image-url').val(ajaxImagePreURL);
                 $('.note-image-btn').click();
             });
@@ -101,7 +106,7 @@ var CMS = {
                 thisEvent.preventDefault();
 
                 let path = $(this).data('relative-path');
-                let ajaxFilePreURL = VuFind.path + '/AJAX/JSON?method=CmsDocs&action=getFileContent&relative-path=' + path;
+                let ajaxFilePreURL = VuFind.path + '/cms/assets/' + path;
                 let fileName = $(this).data('file-name');
                 let linkHTML = '<a target="_blank" href="'+ajaxFilePreURL+'">'+fileName+'</a>';
 
@@ -134,6 +139,153 @@ var CMS = {
 
             });
 
+        },
+
+        InitPluginForPlaceholders: function() {
+            $.extend($.summernote.plugins, {
+
+                tuefindPlaceholders: function (context) {
+
+                    var ui = $.summernote.ui;
+                    var $editor = context.layoutInfo.editor;
+
+                    var placeholders = [
+                        {
+                            value: 'transEsc wiki_link',
+                            label: 'Translated Display Text'
+                        },
+                        {
+                            value: 'icon send-email',
+                            label: 'Icon'
+                        },
+                        {
+                            value: 'url content-page [page=>A_Z]',
+                            label: 'URL'
+                        },
+                        {
+                            value: 'imageLink Logo_Universitaet_Tuebingen.svg',
+                            label: 'Image (from theme hierarchy)'
+                        }
+                    ];
+
+                    /*
+                     * Toolbar-Button
+                     */
+                    context.memo('button.tuefindPlaceholders', function () {
+
+                        return ui.button({
+                            contents: '<span>{{ }}</span>',
+
+                            click: function () {
+
+                                /*
+                                 * Cursorposition sichern.
+                                 */
+                                context.invoke('editor.saveRange');
+
+                                /*
+                                 * Vorhandenes Dropdown entfernen.
+                                 */
+                                $('.tuefind-placeholders-menu').remove();
+
+                                /*
+                                 * Dropdown erzeugen.
+                                 */
+                                var $menu = $('<div>', {
+                                    'class': 'tuefind-placeholders-menu'
+                                });
+
+                                $.each(placeholders, function (index, placeholder) {
+
+                                    var $item = $('<button>', {
+                                        'type': 'button',
+                                        'class': 'tuefind-placeholders-item',
+                                        'text': placeholder.label
+                                    });
+
+                                    $item.on('click', function () {
+
+                                        /*
+                                         * Cursorposition wiederherstellen.
+                                         */
+                                        context.invoke('editor.restoreRange');
+
+                                        /*
+                                         * Platzhalter einfügen.
+                                         */
+                                        context.invoke(
+                                            'editor.insertText',
+                                            '{{' + placeholder.value + '}}'
+                                        );
+
+                                        /*
+                                         * Dropdown schließen.
+                                         */
+                                        $menu.remove();
+
+                                    });
+
+                                    $menu.append($item);
+                                });
+
+                                /*
+                                 * Dropdown zunächst unsichtbar
+                                 * unter dem Editor platzieren.
+                                 */
+                                $('body').append($menu);
+
+                                /*
+                                 * Position des Buttons ermitteln.
+                                 *
+                                 * Wir verwenden hier bewusst nicht
+                                 * Summernotes Popover-/Tooltip-Logik.
+                                 */
+                                var $button = $(this);
+
+                                var offset = $button.offset();
+
+                                $menu.css({
+                                    position: 'absolute',
+                                    top: offset.top + $button.outerHeight(),
+                                    left: offset.left,
+                                    zIndex: 9999
+                                });
+
+                                /*
+                                 * Klick außerhalb schließt das Menü.
+                                 */
+                                setTimeout(function () {
+
+                                    $(document).one(
+                                        'click.tuefindPlaceholders',
+                                        function (event) {
+
+                                            if (
+                                                !$(event.target).closest(
+                                                    '.tuefind-placeholders-menu'
+                                                ).length
+                                            ) {
+                                                $menu.remove();
+                                            }
+
+                                        }
+                                    );
+
+                                }, 0);
+                            }
+
+                        }).render();
+                    });
+
+
+                    this.destroy = function () {
+                        $('.tuefind-placeholders-menu').remove();
+                        $(document).off(
+                            'click.tuefindPlaceholders'
+                        );
+                    };
+                }
+            });
         },
 
         // Function for calling AjaxHandler to replace palceholders (display texts, images, ...)
@@ -400,7 +552,7 @@ var CMS = {
     },
 
     // deprecated? former tuefind.js, see GetAJAXDocs
-    getDocs: function() {
+    GetDocs: function() {
         let table = $('.dataTable').DataTable({
             destroy: true, // if the table already exists, destroy it before reinitializing
             processing: true,
@@ -434,7 +586,7 @@ var CMS = {
     },
 
     // deprecated? former tuefind.js
-    getImages: function() {
+    GetImages: function() {
         $.ajax({
             type: "GET",
             url: VuFind.path + '/AJAX/JSON?method=CmsDocs&action=listImages',
