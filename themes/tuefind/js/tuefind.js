@@ -705,16 +705,18 @@ var TueFind = {
 
     },
 
-    goToCollapseBlock: function(anchor,blockID) {
-        if(anchor.length) {
-            window.location.href = "#"+anchor;
-        }
-        if(blockID.length) {
-            let blockVar = $('#'+blockID);
-            if(!blockVar.hasClass('in')) {
-                blockVar.addClass('in');
-                blockVar.click();
+    GoToCollapsedBlock: function(anchor, blockID) {
+        if (blockID !== undefined && blockID.length) {
+            let block = $('#'+blockID).first();
+            let collapsedSection = block.parents('.tf-panel-collapse').first();
+            let collapsedSectionHeading = collapsedSection.children('.tf-panel-collapse-heading').first();
+            if (collapsedSectionHeading.attr('aria-expanded') === 'false') {
+                collapsedSectionHeading.click();
             }
+        }
+
+        if (anchor !== undefined && anchor.length) {
+            window.location.href = "#"+anchor;
         }
     },
 
@@ -724,14 +726,14 @@ var TueFind = {
         $('.multifieldtext').each(function(){
           $(this).find('input').after(addButton);
           $(this).find('input').after(removeButton);
-        })
+        });
         $('.multifieldtext').hide();
         $('.multifieldtext_group').each(function(){
           let firstInputElement = $(this).find('.multifieldtext:first');
           firstInputElement.find('.removejsicon').remove();
           firstInputElement.find('.addjsicon').addClass('mainaddjsicon');
           firstInputElement.show();
-        })
+        });
 
         $('.addjsicon').click(function(){
           let nextInputBlock = $(this).parents('.multifieldtext').next();
@@ -742,7 +744,7 @@ var TueFind = {
             nextInputBlock.find('.addjsicon').hide();
             nextInputBlock.find('.removejsicon').addClass('mainremovejsicon');
           }
-        })
+        });
 
         $('.removejsicon').click(function(){
           let thisInputBlock =  $(this).parents('.multifieldtext');
@@ -773,7 +775,7 @@ var TueFind = {
 
         $(document).on("change", ".exclusiveSelect", function() {
             removeValidation($(this).find('input:checked').val());
-        })
+        });
 
         $('.feedback-content form .btn.btn-primary').on( "click", function(e) {
             $('.jshide').each(function(){
@@ -781,7 +783,7 @@ var TueFind = {
                     if(thisBlock.css('display') != 'none') {
                         thisBlock.find('input').each(function(){
                         $(this).prop('required',false);
-                    })
+                    });
                 }
             })
         });
@@ -798,74 +800,6 @@ var TueFind = {
                 input.setSelectionRange(length, length);
             }
         }
-    },
-
-    getCMSDocs: function() {
-        let table = $('.dataTable').DataTable({
-            destroy: true, // if the table already exists, destroy it before reinitializing
-            processing: true,
-            serverSide: false, // later change to true if needed
-            ajax: {
-                url: '/AJAX/JSON?method=CmsDocs&action=listFiles',
-                method: 'GET',
-                dataSrc: 'data'
-            },
-            columns: [
-                {
-                    data: 'name',
-                    render: function (data, type, row) {
-                        return `<a href="${row.url}" target="_blank">${data}</a>`;
-                    }
-                },
-                {
-                    data: null,
-                    orderable: false,
-                    render: function (data, type, row) {
-                        return `
-                            <a href="${row.url}" class="me-3" target="_blank">👁</a>
-                            <a href="${row.url}" class="text-center text-danger col-6 delete-btn" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">
-                                <i class="fas fa-trash"></i>
-                            </a>
-                        `;
-                    }
-                }
-            ]
-        });
-    },
-
-    getCMSImages: function() {
-        $.ajax({
-            type: "GET",
-            url: '/AJAX/JSON?method=CmsDocs&action=listImages',
-            dataType: "json",
-            success: function (data) {
-                let file = data.data;
-                let HTMlData = '';
-                for (let i = 0; i < file.length; i++) {
-                    let oneBlock = `
-                        <div class="col-3">
-                            <div class="card h-100 smc-card">
-                                <div class="card-header">
-                                    ${file[i]['name']}
-                                </div>
-                                <div class="card-body">
-                                    <img src="${file[i]['url']}" class="card-img-top" alt="${file[i]['name']}">
-                                </div>
-                                <div class="card-footer text-muted row gx-0">
-                                    <a href="#" class="text-center d-block text-default cms_preview col-6" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                        <i class="fas fa-eye"></i>
-                                    </a>
-                                    <a href="${file[i]['url']}" class="text-center d-block text-danger col-6 delete-btn" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">
-                                        <i class="fas fa-trash"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>`;
-                    HTMlData += oneBlock;
-                }
-                $('.ajax-content-images-container').html(HTMlData);
-            }
-        }); // end ajax
     },
 
     // helper function to run a single git stage (pull, import, push) and log the result to the console
@@ -914,63 +848,11 @@ var TueFind = {
         }
     },
 
-    // button pull:
-    handleCmsGitPull: async function() {
-        await this._executeSyncProcess(this, async (log) => {
-            // Step 1: Pull
-            await this._runGitStage('gitPull', 'Step 1/3: Requesting git pull from remote repository...', 'PULL STAGE FAILED', log);
-
-            // Step 2: Import
-            await this._runGitStage('gitImport', 'Step 2/3: Scanning JSON files and updating database...', 'IMPORT STAGE FAILED', log);
-
-            // Step 3: Push
-            await this._runGitStage('gitPush', 'Step 3/3: Committing local changes and pushing to Git...', 'PUSH STAGE FAILED', log);
-
-            log('=== ALL SYNC STAGES COMPLETED SUCCESSFULLY ===', 'success');
-        });
-    },
-
-    handleCmsGitPush: async function() {
-        await this._executeSyncProcess(this, async (log) => {
-            await this._runGitStage('gitPush', 'Step 1/1: Committing local changes and pushing to Git...', 'PUSH STAGE FAILED', log);
-            log('=== PUSH COMPLETED SUCCESSFULLY ===', 'success');
-        });
-    },
-
     RenderDataTable: function() {
         new DataTable('.dataTable',{
             scrollX: true
         });
-    },
-
-    getAJAXCMSDocs: function(ajaxCmsDocsBlockClass='',modeType='') {
-        const className = ajaxCmsDocsBlockClass.trim() || 'AJAXCMSDocsBlock';
-        const $block = $(`.${className}`);
-        $block.html('<div class="tf_themes_block">Loading...</div>');
-        $.ajax({
-            url: '/AJAX/JSON',
-            type: 'GET',
-            data: {
-                method: 'CmsDocs',
-                action: 'getThemeURLs',
-                block: className,
-                modetype: modeType
-            },
-            dataType: 'json'
-        })
-        .done(response => {
-            if (response && response.data && response.data.length > 0) {
-                $block.html(response.data);
-            } else {
-                $block.html('Themes not finded.');
-            }
-        })
-        .fail((xhr, status, error) => {
-            console.error('AJAX Error:', error);
-            $block.html('html not loated.');
-        });
     }
-
 };
 
 
@@ -1035,65 +917,10 @@ $(document).ready(function () {
             TueFind.GetFulltextSnippets();
         }).observe(stableParent, { childList: true });
     }
-    /* disabled for now, as it causes problems with the CMS docs table, which is currently the only table in the frontend
 
-    */
-
-    // ajax git pull test for CMS
-    $('#git-pull-btn').on('click', (e) => TueFind.handleCmsGitPull(e.currentTarget));
-    $('#git-push-btn').on('click', (e) => TueFind.handleCmsGitPush(e.currentTarget));
-
-    $('.note-btn-group.note-insert').on('click', function() {
-        let noteType = $(this).data('note-type');
-        let noteContent = $(this).data('note-content');
-        let noteTarget = $(this).data('note-target');
-        let noteTargetElement = $('#' + noteTarget);
-
-        console.log('clicked note button: type=' + noteType + ', content=' + noteContent + ', target=' + noteTarget);
-        let noteForm = $('.note-modal-body .form-group.note-form-group.note-group-select-from-files');
-        $('.AJAXCMSDocsBlock').remove();
-        $('<div class="AJAXCMSDocsBlock">Loading...</div>').insertAfter(noteForm);
-        TueFind.getAJAXCMSDocs('AJAXCMSDocsBlock','plagin');
-
-    });
-
-    $(document).on('click', '.tf-theme-btn', function() {
-        // Get attr data-theme
-        let serverPath = $(this).data('server-path');
-        let themeName = $(this).data('theme');
-        let fullPath = $(this).data('full-path');
-        let block = $(this).data('block');
-        let modetype = $(this).data('modetype');
-        console.log('Theme selected:', themeName);
-
-        let uploadBlock = $("." + block);
-
-        $.ajax({
-            url: '/AJAX/JSON?method=CmsDocs&action=getThemeContent&server-path=' + serverPath+ '&path=' + themeName+ '&full-path=' + fullPath+ '&block=' + block+ '&modetype=' + modetype,
-            type: 'GET',
-            beforeSend: function() {
-                // show a loading spinner or message here if needed
-                uploadBlock.html('Loading...');
-            },
-            success: function(response) {
-
-                console.log('Server response:', response);
-
-                if (response && response.status === 'OK' && response.data) {
-
-                    uploadBlock.html(response.data);
-                } else if (response && response.data) {
-
-                    uploadBlock.html(response.data);
-                } else {
-                    uploadBlock.html("<span class='text-danger'>Theme not found or empty</span>");
-                }
-            },
-            error: function(xhr, status, error) {
-                uploadBlock.removeClass('disabled').text(themeName);
-                console.error('Error:', error);
-            }
-        });
+    // Register onClick event to jump to + expand collapsed help sections
+    $('.tf-btn-go-to-collapsed-block').on('click', function() {
+        TueFind.GoToCollapsedBlock($(this).data('anchor'), $(this).data('block'));
     });
 
 });

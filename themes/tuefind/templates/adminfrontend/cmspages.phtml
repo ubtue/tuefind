@@ -74,3 +74,6 @@ $this->breadcrumbs()->set($this->translate('Admins'), $this->url('myresearch-hom
   <?=$this->accountMenu()->render('cmspages')?>
 </div>
 
+<?php $this->assetManager()->appendScriptLink('cms.js'); ?>
+<?=$this->assetManager()->outputInlineScriptString('CMS.Editor.Init();') ?>
+<?=$this->assetManager()->outputInlineScriptString('CMS.Git.Init();') ?>

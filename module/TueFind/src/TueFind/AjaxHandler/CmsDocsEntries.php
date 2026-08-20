@@ -52,7 +52,8 @@ class CmsDocsEntries extends \VuFind\AjaxHandler\AbstractBase
 
         $resultReturn = [];
 
-        if ($params->fromQuery('action') === 'createFolder') {
+        $action = $params->fromQuery('action');
+        if ($action === 'createFolder') {
             $baseDir = $params->fromQuery('parentPath');
             $folderName = $params->fromQuery('folderName');
 
@@ -102,7 +103,7 @@ class CmsDocsEntries extends \VuFind\AjaxHandler\AbstractBase
             ]);
         }
 
-        if ($params->fromQuery('action') === 'deleteImage') {
+        if ($action === 'deleteImage') {
             $fullPath = $params->fromQuery('full-path');
             $file = basename($params->fromQuery('full-path'));
 
@@ -133,7 +134,7 @@ class CmsDocsEntries extends \VuFind\AjaxHandler\AbstractBase
             }
         }
 
-        if ($params->fromQuery('action') === 'deleteFile') {
+        if ($action === 'deleteFile') {
             $fullPath = $params->fromQuery('full-path');
 
             if (file_exists($fullPath)) {
@@ -169,7 +170,7 @@ class CmsDocsEntries extends \VuFind\AjaxHandler\AbstractBase
             }
         }
 
-        if ($params->fromQuery('action') === 'uploadFiles') {
+        if ($action === 'uploadFiles') {
             if (empty($_FILES['file'])) {
                 return $this->formatResponse([
                     'status' => 'ERROR',
@@ -241,7 +242,7 @@ class CmsDocsEntries extends \VuFind\AjaxHandler\AbstractBase
             if ($realTargetDir === false || !str_starts_with($realTargetDir, $realBaseDir)) {
                 return $this->formatResponse([
                     'status' => 'ERROR',
-                    'message' => 'Invalid or non-existent path',
+                    'message' => 'Invalid or non-existent path: ' . $targetDir,
                 ]);
             }
 
@@ -271,7 +272,7 @@ class CmsDocsEntries extends \VuFind\AjaxHandler\AbstractBase
             ]);
         }
 
-        if ($params->fromQuery('action') === 'getThemeURLs') {
+        if ($action === 'getThemeURLs') {
             $config = $this->configManager->get('tuefind');
             $cmsSyncFolder = $config->CMS->repository_path;
 
@@ -329,7 +330,7 @@ class CmsDocsEntries extends \VuFind\AjaxHandler\AbstractBase
             return $this->formatResponse($formattedPaths);
         }
 
-        if ($params->fromQuery('action') === 'getThemeContent') {
+        if ($action === 'getThemeContent') {
             $serverPath = $params->fromQuery('server-path');
             $path = $params->fromQuery('path');
             $fullPath = $params->fromQuery('full-path');
@@ -374,6 +375,7 @@ class CmsDocsEntries extends \VuFind\AjaxHandler\AbstractBase
                                 'size' => filesize($itemFullPath),
                                 'fullPath' => $cleanFullPath,
                                 'serverPath' => $serverPath,
+                                'relativePath' => str_replace($serverPath, '', $cleanFullPath),
                             ];
                         }
                     }
@@ -387,6 +389,8 @@ class CmsDocsEntries extends \VuFind\AjaxHandler\AbstractBase
                 'modetype' => $modetype,
                 'folders' => $folders,
                 'files' => $files,
+                // TODO: The serverPath is known by configuration
+                //       it does not make sense to put it to html and send it via AJAX to to the server again
                 'serverPath' => $serverPath,
             ];
 
@@ -395,7 +399,8 @@ class CmsDocsEntries extends \VuFind\AjaxHandler\AbstractBase
             return $this->formatResponse($htmlContent);
         }
 
-        if ($params->fromQuery('action') === 'getImageContent') {
+        // deprecated, use /cms/assets/... endpoint with relative path instead
+        if ($action === 'getImageContent') {
             $fullPath = $params->fromQuery('full-path');
 
             // Base security: check that the file really lies inside the allowed synchronization folder
@@ -422,7 +427,8 @@ class CmsDocsEntries extends \VuFind\AjaxHandler\AbstractBase
             exit;
         }
 
-        if ($params->fromQuery('action') === 'getFileContent') {
+        // deprecated, use /cms/assets/... endpoint with relative path instead
+        if ($action === 'getFileContent') {
             $fullPath = $params->fromQuery('full-path');
 
             $config = $this->configManager->get('tuefind');
