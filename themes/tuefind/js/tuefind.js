@@ -705,16 +705,18 @@ var TueFind = {
 
     },
 
-    goToCollapseBlock: function(anchor,blockID) {
-        if(anchor.length) {
-            window.location.href = "#"+anchor;
-        }
-        if(blockID.length) {
-            let blockVar = $('#'+blockID);
-            if(!blockVar.hasClass('in')) {
-                blockVar.addClass('in');
-                blockVar.click();
+    GoToCollapsedBlock: function(anchor, blockID) {
+        if (blockID !== undefined && blockID.length) {
+            let block = $('#'+blockID).first();
+            let collapsedSection = block.parents('.tf-panel-collapse').first();
+            let collapsedSectionHeading = collapsedSection.children('.tf-panel-collapse-heading').first();
+            if (collapsedSectionHeading.attr('aria-expanded') === 'false') {
+                collapsedSectionHeading.click();
             }
+        }
+
+        if (anchor !== undefined && anchor.length) {
+            window.location.href = "#"+anchor;
         }
     },
 
@@ -915,5 +917,10 @@ $(document).ready(function () {
             TueFind.GetFulltextSnippets();
         }).observe(stableParent, { childList: true });
     }
+
+    // Register onClick event to jump to + expand collapsed help sections
+    $('.tf-btn-go-to-collapsed-block').on('click', function() {
+        TueFind.GoToCollapsedBlock($(this).data('anchor'), $(this).data('block'));
+    });
 
 });
