@@ -1,6 +1,7 @@
 INSERT INTO tuefind_subsystems (subsystem)
-VALUES 
+VALUES
   ('ixtheo'),
   ('relbib'),
   ('bibstudies'),
-  ('churchlaw');
+  ('churchlaw'),
+  ('augustine');

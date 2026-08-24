@@ -371,7 +371,9 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper implements
         $map = ['ixtheo' => 'ixtheo',
                 'relbib' => 'relbib',
                 'bibstudies' => 'biblestudies',
-                'churchlaw' => 'canonlaw'];
+                'churchlaw' => 'canonlaw',
+                'augustine' => 'augustine',
+            ];
         return $map[$instance] ?? $instance;
     }
 
@@ -381,7 +383,9 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper implements
                 'relbib',
                 'bibstudies',
                 'canonlaw',
-                'krimdok'];
+                'augustine',
+                'krimdok',
+            ];
         return $map;
     }
 
@@ -398,6 +402,7 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper implements
             case 'ixtheo':
             case 'bibstudies':
             case 'churchlaw':
+            case 'augustine':
                 return 'IxTheo';
             case 'relbib':
                 return 'RelBib';
@@ -423,6 +428,8 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper implements
                 return 'BIB';
             case 'churchlaw':
                 return 'CAN';
+            case 'augustine':
+                return 'AUG';
             case 'relbib':
                 return 'REL';
             case 'krimdok':
@@ -445,6 +452,7 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper implements
             case 'ixtheo':
             case 'bibstudies':
             case 'churchlaw':
+            case 'augustine':
                 $fid = 'Theologie';
                 break;
             case 'relbib':
