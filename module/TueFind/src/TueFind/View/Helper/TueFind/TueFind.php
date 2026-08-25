@@ -8,6 +8,7 @@ use TueFind\Db\Entity\UserEntityInterface;
 use function array_slice;
 use function count;
 use function in_array;
+use function intval;
 use function is_array;
 use function strlen;
 
@@ -804,12 +805,29 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper implements
         return $navActive;
     }
 
+    protected function parseCommandHelperProcessArrayPart(array $section, array &$resultArray)
+    {
+        // Can be a word like e.g. 'content-page', or a key/value pair like 'page=>A_Z'
+        $string = implode('', $section);
+        if (str_contains($string, '=>')) {
+            $parts = explode('=>', $string);
+            if (count($parts) != 2) {
+                throw new \Exception('Unexpected key/value syntax in page content: ' . $string);
+            }
+            $resultArray = array_merge($resultArray, [$parts[0] => $parts[1]]);
+        } else {
+            $resultArray[] = $string;
+        }
+    }
+
     /**
      * Parse command string
      * - removing start/end delimiter {{ and }} as well as html_decode should be done BEFORE calling this!
      * - see parseCommandTest() function for examples
+     * - Note: This must be in sync with special character handling in updatecmspage.phtml (when switching into / out of editor code view)
+     *         as well as the CmsTrait which processes special HTML characters like '&gt;' => '>' before saving.
      */
-    protected function parseCommand(string $command): array
+    protected function parseCommand(string $command, bool $debug = false): array
     {
         //..Abandon All Hope, Ye Who Enter Here (to debug this).
         $result = [];
@@ -849,22 +867,9 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper implements
                         $bufferWord[] = $token;
                     } else {
                         $inArray = false;
-                        $bufferArray[] = implode('', $bufferWord);
 
-                        // Special handling for assoc arrays
-                        $toAdd = [];
-                        for ($j = 0; $j < count($bufferArray); $j++) {
-                            if ($bufferArray[$j] == '=>') {
-                                $key = array_shift($toAdd);
-                                $j++;
-                                $value = $bufferArray[$j];
-                                $toAdd[$key] = $value;
-                            } else {
-                                $toAdd[] = $bufferArray[$j];
-                            }
-                        }
-
-                        $result[] = $toAdd;
+                        $this->parseCommandHelperProcessArrayPart($bufferWord, $bufferArray);
+                        $result[] = $bufferArray;
                         $bufferWord = [];
                         $bufferArray = [];
                     }
@@ -874,7 +879,7 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper implements
                         if ($inQuote) {
                             $bufferWord[] = $token;
                         } else {
-                            $bufferArray[] = implode('', $bufferWord);
+                            $this->parseCommandHelperProcessArrayPart($bufferWord, $bufferArray);
                             $bufferWord = [];
                         }
                     }
@@ -887,12 +892,15 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper implements
                     break;
             }
 
-            /*
-            print '<font color="blue">TOKEN: "' . $token . '" quote ' . intval($inQuote) . ' in_array ' . intval($inArray) .  '</font><br>';
-            print 'word: ' .print_r($bufferWord,true);print '<br>';
-            print 'array:' . print_r($bufferArray,true);print '<br>';
-            print 'result: ' . print_r($result,true); print '<br>';
-            */
+            if ($debug) {
+                echo '<font color="blue">TOKEN: "' . $token . '" quote ' . intval($inQuote) . ' in_array ' . intval($inArray) . '</font><br>';
+                echo 'word: ' . print_r($bufferWord, true);
+                echo '<br>';
+                echo 'array:' . print_r($bufferArray, true);
+                echo '<br>';
+                echo 'result: ' . print_r($result, true);
+                echo '<br>';
+            }
         }
         if (!empty($bufferWord)) {
             $end = trim(implode('', $bufferWord));
@@ -940,9 +948,20 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper implements
             '/\{\{(([a-zA-Z0-9_]+)(\s+([^%]+?)))\}\}/',
             function (array $matches) use ($viewHelperManager) {
                 // examples, see $this->parseCommandTest()
-                $command = $this->parseCommand(html_entity_decode($matches[1]));
+                $debug = false;
+                //$debug = (preg_match('"page"', $matches[1]));
+                $command = $this->parseCommand(html_entity_decode($matches[1]), $debug);
                 $helperId = $command[0];
                 $helperArgs = array_slice($command, 1);
+
+                if ($debug) {
+                    print_r($matches);
+                    echo '<br>';
+                    print_r($command);
+                    echo '<br>';
+                    print_r($helperArgs);
+                    die();
+                }
 
                 $helper = $viewHelperManager->get($helperId);
                 return $helper(...$helperArgs);

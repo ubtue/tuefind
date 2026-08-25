@@ -91,7 +91,7 @@ $siteEmail = $tuefind->getSiteEmail();
                 <div class="collapse multi-collapse tf-panel-collapse-body" id="col8">
                     <ul>
                         <li>A user account in <?=$currentSystem;?>, which you can open free of charge at this <a href="<?=$this->url('myresearch-userlogin')?>">link</a>.</li>
-                        <li>Access rights to your author ID, which you can gain through your <?=$currentSystem;?>-user account (see <a onclick="TueFind.goToCollapseBlock('autorID','col11')">author ID</a>).</li>
+                        <li>Access rights to your author ID, which you can gain through your <?=$currentSystem;?>-user account (see <a class="tf-btn-go-to-collapsed-block" data-anchor="autorID" data-block="col11">author ID</a>).</li>
                         <li>Publications which you are allowed to republish.</li>
                     </ul>
                 </div>
@@ -159,7 +159,7 @@ $siteEmail = $tuefind->getSiteEmail();
                     <p>There are a few possible reasons for this:</p>
                     <ul>
                         <li><p>You haven’t logged into your user account. <a href="<?=$this->url('myresearch-userlogin')?>">Please log in</a>.</p></li>
-                        <li><p>You haven’t requested access rights to your <a onclick="TueFind.goToCollapseBlock('autorID','col11')">author ID</a> yet.</p></li>
+                        <li><p>You haven’t requested access rights to your <a class="tf-btn-go-to-collapsed-block" data-anchor="autorID" data-block="col11">author ID</a> yet.</p></li>
                         <li><p>If none of the cases listed above apply, please contact us at <a href="mailto:<?=$publicationEmail;?>"><?=$publicationEmail;?></a>.</p></li>
                     </ul>
                 </div>
@@ -234,7 +234,7 @@ $siteEmail = $tuefind->getSiteEmail();
             <div class="tf-panel-collapse">
                 <p data-bs-toggle="collapse" data-bs-target="#col23" aria-expanded="false" class="tf-panel-collapse-heading"><b>My question was not properly answered / I have other questions.</b></p>
                 <div class="collapse multi-collapse tf-panel-collapse-body" id="col23">
-                    <p>If you have any other question or concern, please contact us at: <?=$siteEmail;?>.</p>
+                    <p>If you have any other question or concern, please contact us at: <a href="mailto:<?=$siteEmail?>"><?=$siteEmail;?></a>.</p>
                 </div>
             </div>
         </div>
