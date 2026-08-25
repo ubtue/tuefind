@@ -198,5 +198,7 @@ GenerateIndexForSystem &
 GenerateIndexForSystem "is_religious_studies" &
 GenerateIndexForSystem "is_biblical_studies" &
 GenerateIndexForSystem "is_canon_law" &
+# This will be inactive until Index Augustinianus goes live to avoid increasing pipeline runtimes on the live server:
+#GenerateIndexForSystem "is_augustine" &
 wait
 echo "Finished generating alphabrowse indices..."
