@@ -78,6 +78,14 @@ CREATE TABLE tuefind_rss_subscriptions (
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;
 
 
+CREATE TABLE `tuefind_subsystems` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `subsystem` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uniq_subsystem` (`subsystem`)
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;
+
+
 CREATE TABLE tuefind_user_authorities (
     id INT UNSIGNED NOT NULL AUTO_INCREMENT,
     user_id INT NOT NULL,
