@@ -51,7 +51,7 @@
       ]
   );
   $recommendations = $this->results->getRecommendations('side');
-  if ($this->results instanceof Results && $this->params->getSearchClassId() == 'Solr' && $this->collapseExpandConfig->isEnabled()) {
+  if ($this->results instanceof Results && $this->results->getResultTotal() > 0 && $this->params->getSearchClassId() == 'Solr' && $this->collapseExpandConfig->isEnabled()) {
     ob_start(); ?>
     <div class="facet-group search-collapse-expand" id="side-panel-collapse-expand" data-title="<?=$this->transEscAttr('collapse results') ?>">
       <h3 class="facet-title">
