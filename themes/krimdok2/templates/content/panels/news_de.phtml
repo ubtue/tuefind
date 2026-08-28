@@ -2,13 +2,12 @@
     <div class="panel-image" style="background-image: url(<?=$this->imageLink('newfrontpage/news.jpg') ?>);"></div>
     <div class="panel-content">
         <h4>Mitteilungen &amp; Termine</h4>
-        <p>
-        <ul>
+        <ul style="margin-bottom: 7px">
             <li><a class="panel-inverse-link" href="<?=$this->url('content-page', ['page' => 'call_for_papers']) ?>">Call for Papers</a></li>
             <li><a class="panel-inverse-link" href="<?=$this->url('content-page', ['page' => 'events']) ?>">Tagungen &amp; Konferenzen</a></li>
             <li><a class="panel-inverse-link" href="<?=$this->url('content-page', ['page' => 'jobs']) ?>">Stellenausschreibungen</a></li>
             <li><a class="panel-inverse-link" href="<?=$this->url('content-page', ['page' => 'employments']) ?>">Habilitationen &amp; Berufungen</a></li>
         </ul>
-        </p>
+        <a target="_blank" href="<?=$this->url('content-page', ['page' => 'introduction']) ?>" class="btn btn-panel-more btn-panel-more-new" role="button">Einführungen in KrimDok</a>
     </div>
 </div>
