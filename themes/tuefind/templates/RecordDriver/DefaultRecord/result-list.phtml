@@ -7,7 +7,7 @@
   $thumbnail = false;
   $thumbnailAlignment = $this->record($this->driver)->getThumbnailAlignment('result');
   $searchHandler = false;
-  if(isset($this->params)) {
+  if (isset($this->params)) {
     $searchHandler = $this->params->getSearchHandler();
   }
 
@@ -22,12 +22,12 @@
     <?php $thumbnail = ob_get_contents(); ?>
   <?php ob_end_clean(); ?>
 <?php endif; ?>
-<input type="hidden" value="<?=$this->escapeHtmlAttr($this->driver->getUniqueID())?>" class="hiddenId" />
-<input type="hidden" value="<?=$this->escapeHtmlAttr($this->driver->getSourceIdentifier())?>" class="hiddenSource" />
+<input type="hidden" value="<?=$this->escapeHtmlAttr($this->driver->getUniqueID())?>" class="hiddenId">
+<input type="hidden" value="<?=$this->escapeHtmlAttr($this->driver->getSourceIdentifier())?>" class="hiddenSource">
 <div class="media">
   <?php if ($thumbnail && $thumbnailAlignment == 'left'): ?>
     <?=$thumbnail ?>
-  <?php endif ?>
+  <?php endif; ?>
   <div class="media-body">
     <div class="result-body">
       <div>
@@ -36,36 +36,39 @@
         </a>
         <?php foreach ($this->driver->tryMethod('getTitlesAltScript', [], []) as $altTitle): ?>
           <div class="title-alt">
-            <?=$this->escapeHtml($altTitle)?>
+            <?=$this->escapeOrCleanHtml($altTitle, 'title')?>
           </div>
         <?php endforeach; ?>
       </div>
       <div>
 
-        <?php if($this->driver->isCollection()): ?>
+        <?php if ($this->driver->isCollection()): ?>
           <?=implode('<br>', array_map([$this, 'escapeHtml'], $this->driver->getSummary())); ?>
         <?php else: ?>
           <?php /* TueFind: Add links to authority index, if active */ ?>
-          <?php $summAuthors = $this->driver->getPrimaryAuthorsWithHighlighting(); 
-          if (!empty($summAuthors)): ?>
-            <?=$this->transEsc('by')?>
-            <?php $i=0; $authorCount = count($summAuthors); 
-            foreach ($summAuthors as $summAuthor => $summAuthorProperties): ?>
-              <?php if ($this->tuefind()->isSearchTabEnabled('SolrAuth')): ?>
-                <?php /* Display separate links to title search + authority page */ ?>
-                <?=$this->highlight(rtrim($summAuthor, ','))?> <?=$this->tuefind()->formatRoles($summAuthorProperties['role'] ?? [])?>
-                <?php $authorityId = $summAuthorProperties['id'][0] ?? '';?>
-                <?php if ($authorityId && $authorityDriver = $this->authority()->recordExists($authorityId)): ?>
-                  <a href="<?=$this->record($authorityDriver)->getLink('titles-by', $authorityDriver)?>" rel="nofollow"><i class="fa fa-book" aria-hidden="true" title="<?=$this->transEsc('author_all_titles_tooltip')?>"></i></a>
-                  <a href="<?=$this->recordLinker()->getUrl($authorityDriver)?>" rel="nofollow"><i class="fa fa-user-circle" aria-hidden="true" title="<?=$this->transEsc('author_details_tooltip')?>"></i></a>
+          <?php $summAuthors = $this->driver->getPrimaryAuthorsWithHighlighting(); ?>
+          <?php if (!empty($summAuthors)): ?>
+            <span class="authors">
+              <?=$this->transEsc('by')?>
+              <?php $i = 0;
+              $authorCount = count($summAuthors); ?>
+              <?php foreach ($summAuthors as $summAuthor => $summAuthorProperties): ?>
+                <?php if ($this->tuefind()->isSearchTabEnabled('SolrAuth')): ?>
+                  <?php /* Display separate links to title search + authority page */ ?>
+                  <?=$this->highlight(rtrim($summAuthor, ','))?> <?=$this->tuefind()->formatRoles($summAuthorProperties['role'] ?? [])?>
+                  <?php $authorityId = $summAuthorProperties['id'][0] ?? '';?>
+                  <?php if ($authorityId && $authorityDriver = $this->authority()->recordExists($authorityId)): ?>
+                    <a href="<?=$this->record($authorityDriver)->getLink('titles-by', $authorityDriver)?>" rel="nofollow"><i class="fa fa-book" aria-hidden="true" title="<?=$this->transEsc('author_all_titles_tooltip')?>"></i></a>
+                    <a href="<?=$this->recordLinker()->getUrl($authorityDriver)?>" rel="nofollow"><i class="fa fa-user-circle" aria-hidden="true" title="<?=$this->transEsc('author_details_tooltip')?>"></i></a>
+                  <?php else: ?>
+                    <a href="<?=$this->record($this->driver)->getLink('author', $this->highlight($summAuthor, null, true, false))?>" rel="nofollow"><i class="fa fa-book" aria-hidden="true" title="<?=$this->transEsc('author_all_titles_tooltip')?>"></i></a>
+                  <?php endif; ?>
                 <?php else: ?>
-                  <a href="<?=$this->record($this->driver)->getLink('author', $this->highlight($summAuthor, null, true, false))?>" rel="nofollow"><i class="fa fa-book" aria-hidden="true" title="<?=$this->transEsc('author_all_titles_tooltip')?>"></i></a>
+                  <?php /* Simple link to title search by author */ ?>
+                  <a href="<?=$this->record($this->driver)->getLink('author', $this->highlight($summAuthor, null, true, false))?>" class="result-author"><?=$this->highlight(rtrim($summAuthor, ','))?></a><?=$i++ + 1 < $authorCount ? ',' : ''?>
                 <?php endif; ?>
-              <?php else: ?>
-              <?php /* Simple link to title search by author */ ?>
-                <a href="<?=$this->record($this->driver)->getLink('author', $this->highlight($summAuthor, null, true, false))?>"><?=$this->highlight(rtrim($summAuthor, ','))?></a><?=$i++ + 1 < $authorCount ? ',' : ''?>
-              <?php endif; ?>
-            <?php endforeach; ?>
+              <?php endforeach; ?>
+            </span>
           <?php endif; ?>
 
           <?php /* TueFind: Replace default container information by custom logic */ ?>
@@ -77,12 +80,12 @@
             <?php $superior_ppn = preg_replace('/\(.*\)/', '', $journal_issue[$superior_ppn_index]); ?>
             <?php unset($journal_issue[$superior_ppn_index]); ?>
             <div>
-              <?php if(!empty($superior_ppn)): ?>
+              <?php if (!empty($superior_ppn)): ?>
                 <?=$this->transEsc('in')?>:
-                <?php $journal_issue_display = preg_replace('/(\d+)(\()/','$1 $2', implode(", ", $journal_issue)) ?>
-                <a href="<?=$this->url('record', array('id' => $superior_ppn)) ?>"><?=$journal_issue_display ?></a>
+                <?php $journal_issue_display = preg_replace('/(\d+)(\()/', '$1 $2', implode(', ', $journal_issue)) ?>
+                <a href="<?=$this->url('record', ['id' => $superior_ppn]) ?>"><?=$journal_issue_display ?></a>
               <?php else: ?>
-                <?php implode(" ", $journal_issue) ?>
+                <?php implode(' ', $journal_issue) ?>
               <?php endif; ?>
             </div>
           <?php // Option 2: We have any other kind of container (e.g. a series of books) ?>
@@ -94,7 +97,7 @@
           <?php else: ?>
             <div>
               <?php // Fill with non article handling code ?>
-              <?=implode(" ", $this->driver->tryMethod('getPublicationDetailsNoPlaces')) ?>
+              <?=implode(' ', $this->driver->tryMethod('getPublicationDetailsNoPlaces')) ?>
             </div>
           <?php endif; ?>
 
@@ -153,6 +156,7 @@
             <?=$this->transEsc('loading_ellipsis')?>
           </span>
           <div class="locationDetails"></div>
+          <span class="getThis ajax-availability hidden"><a rel="nofollow" href="<?= $this->url('record-getthis', ['id' => $this->driver->getUniqueId()]) ?>" data-lightbox><?=$this->transEsc('Get This')?></a></span>
         <?php else: ?>
           <?php $summCallNo = $this->driver->getCallNumber(); ?>
           <?php if (!empty($summCallNo)): ?>
@@ -186,23 +190,23 @@
           // Display an OpenURL link if configured to do so:
           $openUrl = $this->openUrl($this->driver, 'results');
           $openUrlActive = $openUrl->isActive();
-          $idLinker = $this->identifierLinker($this->driver, 'results');
+          $identifierLinksHtml = $this->identifierLinker($this->driver, 'results');
           // Account for replace_other_urls setting
           $urls = $this->record($this->driver)->getLinkDetails($openUrlActive);
         ?>
-        <?php if ($openUrlActive || $idLinker || !empty($urls)): ?>
+        <?php if ($openUrlActive || $identifierLinksHtml || !empty($urls)): ?>
           <?php if ($openUrlActive): ?>
-            <br />
+            <br>
             <?=$openUrl->renderTemplate()?>
           <?php endif; ?>
-          <?php if ($idLinker): ?>
-            <br />
-            <?=$idLinker->renderTemplate()?>
+          <?php if ($identifierLinksHtml): ?>
+            <br>
+            <?=$identifierLinksHtml?>
           <?php endif; ?>
           <?php $urls = is_array($urls) ? $urls : []; ?>
           <?php if (!$this->driver->isCollection()): ?>
             <?php foreach ($urls as $current): ?>
-              <?php if (array_filter($hiddenLinks, fn($hiddenLink) => stristr($current['url'], $hiddenLink))): ?>
+              <?php if (array_filter($hiddenLinks, fn ($hiddenLink) => stristr($current['url'], $hiddenLink))): ?>
                 <?php continue; ?>
               <?php endif; ?>
               <a class="fulltext icon-link" href="<?=$this->escapeHtmlAttr($this->proxyUrl($current['url']))?>" target="new">
@@ -220,7 +224,7 @@
           <?php foreach ($urls_and_material_types as $url => $material_type): ?>
             <?php if ($direct_oa_fulltext_present && $material_type == 'Presumably Free Access'): ?>
             <?php     continue; ?>
-            <?php elseif (array_filter($hiddenLinks, fn($hiddenLink) => stristr($url, $hiddenLink))): ?>
+            <?php elseif (array_filter($hiddenLinks, fn ($hiddenLink) => stristr($url, $hiddenLink))): ?>
             <?php     continue; ?>
             <?php else: ?>
                       <a href="<?=$url?>" class="fulltext" target="_blank"><i class="fa fa-external-link"></i> <?=$this->transEsc($material_type)?></a>
@@ -229,7 +233,7 @@
           <?php endforeach; ?>
         <?php endif; ?>
 
-        <?php if (strtolower($this->tuefind()->getControllerName()) != 'search2' ): ?>
+        <?php if (strtolower($this->tuefind()->getControllerName()) != 'search2'): ?>
           <div class="result-formats">
             <?=$this->record($this->driver)->getFormatList() ?>
             <?=$this->record($this->driver)->getLabelList() ?>
@@ -249,7 +253,7 @@
 
       <?php /* BEGIN Show extended records */ ?>
       <?=$this->render('RecordDriver/DefaultRecord/result-list-snippet.phtml')?>
-      <?php /* END Show extended records */ ?>  
+      <?php /* END Show extended records */ ?>
 
     </div>
 
@@ -280,7 +284,7 @@
         <?php endif; ?>
         <?php /* Saved lists */ ?>
         <div class="savedLists tf-d-none">
-          <strong><?=$this->transEsc("Saved in")?>:</strong>
+          <strong><?=$this->transEsc('Saved in')?>:</strong>
           <a href="<?=$this->url('myresearch-favorites')?>" data-lightbox class="tf-favoritesListModal tf-d-none">&nbsp;</a>
         </div>
       <?php endif; ?>
@@ -291,7 +295,7 @@
         <?php foreach ($trees as $hierarchyID => $hierarchyTitle): ?>
           <div class="hierarchyTreeLink">
             <input type="hidden" value="<?=$this->escapeHtmlAttr($hierarchyID)?>" class="hiddenHierarchyId">
-            <a class="hierarchyTreeLinkText result-link-label icon-link" data-lightbox href="<?=$this->escapeHtmlAttr($recordLinker->getTabUrl($this->driver, 'HierarchyTree', ['hierarchy' => $hierarchyID]))?>#tabnav" title="<?=$this->transEscAttr('hierarchy_tree')?>" data-lightbox-href="<?=$this->escapeHtmlAttr($recordLinker->getTabUrl($this->driver, 'AjaxTab', ['hierarchy' => $hierarchyID]))?>" data-lightbox-post="tab=hierarchytree">
+            <a class="hierarchyTreeLinkText result-link-label icon-link" data-lightbox href="<?=$this->escapeHtmlAttr($recordLinker->getTabUrl($this->driver, 'HierarchyTree', ['hierarchy' => $hierarchyID]))?>#tabnav" title="<?=$this->transEscAttr('hierarchy_tree')?>" data-lightbox-href="<?=$this->escapeHtmlAttr($recordLinker->getTabUrl($this->driver, 'AjaxTab', ['hierarchy' => $hierarchyID]))?>" data-lightbox-post="tab=hierarchytree" rel="nofollow">
               <?=$this->icon('tree-context', 'icon-link__icon') ?>
               <span class="icon-link__label"><?=$this->transEsc('hierarchy_view_context')?><?php if (count($trees) > 1): ?>: <?=$this->escapeHtml($hierarchyTitle)?><?php endif; ?></span>
             </a>

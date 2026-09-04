@@ -159,9 +159,10 @@
             <?=$this->transEsc('Loading')?>...
           </span>
           <div class="locationDetails"></div>
+          <span class="getThis ajax-availability hidden"><a rel="nofollow" href="<?= $this->url('record-getthis', ['id' => $this->driver->getUniqueId()]) ?>" data-lightbox><?=$this->transEsc('Get This')?></a></span>
         <?php else: ?>
-          <?php $summCallNo = $this->driver->getCallNumber();
-          if (!empty($summCallNo)): ?>
+          <?php $summCallNo = $this->driver->getCallNumber(); ?>
+          <?php if (!empty($summCallNo)): ?>
             <strong><?=$this->transEsc('Call Number')?>:</strong> <?=$this->escapeHtml($summCallNo)?>
           <?php endif; ?>
         <?php endif; ?>
