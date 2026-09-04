@@ -1,0 +1,13 @@
+<?php $result = $this->BEACONfinder->getByAuthorityId($this->authorityId); ?>
+<?php if ($result && count($result) > 0): ?>
+<h2><?=$this->transEsc('External Resources')?></h2>
+  <ul class="list-group">
+    <?php foreach ($result as $item): ?>
+      <?php if (!empty($item->getNAME()) && !empty($item->getTargetUri())): ?>
+        <li class="list-group-item tf-beacon-reference">
+          <a class="tf-beacon-reference-link" href="<?=$item->getTargetUri()?>" target="_blank" property="sameAs"><?=htmlspecialchars($item->getNAME())?></a>
+        </li>
+      <?php endif; ?>
+    <?php endforeach; ?>
+  </ul>
+<?php endif; ?>
