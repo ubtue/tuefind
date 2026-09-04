@@ -12127,24 +12127,24 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ubtue/vufind-beacon-finder.git",
-                "reference": "7cfc5809286e22d79e359a83dba4de9633541d48"
+                "reference": "ada5398216a63947579e58de9db753cdcf164d44"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ubtue/vufind-beacon-finder/zipball/7cfc5809286e22d79e359a83dba4de9633541d48",
-                "reference": "7cfc5809286e22d79e359a83dba4de9633541d48",
+                "url": "https://api.github.com/repos/ubtue/vufind-beacon-finder/zipball/ada5398216a63947579e58de9db753cdcf164d44",
+                "reference": "ada5398216a63947579e58de9db753cdcf164d44",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.1"
+                "php": ">=8.2"
             },
             "require-dev": {
-                "friendsofphp/php-cs-fixer": "3.75.0",
-                "phing/phing": "3.0.1",
+                "friendsofphp/php-cs-fixer": "3.89.2",
+                "phing/phing": "3.1.0",
                 "phpmd/phpmd": "2.15.0",
-                "phpstan/phpstan": "2.1.14",
-                "rector/rector": "^2.0.0",
-                "squizlabs/php_codesniffer": "3.12.2"
+                "phpstan/phpstan": "2.1.32",
+                "rector/rector": "2.2.7",
+                "squizlabs/php_codesniffer": "4.0.1"
             },
             "type": "library",
             "autoload": {
@@ -12167,7 +12167,7 @@
                 "issues": "https://github.com/ubtue/vufind-beacon-finder/issues",
                 "source": "https://github.com/ubtue/vufind-beacon-finder/tree/main"
             },
-            "time": "2026-08-21T14:17:21+00:00"
+            "time": "2026-09-04T14:05:50+00:00"
         },
         {
             "name": "ubtue/vufind-collapse-expand",
