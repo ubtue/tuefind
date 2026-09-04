@@ -124,14 +124,14 @@
           $i = 0;
           foreach ($dedupData as $source => $current) {
             if (++$i == 1) {
-              ?><span class="currentSource"><a href="<?=$this->escapeHtmlAttr($recordLinker->getUrl($this->driver))?>"><?=$this->transEsc("source_$source", [], $source)?></a></span><?php
+              ?><span class="currentSource"><a href="<?=$this->escapeHtmlAttr($recordLinker->getUrl($this->driver))?>" rel="nofollow"><?=$this->transEsc("source_$source", [], $source)?></a></span><?php
             } else {
               if ($i == 2) {
                 ?> <span class="otherSources">(<?=$this->transEsc('Other Sources')?>: <?php
               } else {
                 ?>, <?php
               }
-              ?><a href="<?=$this->escapeHtmlAttr($recordLinker->getUrl($current['id']))?>"><?=$this->transEsc("source_$source", [], $source)?></a><?php
+              ?><a href="<?=$this->escapeHtmlAttr($recordLinker->getUrl($current['id']))?>" rel="nofollow"><?=$this->transEsc("source_$source", [], $source)?></a><?php
             }
           }
           if ($i > 1) {
@@ -227,7 +227,7 @@
             <?php elseif (array_filter($hiddenLinks, fn ($hiddenLink) => stristr($url, $hiddenLink))): ?>
             <?php     continue; ?>
             <?php else: ?>
-                      <a href="<?=$url?>" class="fulltext" target="_blank"><i class="fa fa-external-link"></i> <?=$this->transEsc($material_type)?></a>
+                      <a href="<?=$url?>" class="fulltext" target="_blank" rel="nofollow"><i class="fa fa-external-link"></i> <?=$this->transEsc($material_type)?></a>
                       <br/>
             <?php endif; ?>
           <?php endforeach; ?>
@@ -285,7 +285,7 @@
         <?php /* Saved lists */ ?>
         <div class="savedLists tf-d-none">
           <strong><?=$this->transEsc('Saved in')?>:</strong>
-          <a href="<?=$this->url('myresearch-favorites')?>" data-lightbox class="tf-favoritesListModal tf-d-none">&nbsp;</a>
+          <a href="<?=$this->url('myresearch-favorites')?>" data-lightbox class="tf-favoritesListModal tf-d-none" rel="nofollow">&nbsp;</a>
         </div>
       <?php endif; ?>
 

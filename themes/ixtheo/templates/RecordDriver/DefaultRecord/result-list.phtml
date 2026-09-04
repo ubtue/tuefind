@@ -1,9 +1,19 @@
 <?php
   $recordLinker = $this->recordLinker($this->results);
-  $coverDetails = $this->record($this->driver)->getCoverDetails('result-list', 'medium', $recordLinker->getUrl($this->driver));
+  $largeImage = $this->record($this->driver)->getThumbnail('large');
+  $linkAttributes = $largeImage ? ['href' => $largeImage, 'data-lightbox-image' => 'true'] : [];
+  $coverDetails = $this->record($this->driver)->getCoverDetails('result-list', 'medium', $linkAttributes);
   $cover = $coverDetails['html'];
   $thumbnail = false;
   $thumbnailAlignment = $this->record($this->driver)->getThumbnailAlignment('result');
+  $searchHandler = false;
+  if (isset($this->params)) {
+    $searchHandler = $this->params->getSearchHandler();
+  }
+
+  // TueFind: Hide these links from metadata, because we need to generate customized links in a seperate section (e.g. KfL)
+  $hiddenLinks = ['krimdok.uni-tuebingen.de/redirect-license'];
+
   if ($cover):
     ob_start(); ?>
     <div class="media-<?=$thumbnailAlignment ?> <?=$this->escapeHtmlAttr($coverDetails['size'])?>">
@@ -12,12 +22,12 @@
     <?php $thumbnail = ob_get_contents(); ?>
   <?php ob_end_clean(); ?>
 <?php endif; ?>
-<input type="hidden" value="<?=$this->escapeHtmlAttr($this->driver->getUniqueID())?>" class="hiddenId" />
-<input type="hidden" value="<?=$this->escapeHtmlAttr($this->driver->getSourceIdentifier())?>" class="hiddenSource" />
+<input type="hidden" value="<?=$this->escapeHtmlAttr($this->driver->getUniqueID())?>" class="hiddenId">
+<input type="hidden" value="<?=$this->escapeHtmlAttr($this->driver->getSourceIdentifier())?>" class="hiddenSource">
 <div class="media">
   <?php if ($thumbnail && $thumbnailAlignment == 'left'): ?>
     <?=$thumbnail ?>
-  <?php endif ?>
+  <?php endif; ?>
   <div class="media-body">
     <div class="result-body">
       <div>
@@ -47,7 +57,7 @@
             <?php endif; ?>
             <?php $i = 0;
             foreach ($authors['primary'] as $author => $authorProperties): ?><?=($i++ == 0) ? '' : '; '?>
-              <span>
+              <span class="authors">
                 <?php if ($this->tuefind()->isSearchTabEnabled('SolrAuth')): ?>
                   <?php /* Display separate links to title search + authority page */ ?>
                   <?=$this->escapeHtml($author)?> <?=$this->tuefind()->formatRoles($authorProperties['role'] ?? [])?>
