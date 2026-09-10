@@ -2,7 +2,15 @@
 
 namespace TueFind\RecordDriver;
 
-class SolrAuthDefault extends \VuFind\RecordDriver\SolrAuthMarc {
+use function is_array;
+
+class SolrAuthDefault extends \VuFind\RecordDriver\SolrAuthMarc implements \VuFindBEACONFinder\RecordDriver\Feature\BEACONFinderInterface
+{
+    // BEACONFinderInterface: Use GND Numer as Authority ID
+    public function getAuthorityId()
+    {
+        return $this->getGNDNumber();
+    }
 
     public function getGNDNumber()
     {
@@ -19,10 +27,12 @@ class SolrAuthDefault extends \VuFind\RecordDriver\SolrAuthMarc {
         return $this->fields['heading_timespan'] ?? null;
     }
 
-    public function getISNIs(): array {
+    public function getISNIs(): array
+    {
         $isnis = $this->fields['isni'] ?? [];
-        if (!is_array($isnis))
+        if (!is_array($isnis)) {
             $isnis = [$isnis];
+        }
         return $isnis;
     }
 
@@ -32,44 +42,55 @@ class SolrAuthDefault extends \VuFind\RecordDriver\SolrAuthMarc {
      * => Also, VuFind defines lccn as a "multiple" field.
      *    We only return the first value instead of an array.
      */
-    public function getLCCN() {
+    public function getLCCN()
+    {
         return $this->fields['lccn'][0] ?? null;
     }
 
-    public function getORCIDs(): array {
+    public function getORCIDs(): array
+    {
         $orcids = $this->fields['orcid'] ?? [];
-        if (!is_array($orcids))
+        if (!is_array($orcids)) {
             $orcids = [$orcids];
+        }
         return $orcids;
     }
 
-    public function getOccupations($language='en') {
+    public function getOccupations($language = 'en')
+    {
         return $this->fields['occupation_' . $language] ?? [];
     }
 
-    public function getSubsystems(): array {
+    public function getSubsystems(): array
+    {
         return $this->fields['subsystem'] ?? [];
     }
 
-    public function getVIAFs(): array {
+    public function getVIAFs(): array
+    {
         $viafs = $this->fields['viaf'] ?? [];
-        if (!is_array($viafs))
+        if (!is_array($viafs)) {
             $viafs = [$viafs];
+        }
         return $viafs;
     }
 
-    public function getWikidataIds(): array {
+    public function getWikidataIds(): array
+    {
         $wikidata = $this->fields['wikidata'] ?? [];
-        if (!is_array($wikidata))
+        if (!is_array($wikidata)) {
             $wikidata = [$wikidata];
+        }
         return $wikidata;
     }
 
-    public function getType() {
+    public function getType()
+    {
         return $this->fields['type'] ?? null;
     }
 
-    public function getNameVariants() {
+    public function getNameVariants()
+    {
         $nameVariants = $this->getUseFor();
         sort($nameVariants);
         return $nameVariants;
