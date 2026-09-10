@@ -37,9 +37,14 @@ h1 {
 }
 
 .panel-inverse {
-    a {
-        color: white;
-        text-decoration: underline;
+
+    .panel-content {
+        ul {
+            a {
+                color: white;
+                text-decoration: underline;
+            }
+        }
     }
 }
 
@@ -697,7 +702,7 @@ a:hover {
 .list-group-item.section-home {
     border-radius: 5px;
 }
- 
+
 .tf-media-left-center {
     display: flex;
     align-items: center;
