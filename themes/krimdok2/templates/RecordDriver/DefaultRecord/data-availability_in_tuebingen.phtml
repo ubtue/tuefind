@@ -3,7 +3,7 @@
 function OnlyOrdered($signatures)
 {
   foreach ($signatures as $signature) {
-    if (preg_match('"^(UB|IFK): bestellt"i', $signature)) {
+    if (preg_match('"^(UB|IFK):(\s+)bestellt"i', $signature)) {
       return true;
     }
   }
