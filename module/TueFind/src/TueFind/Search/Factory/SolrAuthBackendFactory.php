@@ -4,7 +4,6 @@ namespace TueFind\Search\Factory;
 
 use TueFindSearch\Backend\Solr\QueryBuilder;
 use VuFind\I18n\Translator\TranslatorAwareInterface;
-use VuFindSearch\Backend\Solr\Connector;
 use VuFindSearch\Backend\Solr\HandlerMap;
 
 class SolrAuthBackendFactory extends \VuFind\Search\Factory\SolrAuthBackendFactory implements TranslatorAwareInterface
@@ -12,12 +11,8 @@ class SolrAuthBackendFactory extends \VuFind\Search\Factory\SolrAuthBackendFacto
     use \VuFind\I18n\Translator\TranslatorAwareTrait;
 
     /**
-     * Same code as parent, but uses TueFind's QueryBuilder instead.
-     *
-     * Create TueFind's custom Solr query builder.
-     *
-     * Keep VuFind 11.1 configuration handling, but instantiate
-     * TueFindSearch's QueryBuilder.
+     * Create TueFind's custom Solr query builder while retaining
+     * VuFind 11.1 configuration handling.
      */
     protected function createQueryBuilder()
     {
@@ -153,7 +148,7 @@ class SolrAuthBackendFactory extends \VuFind\Search\Factory\SolrAuthBackendFacto
         /*
          * Let VuFind 11.1 create the cache.
          * This also handles the current Laminas cache configuration format.
-         * TueFind does not need to duplication implementation of Laminas cache.
+         * TueFind does not need to duplicate the Laminas cache implementation.
          */
         if ($cache = $this->createConnectorCache($searchConfig)) {
             $connector->setCache($cache);
