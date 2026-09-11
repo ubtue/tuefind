@@ -2,7 +2,10 @@
 
 namespace TueFind\Search\Factory;
 
-// Former inheritance from SolrDefaultBackendFactory, changed after PluginManager got removed
+use VuFind\RecordDriver\PluginManager;
+use VuFindCollapseExpand\Backend\Solr\Response\Json\RecordCollectionFactory;
+use VuFindSearch\Backend\Solr\Connector;
+
 class Search3BackendFactory extends AbstractSolrBackendFactory
 {
     public function __construct()
@@ -12,11 +15,27 @@ class Search3BackendFactory extends AbstractSolrBackendFactory
         $this->searchYaml = 'searchspecs3.yaml';
     }
 
-    // Additional SolrDefaultBackendFactory-related changes, no longer active
-    protected $createRecordMethod = 'getSearch3Record';
-
-    public function getSearch3Record($data, $defaultKeySuffix = 'Default')
+    /**
+     * Create Search3 backend.
+     *
+     * Search3 needs its own record-driver prefix. The parent
+     * SolrDefaultBackendFactory installs a generic getSolrRecord callback,
+     * which uses the "Solr" prefix. Replace that callback here so Search3
+     * results are instantiated as Search3* record drivers.
+     */
+    protected function createBackend(Connector $connector)
     {
-        //return $this->getSolrRecord($data, 'Search3', $defaultKeySuffix);
+        $backend = parent::createBackend($connector);
+
+        $manager = $this->serviceLocator->get(PluginManager::class);
+
+        $recordFactory = new RecordCollectionFactory(
+            static fn ($data) => $manager->getSolrRecord($data, 'Search3'),
+            $this->serviceLocator
+        );
+
+        $backend->setRecordCollectionFactory($recordFactory);
+
+        return $backend;
     }
 }

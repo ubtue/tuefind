@@ -687,10 +687,10 @@ $config = [
             ],
             'section_plugin' => [
                 'factories' => [
-                    'IxTheo\Navigation\AccountMenu' => 'VuFind\Navigation\AccountMenuFactory',
+                    'TueFind\Navigation\AccountMenu' => 'VuFind\Navigation\AccountMenuFactory',
                 ],
                 'aliases' => [
-                    'accountMenu' => 'IxTheo\Navigation\AccountMenu',
+                    'accountMenu' => 'TueFind\Navigation\AccountMenu',
                 ],
             ],
             'sitemap' => [
