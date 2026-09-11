@@ -493,6 +493,14 @@ $config = [
 
                 ],
             ],
+            'command' => [
+                'factories' => [
+                    'TueFind\Console\Command\ScheduledSearch\NotifyCommand' => 'VuFindConsole\Command\ScheduledSearch\NotifyCommandFactory'
+                ],
+                'aliases' => [
+                    'scheduledsearch/notify' => 'TueFind\Console\Command\ScheduledSearch\NotifyCommand',
+                ],
+            ],
             'contentblock' => [
                 'factories' => [
                     'TueFind\ContentBlock\Home' => 'Laminas\ServiceManager\Factory\InvokableFactory',
