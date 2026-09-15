@@ -3474,6 +3474,17 @@ public class TueFindBiblio extends TueFind {
         return collapseExpandConfig;
     }
 
+    // This function is a replacement for SolrIndexerShim.getSortableTitle() that is not deprecated and can be used in the future to replace the deprecated function. It is used to get a sortable title for collapse & expand functionality which requires to keep article titles.
+    public String getSortableTitleCollapseExpand(final Record record) {
+        final Set<String> result = SolrIndexerShim.instance().getFieldList(
+            record,
+            "245abkp,cleanEach,cleanEnd,stripAccent,stripPunct,toLower,first"
+        );
+
+        return result.isEmpty() ? "" : result.iterator().next();
+    }
+
+
     public String getCollapseExpand(final Record record,
                                        final String authorTagList, final String authorAcceptWithoutRelator, final String authorRelatorConfig) throws FileNotFoundException, IOException
     {
@@ -3521,7 +3532,7 @@ public class TueFindBiblio extends TueFind {
             pages = getIssueInfoPages(record);
 
             // SolrIndexerShim is deprecated & should be replaced soon
-            result += SolrIndexerShim.instance().getSortableTitle(record);
+            result += getSortableTitleCollapseExpand(record);
             result += getSortableAuthorUnicodeCollapseExpand(record, authorTagList, authorAcceptWithoutRelator, authorRelatorConfig);
             result += getFormatCollapseExpand(record);
             result += volume.isEmpty() ? "" : "v" + volume;
