@@ -3474,7 +3474,7 @@ public class TueFindBiblio extends TueFind {
         return collapseExpandConfig;
     }
 
-    // This function is a replacement for SolrIndexerShim.getSortableTitle() that is not deprecated and can be used in the future to replace the deprecated function. It is used to get a sortable title for collapse & expand functionality which requires to keep article titles.
+    // This function is an alternative of SolrIndexerShim.getSortableTitle() that is not deprecated. It is used to get a sortable title for collapse & expand functionality which requires to keep article of the titles.
     public String getSortableTitleCollapseExpand(final Record record) {
         final Set<String> result = SolrIndexerShim.instance().getFieldList(
             record,
