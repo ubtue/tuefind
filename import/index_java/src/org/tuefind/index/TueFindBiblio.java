@@ -38,7 +38,6 @@ import org.marc4j.marc.Record;
 import org.marc4j.marc.Subfield;
 import org.marc4j.marc.VariableField;
 import org.solrmarc.index.SolrIndexer;
-import org.solrmarc.index.SolrIndexerShim;
 import org.solrmarc.tools.DataUtil;
 import org.solrmarc.tools.PropertyUtils;
 import org.solrmarc.tools.Utils;
