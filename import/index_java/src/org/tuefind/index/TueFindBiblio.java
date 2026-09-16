@@ -3474,14 +3474,26 @@ public class TueFindBiblio extends TueFind {
         return collapseExpandConfig;
     }
 
-    // This function is an alternative of SolrIndexerShim.getSortableTitle() that is not deprecated. It is used to get a sortable title for collapse & expand functionality which requires to keep article of the titles.
+    // This function a custom function to generate a sortable title for collapse & expand, which is different from the normal sortable title.
     public String getSortableTitleCollapseExpand(final Record record) {
-        final Set<String> result = SolrIndexerShim.instance().getFieldList(
-            record,
-            "245abkp,cleanEach,cleanEnd,stripAccent,stripPunct,toLower,first"
-        );
+        final Set<String> titles =
+            org.vufind.index.FieldSpecTools.getFieldsByTagList(
+                record,
+                "245abkp",
+                false  // Keep non-filing characters; ignore 245 indicator 2
+            );
 
-        return result.isEmpty() ? "" : result.iterator().next();
+        if (titles.isEmpty())
+            return "";
+
+        String title = titles.iterator().next();
+
+        title = DataUtil.cleanData(title);
+        title = DataUtil.stripAccents(title);
+        title = DataUtil.stripAllPunct(title);
+        title = title.toLowerCase(Locale.ROOT).trim();
+
+        return title;
     }
 
 
@@ -3531,7 +3543,6 @@ public class TueFindBiblio extends TueFind {
             issue = getIssueInfoIssue(record);
             pages = getIssueInfoPages(record);
 
-            // SolrIndexerShim is deprecated & should be replaced soon
             result += getSortableTitleCollapseExpand(record);
             result += getSortableAuthorUnicodeCollapseExpand(record, authorTagList, authorAcceptWithoutRelator, authorRelatorConfig);
             result += getFormatCollapseExpand(record);
