@@ -38,7 +38,6 @@ import org.marc4j.marc.Record;
 import org.marc4j.marc.Subfield;
 import org.marc4j.marc.VariableField;
 import org.solrmarc.index.SolrIndexer;
-import org.solrmarc.index.SolrIndexerShim;
 import org.solrmarc.tools.DataUtil;
 import org.solrmarc.tools.PropertyUtils;
 import org.solrmarc.tools.Utils;
@@ -3474,6 +3473,29 @@ public class TueFindBiblio extends TueFind {
         return collapseExpandConfig;
     }
 
+    // This function a custom function to generate a sortable title for collapse & expand, which is different from the normal sortable title.
+    public String getSortableTitleCollapseExpand(final Record record) {
+        final Set<String> titles =
+            org.vufind.index.FieldSpecTools.getFieldsByTagList(
+                record,
+                "245abkp",
+                false  // Keep non-filing characters; ignore 245 indicator 2
+            );
+
+        if (titles.isEmpty())
+            return "";
+
+        String title = titles.iterator().next();
+
+        title = DataUtil.cleanData(title);
+        title = DataUtil.stripAccents(title);
+        title = DataUtil.stripAllPunct(title);
+        title = title.toLowerCase(Locale.ROOT).trim();
+
+        return title;
+    }
+
+
     public String getCollapseExpand(final Record record,
                                        final String authorTagList, final String authorAcceptWithoutRelator, final String authorRelatorConfig) throws FileNotFoundException, IOException
     {
@@ -3520,8 +3542,7 @@ public class TueFindBiblio extends TueFind {
             issue = getIssueInfoIssue(record);
             pages = getIssueInfoPages(record);
 
-            // SolrIndexerShim is deprecated & should be replaced soon
-            result += SolrIndexerShim.instance().getSortableTitle(record);
+            result += getSortableTitleCollapseExpand(record);
             result += getSortableAuthorUnicodeCollapseExpand(record, authorTagList, authorAcceptWithoutRelator, authorRelatorConfig);
             result += getFormatCollapseExpand(record);
             result += volume.isEmpty() ? "" : "v" + volume;
