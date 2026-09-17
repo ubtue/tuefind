@@ -160,7 +160,7 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase
             !$realFullPath ||
             !$realAllowedBase ||
             !str_starts_with($realFullPath, $realAllowedBase) ||
-            !file_exists($realFullPath)
+            !is_file($realFullPath)
         ) {
             $response = $this->getResponse();
             $response->setStatusCode(404);
