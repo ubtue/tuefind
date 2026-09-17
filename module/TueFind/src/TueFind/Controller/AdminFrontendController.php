@@ -160,7 +160,6 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase
             !$realFullPath ||
             !$realAllowedBase ||
             !str_starts_with($realFullPath, $realAllowedBase) ||
-            !is_file($realFullPath) ||
             !file_exists($realFullPath)
         ) {
             $response = $this->getResponse();
@@ -172,15 +171,15 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase
         $mimeType = finfo_file($finfo, $realFullPath);
         finfo_close($finfo);
 
-        while (ob_get_level() > 0) {
-            ob_end_clean();
-        }
+        $response = new \Laminas\Http\Response\Stream();
+        $response->setStream(fopen($realFullPath, 'r'));
+        $response->setStatusCode(200);
 
-        header('Content-Type: ' . $mimeType);
-        header('Content-Length: ' . filesize($realFullPath));
-        header('Cache-Control: public, max-age=86400');
+        $headers = $response->getHeaders();
+        $headers->addHeaderLine('Content-Type', $mimeType);
+        $headers->addHeaderLine('Content-Length', (string)filesize($realFullPath));
+        $headers->addHeaderLine('Cache-Control', 'public, max-age=86400');
 
-        readfile($realFullPath);
-        exit;
+        return $response;
     }
 }
