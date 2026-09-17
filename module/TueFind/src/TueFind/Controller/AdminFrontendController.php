@@ -172,7 +172,7 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase
         $mimeType = finfo_file($finfo, $realFullPath);
         finfo_close($finfo);
 
-        if (ob_get_level()) {
+        while (ob_get_level() > 0) {
             ob_end_clean();
         }
 
