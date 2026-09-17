@@ -402,10 +402,9 @@ class CmsDocsEntries extends \VuFind\AjaxHandler\AbstractBase
         // deprecated, use /cms/assets/... endpoint with relative path instead
         if ($action === 'getImageContent') {
             $fullPath = $params->fromQuery('full-path');
-
             // Base security: check that the file really lies inside the allowed synchronization folder
-            $config = $this->configManager->get('tuefind');
-            $allowedBase = $config->CMS->repository_path;
+            $allowedBase = $this->configManager->get('tuefind')->CMS->repository_path;
+            $fullPath = $allowedBase . $fullPath;
 
             if (empty($fullPath) || !str_starts_with(realpath($fullPath), $allowedBase) || !file_exists($fullPath)) {
                 return $this->formatResponse('File not found or access denied', 404);
