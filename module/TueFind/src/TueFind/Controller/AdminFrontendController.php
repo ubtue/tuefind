@@ -141,4 +141,46 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase
 
         return $this->createViewModel(['publications' => $this->getDbService(\TueFind\Db\Service\PublicationServiceInterface::class)->getStatistics()]);
     }
+
+    public function assetAction()
+    {
+        $relativePath = $this->params()->fromRoute('relative_path');
+
+        $config = $this->serviceLocator->get(\VuFind\Config\PluginManager::class)->get('tuefind');
+
+        $allowedBase = $config->CMS->repository_path;
+
+        $fullPath = $allowedBase . $relativePath;
+
+        $realFullPath = realpath($fullPath);
+        $realAllowedBase = realpath($allowedBase);
+
+        if (
+            empty($fullPath) ||
+            !$realFullPath ||
+            !$realAllowedBase ||
+            !str_starts_with($realFullPath, $realAllowedBase) ||
+            !is_file($realFullPath) ||
+            !file_exists($realFullPath)
+        ) {
+            $response = $this->getResponse();
+            $response->setStatusCode(404);
+            return $response;
+        }
+
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $mimeType = finfo_file($finfo, $realFullPath);
+        finfo_close($finfo);
+
+        if (ob_get_level()) {
+            ob_end_clean();
+        }
+
+        header('Content-Type: ' . $mimeType);
+        header('Content-Length: ' . filesize($realFullPath));
+        header('Cache-Control: public, max-age=86400');
+
+        readfile($realFullPath);
+        exit;
+    }
 }
