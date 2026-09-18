@@ -3474,11 +3474,11 @@ public class TueFindBiblio extends TueFind {
     }
 
     // This function a custom function to generate a sortable title for collapse & expand, which is different from the normal sortable title.
-    public String getSortableTitleCollapseExpand(final Record record) {
+    public String getSortableTitleCollapseExpand(final Record record, final String titleTagList) {
         final Set<String> titles =
             org.vufind.index.FieldSpecTools.getFieldsByTagList(
                 record,
-                "245abkp",
+                titleTagList, // e.g. "245abkp"
                 false  // Keep non-filing characters; ignore 245 indicator 2
             );
 
@@ -3542,7 +3542,8 @@ public class TueFindBiblio extends TueFind {
             issue = getIssueInfoIssue(record);
             pages = getIssueInfoPages(record);
 
-            result += getSortableTitleCollapseExpand(record);
+            result += getSortableTitleCollapseExpand(record, "245abkp"); // Title form 245
+            result += getSortableTitleCollapseExpand(record, "830a"); // Title form 830
             result += getSortableAuthorUnicodeCollapseExpand(record, authorTagList, authorAcceptWithoutRelator, authorRelatorConfig);
             result += getFormatCollapseExpand(record);
             result += volume.isEmpty() ? "" : "v" + volume;
