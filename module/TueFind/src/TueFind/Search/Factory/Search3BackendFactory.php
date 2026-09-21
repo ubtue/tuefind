@@ -25,7 +25,7 @@ class Search3BackendFactory extends AbstractSolrBackendFactory
      */
     protected function createBackend(Connector $connector)
     {
-        $backend = parent::createBackend($connector);
+        $backend = new $this->backendClass($connector);
 
         $manager = $this->serviceLocator->get(PluginManager::class);
 
