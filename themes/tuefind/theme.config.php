@@ -68,5 +68,8 @@ return [
             'truck'  => 'FontAwesome6:fas fa-truck',
         ],
     ],
-    'mixins' => ['vufind-collapse-expand'],
+    'mixins' => [
+        'vufind-beacon-finder',
+        'vufind-collapse-expand',
+    ],
 ];
