@@ -97,7 +97,7 @@ var CMS = {
 
              $(document).on('click', '.copyImageURL', function(thisEvent) {
                 let path = $(this).data('relative-path');
-                let ajaxImagePreURL = VuFind.path + '/cms/assets/' + path;
+                let ajaxImagePreURL = VuFind.path + '/cms/assets' + path;
                 $('.note-image-url').val(ajaxImagePreURL);
                 $('.note-image-btn').click();
             });
@@ -106,7 +106,7 @@ var CMS = {
                 thisEvent.preventDefault();
 
                 let path = $(this).data('relative-path');
-                let ajaxFilePreURL = VuFind.path + '/cms/assets/' + path;
+                let ajaxFilePreURL = VuFind.path + '/cms/assets' + path;
                 let fileName = $(this).data('file-name');
                 let linkHTML = '<a target="_blank" href="'+ajaxFilePreURL+'">'+fileName+'</a>';
 

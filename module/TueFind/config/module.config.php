@@ -324,6 +324,17 @@ $config = [
                     ],
                 ],
             ],
+            'cms-assets' => [
+                'type' => 'Laminas\Router\Http\Regex',
+                'options' => [
+                    'regex'    => '/cms/assets(?<relative_path>/.*)',
+                    'spec'     => '/cms/assets%relative_path%',
+                    'defaults' => [
+                        'controller' => 'AdminFrontend',
+                        'action'     => 'asset',
+                    ],
+                ],
+            ],
         ],
     ],
     'controllers' => [
@@ -491,6 +502,14 @@ $config = [
                 ],
                 'aliases' => [
 
+                ],
+            ],
+            'command' => [
+                'factories' => [
+                    'TueFind\Console\Command\ScheduledSearch\NotifyCommand' => 'VuFindConsole\Command\ScheduledSearch\NotifyCommandFactory'
+                ],
+                'aliases' => [
+                    'scheduledsearch/notify' => 'TueFind\Console\Command\ScheduledSearch\NotifyCommand',
                 ],
             ],
             'contentblock' => [
