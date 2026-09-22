@@ -12144,16 +12144,16 @@
         },
         {
             "name": "ubtue/vufind-collapse-expand",
-            "version": "dev-release-11.0",
+            "version": "v11.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ubtue/vufind-collapse-expand.git",
-                "reference": "fb2fe4d5a3f7ee8fba9a984b94fe8e38af2da88e"
+                "reference": "775705cd4676ef5eabb011dcb2bd0c8f1c55bb12"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ubtue/vufind-collapse-expand/zipball/fb2fe4d5a3f7ee8fba9a984b94fe8e38af2da88e",
-                "reference": "fb2fe4d5a3f7ee8fba9a984b94fe8e38af2da88e",
+                "url": "https://api.github.com/repos/ubtue/vufind-collapse-expand/zipball/775705cd4676ef5eabb011dcb2bd0c8f1c55bb12",
+                "reference": "775705cd4676ef5eabb011dcb2bd0c8f1c55bb12",
                 "shasum": ""
             },
             "require": {
@@ -12213,9 +12213,9 @@
             "description": "Adding Solr Collapse & Expand functionality to VuFind, initially based on finc/vufind-results-grouping.",
             "support": {
                 "issues": "https://github.com/ubtue/vufind-collapse-expand/issues",
-                "source": "https://github.com/ubtue/vufind-collapse-expand/tree/v11.0-1.0"
+                "source": "https://github.com/ubtue/vufind-collapse-expand/tree/v11.0.0"
             },
-            "time": "2026-06-01T09:08:06+00:00"
+            "time": "2026-09-21T12:19:51+00:00"
         },
         {
             "name": "vstelmakh/url-highlight",
