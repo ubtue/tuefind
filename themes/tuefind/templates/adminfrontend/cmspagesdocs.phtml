@@ -1,4 +1,22 @@
 <?php
+
+    $tuefind = $this->tuefind();
+    $userType = $tuefind->getTueFindSubsystem();
+    if (method_exists($this, 'ixtheo')) {
+        $userType = $this->ixtheo()->getUserType();
+    }
+    $baseSyncPath = $this->serverPath;
+    $relativePath = ltrim(str_replace($baseSyncPath, '', $this->fullPath), '/');
+    $pathParts = array_filter(explode('/', $relativePath));
+    $currentFolder = end($pathParts);
+    $serverFolderArray = explode('/', $this->serverPath);
+    $parentFullPath = dirname($this->fullPath);
+    if (strlen($parentFullPath) < strlen($baseSyncPath)) {
+        $parentFullPath = $baseSyncPath;
+    }
+    $parentTheme = ltrim(str_replace($baseSyncPath, '', $parentFullPath), '/');
+    $modeType = $this->modetype;
+
 $this->breadcrumbs()->set($this->translate('Admins'), $this->url('myresearch-home'))
       ->add($this->translate('CMS Pages Docs'), active: true);
 ?>
@@ -8,7 +26,85 @@ $this->breadcrumbs()->set($this->translate('Admins'), $this->url('myresearch-hom
   <?=$this->flashmessages()?>
 
   <div class="container-md">
-    <div class="row gy-3 mt-4 AJAXCMSDocsBlock" style="min-height: 150px;"></div>
+    <!--<div class="row gy-3 mt-4 AJAXCMSDocsBlock" style="min-height: 150px;"></div>-->
+    
+  <div class="cms-sync-container">
+    <!-- Breadcrumbs -->
+    <div class="cms-breadcrumbs mb-3">
+        <div class="cms-actions-panel-left mb-3 gap-2 text-end hideInPlugin row">
+            <div class="input-group mb-3 w-50 col">
+                <?php if ($tuefind->isAdmin()): ?>
+                    <button type="button"
+                        class="btn btn-primary"
+                        id="createFolderBtn"
+                        data-bs-toggle="modal"
+                        data-bs-target="#createFolderModal"
+                        data-theme="<?= $this->escapeHtml($parentTheme) ?>"
+                        data-full-path="<?= $this->escapeHtml($parentFullPath) ?>"
+                        data-server-path="<?= $this->escapeHtml($this->serverPath) ?>">
+                        <i class="fas fa-folder-plus me-2"></i>Create Folder
+                    </button>
+                <?php endif; ?>
+            </div>
+            <div class="input-group mb-3 w-50 col form-check">
+                <input type="file" class="form-control form-control-lg fileUploadInput" placeholder="Add Image" aria-label="Add Image" aria-describedby="button-addon2">
+                <button class="btn btn-outline-primary uploadBtn" data-theme="<?= $this->escapeHtml($relativePath) ?>" type="button" id="button-addon2" ><?=$this->icon('upload')?></button>
+                <div class="invalid-feedback uploadBtn-validation"></div>
+            </div>
+        </div>
+        <div class="cms-actions-panel-right">
+            <?php if (!empty($pathParts)): ?>
+                <a href="<?= $this->escapeHtml('/' . $this->onlyRouteName) ?>" class="btn btn-secondary tf-theme-btn me-1">
+                    <i class="fas fa-arrow-left me-1"></i> ..
+                </a>
+            <?php endif; ?>
+
+            <?php $accumulatedPath = '';
+            foreach ($pathParts as $folder):
+                $accumulatedPath .= ($accumulatedPath === '' ? '' : '/') . $folder;
+                $stepFullPath = '/' . $this->onlyRouteName . '/' . $accumulatedPath;
+                if (!in_array($folder, $serverFolderArray)) : ?>
+                   <?php if ($currentFolder === $folder): ?>
+                    <span class="btn tf-theme-btn-current me-1">
+                        <i class="fas fa-folder text-warning me-1"></i>
+                        <?= $this->escapeHtml($folder) ?>
+                    </span>
+                   <?php else: ?>
+                    <a href="<?= $this->escapeHtml($stepFullPath) ?>" class="btn btn-secondary tf-theme-btn me-1">
+                        <i class="fas fa-folder text-warning me-1"></i>
+                        <?= $this->escapeHtml($folder) ?>
+                    </a>
+                   <?php endif; ?>
+                <?php endif; ?>
+            <?php endforeach; ?>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <?php if (!empty($this->folders)): ?>
+                <div class="show-cms-files-block">
+                    <?php foreach ($this->folders as $folder): ?>
+                        <a href="<?= $this->escapeHtml($this->routeURL . '/' . $folder['name']) ?>" class="btn btn-folder tf-theme-btn" data-theme="<?= $this->escapeHtml($folder['name']) ?>" data-full-path="" data-server-path="<?= $this->escapeHtml($this->serverPath) ?>" data-block="AJAXCMSDocsBlock" data-modetype="<?= $this->escapeHtml($modeType) ?>">
+                            <i class="fas fa-folder me-2 text-warning"></i>
+                            <span><?= $this->escapeHtml($folder['name']) ?></span>
+                        </a>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
+        </div>
+        <p class="delimiter">&nbsp;</p>
+        <div class="col-md-12">
+        <?php if (!empty($this->files)): ?>
+                <div class="show-cms-files-block">
+                    <?php foreach ($this->files as $file): ?>
+                        <?= $this->context($this)->renderInContext('adminfrontend/ajax/node.phtml', ['file' => $file, 'modetype' => $modeType ]) ?>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
+        </div>
+    </div>
+</div>
   </div>
 </div>
 
@@ -16,5 +112,148 @@ $this->breadcrumbs()->set($this->translate('Admins'), $this->url('myresearch-hom
   <?=$this->accountMenu()->render('cmspagesdocs')?>
 </div>
 
-<?php $this->assetManager()->appendScriptLink('cms.js'); ?>
-<?=$this->assetManager()->outputInlineScriptString('CMS.GetAJAXDocs(\'AJAXCMSDocsBlock\');') ?>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="min-width: 1200px;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title preview_title" id="exampleModalLabel"></h5>
+      </div>
+      <div class="modal-body">
+        <div class="container " id="container">
+          <div class="cw-row">
+            <div class="col-12">
+              <div class="">
+                <div class="preview_body text-center"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+
+    <div class="modal-header">
+        <h5 class="modal-title mr-auto me-auto" id="confirmDeleteLabel">Confirm deletion</h5>
+        <button type="button" class="btn-unstyled ms-auto" data-bs-dismiss="modal" aria-label="Close">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+      <div class="modal-body">
+        Are you sure you want to delete <span class="sureDeleteName text-danger"></span>?
+      </div>
+      <div class="file-path d-none"></div>
+      <div class="ajax-response text-center d-none"></div>
+      <div class="file_or_image d-none"></div>
+      
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Cancel
+        </button>
+        <button type="button" class="btn btn-danger" id="confirmDeleteBtn">
+          Delete
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Modal create Folder -->
+<div class="modal fade" id="createFolderModal" tabindex="-1" aria-labelledby="createFolderLabel" aria-hidden="true">
+  <div class="modal-dialog" style="min-width: 1000px;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="createFolderLabel">Create new Folder</h5>
+      </div>
+      <div class="modal-body">
+        <div class="container">
+          <div class="cw-row">
+            <div class="col-12">
+              <div class="">
+                <div class="row g-3">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text createFolderPATH" id="basic-addon3"></span>
+                        <input type="text" class="form-control folderNameInput" id="folderName" aria-describedby="basic-addon3" placeholder="name">
+                        <button class="btn btn-primary modalCreateFolderBtn">Create</button>
+                        <div class="invalid-feedback"></div>
+                    </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<?php $this->assetManager()->appendScriptLink('cms_static.js'); ?>
+<?=$this->assetManager()->outputInlineScriptString('CMS_STATIC.FileManager.Init();') ?>
+
+<style>
+    .uploadBtn-validation {
+      position: absolute;
+      text-align: left;
+      top: 100%;
+      left: 10px;
+      width: 100%;
+      font-size: 0.875em;
+    }
+    .show-cms-files-block .btn-folder, .show-cms-files-block .btn-file {
+        font-size: 18px;
+    }
+    .delimiter {
+        border-top: 1px solid #ccc;
+        margin: 20px 0;
+    }
+    .smc-card {
+        width: 200px;
+        float: left;
+        margin: 10px;
+        width: 200px;
+        height: 250px;
+    }
+    .smc-card img {
+        max-height: 126px;
+        object-fit: contain;
+        cursor: pointer;
+    }
+    .preview_body img {
+        max-height: 500px;
+        object-fit: contain;
+    }
+    .cursor-pointer {
+        cursor: pointer !important;
+    }
+    .btn-unstyled {
+        background: none;
+        border: none;
+        padding: 0;
+        margin: 0;
+        font: inherit;
+        color: inherit;
+        cursor: pointer;
+    }
+    .tf-theme-btn-current {
+        background: none;
+        color: #000;
+        outline: none;
+        border: 1px solid #ddd;
+    }
+</style>

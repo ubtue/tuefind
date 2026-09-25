@@ -1,9 +1,9 @@
-var CMS = {
+var CMS_STATIC = {
 
     Git: {
         Init: function() {
-            $('#git-pull-btn').on('click', (e) => CMS.Git.HandlePull(e.currentTarget));
-            $('#git-push-btn').on('click', (e) => CMS.Git.HandlePush(e.currentTarget));
+            $('#git-pull-btn').on('click', (e) => CMS_STATIC.Git.HandlePull(e.currentTarget));
+            $('#git-push-btn').on('click', (e) => CMS_STATIC.Git.HandlePush(e.currentTarget));
         },
 
         HandlePull: async function() {
@@ -317,7 +317,7 @@ var CMS = {
                 let serverPATH = $('#createFolderBtn').data('server-path').trim();
                 let cleanPath = serverPATH.replace(/\/$/, "");
                 let parentPath = cleanPath + currentBreadcrumbs;
-                console.log([folderNameInput,currentBreadcrumbs,serverPATH]);
+                let validationElement = parentModal.find('.invalid-feedback');
 
                 $.ajax({
                     url: VuFind.path + '/AJAX/JSON',
@@ -330,17 +330,23 @@ var CMS = {
                     },
                     dataType: 'json',
                     success: function(response) {
-                        $('#createFolderModal').modal('hide');
+                        let respone = response.data;
+                        let status = respone.status;
+                        let message = respone.message;
 
-                        let message = response.data && response.data.data ? response.data.data : 'Folder not created';
-                        $('.ajax-info').removeClass('d-none').find('.alert').text(message);
-
-                        setTimeout(() => {
-                            $('.ajax-info').addClass('d-none');
-                        }, 2000);
-
-                       $('.cms-breadcrumbs .btn-secondary.tf-theme-btn').last().click(); //reload
-
+                        if(status === 'ERROR'){
+                            validationElement.show().html(message);
+                            setTimeout(() => {
+                                validationElement.hide().html('');
+                            }, 2000);
+                            return;
+                        }else{
+                            validationElement.hide().html('');
+                            parentModal.find('.container').html(`<div class="alert alert-success" role="alert">${message}</div>`);
+                            setTimeout(() => {
+                                location.reload();
+                            }, 2000);
+                        }
                     },
                     error: function(xhr, ajaxOptions, thrownError) {
                         if (window.console && window.console.log) {
@@ -430,7 +436,7 @@ var CMS = {
                             THIS.blur();
 
                             $('#confirmDeleteModal').one('hidden.bs.modal', function () {
-                                $('.cms-breadcrumbs .btn-secondary.tf-theme-btn').last().click();
+                                location.reload();
                             });
 
                             $('.ajax-info').removeClass('d-none').find('.alert').text(message);
@@ -460,15 +466,24 @@ var CMS = {
             $(document).off('click', '.uploadBtn').on('click', '.uploadBtn', function (e) {
                 e.preventDefault();
 
+                let THIS = $(this);
+
+                let validationElement = $(e.currentTarget).siblings('.uploadBtn-validation');
+
                 let fileInput = $('.fileUploadInput')[0];
                 if (!fileInput || !fileInput.files.length) {
-                    alert('Select file');
+                    validationElement.text('Select file');
+                    validationElement.removeClass('text-success').addClass('text-danger').show();
+                    setTimeout(() => {
+                        validationElement.text('');
+                    }, 1000);
                     return;
                 }
                 let formData = new FormData();
                 formData.append('file', fileInput.files[0]);
 
-                let theme = $('.cms-breadcrumbs .btn-secondary.tf-theme-btn').last().data('theme');
+                let theme = $(e.currentTarget).data('theme');
+                
 
                 $.ajax({
                     url: VuFind.path + '/AJAX/JSON?method=CmsDocs&action=uploadFiles&theme='+theme,
@@ -476,19 +491,30 @@ var CMS = {
                     data: formData,
                     processData: false,
                     contentType: false,
+                    dataType: 'json',
                     success: function (response) {
-                        if (response.data && response.data.status === 'success') {
-                            $('.ajax-info').removeClass('d-none').find('.alert').text(response.data.message);
-                            setTimeout(() => {
-                                $('.ajax-info').addClass('d-none');
-                            }, 2000);
-                            $('.fileUploadInput').val('');
 
-                            $('.cms-breadcrumbs .btn-secondary.tf-theme-btn').last().trigger('click');
+                        let message = response.data.message;
+                        let status = response.data.status;
+
+                        THIS.blur();
+                        
+                        validationElement.text(message);
+                        
+                        if(status === 'success') {
+                            
+                            validationElement.removeClass('text-danger').addClass('text-success').show();
+                            setTimeout(() => {
+                                location.reload();
+                            }, 1000);
+
                         } else {
-                            let errMsg = response.data && response.data.message ? response.data.message : 'error upload';
-                            console.log(errMsg);
+                            validationElement.removeClass('text-success').addClass('text-danger').show();
+                            setTimeout(() => {
+                                validationElement.hide().text('');
+                            }, 3000);
                         }
+
                     },
                     error: function(xhr, ajaxOptions, thrownError) {
                         if (window.console && window.console.log) {
