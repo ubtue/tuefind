@@ -22,6 +22,8 @@ class CmsDocsEntries extends \VuFind\AjaxHandler\AbstractBase
 
     protected $configManager;
 
+    protected $allowedBase;
+
     public function __construct(
         \VuFind\Search\Results\PluginManager $searchResultsManager,
         PhpRenderer $viewRenderer,
@@ -31,6 +33,7 @@ class CmsDocsEntries extends \VuFind\AjaxHandler\AbstractBase
         $this->searchResultsManager = $searchResultsManager;
         $this->viewRenderer = $viewRenderer;
         $this->configManager = $configManager;
+        $this->allowedBase = $this->configManager->get('tuefind')->CMS->repository_path;
     }
 
     /**
@@ -55,8 +58,9 @@ class CmsDocsEntries extends \VuFind\AjaxHandler\AbstractBase
         $action = $params->fromQuery('action');
         if ($action === 'createFolder') {
             $baseDir = $params->fromQuery('parentPath');
-            $folderName = $params->fromQuery('folderName');
+            $folderName = trim($params->fromQuery('folderName') ?? '');
 
+            // 1. check if folder name is empty
             if (empty($folderName)) {
                 return $this->formatResponse([
                     'status' => 'ERROR',
@@ -64,21 +68,31 @@ class CmsDocsEntries extends \VuFind\AjaxHandler\AbstractBase
                 ]);
             }
 
-            $sanitizedName = preg_replace('/[^a-zA-Z0-9_\-]/', '', $folderName);
-
-            if (empty($sanitizedName)) {
+            // 2. Strict validation (spaces and special characters are rejected by a single regex)
+            if (!preg_match('/^[a-zA-Z0-9_\-\.]+$/', $folderName) || str_contains($folderName, ' ')) {
                 return $this->formatResponse([
                     'status' => 'ERROR',
-                    'message' => 'Invalid folder name. Use only letters, numbers, dashes, and underscores.',
+                    'message' => 'Invalid folder name. Use only letters, numbers, dashes, underscores, and dots (no spaces).',
                 ]);
             }
 
-            $targetPath = $baseDir . $sanitizedName;
+            // 3. Protection from Path Traversal (prohibition of "." and "..")
+            if ($folderName === '.' || $folderName === '..') {
+                return $this->formatResponse([
+                    'status' => 'ERROR',
+                    'message' => 'Invalid folder name.',
+                ]);
+            }
 
+            // 4. Correct path concatenation (directory separator)
+            $baseDir = rtrim($baseDir, '/\\') . DIRECTORY_SEPARATOR;
+            $targetPath = $baseDir . $folderName;
+
+            // 5. Check access and existence
             if (!is_writable($baseDir)) {
                 return $this->formatResponse([
                     'status' => 'ERROR',
-                    'message' => 'Base directory is not writable: ' . $baseDir,
+                    'message' => 'Base directory is not writable',
                 ]);
             }
 
@@ -104,10 +118,14 @@ class CmsDocsEntries extends \VuFind\AjaxHandler\AbstractBase
         }
 
         if ($action === 'deleteImage') {
-            $fullPath = $params->fromQuery('full-path');
-            $file = basename($params->fromQuery('full-path'));
+            $file = $this->allowedBase . $params->fromQuery('full-path');
 
-            if (file_exists($fullPath)) {
+            $resultReturn = [
+                'status' => 'success',
+                'data' => 'File deleted successfully',
+            ];
+
+            if (file_exists($file)) {
                 $allowed = ['jpg', 'jpeg', 'png', 'gif'];
 
                 $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
@@ -119,23 +137,18 @@ class CmsDocsEntries extends \VuFind\AjaxHandler\AbstractBase
                     ]);
                 }
 
-                unlink($fullPath);
-
-                $resultReturn = [
-                    'status' => 'success',
-                    'data' => 'File deleted successfully',
-                ];
+                unlink($file);
             } else {
                 $resultReturn = [
                     'status' => 'ERROR',
-                    'data' => 'File not found: ' . $fullPath,
+                    'data' => 'File not found: ' . $file,
                 ];
-                return $this->formatResponse($resultReturn);
             }
+            return $this->formatResponse($resultReturn);
         }
 
         if ($action === 'deleteFile') {
-            $fullPath = $params->fromQuery('full-path');
+            $fullPath = $this->allowedBase . $params->fromQuery('full-path');
 
             if (file_exists($fullPath)) {
                 // MIME + extenxion check
@@ -210,6 +223,10 @@ class CmsDocsEntries extends \VuFind\AjaxHandler\AbstractBase
             ];
 
             $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'pdf', 'txt'];
+
+            // get the original file name without extension
+            $originalName = pathinfo($_FILES['file']['name'], PATHINFO_FILENAME); // name without extension
+            // get the file extension in lowercase
             $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
 
             $mimeType = mime_content_type($file['tmp_name']);
@@ -221,8 +238,7 @@ class CmsDocsEntries extends \VuFind\AjaxHandler\AbstractBase
                 ]);
             }
 
-            $config = $this->configManager->get('tuefind');
-            $allowedBase = $config->CMS->repository_path;
+            $allowedBase = $this->allowedBase;
 
             $theme = $params->fromQuery('theme');
 
@@ -253,8 +269,11 @@ class CmsDocsEntries extends \VuFind\AjaxHandler\AbstractBase
                 ]);
             }
 
-            $prefix = in_array($ext, ['jpg', 'jpeg', 'png', 'gif']) ? 'img_' : 'doc_';
-            $newName = uniqid($prefix, true) . '.' . $ext;
+            // replace spaces with underscores
+            $cleanName = str_replace(' ', '_', $originalName);
+
+            // form the new file name
+            $newName = $cleanName . '.' . $ext;
 
             $targetPath = $realTargetDir . '/' . $newName;
 
@@ -273,8 +292,7 @@ class CmsDocsEntries extends \VuFind\AjaxHandler\AbstractBase
         }
 
         if ($action === 'getThemeURLs') {
-            $config = $this->configManager->get('tuefind');
-            $cmsSyncFolder = $config->CMS->repository_path;
+            $allowedBase = $this->allowedBase;
 
             $formattedPaths = [];
             $block = 'AJAXCMSDocsBlock';
@@ -286,11 +304,11 @@ class CmsDocsEntries extends \VuFind\AjaxHandler\AbstractBase
                 $modetype = $params->fromQuery('modetype');
             }
 
-            if (is_dir($cmsSyncFolder)) {
+            if (is_dir($allowedBase)) {
                 $folders = [];
 
-                if (!empty($cmsSyncFolder) && is_dir($cmsSyncFolder)) {
-                    $dirPath = rtrim($cmsSyncFolder, '/') . '/';
+                if (!empty($allowedBase) && is_dir($allowedBase)) {
+                    $dirPath = rtrim($allowedBase, '/') . '/';
 
                     $dirContent = scandir($dirPath);
 
@@ -312,12 +330,12 @@ class CmsDocsEntries extends \VuFind\AjaxHandler\AbstractBase
 
                 $viewParams = [
                     'path' => '',
-                    'fullPath' => $cmsSyncFolder,
+                    'fullPath' => $allowedBase,
                     'block' => $block,
                     'modetype' => $modetype,
                     'folders' => $folders,
                     'files' => [],
-                    'serverPath' => $cmsSyncFolder,
+                    'serverPath' => $allowedBase,
                 ];
 
                 $htmlContent = $this->viewRenderer->render('adminfrontend/ajax/allcmsfiles', $viewParams);
@@ -403,10 +421,9 @@ class CmsDocsEntries extends \VuFind\AjaxHandler\AbstractBase
         if ($action === 'getImageContent') {
             $fullPath = $params->fromQuery('full-path');
             // Base security: check that the file really lies inside the allowed synchronization folder
-            $allowedBase = $this->configManager->get('tuefind')->CMS->repository_path;
-            $fullPath = $allowedBase . $fullPath;
+            $fullPath = $this->allowedBase . $fullPath;
 
-            if (empty($fullPath) || !str_starts_with(realpath($fullPath), $allowedBase) || !file_exists($fullPath)) {
+            if (empty($fullPath) || !str_starts_with(realpath($fullPath), $this->allowedBase) || !file_exists($fullPath)) {
                 return $this->formatResponse('File not found or access denied', 404);
             }
 
@@ -430,16 +447,13 @@ class CmsDocsEntries extends \VuFind\AjaxHandler\AbstractBase
         if ($action === 'getFileContent') {
             $fullPath = $params->fromQuery('full-path');
 
-            $config = $this->configManager->get('tuefind');
-            $allowedBase = $config->CMS->repository_path;
-
             if (empty($fullPath) || !file_exists($fullPath)) {
                 return $this->formatResponse('File not found or access denied', 404);
             }
 
             $realPath = realpath($fullPath);
 
-            if (!$allowedBase || !$realPath || !str_starts_with($realPath, $allowedBase . DIRECTORY_SEPARATOR)) {
+            if (!$this->allowedBase || !$realPath || !str_starts_with($realPath, $this->allowedBase . DIRECTORY_SEPARATOR)) {
                 return $this->formatResponse('File not found or access denied', 403);
             }
 

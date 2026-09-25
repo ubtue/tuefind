@@ -297,7 +297,10 @@ $config = [
             'adminfrontend-cmspagesdocs' => [
                 'type'    => 'Laminas\Router\Http\Segment',
                 'options' => [
-                    'route'    => '/AdminFrontend/CMSPagesDocs',
+                    'route'    => '/AdminFrontend/CMSPagesDocs[/:path]',
+                    'constraints' => [
+                        'path' => '[a-zA-Z0-9_\.\-\/]+',
+                    ],
                     'defaults' => [
                         'controller' => 'AdminFrontend',
                         'action'     => 'CMSPagesDocs',
