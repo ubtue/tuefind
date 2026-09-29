@@ -8,10 +8,16 @@ class UserService extends \VuFind\Db\Service\UserService implements UserServiceI
 {
     public function getByRight($right): array
     {
-        $select = $this->getSql()->select();
-        $select->where('FIND_IN_SET("' . $right . '", tuefind_rights) > 0');
-        $select->order('username ASC');
-        return $this->selectWith($select);
+        $dql = 'SELECT U '
+            . 'FROM ' . UserEntityInterface::class . ' U '
+            //. 'WHERE FIND_IN_SET(:right, tuefind_rights) > 0'
+            //. 'WHERE :right MEMBER OF U.tuefindRights '
+            . 'WHERE U.tuefindRights LIKE :right '
+            . 'ORDER BY U.username ASC';
+
+        $query = $this->entityManager->createQuery($dql);
+        $query->setParameter('right', '%' . $right . '%');
+        return $query->getResult();
     }
 
     public function getByUuid($uuid): ?UserEntityInterface
