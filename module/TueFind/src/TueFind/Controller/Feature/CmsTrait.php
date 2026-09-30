@@ -2,6 +2,8 @@
 
 namespace TueFind\Controller\Feature;
 
+use function in_array;
+
 /**
  * This has been part of the AdminFrontendController for a long time,
  * but due to the increasing amount of functions, we decided to move them
@@ -179,9 +181,92 @@ trait CmsTrait
         $subSystem = $this->getDbService(\TueFind\Db\Service\SubsystemsServiceInterface::class)->getAll();
         //$user_type = $user->getUserType(); for now we do not have different user types, but in the future we might want to use this to determine if a user has access to certain subsystems or not
 
-        return $this->createViewModel([
+        $config = $this->serviceLocator->get(\VuFind\Config\PluginManager::class);
+        $allowedBase = $config->get('tuefind')->CMS->repository_path;
+
+        $path = $this->params()->fromRoute('path', '');
+        $path = urldecode($path);
+        $path = ltrim($path, '/');
+        $realPath = realpath($allowedBase . '/' . $path);
+
+        if ($realPath === false || !str_starts_with($realPath, $allowedBase)) {
+            throw new \Exception('Access denied: Invalid directory path.');
+        }
+
+        $cmsSyncFolder = $realPath;
+
+        $folders = [];
+        if (is_dir($cmsSyncFolder)) {
+            if (!empty($cmsSyncFolder) && is_dir($cmsSyncFolder)) {
+                $dirPath = rtrim($cmsSyncFolder, '/') . '/';
+
+                $dirContent = scandir($dirPath);
+
+                foreach ($dirContent as $item) {
+                    if (str_starts_with($item, '.') || str_starts_with($item, '_')) {
+                        continue;
+                    }
+
+                    $itemFullPath = $dirPath . $item;
+
+                    if (is_dir($itemFullPath)) {
+                        $folders[] = [
+                            'name' => $item,
+                            'fullPath' => $itemFullPath,
+                        ];
+                    }
+                }
+            }
+        }
+
+        $files = [];
+        $allowedExtensions = ['pdf', 'txt', 'png', 'jpg', 'jpeg', 'gif', 'svg', 'doc', 'docx', 'xls', 'xlsx'];
+
+        if (!empty($cmsSyncFolder) && is_dir($cmsSyncFolder)) {
+            $dirPath = rtrim($cmsSyncFolder, '/') . '/';
+
+            $dirContent = scandir($dirPath);
+
+            foreach ($dirContent as $item) {
+                if (str_starts_with($item, '.') || str_starts_with($item, '_')) {
+                    continue;
+                }
+
+                $itemFullPath = $dirPath . $item;
+
+                $extension = strtolower(pathinfo($item, PATHINFO_EXTENSION));
+
+                $cleanFullPath = str_replace('//', '/', $itemFullPath);
+
+                if (in_array($extension, $allowedExtensions)) {
+                    $files[] = [
+                        'name' => $item,
+                        'extension' => $extension,
+                        'size' => filesize($itemFullPath),
+                        'fullPath' => $cleanFullPath,
+                        'serverPath' => $allowedBase,
+                        'relativePath' => str_replace($allowedBase, '', $cleanFullPath),
+                    ];
+                }
+            }
+        }
+
+        $block = 'AJAXCMSDocsBlock';
+        $modetype = '';
+        $viewParams = [
+            'path' => $path,
+            'fullPath' => $cmsSyncFolder,
+            'block' => $block,
+            'modetype' => $modetype,
+            'folders' => $folders,
+            'files' => $files,
+            'serverPath' => $allowedBase,
             'subSystem' => $subSystem,
-        ]);
+            'routeURL' => '/AdminFrontend/CMSPagesDocs' . ($path ? '/' . $path : ''),
+            'onlyRouteName' => 'AdminFrontend/CMSPagesDocs',
+        ];
+
+        return $this->createViewModel($viewParams);
     }
 
     public function CmsPagesFilesAction()

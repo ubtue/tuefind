@@ -1,24 +1,20 @@
 <?php
 
-function OnlyOrdered($signatures) {
+function OnlyOrdered($signatures)
+{
   foreach ($signatures as $signature) {
-    if (StartsWith("IFK: bestellt", $signature)) {
+    if (preg_match('"^(UB|IFK):(\s+)bestellt"i', $signature)) {
       return true;
     }
   }
   return false;
 }
 
-function StartsWith($prefix, $str) {
- return (substr($str, 0, strlen($prefix)) === $prefix);
-}
-
 $signatures = $this->driver->getLocalSignatures();
 
 if (!OnlyOrdered($signatures)) {
-  echo $this->transEsc('Available in Tubingen') . ".<br>";
+  echo $this->transEsc('Available in Tubingen') . '.<br>';
 }
 foreach ($signatures as $signature) {
-  echo $this->escapeHtml($signature) . "<br>";
+  echo $this->escapeHtml($signature) . '<br>';
 }
-?>

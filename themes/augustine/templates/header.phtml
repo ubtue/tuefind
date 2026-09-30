@@ -98,33 +98,33 @@
       <?php endif; ?>
     </div>
   </div>
-  <section class="section-home">
-    <div class="panel-home">
-      <br />
-      <br />
-      <div class="visible-lg">
-        <h1>
-          <a href="<?=$this->url('home')?>" title="Index Augustinianus">Index Augustinianus</a>
-        </h1>
-        <!--<h3 class="text-center"><?=$this->transEsc('Exegetics')?></h3>-->
-        <!--The following subtitle will be translated as soon as more information is available-->
-        <!--<small>Internationale Bibliographie für Bibelwissenschaften</small>-->
-        <br />
-      </div>
-      <?php if ($this->ils()->getOfflineMode() == "ils-offline"): ?>
-        <div class="alert alert-warning">
-          <h2><?= $this->transEsc('ils_offline_title') ?></h2>
-
-          <p><strong><?= $this->transEsc('ils_offline_status') ?></strong></p>
-
-          <p><?= $this->transEsc('ils_offline_home_message') ?></p>
-          <?php $supportEmail = $this->escapeHtmlAttr($this->systemEmail()); ?>
-          <p><a href="mailto:<?= $supportEmail ?>"><?= $supportEmail ?></a></p>
-        </div>
-      <?php endif; ?>
-        <nav class="nav searchbox hidden-print">
-          <?=$this->layout()->searchbox ?>
-        </nav>
-    </div>
-  </section>
 </div>
+<section class="section-home">
+  <div class="panel-home">
+    <br />
+    <br />
+    <div class="visible-lg">
+      <h1>
+        <a href="<?=$this->url('home')?>" title="Index Augustinianus">Index Augustinianus</a>
+      </h1>
+      <!--<h3 class="text-center"><?=$this->transEsc('Exegetics')?></h3>-->
+      <!--The following subtitle will be translated as soon as more information is available-->
+      <!--<small>Internationale Bibliographie für Bibelwissenschaften</small>-->
+      <br />
+    </div>
+    <?php if ($this->ils()->getOfflineMode() == "ils-offline"): ?>
+      <div class="alert alert-warning">
+        <h2><?= $this->transEsc('ils_offline_title') ?></h2>
+
+        <p><strong><?= $this->transEsc('ils_offline_status') ?></strong></p>
+
+        <p><?= $this->transEsc('ils_offline_home_message') ?></p>
+        <?php $supportEmail = $this->escapeHtmlAttr($this->systemEmail()); ?>
+        <p><a href="mailto:<?= $supportEmail ?>"><?= $supportEmail ?></a></p>
+      </div>
+    <?php endif; ?>
+      <nav class="nav searchbox hidden-print">
+        <?=$this->layout()->searchbox ?>
+      </nav>
+  </div>
+</section>

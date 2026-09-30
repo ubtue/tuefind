@@ -287,7 +287,10 @@ $config = [
             'adminfrontend-cmspagesdocs' => [
                 'type'    => 'Laminas\Router\Http\Segment',
                 'options' => [
-                    'route'    => '/AdminFrontend/CMSPagesDocs',
+                    'route'    => '/AdminFrontend/CMSPagesDocs[/:path]',
+                    'constraints' => [
+                        'path' => '[a-zA-Z0-9_\.\-\/]+',
+                    ],
                     'defaults' => [
                         'controller' => 'AdminFrontend',
                         'action'     => 'CMSPagesDocs',
@@ -311,6 +314,17 @@ $config = [
                     'defaults' => [
                         'controller' => 'AdminFrontend',
                         'action'     => 'CMSPagesImages',
+                    ],
+                ],
+            ],
+            'cms-assets' => [
+                'type' => 'Laminas\Router\Http\Regex',
+                'options' => [
+                    'regex'    => '/cms/assets(?<relative_path>/.*)',
+                    'spec'     => '/cms/assets%relative_path%',
+                    'defaults' => [
+                        'controller' => 'AdminFrontend',
+                        'action'     => 'asset',
                     ],
                 ],
             ],
@@ -478,6 +492,14 @@ $config = [
                 ],
                 'aliases' => [
 
+                ],
+            ],
+            'command' => [
+                'factories' => [
+                    'TueFind\Console\Command\ScheduledSearch\NotifyCommand' => 'VuFindConsole\Command\ScheduledSearch\NotifyCommandFactory'
+                ],
+                'aliases' => [
+                    'scheduledsearch/notify' => 'TueFind\Console\Command\ScheduledSearch\NotifyCommand',
                 ],
             ],
             'contentblock' => [

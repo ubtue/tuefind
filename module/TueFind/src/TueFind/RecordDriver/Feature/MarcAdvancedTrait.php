@@ -1,17 +1,22 @@
 <?php
+
 namespace TueFind\RecordDriver\Feature;
 
+use function array_key_exists;
+use function in_array;
+use function is_array;
 
 trait MarcAdvancedTrait
 {
-    use \VuFind\RecordDriver\Feature\MarcBasicTrait, \VuFind\RecordDriver\Feature\MarcAdvancedTrait  {
-         \VuFind\RecordDriver\Feature\MarcAdvancedTrait::getNewerTitles insteadof \VuFind\RecordDriver\Feature\MarcBasicTrait;
-         \VuFind\RecordDriver\Feature\MarcAdvancedTrait::getPreviousTitles insteadof \VuFind\RecordDriver\Feature\MarcBasicTrait;
-         \VuFind\RecordDriver\Feature\MarcAdvancedTrait::getSeriesFromMARC as getVuFindSeriesFromMARC;
-         \VuFind\RecordDriver\Feature\MarcAdvancedTrait::getSeries as getVuFindSeries;
+    use \VuFind\RecordDriver\Feature\MarcBasicTrait, \VuFind\RecordDriver\Feature\MarcAdvancedTrait {
+        \VuFind\RecordDriver\Feature\MarcAdvancedTrait::getNewerTitles insteadof \VuFind\RecordDriver\Feature\MarcBasicTrait;
+        \VuFind\RecordDriver\Feature\MarcAdvancedTrait::getPreviousTitles insteadof \VuFind\RecordDriver\Feature\MarcBasicTrait;
+        \VuFind\RecordDriver\Feature\MarcAdvancedTrait::getSeriesFromMARC as getVuFindSeriesFromMARC;
+        \VuFind\RecordDriver\Feature\MarcAdvancedTrait::getSeries as getVuFindSeries;
     }
 
-    public function getSubfieldsWithCustomSeparator($currentField, $subfields, $subfieldSeparatorMap = null) {
+    public function getSubfieldsWithCustomSeparator($currentField, $subfields, $subfieldSeparatorMap = null)
+    {
         // Start building a line of text for the current field
         $matches = '';
         // Loop through all subfields, collecting results that match the whitelist;
@@ -21,7 +26,7 @@ trait MarcAdvancedTrait
             foreach ($allSubfields as $currentSubfield) {
                 $code = $currentSubfield->getCode();
                 if (in_array($code, $subfields)) {
-                    $separator = !is_null($subfieldSeparatorMap) && isset($subfieldSeparatorMap[$code]) ?
+                    $separator = null !== $subfieldSeparatorMap && isset($subfieldSeparatorMap[$code]) ?
                                  $subfieldSeparatorMap[$code] : ' ';
                     // Grab the current subfield value and act on it if it is
                     // non-empty:
@@ -36,11 +41,13 @@ trait MarcAdvancedTrait
         return $matches;
     }
 
-    public function getSeries() {
+    public function getSeries()
+    {
         return $this->getVuFindSeries();
     }
 
-    public function getSeriesFromMARC($fieldInfo) {
+    public function getSeriesFromMARC($fieldInfo)
+    {
         $seriesSeparators = [ 'c' => ', ', 't' => ', ' ];
         $matches = [];
 
@@ -51,18 +58,17 @@ trait MarcAdvancedTrait
 
             if (is_array($series)) {
                 foreach ($series as $currentField) {
-
                     $name = '';
-                    foreach($currentField['subfields'] as $subFields) {
+                    foreach ($currentField['subfields'] as $subFields) {
                         $code = $subFields['code'];
                         if (in_array($code, $subfields)) {
-                          $separator = !is_null($seriesSeparators) && isset($seriesSeparators[$code]) ? $seriesSeparators[$code] : ' ';
-                          // Grab the current subfield value and act on it if it is
-                          // non-empty:
-                          $data = trim($subFields['data']);
-                          if (!empty($data)) {
-                              $name .= !empty($name) ? $separator . $data : $data;
-                          }
+                            $separator = null !== $seriesSeparators && isset($seriesSeparators[$code]) ? $seriesSeparators[$code] : ' ';
+                            // Grab the current subfield value and act on it if it is
+                            // non-empty:
+                            $data = trim($subFields['data']);
+                            if (!empty($data)) {
+                                $name .= !empty($name) ? $separator . $data : $data;
+                            }
                         }
                     }
 
@@ -87,59 +93,74 @@ trait MarcAdvancedTrait
         return $matches;
     }
 
-
-    public function makeDescriptionLinksClickable($description) {
+    public function makeDescriptionLinksClickable($description)
+    {
         // c.f. https://stackoverflow.com/questions/5341168/best-way-to-make-links-clickable-in-block-of-text (211027)
         return preg_replace('!(((f|ht)tp(s)?://)[-a-zA-Zа-яА-Я()0-9@:%_+.~#?&;//=]+)!i', '<a href="$1" target="blank_">$1</a>', $description);
     }
 
-
-    public function getPhysicalDescriptions() {
-         return $this->getFieldArray('300', ['a', 'b', 'c', 'e', 'f', 'g'], true, ', ');
+    public function getPhysicalDescriptions()
+    {
+        return $this->getFieldArray('300', ['a', 'b', 'c', 'e', 'f', 'g'], true, ', ');
     }
 
-
-    public function isLastArrayKey(&$array_, $key) {
+    public function isLastArrayKey(&$array_, $key)
+    {
         $last = array_key_last($array_);
         return $last === $key;
     }
 
-
-    public function getCorporateAuthorsFromMarc($corporateAuthorTag, $subfieldsToExtract) {
-        $fields=$this->getMarcReader()->getFields($corporateAuthorTag);
+    public function getCorporateAuthorsFromMarc($corporateAuthorTag, $subfieldsToExtract)
+    {
+        $fields = $this->getMarcReader()->getFields($corporateAuthorTag);
         $separators = ['a' => '. '];
         $corporateAuthors = [];
         foreach ($fields as $field) {
             $corporateAuthor = '';
+
+            // Detect existing subfield codes
+            $existingSubfieldCodes = [];
+            foreach ($field['subfields'] as $subfield) {
+                $existingSubfieldCodes[] = $subfield['code'];
+            }
+
             // Remove superfluous entries
-            $subfields = array_filter($field['subfields'],
-                             function($subfield) use ($subfieldsToExtract) {
-                                 return in_array($subfield['code'], $subfieldsToExtract);
-                              }
+            $subfields = array_filter(
+                $field['subfields'],
+                function ($subfield) use ($subfieldsToExtract, $existingSubfieldCodes) {
+                    // Special logic: Only extract subfield e (e.g. "Verlag") if no subfield 4 (e.g. "pbl") is given,
+                    // since 4 will be translated later
+                    if ($subfield['code'] == 'e' && in_array('4', $existingSubfieldCodes)) {
+                        return false;
+                    }
+
+                    return in_array($subfield['code'], $subfieldsToExtract);
+                }
             );
 
             // Sort subfields to given order
             usort($subfields, function ($a, $b) use ($subfieldsToExtract) {
-                  $posA = array_search($a['code'], $subfieldsToExtract);
-                  $posB = array_search($b['code'], $subfieldsToExtract);
-                  return $posA - $posB;
+                $posA = array_search($a['code'], $subfieldsToExtract);
+                $posB = array_search($b['code'], $subfieldsToExtract);
+                return $posA - $posB;
             });
 
-            foreach($subfields as $subfield) {
-               $code = $subfield['code'];
-               $separator = array_key_exists($code, $separators) ? $separators[$code] : ' ';
-               $data = trim($subfield['data']);
-               if ($code == 'd')
-                   $data = '(' . $data . ')';
-               $corporateAuthor .= !$this->isLastArrayKey($subfields, key($subfields)) ? $data . $separator : $data;
+            foreach ($subfields as $subfield) {
+                $code = $subfield['code'];
+                $separator = array_key_exists($code, $separators) ? $separators[$code] : ' ';
+                $data = trim($subfield['data']);
+                if ($code == 'd') {
+                    $data = '(' . $data . ')';
+                }
+                $corporateAuthor .= !$this->isLastArrayKey($subfields, key($subfields)) ? $data . $separator : $data;
             }
             array_push($corporateAuthors, $corporateAuthor);
         }
         return $corporateAuthors;
-   }
+    }
 
-
-   public function getCorporateAuthors() {
+    public function getCorporateAuthors()
+    {
         return array_merge(
             $this->getCorporateAuthorsFromMarc('110', ['a', 'e', 'n', 'g', 'c', 'd']),
             $this->getCorporateAuthorsFromMarc('111', ['a', 'e', 'n', 'g', 'c', 'd']),
@@ -148,8 +169,8 @@ trait MarcAdvancedTrait
         );
     }
 
-
-    public function getCountRemarks() {
+    public function getCountRemarks()
+    {
         return $this->getFieldArray('515', ['a'], true, ', ');
     }
 
@@ -170,7 +191,7 @@ trait MarcAdvancedTrait
      *
      * @return array
      */
-    public function getISBNs() : array
+    public function getISBNs(): array
     {
         // Intentionally omit 020z and 773z
         // Prefer 0209 over 020a
@@ -180,10 +201,11 @@ trait MarcAdvancedTrait
         $isbns = [];
         foreach ($this->getMarcReader()->getFields('020') as $field) {
             $subfields = $this->getMarcReader()->getSubfieldsAssoc($field);
-            if (isset($subfields['9']))
+            if (isset($subfields['9'])) {
                 $isbns[] = $subfields['9'];
-            elseif (isset($subfields['a']))
+            } elseif (isset($subfields['a'])) {
                 $isbns[] = $subfields['a'];
+            }
         }
 
         return array_unique($isbns);
@@ -195,7 +217,8 @@ trait MarcAdvancedTrait
      *
      * @return type
      */
-    public function getCleanISBN() {
+    public function getCleanISBN()
+    {
         $isbns = $this->getISBNs();
         return !isset($isbns[0]) ? false : str_replace(['-'], '', $isbns[0]);
     }
@@ -207,8 +230,7 @@ trait MarcAdvancedTrait
     public function getPublicationDates()
     {
         $dates = parent::getPublicationDates();
-        $datesCleaned = array_map(fn($date) => preg_replace('[\[\]]', '', $date), $dates);
+        $datesCleaned = array_map(fn ($date) => preg_replace('[\[\]]', '', $date), $dates);
         return $dates;
     }
-
 }
