@@ -23,6 +23,7 @@ $modules = [
     'VuFind',
     'VuFindAdmin',
     'VuFindApi',
+    'VuFindBEACONFinder',
     'VuFindCollapseExpand',
 ];
 if (!extension_loaded('intl')) {
