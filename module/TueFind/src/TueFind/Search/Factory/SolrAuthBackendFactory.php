@@ -3,109 +3,157 @@
 namespace TueFind\Search\Factory;
 
 use TueFindSearch\Backend\Solr\QueryBuilder;
-use VuFindSearch\Backend\Solr\LuceneSyntaxHelper;
 use VuFind\I18n\Translator\TranslatorAwareInterface;
-use VuFindSearch\Backend\Solr\Connector;
 use VuFindSearch\Backend\Solr\HandlerMap;
-
 
 class SolrAuthBackendFactory extends \VuFind\Search\Factory\SolrAuthBackendFactory implements TranslatorAwareInterface
 {
     use \VuFind\I18n\Translator\TranslatorAwareTrait;
 
     /**
-     * Same code as parent, but uses TueFind's QueryBuilder instead.
+     * Create TueFind's custom Solr query builder while retaining
+     * VuFind 11.1 configuration handling.
      */
     protected function createQueryBuilder()
     {
-        $specs   = $this->loadSpecs();
-        $config = $this->configManager->get($this->mainConfig);
-        $defaultDismax = isset($config->Index->default_dismax_handler)
-            ? $config->Index->default_dismax_handler : 'dismax';
-        $builder = new QueryBuilder($specs, $defaultDismax);
+        $specs = $this->loadSpecs();
 
-        // Configure builder:
-        $search = $this->configManager->get($this->searchConfig);
-        $caseSensitiveBooleans
-            = isset($search->General->case_sensitive_bools)
-            ? $search->General->case_sensitive_bools : true;
-        $caseSensitiveRanges
-            = isset($search->General->case_sensitive_ranges)
-            ? $search->General->case_sensitive_ranges : true;
-        $helper = new LuceneSyntaxHelper(
-            $caseSensitiveBooleans, $caseSensitiveRanges
+        $defaultDismax = $this->getIndexConfig(
+            'default_dismax_handler',
+            'dismax'
         );
-        $builder->setLuceneHelper($helper);
+
+        $builder = new QueryBuilder(
+            $specs,
+            $defaultDismax
+        );
+
+        $builder->setLuceneHelper(
+            $this->createLuceneSyntaxHelper()
+        );
 
         return $builder;
     }
 
-
+    /**
+     * Create the Solr authority connector.
+     *
+     * Based on VuFind 11.1 AbstractSolrBackendFactory::createConnector(),
+     * with TueFind-specific language and multiLanguageQueryParser settings.
+     */
     protected function createConnector()
     {
-        $config = $this->configManager->get($this->mainConfig);
-        $this->setTranslator($this->serviceLocator->get(\Laminas\Mvc\I18n\Translator::class));
-        $current_lang = $this->getTranslatorLocale();
+        $timeout = $this->getIndexConfig('timeout', 30);
 
-        // On the Solr side we use different naming scheme
-        // so map traditional and simplified chinese accordingly
-        $chinese_lang_map = [ "zh" => "hant", "zh-cn" => "hans"];
-        if (array_key_exists($current_lang, $chinese_lang_map))
-            $current_lang = $chinese_lang_map[$current_lang];
+        $searchConfig = $this->configManager->getConfigObject(
+            $this->searchConfig
+        );
 
-        $defaultFields = $searchConfig->General->default_record_fields ?? '*';
+        /*
+         * Preserve the old TueFind behaviour (*,score) when
+         * default_record_fields is not explicitly configured.
+         */
+        $defaultFields
+            = $searchConfig->General->default_record_fields
+            ?? '*,score';
 
+        /*
+         * Match VuFind 11.1 behavior when Explain is enabled.
+         */
+        if (
+            ($searchConfig->Explain->enabled ?? false)
+            && !str_contains($defaultFields, 'score')
+        ) {
+            $defaultFields .= ',score';
+        }
+
+        /*
+         * TueFind customization:
+         * determine the current language for the custom
+         * multiLanguageQueryParser.
+         */
+        $this->setTranslator(
+            $this->serviceLocator->get(
+                \Laminas\Mvc\I18n\Translator::class
+            )
+        );
+
+        $currentLang = $this->getTranslatorLocale();
+
+        /*
+         * Solr uses different identifiers for traditional and
+         * simplified Chinese.
+         */
+        $chineseLangMap = [
+            'zh' => 'hant',
+            'zh-cn' => 'hans',
+        ];
+
+        $currentLang
+            = $chineseLangMap[$currentLang]
+            ?? $currentLang;
+
+        /*
+         * Start from VuFind 11.1's handler structure and add
+         * TueFind-specific parameters to the select handler.
+         */
         $handlers = [
             'select' => [
                 'fallback' => true,
-                'defaults' => ['fl' => '*,score', 'lang' => $current_lang,
-                               'defType' => 'multiLanguageQueryParser', 'df' => 'allfields'
-                              ],
-                'appends'  => ['fq' => []],
+                'defaults' => [
+                    'fl' => $defaultFields,
+
+                    // TueFind-specific settings:
+                    'lang' => $currentLang,
+                    'defType' => 'multiLanguageQueryParser',
+                    'df' => 'allfields',
+                ],
+                'appends' => [
+                    'fq' => [],
+                ],
             ],
-            'term' => [
+
+            // VuFind 11.1 using terms instead of term.
+            'terms' => [
                 'functions' => ['terms'],
+            ],
+
+            // VuFind 11.1:
+            'morelikethis' => [
+                'functions' => ['similar'],
             ],
         ];
 
         foreach ($this->getHiddenFilters() as $filter) {
-            array_push($handlers['select']['appends']['fq'], $filter);
+            $handlers['select']['appends']['fq'][] = $filter;
         }
-
-        $client =  function (string $url) use ($config) {
-            return $this->createHttpClient($config->Index->timeout ?? 30, $this->getHttpOptions($url), $url);
-        };
 
         $connector = new $this->connectorClass(
             $this->getSolrUrl(),
             new HandlerMap($handlers),
-            $client,
+            function (string $url) use ($timeout) {
+                return $this->createHttpClient(
+                    $timeout,
+                    $this->getHttpOptions($url),
+                    $url
+                );
+            },
             $this->uniqueKey
         );
 
         if ($this->logger) {
             $connector->setLogger($this->logger);
         }
-        if (!empty($searchConfig->SearchCache->adapter)) {
-            $cacheConfig = $searchConfig->SearchCache->toArray();
-            $options = $cacheConfig['options'] ?? [];
-            if (empty($options['namespace'])) {
-                $options['namespace'] = 'Index';
-            }
-            if (empty($options['ttl'])) {
-                $options['ttl'] = 300;
-            }
-            $settings = [
-                'name' => $cacheConfig['adapter'],
-                'options' => $options,
-            ];
-            $cache = $this->serviceLocator
-                ->get(\Laminas\Cache\Service\StorageAdapterFactory::class)
-                ->createFromArrayConfiguration($settings);
+
+        /*
+         * Let VuFind 11.1 create the cache.
+         * This also handles the current Laminas cache configuration format.
+         * TueFind does not need to duplicate the Laminas cache implementation.
+         */
+        if ($cache = $this->createConnectorCache($searchConfig)) {
             $connector->setCache($cache);
         }
 
         return $connector;
     }
-
 }
