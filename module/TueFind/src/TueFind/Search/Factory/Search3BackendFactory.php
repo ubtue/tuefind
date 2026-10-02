@@ -25,6 +25,7 @@ class Search3BackendFactory extends AbstractSolrBackendFactory
      */
     protected function createBackend(Connector $connector)
     {
+        // take from its own not from TueFind since TueFind is used CollapseExpand, but Search3 does not use it.
         $backend = new $this->backendClass($connector);
 
         $manager = $this->serviceLocator->get(PluginManager::class);
