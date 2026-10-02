@@ -37,4 +37,16 @@ class Utility
     {
         return preg_match('/^(["\']).*\1/m', $string);
     }
+
+    public static function CMSuploadAllowedExtensions(): string
+    {
+        $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'pdf', 'txt'];
+        return implode(', ', $allowedExtensions);
+    }
+
+    public static function CMSallFilesAllowedExtensions(): string
+    {
+        $allowedExtensions = ['pdf', 'txt', 'png', 'jpg', 'jpeg', 'gif', 'svg', 'doc', 'docx', 'xls', 'xlsx'];
+        return implode(', ', $allowedExtensions);
+    }
 }
