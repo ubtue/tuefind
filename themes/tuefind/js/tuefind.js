@@ -923,4 +923,10 @@ $(document).ready(function () {
         TueFind.GoToCollapsedBlock($(this).data('anchor'), $(this).data('block'));
     });
 
+    $(document).on('hide.bs.modal', '.modal', function () {
+        if (this.contains(document.activeElement) || document.activeElement === this) {
+            document.activeElement.blur();
+        }
+    });
+
 });

@@ -31,7 +31,7 @@ $this->breadcrumbs()->set($this->translate('Admins'), $this->url('myresearch-hom
   <div class="cms-sync-container">
     <!-- Breadcrumbs -->
     <div class="cms-breadcrumbs mb-3">
-        <div class="cms-actions-panel-left mb-3 gap-2 text-end hideInPlugin row">
+        <div class="cms-actions-panel-left mb-3 gap-2 text-end row">
             <div class="input-group mb-3 w-50 col">
                 <?php if ($tuefind->isAdmin()): ?>
                     <button type="button"
@@ -114,11 +114,11 @@ $this->breadcrumbs()->set($this->translate('Admins'), $this->url('myresearch-hom
 
 
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="previewModalLabel" aria-hidden="true">
   <div class="modal-dialog" style="min-width: 1200px;">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title preview_title" id="exampleModalLabel"></h5>
+        <h5 class="modal-title preview_title" id="previewModalLabel"></h5>
       </div>
       <div class="modal-body">
         <div class="container " id="container">
@@ -205,55 +205,3 @@ $this->breadcrumbs()->set($this->translate('Admins'), $this->url('myresearch-hom
 
 <?php $this->assetManager()->appendScriptLink('cms_static.js'); ?>
 <?=$this->assetManager()->outputInlineScriptString('CMS_STATIC.FileManager.Init();') ?>
-
-<style>
-    .uploadBtn-validation {
-      position: absolute;
-      text-align: left;
-      top: 100%;
-      left: 10px;
-      width: 100%;
-      font-size: 0.875em;
-    }
-    .show-cms-files-block .btn-folder, .show-cms-files-block .btn-file {
-        font-size: 18px;
-    }
-    .delimiter {
-        border-top: 1px solid #ccc;
-        margin: 20px 0;
-    }
-    .smc-card {
-        width: 200px;
-        float: left;
-        margin: 10px;
-        width: 200px;
-        height: 250px;
-    }
-    .smc-card img {
-        max-height: 126px;
-        object-fit: contain;
-        cursor: pointer;
-    }
-    .preview_body img {
-        max-height: 500px;
-        object-fit: contain;
-    }
-    .cursor-pointer {
-        cursor: pointer !important;
-    }
-    .btn-unstyled {
-        background: none;
-        border: none;
-        padding: 0;
-        margin: 0;
-        font: inherit;
-        color: inherit;
-        cursor: pointer;
-    }
-    .tf-theme-btn-current {
-        background: none;
-        color: #000;
-        outline: none;
-        border: 1px solid #ddd;
-    }
-</style>

@@ -465,3 +465,69 @@ div#topic_cloud span {
     }
   }
 }
+/* CMS Preview Modal */
+.uploadBtn-validation {
+  position: absolute;
+  text-align: left;
+  top: 100%;
+  left: 10px;
+  width: 100%;
+  font-size: 0.875em;
+}
+.show-cms-files-block .btn-folder, .show-cms-files-block .btn-file {
+  font-size: 18px;
+}
+.delimiter {
+  border-top: 1px solid #ccc;
+  margin: 20px 0;
+}
+.smc-card {
+  width: 200px;
+  float: left;
+  margin: 10px;
+  width: 200px;
+  height: 250px;
+}
+.smc-card img {
+  max-height: 126px;
+  object-fit: contain;
+  cursor: pointer;
+}
+#previewModal .preview_body img {
+  max-height: 500px;
+  object-fit: contain;
+}
+.cursor-pointer {
+  cursor: pointer !important;
+}
+.btn-unstyled {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+.tf-theme-btn-current {
+  background: none;
+  color: #000;
+  outline: none;
+  border: 1px solid #ddd;
+}
+.note-modal-content {
+  min-width: 1300px;
+}
+.hideInPlugin {
+  display: none;
+}
+.hideInAdmin {
+  display: block !important;
+}
+.mainCMSDocsBlock {
+  overflow: auto;
+  max-height: 500px;
+}
+.note-group-image-url, .note-image-btn {
+  display: none;
+}

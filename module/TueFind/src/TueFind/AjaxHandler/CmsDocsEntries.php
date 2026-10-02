@@ -222,7 +222,9 @@ class CmsDocsEntries extends \VuFind\AjaxHandler\AbstractBase
                 'text/plain',
             ];
 
-            $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'pdf', 'txt'];
+            $allowedExtensions = \TueFind\Utility::CMSuploadAllowedExtensions();
+
+            $allowedExtensions = array_map('strtolower', explode(', ', $allowedExtensions));
 
             // get the original file name without extension
             $originalName = pathinfo($_FILES['file']['name'], PATHINFO_FILENAME); // name without extension
@@ -294,37 +296,27 @@ class CmsDocsEntries extends \VuFind\AjaxHandler\AbstractBase
         if ($action === 'getThemeURLs') {
             $allowedBase = $this->allowedBase;
 
-            $formattedPaths = [];
-            $block = 'AJAXCMSDocsBlock';
-            if (!empty($params->fromQuery('block'))) {
-                $block = $params->fromQuery('block');
-            }
-            $modetype = '';
-            if (!empty($params->fromQuery('modetype'))) {
-                $modetype = $params->fromQuery('modetype');
-            }
+            $block = $params->fromQuery('block', 'AJAXCMSDocsBlock');
+            $modetype = $params->fromQuery('modetype', '');
 
-            if (is_dir($allowedBase)) {
+            if (!empty($allowedBase) && is_dir($allowedBase)) {
                 $folders = [];
+                $dirPath = rtrim($allowedBase, '/') . '/';
 
-                if (!empty($allowedBase) && is_dir($allowedBase)) {
-                    $dirPath = rtrim($allowedBase, '/') . '/';
+                $dirContent = scandir($dirPath) ?: [];
 
-                    $dirContent = scandir($dirPath);
+                foreach ($dirContent as $item) {
+                    if (str_starts_with($item, '.') || str_starts_with($item, '_')) {
+                        continue;
+                    }
 
-                    foreach ($dirContent as $item) {
-                        if (str_starts_with($item, '.') || str_starts_with($item, '_')) {
-                            continue;
-                        }
+                    $itemFullPath = $dirPath . $item;
 
-                        $itemFullPath = $dirPath . $item;
-
-                        if (is_dir($itemFullPath)) {
-                            $folders[] = [
-                                'name' => $item,
-                                'fullPath' => $itemFullPath,
-                            ];
-                        }
+                    if (is_dir($itemFullPath)) {
+                        $folders[] = [
+                            'name' => $item,
+                            'fullPath' => $itemFullPath,
+                        ];
                     }
                 }
 
@@ -338,14 +330,19 @@ class CmsDocsEntries extends \VuFind\AjaxHandler\AbstractBase
                     'serverPath' => $allowedBase,
                 ];
 
-                $htmlContent = $this->viewRenderer->render('adminfrontend/ajax/allcmsfiles', $viewParams);
-
-                return $this->formatResponse($htmlContent);
-            } else {
-                $formattedPaths[] = "<span class='btn btn-danger m-1' style='pointer-events: none;'>No themes directory found</span>";
+                try {
+                    $htmlContent = $this->viewRenderer->render('adminfrontend/ajax/allcmsfiles', $viewParams);
+                    return $this->formatResponse($htmlContent ?: 'No content generated.');
+                } catch (\Throwable $e) {
+                    return $this->formatResponse(
+                        "<span class='btn btn-danger m-1' style='pointer-events: none;'>Template render error: " . htmlspecialchars($e->getMessage()) . '</span>'
+                    );
+                }
             }
 
-            return $this->formatResponse($formattedPaths);
+            // if dont have allowedBase or it is not a directory, return an error message
+            $errorMessage = "<span class='btn btn-danger m-1' style='pointer-events: none;'>No themes directory found</span>";
+            return $this->formatResponse($errorMessage);
         }
 
         if ($action === 'getThemeContent') {
@@ -362,7 +359,9 @@ class CmsDocsEntries extends \VuFind\AjaxHandler\AbstractBase
             $folders = [];
             $files = [];
 
-            $allowedExtensions = ['pdf', 'txt', 'png', 'jpg', 'jpeg', 'gif', 'svg', 'doc', 'docx', 'xls', 'xlsx'];
+            $allowedExtensions = \TueFind\Utility::CMSallFilesAllowedExtensions();
+
+            $allowedExtensions = array_map('strtolower', explode(', ', $allowedExtensions));
 
             if (!empty($fullPath) && is_dir($fullPath)) {
                 $dirPath = rtrim($fullPath, '/') . '/';
@@ -442,45 +441,6 @@ class CmsDocsEntries extends \VuFind\AjaxHandler\AbstractBase
             readfile($fullPath);
             exit;
         }
-
-        // deprecated, use /cms/assets/... endpoint with relative path instead
-        if ($action === 'getFileContent') {
-            $fullPath = $params->fromQuery('full-path');
-
-            if (empty($fullPath) || !file_exists($fullPath)) {
-                return $this->formatResponse('File not found or access denied', 404);
-            }
-
-            $realPath = realpath($fullPath);
-
-            if (!$this->allowedBase || !$realPath || !str_starts_with($realPath, $this->allowedBase . DIRECTORY_SEPARATOR)) {
-                return $this->formatResponse('File not found or access denied', 403);
-            }
-
-            $allowedExtensions = ['pdf', 'txt'];
-            $ext = strtolower(pathinfo($realPath, PATHINFO_EXTENSION));
-
-            if (!in_array($ext, $allowedExtensions, true)) {
-                return $this->formatResponse('Invalid file type', 400);
-            }
-
-            $finfo = finfo_open(FILEINFO_MIME_TYPE);
-            $mimeType = finfo_file($finfo, $realPath);
-            finfo_close($finfo);
-
-            if (ob_get_level()) {
-                ob_end_clean();
-            }
-
-            header('Content-Type: ' . $mimeType);
-            header('Content-Length: ' . filesize($realPath));
-
-            header('Content-Disposition: inline; filename="' . basename($realPath) . '"');
-
-            readfile($realPath);
-            exit;
-        }
-
         return $this->formatResponse($resultReturn);
     }
 }
