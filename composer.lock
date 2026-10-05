@@ -1832,16 +1832,16 @@
         },
         {
             "name": "doctrine/lexer",
-            "version": "3.0.2",
+            "version": "3.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/lexer.git",
-                "reference": "e96fe45e92a54233726014a7cc7340abf29bb14c"
+                "reference": "71d305eaa6480d3d3460c7d053d1da7749fa9cca"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/lexer/zipball/e96fe45e92a54233726014a7cc7340abf29bb14c",
-                "reference": "e96fe45e92a54233726014a7cc7340abf29bb14c",
+                "url": "https://api.github.com/repos/doctrine/lexer/zipball/71d305eaa6480d3d3460c7d053d1da7749fa9cca",
+                "reference": "71d305eaa6480d3d3460c7d053d1da7749fa9cca",
                 "shasum": ""
             },
             "require": {
@@ -1887,7 +1887,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/lexer/issues",
-                "source": "https://github.com/doctrine/lexer/tree/3.0.2"
+                "source": "https://github.com/doctrine/lexer/tree/3.0.3"
             },
             "funding": [
                 {
@@ -1903,7 +1903,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-06-14T20:44:06+00:00"
+            "time": "2026-10-01T06:59:29+00:00"
         },
         {
             "name": "doctrine/orm",
@@ -2419,16 +2419,16 @@
         },
         {
             "name": "filp/whoops",
-            "version": "2.18.5",
+            "version": "2.18.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/filp/whoops.git",
-                "reference": "baec851ad6ae00db8bd0fdd30d208afc1b71c56e"
+                "reference": "7d0a2cde892089bb09372f4366e9b960eb3001a9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/filp/whoops/zipball/baec851ad6ae00db8bd0fdd30d208afc1b71c56e",
-                "reference": "baec851ad6ae00db8bd0fdd30d208afc1b71c56e",
+                "url": "https://api.github.com/repos/filp/whoops/zipball/7d0a2cde892089bb09372f4366e9b960eb3001a9",
+                "reference": "7d0a2cde892089bb09372f4366e9b960eb3001a9",
                 "shasum": ""
             },
             "require": {
@@ -2478,7 +2478,7 @@
             ],
             "support": {
                 "issues": "https://github.com/filp/whoops/issues",
-                "source": "https://github.com/filp/whoops/tree/2.18.5"
+                "source": "https://github.com/filp/whoops/tree/2.18.6"
             },
             "funding": [
                 {
@@ -2486,7 +2486,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-09-18T12:00:00+00:00"
+            "time": "2026-10-03T17:03:57+00:00"
         },
         {
             "name": "firebase/php-jwt",
@@ -12137,12 +12137,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ubtue/vufind-beacon-finder.git",
-                "reference": "4b02cdbdd01c885dd3d51730a46ac3f21c92ea5b"
+                "reference": "0b6fc07801cccc2febdbe5ad1b45ff9fc81dcc78"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ubtue/vufind-beacon-finder/zipball/4b02cdbdd01c885dd3d51730a46ac3f21c92ea5b",
-                "reference": "4b02cdbdd01c885dd3d51730a46ac3f21c92ea5b",
+                "url": "https://api.github.com/repos/ubtue/vufind-beacon-finder/zipball/0b6fc07801cccc2febdbe5ad1b45ff9fc81dcc78",
+                "reference": "0b6fc07801cccc2febdbe5ad1b45ff9fc81dcc78",
                 "shasum": ""
             },
             "require": {
@@ -12177,7 +12177,7 @@
                 "issues": "https://github.com/ubtue/vufind-beacon-finder/issues",
                 "source": "https://github.com/ubtue/vufind-beacon-finder/tree/release-11.0"
             },
-            "time": "2026-09-22T12:11:58+00:00"
+            "time": "2026-10-05T08:51:58+00:00"
         },
         {
             "name": "ubtue/vufind-collapse-expand",
