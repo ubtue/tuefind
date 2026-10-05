@@ -871,4 +871,18 @@ class Authority extends \Laminas\View\Helper\AbstractHelper implements \VuFind\I
 
         return $loadResult;
     }
+
+    // Special variant of recordExists to use e.g. with the "gnd" field
+    public function recordExistsByField(string $field, string $value): ?AuthorityRecordDriver
+    {
+        $query = new Query($field . ':"' . addcslashes($value, '"\\') . '"', null, 'AllFields');
+        $searchCommand = new SearchCommand('SolrAuth', $query, 0, 1, new ParamBag());
+        $result = $this->searchService->invoke($searchCommand)->getResult();
+        $records = $result->getRecords();
+        if (count($records) !== 1) {
+            return null;
+        }
+        $record = $records[0];
+        return $record instanceof AuthorityRecordDriver ? $record : null;
+    }
 }
