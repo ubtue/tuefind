@@ -1,5 +1,32 @@
 <?php $result = $this->BEACONfinder->getByAuthorityId($this->authorityId); ?>
 
+<?php // TueFind: Make sure the external ressources are not already mentioned in the existing biographical ressources ?>
+<?php if ($result && count($result) > 0): ?>
+  <?php
+  $driver = $this->authority()->recordExistsByField('gnd', $this->authorityId);
+  if ($driver) {
+    $BEACONfinderResult = $result;
+    $result = [];
+    $biographicalReferences = $driver->getBiographicalReferences();
+    foreach ($BEACONfinderResult as $BEACONfinderItem) {
+      $domainFound = false;
+      $domain1 = parse_url($BEACONfinderItem->getTargetUri(), PHP_URL_HOST);
+      foreach ($biographicalReferences as $biographicalReference) {
+        $domain2 = parse_url($biographicalReference['url'], PHP_URL_HOST);
+        if ($domain1 == $domain2) {
+          $domainFound = true;
+          break;
+        }
+      }
+
+      if (!$domainFound) {
+        $result[] = $BEACONfinderItem;
+      }
+    }
+  }
+  ?>
+<?php endif; ?>
+
 <?php // TueFind: Special Sorting ?>
 <?php if ($result && count($result) > 0): ?>
   <?php
