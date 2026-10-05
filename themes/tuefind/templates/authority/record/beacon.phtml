@@ -20,4 +20,4 @@ $sortBottomPattern = 'B3Kat|Bayerische Staatsbibliothek|HBZ-Verbundkatalog|HeBIS
 
 <div id="beacon_placeholder"></div>
 <?=$this->assetManager()->outputInlineScriptLink('BEACONfinder.js')?>
-<?=$this->assetManager()->outputInlineScriptString('BEACONFinder.getReferencesByAuthorityId(' . $this->driver->getAuthorityId() . ');')?>
+<?=$this->assetManager()->outputInlineScriptString('BEACONFinder.getReferencesByAuthorityId(' . json_encode($this->driver->getAuthorityId()) . ');')?>
