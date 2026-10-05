@@ -1,4 +1,30 @@
 <?php $result = $this->BEACONfinder->getByAuthorityId($this->authorityId); ?>
+
+<?php // TueFind: Special Sorting ?>
+<?php if ($result && count($result) > 0): ?>
+  <?php
+  if (!is_array($result)) {
+      $result = iterator_to_array($result);
+  }
+  $sortBottomPattern = '"B3Kat|Bayerische Staatsbibliothek|HBZ-Verbundkatalog|HeBIS|Nordrhein-Westfälische Bibliographie|SWB-Verbundkatalog|Universitätsbibliothek Heidelberg"i';
+  usort($result, function (VuFindBEACONFinder\Item $a, VuFindBEACONFinder\Item $b) use ($sortBottomPattern) {
+    $aKey = $a->getNAME();
+    $bKey = $b->getNAME();
+
+    $aMatch = preg_match($sortBottomPattern, $aKey);
+    $bMatch = preg_match($sortBottomPattern, $bKey);
+    if ($aMatch && !$bMatch) {
+        return 1;
+    }
+    if ($bMatch && !$aMatch) {
+        return -1;
+    }
+
+    return strcmp($aKey, $bKey);
+  });
+  ?>
+<?php endif; ?>
+
 <?php if ($result && count($result) > 0): ?>
 <h2><?=$this->transEsc('External Resources')?></h2>
   <ul class="list-group">
