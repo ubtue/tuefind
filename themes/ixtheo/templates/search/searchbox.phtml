@@ -12,8 +12,9 @@
       if (!isset($this->searchClassId)) {
         $config = $this->config()->get('config');
         $this->searchClassId = $config->Site->defaultSearchBackend ?? 'Solr';
-        if (preg_match('"/Authority"i', $this->serverUrl(true)))
+        if (preg_match('"/Authority"i', $this->serverUrl(true))) {
           $this->searchClassId = 'SolrAuth';
+        }
       }
       $options = $this->searchOptions($this->searchClassId);
       $hiddenFilters = $this->searchTabs()->getHiddenFilters($this->searchClassId, true, $this->ignoreHiddenFiltersInRequest ?? false);
@@ -30,7 +31,7 @@
 
     $routeParams = $tuefind->getRouteParams();
 
-    $isNewItemActiveClass = $tuefind->isNewItem($this->searchClassId) ? 'isNewItemActiveClass': '';
+    $isNewItemActiveClass = $tuefind->isNewItem($this->searchClassId) ? 'isNewItemActiveClass' : '';
 
     // Load search actions and settings (if any):
     $keyboardLayouts = $this->searchbox()->getKeyboardLayouts();
@@ -68,8 +69,8 @@
       </p>
       <?=
         $this->context($this)->renderInContext(
-        'search/filters.phtml',
-        [
+            'search/filters.phtml',
+            [
           'params' => $params ?? null,
           'urlQuery' => isset($results) ? $results->getUrlQuery() : null,
           'filterList' => $showFilters ? $filterList : [],
@@ -85,7 +86,7 @@
   <div class="keyboard-box">
     <div class="simple-keyboard"></div>
   </div>
-  <form id="searchForm" class="searchForm navbar-form navbar-left flip tuefind-event-searchForm-on-submit <?=$tuefind->getTueFindSubsystem()."-searchForm";?> <?=$isNewItemActiveClass?>" method="get" action="<?=$this->url($basicSearch)?>" name="searchForm" autocomplete="off">
+  <form id="searchForm" class="searchForm navbar-form navbar-left flip tuefind-event-searchForm-on-submit <?=$tuefind->getTueFindSubsystem() . '-searchForm';?> <?=$isNewItemActiveClass?>" method="get" action="<?=$this->url($basicSearch)?>" name="searchForm" autocomplete="off">
     <?= $this->context($this)->renderInContext('search/searchTabs', ['searchTabs' => $tabConfig['tabs'], 'hiddenFilters' => $hiddenFilters, 'showCounts' => $tabConfig['showCounts']]); ?>
     <div class="searchForm-inputs">
       <?php
@@ -99,7 +100,9 @@
           'aria-label' => $this->translate('search_terms'),
         ];
         if ($placeholder = $this->searchbox()->getPlaceholderText($tabConfig['selected']['id'] ?? $this->searchClassId)) {
-          if(!empty($isNewItemActiveClass)) { $placeholder = 'Search in New items'; }
+          if (!empty($isNewItemActiveClass)) {
+          $placeholder = 'Search in New items';
+          }
           $searchboxAttributes['placeholder'] = $this->translate($placeholder);
         }
         if ($this->searchbox()->autocompleteEnabled($this->searchClassId)) {
@@ -117,7 +120,6 @@
           <button id="searchForm-reset" class="searchForm-reset hidden" type="reset" tabindex="-1" aria-label="<?=$this->transEscAttr('searchform_reset_button')?>"><?=$this->icon('ui-reset-search');?></button>
           <?php if (!empty($keyboardLayouts)): ?>
             <?php
-            $this->headScript()->appendFile('vendor/js.cookie.js');
             $this->headScript()->appendFile('vendor/simple-keyboard/index.js');
             $this->headScript()->appendFile('vendor/simple-keyboard-layouts/index.js');
             $this->headLink()->appendStylesheet('vendor/simple-keyboard/index.css');
@@ -196,7 +198,8 @@
     <?php endif; ?>
     <?php foreach ($hiddenFilters as $key => $filter): ?>
       <?php foreach ($filter as $value): ?>
-        <?php preg_match ( '/\[NOW-(\d+)DAY TO NOW\]-id:LR\*/', $value, $matchesValue ); if (count($filter) == 1 && !empty($matchesValue) && $routeParams['controller'] == 'Search' && $routeParams['action'] == 'NewItem'): ?>
+        <?php preg_match('/\[NOW-(\d+)DAY TO NOW\]-id:LR\*/', $value, $matchesValue);
+        if (count($filter) == 1 && !empty($matchesValue) && $routeParams['controller'] == 'Search' && $routeParams['action'] == 'NewItem'): ?>
           <input type="hidden" name="hiddenFilters[]" value="">
         <?php else: ?>
           <input type="hidden" name="hiddenFilters[]" value="<?=$this->escapeHtmlAttr($key) . ':' . $this->escapeHtmlAttr('"' . $value . '"')?>">

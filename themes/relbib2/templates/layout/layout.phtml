@@ -45,7 +45,7 @@
 
       // Set up OpenSearch link:
       $this->headLink(
-        [
+          [
           'href' => $this->url('search-opensearch') . '?method=describe',
           'type' => 'application/opensearchdescription+xml',
           'title' => $this->transEsc('Library Catalog Search'),
@@ -75,7 +75,6 @@
         // Deal with cart stuff:
         $cart = $this->cart();
         if ($cart->isActive()) {
-          $this->assetManager()->appendScriptLink('vendor/js.cookie.js');
           $this->assetManager()->appendScriptLink('cart.js');
           }
         $this->assetManager()->prependScriptString(
@@ -143,10 +142,10 @@
 
       $this->assetManager()->appendScriptString(implode("\n", $appendScripts));
     ?>
-    <?=$this->cookieConsent()->render()?>
     <?=$this->assetManager()->outputHeaderAssets()?>
   </head>
   <body class="template-dir-<?=$this->templateDir?> template-name-<?=$this->templateName?> <?=$this->layoutClass('offcanvas-row')?><?php if ($this->layout()->rtl): ?> rtl<?php endif; ?>">
+    <?=$this->cookieConsent()->render('bottom')?>
     <header class="hidden-print">
       <div class="container-fluid px-0">
         <?php if (isset($this->layout()->srmessage)): // message for benefit of screen-reader users ?>
@@ -171,12 +170,13 @@
         <div class="col-12 px-0 justify-content-center">
           <div role="main" class="main template-dir-<?=$this->templateDir?> template-name-<?=$this->templateName?>">
             <?php
-              $showContainerBlock = true; $routeParams = $this->tuefind()->getRouteParams();
-              if($routeParams['controller'] == 'index' || ($routeParams['controller'] == "Search" && $routeParams['action'] == "Home")) {
+              $showContainerBlock = true;
+              $routeParams = $this->tuefind()->getRouteParams();
+              if ($routeParams['controller'] == 'index' || ($routeParams['controller'] == 'Search' && $routeParams['action'] == 'Home')) {
                 $showContainerBlock = false;
               }
             ?>
-            <?php if($showContainerBlock === true): ?>
+            <?php if ($showContainerBlock === true): ?>
               <div id="content" class="container">
                 <?=$this->layout()->content ?>
               </div>

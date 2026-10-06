@@ -261,7 +261,6 @@
                                         <a class="dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ><?=$this->transEsc('Virtual Keyboard')?>&nbsp;<?=$this->icon('dropdown-caret') ?></a>
                                         <ul class="dropdown-menu">
                                             <?php
-                                            $this->assetManager()->appendScriptLink('vendor/js.cookie.js');
                                             $this->assetManager()->appendScriptLink('vendor/simple-keyboard/index.js');
                                             $this->assetManager()->appendScriptLink('vendor/simple-keyboard-layouts/index.js');
                                             $this->assetManager()->appendStyleLink('vendor/simple-keyboard/index.css');

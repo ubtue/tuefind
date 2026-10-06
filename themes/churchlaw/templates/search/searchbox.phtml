@@ -116,7 +116,6 @@
           <button id="searchForm-reset" class="searchForm-reset hidden" type="reset" tabindex="-1" aria-label="<?=$this->transEscAttr('searchform_reset_button')?>"><?=$this->icon('ui-reset-search');?></button>
           <?php if (!empty($keyboardLayouts)): ?>
             <?php
-              $this->assetManager()->appendScriptLink('vendor/js.cookie.js');
               $this->assetManager()->appendScriptLink('vendor/simple-keyboard/index.js');
               $this->assetManager()->appendScriptLink('vendor/simple-keyboard-layouts/index.js');
               $this->assetManager()->appendStyleLink('vendor/simple-keyboard/index.css');
