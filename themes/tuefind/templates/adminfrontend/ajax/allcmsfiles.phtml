@@ -148,18 +148,20 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
 
-      <div class="modal-header">
-        <h5 class="modal-title" id="confirmDeleteLabel">Confirm deletion</h5>
-        <i class="fas fa-times btn-close" type="button" data-bs-dismiss="modal"></i>
-      </div>
+    <div class="modal-header">
+        <h5 class="modal-title mr-auto me-auto" id="confirmDeleteLabel">Confirm deletion</h5>
+        <button type="button" class="btn-unstyled ms-auto" data-bs-dismiss="modal" aria-label="Close">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
 
       <div class="modal-body">
         Are you sure you want to delete <span class="sureDeleteName text-danger"></span>?
       </div>
       <div class="file-path d-none"></div>
-      <div class="ajax-response d-none"></div>
+      <div class="ajax-response text-center d-none"></div>
       <div class="file_or_image d-none"></div>
-
+      
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
           Cancel
@@ -230,6 +232,15 @@
     }
     .cursor-pointer {
         cursor: pointer !important;
+    }
+    .btn-unstyled {
+        background: none;
+        border: none;
+        padding: 0;
+        margin: 0;
+        font: inherit;
+        color: inherit;
+        cursor: pointer;
     }
 </style>
 

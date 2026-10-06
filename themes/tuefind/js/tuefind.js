@@ -280,142 +280,6 @@ var TueFind = {
         });
     },
 
-    GetBeaconReferencesFromFindbuch: function() {
-        $('.tf-findbuch-references').each(function() {
-            var container = this;
-            var proxyUrl = this.getAttribute('data-url');
-            var headline = this.getAttribute('data-headline');
-            var sortBottomPattern = this.getAttribute('data-sort-bottom-pattern');
-            var sortBottomRegex = new RegExp(sortBottomPattern);
-            var filterUniquePattern = this.getAttribute('data-filter-unique-pattern');
-            var filterUniqueRegex = new RegExp(filterUniquePattern);
-            var filterLabelPattern = this.getAttribute('data-filter-label-pattern');
-            var filterLabelRegex = new RegExp(filterLabelPattern);
-
-            $.ajax({
-                type: 'GET',
-                url: proxyUrl,
-                success: function(json, textStatus, request) {
-                    if (json[1] !== undefined && json[1].length > 0) {
-
-                        // Build different array structure (prepare sort)
-                        var references = [];
-                        let countRegex = new RegExp(/\((\d+)\)$/);
-                        for (let i=0; i<json[1].length; ++i) {
-                            let label = json[1][i];
-                            let groupLabel = label.replace(countRegex, '').trim();
-
-                            let description = json[2][i];
-                            let url = json[3][i];
-
-                            let matchCount = label.match(countRegex);
-                            let count = 1;
-                            if (matchCount != null)
-                                count = parseInt(matchCount[1]);
-
-                            let sortPriority = 1;
-                            if (label.match(sortBottomRegex))
-                                sortPriority = 2;
-
-                            if (filterLabelPattern == '' || !label.match(filterLabelRegex))
-                                references.push({ label: label, groupLabel: groupLabel, description: description, url: url, count: count, sortPriority: sortPriority });
-                        }
-
-                        // sort by priority, then alphabetically
-                        references.sort(function(a, b) {
-                            if (a.sortPriority < b.sortPriority)
-                                return -1;
-                            if (a.sortPriority > b.sortPriority)
-                                return 1;
-
-                            return a.label.localeCompare(b.label);
-                        });
-
-                        // merge links with same label, if exact 1 url contains the correct gnd number
-                        if (filterUniquePattern != '') {
-                            let currentGroup = [];
-                            let currentGroupStartIndex = 0;
-                            var abortCondition = references.length;
-                            for (let i=0; i<abortCondition;++i) {
-                                let currentReference = references[i];
-                                let nextReference = references[i+1];
-                                currentGroup.push(currentReference);
-
-                                // If we are at the end of the group
-                                if (nextReference == undefined || nextReference.groupLabel != currentReference.groupLabel) {
-                                    // Detect how many entries match the GND number
-                                    var matchingIndexes = [];
-                                    currentGroup.forEach(function (groupedReference, index) {
-                                        if (groupedReference.url.match(filterUniqueRegex)) {
-                                            matchingIndexes.push(index);
-                                        }
-                                    });
-
-                                    // If we have exact 1 regex match & more than 1 entry, remove the invalid ones
-                                    if (currentGroup.length > 1 && matchingIndexes.length == 1) {
-                                        var matchingIndex = matchingIndexes[0];
-                                        var removeOffset = 0;
-                                        currentGroup.forEach(function (groupedReference, index) {
-                                            if (index != matchingIndex) {
-                                                let indexToRemove = index + currentGroupStartIndex - removeOffset;
-                                                references.splice(indexToRemove, 1);
-                                                --abortCondition;
-                                                --i;
-                                                ++removeOffset;
-                                            }
-                                        });
-                                    }
-
-                                    // Reset cached group
-                                    currentGroup = [];
-                                    currentGroupStartIndex = i+1;
-                                }
-                            }
-                        }
-
-                        // render HTML
-                        let html = '<h2>' + headline + '</h2>';
-                        html += '<ul class="list-group">';
-                        var previousSortPriority = 1;
-                        references.forEach(function(reference) {
-                            if (reference.sortPriority != previousSortPriority) {
-                                html += '</ul><ul class="list-group">';
-                            }
-                            previousSortPriority = reference.sortPriority;
-                            html += '<li class="list-group-item tf-beacon-reference"><a class="tf-beacon-reference-link" href="' + reference.url + '" title="' + TueFind.EscapeHTML(reference.description) + '" target="_blank" property="sameAs">' + TueFind.EscapeHTML(reference.label) + '</a></li>';
-                        });
-                        html += '</ul>';
-                        $(container).append(html);
-
-                        // check if urls are valid (only if special URL parameter is set)
-                        // Note that CORS needs to be disabled in your browser for this to work.
-                        // See also:
-                        // - https://github.com/ubtue/tuefind/issues/1924
-                        // - https://medium.com/swlh/avoiding-cors-errors-on-localhost-in-2020-5a656ed8cefa
-                        const urlParams = new URLSearchParams(window.location.search);
-                        if (urlParams.get('checkUrls') == 'true') {
-                            $('.tf-beacon-reference').each(function() {
-                                $(this).css('backgroundColor', 'yellow');
-                                var urlToCheck = $(this).children('.tf-beacon-reference-link').attr('href');
-                                var targetBackground = $(this);
-                                $.ajax({
-                                    type: 'GET',
-                                    url: urlToCheck,
-                                    complete: function(jqXHR, textStatus) {
-                                        let color = 'red';
-                                        if (textStatus == 'success')
-                                            color = 'green';
-                                        targetBackground.css('backgroundColor', color);
-                                    }
-                                });
-                            });
-                        }
-                    }
-                }
-            });
-        });
-    },
-
     GetImagesFromWikidata: function() {
         $('.tf-wikidata-image').each(function() {
             var placeholder = this;
@@ -921,6 +785,12 @@ $(document).ready(function () {
     // Register onClick event to jump to + expand collapsed help sections
     $('.tf-btn-go-to-collapsed-block').on('click', function() {
         TueFind.GoToCollapsedBlock($(this).data('anchor'), $(this).data('block'));
+    });
+
+    $(document).on('hide.bs.modal', '.modal', function () {
+        if (this.contains(document.activeElement) || document.activeElement === this) {
+            document.activeElement.blur();
+        }
     });
 
 });

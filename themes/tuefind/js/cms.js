@@ -1,9 +1,8 @@
 var CMS = {
-
     Git: {
         Init: function() {
-            $('#git-pull-btn').on('click', (e) => CMS.Git.HandlePull(e.currentTarget));
-            $('#git-push-btn').on('click', (e) => CMS.Git.HandlePush(e.currentTarget));
+            $('#git-pull-btn').on('click', (e) => CMS_STATIC.Git.HandlePull(e.currentTarget));
+            $('#git-push-btn').on('click', (e) => CMS_STATIC.Git.HandlePush(e.currentTarget));
         },
 
         HandlePull: async function() {
@@ -41,6 +40,22 @@ var CMS = {
 
             CMS.Editor.InitPluginForPlaceholders();
 
+            var CustomPictureButton = function (context) {
+            var ui = $.summernote.ui;
+
+            // Create button
+            var button = ui.button({
+                contents: '<i class="fa-solid fa-paperclip"></i>', // icon for the button
+                tooltip: 'Upload Files', // tooltip text
+                click: function () {
+                // Call the image dialog
+                context.invoke('imageDialog.show');
+                }
+            });
+
+                return button.render();
+            };
+
             // Summernote API Documentation:
             // https://summernote.org/deep-dive/
             $('.editor').summernote({
@@ -53,7 +68,7 @@ var CMS = {
                     ['color', ['color']],
                     ['para', ['ul', 'ol', 'paragraph']],
                     ['table', ['table']],
-                    ['insert', ['link', 'picture']],
+                    ['insert', ['link', 'picture', 'myPicture']],
 
                     // Note: Placeholders plugin is still experimental, works but will lead to hanging window during preview
                     //['insert', ['link', 'picture', 'tuefindPlaceholders']],
@@ -65,6 +80,9 @@ var CMS = {
                   onBlur: function() {
                     lastRange = $('.editor').summernote('createRange');
                   }
+                },
+                  buttons: {
+                    myPicture: CustomPictureButton
                 }
             });
 
@@ -85,14 +103,49 @@ var CMS = {
                 }
             });
 
-            $('.cms_preview').click(function(thisEvent){
-                let activeTab =  $(thisEvent.currentTarget).parent().prev().find('.tab-content .tab-pane.active');
-                let pagetitle = activeTab.find('.page_title').val();
-                let pageContent = activeTab.find('.editor').summernote('code');
-                $('#exampleModal .preview_title').html(pagetitle);
-                CMS.Editor.TransformPageContent(pageContent).then(transformedContent => {
-                    $('#exampleModal .preview_body').html(transformedContent);
-                });
+            $('.cms_content_preview').off('click').on('click', function(thisEvent) {
+
+                console.log('Preview button clicked, preparing to transform content...');
+
+                thisEvent.preventDefault();
+                
+                var $btn = $(thisEvent.currentTarget);
+                
+                // protect against multiple clicks while the request is in progress
+                if ($btn.data('loading')) {
+                    return;
+                }
+                
+                var $activeTab = $btn.parent().prev().find('.tab-content .tab-pane.active');
+                var pageTitle = $activeTab.find('.page_title').val() || '';
+                var pageContent = $activeTab.find('.editor').summernote('code');
+
+                // 1. replace the modal content with a loading spinner and set the title
+                $('#cmsUpdatePreviewModal .preview_title').text(pageTitle);
+                $('#cmsUpdatePreviewModal .preview_body').html('<div class="text-center p-4"><i class="fa fa-spinner fa-spin fa-2x"></i> <p>Loading preview...</p></div>');
+                
+                // 2. open the modal immediately to show the loading state
+                $('#cmsUpdatePreviewModal').modal('show');
+                
+                // block the button to prevent multiple clicks while the transformation is in progress
+                $btn.data('loading', true).prop('disabled', true);
+
+                // 3. execute the transformation
+                CMS.Editor.TransformPageContent(pageContent)
+                    .then(function(transformedContent) {
+                        // insert the transformed content into the modal body
+                        $('#cmsUpdatePreviewModal .preview_body').html(transformedContent);
+                    })
+                    .catch(function(err) {
+                        console.error('Preview transformation error:', err);
+                        $('#cmsUpdatePreviewModal .preview_body').html(pageContent);
+                    })
+                    .finally(function() {
+                        // reblock the button after the transformation is complete
+                        $btn.data('loading', false).prop('disabled', false);
+                    });
+
+                console.log('Preview button clicked: title=' + pageTitle);
             });
 
              $(document).on('click', '.copyImageURL', function(thisEvent) {
@@ -136,6 +189,7 @@ var CMS = {
                 $('.AJAXCMSDocsBlock').remove();
                 $('<div class="AJAXCMSDocsBlock">Loading...</div>').insertAfter(noteForm);
                 CMS.GetAJAXDocs('AJAXCMSDocsBlock','plugin');
+                //console.log('Note button clicked: ' + noteType);
 
             });
 
@@ -288,198 +342,54 @@ var CMS = {
             });
         },
 
-        // Function for calling AjaxHandler to replace palceholders (display texts, images, ...)
-        TransformPageContent: function(pageContent) {
-            // Use POST instead of GET due URL size limitation
-            const postData = { content: pageContent };
-            const url = VuFind.path + '/AJAX/JSON?method=CmsPageContentTransformer';
+        _transformerXhr: null,
+        _transformerTimer: null,
 
-            return fetch(url, {
-                method: 'POST',
-                headers: {'Accept': 'application/json'},
-                body: new URLSearchParams(postData)
-            })
-            .then(response => response.text())
-            .then((data) => {
-                const jsonObject = JSON.parse(data);
-                return jsonObject.data.content;
+        TransformPageContent: function(pageContent) {
+            var self = this;
+
+            return new Promise(function(resolve) {
+                // clear any existing timer to avoid multiple requests
+                clearTimeout(self._transformerTimer);
+
+                // if there's an ongoing AJAX request, abort it to avoid race conditions
+                if (self._transformerXhr && self._transformerXhr.readyState !== 4) {
+                    self._transformerXhr.abort();
+                }
+
+                // wait for 300ms before sending the request to avoid sending too many requests in quick succession
+                self._transformerTimer = setTimeout(function() {
+                    self._transformerXhr = $.ajax({
+                        url: VuFind.path + '/AJAX/JSON?method=CmsPageContentTransformer',
+                        type: 'POST',
+                        data: { content: pageContent },
+                        dataType: 'json'
+                    })
+                    .done(function(response) {
+                        if (response && response.data && response.data.content !== undefined) {
+                            resolve(response.data.content);
+                        } else {
+                            resolve(pageContent);
+                        }
+                    })
+                    .fail(function(xhr, status) {
+                        if (status !== 'abort') {
+                            console.warn('TransformPageContent error or timeout:', status);
+                        }
+                        resolve(pageContent);
+                    });
+                }, 300);
             });
         }
     },
 
     FileManager: {
         Init: function() {
-            $('.modalCreateFolderBtn').off('click').on('click', function() {
-                let THIS = $(this);
-                let parentModal = THIS.closest('.modal-content');
-                let folderNameInput = parentModal.find('.folderNameInput').val();
-                let currentBreadcrumbs = parentModal.find('.createFolderPATH').text().trim();
-                let serverPATH = $('#createFolderBtn').data('server-path').trim();
-                let cleanPath = serverPATH.replace(/\/$/, "");
-                let parentPath = cleanPath + currentBreadcrumbs;
-                console.log([folderNameInput,currentBreadcrumbs,serverPATH]);
 
-                $.ajax({
-                    url: VuFind.path + '/AJAX/JSON',
-                    method: 'GET',
-                    data: {
-                        method: 'CmsDocs',
-                        action: 'createFolder',
-                        'parentPath': parentPath,
-                        'folderName': folderNameInput
-                    },
-                    dataType: 'json',
-                    success: function(response) {
-                        $('#createFolderModal').modal('hide');
-
-                        let message = response.data && response.data.data ? response.data.data : 'Folder not created';
-                        $('.ajax-info').removeClass('d-none').find('.alert').text(message);
-
-                        setTimeout(() => {
-                            $('.ajax-info').addClass('d-none');
-                        }, 2000);
-
-                       $('.cms-breadcrumbs .btn-secondary.tf-theme-btn').last().click(); //reload
-
-                    },
-                    error: function(xhr, ajaxOptions, thrownError) {
-                        if (window.console && window.console.log) {
-                            console.log("Status: " + xhr.status + ", Error: " + thrownError);
-                        }
-                    }
-                }); //end AJAX
-            });
-
-            $('#createFolderModal').on('show.bs.modal', function (event) {
-                let currentBreadcrumbs = $('.cms-breadcrumbs .cms-actions-panel-right');
-                let oneBread = [];
-                currentBreadcrumbs.find('.btn').each(function() {
-                    let btnText = $(this).text().trim();
-                    if (btnText.length > 0 && btnText != "..") {
-                        oneBread.push(btnText);
-                    }
-                });
-
-                let fullPath = (oneBread.length > 0) ? "/" + oneBread.join('/') + "/" : "/";
-
-                $('.createFolderPATH').text(fullPath);
-            });
-
-            $(document).on('click', '.cms_preview, .card-img-top', function(thisEvent) {
-                thisEvent.preventDefault();
-                thisEvent.stopPropagation();
-
-                let card = $(thisEvent.currentTarget).closest('.card');
-                let image = card.find('.card-img-top');
-
-                let cardHeaderTitle = card.find('.card-header').attr('title') || card.find('.card-header').text().trim();
-
-                $('#exampleModal .preview_title').html(cardHeaderTitle);
-
-                if (image.length) {
-                    let clonedImg = image.clone().removeClass('card-img-top img-fluid');
-                    $('#exampleModal .preview_body').html(clonedImg);
-                } else {
-                    let iconClone = card.find('.card-body').html();
-                    $('#exampleModal .preview_body').html(iconClone);
+            $(document).on('hide.bs.modal', '.modal', function () {
+                if (this.contains(document.activeElement) || document.activeElement === this) {
+                    document.activeElement.blur();
                 }
-            });
-
-            $(document).on('click', '.delete-btn', function(thisEvent) {
-                thisEvent.preventDefault();
-
-                let btn = $(this);
-                let cardParent = btn.closest('.smc-card');
-
-                $('.smc-card').removeClass('pre-delete');
-                cardParent.addClass('pre-delete');
-
-                let fileName = cardParent.find('.card-header').text().trim();
-                let fullPath = btn.attr('data-full-path');
-                let isImage = '';
-                if (cardParent.find('.card-img-top').length > 0) {
-                    isImage = 'image';
-                }
-                $('#confirmDeleteModal .sureDeleteName').text(fileName);
-                $('#confirmDeleteModal .file-path').text(fullPath);
-                $('#confirmDeleteModal .file_or_image').text(isImage);
-            });
-
-            $('#confirmDeleteBtn').off('click').on('click', function() {
-                let THIS = $(this);
-                let parentModal = THIS.closest('.modal-content');
-                let filePATH = parentModal.find('.file-path').text().trim();
-                let fileORImage = parentModal.find('.file_or_image').text().trim();
-
-                $.ajax({
-                    url: VuFind.path + '/AJAX/JSON',
-                    method: 'GET',
-                    data: {
-                        method: 'CmsDocs',
-                        action: (fileORImage.length > 0) ? 'deleteImage' : 'deleteFile',
-                        'full-path': filePATH
-                    },
-                    dataType: 'json',
-                    success: function(response) {
-                        $('#confirmDeleteModal').modal('hide');
-
-                        let message = response.data && response.data.data ? response.data.data : 'File removed success';
-                        $('.ajax-info').removeClass('d-none').find('.alert').text(message);
-
-                        setTimeout(() => {
-                            $('.ajax-info').addClass('d-none');
-                        }, 2000);
-
-                       $('.cms-breadcrumbs .btn-secondary.tf-theme-btn').last().click(); //reload
-
-                    },
-                    error: function(xhr, ajaxOptions, thrownError) {
-                        if (window.console && window.console.log) {
-                            console.log("Status: " + xhr.status + ", Error: " + thrownError);
-                        }
-                    }
-                });
-            });
-
-            $(document).off('click', '.uploadBtn').on('click', '.uploadBtn', function (e) {
-                e.preventDefault();
-
-                let fileInput = $('.fileUploadInput')[0];
-                if (!fileInput || !fileInput.files.length) {
-                    alert('Select file');
-                    return;
-                }
-                let formData = new FormData();
-                formData.append('file', fileInput.files[0]);
-
-                let theme = $('.cms-breadcrumbs .btn-secondary.tf-theme-btn').last().data('theme');
-
-                $.ajax({
-                    url: VuFind.path + '/AJAX/JSON?method=CmsDocs&action=uploadFiles&theme='+theme,
-                    method: 'POST',
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    success: function (response) {
-                        if (response.data && response.data.status === 'success') {
-                            $('.ajax-info').removeClass('d-none').find('.alert').text(response.data.message);
-                            setTimeout(() => {
-                                $('.ajax-info').addClass('d-none');
-                            }, 2000);
-                            $('.fileUploadInput').val('');
-
-                            $('.cms-breadcrumbs .btn-secondary.tf-theme-btn').last().trigger('click');
-                        } else {
-                            let errMsg = response.data && response.data.message ? response.data.message : 'error upload';
-                            console.log(errMsg);
-                        }
-                    },
-                    error: function(xhr, ajaxOptions, thrownError) {
-                        if (window.console && window.console.log) {
-                            console.log("Status: " + xhr.status + ", Error: " + thrownError);
-                        }
-                    }
-                });
             });
 
             $(document).on('click', '.tf-theme-btn', function() {
@@ -502,8 +412,6 @@ var CMS = {
                     },
                     success: function(response) {
 
-                        //console.log('Server response:', response);
-
                         if (response && response.status === 'OK' && response.data) {
 
                             uploadBlock.html(response.data);
@@ -523,10 +431,11 @@ var CMS = {
         },
     },
 
-    GetAJAXDocs: function(ajaxCmsDocsBlockClass='',modeType='') {
+    GetAJAXDocs: function(ajaxCmsDocsBlockClass='', modeType='') {
         const className = ajaxCmsDocsBlockClass.trim() || 'AJAXCMSDocsBlock';
-        const $block = $(`.${className}`);
+        const $block =$(`.${className}`);
         $block.html('<div class="tf_themes_block">Loading...</div>');
+
         $.ajax({
             url: VuFind.path + '/AJAX/JSON',
             type: 'GET',
@@ -539,8 +448,10 @@ var CMS = {
             dataType: 'json'
         })
         .done(response => {
-            if (response && response.data && response.data.length > 0) {
-                $block.html(response.data);
+            if (response && response.data) {
+                // if response.data is an array, join it into a single string; otherwise, use it as is
+                const html = Array.isArray(response.data) ? response.data.join('') : response.data;
+                $block.html(html);
             } else {
                 $block.html('Themes not found.');
             }
@@ -605,7 +516,7 @@ var CMS = {
                                     <img src="${file[i]['url']}" class="card-img-top" alt="${file[i]['name']}">
                                 </div>
                                 <div class="card-footer text-muted row gx-0">
-                                    <a href="#" class="text-center d-block text-default cms_preview col-6" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                    <a href="#" class="text-center d-block text-default cms_preview col-6" data-bs-toggle="modal" data-bs-target="#previewModal">
                                         <i class="fas fa-eye"></i>
                                     </a>
                                     <a href="${file[i]['url']}" class="text-center d-block text-danger col-6 delete-btn" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">
