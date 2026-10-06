@@ -46,11 +46,11 @@
       // Set up OpenSearch link:
       $this->headLink(
           [
-          'href' => $this->url('search-opensearch') . '?method=describe',
-          'type' => 'application/opensearchdescription+xml',
-          'title' => $this->transEsc('Library Catalog Search'),
-          'rel' => 'search',
-        ]
+            'href' => $this->url('search-opensearch') . '?method=describe',
+            'type' => 'application/opensearchdescription+xml',
+            'title' => $this->transEsc('Library Catalog Search'),
+            'rel' => 'search',
+          ]
       );
       // We need to generate the icons early, because they may add some stylesheets;
       // if we render them after calling AssetManager's outputHeaderAssets method,
@@ -165,6 +165,9 @@
               <?=$this->layout()->content ?>
             <?php else: ?>
               <div id="content" class="container">
+                <?php if (!($this->layout()->disableDefaultNotices ?? false)): ?>
+                  <?=$this->notices()->renderNoticesForPosition('default')?>
+                <?php endif; ?>
                 <?=$this->layout()->content ?>
               </div>
             <?php endif; ?>
