@@ -13,7 +13,7 @@ use function array_key_exists;
 use function count;
 
 /**
- * View Helper for TueFind, containing functions related to authority data + schema.org
+ * View Helper for TueFind, containing functions related to authority data + schema.org.
  */
 class Authority extends \Laminas\View\Helper\AbstractHelper implements \VuFind\I18n\Translator\TranslatorAwareInterface
 {
@@ -94,7 +94,7 @@ class Authority extends \Laminas\View\Helper\AbstractHelper implements \VuFind\I
     }
 
     /**
-     * Get authority birth information for display
+     * Get authority birth information for display.
      *
      * @return string
      */
@@ -129,7 +129,7 @@ class Authority extends \Laminas\View\Helper\AbstractHelper implements \VuFind\I
     }
 
     /**
-     * Get rendered html for datetime property (for view + schema.org)
+     * Get rendered html for datetime property (for view + schema.org).
      *
      * schema.org timestamps must be provided as a ISO8601 timestamp,
      * so if the timestamp differs, we create an additional element
@@ -152,7 +152,7 @@ class Authority extends \Laminas\View\Helper\AbstractHelper implements \VuFind\I
     }
 
     /**
-     * Get authority death information for display
+     * Get authority death information for display.
      *
      * @return string
      */
@@ -533,7 +533,7 @@ class Authority extends \Laminas\View\Helper\AbstractHelper implements \VuFind\I
     /**
      * Call this number with a variable number of arguments,
      * each containing either an author name/heading or an authority record driver.
-     * ("..." == PHP splat operator)
+     * ("..." == PHP splat operator).
      */
     public function getRelatedJointQueryParams(...$authors): string
     {
@@ -621,7 +621,7 @@ class Authority extends \Laminas\View\Helper\AbstractHelper implements \VuFind\I
      * Moved here because it needs to be the same in several locations, e.g.:
      * - authority page
      * - biblio result-list
-     * - biblio core (data-authors)
+     * - biblio core (data-authors).
      */
     public function getTitlesByUrl(AuthorityRecordDriver &$driver): string
     {
@@ -870,5 +870,19 @@ class Authority extends \Laminas\View\Helper\AbstractHelper implements \VuFind\I
         }
 
         return $loadResult;
+    }
+
+    // Special variant of recordExists to use e.g. with the "gnd" field
+    public function recordExistsByField(string $field, string $value): ?AuthorityRecordDriver
+    {
+        $query = new Query($field . ':"' . addcslashes($value, '"\\') . '"', null, 'AllFields');
+        $searchCommand = new SearchCommand('SolrAuth', $query, 0, 1, new ParamBag());
+        $result = $this->searchService->invoke($searchCommand)->getResult();
+        $records = $result->getRecords();
+        if (count($records) !== 1) {
+            return null;
+        }
+        $record = $records[0];
+        return $record instanceof AuthorityRecordDriver ? $record : null;
     }
 }

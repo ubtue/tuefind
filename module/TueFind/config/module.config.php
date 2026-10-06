@@ -42,16 +42,6 @@ $config = [
                     ],
                 ],
             ],
-            'findbuchproxy-load' => [
-                'type'    => 'Laminas\Router\Http\Literal',
-                'options' => [
-                    'route'    => '/FindbuchProxy/Load',
-                    'defaults' => [
-                        'controller' => 'FindbuchProxy',
-                        'action'     => 'Load',
-                    ],
-                ],
-            ],
             'fulltextsnippetproxy-load' => [
                 'type' => 'Laminas\Router\Http\Literal',
                 'options' => [
@@ -297,7 +287,10 @@ $config = [
             'adminfrontend-cmspagesdocs' => [
                 'type'    => 'Laminas\Router\Http\Segment',
                 'options' => [
-                    'route'    => '/AdminFrontend/CMSPagesDocs',
+                    'route'    => '/AdminFrontend/CMSPagesDocs[/:path]',
+                    'constraints' => [
+                        'path' => '[a-zA-Z0-9_\.\-\/]+',
+                    ],
                     'defaults' => [
                         'controller' => 'AdminFrontend',
                         'action'     => 'CMSPagesDocs',
@@ -346,7 +339,6 @@ $config = [
             'TueFind\Controller\CartController' => 'VuFind\Controller\CartControllerFactory',
             'TueFind\Controller\ContentController' => 'VuFind\Controller\AbstractBaseFactory',
             'TueFind\Controller\FeedbackController' => 'VuFind\Controller\AbstractBaseFactory',
-            'TueFind\Controller\FindbuchProxyController' => 'TueFind\Controller\AbstractProxyControllerFactory',
             'TueFind\Controller\FulltextSnippetProxyController' => '\TueFind\Controller\FulltextSnippetProxyControllerFactory',
             'TueFind\Controller\MyResearchController' => 'VuFind\Controller\MyResearchControllerFactory',
             'TueFind\Controller\PDAProxyController' => 'VuFind\Controller\AbstractBaseFactory',
@@ -378,8 +370,6 @@ $config = [
             'content' => 'TueFind\Controller\ContentController',
             'Feedback' => 'TueFind\Controller\FeedbackController',
             'feedback' => 'TueFind\Controller\FeedbackController',
-            'FindbuchProxy' => 'TueFind\Controller\FindbuchProxyController',
-            'findbuchproxy' => 'TueFind\Controller\FindbuchProxyController',
             'fulltextsnippetproxy' => 'TueFind\Controller\FulltextSnippetProxyController',
             'MyResearch' => 'TueFind\Controller\MyResearchController',
             'myresearch' => 'TueFind\Controller\MyResearchController',
@@ -416,6 +406,7 @@ $config = [
             'TueFind\Cookie\CookieManager' => 'VuFind\Cookie\CookieManagerFactory',
             'TueFind\Export' => 'VuFind\ExportFactory',
             'TueFind\Form\Form' => 'TueFind\Form\FormFactory',
+            'TueFind\Http\CachingDownloader' => 'VuFind\Http\CachingDownloaderFactory',
             'TueFind\Sitemap\Generator' => 'VuFind\Sitemap\GeneratorFactory',
             'TueFind\Mailer\Mailer' => 'TueFind\Mailer\MailerFactory',
             'TueFind\Record\Loader' => 'VuFind\Record\LoaderFactory',
@@ -441,6 +432,7 @@ $config = [
             'VuFind\CookieManager' => 'TueFind\Cookie\CookieManager',
             'VuFind\Export' => 'TueFind\Export',
             'VuFind\Form\Form' => 'TueFind\Form\Form',
+            'VuFind\Http\CachingDownloader' => 'TueFind\Http\CachingDownloader',
             'VuFind\Mailer\Mailer' => 'TueFind\Mailer\Mailer',
             'VuFind\Record\Loader' => 'TueFind\Record\Loader',
             'VuFind\RecordLoader' => 'TueFind\Record\Loader',

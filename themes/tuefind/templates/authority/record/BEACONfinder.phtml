@@ -1,0 +1,66 @@
+<?php $result = $this->BEACONfinder->getByAuthorityId($this->authorityId); ?>
+
+<?php // TueFind: Make sure the external ressources are not already mentioned in the existing biographical ressources ?>
+<?php if ($result && count($result) > 0): ?>
+  <?php
+  $driver = $this->authority()->recordExistsByField('gnd', $this->authorityId);
+  if ($driver) {
+    $BEACONfinderResult = $result;
+    $result = [];
+    $biographicalReferences = $driver->getBiographicalReferences();
+    foreach ($BEACONfinderResult as $BEACONfinderItem) {
+      $domainFound = false;
+      $domain1 = parse_url($BEACONfinderItem->getTargetUri(), PHP_URL_HOST);
+      foreach ($biographicalReferences as $biographicalReference) {
+        $domain2 = parse_url($biographicalReference['url'], PHP_URL_HOST);
+        if ($domain1 == $domain2) {
+          $domainFound = true;
+          break;
+        }
+      }
+
+      if (!$domainFound) {
+        $result[] = $BEACONfinderItem;
+      }
+    }
+  }
+  ?>
+<?php endif; ?>
+
+<?php // TueFind: Special Sorting ?>
+<?php if ($result && count($result) > 0): ?>
+  <?php
+  if (!is_array($result)) {
+      $result = iterator_to_array($result);
+  }
+  $sortBottomPattern = '"B3Kat|Bayerische Staatsbibliothek|HBZ-Verbundkatalog|HeBIS|Nordrhein-Westfälische Bibliographie|SWB-Verbundkatalog|Universitätsbibliothek Heidelberg"i';
+  usort($result, function (VuFindBEACONFinder\Item $a, VuFindBEACONFinder\Item $b) use ($sortBottomPattern) {
+    $aKey = $a->getNAME();
+    $bKey = $b->getNAME();
+
+    $aMatch = preg_match($sortBottomPattern, $aKey);
+    $bMatch = preg_match($sortBottomPattern, $bKey);
+    if ($aMatch && !$bMatch) {
+        return 1;
+    }
+    if ($bMatch && !$aMatch) {
+        return -1;
+    }
+
+    return strcmp($aKey, $bKey);
+  });
+  ?>
+<?php endif; ?>
+
+<?php if ($result && count($result) > 0): ?>
+<h2><?=$this->transEsc('External Resources')?></h2>
+  <ul class="list-group">
+    <?php foreach ($result as $item): ?>
+      <?php if (!empty($item->getNAME()) && !empty($item->getTargetUri())): ?>
+        <li class="list-group-item tf-beacon-reference">
+          <a class="tf-beacon-reference-link" href="<?=$item->getTargetUri()?>" target="_blank" property="sameAs"><?=htmlspecialchars($item->getNAME())?></a>
+        </li>
+      <?php endif; ?>
+    <?php endforeach; ?>
+  </ul>
+<?php endif; ?>
