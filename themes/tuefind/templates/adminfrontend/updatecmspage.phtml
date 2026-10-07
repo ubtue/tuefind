@@ -1,4 +1,6 @@
 <?php
+  $isAdmin = $this->tuefind()->isAdmin();
+
   $this->breadcrumbs()->set($this->translate('Admins'), $this->url('adminfrontend-cmspages'))
       ->add($this->translate('Update CMS Page'), active: true);
 ?>
@@ -26,7 +28,7 @@
               </div>
               <br />
 
-             <div class="mb-3">
+              <div class="mb-3">
                 <nav>
                   <div class="nav nav-tabs" id="nav-tab" role="tablist">
                     <?php $iLang = 0;
@@ -52,7 +54,24 @@
                   <?php $iLang2++; endforeach; ?>
                 </div>
               </div>
-
+              <!-- custom js, css blocks -->
+              <p class="d-inline-flex gap-1">
+                <a class="btn btn-outline-primary" data-bs-toggle="collapse" href="#collapseCustom" role="button" aria-expanded="false" aria-controls="collapseCustom">
+                  Custom JS/CSS
+                </a>
+              </p>
+              <div class="collapse" id="collapseCustom">
+                <div class="card card-body">
+                  <div class="mb-3">
+                    <label class="form-label">Custom JS</label>
+                    <textarea name="custom_js" class="form-control" <?php if (!$isAdmin): ?>disabled<?php endif; ?>><?=$this->cmsPage->getCustomJs()?></textarea>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">Custom CSS</label>
+                    <textarea name="custom_css" class="form-control" <?php if (!$isAdmin): ?>disabled<?php endif; ?>><?=$this->cmsPage->getCustomCss()?></textarea>
+                  </div>
+                </div>
+              </div>
               <!-- Update -->
               <div class="">
                 <button type="submit" class="btn btn-primary cms_update" name="action" value="update"><?=$this->transEsc('Update')?></button>

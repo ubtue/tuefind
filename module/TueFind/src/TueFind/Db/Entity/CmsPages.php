@@ -5,6 +5,7 @@ namespace TueFind\Db\Entity;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
@@ -18,6 +19,12 @@ class CmsPages implements CmsPagesEntityInterface
 
     #[ORM\Column(name: 'page_system_id', type: 'string', length: 255, nullable: false)]
     protected string $pageSystemId;
+
+    #[ORM\Column(name: 'custom_js', type: Types::TEXT, nullable: true)]
+    protected ?string $customJs = null;
+
+    #[ORM\Column(name: 'custom_css', type: Types::TEXT, nullable: true)]
+    protected ?string $customCss = null;
 
     #[ORM\Column(name: 'created', type: 'datetime', length: 255, nullable: false, options: ['default' => 'CURRENT_TIMESTAMP'])]
     protected DateTime $createDate;
@@ -76,10 +83,32 @@ class CmsPages implements CmsPagesEntityInterface
         return $this->pageSystemId ?? null;
     }
 
-    public function setPageSystemId(string $pageSystemId): string
+    public function setPageSystemId(string $pageSystemId): static
     {
         $this->pageSystemId = $pageSystemId;
-        return $pageSystemId;
+        return $this;
+    }
+
+    public function getCustomJs(): ?string
+    {
+        return $this->customJs ?? null;
+    }
+
+    public function setCustomJs(?string $customJs): static
+    {
+        $this->customJs = $customJs;
+        return $this;
+    }
+
+    public function getCustomCss(): ?string
+    {
+        return $this->customCss ?? null;
+    }
+
+    public function setCustomCss(?string $customCss): static
+    {
+        $this->customCss = $customCss;
+        return $this;
     }
 
     public function getCreateDate(): ?DateTime
@@ -109,7 +138,7 @@ class CmsPages implements CmsPagesEntityInterface
         return $this->cmsPagesTranslations;
     }
 
-    public function getTranslation($language): ?CmsPagesTranslation
+    public function getTranslation(string $language): ?CmsPagesTranslation
     {
         foreach ($this->getTranslations() as $translation) {
             if ($translation->getLanguage() == $language) {
