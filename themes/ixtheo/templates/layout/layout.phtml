@@ -51,7 +51,7 @@
 
       // Set up OpenSearch link:
       $this->headLink(
-        [
+          [
           'href' => $this->url('search-opensearch') . '?method=describe',
           'type' => 'application/opensearchdescription+xml',
           'title' => $this->transEsc('Library Catalog Search'),
@@ -81,7 +81,6 @@
         // Deal with cart stuff:
         $cart = $this->cart();
         if ($cart->isActive()) {
-          $this->assetManager()->appendScriptLink('vendor/js.cookie.js');
           $this->assetManager()->appendScriptLink('cart.js');
           }
         $this->assetManager()->prependScriptString(
@@ -117,15 +116,15 @@
       $theme = json_encode($themeConfig['themeName']);
 
       $appendScripts[] = <<<JS
-          VuFind.path = '{$root}';
-          VuFind.defaultSearchBackend = '{$dsb}';
-          VuFind.config.add({$jsConfig});
-          VuFind.addTranslations({$translations});
-          VuFind.addIcons({$icons});
-          VuFind.setCspNonce('{$cspNonce}');
-          VuFind.setCurrentSearchId($searchId);
-          VuFind.setTheme($theme);
-JS;
+                    VuFind.path = '{$root}';
+                    VuFind.defaultSearchBackend = '{$dsb}';
+                    VuFind.config.add({$jsConfig});
+                    VuFind.addTranslations({$translations});
+                    VuFind.addIcons({$icons});
+                    VuFind.setCspNonce('{$cspNonce}');
+                    VuFind.setCurrentSearchId($searchId);
+                    VuFind.setTheme($theme);
+          JS;
 
       if ($domain = $this->cookieManager()->getDomain()) {
         $appendScripts[] = 'VuFind.cookie.setDomain(' . json_encode($domain) . ');';
@@ -149,10 +148,10 @@ JS;
 
       $this->assetManager()->appendScriptString(implode("\n", $appendScripts));
     ?>
-    <?=$this->cookieConsent()->render()?>
     <?=$this->assetManager()->outputHeaderAssets()?>
   </head>
   <body class="template-dir-<?=$this->templateDir?> template-name-<?=$this->templateName?> <?=$this->layoutClass('offcanvas-row')?><?php if ($this->layout()->rtl): ?> rtl<?php endif; ?>">
+    <?=$this->cookieConsent()->render('bottom')?>
     <div class="background<?=$backgroundSmallClass;?>">
       <div class="background-stripe">
         &nbsp;
@@ -169,11 +168,14 @@ JS;
     <?=$this->breadcrumbs()->render()?>
     <div role="main" class="main">
       <div id="content" class="container">
+        <?php if (!($this->layout()->disableDefaultNotices ?? false)): ?>
+          <?=$this->notices()->renderNoticesForPosition('default')?>
+        <?php endif; ?>
         <?=$this->layout()->content ?>
       </div>
     </div>
     <div style="position: fixed; bottom: 0; right: 0;padding: 8px 0px">
-      <a href="/Feedback/home" data-lightbox style="padding: 10px 20px; border:1px solid darkgray; border-radius: 2px;"><?=$this->transEsc("Feedback");?></a>
+      <a href="/Feedback/home" data-lightbox style="padding: 10px 20px; border:1px solid darkgray; border-radius: 2px;"><?=$this->transEsc('Feedback');?></a>
     </div>
     <?=$this->render('footer.phtml')?>
     <!-- MODAL IN CASE WE NEED ONE -->

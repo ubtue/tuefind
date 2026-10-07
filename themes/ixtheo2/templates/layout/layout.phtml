@@ -75,7 +75,6 @@
         // Deal with cart stuff:
         $cart = $this->cart();
         if ($cart->isActive()) {
-          $this->assetManager()->appendScriptLink('vendor/js.cookie.js');
           $this->assetManager()->appendScriptLink('cart.js');
           }
         $this->assetManager()->prependScriptString(
@@ -143,11 +142,11 @@
 
       $this->assetManager()->appendScriptString(implode("\n", $appendScripts));
     ?>
-    <?=$this->cookieConsent()->render()?>
     <?=$this->assetManager()->outputHeaderAssets()?>
   </head>
   <body class="template-ix2 template-dir-<?=$this->templateDir?> template-name-<?=$this->templateName?> <?=$this->layoutClass('offcanvas-row')?><?php if ($this->layout()->rtl): ?> rtl<?php endif; ?>">
     <?=$this->render('header.phtml');?>
+    <?=$this->cookieConsent()->render('bottom')?>
     <?php $routeParams = $this->tuefind()->getRouteParams();
     $searchResults = '';
     $indexPage = '';
@@ -173,6 +172,9 @@
                   ?>
                   <?php if ($showContainerBlock === true): ?>
                     <div id="content" class="container">
+                      <?php if (!($this->layout()->disableDefaultNotices ?? false)): ?>
+                        <?=$this->notices()->renderNoticesForPosition('default')?>
+                      <?php endif; ?>
                       <?=$this->layout()->content ?>
                     </div>
                   <?php else: ?>
