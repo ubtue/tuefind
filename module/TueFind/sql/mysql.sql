@@ -125,3 +125,7 @@ CREATE INDEX tuefind_rss_feed_send_emails_index ON user (tuefind_rss_feed_send_e
 ALTER TABLE user ADD tuefind_rss_feed_last_notification TIMESTAMP DEFAULT NOW();
 
 ALTER TABLE user ADD tuefind_rights SET('admin', 'user_authorities', 'cms') DEFAULT NULL;
+
+ALTER TABLE `tuefind_cms_pages`
+  ADD COLUMN `custom_js` TEXT DEFAULT NULL AFTER `page_system_id`,
+  ADD COLUMN `custom_css` TEXT DEFAULT NULL AFTER `custom_js`;

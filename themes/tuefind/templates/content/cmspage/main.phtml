@@ -1,9 +1,7 @@
 <h2><?=$this->escapeHtml($this->cmsPagesTranslation->getTitle())?></h2>
 <?=$this->tuefind()->transformCmsPageContent($this->cmsPagesTranslation)?>
 <?php if (!empty($this->cmsPage->getCustomCss())): ?>
-    <style>
-        <?=$this->cmsPage->getCustomCss()?>
-    </style>
+    <?php $this->assetManager()->appendStyleString($this->cmsPage->getCustomCss()) ?>
 <?php endif; ?>
 
 <?php if (!empty($this->cmsPage->getCustomJs())) {
