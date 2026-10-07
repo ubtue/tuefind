@@ -70,7 +70,7 @@
     }
     $filterDetails = $this->searchbox()->getFilterDetails($filterList, $checkboxFilters);
     $retainFilters = $this->retainFilters ?? $options->getRetainFilterSetting();
-    $showFilters = $filterDetails && ($results || $options->getRetainFilterSetting());
+    $showFilters = $filterDetails && ($results && !$fromSearchMemory || $retainFilters);
     if ($helper->availableToShowSearchForm()) :
 ?>
 <?php $tabConfig = $this->searchTabs()->getTabConfig($this->searchClassId, $this->lookfor, $this->searchIndex, $this->searchType, $hiddenFilters); ?>

@@ -25,6 +25,7 @@
     } else {
       if (preg_match('"/Authority"i', $this->serverUrl(true))) {
         $this->searchClassId = 'SolrAuth';
+      }
       $hiddenFilters = $this->searchTabs()->getHiddenFilters($this->searchClassId, true, $this->ignoreHiddenFiltersInRequest ?? false);
       $lastSort = $this->searchMemory()->getLastSort($this->searchClassId);
       $lastLimit = $this->searchMemory()->getLastLimit($this->searchClassId);
