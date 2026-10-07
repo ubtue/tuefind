@@ -107,9 +107,6 @@
                     <?php if (!empty($tabs)): ?></div><?php endif; ?>
                 </div>
                 <?php else: ?>
-                <div class="keyboard-box">
-                  <div class="simple-keyboard"></div>
-                </div>
                 <form id="searchForm" class="searchForm ix2-searchForm tuefind-event-search Form-on-submit" method="get" action="<?=$this->url($basicSearch)?>" name="searchForm" autocomplete="off">
                     <?= $this->context($this)->renderInContext('search/searchTabs', ['searchTabs' => $tabConfig['tabs'], 'hiddenFilters' => $hiddenFilters, 'showCounts' => $tabConfig['showCounts']]); ?>
                     <div class="searchForm-inputs row g-0">
@@ -267,7 +264,7 @@
                                 <!-- IxTheo 2: Advanced search -->
                                 <?php if ($advSearch != ''):?>
                                     <li class="nav-item ">
-                                        <a href="<?=$this->url($advSearch) . ((isset($this->searchId) && $this->searchId) ? '?edit=' . $this->escapeHtmlAttr($this->searchId) : $this->hiddenFilterParams)?>" class="" role="button" rel="nofollow">
+                                        <a href="<?=$this->url($advSearch, [], ['query' => ['sid' => $this->searchId]])?>" class="" role="button" rel="nofollow">
                                             <?= $this->transEsc('Advanced Search') ?>
                                         </a>
                                     </li>
