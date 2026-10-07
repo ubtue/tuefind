@@ -91,8 +91,7 @@
       -->
     </deletionPolicy>
 
-
-
+   <!-- IxTheo only: Optimize merge policy for better performance -->
    <mergePolicyFactory
       class="org.apache.solr.index.TieredMergePolicyFactory">
 
@@ -112,7 +111,6 @@
     <double name="deletesPctAllowed">25</double>
     <double name="forceMergeDeletesPctAllowed">30</double>
   </mergePolicyFactory>
-
 
   </indexConfig>
 
