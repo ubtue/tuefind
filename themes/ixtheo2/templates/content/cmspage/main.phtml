@@ -1,2 +1,17 @@
 <h1 class="cw-h1"><?=$this->escapeHtml($this->cmsPagesTranslation->getTitle())?></h1>
 <?=$this->tuefind()->transformCmsPageContent($this->cmsPagesTranslation)?>
+<?php if (!empty($this->cmsPage->getCustomCss())): ?>
+    <style>
+        <?=$this->cmsPage->getCustomCss()?>
+    </style>
+<?php endif; ?>
+
+<?php if (!empty($this->cmsPage->getCustomJs())) {
+    $customJs = $this->cmsPage->getCustomJs();
+    $jsSnippet = <<<JS
+            document.addEventListener('DOMContentLoaded', () => {
+                {$customJs}
+            });
+        JS;
+    echo $this->assetManager()->outputInlineScriptString($jsSnippet);
+} ?>

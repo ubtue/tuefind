@@ -41,17 +41,17 @@ var CMS = {
             CMS.Editor.InitPluginForPlaceholders();
 
             var CustomPictureButton = function (context) {
-            var ui = $.summernote.ui;
+                var ui = $.summernote.ui;
 
-            // Create button
-            var button = ui.button({
-                contents: '<i class="fa-solid fa-paperclip"></i>', // icon for the button
-                tooltip: 'Upload Files', // tooltip text
-                click: function () {
-                // Call the image dialog
-                context.invoke('imageDialog.show');
-                }
-            });
+                // Create button
+                var button = ui.button({
+                    contents: '<i class="fa-solid fa-paperclip"></i>', // icon for the button
+                    tooltip: 'Upload Files', // tooltip text
+                    click: function () {
+                        // Call the image dialog
+                        context.invoke('imageDialog.show');
+                    }
+                });
 
                 return button.render();
             };
@@ -68,7 +68,7 @@ var CMS = {
                     ['color', ['color']],
                     ['para', ['ul', 'ol', 'paragraph']],
                     ['table', ['table']],
-                    ['insert', ['link', 'picture', 'myPicture']],
+                    ['insert', ['link', 'myPicture']],
 
                     // Note: Placeholders plugin is still experimental, works but will lead to hanging window during preview
                     //['insert', ['link', 'picture', 'tuefindPlaceholders']],
@@ -109,14 +109,14 @@ var CMS = {
 
                 thisEvent.preventDefault();
                 
-                var $btn = $(thisEvent.currentTarget);
+                var $btn = $(this);
                 
                 // protect against multiple clicks while the request is in progress
                 if ($btn.data('loading')) {
                     return;
                 }
                 
-                var $activeTab = $btn.parent().prev().find('.tab-content .tab-pane.active');
+                var $activeTab = $btn.parents('.justify-content-center').find('.tab-content .tab-pane.active');
                 var pageTitle = $activeTab.find('.page_title').val() || '';
                 var pageContent = $activeTab.find('.editor').summernote('code');
 
@@ -345,38 +345,52 @@ var CMS = {
         _transformerXhr: null,
         _transformerTimer: null,
 
-        TransformPageContent: function(pageContent) {
+        TransformPageContent: function (pageContent) {
             var self = this;
 
-            return new Promise(function(resolve) {
-                // clear any existing timer to avoid multiple requests
-                clearTimeout(self._transformerTimer);
+            // cancel any previous transformation request if it's still pending
+            if (self._transformerCancel) {
+                self._transformerCancel();
+            }
 
-                // if there's an ongoing AJAX request, abort it to avoid race conditions
-                if (self._transformerXhr && self._transformerXhr.readyState !== 4) {
-                    self._transformerXhr.abort();
-                }
+            return new Promise(function (resolve, reject) {
+                var timer = null;
+                var xhr = null;
+                var cancelled = false;
 
-                // wait for 300ms before sending the request to avoid sending too many requests in quick succession
-                self._transformerTimer = setTimeout(function() {
-                    self._transformerXhr = $.ajax({
+                self._transformerCancel = function () {
+                    cancelled = true;
+                    clearTimeout(timer);
+                    if (xhr && xhr.readyState !== 4) {
+                        xhr.abort();
+                    }
+                    reject({ aborted: true }); // reject the promise with an aborted flag
+                };
+
+                // debounce 300 мs
+                timer = setTimeout(function () {
+                    xhr = $.ajax({
                         url: VuFind.path + '/AJAX/JSON?method=CmsPageContentTransformer',
                         type: 'POST',
                         data: { content: pageContent },
                         dataType: 'json'
                     })
-                    .done(function(response) {
+                    .done(function (response) {
+                        if (cancelled) {
+                            return;
+                        }
                         if (response && response.data && response.data.content !== undefined) {
                             resolve(response.data.content);
                         } else {
                             resolve(pageContent);
                         }
                     })
-                    .fail(function(xhr, status) {
-                        if (status !== 'abort') {
-                            console.warn('TransformPageContent error or timeout:', status);
+                    .fail(function (jqXHR, status) {
+                        if (cancelled) {
+                            return;
                         }
-                        resolve(pageContent);
+                        console.warn('TransformPageContent error or timeout:', status);
+                        resolve(pageContent); // fallback to original content
                     });
                 }, 300);
             });

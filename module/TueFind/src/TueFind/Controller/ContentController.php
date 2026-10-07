@@ -3,6 +3,7 @@
 namespace TueFind\Controller;
 
 use Laminas\View\Model\ViewModel;
+use TueFind\Db\Entity\CmsPagesEntityInterface;
 use TueFind\Db\Entity\CmsPagesTranslationEntityInterface;
 use VuFind\I18n\Locale\LocaleSettings;
 
@@ -71,7 +72,7 @@ class ContentController extends \VuFind\Controller\ContentController
             $data = $pageLocator->determineTemplateAndRenderer($pathPrefix, $page);
             $data['cmspage'] = $cmsPage;
             $data['renderer'] = 'CmsPage';
-            return $this->getViewForCmsPage($data['page'], $data['relativePath'], $data['path'], $cmsPageTranslation);
+            return $this->getViewForCmsPage($cmsPage, $data['relativePath'], $data['path'], $cmsPageTranslation);
         }
 
         $method = isset($data) ? 'getViewFor' . ucwords($data['renderer']) : false;
@@ -86,7 +87,7 @@ class ContentController extends \VuFind\Controller\ContentController
             : $this->notFoundAction();
     }
 
-    protected function getViewForCmsPage(string $page, string $relPath, string $path, CmsPagesTranslationEntityInterface $cmsPagesTranslation): ViewModel
+    protected function getViewForCmsPage(CmsPagesEntityInterface $cmsPage, string $relPath, string $path, CmsPagesTranslationEntityInterface $cmsPagesTranslation): ViewModel
     {
         // Convert relative path to a relative page name:
         $relPage = $relPath;
@@ -102,8 +103,10 @@ class ContentController extends \VuFind\Controller\ContentController
         }
         $view = $this->createViewModel([
             'page' => $relPage,
+            'cmsPage' => $cmsPage,
             'cmsPagesTranslation' => $cmsPagesTranslation,
         ]);
+
         $view->setTemplate('content/cmspage/main');
         return $view;
     }

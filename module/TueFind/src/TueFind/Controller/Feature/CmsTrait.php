@@ -46,6 +46,8 @@ trait CmsTrait
             $cmsPageId = $this->getDbService(\TueFind\Db\Service\CmsPagesServiceInterface::class)->add(
                 $subsystem->getId(),
                 $this->params()->fromPost('page_system_id'),
+                $this->params()->fromPost('custom_js'),
+                $this->params()->fromPost('custom_css'),
                 new \DateTime(),
                 new \DateTime()
             );
@@ -91,8 +93,15 @@ trait CmsTrait
         $cmsPageId = $this->params()->fromRoute('cms_page_id');
         $pageContents = $this->params()->fromPost('page_content');
         $pageTitles = $this->params()->fromPost('page_title');
+        $customJs = $this->params()->fromPost('custom_js');
+        $customCss = $this->params()->fromPost('custom_css');
 
         $cmsPage = $this->getDbService(\TueFind\Db\Service\CmsPagesServiceInterface::class)->getByID($cmsPageId);
+
+        if ($customJs === null && $customCss === null) {
+            $customJs = $cmsPage->getCustomJs();
+            $customCss = $cmsPage->getCustomCss();
+        }
 
         if ($action == 'update') {
             $iLang = 0;
@@ -111,7 +120,12 @@ trait CmsTrait
                 } elseif ($existingTranslation != null) {
                     if ($pageTitle != '') {
                         // update
-                        $this->getDbService(\TueFind\Db\Service\CmsPagesServiceInterface::class)->update($cmsPageId, new \DateTime());
+                        $this->getDbService(\TueFind\Db\Service\CmsPagesServiceInterface::class)->update(
+                            $cmsPageId,
+                            $customJs,
+                            $customCss,
+                            new \DateTime()
+                        );
                         $existingTranslation->setTitle($pageTitle);
                         $existingTranslation->setContent($pageContent);
                         $this->getDbService(\TueFind\Db\Service\CmsPagesTranslationServiceInterface::class)->save($existingTranslation);

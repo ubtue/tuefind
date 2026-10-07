@@ -44,7 +44,7 @@ class CmsPagesService extends AbstractDbService implements CmsPagesServiceInterf
         return $result;
     }
 
-    public function add(int $subSystemId, string $pageSystemId, DateTime $createdDate, DateTime $changeDate): int
+    public function add(int $subSystemId, string $pageSystemId, string $customJs, string $customCss, DateTime $createdDate, DateTime $changeDate): int
     {
         $cmsPage = new CmsPages();
 
@@ -55,16 +55,17 @@ class CmsPagesService extends AbstractDbService implements CmsPagesServiceInterf
 
         $cmsPage->setSubSystem($subSystem);
         $cmsPage->setPageSystemId($pageSystemId);
+        $cmsPage->setCustomJs($customJs);
+        $cmsPage->setCustomCss($customCss);
         $cmsPage->setCreateDate($createdDate);
         $cmsPage->setChangeDate($changeDate);
-
         $this->entityManager->persist($cmsPage);
         $this->entityManager->flush();
 
         return $cmsPage->getId();
     }
 
-    public function update(int $cmsPageId, DateTime $dateModified): CmsPages
+    public function update(int $cmsPageId, string $customJs, string $customCss, DateTime $dateModified): CmsPages
     {
 
         // Load page (adapt to your table/service)
@@ -72,6 +73,8 @@ class CmsPagesService extends AbstractDbService implements CmsPagesServiceInterf
         if (!$page) {
             throw new \RuntimeException("CMS page not found: $cmsPageId");
         }
+        $page->setCustomJs($customJs);
+        $page->setCustomCss($customCss);
         $page->setChangeDate($dateModified);
         $this->entityManager->persist($page);
         $this->entityManager->flush();
