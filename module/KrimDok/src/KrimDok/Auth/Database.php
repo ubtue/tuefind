@@ -2,9 +2,10 @@
 
 namespace KrimDok\Auth;
 
-class Database extends \VuFind\Auth\Database
-{
+use function boolval;
 
+class Database extends \TueFind\Auth\Database
+{
     protected function collectParamsFromRequest($request)
     {
         $params = parent::collectParamsFromRequest($request);
