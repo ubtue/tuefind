@@ -40,9 +40,6 @@ class User extends \VuFind\Db\Entity\User implements UserEntityInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: CmsPages::class)]
     protected Collection $cmsPages;
 
-    #[ORM\ManyToMany(mappedBy: 'adminUser', targetEntity: CmsPages::class)]
-    protected Collection $adminCmsPages;
-
     public function __construct()
     {
         parent::__construct();
