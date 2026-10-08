@@ -54,12 +54,8 @@
 <!-- TueFind: Add Admin section -->
 <?php
 // check whether admin section must be rendered
-$showAdminSection = false;
-foreach ($this->items as $item) {
-    if (isset($item['section']) && $item['section'] == 'admin') {
-        $showAdminSection = true;
-    }
-}
+$adminItems = $this->menu['Admin']['MenuItems'] ?? [];
+$showAdminSection = !empty($adminItems);
 
 ?>
 <?php if ($showAdminSection): ?>
