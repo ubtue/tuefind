@@ -3,7 +3,7 @@
 $this->headTitle($this->translate('Subscriptions'));
 
 // Set up breadcrumbs:
-$this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') . '">' . $this->transEsc('Your Account') . '</a></li> <li class="active">' . $this->transEsc('Subscriptions') . '</li>';
+$this->layout()->breadcrumbs = '<li><a href="' . $this->url('myresearch-home') . '">' . $this->transEsc('Your Account') . '</a></li> <li class="active">' . $this->transEsc('Subscriptions') . '</li>';
 
 // Grab list object from search results (if applicable):
 $list = isset($this->results) ? $this->results->getListObject() : null;
@@ -15,7 +15,7 @@ $user = $this->auth()->getUserObject();
 ?>
 
 <div class="<?=$this->layoutClass('mainbody')?>">
-    <h2><?=$this->transEsc("Subscriptions")?></h2>
+    <h2><?=$this->transEsc('Subscriptions')?></h2>
 
     <?=$this->flashmessages()?>
 
@@ -26,17 +26,20 @@ $user = $this->auth()->getUserObject();
             </div>
         </div>
         <form class="form-inline" method="post" name="bulkActionForm" action="<?=$this->url('cart-myresearchbulk')?>" data-lightbox data-lightbox-onsubmit="bulkFormHandler">
-            <?=$this->context($this)->renderInContext('myresearch/subscriptions-bulk-action-buttons.phtml', array('idPrefix' => '', 'list' => isset($list) ? $list : null, 'account' => $this->account))?>
-            <?php foreach ($this->results->getResultsSorted() as $i=>$current): ?>
+            <?=$this->context($this)->renderInContext('myresearch/subscriptions-bulk-action-buttons.phtml', ['idPrefix' => '', 'list' => $list ?? null, 'account' => $this->account])?>
+            <?php foreach ($this->results->getResultsSorted() as $i => $current): ?>
                 <?=$this->record($current)->getSubscriptionListEntry($list, $user)?>
             <?php endforeach; ?>
         </form>
-        <?=$this->paginationControl($this->results->getPaginator(), 'Sliding', 'Helpers/pagination.phtml', array('results' => $this->results))?>
+        <?=$this->paginationControl($this->results->getPaginator(), 'Sliding', 'Helpers/pagination.phtml', ['results' => $this->results])?>
     <?php else: ?>
         <p><?=$this->transEsc('You do not have any alerts yet')?></p>
     <?php endif; ?>
 </div>
 
 <div class="<?=$this->layoutClass('sidebar')?>" id="myresearch-sidebar" role="navigation" aria-label="<?=$this->transEsc('account_menu_label')?>">
-  <?=$this->accountMenu()->render('subscriptions')?>
+  <?=$this->section(
+      'AccountMenu',
+      template: 'myresearch/menu.phtml'
+  )->render(['active' => 'subscriptions'])?>
 </div>
