@@ -59,8 +59,15 @@ $showAdminSection = !empty($adminItems);
 
 ?>
 <?php if ($showAdminSection): ?>
-  <h3 id="<?=$this->idPrefix ?? ''?>acc-menu-acc-header"><?=$this->transEsc('Admin')?></h3>
-  <nav class="myresearch-menu" aria-labelledby="<?=$this->idPrefix ?? ''?>acc-menu-acc-header">
+  <?php
+    $adminHeaderId = ($this->idPrefix ?? '')
+        . ($this->menu['Admin']['id'] ?? 'acc-menu-admin-header');
+  ?>
+
+  <h3 id="<?=$this->escapeHtmlAttr($adminHeaderId)?>">
+    <?=$this->transEsc('Admin')?>
+  </h3>
+  <nav class="myresearch-menu" aria-labelledby="<?=$this->escapeHtmlAttr($adminHeaderId)?>">
     <ul class="account-menu">
       <?php foreach ($adminItems as $item): ?>
         <?=$this->render('myresearch/menu-item.phtml', [
