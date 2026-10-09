@@ -62,10 +62,12 @@ $showAdminSection = !empty($adminItems);
   <h3 id="<?=$this->idPrefix ?? ''?>acc-menu-acc-header"><?=$this->transEsc('Admin')?></h3>
   <nav class="myresearch-menu" aria-labelledby="<?=$this->idPrefix ?? ''?>acc-menu-acc-header">
     <ul class="account-menu">
-      <?php foreach ($this->items as $item): ?>
-        <?php if (isset($item['section']) && $item['section'] == 'admin'): ?>
-          <?=$this->render('myresearch/menu-item.phtml', ['active' => $this->active, ...$item])?>
-        <?php endif; ?>
+      <?php foreach ($adminItems as $item): ?>
+        <?=$this->render('myresearch/menu-item.phtml', [
+            'sectionPlugin' => $this->{\VuFind\View\Helper\Root\Section::SECTION_PLUGIN_KEY},
+            'active' => $this->active,
+            ...$item,
+        ])?>
       <?php endforeach; ?>
     </ul>
   </nav>
