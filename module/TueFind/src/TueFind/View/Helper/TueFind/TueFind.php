@@ -2,6 +2,9 @@
 
 namespace TueFind\View\Helper\TueFind;
 
+use DOMDocument;
+use DOMXPath;
+
 use Psr\Container\ContainerInterface;
 use TueFind\Db\Entity\UserEntityInterface;
 
@@ -9,7 +12,12 @@ use function array_slice;
 use function count;
 use function in_array;
 use function intval;
+
 use function is_array;
+use function libxml_clear_errors;
+
+use function libxml_use_internal_errors;
+use function mb_convert_encoding;
 use function strlen;
 
 /**
@@ -983,5 +991,80 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper implements
     {
         $user = $this->getAUTHUserObject();
         return $user ? in_array('admin', $user->getTueFindRights()) : false;
+    }
+
+    public function generateNewsLinks(int $limit): string
+    {
+        // 1. Detect the current language, default to 'de' if not available
+        $translator = $this->getTranslator();
+        $language = $translator ? substr($translator->getLocale(), 0, 2) : 'de';
+
+        $subSystem = $this->getTueFindSubsystem();
+        $defaultLanguage = $this->getConfig('tuefind')->General->default_language ?? 'en';
+        $page = 'news_cms';
+
+        // 2. Get the CMS page from the database
+        $cmsPage = $this->getDbService(\TueFind\Db\Service\CmsPagesServiceInterface::class)
+            ->getByPageSystemId($page, $subSystem);
+
+        $cmsPageTranslation = null;
+        if ($cmsPage !== null) {
+            $cmsPageTranslation = $cmsPage->getTranslation($language)
+                ?? $cmsPage->getTranslation($defaultLanguage);
+        }
+
+        if ($cmsPageTranslation === null || empty($cmsPageTranslation->getContent())) {
+            return '';
+        }
+
+        // 3. Parse HTML and generate dynamic news list
+        $newsItems = $this->parseHTMLInCMSContent($cmsPageTranslation->getContent());
+
+        $urlHelper = $this->getView()->plugin('url');
+        $newsUrl = $urlHelper('content-page', ['page' => 'news']);
+
+        $newsLinks = '';
+        $count = 0;
+        foreach ($newsItems as $item) {
+            if ($count >= $limit) {
+                break;
+            }
+            $id = htmlspecialchars($item['id'], ENT_QUOTES, 'UTF-8');
+            $title = htmlspecialchars($item['title'], ENT_QUOTES, 'UTF-8');
+
+            $newsLinks .= '<li><a href="' . $newsUrl . '#' . $id . '"><b>' . $title . '</b></a></li>';
+            $count++;
+        }
+
+        return $newsLinks;
+    }
+
+    protected function parseHTMLInCMSContent(string $content): array
+    {
+        if (trim($content) === '') {
+            return [];
+        }
+
+        $dom = new DOMDocument();
+
+        libxml_use_internal_errors(true);
+        // Load HTML with correct encoding for proper parsing of umlauts
+        $dom->loadHTML(mb_convert_encoding($content, 'HTML-ENTITIES', 'UTF-8'));
+        libxml_clear_errors();
+
+        $xpath = new DOMXPath($dom);
+
+        // Search for all <h1> elements inside <li> with an id attribute
+        $nodes = $xpath->query('//li/h1[@id]');
+
+        $newsList = [];
+        foreach ($nodes as $node) {
+            $newsList[] = [
+                'id'    => $node->getAttribute('id'),
+                'title' => trim($node->textContent),
+            ];
+        }
+
+        return $newsList;
     }
 }
