@@ -77,11 +77,14 @@ var CMS = {
                     // Note: 'fullscreen' removed due to severe display problems
                 ],
                 callbacks: {
-                  onBlur: function() {
-                    lastRange = $('.editor').summernote('createRange');
-                  }
+                    onKeyup: function(e) {
+                        lastRange = $('.editor').summernote('createRange');
+                    },
+                    onMouseup: function(e) {
+                        lastRange = $('.editor').summernote('createRange');
+                    }
                 },
-                  buttons: {
+                buttons: {
                     myPicture: CustomPictureButton
                 }
             });
