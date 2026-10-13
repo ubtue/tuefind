@@ -4,7 +4,6 @@ namespace TueFind\View\Helper\TueFind;
 
 use DOMDocument;
 use DOMXPath;
-
 use Psr\Container\ContainerInterface;
 use TueFind\Db\Entity\UserEntityInterface;
 
@@ -12,10 +11,8 @@ use function array_slice;
 use function count;
 use function in_array;
 use function intval;
-
 use function is_array;
 use function libxml_clear_errors;
-
 use function libxml_use_internal_errors;
 use function mb_convert_encoding;
 use function strlen;
@@ -1001,7 +998,7 @@ class TueFind extends \Laminas\View\Helper\AbstractHelper implements
 
         $subSystem = $this->getTueFindSubsystem();
         $defaultLanguage = $this->getConfig('tuefind')->General->default_language ?? 'en';
-        $page = 'news_cms';
+        $page = 'news';
 
         // 2. Get the CMS page from the database
         $cmsPage = $this->getDbService(\TueFind\Db\Service\CmsPagesServiceInterface::class)
