@@ -328,6 +328,16 @@ $config = [
                     ],
                 ],
             ],
+            'adminfrontend-gitcommit' => [
+                'type' => \Laminas\Router\Http\Literal::class,
+                'options' => [
+                    'route'    => '/AdminFrontend/GitCommit', // URL in the browser
+                    'defaults' => [
+                        'controller' => 'AdminFrontend',
+                        'action'     => 'gitCommit',          // Action in the controller
+                    ],
+                ],
+            ],
         ],
     ],
     'controllers' => [

@@ -17,9 +17,12 @@ trait CmsTrait
 
         $subsystem = $this->getDbService(\TueFind\Db\Service\SubsystemsServiceInterface::class)->getByName(\IxTheo\Utility::getUserTypeFromUsedEnvironment());
         $cmsPages = $subsystem->getCmsPages();
+        $cmsSync = $this->serviceLocator->get(\TueFind\Service\CmsSync::class);
+        $currentBranch = $cmsSync->getBranch();
 
         $allCMS = ['cmsPages' => $cmsPages,
-                  'cmsSync' => $this->serviceLocator->get(\TueFind\Service\CmsSync::class),
+                  'cmsSync' => $cmsSync,
+                  'currentBranch' => $currentBranch ?? null,
                   'user' => $this->getUser(),
         ];
 

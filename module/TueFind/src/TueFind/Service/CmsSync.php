@@ -127,7 +127,9 @@ class CmsSync
                     $dateModified = isset($pageArray['changed'])
                         ? new \DateTime($pageArray['changed'])
                         : new \DateTime();
-                    $this->cmsPagesService->update($pageInDb->getId(), $dateModified);
+                    $customJs = !empty($pageInDb->getCustomJs()) ? $pageInDb->getCustomJs() : '';
+                    $customCss = !empty($pageInDb->getCustomCss()) ? $pageInDb->getCustomCss() : '';
+                    $this->cmsPagesService->update($pageInDb->getId(), $customJs, $customCss, $dateModified);
 
                     if ($jsonTranslations === $currentTranslations) {
                         continue;
@@ -241,39 +243,78 @@ class CmsSync
      * @return array An array containing the success status and message of the operation.
      * @throws \Exception If the git push operation fails.
      */
-    public function pushRepository(): array
+    public function pushRepository(string $commitMessage = null): array
     {
         try {
             $repo = $this->initRepo();
             $statusText = $repo->run('status', ['--porcelain']);
 
-            $hasChanges = false;
-            $changedFiles = [];
+            $pages = $this->cmsPagesService->getAll();
 
-            if (!empty($statusText)) {
-                $lines = explode("\n", trim($statusText));
-                foreach ($lines as $line) {
-                    if (trim($line) === '') {
+            if (count($pages) > 0) {
+                foreach ($pages as $page) {
+                    // Safely extract ID: works whether $page is an object or an array
+                    $pageId = is_array($page) ? ($page['id'] ?? null) : $page->getId();
+
+                    if (!$pageId) {
+                        continue; // On the off chance, skip corrupted data
+                    }
+
+                    // step 1: load the most recent object from the database by ID
+                    // to ensure translations are loaded bypassing the Doctrine cache,
+                    // first find the page itself through getByID
+                    $pageObject = $this->cmsPagesService->getByID($pageId);
+
+                    if (!$pageObject) {
                         continue;
                     }
 
-                    // if the line does not start with ?? (untracked file), then there are modified JSON files
-                    if (!str_starts_with($line, '?? ')) {
-                        $hasChanges = true;
-                        $changedFiles[] = trim(substr($line, 3)); // Remember the file name for logging
+                    // step 2: use the method by SystemID, which we checked last time —
+                    // it builds a QueryBuilder and updates the relationships (translations) in PHP memory
+                    $freshPage = $this->cmsPagesService->getByPageSystemID(
+                        $pageObject->getPageSystemId(),
+                        $this->subsystem
+                    );
+
+                    if (!$freshPage) {
+                        continue;
                     }
+
+                    // generate JSON and save it
+                    $pageArray = $this->pageToSharedArray($freshPage);
+                    $pagePath = $this->getPagePath($freshPage);
+                    $pageJson = json_encode($pageArray, JSON_PRETTY_PRINT);
+                    file_put_contents($pagePath, $pageJson);
+                    $this->gitAdd($pagePath);
                 }
             }
 
-            if (!$hasChanges) {
+            // 1. check if there are any changes to commit; if not, return a message indicating no push is needed
+            /*
+            if (empty(trim($statusText))) {
                 return [
                     'success' => true,
                     'message' => 'Git push not required: Repository is already up to date.',
                 ];
             }
+            */
+            $changedFiles = [];
+            $lines = explode("\n", trim($statusText));
+            foreach ($lines as $line) {
+                if (trim($line) === '') {
+                    continue;
+                }
+                // Save names of all affected files for logging
+                $changedFiles[] = trim(substr($line, 3));
+            }
 
+            // 2. Index all changes (added, modified, and deleted files)
+            $repo->run('add', ['-A']);
+
+            // 3. Formulate the commit and make the push
             $user = $this->authManager->getUserObject();
-            $commitMessage = 'CMS Sync Auto-Commit: ' . date('Y-m-d H:i:s') . ' - ' . $user->getUsername();
+            $commitMessage ??= 'CMS Sync Auto-Commit: ' . date('Y-m-d H:i:s') . ' - ' . $user->getUsername();
+
             $this->gitCommit($commitMessage);
             $this->gitPush();
 
@@ -299,6 +340,70 @@ class CmsSync
                 'message' => 'Git push failed: ' . $e->getMessage(),
             ];
         }
+    }
+
+    public function getStatus(): string
+    {
+        $repo = $this->initRepo();
+        $statusText = trim($repo->run('status', ['--short']));
+
+        $lines = explode("\n", $statusText);
+
+        $changedFiles = [];
+        $allFiles = [];
+
+        foreach ($lines as $line) {
+            if (trim($line) === '') {
+                continue;
+            }
+            // Save names of all affected files for logging, replacing spaces with non-breaking spaces for HTML display
+            $changedFiles[] = trim(substr($line, 3));
+        }
+
+        $jsonFiles = array_diff(scandir($this->getPagesPath()), ['.', '..']);
+        $updatedPages = [];
+
+        foreach ($jsonFiles as $jsonFile) {
+            if (preg_match('"\.json$"', $jsonFile)) {
+                $pageJson = file_get_contents($this->getPagesPath() . DIRECTORY_SEPARATOR . $jsonFile);
+                $pageArray = json_decode($pageJson, true);
+                $pageSystemId = preg_replace('"\.json$"', '', $jsonFile);
+
+                $pageInDb = $this->cmsPagesService->getByPageSystemIDWithoutTranslations($pageSystemId, $this->subsystem);
+
+                if ($pageInDb != null) {
+                    $currentTranslations = [];
+                    foreach ($pageInDb->getTranslations() as $t) {
+                        $currentTranslations[$t->getLanguage()] = [
+                            'title' => $t->getTitle(),
+                            'content' => $t->getContent(),
+                        ];
+                    }
+
+                    $jsonTranslations = $pageArray['translations'] ?? [];
+
+                    if ($jsonTranslations !== $currentTranslations) {
+                        $updatedPages[] = $pageSystemId;
+                    }
+                }
+            }
+        }
+
+        $allFiles = array_merge($changedFiles, $updatedPages);
+
+        if (empty($allFiles)) {
+            return 'Git push not required: Repository is already up to date.';
+        }
+
+        if (!empty($changedFiles) && empty($updatedPages)) {
+            return 'Git push required: Changes detected in files: <br />' . implode('<br />', $changedFiles);
+        }
+
+        if (empty($changedFiles) && !empty($updatedPages)) {
+            return 'Git push required: Changes detected in pages: <br />' . implode('<br />', $updatedPages);
+        }
+
+        return 'Git push required: Changes detected: <br /> Pages: ' . implode('<br />', $updatedPages) . '<br /> Files: ' . implode('<br />', $changedFiles);
     }
 
     public function gitAdd(string $file = null)
