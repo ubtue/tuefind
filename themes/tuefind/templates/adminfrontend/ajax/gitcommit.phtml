@@ -1,0 +1,22 @@
+<div class="">
+    <h3>You in branch <span class="text-danger"><?=$this->currentBranch?></span></h3>
+    <p>Commit your changes to the CMS repository.</p>
+    <form id="git-commit-form" method="post" action="<?=$this->url('adminfrontend-gitcommit')?>">
+        <div class="form-group">
+            <label for="commit-message">Commit message:</label>
+            <div class="input-group">
+                <input type="text" class="form-control" id="commit-message" name="commit_message" required>
+                <button type="submit" class="btn btn-primary">Commit</button>
+            </div>
+        </div>
+    </form>
+    <div id="commit-log-console" style="margin-top: 15px; padding: 10px; background: #222; color: #fff; font-family: monospace; border-radius: 4px; min-height: 100px; max-height: 300px; overflow-y: auto;">
+        <?php if (isset($this->result)): ?>
+            <?php if ($this->result['success']): ?>
+                <p class="text-success"><?=htmlspecialchars($this->result['message'])?></p>
+            <?php else: ?>
+                <p class="text-danger"><?=htmlspecialchars($this->result['message'])?></p>
+            <?php endif; ?>
+        <?php endif; ?>
+    </div>
+</div>

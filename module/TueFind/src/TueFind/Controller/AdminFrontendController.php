@@ -182,4 +182,40 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase
 
         return $response;
     }
+
+    public function gitCommitAction()
+    {
+
+        $cmsSync = $this->serviceLocator->get(\TueFind\Service\CmsSync::class);
+
+        $currentBranch = $cmsSync->getBranch();
+
+        try {
+            $this->forceAdminLogin();
+        } catch (\Exception $e) {
+            return $this->forceLogin($e->getMessage());
+        }
+
+        if ($this->getRequest()->isPost()) {
+            $commit_message = !empty($this->params()->fromPost('commit_message')) ? $this->params()->fromPost('commit_message') : null;
+            $result = $cmsSync->pushRepository($commit_message);
+        }
+
+        $adminUser = $this->getUser();
+
+        $view = new \Laminas\View\Model\ViewModel([
+            'currentBranch' => $currentBranch,
+            'terminal' => $this->getRequest()->isXmlHttpRequest(),
+            'result' => $result ?? null,
+            'user' => $adminUser,
+        ]);
+
+        $view->setTemplate('adminfrontend/ajax/gitcommit');
+        // if request comes from Lightbox / AJAX — disable global layout
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $view->setTerminal(true);
+        }
+
+        return $view;
+    }
 }
