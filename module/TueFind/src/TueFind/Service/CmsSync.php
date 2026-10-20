@@ -313,9 +313,9 @@ class CmsSync
 
             // 3. Formulate the commit and make the push
             $user = $this->authManager->getUserObject();
-            $commitMessage ??= 'CMS Sync Auto-Commit: ' . date('Y-m-d H:i:s') . ' - ' . $user->getUsername();
+            $commitMessage ??= 'CMS Sync Auto-Commit:';
 
-            $this->gitCommit($commitMessage);
+            $this->gitCommit($commitMessage . ' ' . date('Y-m-d H:i:s') . ' - ' . $user->getUsername());
             $this->gitPush();
 
             return [

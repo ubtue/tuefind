@@ -331,10 +331,40 @@ $config = [
             'adminfrontend-gitcommit' => [
                 'type' => \Laminas\Router\Http\Literal::class,
                 'options' => [
-                    'route'    => '/AdminFrontend/GitCommit', // URL in the browser
+                    'route'    => '/AdminFrontend/GitCommit',
                     'defaults' => [
                         'controller' => 'AdminFrontend',
-                        'action'     => 'gitCommit',          // Action in the controller
+                        'action'     => 'gitCommit',
+                    ],
+                ],
+            ],
+            'adminfrontend-confirmdelete' => [
+                'type' => \Laminas\Router\Http\Literal::class,
+                'options' => [
+                    'route'    => '/AdminFrontend/ConfirmDelete',
+                    'defaults' => [
+                        'controller' => 'AdminFrontend',
+                        'action'     => 'confirmDelete',
+                    ],
+                ],
+            ],
+            'adminfrontend-preview' => [
+                'type' => \Laminas\Router\Http\Literal::class,
+                'options' => [
+                    'route'    => '/AdminFrontend/Preview',
+                    'defaults' => [
+                        'controller' => 'AdminFrontend',
+                        'action'     => 'preview',
+                    ],
+                ],
+            ],
+            'adminfrontend-createfolder' => [
+                'type' => \Laminas\Router\Http\Literal::class,
+                'options' => [
+                    'route'    => '/AdminFrontend/CreateFolder',
+                    'defaults' => [
+                        'controller' => 'AdminFrontend',
+                        'action'     => 'createFolder',
                     ],
                 ],
             ],

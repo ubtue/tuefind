@@ -210,7 +210,112 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase
             'user' => $adminUser,
         ]);
 
-        $view->setTemplate('adminfrontend/ajax/gitcommit');
+        $view->setTemplate('adminfrontend/ajax/cms/modal/gitcommit');
+        // if request comes from Lightbox / AJAX — disable global layout
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $view->setTerminal(true);
+        }
+
+        return $view;
+    }
+
+    public function confirmDeleteAction()
+    {
+
+        try {
+            $this->forceAdminLogin();
+        } catch (\Exception $e) {
+            return $this->forceLogin($e->getMessage());
+        }
+
+        $relativePath = null;
+        $fileOrImage = null;
+        $result = null;
+
+        if ($this->getRequest()->isGet()) {
+            $relativePath = $this->params()->fromQuery('relative-path');
+            $fileOrImage = $this->params()->fromQuery('file-or-image');
+        }
+
+        $adminUser = $this->getUser();
+
+        $view = new \Laminas\View\Model\ViewModel([
+            'relativePath' => $relativePath,
+            'fileOrImage' => $fileOrImage,
+            'result' => $result,
+            'user' => $adminUser,
+        ]);
+
+        $view->setTemplate('adminfrontend/ajax/cms/modal/confirmdelete');
+
+        // If request comes from Lightbox / AJAX — disable global layout
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $view->setTerminal(true);
+        }
+
+        return $view;
+    }
+
+    public function previewAction()
+    {
+        try {
+            $this->forceAdminLogin();
+        } catch (\Exception $e) {
+            return $this->forceLogin($e->getMessage());
+        }
+
+        $relativePath = null;
+        $fileOrImage = null;
+        $result = null;
+
+        if ($this->getRequest()->isGet()) {
+            $relativePath = $this->params()->fromQuery('relative-path');
+            $fileOrImage = $this->params()->fromQuery('file-or-image');
+        }
+
+        $adminUser = $this->getUser();
+
+        $view = new \Laminas\View\Model\ViewModel([
+            'relativePath' => $relativePath,
+            'fileOrImage' => $fileOrImage,
+            'result' => $result,
+            'user' => $adminUser,
+        ]);
+
+        $view->setTemplate('adminfrontend/ajax/cms/modal/preview');
+
+        // If request comes from Lightbox / AJAX — disable global layout
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $view->setTerminal(true);
+        }
+
+        return $view;
+    }
+
+    public function createFolderAction()
+    {
+        try {
+            $this->forceAdminLogin();
+        } catch (\Exception $e) {
+            return $this->forceLogin($e->getMessage());
+        }
+
+        if ($this->getRequest()->isGet()) {
+            $theme = $this->params()->fromQuery('theme');
+            $serverPath = $this->params()->fromQuery('server-path');
+            $fullPath = $this->params()->fromQuery('full-path');
+        }
+
+        $adminUser = $this->getUser();
+
+        $view = new \Laminas\View\Model\ViewModel([
+            'theme' => $theme ?? null,
+            'serverPath' => $serverPath ?? null,
+            'fullPath' => $fullPath ?? null,
+            'user' => $adminUser,
+        ]);
+
+        $view->setTemplate('adminfrontend/ajax/cms/modal/createfolder');
         // if request comes from Lightbox / AJAX — disable global layout
         if ($this->getRequest()->isXmlHttpRequest()) {
             $view->setTerminal(true);
