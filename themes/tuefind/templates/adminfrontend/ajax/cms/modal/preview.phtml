@@ -1,0 +1,36 @@
+<div class="preview-dialog">
+    <div>    
+        <div class="container" id="container">
+            <div class="cw-row">
+                <div class="col-12">
+                    <div class="">
+                        <div class="preview_body text-center">
+                            <?php if ($this->fileOrImage === 'image'): ?>
+                                <img src="/cms/assets/<?= $this->escapeHtml($this->relativePath) ?>" alt="Preview" class="img-fluid">
+                            <?php elseif ($this->fileOrImage === 'file'): ?>
+                                <iframe src="/cms/assets/<?= $this->escapeHtml($this->relativePath) ?>" style="width: 100%; height: 600px;" frameborder="0"></iframe>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style type="text/css">
+    .preview-dialog {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        max-height: 800px;
+        max-width: 1200px;
+    }
+    .preview_body img {
+        max-height: 700px;
+        object-fit: contain;
+    }
+    .preview_body iframe {
+        width: 100%;
+        height: 600px;
+    }
+</style>

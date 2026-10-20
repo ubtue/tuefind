@@ -1,0 +1,70 @@
+<div class="confirm-content">
+    <h3>Are you sure you want to delete <span class="sureDeleteName text-danger"><?= $this->escapeHtml($this->relativePath) ?></span>?</h3>
+    <div class="file-path d-none"><?=$this->escapeHtml($this->relativePath) ?></div>
+    <div class="ajax-response text-center d-none"></div>
+    <div class="file_or_image d-none"><?=$this->escapeHtml($this->fileOrImage) ?></div>
+    
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            Cancel
+        </button>
+        <button type="button" class="btn btn-danger" id="confirmDeleteBtn">
+            Delete
+        </button>
+    </div>
+</div>
+
+<?php $jsSnippet = <<<'EOD'
+        $(document).on('click', '#confirmDeleteBtn', function() {
+            let THIS = $(this);
+            let parentModal = THIS.closest('.confirm-content');
+            let filePATH = parentModal.find('.file-path').text().trim();
+            let fileORImage = parentModal.find('.file_or_image').text().trim();
+
+            $.ajax({
+                url: VuFind.path + '/AJAX/JSON',
+                method: 'GET',
+                data: {
+                    method: 'CmsDocs',
+                    action: (fileORImage === 'image') ? 'deleteImage' : 'deleteFile',
+                    'full-path': filePATH
+                },
+                dataType: 'json',
+                success: function(response) {
+                    let message = response.data.data;
+                    let status = response.data.status;
+
+                    if(status === 'success') {
+                        THIS.blur();
+
+                        $('#confirmDeleteModal').one('hidden.bs.modal', function () {
+                            location.reload();
+                        });
+
+                        $('.ajax-info').removeClass('d-none').find('.alert').text(message);
+                        $('.ajax-response').removeClass('d-none').addClass('text-success').text(message);
+
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1000);
+                        
+                    } else {
+                        $('.ajax-response').removeClass('d-none').addClass('text-danger').text(message);
+                        console.log('Delete failed:', message);
+                        setTimeout(() => {
+                            $('.ajax-info').addClass('d-none');
+                            $('.ajax-response').addClass('d-none').text('');
+                        }, 2000);
+                    }
+                },
+                error: function(xhr, ajaxOptions, thrownError) {
+                    if (window.console && window.console.log) {
+                        console.log("Status: " + xhr.status + ", Error: " + thrownError);
+                    }
+                }
+            });
+        });
+    EOD;
+?>
+<?=$this->assetManager()->outputInlineScriptString($jsSnippet)?>
+
