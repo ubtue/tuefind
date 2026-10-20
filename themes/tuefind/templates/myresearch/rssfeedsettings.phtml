@@ -16,14 +16,14 @@
       <td><?=$this->transEsc('rss_subscribe_email')?></td>
       <td class="tf-rss-feeds-switcher">
         <label class="switch">
-          <input type="checkbox" <?=($this->user->getRssFeedSendEmails())?"checked":"";?>  class="rssLabel" name="action" value="<?=(!$this->user->getRssFeedSendEmails())?"unsubscribe_email":"subscribe_email";?>">
+          <input type="checkbox" <?=($this->user->getRssFeedSendEmails()) ? 'checked' : '';?>  class="rssLabel" name="action" value="<?=(!$this->user->getRssFeedSendEmails()) ? 'unsubscribe_email' : 'subscribe_email';?>">
           <span class="slider round"></span>
         </label>
       </td>
     </tr>
   </table>
   <p>
-    <div class="rssEmailTimestampBlock <?=(!$this->user->getRssFeedSendEmails())?"tf-d-none":"";?>">
+    <div class="rssEmailTimestampBlock <?=(!$this->user->getRssFeedSendEmails()) ? 'tf-d-none' : '';?>">
       <?=$this->transEsc('rss_email_min_timestamp')?> <span><?=$this->user->getRssFeedLastNotification()->format($this->config()->dateTimeFormat())?></span>.
     </div>
   </p>
@@ -33,7 +33,7 @@
       <th><?=$this->transEsc('RSS feed')?></th>
       <th><?=$this->transEsc('Subscribe')?></th>
     </tr>
-    <?php foreach($rssFeeds as $rssFeed): ?>
+    <?php foreach ($rssFeeds as $rssFeed): ?>
       <tr>
         <td><a href="<?=$rssFeed->getWebsiteUrl()?>" target="_blank"><?=$this->escapeHtml($rssFeed->getFeedName())?></a></td>
         <td class="tf-rss-feeds-switcher">
@@ -52,5 +52,8 @@
 </div>
 
 <div class="<?=$this->layoutClass('sidebar')?>" id="myresearch-sidebar" role="navigation" aria-label="<?=$this->transEsc('account_menu_label')?>">
-  <?=$this->accountMenu()->render('RssFeedSettings')?>
+  <?=$this->section(
+      'AccountMenu',
+      template: 'myresearch/menu.phtml'
+  )->render(['active' => 'RssFeedSettings'])?>
 </div>

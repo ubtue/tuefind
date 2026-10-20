@@ -1,18 +1,18 @@
 <?php
+
 namespace KrimDok\Search\Factory;
 
-use VuFindSearch\Backend\Solr\LuceneSyntaxHelper;
-use VuFind\I18n\Translator\TranslatorAwareInterface;
-use VuFindSearch\Backend\Solr\Connector;
-use TueFindSearch\Backend\Solr\HandlerMap;
-use TueFindSearch\Backend\Solr\Response\Json\RecordCollectionFactory;
 use KrimDok\Search\Backend\Solr\Backend;
 use KrimDok\Search\Backend\Solr\QueryBuilder;
+use TueFindSearch\Backend\Solr\HandlerMap;
+use TueFindSearch\Backend\Solr\Response\Json\RecordCollectionFactory;
+use VuFind\I18n\Translator\TranslatorAwareInterface;
+use VuFindSearch\Backend\Solr\Connector;
+use VuFindSearch\Backend\Solr\LuceneSyntaxHelper;
 
 class SolrDefaultBackendFactory extends \TueFind\Search\Factory\SolrDefaultBackendFactory implements TranslatorAwareInterface
 {
     use \VuFind\I18n\Translator\TranslatorAwareTrait;
-
 
     protected function createConnector()
     {
@@ -24,19 +24,21 @@ class SolrDefaultBackendFactory extends \TueFind\Search\Factory\SolrDefaultBacke
             'select' => [
                 'fallback' => true,
                 'defaults' => ['fl' => '*,score', 'lang' => $current_lang,
-                               'defType' => 'multiLanguageQueryParser', 'df' => 'allfields'
+                               'defType' => 'multiLanguageQueryParser', 'df' => 'allfields',
                               ],
                 'appends'  => ['fq' => []],
             ],
-            'term' => [
+            'terms' => [
                 'functions' => ['terms'],
+            ],
+            'morelikethis' => [
+                'functions' => ['similar'],
             ],
         ];
 
         foreach ($this->getHiddenFilters() as $filter) {
             array_push($handlers['select']['appends']['fq'], $filter);
         }
-        
 
         // Careful: Inherited TueFind HandlerMap is used here, see "use" statement at top
         $connector = new $this->connectorClass(
@@ -56,29 +58,17 @@ class SolrDefaultBackendFactory extends \TueFind\Search\Factory\SolrDefaultBacke
             $connector->setLogger($this->logger);
         }
 
-        if (!empty($searchConfig->SearchCache->adapter)) {
-            $cacheConfig = $searchConfig->SearchCache->toArray();
-            $options = $cacheConfig['options'] ?? [];
-            if (empty($options['namespace'])) {
-                $options['namespace'] = 'Index';
-            }
-            if (empty($options['ttl'])) {
-                $options['ttl'] = 300;
-            }
-            $settings = [
-                'name' => $cacheConfig['adapter'],
-                'options' => $options,
-            ];
-            $cache = $this->serviceLocator
-                ->get(\Laminas\Cache\Service\StorageAdapterFactory::class)
-                ->createFromArrayConfiguration($settings);
+        $searchConfig = $this->configManager
+            ->getConfigObject($this->searchConfig);
+
+        if ($cache = $this->createConnectorCache($searchConfig)) {
             $connector->setCache($cache);
         }
+
         return $connector;
     }
 
-
-     /**
+    /**
      * Create the SOLR backend.
      *
      * @param Connector $connector Connector
@@ -88,6 +78,21 @@ class SolrDefaultBackendFactory extends \TueFind\Search\Factory\SolrDefaultBacke
     protected function createBackend(Connector $connector)
     {
         $backend = new Backend($connector);
+
+        $pageSize = $this->getIndexConfig(
+            'record_batch_size',
+            100
+        );
+
+        $maxClauses = $this->getIndexConfig(
+            'maxBooleanClauses',
+            $pageSize
+        );
+
+        if ($pageSize > 0 && $maxClauses > 0) {
+            $backend->setPageSize(min($pageSize, $maxClauses));
+        }
+
         $backend->setQueryBuilder($this->createQueryBuilder());
         $backend->setSimilarBuilder($this->createSimilarBuilder());
         if ($this->logger) {
@@ -99,7 +104,6 @@ class SolrDefaultBackendFactory extends \TueFind\Search\Factory\SolrDefaultBacke
         return $backend;
     }
 
-
     /**
      * Create the query builder.
      *
@@ -109,16 +113,13 @@ class SolrDefaultBackendFactory extends \TueFind\Search\Factory\SolrDefaultBacke
     {
         $specs   = $this->loadSpecs();
         $config = $this->configManager->getConfigObject($this->mainConfig);
-        $defaultDismax = isset($config->Index->default_dismax_handler)
-                         ? $config->Index->default_dismax_handler : 'dismax';
+        $defaultDismax = $config->Index->default_dismax_handler ?? 'dismax';
         $builder = new QueryBuilder($specs, $defaultDismax);
 
         // Configure builder:
         $search = $this->configManager->getConfigObject($this->searchConfig);
-        $caseSensitiveBooleans = isset($search->General->case_sensitive_bools)
-                                 ? $search->General->case_sensitive_bools : true;
-        $caseSensitiveRanges = isset($search->General->case_sensitive_ranges)
-                               ? $search->General->case_sensitive_ranges : true;
+        $caseSensitiveBooleans = $search->General->case_sensitive_bools ?? true;
+        $caseSensitiveRanges = $search->General->case_sensitive_ranges ?? true;
         $helper = new LuceneSyntaxHelper($caseSensitiveBooleans, $caseSensitiveRanges);
         $builder->setLuceneHelper($helper);
         return $builder;

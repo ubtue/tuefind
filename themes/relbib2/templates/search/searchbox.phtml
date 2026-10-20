@@ -133,11 +133,30 @@
                                 <!-- Begin search input field -->
                                 <div class="col-xs-12 col-sm-7 col-lg-8">
                                     <div class="input-group searchbar flex-nowrap w-100">
-                                        <input id="searchForm_lookfor"
-                                               class="form-control form-control-lg searchForm_lookfor form-control search-query<?php if ($this->searchbox()->autocompleteEnabled($this->searchClassId)): ?> autocomplete searcher:<?= $this->escapeHtmlAttr($this->searchClassId) ?><?php endif ?>"
-                                               type="text" name="lookfor"
-                                               value="<?= $this->escapeHtmlAttr($this->lookfor) ?>"
-                                               <?php if ($placeholder): ?> placeholder="<?=$this->transEsc($placeholder) ?>"<?php endif ?> aria-describedby="basic-addon2"/>
+                                        <?php
+                                          $searchboxAttributes = [
+                                            'id' => 'searchForm_lookfor',
+                                            'class' => 'form-control form-control-lg searchForm_lookfor form-control search-query',
+                                            'type' => 'text',
+                                            'name' => 'lookfor',
+                                            'value' => $this->lookfor,
+                                            'aria-label' => $this->translate('search_terms'),
+                                            'aria-describedby' => 'basic-addon2',
+                                          ];
+                                          if ($placeholder) {
+                                            $searchboxAttributes['placeholder'] = $this->translate($placeholder);
+                                          }
+                                          if ($this->searchbox()->autocompleteEnabled($this->searchClassId)) {
+                                            $searchboxAttributes['class'] .= " autocomplete searcher:{$this->searchClassId}"
+                                              . ($this->searchbox()->autocompleteAutoSubmit($this->searchClassId) ? ' ac-auto-submit' : '');
+                                            $searchboxAttributes['data-autocomplete-formatting-rules'] = $this->searchbox()->autocompleteFormattingRulesJson($this->searchClassId);
+                                            if ($this->searchbox()->autocompleteApplyActiveFilters($this->searchClassId)) {
+                                              $searchboxAttributes['data-autocomplete-apply-active-filters'] = 'true';
+                                            }
+                                            $searchboxAttributes['data-autocomplete-display-limit'] = $this->searchbox()->autocompleteDisplayLimit($this->searchClassId);
+                                          }
+                                        ?>
+                                        <input<?=$this->htmlAttributes($searchboxAttributes)?>>
                                         <?php $subSystem = $tuefind->getTueFindSubsystem();?>
                                         <span class="tf-clear-search-input-span <?=$subSystem;?>-form" data-x-position="-5"><svg focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg></span>
                                         <span class="input-group-text" id="basic-addon2"><i class="fa fa-search"></i></span>
