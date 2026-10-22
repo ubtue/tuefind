@@ -182,3 +182,8 @@ CREATE INDEX tuefind_rss_feed_send_emails_index ON user (tuefind_rss_feed_send_e
 ALTER TABLE user ADD tuefind_rss_feed_last_notification TIMESTAMP DEFAULT NOW();
 
 ALTER TABLE user ADD tuefind_rights SET('admin', 'user_authorities', 'cms') DEFAULT NULL;
+
+ALTER TABLE tuefind_cms_pages_history ADD COLUMN comment TEXT after cms_id;
+ALTER TABLE tuefind_cms_pages_history MODIFY COLUMN cms_id INT UNSIGNED NULL;
+ALTER TABLE tuefind_cms_pages_history ADD CONSTRAINT fk_history_cms FOREIGN KEY (cms_id) REFERENCES tuefind_cms_pages(id) ON DELETE SET NULL;
+ALTER TABLE tuefind_cms_pages_history ADD COLUMN subsystem_id int after cms_id;
