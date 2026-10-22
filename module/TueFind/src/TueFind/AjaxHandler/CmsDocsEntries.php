@@ -4,8 +4,9 @@ namespace TueFind\AjaxHandler;
 
 use Laminas\Mvc\Controller\Plugin\Params;
 use Laminas\View\Renderer\PhpRenderer;
+use TueFind\Db\Entity\User;
 use VuFind\Config\PluginManager as ConfigManager;
-use VuFind\Db\Entity\UserEntityInterface;
+use VuFind\Db\Service\PluginManager as DbServiceManager;
 
 use function in_array;
 
@@ -22,17 +23,21 @@ class CmsDocsEntries extends \VuFind\AjaxHandler\AbstractBase
 
     protected $configManager;
 
+    protected $dbServiceManager;
+
     protected $allowedBase;
 
     public function __construct(
         \VuFind\Search\Results\PluginManager $searchResultsManager,
         PhpRenderer $viewRenderer,
         ConfigManager $configManager,
-        protected ?UserEntityInterface $user = null
+        DbServiceManager $dbServiceManager,
+        protected ?User $user = null
     ) {
         $this->searchResultsManager = $searchResultsManager;
         $this->viewRenderer = $viewRenderer;
         $this->configManager = $configManager;
+        $this->dbServiceManager = $dbServiceManager;
         $this->allowedBase = $this->configManager->get('tuefind')->CMS->repository_path;
     }
 
@@ -120,11 +125,6 @@ class CmsDocsEntries extends \VuFind\AjaxHandler\AbstractBase
         if ($action === 'deleteImage') {
             $file = $this->allowedBase . $params->fromQuery('full-path');
 
-            $resultReturn = [
-                'status' => 'success',
-                'data' => 'File deleted successfully',
-            ];
-
             if (file_exists($file)) {
                 $allowed = ['jpg', 'jpeg', 'png', 'gif'];
 
@@ -133,15 +133,24 @@ class CmsDocsEntries extends \VuFind\AjaxHandler\AbstractBase
                 if (!in_array($ext, $allowed)) {
                     return $this->formatResponse([
                         'status' => 'ERROR',
-                        'data' => 'Invalid file type',
+                        'message' => 'Invalid file type',
                     ]);
                 }
 
+                $subSystem = $this->dbServiceManager->get(\TueFind\Db\Service\SubsystemsServiceInterface::class)->getByName(\IxTheo\Utility::getUserTypeFromUsedEnvironment());
+                $cmsHistoryService = $this->dbServiceManager->get(\TueFind\Db\Service\CmsPagesHistoryServiceInterface::class);
+                $cmsHistoryService->add(null, $this->user, $subSystem, 'Image deleted: ' . $params->fromQuery('full-path'));
+
                 unlink($file);
+
+                $resultReturn = [
+                    'status' => 'success',
+                    'message' => 'File deleted successfully',
+                ];
             } else {
                 $resultReturn = [
                     'status' => 'ERROR',
-                    'data' => 'File not found: ' . $file,
+                    'message' => 'File not found: ' . $file,
                 ];
             }
             return $this->formatResponse($resultReturn);
@@ -154,30 +163,40 @@ class CmsDocsEntries extends \VuFind\AjaxHandler\AbstractBase
                 // MIME + extenxion check
                 $allowedMime = [
                     'application/pdf',
+                    'application/x-pdf',
+                    'application/acrobat',
+                    'applications/vnd.pdf',
+                    'text/pdf',
+                    'text/x-pdf',
                     'text/plain',
                 ];
 
                 $allowedExt = ['pdf', 'txt'];
 
                 $ext = strtolower(pathinfo($fullPath, PATHINFO_EXTENSION));
+                $detectedMime = strtolower(mime_content_type($fullPath) ?: '');
 
-                if (!in_array(mime_content_type($fullPath), $allowedMime) || !in_array($ext, $allowedExt)) {
+                if (!in_array($detectedMime, $allowedMime) || !in_array($ext, $allowedExt)) {
                     return $this->formatResponse([
                         'status' => 'ERROR',
-                        'message' => 'Invalid file type',
+                        'message' => 'Invalid file type. Extension: ' . $ext . ', MIME: ' . $detectedMime,
                     ]);
                 }
+
+                $subSystem = $this->dbServiceManager->get(\TueFind\Db\Service\SubsystemsServiceInterface::class)->getByName(\IxTheo\Utility::getUserTypeFromUsedEnvironment());
+                $cmsHistoryService = $this->dbServiceManager->get(\TueFind\Db\Service\CmsPagesHistoryServiceInterface::class);
+                $cmsHistoryService->add(null, $this->user, $subSystem, 'File deleted: ' . $params->fromQuery('full-path'));
 
                 unlink($fullPath);
 
                 $resultReturn = [
                     'status' => 'success',
-                    'data' => 'File deleted successfully',
+                    'message' => 'File deleted successfully',
                 ];
             } else {
                 $resultReturn = [
                     'status' => 'ERROR',
-                    'data' => 'File not found: ' . $fullPath,
+                    'message' => 'File not found: ' . $fullPath,
                 ];
                 return $this->formatResponse($resultReturn);
             }
@@ -285,6 +304,10 @@ class CmsDocsEntries extends \VuFind\AjaxHandler\AbstractBase
                     'message' => 'Failed to save file',
                 ]);
             }
+
+            $subSystem = $this->dbServiceManager->get(\TueFind\Db\Service\SubsystemsServiceInterface::class)->getByName(\IxTheo\Utility::getUserTypeFromUsedEnvironment());
+            $cmsHistoryService = $this->dbServiceManager->get(\TueFind\Db\Service\CmsPagesHistoryServiceInterface::class);
+            $resultReturn = $cmsHistoryService->add(null, $this->user, $subSystem, 'New file: /' . $theme . '/' . $newName . ' uploaded.');
 
             return $this->formatResponse([
                 'status' => 'success',
