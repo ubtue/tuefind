@@ -48,7 +48,7 @@ class CmsPagesHistoryService extends AbstractDbService implements CmsPagesHistor
         return $qb->getQuery()->getResult();
     }
 
-    public function add(?int $cmsPageId, User $user = null, Subsystems $subsystem, string $comment = ''): CmsPagesHistory
+    public function add(?int $cmsPageId, User $user = null, Subsystems $subsystem, $comment = null): CmsPagesHistory
     {
         $cmsHistory = new CmsPagesHistory();
         if ($cmsPageId !== null) {
