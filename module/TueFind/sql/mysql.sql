@@ -127,7 +127,7 @@ CREATE TABLE `tuefind_cms_pages_history` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int DEFAULT NULL,
   `cms_id` int unsigned DEFAULT NULL,
-  `subsystem_id` int unsigned DEFAULT NULL,
+  `subsystem_id` int unsigned NOT NULL,
   `comment` text DEFAULT NULL,
   `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
@@ -146,7 +146,7 @@ CREATE TABLE `tuefind_cms_pages_history` (
   CONSTRAINT `fk_history_subsystem`
     FOREIGN KEY (`subsystem_id`)
     REFERENCES `tuefind_subsystems` (`id`)
-    ON DELETE SET NULL
+    ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
