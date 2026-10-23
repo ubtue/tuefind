@@ -30,7 +30,7 @@ $this->breadcrumbs()->set($this->translate('Admins'), $this->url('adminfrontend-
           <td>
             <?=$this->escapeHtml($one->getUser()->getUsername())?>
           </td>
-          <td>
+          <td data-order="<?=$one->getCreated()->format('Y-m-d H:i:s')?>">
             <?=$this->escapeHtml($one->getCreated()->format('d.m.Y H:i:s'))?>
           </td>
         </tr>
