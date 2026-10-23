@@ -7,11 +7,12 @@ $this->breadcrumbs()->set($this->translate('Admins'), $this->url('adminfrontend-
   <h1><?=$this->transEsc('CMS pages history')?></h1>
   <?=$this->flashmessages()?>
 
-  <table class="table dataTable table-striped content-list custom-link-list">
+  <table class="table dataTable table-striped content-list custom-link-list" data-order='[[3, "desc"]]'>
     <thead>
       <tr>
+        <th><?=$this->transEsc('Comment')?></th>
         <th><?=$this->transEsc('CMS page')?></th>
-        <th><?=$this->transEsc('Admin ID')?></th>
+        <th><?=$this->transEsc('User Name')?></th>
         <th><?=$this->transEsc('Updated')?></th>
       </tr>
     </thead>
@@ -19,7 +20,12 @@ $this->breadcrumbs()->set($this->translate('Admins'), $this->url('adminfrontend-
       <?php foreach ($this->CMSPagesHistory as $one): ?>
         <tr class="custom-link-row" data-custom-link-id="<?=$this->escapeHtmlAttr($one->getId())?>">
           <td>
-            <?=$this->escapeHtml($one->getCmsPage()->getPageSystemId())?>
+            <?=$this->escapeHtml($one->getComment())?>
+          </td>
+          <td>
+            <?php if ($one->getCmsPage() !== null): ?>
+              <?=$this->escapeHtml($one->getCmsPage()->getPageSystemId())?>
+            <?php endif; ?>
           </td>
           <td>
             <?=$this->escapeHtml($one->getUser()->getUsername())?>
