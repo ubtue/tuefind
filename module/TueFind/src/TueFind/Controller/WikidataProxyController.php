@@ -22,6 +22,8 @@ class WikidataProxyController extends AbstractProxyController implements \VuFind
 
     protected $downloaderClientOptions = [];
 
+    protected $mandatoryImageFields = ['P18'];
+
     /**
      * Wikidata URLs must be resolved with a special content, else you might get the following error:
      * - HTTP/1.0 429 Too many requests. Please comply with the User-Agent policy: https://meta.wikimedia.org/wiki/User-Agent_policy
@@ -53,13 +55,18 @@ class WikidataProxyController extends AbstractProxyController implements \VuFind
         if (isset($parameters['id'])) {
             try {
                 $entities = $this->getEntities([$parameters['id']]);
-                $entity = $this->getFirstMatchingEntity($entities);
+
+                // Use additional criteria for sanity check, if given
+                $filters = $filters = $this->getFiltersFromParams($parameters);
+
+                $entity = $this->getFirstMatchingEntity($entities, $filters, $this->mandatoryImageFields);
                 $image = $this->getBestImageFromEntity($entity);
                 return $this->generateResponse($image);
             } catch (\Exception $e) {
                 // return proper status code, see end of this function
             }
         } else {
+            // Deprecated: Search Entity if no ID is given via name, birthYear, ...
             if (!isset($parameters['search'])) {
                 throw new \VuFind\Exception\BadRequest('Invalid request parameters.');
             }
@@ -70,18 +77,7 @@ class WikidataProxyController extends AbstractProxyController implements \VuFind
             }
             $language = $this->getTranslatorLocale();
 
-            // P18: image
-            // P569: birthYear
-            // P570: deathYear
-            $mandatoryFields = ['P18'];
-            $filters = [];
-            if (isset($parameters['birthYear'])) {
-                $filters['P569'] = ['value' => $parameters['birthYear'], 'type' => 'year'];
-            }
-            if (isset($parameters['deathYear'])) {
-                $filters['P570'] = ['value' => $parameters['deathYear'], 'type' => 'year'];
-            }
-
+            $filters = $this->getFiltersFromParams($parameters);
             if (count($filters) == 0) {
                 throw new \Exception('No suitable image found (at least one additional filter must be given!) when searching for: ' . PHP_EOL . print_r($searches, true));
             }
@@ -89,7 +85,7 @@ class WikidataProxyController extends AbstractProxyController implements \VuFind
             foreach ($searches as $search) {
                 try {
                     $entities = $this->searchAndGetEntities($search, $language);
-                    $entity = $this->getFirstMatchingEntity($entities, $filters, ['P18']);
+                    $entity = $this->getFirstMatchingEntity($entities, $filters, $this->mandatoryImageFields);
                     $image = $this->getBestImageFromEntity($entity);
                     return $this->generateResponse($image);
                 } catch (\Exception $e) {
@@ -100,6 +96,20 @@ class WikidataProxyController extends AbstractProxyController implements \VuFind
         }
 
         $this->getResponse()->setStatusCode(404);
+    }
+
+    protected function getFiltersFromParams(array $parameters)
+    {
+        $filters = [];
+        // P569: birthYear
+        // P570: deathYear
+        if (isset($parameters['birthYear'])) {
+            $filters['P569'] = ['value' => $parameters['birthYear'], 'type' => 'year'];
+        }
+        if (isset($parameters['deathYear'])) {
+            $filters['P570'] = ['value' => $parameters['deathYear'], 'type' => 'year'];
+        }
+        return $filters;
     }
 
     protected function normalizeHeaderContent($artist)
