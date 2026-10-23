@@ -18,8 +18,8 @@ class CmsPagesHistory implements CmsPagesHistoryEntityInterface
     protected ?string $comment = null;
 
     #[ORM\ManyToOne(targetEntity: Subsystems::class)]
-    #[ORM\JoinColumn(name: 'subsystem_id', referencedColumnName: 'id', nullable: false)]
-    protected Subsystems $subSystem;
+    #[ORM\JoinColumn(name: 'subsystem_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
+    protected ?Subsystems $subSystem = null;
 
     #[ORM\Column(name: 'created', type: 'datetime', nullable: false, options: ['default' => 'CURRENT_TIMESTAMP'])]
     protected DateTime $created;
@@ -69,12 +69,12 @@ class CmsPagesHistory implements CmsPagesHistoryEntityInterface
         return $this;
     }
 
-    public function getSubSystem(): Subsystems
+    public function getSubSystem(): ?Subsystems
     {
         return $this->subSystem;
     }
 
-    public function setSubSystem(Subsystems $subSystem): static
+    public function setSubSystem(?Subsystems $subSystem): static
     {
         $this->subSystem = $subSystem;
         return $this;

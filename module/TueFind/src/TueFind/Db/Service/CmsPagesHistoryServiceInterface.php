@@ -16,5 +16,5 @@ interface CmsPagesHistoryServiceInterface extends DbServiceInterface
 
     public function getByPageID(int $cmsPageId): array;
 
-    public function add(?int $cmsPageId, User $user = null, Subsystems $subsystem, string $comment = ''): CmsPagesHistory;
+    public function add(?int $cmsPageId, User $user = null, Subsystems $subsystem, $comment = null): CmsPagesHistory;
 }

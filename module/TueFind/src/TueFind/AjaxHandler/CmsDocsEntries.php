@@ -9,6 +9,7 @@ use VuFind\Config\PluginManager as ConfigManager;
 use VuFind\Db\Service\PluginManager as DbServiceManager;
 
 use function in_array;
+use function sprintf;
 
 class CmsDocsEntries extends \VuFind\AjaxHandler\AbstractBase
 {
@@ -177,9 +178,16 @@ class CmsDocsEntries extends \VuFind\AjaxHandler\AbstractBase
                 $detectedMime = strtolower(mime_content_type($fullPath) ?: '');
 
                 if (!in_array($detectedMime, $allowedMime) || !in_array($ext, $allowedExt)) {
+                    $allowedTypesStr = implode(', ', array_map('strtoupper', $allowedExt));
+
                     return $this->formatResponse([
                         'status' => 'ERROR',
-                        'message' => 'Invalid file type. Extension: ' . $ext . ', MIME: ' . $detectedMime,
+                        'message' => sprintf(
+                            'Invalid file type (detected: %s, MIME: %s). Allowed file types: %s',
+                            $ext,
+                            $detectedMime,
+                            $allowedTypesStr
+                        ),
                     ]);
                 }
 

@@ -19,9 +19,9 @@ interface CmsPagesHistoryEntityInterface extends EntityInterface
 
     public function setUser(?User $user): static;
 
-    public function getSubSystem(): Subsystems;
+    public function getSubSystem(): ?Subsystems;
 
-    public function setSubSystem(Subsystems $subSystem): static;
+    public function setSubSystem(?Subsystems $subSystem): static;
 
     public function getComment(): ?string;
 

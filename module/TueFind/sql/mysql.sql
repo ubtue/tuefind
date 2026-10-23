@@ -126,11 +126,14 @@ CREATE TABLE `tuefind_cms_pages_translation` (
 CREATE TABLE `tuefind_cms_pages_history` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int DEFAULT NULL,
-  `cms_id` int unsigned NOT NULL,
+  `cms_id` int unsigned DEFAULT NULL,
+  `subsystem_id` int unsigned DEFAULT NULL,
+  `comment` text DEFAULT NULL,
   `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `cms_id` (`cms_id`),
+  KEY `subsystem_id` (`subsystem_id`),
   KEY `created` (`created`),
   CONSTRAINT `fk_history_user`
     FOREIGN KEY (`user_id`)
@@ -139,8 +142,12 @@ CREATE TABLE `tuefind_cms_pages_history` (
   CONSTRAINT `fk_history_cms`
     FOREIGN KEY (`cms_id`)
     REFERENCES `tuefind_cms_pages` (`id`)
-    ON DELETE CASCADE
-) CHARACTER SET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+    ON DELETE SET NULL,
+  CONSTRAINT `fk_history_subsystem`
+    FOREIGN KEY (`subsystem_id`)
+    REFERENCES `tuefind_subsystems` (`id`)
+    ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
 CREATE TABLE tuefind_user_authorities (
@@ -183,7 +190,3 @@ ALTER TABLE user ADD tuefind_rss_feed_last_notification TIMESTAMP DEFAULT NOW();
 
 ALTER TABLE user ADD tuefind_rights SET('admin', 'user_authorities', 'cms') DEFAULT NULL;
 
-ALTER TABLE tuefind_cms_pages_history ADD COLUMN comment TEXT after cms_id;
-ALTER TABLE tuefind_cms_pages_history MODIFY COLUMN cms_id INT UNSIGNED NULL;
-ALTER TABLE tuefind_cms_pages_history ADD CONSTRAINT fk_history_cms FOREIGN KEY (cms_id) REFERENCES tuefind_cms_pages(id) ON DELETE SET NULL;
-ALTER TABLE tuefind_cms_pages_history ADD COLUMN subsystem_id int after cms_id;
