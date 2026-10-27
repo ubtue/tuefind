@@ -120,3 +120,54 @@
 
 <?php $this->assetManager()->appendScriptLink('cms.js'); ?>
 <?=$this->assetManager()->outputInlineScriptString('CMS.Editor.Init();') ?>
+
+<?php
+$jsSnippet = <<<EOD
+                      $(function () {
+                        function hasActiveCodeView() {
+                          var hasActive = false;
+                          $('.editor').each(function () {
+                            var oneEditor = $(this);
+                            if (oneEditor.data('summernote')) {
+                              if (oneEditor.summernote('codeview.isActivated')) {
+                                hasActive = true;
+                                return false;
+                              }
+                            }
+                          });
+                          return hasActive;
+                        }
+
+                        $(document).on('click', '.cms_update', function (e) {
+                          if ($(this).hasClass('disabledUpdate')) {
+                            alert('Please close HTML code mode before saving your changes!');
+                            e.preventDefault();
+                            return false;
+                          }
+                        });
+
+                        $(document).on('click', '.note-btn.btn-codeview, [data-name="codeview"]', function () {
+                          setTimeout(function () {
+                            if (hasActiveCodeView()) {
+                              let updateInfo = "<i class='note-icon-code'></i> HTML mod Active"
+                              $('.cms_update').addClass('disabledUpdate').html(updateInfo);
+                            } else {
+                              $('.cms_update').removeClass('disabledUpdate').html('Update');
+                            }
+                          }, 100);
+                        });
+                      });
+                      EOD;
+?>
+<?=$this->assetManager()->outputInlineScriptString($jsSnippet)?>
+
+<style>
+  .cms_update.disabledUpdate {
+     opacity: 50%;
+  }
+  .note-editor.note-frame .note-editable {
+      font-family: "Open Sans", Arial, Helvetica, sans-serif !important;
+      font-size: 16px !important;
+      line-height: 1.5;
+  }
+</style>
