@@ -5,6 +5,8 @@ namespace IxTheo\RecordDriver;
 use VuFindSearch\Command\SearchCommand;
 use VuFindSearch\Query\Query;
 
+use function count;
+
 class SolrMarc extends SolrDefault
 {
     public const SUBITO_BROKER_ID = 'IXTHEO';
@@ -148,5 +150,22 @@ class SolrMarc extends SolrDefault
         }
 
         return $collectionsHierarchy;
+    }
+
+    public function getVDNumber(): string
+    {
+        $_024_fields = $this->getMarcReader()->getFields('024');
+        if (!$_024_fields) {
+            return '';
+        }
+        foreach ($_024_fields as $_024_field) {
+            $subfields = $this->getSubfieldArray($_024_field, ['a', '2'], false);
+            if ($subfields && count($subfields) == 2) {
+                if (preg_match('/vd1[678]/i', $subfields[1])) {
+                    return $subfields[0];
+                }
+            }
+        }
+        return '';
     }
 }
