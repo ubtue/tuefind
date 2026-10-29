@@ -170,6 +170,7 @@ class DefaultRecord extends \TueFind\RecordDataFormatter\Specs\DefaultRecord
         // Persistent identifiers (IxTheo-specific)
         $spec->setTemplateLine('Persistent identifiers', 'getTypesAndPersistentIdentifiers', 'data-persistent_identifiers.phtml');
         $spec->setLine('Count Remarks', 'getCountRemarks');
+        $spec->setLine('VD Number', 'getVDNumber');
         return $spec->getArray();
     }
 }
