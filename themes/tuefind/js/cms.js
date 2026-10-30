@@ -62,6 +62,7 @@ var CMS = {
                 placeholder: '',
                 tabsize: 2,
                 height: 600,
+                fontSizes: ['8', '10', '12', '14', '16', '18', '20', '24', '36'],
                 fontNames: [
                     'Open Sans', 
                     'Arial', 
@@ -78,8 +79,9 @@ var CMS = {
                 fontNamesIgnoreCheck: ['Open Sans', 'Roboto'],
                 toolbar: [
                     ['style', ['style']],
-                    ['font', ['bold', 'underline', 'clear']],
+                    ['font', ['bold', 'italic', 'underline', 'clear']],
                     ['fontname', ['fontname']],
+                    ['fontsize', ['fontsize']],
                     ['color', ['color']],
                     ['para', ['ul', 'ol', 'paragraph']],
                     ['table', ['table']],

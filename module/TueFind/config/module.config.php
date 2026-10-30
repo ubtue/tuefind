@@ -505,6 +505,7 @@ $config = [
         'plugin_managers' => [
             'ajaxhandler' => [
                 'factories' => [
+                    'TueFind\AjaxHandler\Admin' => 'TueFind\AjaxHandler\AdminFactory',
                     'TueFind\AjaxHandler\GetSubscriptionBundleEntries' => 'TueFind\AjaxHandler\GetSubscriptionBundleEntriesFactory',
                     'TueFind\AjaxHandler\CmsEntries' => 'TueFind\AjaxHandler\CmsEntriesFactory',
                     'TueFind\AjaxHandler\CmsDocsEntries' => 'TueFind\AjaxHandler\CmsDocsEntriesFactory',
@@ -512,6 +513,7 @@ $config = [
                     'TueFind\AjaxHandler\MappingEntries' => 'TueFind\AjaxHandler\MappingEntriesFactory',
                 ],
                 'aliases' => [
+                    'Admin' => 'TueFind\AjaxHandler\Admin',
                     'getSubscriptionBundleEntries' => 'TueFind\AjaxHandler\GetSubscriptionBundleEntries',
                     'Cms' => 'TueFind\AjaxHandler\CmsEntries',
                     'CmsDocs' => 'TueFind\AjaxHandler\CmsDocsEntries',
