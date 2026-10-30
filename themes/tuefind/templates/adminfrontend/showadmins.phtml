@@ -7,6 +7,24 @@ $this->layout()->breadcrumbs = '<li><a href="' . $this->url('myresearch-home') .
 ?>
 
 <div class="<?=$this->layoutClass('mainbody')?>">
+  <div class="card">
+    <div class="card-header">
+      Search Users
+    </div>
+    <div class="card-body">
+      <blockquote class="blockquote mb-0">
+        <div class="row m-3 p3">
+          <label for="colFormLabelSm" class="col-sm-1 col-form-label col-form-label-sm">Email</label>
+          <div class="col-sm-11">
+            <input type="email" class="form-control form-control-sm mw-100 searchUsers" id="colFormLabelSm" placeholder="email" style="max-width: none;">
+          </div>
+        </div>
+        <footer class="ajaxResult"></footer>
+      </blockquote>
+    </div>
+  </div>
+  
+  <hr />
   <h2>Admins</h2>
   <p>Additional admins must be unlocked manually in the database by the development team.</p>
   <hr />
@@ -40,3 +58,39 @@ $this->layout()->breadcrumbs = '<li><a href="' . $this->url('myresearch-home') .
 <div class="<?=$this->layoutClass('sidebar')?>" id="myresearch-sidebar" role="navigation" aria-label="<?=$this->transEsc('account_menu_label')?>">
   <?=$this->accountMenu()->render('showadmins')?>
 </div>
+
+<?php
+$jsSnippet = <<<EOD
+      let timer = null;
+
+      $('.searchUsers').on('keyup', function() {
+        clearTimeout(timer);
+        
+        const query = $(this).val();
+
+        if (query.trim() === '') {
+          $('.ajaxResult').html('');
+          return;
+        }
+
+        timer = setTimeout(function() {
+          $.ajax({
+           url: VuFind.path + '/AJAX/JSON?method=Admin',
+            type: 'GET',
+            data: { 
+                    action: 'searchUsers',
+                    q: query
+            },
+            dataType: 'json',
+            success: function(response) {
+              $('.ajaxResult').html(response.data);
+            },
+            error: function(xhr, status, error) {
+              console.error('Request error: ', error);
+            }
+          });
+        }, 300);
+      });  
+    EOD;
+?>
+<?=$this->assetManager()->outputInlineScriptString($jsSnippet)?>

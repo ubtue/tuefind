@@ -1,0 +1,84 @@
+<?php
+$allTueFindRights = ['admin', 'user_authorities', 'cms'];
+?>
+<div class="">
+   <table class="table dataTable display compact table-striped table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th><?=$this->transEsc('Username')?></th>
+        <th><?=$this->transEsc('First Name')?></th>
+        <th><?=$this->transEsc('Last Name')?></th>
+        <th><?=$this->transEsc('Email Address')?></th>
+        <th><?=$this->transEsc('Institution')?></th>
+        <th><?=$this->transEsc('Rights')?></th>
+      </tr>
+    </thead>
+    <tbody>
+      <?php foreach ($this->users as $user): ?>
+        <tr>
+          <td><?=$this->escapeHtml($user->getUsername())?></td>
+          <td><?=$this->escapeHtml($user->getFirstname())?></td>
+          <td><?=$this->escapeHtml($user->getLastname())?></td>
+          <td><?=$this->escapeHtml($user->getEmail())?></td>
+          <td><?=$this->escapeHtml($user->getInstitution())?></td>
+          <td class="parentBlock" data-userId="<?=$user->getId()?>"><?php $userRights = $user->getTueFindRights();?>
+              <?php foreach ($allTueFindRights as $right): ?>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" value="<?=$right?>" id="flexCheckChecked" <?php if (in_array($right, $userRights)) {
+                  echo 'checked';
+                  }?>>
+                  <label class="form-check-label" for="flexCheckChecked">
+                    &nbsp;<?=$right?>
+                  </label>
+                </div>
+              <?php endforeach; ?>
+          </td>
+        </tr>
+      <?php endforeach; ?>
+    </tbody>
+  </table>
+</div>
+
+<?php
+$jsSnippet = <<<EOD
+                        $('.parentBlock input:checkbox').on('change', function() {
+                          let parentBlock = $(this).closest('td.parentBlock');
+                          let userId = parentBlock.attr('data-userId');
+
+                          let selectedRights = parentBlock.find('input:checkbox:checked').map(function() {
+                              return $(this).val();
+                          }).get();
+                          let rightsString = selectedRights.join(',');
+
+                          $.ajax({
+                            url: VuFind.path + '/AJAX/JSON?method=Admin&action=changeUserRights',
+                              type: 'POST',
+                              data: { 
+                                userId: userId,
+                                rights: rightsString
+                              },
+                              dataType: 'json',
+                              beforeSend: function() {
+                                  $('.ajaxResult').html(`
+                                      <div class="text-center p-3">
+                                          <i class="fa fa-spinner fa-spin fa-2x text-primary" aria-hidden="true"></i> Loading...
+                                      </div>
+                                  `);
+                              },
+                              success: function(response) {
+                                  console.log(response.data);
+                                  let message = response.data.message || '<div class="alert alert-success m-0">Rights updated successfully!</div>';
+                                  $('.ajaxResult').html(message);
+                              },
+                              error: function(xhr, status, error) {
+                                  console.error('Error: ', error);
+                                  $('.ajaxResult').html(`
+                                      <div class="alert alert-danger m-0">Failed to update rights.</div>
+                                  `);
+                              }
+                          });
+                        });  
+                      EOD;
+?>
+<?=$this->assetManager()->outputInlineScriptString($jsSnippet)?>
+
