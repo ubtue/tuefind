@@ -31,42 +31,13 @@ return [
     'css' => [
         ['file' => 'vendor/jquery-ui.min.css'],
         ['file' => 'vendor/jquery.dataTable.css'],
-        ['file' => 'vendor/sum_lite.css'],
-        ['file' => 'vendor/fontawesome-free-6.7.2-web/css/all.min.css'],
+        ['file' => 'vendor/sum_lite.css']
     ],
     'js' => [
         ['file' => 'tuefind.js', 'priority' => 1500],
         ['file' => 'vendor/jquery-ui.min.js', 'priority' => 1400],
         ['file' => 'vendor/jquery.dataTable.js', 'priority' => 1300],
         ['file' => 'vendor/summernote_lite.js', 'priority' => 1350],
-
-    ],
-    'icons' => [
-        'sets' => [
-            'FontAwesome6' => [
-                'template' => 'font',
-                'prefix'   => '',
-            ],
-        ],
-        'aliases' => [
-            'upload'      => 'FontAwesome:upload',
-            'user-plus'   => 'FontAwesome:user-plus',
-
-            // --- add new icon from FA6 ---
-            'github'      => 'FontAwesome6:fab fa-github',
-            'discord'     => 'FontAwesome6:fab fa-discord',
-
-            //(Solid)
-            'robot'       => 'FontAwesome6:fas fa-robot',
-            'brain'       => 'FontAwesome6:fas fa-brain',
-            'sparkles'    => 'FontAwesome6:fas fa-sparkles',
-            'graduation'  => 'FontAwesome6:fas fa-graduation-cap',
-
-            //(Regular)
-            'face-smile'  => 'FontAwesome6:far fa-face-smile',
-
-            'truck'  => 'FontAwesome6:fas fa-truck',
-        ],
     ],
     'mixins' => [
         'vufind-beacon-finder',
