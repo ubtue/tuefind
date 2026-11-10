@@ -31,6 +31,7 @@
 namespace VuFindTest\Mink;
 
 use Behat\Mink\Element\Element;
+use Generator;
 
 use function count;
 use function intval;
@@ -316,6 +317,26 @@ final class RecordActionsTest extends \VuFindTest\Integration\MinkTestCase
     }
 
     /**
+     * Test sorting persists in last search link.
+     *
+     * @return void
+     */
+    #[\PHPUnit\Framework\Attributes\Depends('testTagSearchSort')]
+    public function testTagSearchSortPersistsInLastSearchLink(): void
+    {
+        $page = $this->performSearch('five', 'tag');
+        $this->clickCss($page, $this->sortControlSelector . ' option', null, 1);
+        $this->waitForPageLoad($page);
+        $this->assertSelectedSort($page, 'author');
+        $page->clickLink('Dewey browse test');
+        $this->assertSame('Dewey browse test', $this->findCssAndGetText($page, 'h1'));
+        // Click on search results in breadcrumb to go back to search and check that
+        // author sort is still selected
+        $page->clickLink('Search Results');
+        $this->assertSelectedSort($page, 'author');
+    }
+
+    /**
      * Test that default autocomplete behavior is correct on a non-default search handler.
      *
      * @return void
@@ -374,6 +395,49 @@ final class RecordActionsTest extends \VuFindTest\Integration\MinkTestCase
         $this->waitForPageLoad($page);
         $tags = $page->findAll('css', '.tagList .tag');
         $this->assertCount(6, $tags);
+    }
+
+    /**
+     * Data provider for testTagManagementTagDisplay.
+     *
+     * @return Generator<string, array>
+     */
+    public static function tagManagementTagDisplayProvider(): Generator
+    {
+        yield 'case sensitive' => [true, ['ONE', 'THREE 4', 'five', 'five', 'five', 'new tag', 'one', 'three 4']];
+        yield 'case insensitive' => [false, ['five', 'five', 'five', 'new tag', 'one', 'one', 'three 4', 'three 4']];
+    }
+
+    /**
+     * Test display of tags in user content management area.
+     *
+     * @param bool     $caseSensitive Use case sensitive tags?
+     * @param string[] $expected      Expected tag text
+     *
+     * @return void
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('tagManagementTagDisplayProvider')]
+    #[\PHPUnit\Framework\Attributes\Depends('testAddSensitiveTag')]
+    public function testTagManagementTagDisplay(bool $caseSensitive, array $expected): void
+    {
+        if ($caseSensitive) {
+            $this->changeConfigs(
+                [
+                    'config' => [
+                        'Social' => ['case_sensitive_tags' => 'true'],
+                    ],
+                ]
+            );
+        }
+        $session = $this->getMinkSession();
+        $session->visit($this->getVuFindUrl('/Tag/UserList'));
+        $page = $session->getPage();
+        $this->fillInLoginForm($page, 'username2', 'test', false);
+        $this->submitLoginForm($page, false);
+        $tags = array_map(fn ($tag) => $tag->getText(), $page->findAll('css', 'td.user-tag div'));
+        // Sort tags to account for database platform and timing differences:
+        sort($tags);
+        $this->assertEquals($expected, $tags);
     }
 
     /**
