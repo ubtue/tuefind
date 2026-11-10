@@ -53,15 +53,23 @@ class UserService extends \VuFind\Db\Service\UserService implements UserServiceI
         return $query->getOneOrNullResult();
     }
 
-    public function getLikeEmail(string $searchQuery, int $limit = 20): array
+    public function getLikeEmail(string $searchQuery, ?string $userType, int $limit = 20): array
     {
-        $dql = 'SELECT U '
-            . 'FROM ' . UserEntityInterface::class . ' U '
-            . 'WHERE U.email LIKE :email '
-            . 'ORDER BY U.email ASC';
+        $dql = 'SELECT U FROM ' . UserEntityInterface::class . ' U WHERE U.email LIKE :email';
+
+        if ($userType !== null) {
+            $dql .= ' AND U.ixtheoUserType = :ixtheo_user_type';
+        }
+
+        $dql .= ' ORDER BY U.email ASC';
 
         $query = $this->entityManager->createQuery($dql);
         $query->setParameter('email', '%' . trim($searchQuery) . '%');
+
+        if ($userType !== null) {
+            $query->setParameter('ixtheo_user_type', $userType);
+        }
+
         $query->setMaxResults($limit);
 
         return $query->getResult();
