@@ -31,7 +31,7 @@
 <?php ob_start(); ?>
   <?php foreach ($this->checkboxFilters as $filter): ?>
     <?php if ($filter['selected']): ?>
-      <span class="filter-value">
+      <span class="filter-value" data-filter="<?=$this->escapeHtmlAttr($filter['filter'])?>">
         <?php
         $removeLink = isset($urlQuery) && !$fromSearchMemory
             ? $urlQuery->removeFilter($filter['filter'])
@@ -91,7 +91,12 @@
         <span class="filters-term filters-<?=$operatorClass?>">
           <?=($index > 0 || 'NOT' === $value['operator']) ? $join : '' ?>
         </span>
-        <span class="filter-value filters-<?=$operatorClass?>">
+        <span
+          class="filter-value filters-<?=$operatorClass?>"
+          <?php if (isset($urlQuery)): ?>
+            data-filter="<?=$this->escapeHtmlAttr($urlQuery->formatFilterString($value['field'], $value['value'], $value['operator']))?>"
+          <?php endif; ?>
+        >
           <span class="text">
             <?=$this->escapeHtml($value['displayText'])?>
           </span>

@@ -71,7 +71,7 @@
               $this->transEsc('Phone Number') => 'phone',
               $this->transEsc('Mobile Number') => 'mobile_phone',
               $this->transEsc('Group') => 'group',
-              $this->transEsc('patron_account_expires') => 'expiration_date'
+              $this->transEsc('patron_account_expires') => 'expiration_date',
             ]
         );
       ?>
@@ -82,5 +82,8 @@
 </div>
 
 <div class="<?=$this->layoutClass('sidebar')?>" id="myresearch-sidebar" role="navigation" aria-label="<?=$this->transEsc('account_menu_label')?>">
-  <?=$this->accountMenu()->render('profile')?>
+  <?=$this->section(
+      'AccountMenu',
+      template: 'myresearch/menu.phtml'
+  )->render(['active' => 'profile'])?>
 </div>

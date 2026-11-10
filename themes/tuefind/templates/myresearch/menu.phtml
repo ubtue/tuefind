@@ -6,11 +6,22 @@
 <h3 id="<?=$this->idPrefix ?? ''?>acc-menu-acc-header"><?=$this->transEsc('Your Account')?></h3>
 <nav class="myresearch-menu" aria-labelledby="<?=$this->idPrefix ?? ''?>acc-menu-acc-header">
   <ul class="account-menu">
-    <?php foreach ($this->items as $item): ?>
-      <?php // TueFind: only show items for default section ?>
-      <?php if (!isset($item['section'])): ?>
-        <?=$this->render('myresearch/menu-item.phtml', ['active' => $this->active, ...$item])?>
-      <?php endif; ?>
+    <?php foreach (
+        $this->menu['Account']['MenuItems'] ?? [] as $item
+    ): ?>
+      <?php
+        $context = [
+            'sectionPlugin' => $this->{
+                \VuFind\View\Helper\Root\Section::SECTION_PLUGIN_KEY
+            },
+            'active' => $this->active,
+            ...$item,
+        ];
+      ?>
+      <?=$this->render(
+          $item['template'] ?? 'myresearch/menu-item.phtml',
+          $context
+      )?>
     <?php endforeach; ?>
   </ul>
 </nav>
@@ -54,22 +65,27 @@
 <!-- TueFind: Add Admin section -->
 <?php
 // check whether admin section must be rendered
-$showAdminSection = false;
-foreach ($this->items as $item) {
-    if (isset($item['section']) && $item['section'] == 'admin') {
-        $showAdminSection = true;
-    }
-}
+$adminItems = $this->menu['Admin']['MenuItems'] ?? [];
+$showAdminSection = !empty($adminItems);
 
 ?>
 <?php if ($showAdminSection): ?>
-  <h3 id="<?=$this->idPrefix ?? ''?>acc-menu-acc-header"><?=$this->transEsc('Admin')?></h3>
-  <nav class="myresearch-menu" aria-labelledby="<?=$this->idPrefix ?? ''?>acc-menu-acc-header">
+  <?php
+    $adminHeaderId = ($this->idPrefix ?? '')
+        . ($this->menu['Admin']['id'] ?? 'acc-menu-admin-header');
+  ?>
+
+  <h3 id="<?=$this->escapeHtmlAttr($adminHeaderId)?>">
+    <?=$this->transEsc('Admin')?>
+  </h3>
+  <nav class="myresearch-menu" aria-labelledby="<?=$this->escapeHtmlAttr($adminHeaderId)?>">
     <ul class="account-menu">
-      <?php foreach ($this->items as $item): ?>
-        <?php if (isset($item['section']) && $item['section'] == 'admin'): ?>
-          <?=$this->render('myresearch/menu-item.phtml', ['active' => $this->active, ...$item])?>
-        <?php endif; ?>
+      <?php foreach ($adminItems as $item): ?>
+        <?=$this->render('myresearch/menu-item.phtml', [
+            'sectionPlugin' => $this->{\VuFind\View\Helper\Root\Section::SECTION_PLUGIN_KEY},
+            'active' => $this->active,
+            ...$item,
+        ])?>
       <?php endforeach; ?>
     </ul>
   </nav>

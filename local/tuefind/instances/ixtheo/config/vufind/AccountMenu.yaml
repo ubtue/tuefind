@@ -11,114 +11,114 @@
 #     a check whether to show the item. If omitted, item will always display.
 #   - status: whether to show status label, defaults to false
 #   - section: Added in TueFind to move items to separate admin menu.
+Account:
+  label: Guest
+  id: acc-menu-acc-header
+  class: account-menu
+  MenuItems:
+    - name: favorites
+      label: saved_items
+      route: myresearch-favorites
+      icon: user-favorites
+      checkMethod: checkFavorites
 
-MenuItems:
-  - name: favorites
-    label: saved_items
-    route: myresearch-favorites
-    icon: user-favorites
-    checkMethod: checkFavorites
+    - name: history
+      label: Search History
+      route: search-history
+      icon: search
+      checkMethod: checkHistory
 
-  - name: history
-    label: Search History
-    route: search-history
-    icon: search
-    checkMethod: checkHistory
+    - name: subscriptions
+      label: Subscriptions
+      route: myresearch-subscriptions
+      icon: notification
+      checkMethod: checkSubscriptions
 
-  - name: subscriptions
-    label: Subscriptions
-    route: myresearch-subscriptions
-    icon: notification
-    checkMethod: checkSubscriptions
+    - name: RssFeedSettings
+      label: My newsfeeds
+      route: myresearch-rssfeedsettings
+      icon: search-rss
+      checkMethod: checkRssSubscriptions
 
-  - name: RssFeedSettings
-    label: My newsfeeds
-    route: myresearch-rssfeedsettings
-    icon: search-rss
-    checkMethod: checkRssSubscriptions
+    - name: PDASubscriptions
+      label: PDA
+      route: myresearch-pdasubscriptions
+      icon: format-book
+      checkMethod: checkPda
 
-  - name: PDASubscriptions
-    label: PDA
-    route: myresearch-pdasubscriptions
-    icon: format-book
-    checkMethod: checkPda
+    - name: SelfArchiving_menu_label
+      label: SelfArchiving_menu_label
+      route: myresearch-selfarchiving
+      icon: file-text-o
+      checkMethod: checkSelfarchiving
 
-  - name: SelfArchiving_menu_label
-    label: SelfArchiving_menu_label
-    route: myresearch-selfarchiving
-    icon: file-text-o
-    checkMethod: checkSelfarchiving
+    - name: publications
+      label: My Publications
+      route: myresearch-publications
+      icon: upload
+      checkMethod: checkPublications
 
-  - name: publications
-    label: My Publications
-    route: myresearch-publications
-    icon: upload
-    checkMethod: checkPublications
+    - name: profile
+      label: Profile
+      route: myresearch-profile
+      icon: profile
 
-  - name: profile
-    label: Profile
-    route: myresearch-profile
-    icon: profile
+    - name: logout
+      label: Log Out
+      route: myresearch-logout
+      icon: sign-out
+      checkMethod: checkLogout
 
-  - name: logout
-    label: Log Out
-    route: myresearch-logout
-    icon: sign-out
-    checkMethod: checkLogout
 
-  - name: showadmins
-    label: Show admins
-    route: adminfrontend-showadmins
-    icon: user-secret
-    checkMethod: checkAdmins
-    section: admin
+Admin:
+  label: Admin
+  id: acc-menu-admin-header
+  class: account-menu
+  MenuItems:
+    - name: showadmins
+      label: Show admins
+      route: adminfrontend-showadmins
+      icon: user-secret
+      checkMethod: checkAdmins
 
-  - name: showuserauthorities
-    label: Show user authorities
-    route: adminfrontend-showuserauthorities
-    icon: user-plus
-    checkMethod: checkUserAuthorities
-    section: admin
+    - name: showuserauthorities
+      label: Show user authorities
+      route: adminfrontend-showuserauthorities
+      icon: user-plus
+      checkMethod: checkUserAuthorities
 
-  - name: showuserauthorityhistory
-    label: Show user authority history
-    route: adminfrontend-showuserauthorityhistory
-    icon: user-plus
-    checkMethod: checkUserAuthorities
-    section: admin
+    - name: showuserauthorityhistory
+      label: Show user authority history
+      route: adminfrontend-showuserauthorityhistory
+      icon: user-plus
+      checkMethod: checkUserAuthorities
 
-  - name: showuserpublications
-    label: Show user publications
-    route: adminfrontend-showuserpublications
-    icon: user-plus
-    checkMethod: checkUserPublications
-    section: admin
+    - name: showuserpublications
+      label: Show user publications
+      route: adminfrontend-showuserpublications
+      icon: user-plus
+      checkMethod: checkUserPublications
 
-  - name: showuserpublicationstatistics
-    label: Show user publication statistics
-    route: adminfrontend-showuserpublicationstatistics
-    icon: user-plus
-    checkMethod: checkUserPublications
-    section: admin
+    - name: showuserpublicationstatistics
+      label: Show user publication statistics
+      route: adminfrontend-showuserpublicationstatistics
+      icon: user-plus
+      checkMethod: checkUserPublications
 
-  - name: cmspages
-    label: CMS pages
-    route: adminfrontend-cmspages
-    icon: file-word
-    checkMethod: checkCMS
-    section: admin
+    - name: cmspages
+      label: CMS pages
+      route: adminfrontend-cmspages
+      icon: file-word
+      checkMethod: checkCMS
 
-  - name: cmspageshistory
-    label: CMS Pages History
-    route: adminfrontend-cmspagesallhistory
-    icon: clock-rotate-left
-    checkMethod: checkAllCMSHistory
-    section: admin
+    - name: cmspageshistory
+      label: CMS Pages History
+      route: adminfrontend-cmspagesallhistory
+      icon: clock-rotate-left
+      checkMethod: checkAllCMSHistory
 
-  - name: cmspagesdocs
-    label: CMS Pages Docs
-    route: adminfrontend-cmspagesdocs
-    icon: folder-tree
-    checkMethod: checkCMSDocs
-    section: admin
-
+    - name: cmspagesdocs
+      label: CMS Pages Docs
+      route: adminfrontend-cmspagesdocs
+      icon: folder-tree
+      checkMethod: checkCMSDocs
