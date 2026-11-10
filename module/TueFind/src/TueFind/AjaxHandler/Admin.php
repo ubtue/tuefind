@@ -39,6 +39,9 @@ class Admin extends \VuFind\AjaxHandler\AbstractBase
                 $searchEmails = $params->fromQuery('q');
 
                 $subSystem = $this->viewRenderer->getHelperPluginManager()->get(\TueFind\View\Helper\TueFind\TueFind::class)->getTueFindSubsystem();
+                if ($subSystem == 'krimdok') {
+                    $subSystem = null;
+                }
 
                 $users = $this->userService->getLikeEmail($searchEmails, $subSystem);
 
