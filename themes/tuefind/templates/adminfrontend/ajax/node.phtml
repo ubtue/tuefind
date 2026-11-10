@@ -23,13 +23,13 @@ $imageUrl = '/cms/assets' . $this->file['relativePath'];
                     data-isimage="image"
                     alt="<?= $this->escapeHtml($this->file['name']) ?>">
             <?php else: ?>
-                <img src="<?= $imageUrl ?>"
-                    class="img-fluid card-img-top"
-                    data-bs-toggle="modal"
-                    data-bs-target="#previewModal"
-                    data-relative-path="<?= $this->escapeHtml($this->file['relativePath']) ?>"
-                    data-isimage="image"
-                    alt="<?= $this->escapeHtml($this->file['name']) ?>">
+                <a href="<?=$this->url('adminfrontend-preview')?>?relative-path=<?= $this->escapeHtml($this->file['relativePath']) ?>&file-or-image=image" data-lightbox class="text-center d-block text-default cms_preview col-6 cursor-pointer">
+                    <img src="<?= $imageUrl ?>"
+                        class="img-fluid card-img-top"
+                        data-relative-path="<?= $this->escapeHtml($this->file['relativePath']) ?>"
+                        data-isimage="image"
+                        alt="<?= $this->escapeHtml($this->file['name']) ?>">
+                </a>
             <?php endif; ?>
         </div>
         <div class="card-footer text-muted row gx-0">
@@ -39,18 +39,8 @@ $imageUrl = '/cms/assets' . $this->file['relativePath'];
                     <i class="fa fa-link"></i>
                 </span>
             <?php else: ?>
-                <span class="text-center d-block text-default cms_preview col-6 cursor-pointer"
-                    data-bs-toggle="modal"
-                    data-bs-target="#previewModal"
-                    data-relative-path="<?= $this->escapeHtml($this->file['relativePath']) ?>">
-                        <i class="fas fa-eye"></i>
-                </span>
-                <span class="text-center d-block text-danger col-6 delete-btn cursor-pointer"
-                data-bs-toggle="modal"
-                data-bs-target="#confirmDeleteModal"
-                data-relative-path="<?= $this->escapeHtml($this->file['relativePath']) ?>">
-                    <i class="fas fa-trash"></i>
-                </span>
+                <a href="<?=$this->url('adminfrontend-preview')?>?relative-path=<?= $this->escapeHtml($this->file['relativePath']) ?>&file-or-image=image" data-lightbox class="text-center d-block text-default cms_preview col-6 cursor-pointer"><i class="fas fa-eye"></i></a>
+                <a href="<?=$this->url('adminfrontend-confirmdelete')?>?relative-path=<?= $this->escapeHtml($this->file['relativePath']) ?>&file-or-image=image" data-lightbox class="text-center d-block text-danger col-6 delete-btn cursor-pointer"><i class="fas fa-trash"></i></a>
             <?php endif;?>
         </div>
     <?php else: ?>
@@ -73,7 +63,9 @@ $imageUrl = '/cms/assets' . $this->file['relativePath'];
             <?php else: ?>
                 <div class="text-center">
                     <?php if ($this->file['extension'] === 'pdf'): ?>
-                        <i class="fas fa-file-pdf text-danger" style="font-size: 4rem;"></i>
+                        <a href="<?=$this->url('adminfrontend-preview')?>?relative-path=<?= $this->escapeHtml($this->file['relativePath']) ?>&file-or-image=file" data-lightbox class="text-center d-block text-default cms_preview col-6 cursor-pointer">
+                            <i class="fas fa-file-pdf text-danger" style="font-size: 4rem;"></i>
+                        </a>
                     <?php elseif ($this->file['extension'] === 'txt'): ?>
                         <i class="fas fa-file-alt text-secondary" style="font-size: 4rem;"></i>
                     <?php else: ?>
@@ -91,18 +83,8 @@ $imageUrl = '/cms/assets' . $this->file['relativePath'];
                     <i class="fa fa-link"></i>
                 </span>
             <?php else: ?>
-                <span class="text-center d-block text-default cms_preview col-6 cursor-pointer"
-                    data-bs-toggle="modal"
-                    data-bs-target="#previewModal"
-                    data-relative-path="<?= $this->escapeHtml($this->file['relativePath']) ?>">
-                        <i class="fas fa-eye"></i>
-                </span>
-                <span class="text-center d-block text-danger col-6 delete-btn cursor-pointer"
-                data-bs-toggle="modal"
-                data-bs-target="#confirmDeleteModal"
-                data-relative-path="<?= $this->escapeHtml($this->file['relativePath']) ?>">
-                    <i class="fas fa-trash"></i>
-                </span>
+                <a href="<?=$this->url('adminfrontend-preview')?>?relative-path=<?= $this->escapeHtml($this->file['relativePath']) ?>&file-or-image=file" data-lightbox class="text-center d-block text-default cms_preview col-6 cursor-pointer"><i class="fas fa-eye"></i></a>
+                <a href="<?=$this->url('adminfrontend-confirmdelete')?>?relative-path=<?= $this->escapeHtml($this->file['relativePath']) ?>&file-or-image=file" data-lightbox id="confirm-delete-btn" class="text-center d-block text-danger col-6 delete-btn cursor-pointer"><i class="fas fa-trash"></i></a>
             <?php endif;?>
         </div>
     <?php endif; ?>

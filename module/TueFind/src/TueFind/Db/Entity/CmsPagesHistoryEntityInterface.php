@@ -4,16 +4,12 @@ namespace TueFind\Db\Entity;
 
 use DateTime;
 use VuFind\Db\Entity\EntityInterface;
-use TueFind\Db\Entity\CmsPages;
-use TueFind\Db\Entity\User;
 
 interface CmsPagesHistoryEntityInterface extends EntityInterface
 {
     public function getId(): ?int;
 
     public function getUserID(): ?int;
-
-    public function setUserID(int $userId): static;
 
     public function getCmsPage(): ?CmsPages;
 
@@ -23,8 +19,15 @@ interface CmsPagesHistoryEntityInterface extends EntityInterface
 
     public function setUser(?User $user): static;
 
+    public function getSubSystem(): ?Subsystems;
+
+    public function setSubSystem(?Subsystems $subSystem): static;
+
+    public function getComment(): ?string;
+
+    public function setComment(?string $comment): static;
+
     public function getCreated(): ?DateTime;
 
     public function setCreated(DateTime $created): static;
-    
 }

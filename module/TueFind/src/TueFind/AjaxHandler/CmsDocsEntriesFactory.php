@@ -2,7 +2,6 @@
 
 namespace TueFind\AjaxHandler;
 
-use Laminas\View\Renderer\PhpRenderer;
 use Psr\Container\ContainerInterface;
 
 class CmsDocsEntriesFactory implements \Laminas\ServiceManager\Factory\FactoryInterface
@@ -14,10 +13,11 @@ class CmsDocsEntriesFactory implements \Laminas\ServiceManager\Factory\FactoryIn
         }
 
         return new $requestedName(
-            $container->get(\VuFind\Search\Results\PluginManager::class), // 1-й: Search Manager
-            $container->get(\Laminas\View\Renderer\PhpRenderer::class),  // 2-й: PhpRenderer
+            $container->get(\VuFind\Search\Results\PluginManager::class),
+            $container->get(\Laminas\View\Renderer\PhpRenderer::class),
             $container->get(\VuFind\Config\PluginManager::class),
-            $container->get(\VuFind\Auth\Manager::class)->getUserObject() // 3-й: User Object
+            $container->get(\VuFind\Db\Service\PluginManager::class),
+            $container->get(\VuFind\Auth\Manager::class)->getUserObject()
         );
     }
 }

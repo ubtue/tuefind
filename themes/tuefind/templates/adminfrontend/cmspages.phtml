@@ -2,6 +2,8 @@
 $isAdmin = $this->tuefind()->isAdmin();
 $this->breadcrumbs()->set($this->translate('Admins'), $this->url('myresearch-home'))
       ->add($this->translate('CMS Pages'), active: true);
+$gitSync = $this->cmsSync;
+$gitStatus = $gitSync->getStatus();
 ?>
 
 <div class="<?=$this->layoutClass('mainbody')?>">
@@ -40,7 +42,9 @@ $this->breadcrumbs()->set($this->translate('Admins'), $this->url('myresearch-hom
           <td class="content-edit-cell">
             <a class="content-edit-button" href="<?=$this->url('content-page', ['page' => $page->getPageSystemId()])?>" title="<?=$this->transEsc('Show')?>"><?=$this->icon('link')?></a>&nbsp;
             <a class="content-edit-button" href="<?=$this->url('adminfrontend-updatecmspage', ['cms_page_id' => $page->getId()])?>" title="<?=$this->transEsc('Edit')?>"><?=$this->icon('edit')?></a>&nbsp;
-            <a class="content-edit-button" href="<?=$this->url('adminfrontend-deletecmspage', ['cms_page_id' => $page->getId()])?>" title="<?=$this->transEsc('Delete')?>"><?=$this->icon('trash')?></a>
+            <?php if ($isAdmin): ?>
+              <a class="content-edit-button" href="<?=$this->url('adminfrontend-deletecmspage', ['cms_page_id' => $page->getId()])?>" title="<?=$this->transEsc('Delete')?>"><?=$this->icon('trash')?></a>
+            <?php endif; ?>
           </td>
         </tr>
       <?php endforeach; ?>
@@ -53,18 +57,22 @@ $this->breadcrumbs()->set($this->translate('Admins'), $this->url('myresearch-hom
     <a href="<?=$this->url('adminfrontend-addcmspage')?>">Admin only: <?=$this->transEsc('Add New CMS page')?></a>
   <?php endif;?>
 
-  <?php if ($this->cmsSync->isEnabled()): ?>
+  <?php if ($this->cmsSync->isEnabled() && $isAdmin): ?>
   <div class="cms-sync-container" style="margin: 20px 0;">
     <h3>CMS Repository Synchronization</h3>
+    <h4>You are currently in branch <span class="text-danger"><?=$this->currentBranch?></span></h4>
     <button id="git-pull-btn" class="btn btn-primary">Git pull</button>
-    <button id="git-push-btn" class="btn btn-danger">Git push</button>
+    <a href="<?=$this->url('adminfrontend-gitcommit')?>" data-lightbox id="git-commit-btn" class="btn btn-warning">Git commit / push</a>
+    <!-- <button id="git-push-btn" class="btn btn-danger">Git push</button> -->
 
     <span id="sync-spinner" style="display: none; margin-left: 10px;">
         <i class="fa fa-spinner fa-spin"></i> Processing...
     </span>
 
     <div id="sync-log-console" style="margin-top: 15px; padding: 10px; background: #222; color: #fff; font-family: monospace; border-radius: 4px; min-height: 100px; max-height: 300px; overflow-y: auto;">
-        [Console] Ready. Press "Start Full Sync".
+        <?php if (!empty($gitStatus)): ?>
+            <p><?=$gitStatus;?></p>
+        <?php endif; ?>
     </div>
 </div>
   <?php endif; ?>

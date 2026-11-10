@@ -1,0 +1,79 @@
+<div class="">
+    <div class="createFolderModal" style="min-width: 800px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createFolderLabel">Create new Folder</h5>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="cw-row">
+                        <div class="col-12">
+                            <div class="">
+                            <div class="row g-3">
+                                <div class="input-group mb-3">
+                                    <span class="serverPath d-none"><?php echo $this->escapeHtml($this->serverPath); ?></span>
+                                    <span class="input-group-text createFolderPATH" id="basic-addon3"><?php echo $this->escapeHtml($this->theme); ?>/</span>
+                                    <input type="text" class="form-control folderNameInput" id="folderName" aria-describedby="basic-addon3" placeholder="name">
+                                    <button class="btn btn-primary modalCreateFolderBtn">Create</button>
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+  </div>
+</div>
+
+<?php $jsSnippet = <<<'EOD'
+     $(document).on('click', '.modalCreateFolderBtn', function() {
+        let THIS = $(this);
+        let parentModal = THIS.closest('.modal-content');
+        let folderNameInput = parentModal.find('.folderNameInput').val();
+        let currentBreadcrumbs = parentModal.find('.createFolderPATH').text().trim();
+        let serverPATH = parentModal.find('.serverPath').text().trim();
+        let cleanPath = serverPATH.replace(/\/$/, "");
+        let parentPath = cleanPath + '/' +currentBreadcrumbs;
+        let validationElement = parentModal.find('.invalid-feedback');
+
+        $.ajax({
+            url: VuFind.path + '/AJAX/JSON',
+            method: 'GET',
+            data: {
+                method: 'CmsDocs',
+                action: 'createFolder',
+                'parentPath': parentPath,
+                'folderName': folderNameInput
+            },
+            dataType: 'json',
+            success: function(response) {
+                let respone = response.data;
+                let status = respone.status;
+                let message = respone.message;
+
+                if(status === 'ERROR'){
+                    validationElement.show().html(message);
+                    setTimeout(() => {
+                        validationElement.hide().html('');
+                    }, 2000);
+                    return;
+                }else{
+                    validationElement.hide().html('');
+                    parentModal.find('.container').html(`<div class="alert alert-success" role="alert">${message}</div>`);
+                    setTimeout(() => {
+                        location.reload();
+                    }, 2000);
+                }
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                if (window.console && window.console.log) {
+                    console.log("Status: " + xhr.status + ", Error: " + thrownError);
+                }
+            }
+        }); //end AJAX
+    });
+    EOD;
+?>
+<?=$this->assetManager()->outputInlineScriptString($jsSnippet)?>

@@ -1,5 +1,16 @@
 <?php $result = $this->BEACONfinder->getByAuthorityId($this->authorityId); ?>
 
+<?php
+  function GetItemLabel(VuFindBEACONFinder\Item $item): string
+  {
+    $label = $item->getNAME();
+    if (empty($label)) {
+      $label = parse_url($item->getTargetUri(), PHP_URL_HOST);
+    }
+    return $label;
+  }
+?>
+
 <?php // TueFind: Make sure the external ressources are not already mentioned in the existing biographical ressources ?>
 <?php if ($result && count($result) > 0): ?>
   <?php
@@ -35,8 +46,8 @@
   }
   $sortBottomPattern = '"B3Kat|Bayerische Staatsbibliothek|HBZ-Verbundkatalog|HeBIS|Nordrhein-Westfälische Bibliographie|SWB-Verbundkatalog|Universitätsbibliothek Heidelberg"i';
   usort($result, function (VuFindBEACONFinder\Item $a, VuFindBEACONFinder\Item $b) use ($sortBottomPattern) {
-    $aKey = $a->getNAME();
-    $bKey = $b->getNAME();
+    $aKey = GetItemLabel($a);
+    $bKey = GetItemLabel($b);
 
     $aMatch = preg_match($sortBottomPattern, $aKey);
     $bMatch = preg_match($sortBottomPattern, $bKey);
@@ -47,7 +58,7 @@
         return -1;
     }
 
-    return strcmp($aKey, $bKey);
+    return strnatcmp($aKey, $bKey);
   });
   ?>
 <?php endif; ?>
@@ -56,9 +67,9 @@
 <h2><?=$this->transEsc('External Resources')?></h2>
   <ul class="list-group">
     <?php foreach ($result as $item): ?>
-      <?php if (!empty($item->getNAME()) && !empty($item->getTargetUri())): ?>
+      <?php if (!empty($item->getTargetUri())): ?>
         <li class="list-group-item tf-beacon-reference">
-          <a class="tf-beacon-reference-link" href="<?=$item->getTargetUri()?>" target="_blank" property="sameAs"><?=htmlspecialchars($item->getNAME())?></a>
+          <a class="tf-beacon-reference-link" href="<?=$item->getTargetUri()?>" target="_blank" property="sameAs"><?=htmlspecialchars(GetItemLabel($item))?></a>
         </li>
       <?php endif; ?>
     <?php endforeach; ?>

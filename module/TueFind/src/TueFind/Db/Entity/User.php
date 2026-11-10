@@ -7,6 +7,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+use function is_array;
+use function is_string;
+
 #[ORM\Entity]
 class User extends \VuFind\Db\Entity\User implements UserEntityInterface
 {
@@ -118,10 +121,25 @@ class User extends \VuFind\Db\Entity\User implements UserEntityInterface
 
     public function getTueFindRights(): array
     {
-        if ($this->tuefindRights == null) {
+        if ($this->tuefindRights === null || trim($this->tuefindRights) === '') {
             return [];
         }
-        return explode(',', $this->tuefindRights);
+        return array_map('trim', explode(',', $this->tuefindRights));
+    }
+
+    public function setTueFindRights(array|string|null $rights): static
+    {
+        if (is_array($rights)) {
+            $cleaned = array_filter(array_map('trim', $rights));
+            $this->tuefindRights = !empty($cleaned) ? implode(',', $cleaned) : null;
+        } elseif (is_string($rights)) {
+            $trimmed = trim($rights);
+            $this->tuefindRights = $trimmed !== '' ? $trimmed : null;
+        } else {
+            $this->tuefindRights = null;
+        }
+
+        return $this;
     }
 
     public function cmsPagesHistory(): Collection

@@ -17,9 +17,12 @@ trait CmsTrait
 
         $subsystem = $this->getDbService(\TueFind\Db\Service\SubsystemsServiceInterface::class)->getByName(\IxTheo\Utility::getUserTypeFromUsedEnvironment());
         $cmsPages = $subsystem->getCmsPages();
+        $cmsSync = $this->serviceLocator->get(\TueFind\Service\CmsSync::class);
+        $currentBranch = $cmsSync->getBranch();
 
         $allCMS = ['cmsPages' => $cmsPages,
-                  'cmsSync' => $this->serviceLocator->get(\TueFind\Service\CmsSync::class),
+                  'cmsSync' => $cmsSync,
+                  'currentBranch' => $currentBranch ?? null,
                   'user' => $this->getUser(),
         ];
 
@@ -143,7 +146,9 @@ trait CmsTrait
 
             $user = $this->getUser();
 
-            $this->getDbService(\TueFind\Db\Service\CmsPagesHistoryServiceInterface::class)->add($cmsPageId, $user);
+            $subSystem = $this->getDbService(\TueFind\Db\Service\SubsystemsServiceInterface::class)->getByName(\IxTheo\Utility::getUserTypeFromUsedEnvironment());
+
+            $this->getDbService(\TueFind\Db\Service\CmsPagesHistoryServiceInterface::class)->add($cmsPageId, $user, $subSystem, 'Page ' . $cmsPage->getPageSystemId() . ' updated');
         }
 
         $view = $this->createViewModel();
@@ -172,8 +177,8 @@ trait CmsTrait
     public function CmsPagesAllHistoryAction()
     {
         $this->forceAdminLogin();
-
-        $CMSPagesHistory = ['CMSPagesHistory' => $this->getDbService(\TueFind\Db\Service\CmsPagesHistoryServiceInterface::class)->getAllBySubsystemName(\IxTheo\Utility::getUserTypeFromUsedEnvironment())];
+        $subSystem = $this->getDbService(\TueFind\Db\Service\SubsystemsServiceInterface::class)->getByName(\IxTheo\Utility::getUserTypeFromUsedEnvironment());
+        $CMSPagesHistory = ['CMSPagesHistory' => $this->getDbService(\TueFind\Db\Service\CmsPagesHistoryServiceInterface::class)->getAllBySubsystem($subSystem)];
         return $this->createViewModel($CMSPagesHistory);
     }
 

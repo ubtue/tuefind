@@ -22,16 +22,10 @@
         <div class="cms-actions-panel-left mb-3 gap-2 text-end hideInPlugin row">
             <div class="input-group mb-3 w-50 col">
                 <?php if ($tuefind->isAdmin()): ?>
-                    <button type="button"
-                        class="btn btn-primary"
-                        id="createFolderBtn"
-                        data-bs-toggle="modal"
-                        data-bs-target="#createFolderModal"
-                        data-theme="<?= $this->escapeHtml($parentTheme) ?>"
-                        data-full-path="<?= $this->escapeHtml($parentFullPath) ?>"
-                        data-server-path="<?= $this->escapeHtml($this->serverPath) ?>">
+                    <a href="<?=$this->url('adminfrontend-createfolder')?>?theme=<?= $this->escapeHtml($parentTheme) ?>&full-path=<?= $this->escapeHtml($parentFullPath) ?>&server-path=<?= $this->escapeHtml($this->serverPath) ?>" 
+                        data-lightbox class="btn btn-primary">
                         <i class="fas fa-folder-plus me-2"></i>Create Folder
-                    </button>
+                    </a>
                 <?php endif; ?>
             </div>
             <div class="input-group mb-3 w-50 col">
@@ -115,95 +109,6 @@
             <?php endif; ?>
         </div>
     </div>
-</div>
-
-
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" style="min-width: 1200px;">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title preview_title" id="exampleModalLabel"></h5>
-      </div>
-      <div class="modal-body">
-        <div class="container " id="container">
-          <div class="cw-row">
-            <div class="col-12">
-              <div class="">
-                <div class="preview_body text-center"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Modal -->
-<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-
-    <div class="modal-header">
-        <h5 class="modal-title mr-auto me-auto" id="confirmDeleteLabel">Confirm deletion</h5>
-        <button type="button" class="btn-unstyled ms-auto" data-bs-dismiss="modal" aria-label="Close">
-            <i class="fas fa-times"></i>
-        </button>
-    </div>
-
-      <div class="modal-body">
-        Are you sure you want to delete <span class="sureDeleteName text-danger"></span>?
-      </div>
-      <div class="file-path d-none"></div>
-      <div class="ajax-response text-center d-none"></div>
-      <div class="file_or_image d-none"></div>
-      
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-          Cancel
-        </button>
-        <button type="button" class="btn btn-danger" id="confirmDeleteBtn">
-          Delete
-        </button>
-      </div>
-
-    </div>
-  </div>
-</div>
-
-<!-- Modal create Folder -->
-<div class="modal fade" id="createFolderModal" tabindex="-1" aria-labelledby="createFolderLabel" aria-hidden="true">
-  <div class="modal-dialog" style="min-width: 1000px;">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="createFolderLabel">Create new Folder</h5>
-      </div>
-      <div class="modal-body">
-        <div class="container">
-          <div class="cw-row">
-            <div class="col-12">
-              <div class="">
-                <div class="row g-3">
-                    <div class="input-group mb-3">
-                        <span class="input-group-text createFolderPATH" id="basic-addon3"></span>
-                        <input type="text" class="form-control folderNameInput" id="folderName" aria-describedby="basic-addon3" placeholder="name">
-                        <button type="submit" class="btn btn-primary modalCreateFolderBtn">Create</button>
-                    </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
 </div>
 
 <style>

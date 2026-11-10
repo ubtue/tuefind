@@ -1,28 +1,28 @@
 var CMS = {
     Git: {
         Init: function() {
-            $('#git-pull-btn').on('click', (e) => CMS_STATIC.Git.HandlePull(e.currentTarget));
-            $('#git-push-btn').on('click', (e) => CMS_STATIC.Git.HandlePush(e.currentTarget));
+            $('#git-pull-btn').on('click', (e) => CMS.Git.HandlePull(e.currentTarget));
+            $('#git-push-btn').on('click', (e) => CMS.Git.HandlePush(e.currentTarget));
         },
 
         HandlePull: async function() {
-            await this._executeSyncProcess(this, async (log) => {
+            await TueFind._executeSyncProcess(this, async (log) => {
                 // Step 1: Pull
-                await this._runGitStage('gitPull', 'Step 1/3: Requesting git pull from remote repository...', 'PULL STAGE FAILED', log);
+                await TueFind._runGitStage('gitPull', 'Step 1/3: Requesting git pull from remote repository...', 'PULL STAGE FAILED', log);
 
                 // Step 2: Import
-                await this._runGitStage('gitImport', 'Step 2/3: Scanning JSON files and updating database...', 'IMPORT STAGE FAILED', log);
+                await TueFind._runGitStage('gitImport', 'Step 2/3: Scanning JSON files and updating database...', 'IMPORT STAGE FAILED', log);
 
                 // Step 3: Push
-                await this._runGitStage('gitPush', 'Step 3/3: Committing local changes and pushing to Git...', 'PUSH STAGE FAILED', log);
+                //await TueFind._runGitStage('gitPush', 'Step 3/3: Committing local changes and pushing to Git...', 'PUSH STAGE FAILED', log);
 
                 log('=== ALL SYNC STAGES COMPLETED SUCCESSFULLY ===', 'success');
             });
         },
 
         HandlePush: async function() {
-            await this._executeSyncProcess(this, async (log) => {
-                await this._runGitStage('gitPush', 'Step 1/1: Committing local changes and pushing to Git...', 'PUSH STAGE FAILED', log);
+            await TueFind._executeSyncProcess(this, async (log) => {
+                await TueFind._runGitStage('gitPush', 'Step 1/1: Committing local changes and pushing to Git...', 'PUSH STAGE FAILED', log);
                 log('=== PUSH COMPLETED SUCCESSFULLY ===', 'success');
             });
         }
@@ -62,9 +62,26 @@ var CMS = {
                 placeholder: '',
                 tabsize: 2,
                 height: 600,
+                fontSizes: ['8', '10', '12', '14', '16', '18', '20', '24', '36'],
+                fontNames: [
+                    'Open Sans', 
+                    'Arial', 
+                    'Arial Black', 
+                    'Comic Sans MS', 
+                    'Courier New', 
+                    'Helvetica', 
+                    'Impact', 
+                    'Tahoma', 
+                    'Times New Roman', 
+                    'Verdana',
+                    'Roboto'
+                ],
+                fontNamesIgnoreCheck: ['Open Sans', 'Roboto'],
                 toolbar: [
                     ['style', ['style']],
-                    ['font', ['bold', 'underline', 'clear']],
+                    ['font', ['bold', 'italic', 'underline', 'clear']],
+                    ['fontname', ['fontname']],
+                    ['fontsize', ['fontsize']],
                     ['color', ['color']],
                     ['para', ['ul', 'ol', 'paragraph']],
                     ['table', ['table']],
@@ -77,11 +94,14 @@ var CMS = {
                     // Note: 'fullscreen' removed due to severe display problems
                 ],
                 callbacks: {
-                  onBlur: function() {
-                    lastRange = $('.editor').summernote('createRange');
-                  }
+                    onKeyup: function(e) {
+                        lastRange = $('.editor').summernote('createRange');
+                    },
+                    onMouseup: function(e) {
+                        lastRange = $('.editor').summernote('createRange');
+                    }
                 },
-                  buttons: {
+                buttons: {
                     myPicture: CustomPictureButton
                 }
             });

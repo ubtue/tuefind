@@ -1,27 +1,29 @@
 <?php
   // Image (partially rendered by JS)
-  $imgUrl = $this->url('wikidataproxy-load');
   $wikidataIds = $this->driver->getWikidataIds();
 
-  if (empty($wikidataIds)) {
-    $imgUrl .= '?search[]=';
-    $names = $this->driver->getNameAliases();
-    $encodedNames = [];
-    foreach ($names as $name) {
-      $encodedNames[] = urlencode($name);
-    }
-    $imgUrl .= implode('&search[]=', $encodedNames);
-    $params = ['birthYear' => $this->driver->getBirthYear(),
-               'deathYear' => $this->driver->getDeathYear()];
-    foreach ($params as $key => $value) {
-      if ($value)
-	$imgUrl .= '&' . urlencode($key) . '=' . urlencode($value);
-    }
-  } else {
+  // Until 10-2026 there was a heuristic active to use name/birthdate in case
+  // no Wikidata ID was present, which lead to many false positives, see issue 3585.
+  // So now we only take the ID if present.
+  // Sometimes the ID is incorrect, so we use the birthYear for additional checks
+  // if present.
+  if (!empty($wikidataIds)) {
     // wikidata ids for single object always redirect to the master obj.: https://www.wikidata.org/wiki/Help:Redirects
-    $imgUrl .= '?id=' . $wikidataIds[0];
+    $imgUrl = $this->url('wikidataproxy-load');
+    $imgUrl .= '?id=' . urlencode($wikidataIds[0]);
+    $birthYear = $this->driver->getBirthYear();
+    $deathYear = $this->driver->getDeathYear();
+    if (!empty($birthYear)) {
+        $imgUrl .= '&birthYear=' . urlencode($birthYear);
+    }
+    if (!empty($deathYear)) {
+        $imgUrl .= '&deathYear=' . urlencode($deathYear);
+    }
+    ?>
+
+    <!-- onload didn't work, so we use a separate script snippet -->
+    <div class="tf-wikidata-image" data-url="<?=$this->escapeHtmlAttr($imgUrl)?>" align="center"></div>
+    <?=$this->assetManager()->outputInlineScriptString('TueFind.GetImagesFromWikidata();')?>
+
+    <?php
   }
-?>
-<!-- onload didn't work, so we use a separate script snippet -->
-<div class="tf-wikidata-image" data-url="<?=htmlspecialchars($imgUrl)?>" align="center"></div>
-<?=$this->assetManager()->outputInlineScriptString('TueFind.GetImagesFromWikidata();')?>
