@@ -37,7 +37,10 @@ class Admin extends \VuFind\AjaxHandler\AbstractBase
         if ($params->fromQuery('action') === 'searchUsers') {
             try {
                 $searchEmails = $params->fromQuery('q');
-                $users = $this->userService->getLikeEmail($searchEmails);
+
+                $subSystem = $this->viewRenderer->getHelperPluginManager()->get(\TueFind\View\Helper\TueFind\TueFind::class)->getTueFindSubsystem();
+
+                $users = $this->userService->getLikeEmail($searchEmails, $subSystem);
 
                 $htmlContent = $this->viewRenderer->render('adminfrontend/ajax/admin/searchusers', [
                     'users' => $users,
