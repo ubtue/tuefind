@@ -3,7 +3,8 @@
 $this->headTitle($this->translate('User Authorities'));
 
 // Set up breadcrumbs:
-$this->layout()->breadcrumbs = '<li><a href="' . $this->url('myresearch-home') . '">' . $this->transEsc('Your Account') . '</a></li> <li class="active">' . $this->transEsc('User Authorities') . '</li>';
+$this->breadcrumbs()->set($this->translate('Admins'), $this->url('myresearch-home'))
+      ->add($this->translate('User Authorities'), active: true);
 ?>
 
 <div class="<?=$this->layoutClass('mainbody')?>">
