@@ -60,6 +60,8 @@ RangedSearches.jar
 *.log
 *.log.*
 compiled.css
+compiled.css.map
+/themes/bootstrap5/scss/vendor
 
 # Solr synonym files
 /solr/vufind/biblio/conf/synonyms/*
