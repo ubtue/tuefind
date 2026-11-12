@@ -3,7 +3,8 @@
 $this->headTitle($this->transEsc('publication_overview_headline'));
 
 // Set up breadcrumbs:
-$this->layout()->breadcrumbs = '<li><a href="' . $this->url('myresearch-home') . '">' . $this->transEsc('Your Account') . '</a></li> <li class="active">' . $this->transEsc('publication_overview_headline') . '</li>';
+$this->breadcrumbs()->set($this->translate('User Account'), $this->url('myresearch-home'))
+      ->add($this->translate('My Publications'), active: true);
 ?>
 
 <div class="<?=$this->layoutClass('mainbody')?>">

@@ -46,11 +46,11 @@ Account:
       icon: format-book
       checkMethod: checkPda
 
-    - name: SelfArchiving_menu_label
-      label: SelfArchiving_menu_label
+    - name: SelfArchiving
+      label: Self-Archiving
       route: myresearch-selfarchiving
       icon: file-text-o
-      checkMethod: checkSelfarchiving
+      checkMethod: checkSelfArchiving
 
     - name: publications
       label: My Publications

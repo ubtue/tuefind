@@ -3,8 +3,8 @@
 $this->headTitle($this->translate('Subscriptions'));
 
 // Set up breadcrumbs:
-$this->layout()->breadcrumbs = '<li><a href="' . $this->url('myresearch-home') . '">' . $this->transEsc('Your Account') . '</a></li> <li class="active">' . $this->transEsc('Subscriptions') . '</li>';
-
+$this->breadcrumbs()->set($this->translate('User Account'), $this->url('myresearch-home'))
+      ->add($this->translate('Subscriptions'), active: true);
 // Grab list object from search results (if applicable):
 $list = isset($this->results) ? $this->results->getListObject() : null;
 $recordTotal = isset($this->results) ? $this->results->getResultTotal() : 0;

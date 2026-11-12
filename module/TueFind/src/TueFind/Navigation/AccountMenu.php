@@ -11,9 +11,9 @@ class AccountMenu extends \VuFind\Navigation\AccountMenu
         return $this->accountCapabilities->getRssSubscriptionSetting() === 'enabled';
     }
 
-    public function checkSelfarchiving(): bool
+    public function checkSelfArchiving(): bool
     {
-        return $this->accountCapabilities->getSelfarchivingSetting() === 'enabled';
+        return $this->accountCapabilities->getSelfArchivingSetting() === 'enabled';
     }
 
     public function checkPublications(): bool

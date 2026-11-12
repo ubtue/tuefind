@@ -15,6 +15,7 @@ $gitStatus = $gitSync->getStatus();
       <tr>
         <th><?=$this->transEsc('ID')?></th>
         <th><?=$this->transEsc('Page System ID')?></th>
+        <th><?=$this->transEsc('Translations')?></th>
         <th><?=$this->transEsc('History')?></th>
         <th><?=$this->transEsc('Created')?></th>
         <th><?=$this->transEsc('Updated')?></th>
@@ -29,6 +30,15 @@ $gitStatus = $gitSync->getStatus();
           </td>
           <td>
             <?=$page->getPageSystemId()?>
+          </td>
+          <td>
+            <?php
+              $langs = [];
+              foreach ($page->getTranslations() as $translation) {
+                  $langs[] = $translation->getLanguage();
+              }
+              echo !empty($langs) ? implode(', ', $langs) : 'N/A';
+            ?>
           </td>
           <td>
             <a href="<?=$this->url('adminfrontend-cmspageshistory', ['cms_page_id' => $page->getId()])?>"><?=$this->transEsc('history')?></a>
