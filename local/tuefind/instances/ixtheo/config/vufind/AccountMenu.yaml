@@ -44,7 +44,7 @@ MenuItems:
     checkMethod: checkPda
 
   - name: SelfArchiving
-    label: Self-Archiving
+    label: SelfArchiving_menu_label
     route: myresearch-selfarchiving
     icon: file-text-o
     checkMethod: checkSelfArchiving
