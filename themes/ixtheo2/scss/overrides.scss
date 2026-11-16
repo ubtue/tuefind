@@ -1,3 +1,4 @@
+@use "sass:color";
 @use "../../ixtheo2/scss/variables" as ixtheo2variables;
 @use "../../ixtheo/scss/variables" as *;
 @use "../../tuefind2/scss/compiled" as tuefind2compiled;
@@ -229,7 +230,7 @@
 }
 
 .home-navbar {
-  background-color: lighten(ixtheo2variables.$link-color, 40%);
+  background-color: color.adjust(ixtheo2variables.$link-color, $lightness: 40%);
   border-radius: 0px;
   border: 0;
   margin-bottom: 0px;
@@ -283,18 +284,18 @@
 }}
 
 .ix-news-panel-1 {
-  background-color: lighten(#EEE, 3%);;
+  background-color: color.adjust(#EEE, $lightness: 3%);
   border-radius: 12px 0 0 0;
 }
 .ix-news-panel-2 {
-  background-color: lighten(#CCC, 11%);
+  background-color: color.adjust(#CCC, $lightness: 11%);
   border-radius: 0 12px 0 0;
 }
 .ix-news-panel-3 {
-  background-color: lighten(#CCC, 11%);
+  background-color: color.adjust(#CCC, $lightness: 11%);
 }
 .ix-news-panel-4 {
-  background-color: lighten(#EEE, 3%);;
+  background-color: color.adjust(#EEE, $lightness: 3%);;
 }
 
 @media (max-width: 479px) {
