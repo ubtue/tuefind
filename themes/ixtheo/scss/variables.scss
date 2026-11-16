@@ -552,7 +552,7 @@ $popover-arrow-color:                 $popover-bg;
 //** Popover outer arrow width
 $popover-arrow-outer-width:           ($popover-arrow-width + 1);
 //** Popover outer arrow color
-$popover-arrow-outer-color:           fadein($popover-border-color, 5%);
+$popover-arrow-outer-color:           color.adjust($popover-border-color, $lightness: 5%);
 //** Popover outer arrow fallback color
 $popover-arrow-outer-fallback-color:  color.scale($popover-fallback-border-color, $lightness: -20%);
 
@@ -681,7 +681,7 @@ $list-group-active-bg:          $component-active-bg;
 //** Border color of active list elements
 $list-group-active-border:      $list-group-active-bg;
 //** Text color for content within active list items
-$list-group-active-text-color:  lighten($list-group-active-bg, 40%);
+$list-group-active-text-color:  color.adjust($list-group-active-bg, $lightness: 40%);
 
 //** Text color of disabled list items
 $list-group-disabled-color:      $gray-light;

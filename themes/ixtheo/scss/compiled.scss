@@ -1,8 +1,10 @@
 @use "../../tuefind/scss/compiled";
+@use "sass:color";
+@use "sass:math";
 @import "variables";
 
 mark {
-  background-color: lighten(#ffff66, 20%);
+  background-color:  color.adjust(#ffff66, $lightness: 20%);
   border-radius: $border-radius-small;
 }
 

@@ -1,3 +1,4 @@
+@use "sass:color";
 
 $brand-primary:               #2f78a0 !default;
 $brand-default:               #555 !default;
@@ -5,4 +6,4 @@ $brand-breadcrumb:            #7b7d84 !default;
 
 @import "../../tuefind2/scss/variables";
 
-$link-color: darken($brand-primary, 3%);
+$link-color:  color.adjust($brand-primary, $lightness: -3%);

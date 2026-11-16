@@ -4,6 +4,8 @@ $screen-md-min: 500;
 $table-border-color: #000;
 @use "../../ixtheo/scss/variables" as ixtheo;
 @use "variables" as *;
+@use "sass:color";
+
 .background {
   background-color: $body-bg;
   position: absolute;
@@ -610,7 +612,7 @@ ul .dropdown-menu {
 }
 
 mark {
-  background-color: lighten(#ffff66, 20%);
+  background-color:  color.adjust(#ffff66, $lightness: 20%);
   border-radius: $border-radius-sm;
 }
 
