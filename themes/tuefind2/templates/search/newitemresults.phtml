@@ -4,4 +4,6 @@
   $this->slot('search-heading')->set($this->transEsc('New Items'));
   $this->slot('empty-message')->set($this->transEsc('No new item information is currently available.'));
   $this->skip_noresults_recommendation = true;
+  $this->breadcrumbs()->set($this->translate('Find New Items'), $this->url('search-newitem'));
+  $this->results->getOptions()->setLoadResultsWithJs(false);
   echo $this->render('search/results.phtml');
