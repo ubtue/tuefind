@@ -118,3 +118,24 @@ ul.nav.nav-pills.align-items-start li:last-child .btn.btn-primary.search-button 
 .nav.searchbox.nav a.dropdown-toggle.show {
     color: $brand-primary !important;
 }
+.breadcrumb {
+    background: none;
+}
+.slider-container .noUi-horizontal .noUi-handle {
+    background: $brand-primary;
+    border: 1px solid $brand-primary;
+}
+.result-formats .format,.label,.result .format,.sidebar .format {
+    background: $brand-primary !important;
+}
+#mltmore {
+    color: $brand-primary !important;
+}
+.active>.page-link {
+    background-color: $brand-primary !important;
+    border-color: $brand-primary !important;
+    color: $body-bg !important;
+}
+.page-link {
+    color: $brand-primary !important;
+}
