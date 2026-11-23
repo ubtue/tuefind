@@ -112,8 +112,11 @@ echo $this->content()->renderTranslated($this->formId, 'feedback');
       $cleanClasses = trim(preg_replace('/\s+/', ' ', $cleanClasses));
       $formElement->setAttribute('class', $cleanClasses);
     }
-    ?>
 
+    if ($el['type'] == 'checkbox') {
+      $formElement->setAttribute('class', 'form-check-input');
+    }
+    ?>
     <?php if (in_array($handleGroup, ['close', 'openAndClose'])): ?>
       </div>
     <?php endif ?>
