@@ -17,14 +17,23 @@ class SolrDefaultBackendFactory extends \TueFind\Search\Factory\SolrDefaultBacke
     protected function createConnector()
     {
         $timeout = $this->getIndexConfig('timeout', 30);
+        $searchConfig = $this->configManager->getConfigObject($this->searchConfig);
+        $defaultFields = $searchConfig->General->default_record_fields ?? '*';
+
+        if (($searchConfig->Explain->enabled ?? false) && !str_contains($defaultFields, 'score')) {
+            $defaultFields .= ',score';
+        }
+
         $this->setTranslator($this->serviceLocator->get(\Laminas\Mvc\I18n\Translator::class));
-        $current_lang = $this->getTranslatorLocale();
+        $currentLang = $this->getTranslatorLocale();
 
         $handlers = [
             'select' => [
                 'fallback' => true,
-                'defaults' => ['fl' => '*,score', 'lang' => $current_lang,
-                               'defType' => 'multiLanguageQueryParser', 'df' => 'allfields',
+                'defaults' => ['fl' => $defaultFields,
+                               'lang' => $currentLang,
+                               'defType' => 'multiLanguageQueryParser',
+                               'df' => 'allfields',
                               ],
                 'appends'  => ['fq' => []],
             ],
@@ -57,9 +66,6 @@ class SolrDefaultBackendFactory extends \TueFind\Search\Factory\SolrDefaultBacke
         if ($this->logger) {
             $connector->setLogger($this->logger);
         }
-
-        $searchConfig = $this->configManager
-            ->getConfigObject($this->searchConfig);
 
         if ($cache = $this->createConnectorCache($searchConfig)) {
             $connector->setCache($cache);
