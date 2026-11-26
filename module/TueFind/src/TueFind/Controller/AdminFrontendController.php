@@ -323,4 +323,33 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase
 
         return $view;
     }
+
+    public function dspaceAction()
+    {
+        try {
+            $this->forceAdminLogin();
+        } catch (\Exception $e) {
+            return $this->forceLogin($e->getMessage());
+        }
+        $config = $this->getConfig('tuefind');
+        $dspaceServer = $config->Publication->dspace_url;
+        $dspaceUrlBase = $config->Publication->dspace_url_base;
+        $dspaceVersion = $config->Publication->dspace_version;
+        $dspaceUsername = $config->Publication->dspace_username;
+        $dspaceCollectionName = $config->Publication->collection_name;
+        $selfarchivingemail = $config->Publication->selfarchivingemail;
+
+        $view = new \Laminas\View\Model\ViewModel([
+            'dspaceServer' => $dspaceServer,
+            'dspaceUrlBase' => $dspaceUrlBase,
+            'dspaceVersion' => $dspaceVersion,
+            'dspaceUsername' => $dspaceUsername,
+            'dspaceCollectionName' => $dspaceCollectionName,
+            'selfarchivingemail' => $selfarchivingemail
+        ]);
+
+        $view->setTemplate('adminfrontend/api/dspace');
+
+        return $view;
+    }
 }

@@ -81,6 +81,12 @@ Admin:
       icon: user-secret
       checkMethod: checkAdmins
 
+    - name: dspace
+      label: Dspace API
+      route: adminfrontend-dspace
+      icon: database
+      checkMethod: checkDspace
+
     - name: showuserauthorities
       label: Show user authorities
       route: adminfrontend-showuserauthorities

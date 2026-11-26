@@ -210,7 +210,7 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
 
                 $dbPublicationService = $this->getDbService(\TueFind\Db\Service\PublicationServiceInterface::class);
                 $metadataVocabularyPluginManager = $this->serviceLocator->get(\VuFind\MetadataVocabulary\PluginManager::class);
-
+                /*
                 if ($dspaceVersion == 6) {
                     $dspace = $this->serviceLocator->get(\TueFind\Service\DSpace6::class);
                     $dspace->login();
@@ -232,6 +232,20 @@ class MyResearchController extends \VuFind\Controller\MyResearchController
                     $item = $dspace->addWorkspaceItem($tmpfile, $collection->uuid);
                     //$workflowItem = $dspace->addWorkflowItem($item->id); // not work
                     $updateData = $dspace->updateWorkspaceItem($item->id, $dspaceMetadata);
+                    // Store information in database
+                    $dbPublication = $dbPublicationService->createPublication($user, $existingRecordId, $item->id, $item->sections->upload->files[0]->uuid, $termFileData['termDate']);
+                    $publicationURL = $dspaceServer . '/workspaceitems/' . $item->id . '/view';
+                }
+                */
+                if($dspaceVersion == 8) {
+                    $client = $this->serviceLocator->get(\TueFind\Service\DSpace8::class);
+                    $client->login();
+                    
+                    $configCollectionName = $config->Publication->collection_name;
+                    $collection = $client->getCollectionByName($configCollectionName);
+
+                    $dspaceMetadata = $metadataVocabularyPluginManager->get('DSpace8')->getMappedData($existingRecord);
+                    $item = $client->addWorkspaceItem($tmpfile, $collection->uuid, $dspaceMetadata);
                     // Store information in database
                     $dbPublication = $dbPublicationService->createPublication($user, $existingRecordId, $item->id, $item->sections->upload->files[0]->uuid, $termFileData['termDate']);
                     $publicationURL = $dspaceServer . '/workspaceitems/' . $item->id . '/view';
