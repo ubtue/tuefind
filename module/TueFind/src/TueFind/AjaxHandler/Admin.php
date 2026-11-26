@@ -5,6 +5,7 @@ namespace TueFind\AjaxHandler;
 use Laminas\Mvc\Controller\Plugin\Params;
 use Laminas\View\Renderer\PhpRenderer;
 use TueFind\Db\Service\UserServiceInterface;
+use TueFind\Service\DSpace8;
 use VuFind\Db\Entity\UserEntityInterface;
 
 class Admin extends \VuFind\AjaxHandler\AbstractBase
@@ -15,13 +16,17 @@ class Admin extends \VuFind\AjaxHandler\AbstractBase
 
     protected $userService;
 
+    protected DSpace8 $dspace8;
+
     public function __construct(
         PhpRenderer $viewRenderer,
         protected ?UserEntityInterface $user,
-        UserServiceInterface $userService
+        UserServiceInterface $userService,
+        DSpace8 $dspace8
     ) {
         $this->viewRenderer = $viewRenderer;
         $this->userService = $userService;
+        $this->dspace8 = $dspace8;
     }
 
     public function handleRequest(Params $params)
@@ -87,6 +92,30 @@ class Admin extends \VuFind\AjaxHandler\AbstractBase
                 ]);
             }
         }
+
+        if ($params->fromQuery('action') === 'checkDspace') {
+            try {
+                
+                $collection_name = $params->fromPost('collection_name', $params->fromQuery('collection_name'));
+
+                $client = $this->dspace8;
+                $client->login();
+                
+                $collection = $client->getCollectionByName($collection_name);
+                $status = false;
+                if(!empty($collection)) {
+                     $status = true;
+                }
+                return $this->formatResponse([
+                    'status'  => $status
+                ]);
+            } catch (\Exception $e) {
+                return $this->formatResponse(
+                    "<span class='btn btn-danger m-1' style='pointer-events: none;'>Template render error: " . htmlspecialchars($e->getMessage()) . '</span>'
+                );
+            }
+        }
+
         return [];
     }
 }

@@ -83,4 +83,9 @@ class AccountMenu extends \VuFind\Navigation\AccountMenu
     {
         return $this->showCMS();
     }
+
+    public function checkDspace(): bool
+    {
+        return $this->checkAdmins();
+    }
 }
