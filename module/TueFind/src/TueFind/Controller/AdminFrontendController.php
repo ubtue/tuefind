@@ -336,7 +336,6 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase
         $dspaceUrlBase = $config->Publication->dspace_url_base;
         $dspaceVersion = $config->Publication->dspace_version;
         $dspaceUsername = $config->Publication->dspace_username;
-        $dspacePassword = $config->Publication->dspace_password;
         $dspaceCollectionName = $config->Publication->collection_name;
         $selfarchivingemail = $config->Publication->selfarchivingemail;
 
@@ -345,7 +344,6 @@ class AdminFrontendController extends \VuFind\Controller\AbstractBase
             'dspaceUrlBase' => $dspaceUrlBase,
             'dspaceVersion' => $dspaceVersion,
             'dspaceUsername' => $dspaceUsername,
-            'dspacePassword' => $dspacePassword,
             'dspaceCollectionName' => $dspaceCollectionName,
             'selfarchivingemail' => $selfarchivingemail
         ]);
