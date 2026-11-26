@@ -78,7 +78,7 @@ $jsSnippet = <<<EOD
           if (response && response.data && response.data.status) {
             $('.ajaxResult').html('<p class="text-success">Success! DSpace API is working properly.</p>');
           } else {
-            $('.ajaxResult').html(`<p class="text-danger">Collection `+collection+` not found in DSpace API!</p>`);
+            $('.ajaxResult').html(response.data);
           }
         },
         error: function(xhr, status, error) {
