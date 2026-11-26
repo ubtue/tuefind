@@ -454,6 +454,7 @@ $config = [
             'TueFind\Service\CmsSync' => 'TueFind\Service\CmsSyncFactory',
             'TueFind\Service\DSpace6' => 'TueFind\Service\DSpaceFactory',
             'TueFind\Service\DSpace7' => 'TueFind\Service\DSpaceFactory',
+            'TueFind\Service\DSpace8' => 'TueFind\Service\DSpaceFactory',
             'TueFind\Service\KfL' => 'TueFind\Service\KfLFactory',
             'TueFindSearch\Service' => 'VuFind\Service\SearchServiceFactory',
             'Laminas\Session\SessionManager' => 'TueFind\Session\ManagerFactory',
@@ -628,11 +629,13 @@ $config = [
                 'factories' => [
                     'TueFind\MetadataVocabulary\DSpace6' => 'Laminas\ServiceManager\Factory\InvokableFactory',
                     'TueFind\MetadataVocabulary\DSpace7' => 'Laminas\ServiceManager\Factory\InvokableFactory',
+                    'TueFind\MetadataVocabulary\DSpace8' => 'Laminas\ServiceManager\Factory\InvokableFactory',
                     'TueFind\MetadataVocabulary\HighwirePress' => 'Laminas\ServiceManager\Factory\InvokableFactory',
                 ],
                 'aliases' => [
                     'DSpace6' => 'TueFind\MetadataVocabulary\DSpace6',
                     'DSpace7' => 'TueFind\MetadataVocabulary\DSpace7',
+                    'DSpace8' => 'TueFind\MetadataVocabulary\DSpace8',
                     'HighwirePress' => 'TueFind\MetadataVocabulary\HighwirePress',
                     'VuFind\MetadataVocabulary\HighwirePress' => 'TueFind\MetadataVocabulary\HighwirePress',
                 ],
@@ -777,6 +780,7 @@ $nonTabRecordActions = ['Publish'];
 $dynamicRoutes = [];
 $staticRoutes = [
     'AdminFrontend/ShowAdmins',
+    'AdminFrontend/Dspace',
     'AdminFrontend/ShowUserAuthorities',
     'AdminFrontend/ShowUserAuthorityHistory',
     'AdminFrontend/ShowUserPublications',

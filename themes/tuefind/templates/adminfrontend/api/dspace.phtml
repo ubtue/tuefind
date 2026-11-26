@@ -1,0 +1,96 @@
+<?php
+// Set up page title:
+$this->headTitle($this->translate('Dspace API'));
+
+// Set up breadcrumbs:
+$this->breadcrumbs()->set($this->translate('Dspace API'), $this->url('myresearch-home'))
+      ->add($this->translate('Dspace API'), active: true);
+?>
+
+<div class="<?=$this->layoutClass('mainbody')?>">
+  <div class="card">
+    <div class="card-header">
+      Configuration for the Dspace API
+    </div>
+    <div class="card-body">
+      <table id="dspace-table" class="table table-striped table-bordered">
+        <tbody>
+          <tr>
+            <td>Version</td>
+            <td class="fw-bold"><?=$this->dspaceVersion;?></td>
+          </tr>
+          <tr>
+            <td>Server</td>
+            <td class="fw-bold"><?=$this->dspaceServer;?></td>
+          </tr>
+          <tr>
+            <td>Url Base</td>
+            <td class="fw-bold"><?=$this->dspaceUrlBase;?></td>
+          </tr>
+          <tr>
+            <td>Username</td>
+            <td class="fw-bold"><?=$this->dspaceUsername;?></td>
+          </tr>
+          <tr>
+            <td>Password</td>
+            <td class="fw-bold"><?=$this->dspacePassword;?></td>
+          </tr>
+          <tr>
+            <td>Collection Name</td>
+            <td class="fw-bold collection_name"><?=$this->dspaceCollectionName;?></td>
+          </tr>
+          <tr>
+            <td>Self-Archiving email</td>
+            <td class="fw-bold"><?=$this->selfarchivingemail;?></td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="2" class="text-center"><button class="btn btn-primary m-3 check-Dspace">Check</button></td>
+          </tr>
+        </tfoot>
+      </table>
+      <div class="ajaxResult text-center"></div>
+    </div>
+  </div>
+  <?=$this->assetManager()->outputInlineScriptString('TueFind.RenderDataTable();') ?>
+</div>
+
+<div class="<?=$this->layoutClass('sidebar')?>" id="myresearch-sidebar" role="navigation" aria-label="<?=$this->transEsc('account_menu_label')?>">
+<?=$this->section(
+    'AccountMenu',
+    template: 'myresearch/menu.phtml'
+)->render(['active' => 'dspace'])?>
+</div>
+
+<?php
+$jsSnippet = <<<EOD
+    $('.check-Dspace').click(function() {
+      let collection = $('.collection_name').text().trim();
+      $.ajax({
+        url: VuFind.path + '/AJAX/JSON?method=Admin',
+        type: 'GET',
+        data: {
+          action: 'checkDspace',
+          collection_name: collection
+        },
+        dataType: 'json',
+        beforeSend: function() {
+          $('.ajaxResult').html('<i class="fa fa-spinner fa-spin" style="font-size:24px"></i>');
+        },
+        success: function(response) {
+          if (response && response.data && response.data.status) {
+            $('.ajaxResult').html('<p class="text-success">Success! DSpace API is working properly.</p>');
+          } else {
+            $('.ajaxResult').html(`<p class="text-danger">Collection `+collection+` not found in DSpace API!</p>`);
+          }
+        },
+        error: function(xhr, status, error) {
+          console.error('Request error: ', error);
+          $('.ajaxResult').html(`<p class="text-danger">`+error+`</p>`);
+        }
+      });
+    });
+    EOD;
+?>
+<?=$this->assetManager()->outputInlineScriptString($jsSnippet)?>
