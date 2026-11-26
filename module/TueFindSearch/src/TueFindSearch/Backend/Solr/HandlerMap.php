@@ -4,7 +4,10 @@ namespace TueFindSearch\Backend\Solr;
 
 use VuFindSearch\ParamBag;
 
-class HandlerMap extends \VuFindSearch\Backend\Solr\HandlerMap {
+use function in_array;
+
+class HandlerMap extends \VuFindSearch\Backend\Solr\HandlerMap
+{
     protected function apply(
         ParamBag $params,
         array $defaults,
@@ -19,10 +22,13 @@ class HandlerMap extends \VuFindSearch\Backend\Solr\HandlerMap {
         // are queried, e.g. when searching for record versions within the record full view.
         $final = $params->getArrayCopy();
 
+        // Enforce multiLanguageQueryParser (added in VuFind 11.1, else the default defType from Backend would be overridden by the QueryParser)
+        $final['defType'] = ['multiLanguageQueryParser'];
+
         // Disable our custom multiLanguageQueryParser plugin (potentially on several occasions)
         if (isset($final['defType']) && in_array('multiLanguageQueryParser', $final['defType'])) {
             // When searching for other record versions using work_keys_str_mv
-            if (isset($final['q'][0]) && strpos($final['q'][0], 'work_keys_str_mv') !== false) {
+            if (isset($final['q'][0]) && str_contains($final['q'][0], 'work_keys_str_mv')) {
                 unset($final['defType']);
             }
         }
