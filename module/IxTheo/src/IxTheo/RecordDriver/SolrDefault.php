@@ -270,8 +270,14 @@ class SolrDefault extends \TueFind\RecordDriver\SolrMarc
 
     public function getTimeRangesString()
     {
-        if (isset($this->fields['time_range_display'])) {
-            return $this->fields['time_range_display'];
+        $locale = $this->getTranslatorLocale();
+        $mainKey = 'time_range_display';
+        $keys = [$mainKey . '_' . $locale, $mainKey];
+
+        foreach ($keys as $key) {
+            if (!empty($this->fields[$key])) {
+                return $this->fields[$key];
+            }
         }
     }
 
